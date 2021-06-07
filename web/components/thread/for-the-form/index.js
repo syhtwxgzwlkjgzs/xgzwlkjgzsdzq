@@ -53,7 +53,6 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
         <div className={styles.item}>
           <Input
             mode="number"
-            htmlType="number"
             value={value}
             placeholder="金额"
             onChange={e => setValue(e.target.value)}

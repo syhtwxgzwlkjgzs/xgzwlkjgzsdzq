@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import SearchInput from '@components/search-input';
 import BaseLayout from '@components/base-layout';
 import UserItem from '@components/thread/user-item';
-import Taro from '@tarojs/taro';
+import Taro, { getCurrentInstance } from '@tarojs/taro';
 
 import styles from './index.module.scss';
 @inject('site')
@@ -13,7 +13,7 @@ class SearchResultUserH5Page extends React.Component {
   constructor(props) {
     super(props);
 
-    const keyword = '';
+    const { keyword = '' } = getCurrentInstance().router.params;
 
     this.state = {
       keyword,
@@ -69,6 +69,8 @@ class SearchResultUserH5Page extends React.Component {
               imgSrc={item.avatar}
               label={item.groupName}
               onClick={this.onUserClick}
+              needPadding={true}
+              needBottomLine={true}
             />
           ))
         }

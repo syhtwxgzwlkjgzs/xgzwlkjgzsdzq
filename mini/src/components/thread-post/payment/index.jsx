@@ -28,7 +28,7 @@ const Paid = inject('threadPost')(observer((props) => {
     const { postData } = props.threadPost;
     if (isPost) {
       postData.price && setPrice(postData.price);
-      setFreeWords(postData.freeWords * 100);
+      setFreeWords(parseInt(Number(postData.freeWords) * 100));
     }
     if (isAttach) {
       postData.attachmentPrice && setPrice(postData.attachmentPrice);

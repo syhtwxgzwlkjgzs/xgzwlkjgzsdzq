@@ -1,5 +1,20 @@
 @import '@common/styles/index.scss';
-@import '@common/styles/_variable.scss';
+
+@mixin uploadStyles {
+  transition: all .5s;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: $mask-bg-color;
+  color: #fff;
+}
 
 .box {
     width: 100%;
@@ -35,6 +50,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        z-index: 1;
         :global {
           .dzq-icon {
             color: $white;
@@ -70,12 +86,19 @@
         font-size: rem($font-size-primary);
         line-height: rem($font-line-height-small);
         color: $text-color-primary;
+        left: rem(210);
+        right: 0;
+        @include text-ellipsis();
       }
     }
     .upload {
       cursor: pointer;
       .uploadIcon {
         margin-right: rem(6);
+      }
+      .uploadText {
+        display: flex;
+        align-items: center;
       }
       padding-top: rem(48);
       font-size: rem($font-size-small);
@@ -105,7 +128,7 @@
       button {
         width: rem(113);
         height: rem(36);
-        font-size: rem($font-size-middle);
+        font-size: rem($font-size-primary);
         display: inline-block;
         :global {
           .dzq-icon {
@@ -122,5 +145,22 @@
         vertical-align: middle;
         margin-left: rem($margin-2n);
       }
+      .userFriendsBtn {
+        background: $warn-color;
+        border-color: $warn-color;
+      }
+      .userFollowedBtn {
+        background: $button-primary-disabled-bg-color;
+        border-color: $button-primary-disabled-bg-color;
+      }
     }
+}
+
+// 上传样式
+.uploadAvatar {
+  @include uploadStyles();
+  z-index: 0;
+  .uploadText {
+    margin-left: rem($margin-2n);
+  }
 }

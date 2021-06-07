@@ -6,6 +6,7 @@ import Avatar from '@components/avatar';
 import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
 import throttle from '@common/utils/thottle.js';
+
 @inject('site')
 @inject('user')
 @observer
@@ -101,6 +102,10 @@ class index extends Component {
   }, 300);
 
   handleGoToEditMobile = () => {
+    if (!this.user.mobile) {
+      Router.push({ url: '/user/bind-phone' });
+      return;
+    }
     Router.push({ url: '/my/edit/mobile' });
   };
 
@@ -125,7 +130,7 @@ class index extends Component {
 
   render() {
     // 条件都满足时才显示微信
-    const IS_WECHAT_ACCESSABLE = this.props.wechatEnv !== 'none' && !!this.user.wxNickname
+    const IS_WECHAT_ACCESSABLE = this.props.site.wechatEnv !== 'none' && !!this.user.wxNickname;
     return (
       <div>
         {/* 头部 */}
@@ -154,7 +159,7 @@ class index extends Component {
                 <label>手机号码</label>
               </div>
               <div className={styles.userCenterEditValue} onClick={this.handleGoToEditMobile}>
-                <div className={styles.ucText}>{this.user.mobile}</div>
+                <div className={styles.ucText}>{this.user.mobile || '去绑定'}</div>
                 <Icon name="RightOutlined" />
               </div>
             </div>

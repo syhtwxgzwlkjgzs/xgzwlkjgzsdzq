@@ -264,7 +264,7 @@ class ThreadPostAction extends ThreadPostStore {
     const { title, categoryId, contentText, position, price, attachmentPrice, freeWords } = this.postData;
     const params = {
       title, categoryId, content: {
-        text: emojiFormatForCommit(contentText),
+        text: emojiFormatForCommit(contentText).replace(/\n/g, '<br />'),
       },
     };
     if (position.address) params.position = position;
@@ -282,12 +282,12 @@ class ThreadPostAction extends ThreadPostStore {
 
   @action
   formatThreadDetailToPostData(detail) {
-    const { title, categoryId, content, freeWords = 1 } = detail || {};
+    const { title, categoryId, content, freewords = 1 } = detail || {};
     const price = Number(detail.price);
     const attachmentPrice = Number(detail.attachmentPrice);
     let position = {};
     if (detail.position && detail.position.address) position = detail.position;
-    const contentText = content && content.text;
+    const contentText = content && content.text.replace(/<br \/>/g, '\n');
     const contentindexes = (content && content.indexes) || {};
     let audio = {};
     let rewardQa = {};
@@ -343,7 +343,7 @@ class ThreadPostAction extends ThreadPostStore {
       video,
       images,
       files,
-      freeWords,
+      freeWords: freewords,
     });
   }
 
@@ -355,6 +355,11 @@ class ThreadPostAction extends ThreadPostStore {
   @action.bound
   setCursorPosition(val) {
     this.cursorPosition = val;
+  }
+
+  @action
+  setNavInfo(info) {
+    if (info) this.navInfo = info;
   }
 }
 

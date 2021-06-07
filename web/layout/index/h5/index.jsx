@@ -19,15 +19,8 @@ class IndexH5Page extends React.Component {
     super(props);
     this.state = {
       visible: false,
-      filter: {
-        categoryids: this.checkIsOpenDefaultTab() ? ['default'] : ['all'],
-        sequence: this.checkIsOpenDefaultTab() ? 1 : 0,
-        sort: 1,
-        attention: 0,
-        types: 'all',
-        essence: 0
-      },
-      currentIndex: this.checkIsOpenDefaultTab() ? 'default' : 'all',
+      filter: {},
+      currentIndex: 'all',
       isFinished: true,
       fixedTab: false,
     };
@@ -42,6 +35,7 @@ class IndexH5Page extends React.Component {
 
     const newFilter = { ...this.state.filter, ...filter }
     const { categoryids = [] } = newFilter
+ 
     const currentIndex = this.resetCurrentIndex(categoryids[0] || 'all')
     
     this.setState({ filter: newFilter, currentIndex })
@@ -94,8 +88,6 @@ class IndexH5Page extends React.Component {
         newCategoryIds.push(item.pid)
       })
     }
-
-    this.props.baselayout.setJumpingToTop();
 
     const newFilter = { ...this.state.filter, categoryids: newCategoryIds, sequence: id === 'default' ? 1 : 0, }
 
@@ -173,25 +165,20 @@ class IndexH5Page extends React.Component {
       return categories;
     }
 
-    let tmpCategories = categories.filter(item => item.name === '全部');
-    if (tmpCategories?.length) {
-      return categories;
-    }
+    let tmpCategories = [{ name: '全部', pid: 'all', children: [] }]
 
-    tmpCategories = [{ name: '全部', pid: 'all', children: [] }, ...categories];
-
-    // 默认功能的开启
     if (this.checkIsOpenDefaultTab()) {
-      tmpCategories.unshift({ name: '默认', pid: 'default', children: [] });
+      tmpCategories.push({ name: '推荐', pid: 'default', children: [] });
     }
-    return tmpCategories;
+
+    return [...tmpCategories, ...categories];
   };
 
   renderTabs = () => {
     const { index } = this.props;
     const { currentIndex, fixedTab } = this.state;
     const { categories = [] } = index;
-    const newCategories = this.handleCategories(categories);
+    const newCategories = this.handleCategories();
 
     return (
       <>
@@ -247,9 +234,9 @@ class IndexH5Page extends React.Component {
   render() {
     const { index } = this.props;
     const { filter, isFinished } = this.state;
-    const { threads = {}, categories = [] } = index;
+    const { threads = {} } = index;
     const { currentPage, totalPage, pageData } = threads || {};
-    const newCategories = this.handleCategories(categories);
+    const newCategories = this.handleCategories();
 
     return (
       <BaseLayout
@@ -265,6 +252,7 @@ class IndexH5Page extends React.Component {
         preload={1000}
         onClickTabBar={this.onClickTabBar}
         requestError={this.props.isError}
+        errorText={this.props.errorText}
       >
         <HomeHeader ref={this.headerRef} />
 

@@ -131,8 +131,8 @@ class Index extends Component {
     super(props);
     this.state = {
       currentId: 0,
-      isTop: false, // 列表位置
-      damping: 0, // 下拉距离，下拉时将动态改变
+      isTop: true, // 列表位置
+      damping: 80, // 下拉距离，下拉时将动态改变
       isFinished: true, // 下拉刷新是否结束
     }
   }
@@ -197,6 +197,7 @@ class Index extends Component {
             noMore={noMore}
             onScroll={throttle(this.onScroll, 10)}
             onRefresh={onScrollBottom}
+            immediateCheck={false}
           >
             {/* 导航条 */}
             {showHeader && <Header />}

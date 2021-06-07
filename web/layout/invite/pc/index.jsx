@@ -1,78 +1,153 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-import { Icon, Button } from '@discuzq/design';
+import { Icon, Toast, Avatar, Spin } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
-import { get } from '@common/utils/get';
-
-const testArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+import NoData from '@components/no-data';
+import BaseLayout from '@components/base-layout';
+import UserCenterFansPc from '@components/user-center/fans-pc';
+import UserCenterFriendPc from '@components/user-center/friend-pc';
+import { numberFormat } from '@common/utils/number-format';
+import Copyright from '@components/copyright';
+import { copyToClipboard } from '@common/utils/copyToClipboard';
 
 @inject('site')
+@inject('forum')
+@inject('search')
+@inject('invite')
 @observer
 class InvitePCPage extends React.Component {
-  render() {
+  containerRef = React.createRef(null);
+
+  async componentDidMount() {
+    try {
+      const { invite } = this.props;
+      await invite.getInviteUsersList();
+    } catch (e) {
+      Toast.error({
+        content: e.Message,
+      });
+    }
+  }
+
+  // 检查是否满足触底加载更多的条件
+  checkLoadCondition() {
+    const { invite } = this.props;
+    const hasMorePage = invite.totalPage >= (invite.currentPage + 1);
+    if (invite.inviteLoading) return false;
+    if (!hasMorePage) return false;
+    return true;
+  }
+
+  // 加载更多函数
+  loadMore = async () => {
+    const { invite } = this.props;
+    if (!this.checkLoadCondition()) return;
+    return await invite.getInviteUsersList(invite.currentPage + 1);
+  };
+
+  createInviteLink = async () => {
+    try {
+      const { invite } = this.props;
+      await this.props.invite.createInviteLink();
+      copyToClipboard(`${window.location.origin}/forum/partner-invite?inviteCode=${invite.inviteCode}`);
+      Toast.success({
+        content: '创建邀请链接成功',
+        duration: 1000,
+      });
+    } catch (e) {
+      Toast.error({
+        content: e.Message,
+      });
+    }
+  }
+
+  // 右侧 - 潮流话题 粉丝 版权信息
+  renderRight = () => {
+    const { inviteData } = this.props.invite;
+    const { pageData = [] } = this.props.search.topics || { pageData: [] };
     return (
       <>
-        <div className={layout.content}>
-          {/* 头部 start */}
-          <div className={layout.header}></div>
-          {/* 头部 end */}
-          {/* 用户信息 start */}
-          <div className={layout.user_info}>
-            <img className={layout.user_info_author} src="/dzq-img/login-user.png" alt=""/>
-            <div className={layout.user_info_content}>
-              <div className={layout.user_info_name}>Amber</div>
-              <div className={layout.user_info_tag}>官方团队</div>
+        <div className={layout.user_card_wrap}>
+          <div className={layout.user_card_main}>
+            <div className={layout.user_card_avatar}>
+              <Avatar
+                size={'big'}
+                image={inviteData.avatar}
+                text={inviteData.nickname && inviteData.nickname.substring(0, 1)}
+              />
+            </div>
+            <div className={layout.user_card_info}>
+              <div className={layout.user_info_name} title={inviteData.nickname}>{inviteData.nickname}</div>
+              <div className={layout.user_info_tag}>{inviteData.groupName}</div>
               <div className={layout.user_info_invite}>
                 <div className={layout.invite_num}>
                   <div className={layout.invite_num_title}>已邀人数</div>
-                  <div className={layout.invite_num_content}>62</div>
+                  <div className={layout.invite_num_content} title={numberFormat(inviteData.totalInviteUsers)}>{numberFormat(inviteData.totalInviteUsers)}</div>
                 </div>
                 <div className={layout.invite_money}>
                   <div className={layout.invite_num_title}>赚得赏金</div>
-                  <div className={layout.invite_num_content}>1024.00</div>
+                  <div className={layout.invite_num_content} title={inviteData.totalInviteBounties}>{inviteData.totalInviteBounties || 0}</div>
                 </div>
               </div>
             </div>
           </div>
-          {/* 用户信息 end */}
-          {/* 邀请列表 start */}
+          <div className={layout.user_card_button} onClick={this.createInviteLink}>邀请朋友</div>
+        </div>
+        <UserCenterFriendPc className={layout.user_center_wrap}/>
+        <UserCenterFansPc  className={layout.user_center_wrap}/>
+        <Copyright/>
+      </>
+    );
+  }
+  render() {
+    const { inviteUsersList, inviteLoading, isNoData, currentPage, totalPage } = this.props.invite;
+    return (
+      <BaseLayout
+        right={ this.renderRight }
+        onRefresh={this.loadMore}
+        showRefresh={false}
+        isShowLayoutRefresh={false}
+      >
+        <div
+          className={layout.container}
+        >
           <div className={layout.invite_list}>
             <div className={layout.invite_list_title}>
-              <Icon className={layout.invite_list_titleIcon} color='#FFC300' name='IncomeOutlined'/>
-              <div className={layout.invite_list_titleText}>邀请列表</div>
+              <Icon size={16} name='IncomeOutlined' color='#FFC300'/>
+              <span className={layout.title_text}>邀请列表</span>
             </div>
-            <div className={layout.invite_list_header}>
-              <span className={layout.invite_list_headerName}>成员昵称</span>
-              <span className={layout.invite_list_headerMoney}>获得赏金</span>
-              <span className={layout.invite_list_headerTime}>推广时间</span>
+            <div className={layout.invite_list_label}>
+              <div className={layout.list_label_nickname}>成员昵称</div>
+              <div className={layout.list_label_money}>获得赏金</div>
+              <div className={layout.list_label_timer}>加入时间</div>
             </div>
-            <div className={layout.invite_list_content}>
+            <div className={layout.invite_list_main}>
               {
-                testArr.map((item, index) => (
-                  <div key={index} className={layout.invite_list_item}>
-                      <div className={layout.invite_list_itemName}>
-                        <img src="/dzq-img/login-user.png" alt=""/>
-                        <span>嘻嘻哈哈嘻嘻哈哈</span>
+                inviteUsersList?.map((item) => (
+                  <div key={item.toUserId} className={layout.list_main_wrap}>
+                      <div className={layout.list_main_nickname}>
+                        <Avatar
+                          className={layout.user_value_avatar}
+                          image={item.avatar}
+                          size='small'
+                          text={item?.nickname?.substring(0, 1)}
+                        />
+                        <div className={layout.user_value_name} title={item.nickname}>{item.nickname || '匿名'}</div>
                       </div>
-                      <span className={layout.invite_list_itemMoney}>+1288.00</span>
-                      <span className={layout.invite_list_itemTime}>2020-10-28 10:42</span>
-                      <span className={layout.invite_list_itemLine}></span>
+                      <div className={layout.list_main_money} title={`+${item.bounty}`}><span>+{item.bounty}</span></div>
+                      <div className={layout.list_main_timer} title={item.joinedAt}><span>{item.joinedAt || '--'}</span></div>
                   </div>
                 ))
               }
+              {isNoData && <NoData className={layout.invite_list_nodata} text='没有更多内容了'/>}
+              {inviteLoading && <div className={layout.loadMoreContainer}><Spin type={'spinner'}>加载中 ...</Spin></div>}
             </div>
           </div>
-          {/* 邀请列表 end */}
-          {/* 邀请朋友 start */}
-          <div className={layout.invite_bottom}>
-            <Button className={layout.invite_bottom_button}>邀请朋友</Button>
-          </div>
-          {/* 邀请朋友 end */}
         </div>
-      </>
-    )
+      </BaseLayout>
+    );
   }
 }
 

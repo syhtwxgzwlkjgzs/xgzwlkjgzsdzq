@@ -22,38 +22,9 @@ import { View, Text } from '@tarojs/components'
 @inject('topic')
 @observer
 class Index extends React.Component {
-
     state = {
       isSendingLike: false,
     }
-
-    // 分享
-    onShare = (e) => {
-      e && e.stopPropagation();
-      this.handleShare()
-    }
-    handleShare = debounce(() => {
-      
-      // 对没有登录的先登录
-      if (!this.props.user.isLogin()) {
-        Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/subPages/user/wx-auth/index' });
-        return;
-      }
-
-      // Toast.info({ content: '复制链接成功' });
-
-      const { title = '', threadId = '', user } = this.props.data || {};
-
-      // h5Share({path: `/thread/${threadId}`});
-      this.props.index.updateThreadShare({ threadId }).then(result => {
-        if (result.code === 0) {
-          this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
-          this.props.search.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
-          this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
-        }
-      });
-    }, 1000);
     // 评论
     onComment = (e) => {
       e && e.stopPropagation();
@@ -144,6 +115,10 @@ class Index extends React.Component {
 
       if (threadId !== '') {
         Router.push({url: `/subPages/thread/index?id=${threadId}`})
+
+        this.props.index.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
+        this.props.search.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
+        this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
       } else {
         console.log('帖子不存在');
       }
@@ -204,13 +179,14 @@ class Index extends React.Component {
             wholeNum={likeReward.likePayCount || 0}
             comment={likeReward.postCount || 0}
             sharing={likeReward.shareCount || 0}
-            onShare={this.onShare}
+            // onShare={this.onShare}
             onComment={this.onComment}
             onPraise={this.onPraise}
             isLiked={isLike}
             isSendingLike={this.state.isSendingLike}
             tipData={{ postId, threadId, platform, payType }}
             platform={platform}
+            index={this.props.index}
           />
         </View>
       );

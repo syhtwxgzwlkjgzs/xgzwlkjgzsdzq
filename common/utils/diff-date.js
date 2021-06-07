@@ -1,11 +1,10 @@
-import { formatDate } from './format-date';
+import Time from '@discuzq/sdk/dist/time';
 
 export const diffDate = function (time, referenceTime) {
-  if (!time) formatDate(new Date(), 'yyyy-MM-dd');
+  if (!time) Time.formatDate(new Date(), 'yyyy-MM-dd');
 
-  if (typeof time === 'string') {
-    time = time.replace(/-/g, '/');
-  }
+  // 格式化，兼容苹果系统
+  time = Time.formatDate(time, 'YYYY/MM/DD HH:mm:ss');
 
   const timestamp = new Date(time).getTime();
   const refTimestamp = referenceTime ? new Date(referenceTime).getTime() : Date.now();
@@ -17,7 +16,7 @@ export const diffDate = function (time, referenceTime) {
   const diffDays = Math.floor(diffSenconds / 86400);
 
   if (diffDays === 0 && diffHours === 0 && diffMinutes === 0) {
-    return `${diffSenconds}秒前`;
+    return `${diffSenconds || 1}秒前`;
   }
 
   if (diffDays === 0 && diffHours === 0) {
@@ -28,5 +27,5 @@ export const diffDate = function (time, referenceTime) {
     return `${diffHours}小时前`;
   }
 
-  return formatDate(time, 'yyyy-MM-dd');
+  return Time.formatDate(time, 'YYYY-MM-DD');
 };

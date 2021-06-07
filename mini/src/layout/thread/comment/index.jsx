@@ -26,7 +26,6 @@ class CommentH5Page extends React.Component {
       showReportPopup: false, // 举报弹框
       showMorePopup: false, // 是否弹出更多弹框
       showCommentInput: false, // 是否弹出评论框
-      commentSort: true, // ture 评论从旧到新 false 评论从新到旧
       showDeletePopup: false, // 是否弹出删除弹框
       showReplyDeletePopup:false, // 是否弹出回复删除弹框
       inputText: '请输入内容', // 默认回复框placeholder内容
@@ -59,7 +58,7 @@ class CommentH5Page extends React.Component {
   onOperClick = (type) => {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -146,7 +145,7 @@ class CommentH5Page extends React.Component {
   async likeClick(data) {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -185,7 +184,7 @@ class CommentH5Page extends React.Component {
   async replyLikeClick(reply) {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -232,7 +231,7 @@ class CommentH5Page extends React.Component {
   replyClick(comment) {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -248,7 +247,7 @@ class CommentH5Page extends React.Component {
   replyReplyClick(reply, comment) {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -263,9 +262,11 @@ class CommentH5Page extends React.Component {
   }
 
   // 创建回复评论+回复回复接口
-  async createReply(val) {
-    if (!val) {
-      Toast.info({ content: '请输入内容!' });
+  async createReply(val, imageList) {
+    const valuestr = val.replace(/\s/g, '');
+    // 如果内部为空，且只包含空格或空行
+    if (!valuestr) {
+      Toast.info({ content: '请输入内容' });
       return;
     }
 
@@ -289,6 +290,18 @@ class CommentH5Page extends React.Component {
       params.replyId = this.commentData.id;
       params.isComment = true;
       params.commentId = this.commentData.id;
+    }
+
+    if (imageList?.length) {
+      params.attachments = imageList
+        .filter((item) => item.status === 'success' && item.response)
+        .map((item) => {
+          const { id } = item.response;
+          return {
+            id,
+            type: 'attachments',
+          };
+        });
     }
 
     const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
@@ -340,7 +353,6 @@ class CommentH5Page extends React.Component {
 
     // 更多弹窗权限
     const morePermissions = {
-      // canEdit: commentData?.canEdit,
       canEdit: false,
       canDelete: commentData?.canDelete,
       canEssence: false,
@@ -354,30 +366,31 @@ class CommentH5Page extends React.Component {
     };
 
     return (
-      <View className={styles.index}>
-        {/* <Header></Header> */}
-        {/* <View className={styles.header}>
-          <View className={styles.show}>
-            {
-              this.state.isShowReward
-                ? <View className={styles.showGet}>
-                  <View className={styles.icon}>悬赏图标</View>
-                  <View className={styles.showMoneyNum}>
-                    获得<span className={styles.moneyNumber}>5.20</span>元悬赏金
-                    </View>
-                </View> : ''
-            }
-            {
-              this.state.isShowRedPacket
-                ? <View className={styles.showGet}>
-                  <View className={styles.icon}>红包图标</View>
-                  <View className={styles.showMoneyNum}>
-                    获得<span className={styles.moneyNumber}>5.20</span>元红包
-                    </View>
-                </View> : ''
-            }
-          </View>
-        </View> */}
+      <View>
+        <View className={styles.index}>
+          {/* <Header></Header> */}
+          {/* <View className={styles.header}>
+            <View className={styles.show}>
+              {
+                this.state.isShowReward
+                  ? <View className={styles.showGet}>
+                    <View className={styles.icon}>悬赏图标</View>
+                    <View className={styles.showMoneyNum}>
+                      获得<span className={styles.moneyNumber}>5.20</span>元悬赏金
+                      </View>
+                  </View> : ''
+              }
+              {
+                this.state.isShowRedPacket
+                  ? <View className={styles.showGet}>
+                    <View className={styles.icon}>红包图标</View>
+                    <View className={styles.showMoneyNum}>
+                      获得<span className={styles.moneyNumber}>5.20</span>元红包
+                      </View>
+                  </View> : ''
+              }
+            </View>
+          </View> */}
 
         {/* 内容 */}
         <View className={styles.content}>
@@ -402,7 +415,8 @@ class CommentH5Page extends React.Component {
             visible={this.state.showCommentInput}
             inputText={this.state.inputText}
             onClose={() => this.setState({ showCommentInput: false })}
-            onSubmit={(value) => this.createReply(value)}
+            onSubmit={(value, imageList) => this.createReply(value, imageList)}
+            site={this.props.site}
           ></InputPopup>
 
           {/* 更多弹层 */}
@@ -438,6 +452,7 @@ class CommentH5Page extends React.Component {
             onOkClick={(data) => this.onReportOk(data)}
           ></ReportPopup>
         </View>
+      </View>
       </View>
     );
   }

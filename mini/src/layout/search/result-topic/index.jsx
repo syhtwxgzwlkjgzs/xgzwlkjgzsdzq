@@ -5,15 +5,16 @@ import BaseLayout from '@components/base-layout';
 import TopicItem from '@components/topic-item'
 import styles from './index.module.scss';
 import { View, Text, Image } from '@tarojs/components'
-import Taro from '@tarojs/taro';
+import Taro, { getCurrentInstance } from '@tarojs/taro';
 
 @inject('search')
+@inject('topic')
 @observer
 class SearchResultTopicH5Page extends React.Component {
   constructor(props) {
     super(props);
 
-    const keyword = '';
+    const { keyword = '' } = getCurrentInstance().router.params;
 
     this.state = {
       keyword,
@@ -46,6 +47,7 @@ class SearchResultTopicH5Page extends React.Component {
   };
 
   onTopicClick = data => {
+    this.props.topic?.setTopicDetail(null);
     Taro.navigateTo({
       url: `/subPages/topic/topic-detail/index?id=${data.topicId || ''}`
     })

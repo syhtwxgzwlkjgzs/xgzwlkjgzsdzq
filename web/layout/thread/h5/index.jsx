@@ -19,7 +19,7 @@ import DeletePopup from '@components/thread-detail-pc/delete-popup';
 import MorePopup from './components/more-popup';
 import InputPopup from './components/input-popup';
 import throttle from '@common/utils/thottle';
-
+import { debounce } from '@common/utils/throttle-debounce.js'
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import threadPay from '@common/pay-bussiness/thread-pay';
 import RewardPopup from './components/reward-popup';
@@ -78,6 +78,8 @@ class ThreadH5Page extends React.Component {
     const offsetHeight = this.threadBodyRef?.current?.offsetHeight;
     const scrollHeight = this.threadBodyRef?.current?.scrollHeight;
     const { isCommentReady, isNoMore } = this.props.thread;
+    // 记录当前的滚动位置
+    this.props.thread.setScrollDistance(scrollDistance);
     if (scrollDistance + offsetHeight >= scrollHeight && !this.state.isCommentLoading && isCommentReady && !isNoMore) {
       this.page = this.page + 1;
       this.loadCommentList();
@@ -98,7 +100,10 @@ class ThreadH5Page extends React.Component {
       setTimeout(() => {
         this.threadBodyRef.current.scrollTo(0, this.position);
       }, 1000);
+      return;
     }
+    // 滚动到记录的指定位置
+    this.threadBodyRef.current.scrollTo(0, this.props.thread.scrollDistance);
   }
 
   componentDidUpdate() {
@@ -110,7 +115,7 @@ class ThreadH5Page extends React.Component {
 
   componentWillUnmount() {
     // 清空数据
-    this.props?.thread && this.props.thread.reset();
+    // this.props?.thread && this.props.thread.reset();
   }
 
   // 点击信息icon
@@ -364,8 +369,10 @@ class ThreadH5Page extends React.Component {
 
   // 点击发布按钮
   async onPublishClick(val, imageList) {
-    if (!val) {
-      Toast.info({ content: '请输入内容!' });
+    const valuestr = val.replace(/\s/g, '');
+    // 如果内部为空，且只包含空格或空行
+    if (!valuestr) {
+      Toast.info({ content: '请输入内容' });
       return;
     }
     return this.comment ? await this.updateComment(val, imageList) : await this.createComment(val, imageList);
@@ -496,6 +503,7 @@ class ThreadH5Page extends React.Component {
 
   // 分享
   async onShareClick() {
+    console.log('点击了')
     Toast.info({ content: '复制链接成功' });
 
     const { title = '' } = this.props.thread?.threadData || {};
@@ -579,6 +587,13 @@ class ThreadH5Page extends React.Component {
     this.props.router.push('/');
   }
 
+  onClickUser = (e) => {
+    e && e.stopPropagation()
+
+    const { threadData } = this.props.thread || {};
+    this.props.router.push(`/user/${threadData?.userId}`);
+  }
+
   render() {
     const { thread: threadStore } = this.props;
     const { isReady, isCommentReady, isNoMore, totalCount, isCommentListError } = threadStore;
@@ -620,7 +635,8 @@ class ThreadH5Page extends React.Component {
         <div
           className={layout.body}
           ref={this.threadBodyRef}
-          onScrollCapture={() => throttle(this.handleOnScroll(), 500)}
+          // onScrollCapture={() => throttle(this.handleOnScroll, 3000)}
+          onScrollCapture={throttle(() => this.handleOnScroll(), 1000)}
         >
           <ShowTop showContent={this.state.showContent} setTop={this.state.setTop}></ShowTop>
           {/* 帖子内容 */}
@@ -636,6 +652,8 @@ class ThreadH5Page extends React.Component {
               onRewardClick={() => this.onRewardClick()}
               onTagClick={() => this.onTagClick()}
               onPayClick={() => this.onPayClick()}
+              onPayClick={() => this.onPayClick()}
+              onClickUser={(e) => this.onClickUser(e)}
             ></RenderThreadContent>
           ) : (
             <LoadingTips type="init"></LoadingTips>
@@ -690,7 +708,7 @@ class ThreadH5Page extends React.Component {
                   name="CollectOutlinedBig"
                 ></Icon>
                 <Icon
-                  onClick={() => this.onShareClick()}
+                  onClick={debounce(() => this.onShareClick(),1000)}
                   className={footer.icon}
                   size="20"
                   name="ShareAltOutlined"

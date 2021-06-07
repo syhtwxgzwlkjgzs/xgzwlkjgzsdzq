@@ -5,7 +5,15 @@
   border-radius: $border-radius-small $border-radius-small 0 0;
   overflow: hidden;
 
+  &.mobile{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
   &.pc {
     height: 850px;
+    background: $white;
   }
 }

@@ -20,7 +20,6 @@ import deepClone from '@common/utils/deep-clone';
 @inject('site')
 @inject('user')
 @inject('index')
-@inject('baselayout')
 @observer
 class IndexPCPage extends React.Component {
   constructor(props) {
@@ -32,15 +31,10 @@ class IndexPCPage extends React.Component {
       // visibility: 'hidden',
       isShowDefault: this.checkIsOpenDefaultTab(),
       // 筛选过滤数据
-      filter: {
-        sequence: this.checkIsOpenDefaultTab() ? 1 : 0,
-        sort: 1,
-        attention: 0,
-        essence: 0
-      }
+      filter: {}
     };
 
-    this.defaultCategoryIds = this.props.index.filter?.categoryids || []
+    this.defaultCategoryIds = this.props.index.filter?.categoryids || ['all']
   }
 
   // 轮询定时器
@@ -63,27 +57,32 @@ class IndexPCPage extends React.Component {
     const currentIndex = this.resetCurrentIndex(categoryids[0] || 'all')
     
     this.setState({ filter: newFilter, currentIndex }, () => {
-
       this.timer = setInterval(() => {
-        const { categoryids, types, essence, attention, sort, sequence } = this.state.filter;
-        const { totalCount: nowTotal = -1 } = this.props.index?.threads || {};
-  
-        if (nowTotal !== -1) {
-          readThreadList({ params: { perPage: 10, page: 1, filter: { categoryids, types, essence, attention, sort }, sequence } }).then((res) => {
-            const { totalCount = 0 } = res?.data || {};
-            if (totalCount > nowTotal) {
-              this.setState({
-                visible: true,
-                conNum: totalCount - nowTotal,
-              });
-              // 缓存新数据
-              this.newThread = res?.data
-            }
-          });
-        }
+        this.handleIntervalRequest()
       }, 30000);
-
     })
+  }
+
+  handleIntervalRequest = () => {
+    const { essence, attention, sort, sequence } = this.state.filter;
+    const { totalCount: nowTotal = -1 } = this.props.index?.threads || {};
+
+    let newTypes = this.handleString2Arr(this.state.filter, 'types');
+    let categoryIds = this.handleString2Arr(this.state.filter, 'categoryids');
+
+    if (nowTotal !== -1) {
+      readThreadList({ params: { perPage: 10, page: 1, filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence } }).then((res) => {
+        const { totalCount = 0 } = res?.data || {};
+        if (totalCount > nowTotal) {
+          this.setState({
+            visible: true,
+            conNum: totalCount - nowTotal,
+          });
+          // 缓存新数据
+          this.newThread = res?.data
+        }
+      });
+    }
   }
 
   resetCategoryids(categoryids) {
@@ -150,7 +149,6 @@ class IndexPCPage extends React.Component {
 
     // 发起网络请求
     dispatch('click-filter', newFilter);
-    this.props.baselayout.setJumpingToTop();
    }
 
    goRefresh = () => {
@@ -175,12 +173,24 @@ class IndexPCPage extends React.Component {
     }
    }
 
-   // // 回到顶部 // visibility导致了导航栏无法正常显示子目录所以先注释掉
-   // onScroll = ({ scrollTop }) => {
-   //   this.setState({
-   //     visibility: scrollTop > 10 ? 'visible' : 'hidden',
-   //   })
-   // }
+   // 将字符串转成数组，且过滤掉不必要的参数
+  handleString2Arr = (dic, key) => {
+    if (!dic || !dic[key]) {
+      return
+    }
+
+    const target = dic[key]
+    let arr = [];
+    if (target) {
+      if (!(target instanceof Array)) {
+        arr = [target];
+      } else {
+        arr = target;
+      }
+    }
+
+    return arr?.filter(item => item !== 'all' && item !== 'default' && item !== '') || []
+  }
 
   // 后台接口的分类数据不会包含「全部」，此处前端手动添加
   handleCategories = () => {
@@ -194,7 +204,7 @@ class IndexPCPage extends React.Component {
     if (tmpCategories?.length) {
       return categories;
     }
-    tmpCategories = [{ name: '全部', pid: '-1', children: [] }, ...categories];
+    tmpCategories = [{ name: '全部', pid: 'all', children: [] }, ...categories];
 
     return tmpCategories;
   }
@@ -245,6 +255,8 @@ class IndexPCPage extends React.Component {
     const { pageData, currentPage, totalPage } = threads || {};
     return (
       <div className={styles.indexContent}>
+        <TopFilterView onFilterClick={this.onFilterClick} onPostThread={this.onPostThread} isShowDefault={isShowDefault} />
+
         <div className={styles.contnetTop}>
           {sticks?.length && <div className={`${styles.TopNewsBox} ${!visible && styles.noBorder}`}>
             <TopNews data={sticks} platform="pc" isShowBorder={false}/>
@@ -283,8 +295,9 @@ class IndexPCPage extends React.Component {
         left={ this.renderLeft(countThreads) }
         right={ this.renderRight() }
         pageName='home'
+        requestError={this.props.isError}
+        errorText={this.props.errorText}
       >
-        <TopFilterView onFilterClick={this.onFilterClick} onPostThread={this.onPostThread} isShowDefault={isShowDefault} />
         {this.renderContent(index)}
       </BaseLayout>
     );

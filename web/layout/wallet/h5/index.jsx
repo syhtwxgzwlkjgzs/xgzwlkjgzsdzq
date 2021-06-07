@@ -14,6 +14,7 @@ import { formatDate } from '@common/utils/format-date.js';
 import { INCOME_DETAIL_CONSTANTS, EXPAND_DETAIL_CONSTANTS, CASH_DETAIL_CONSTANTS } from '@common/constants/wallet';
 import List from '@components/list';
 import { typeFilter } from './adapter';
+import BaseLayout from '@components/base-layout'
 
 import layout from './layout.module.scss';
 
@@ -57,6 +58,7 @@ class WalletH5Page extends React.Component {
 
   // 切换选项卡
   onTabActive = (val) => {
+    this.props.wallet.resetInfo()
     this.setState({
       tabsType: val,
     });
@@ -197,6 +199,8 @@ class WalletH5Page extends React.Component {
         });
       }
       this.setState(pageState);
+
+      return
     } catch (e) {
       console.error(e);
       if (e.Code) {
@@ -205,6 +209,7 @@ class WalletH5Page extends React.Component {
           duration: 1000,
         });
       }
+      return Promise.reject()
     }
   };
 
@@ -223,6 +228,8 @@ class WalletH5Page extends React.Component {
       });
     }
     this.setState(pageState);
+
+    return
   };
 
   fetchCashDetail = async () => {
@@ -240,6 +247,8 @@ class WalletH5Page extends React.Component {
       });
     }
     this.setState(pageState);
+
+    return
   };
 
   listRenderDataFilter = (data) => {
@@ -268,11 +277,35 @@ class WalletH5Page extends React.Component {
       case 'withdrawal':
         arr = CASH_DETAIL_CONSTANTS;
     }
+
     for (const key in arr) {
       if (arr[key].code === this.state.selectType) {
         return arr[key].text || '';
       }
     }
+  }
+
+  renderFooter = () => {
+    return (
+      <div className={layout.footer}>
+        <Button className={layout.button} onClick={this.toWithrawal} >
+          提现
+        </Button>
+      </div>
+    )
+  }
+
+  // 处理上拉加载更多逻辑
+  handleOnRefresh = () => {
+    const { tabsType } = this.state
+    if (tabsType === 'income') {
+      return this.fetchIncomeDetail()
+    } else if (tabsType === 'pay') {
+      return this.fetchExpendDetail()
+    } else if (tabsType === 'withdrawal') {
+      return this.fetchCashDetail()
+    }
+    return Promise.resolve()
   }
 
   render() {
@@ -318,86 +351,68 @@ class WalletH5Page extends React.Component {
       ],
     ];
     const { walletInfo, incomeDetail = {}, expandDetail, cashDetail } = this.props.wallet;
-    const incomeData = this.listRenderDataFilter(incomeDetail) || []
-    const expandData = this.listRenderDataFilter(expandDetail) || []
-    const cashData = this.listRenderDataFilter(cashDetail) || []
+
+    const incomeData = this.listRenderDataFilter(incomeDetail) || [];
+    const expandData = this.listRenderDataFilter(expandDetail) || [];
+    const cashData = this.listRenderDataFilter(cashDetail) || [];
+
     return (
-      <div className={layout.container}>
-        <Header></Header>
-        <div className={layout.scroll}>
-          <div className={layout.header}>
-            <WalletInfo
-              walletData={walletInfo}
-              webPageType="h5"
-              onFrozenAmountClick={() => this.onFrozenAmountClick()}
-            ></WalletInfo>
+      <BaseLayout
+        noMore={this.state.page > this.state.totalPage}
+        onRefresh={this.handleOnRefresh}
+        className={layout.container}
+        footer={this.renderFooter()}
+        immediateCheck
+      >
+        <div className={layout.header}>
+          <WalletInfo
+            walletData={walletInfo}
+            webPageType="h5"
+            onFrozenAmountClick={() => this.onFrozenAmountClick()}
+          ></WalletInfo>
+        </div>
+      
+        <div className={layout.choiceTime}>
+          <div className={layout.status} onClick={this.handleTypeSelectorClick}>
+            <span className={layout.text}>
+              {this.renderSelectedType()}
+            </span>
+            <Icon name="UnderOutlined" size="6" className={layout.icon}></Icon>
           </div>
-          <div className={layout.choiceTime}>
-            <div className={layout.status} onClick={this.handleTypeSelectorClick}>
-              <span className={layout.text}>
-                {this.renderSelectedType()}
-              </span>
-              <Icon name="UnderOutlined" size="6" className={layout.icon}></Icon>
-            </div>
-            <div className={layout.status} onClick={this.handleTimeSelectorClick}>
-              <span className={layout.text}>
-                {formatDate(this.state.consumptionTime, 'yyyy年MM月') || formatDate(new Date(), 'yyyy年MM月')}
-              </span>
-              <Icon name="UnderOutlined" size="6" className={layout.icon}></Icon>
-            </div>
-          </div>
-          <div className={layout.tabs}>
-            <Tabs scrollable={true} className={layout.tabList} onActive={this.onTabActive}>
-              {tabList.map(([id, label, icon]) => (
-                <Tabs.TabPanel key={id} id={id} label={label} name={icon.name}>
-                  {this.state.tabsType === 'income' && (
-                    <List
-                      className={layout.list}
-                      noMore={this.state.page > this.state.totalPage}
-                      onRefresh={this.fetchIncomeDetail}
-                    >
-                      {incomeData.map((value,index) => (
-                        <IncomeList key={value.id} incomeVal={value} itemKey={index} dataLength={incomeData.length} />
-                      ))}
-                    </List>
-                  )}
-                  {this.state.tabsType === 'pay' && (
-                    <List
-                      className={layout.list}
-                      noMore={this.state.page > this.state.totalPage}
-                      onRefresh={this.fetchExpendDetail}
-                    >
-                      {expandData.map((value,index) => (
-                        <PayList key={value.id} payVal={value} itemKey={index} dataLength={expandData.length}  />
-                      ))}
-                    </List>
-                  )}
-                  {this.state.tabsType === 'withdrawal' && (
-                    <List
-                      className={layout.list}
-                      noMore={this.state.page > this.state.totalPage}
-                      onRefresh={this.fetchCashDetail}
-                    >
-                      {cashData.map((value,index) => (
-                        <WithdrawalList 
-                        key={value.id} 
-                        withdrawalVal={value}
-                        itemKey={index}
-                        dataLength={cashData.length} 
-                        />
-                      ))}
-                    </List>
-                  )}
-                </Tabs.TabPanel>
-              ))}
-            </Tabs>
+          <div className={layout.status} onClick={this.handleTimeSelectorClick}>
+            <span className={layout.text}>
+              {formatDate(this.state.consumptionTime, 'yyyy年MM月') || formatDate(new Date(), 'yyyy年MM月')}
+            </span>
+            <Icon name="UnderOutlined" size="6" className={layout.icon}></Icon>
           </div>
         </div>
-        <div className={layout.footer}>
-          <Button className={layout.button} onClick={this.toWithrawal} >
-            提现
-          </Button>
+
+        <div className={layout.tabs}>
+          <Tabs scrollable={true} className={layout.tabList} onActive={this.onTabActive}>
+            {tabList.map(([id, label, icon]) => (
+              <Tabs.TabPanel key={id} id={id} label={label} name={icon.name}></Tabs.TabPanel>
+            ))}
+          </Tabs>
+
+          {this.state.tabsType === 'income' && 
+            incomeData.map((value, index) => (
+              <IncomeList key={value.id} incomeVal={value} itemKey={index} dataLength={incomeData.length} />
+            ))
+          }
+
+          {this.state.tabsType === 'pay' && 
+            expandData.map((value, index) => (
+              <PayList key={value.id} payVal={value} itemKey={index} dataLength={expandData.length}  />
+            ))
+          }
+
+          {this.state.tabsType === 'withdrawal' &&
+            cashData.map((value, index) => (
+              <WithdrawalList key={value.id} withdrawalVal={value} itemKey={index} dataLength={cashData.length} />
+            ))
+          }
         </div>
+  
         <FilterView
           value={this.state.selectType}
           data={this.renderSelectContent()}
@@ -413,7 +428,7 @@ class WalletH5Page extends React.Component {
           onSelects={this.handleMoneyTime}
           dateConfig={DATE_PICKER_CONFIG}
         />
-      </div>
+      </BaseLayout>
     );
   }
 }

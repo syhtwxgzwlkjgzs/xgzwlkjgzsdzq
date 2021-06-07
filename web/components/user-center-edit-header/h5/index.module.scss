@@ -56,14 +56,21 @@
       -webkit-box-orient: vertical;
       line-height: 1.2;
       color: $text-color-primary;
-      margin-left: rem($margin-2n);
-      min-width: rem(200);
+      // margin-left: rem($margin-2n);
     }
     .userCenterEditDecItem {
       display: flex;
       padding: 0 rem($padding-4n);
       justify-content: center;
       align-items: center;
+      :global {
+        .dzq-input {
+          width: 100%;
+        }
+      }
+    }
+    .compileIcon {
+      margin-right: rem($margin-2n);
     }
     .userSignatureInput {
       height: rem(20);
@@ -77,6 +84,7 @@
           height: rem(20);
           border: none;
           line-height: rem(20);
+          padding: 0;
         }
       }
     }
@@ -126,5 +134,14 @@
       margin-left: rem($margin-2n);
     }
   }
+}
+
+.hiddenElement {
+  position: absolute;
+  z-index: -1;
+  visibility: hidden;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 

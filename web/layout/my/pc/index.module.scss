@@ -35,14 +35,42 @@
   .userInfoKey {
     color: $text-color-regular;
     font-size: rem($font-size-primary);
+    flex-shrink: 0;
   }
 
   .userInfoValue {
     color: $text-color-primary;
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    margin-left: rem($margin-1n);
+    @include text-ellipsis();
+  }
+
+  .wxContent {
+    display: flex;
+    align-items: center;
+  }
+
+  .wecahtNickname {
+    margin-left: rem(8);
+    @include text-ellipsis();
   }
 }
 
 .friendsWrapper {
   overflow: hidden !important;
   margin: 0 rem(-16);
+}
+
+.threadStyle {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.postTitle {
+  padding: 0 rem($padding-6n);
+  border-top-left-radius: rem($border-radius-small);
+  border-top-right-radius: rem($border-radius-small);
+  background: var(--color-white);
 }

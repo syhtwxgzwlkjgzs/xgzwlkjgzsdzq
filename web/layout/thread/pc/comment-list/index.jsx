@@ -8,7 +8,7 @@ import DeletePopup from '@components/thread-detail-pc/delete-popup';
 import { Icon, Toast } from '@discuzq/design';
 import classnames from 'classnames';
 import goToLoginPage from '@common/utils/go-to-login-page';
-
+import { debounce } from '@common/utils/throttle-debounce.js'
 const typeMap = {
   101: 'IMAGE',
   102: 'VOICE',
@@ -222,9 +222,11 @@ class RenderCommentList extends React.Component {
   }
 
   // 创建回复评论+回复回复接口
-  async createReply(val) {
-    if (!val) {
-      Toast.info({ content: '请输入内容!' });
+  async createReply(val, imageList) {
+    const valuestr = val.replace(/\s/g, '');
+    // 如果内部为空，且只包含空格或空行
+    if (!valuestr) {
+      Toast.info({ content: '请输入内容' });
       return;
     }
 
@@ -248,6 +250,18 @@ class RenderCommentList extends React.Component {
       params.replyId = this.commentData.id;
       params.isComment = true;
       params.commentId = this.commentData.id;
+    }
+
+    if (imageList?.length) {
+      params.attachments = imageList
+        .filter((item) => item.status === 'success' && item.response)
+        .map((item) => {
+          const { id } = item.response;
+          return {
+            id,
+            type: 'attachments',
+          };
+        });
     }
 
     const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
@@ -373,7 +387,7 @@ class RenderCommentList extends React.Component {
         <div className={comment.input}>
           <CommentInput
             height="middle"
-            onSubmit={(value) => this.props.onPublishClick(value)}
+            onSubmit={(value, imageList) => this.props.onPublishClick(value, imageList)}
             initValue={this.state.inputValue}
             placeholder={this.state.placeholder}
           ></CommentInput>
@@ -393,16 +407,16 @@ class RenderCommentList extends React.Component {
               <CommentList
                 data={val}
                 key={val.id}
-                likeClick={() => this.likeClick(val)}
+                likeClick={debounce(() => this.likeClick(val),300)}
                 replyClick={() => this.replyClick(val)}
                 deleteClick={() => this.deleteClick(val)}
                 editClick={() => this.editClick(val)}
-                replyLikeClick={(reply) => this.replyLikeClick(reply, val)}
+                replyLikeClick={debounce((reply) => this.replyLikeClick(reply, val),300)}
                 replyReplyClick={(reply) => this.replyReplyClick(reply, val)}
                 replyDeleteClick={(reply) => this.replyDeleteClick(reply, val)}
                 reportClick={() => this.reportClick(val)}
                 onCommentClick={() => this.onCommentClick(val)}
-                onSubmit={(val) => this.createReply(val)}
+                onSubmit={(val, imageList) => this.createReply(val, imageList)}
                 isShowOne={true}
                 isShowInput={this.state.commentId === val.id}
                 onAboptClick={() => this.onAboptClick(val)}

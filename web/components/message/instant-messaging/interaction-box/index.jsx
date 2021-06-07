@@ -11,7 +11,7 @@ import styles from './index.module.scss';
 
 const InteractionBox = (props) => {
   const { onSubmit, dialogBoxRef, platform, dialogId, threadPost, showEmoji, setShowEmoji, username } = props;
-  const { readDialogMsgList, dialogMsgList, createDialogMsg, createDialog } = props.message;
+  const { readDialogMsgList, dialogMsgList, createDialogMsg, createDialog, readDialogIdByUsername } = props.message;
 
   const [lastTimestamp, setLastTimestamp] = useState(0);
   const [typingValue, setTypingValue] = useState('');
@@ -21,7 +21,7 @@ const InteractionBox = (props) => {
   let toastInstance = null;
 
 
-  const uploadRef = useRef(null);
+  const uploadRef = useRef();
 
   // const checkToShowCurrentMsgTime = (curTimestamp) => {
   //   const DISPLAY_GAP_IN_MINS = 3;
@@ -34,12 +34,26 @@ const InteractionBox = (props) => {
   //     return true;
   //   }
   // };
+  const replaceRouteWidthDialogId = (dialogId) => {
+    Router.replace({ url: `/message?page=chat&username=${username}&dialogId=${dialogId}` });
+  };
+
+
+  useEffect(async () => {
+    if (username && !dialogId) {
+      const res = await readDialogIdByUsername(username);
+      const { code, data: { dialogId } } = res;
+      if (code === 0 && dialogId) {
+        replaceRouteWidthDialogId(dialogId);
+      }
+    }
+  }, []);
+
 
   useEffect(() => {
     if (!threadPost.emojis.length) {
       threadPost.fetchEmoji();
     }
-
     return () => {
       toastInstance?.destroy();
     };
@@ -47,7 +61,6 @@ const InteractionBox = (props) => {
 
 
   const submit = async (data) => {
-    setShowEmoji(false);
     let ret = {};
     if (dialogId) {
       ret = await createDialogMsg({
@@ -59,7 +72,7 @@ const InteractionBox = (props) => {
         setTypingValue('');
         readDialogMsgList(dialogId);
       } else {
-        Toast.error({ content: ret.message });
+        Toast.error({ content: ret.msg });
       }
     }
 
@@ -70,9 +83,9 @@ const InteractionBox = (props) => {
       });
       if (ret.code === 0) {
         setTypingValue('');
-        Router.replace({url: `/message?page=chat&dialogId=${ret.data.dialogId}`});
+        replaceRouteWidthDialogId(ret.data.dialogId);
       } else {
-        Toast.error({ content: ret.message });
+        Toast.error({ content: ret.msg });
       }
     }
   };
@@ -84,6 +97,7 @@ const InteractionBox = (props) => {
 
   const doPressEnter = (e) => {
     if (e.key !== 'Enter') return;
+    e.preventDefault();
     doSubmitClick();
   };
 
@@ -93,8 +107,63 @@ const InteractionBox = (props) => {
     uploadRef.current.click();
   };
 
+  // 图片上传之前，true-允许上传，false-取消上传
+  const beforeUpload = (cloneList) => {
+    const { webConfig } = props.site;
+    if (!webConfig) return false;
+
+    const file = cloneList[0];
+    const { supportImgExt, supportMaxSize } = webConfig.setAttach;
+    const imageType = file.name.match(/\.([^\.]+)$/)[1].toLocaleLowerCase();
+    const imageSize = file.size;
+    const isLegalType = supportImgExt.toLocaleLowerCase().includes(imageType);
+    const isLegalSize = imageSize > 0 && imageSize < supportMaxSize * 1024 * 1024;
+
+    if (!isLegalType) {
+      Toast.info({ content: `仅支持${supportImgExt}类型的图片` });
+      return false;
+    }
+
+    if (!isLegalSize) {
+      Toast.info({ content: `仅支持0 ~ ${supportMaxSize}MB的图片` });
+      return false;
+    }
+
+    return true;
+  };
+
+  const onImgChange = async (e) => {
+    const files = e.target.files;
+    if (!beforeUpload(files)) {
+      uploadRef.current.value = '';
+      return; // 图片上传前校验
+    }
+
+    toastInstance = Toast.loading({
+      content: '图片发送中...',
+      duration: 0,
+    });
+    const formData = new FormData();
+    formData.append('file', files[0]);
+    formData.append('type', 1);
+    const ret = await createAttachment(formData);
+    const { code, data } = ret;
+    if (code === 0) {
+      await submit({ imageUrl: data.url });
+    } else {
+      Toast.error({ content: ret.msg });
+    }
+    uploadRef.current.value = '';
+  }
+
   const recordCursor = (e) => {
     setCursorPosition(e.target.selectionStart);
+  };
+
+  const insertEmoji = (emoji) => {
+    const text = typingValue.slice(0, cursorPosition) + emoji.code + typingValue.slice(cursorPosition);
+    setTypingValue(text);
+    setCursorPosition(cursorPosition + emoji.code.length);
   };
 
   return (
@@ -103,66 +172,51 @@ const InteractionBox = (props) => {
         style={{display: 'none'}}
         type="file"
         ref={uploadRef}
-        onChange={async (e) => {
-          toastInstance = Toast.loading({
-            content: '图片发送中...',
-            duration: 0,
-          });
-          const formData = new FormData();
-          formData.append('file', e.target.files[0]);
-          formData.append('type', 1);
-          const ret = await createAttachment(formData);
-          const { code, data } = ret;
-          if (code === 0) {
-            submit({ imageUrl: data.url });
-          } else {
-            Toast.error({ content: ret.message });
-          }
-        }}
-        // multiple='1'
+        onChange={onImgChange}
         accept={ACCEPT_IMAGE_TYPES.join(',')}
       />
 
       {platform === 'h5' && (
         <>
-          <div className={styles.h5InteractionBox} style={{bottom: showEmoji ? '200px' : 0}}>
-          <div className={styles.inputWrapper}>
-            <Input value={typingValue} placeholder=" 请输入内容" onFocus={() => {
-              setShowEmoji(false);
-            }} onChange={(e) => {
-              setTypingValue(e.target.value);
-              recordCursor(e);
-            }} onBlur={(e) => {
-              recordCursor(e);
-            }} />
-            <div className={styles.tools}>
-              <div>
-                <Icon name="SmilingFaceOutlined" size={20} onClick={() => {setShowEmoji(!showEmoji);}} />
-              </div>
-              <div className={styles.pictureUpload}>
-                <Icon name="PictureOutlinedBig" size={20} onClick={() => {
-                  setShowEmoji(false);
-                  uploadImage();
-                }} />
+          <div className={styles.h5InteractionBox} style={{ bottom: showEmoji ? '200px' : 0 }}>
+            <div className={styles.inputWrapper}>
+              <Input
+                value={typingValue}
+                placeholder=" 请输入内容"
+                onChange={(e) => {
+                  setTypingValue(e.target.value);
+                  recordCursor(e);
+                }}
+                onBlur={(e) => {
+                  recordCursor(e);
+                }}
+              />
+              <div className={styles.tools}>
+                <div>
+                  <Icon name="SmilingFaceOutlined" size={20} onClick={(e) => {
+                    e.stopPropagation();
+                    setShowEmoji(!showEmoji);
+                  }} />
+                </div>
+                <div className={styles.pictureUpload}>
+                  <Icon name="PictureOutlinedBig" size={20} onClick={() => {
+                    uploadImage();
+                  }} />
+                </div>
               </div>
             </div>
+            <div className={styles.submit}>
+              <Button type="primary" onClick={doSubmitClick}>
+                发送
+              </Button>
+            </div>
           </div>
-          <div className={styles.submit}>
-            <Button type="primary" onClick={doSubmitClick}>
-              发送
-            </Button>
-          </div>
-        </div>
-        <div className={styles.emoji}>
-          <Emoji
-            show={showEmoji}
-            emojis={threadPost.emojis}
-            onClick={
-              (emoji) => {
-                const text = typingValue.slice(0, cursorPosition) + emoji.code + typingValue.slice(cursorPosition);
-                setTypingValue(text);
-                setCursorPosition(cursorPosition + emoji.code.length);
-              }}
+          <div className={styles.emoji}>
+            <Emoji
+              onEmojiBlur={() => setShowEmoji(false)}
+              show={showEmoji}
+              emojis={threadPost.emojis}
+              onClick={insertEmoji}
             />
           </div>
         </>
@@ -170,16 +224,21 @@ const InteractionBox = (props) => {
       {platform === 'pc' && (
         <div className={styles.pcInteractionBox}>
           <div className={styles.tools}>
+            <Emoji
+              onEmojiBlur={() => setShowEmoji(false)}
+              pc
+              show={showEmoji}
+              emojis={threadPost.emojis}
+              onClick={insertEmoji}
+            />
             <div className={styles.emoj}>
-              <Icon name="SmilingFaceOutlined" size={20} />
+              <Icon name="SmilingFaceOutlined" size={20} onClick={(e) => {
+                e.stopPropagation();
+                setShowEmoji(!showEmoji);
+              }} />
             </div>
             <div className={styles.pictureUpload}>
-              <Upload
-                handleUploadChange={() => {}}
-                isCustomUploadIcon={true}
-              >
-                <Icon name="PictureOutlinedBig" size={20} onClick={uploadImage} />
-              </Upload>
+              <Icon name="PictureOutlinedBig" size={20} onClick={uploadImage} />
             </div>
           </div>
           <Textarea
@@ -188,7 +247,13 @@ const InteractionBox = (props) => {
             focus={true}
             maxLength={5000}
             rows={3}
-            onChange={(e) => setTypingValue(e.target.value)}
+            onChange={(e) => {
+              setTypingValue(e.target.value);
+              recordCursor(e);
+            }}
+            onBlur={(e) => {
+              recordCursor(e);
+            }}
             onKeyDown={doPressEnter}
             placeholder={' 请输入内容'}
           />
@@ -203,4 +268,4 @@ const InteractionBox = (props) => {
   );
 };
 
-export default inject('message', 'user', 'threadPost')(observer(InteractionBox));
+export default inject('message', 'user', 'threadPost', 'site')(observer(InteractionBox));

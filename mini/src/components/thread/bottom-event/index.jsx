@@ -1,9 +1,9 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import styles from './index.module.scss';
 import Tip from '../tip';
 import Icon from '@discuzq/design/dist/components/icon/index';
-import { View, Text, Button } from '@tarojs/components'
-
+import { View, Text } from '@tarojs/components'
+import ShareButton from '../share-button'
 /**
  * 帖子底部内容
  * @prop {array}    userImgs 点赞分享用户信息
@@ -23,6 +23,7 @@ const Index = ({
   isSendingLike = false,
   tipData,
   platform,
+  index,
   onShare = () => {},
   onComment = () => {},
   onPraise = () => {},
@@ -48,11 +49,17 @@ const Index = ({
       type: 'share'
     }];
   }, [isLiked]);
-  const needHeight = useMemo(() => {
-    return userImgs.length !== 0 || comment > 0 || sharing > 0
-  }, [userImgs, comment, sharing])
+  const [ show, setShow ] = useState(false)
+  const handleClickShare = () => {
+    setShow(true)
+  }
+  const needHeight = useMemo(() => userImgs.length !== 0 || comment > 0 || sharing > 0, [userImgs, comment, sharing])
+  const thread = index
   return (
     <View>
+      {
+        show && <ShareButton setShow={setShow} tipData={tipData} index={thread}></ShareButton>
+      }
       <View className={needHeight ? styles.user : styles.users}>
         {userImgs.length !== 0 ? <View className={styles.userImg}>
           <View className={styles.portrait}>
@@ -72,28 +79,28 @@ const Index = ({
           {sharing > 0 && <Text className={styles.commentNum}>{`${sharing}次分享`}</Text>}
         </View>
       </View>
-
+          
       <View className={needHeight ? styles.operation : styles.operations}>
         {
           postList.map((item, index) => (
               item.name === '分享'?(
-                <Button  plain='true' className={styles.fabulous} openType='share' data-threadId={tipData.threadId} >
-                  <View className={styles.fabulousIcon}>
+                <View key={index} className={styles.fabulous} onClick={handleClickShare}>
+                 <View className={styles.fabulousIcon}>
                     <Icon
-                    className={`${styles.icon} ${item.type}`}
+                    className={`${styles.icon} ${item.type}`} 
                     name={item.icon}
-                    >
+                    size={16}>
                   </Icon>
-                  </View>
-                  <Text className={styles.fabulousPost}>
+                </View>
+                <Text className={styles.fabulousPost}>
                   {item.name}
                 </Text>
-                </Button>
+              </View>
               ):
               (<View key={index} className={styles.fabulous} onClick={item.event}>
                  <View className={styles.fabulousIcon}>
                     <Icon
-                    className={`${styles.icon} ${item.type}`}
+                    className={`${styles.icon} ${item.type} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`} 
                     name={item.icon}
                     size={16}>
                   </Icon>
@@ -108,4 +115,4 @@ const Index = ({
     </View>
   );
 };
-export default React.memo(Index);
+export default  React.memo(Index);

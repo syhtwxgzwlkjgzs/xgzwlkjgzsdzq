@@ -10,14 +10,6 @@ import classNames from 'classnames';
 @observer
 export default class index extends Component {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      newPayPwd: null,
-      newPayPwdRepeat: null,
-    }
-  }
-
   componentDidMount() {
     this.props.payBox.clearPayPassword()
   }

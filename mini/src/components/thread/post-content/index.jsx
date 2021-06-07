@@ -36,6 +36,7 @@ const Index = ({
 }) => {
   // 内容是否超出屏幕高度
   const [contentTooLong, setContentTooLong] = useState(false);
+  const [cutContentForDisplay, setCutContentForDisplay] = useState("");
   const [showMore, setHiddenMore] = useState(!useShowMore);
   const contentWrapperRef = useRef(null);
 
@@ -75,14 +76,29 @@ const Index = ({
     }
   }
 
+  const getCutContentForDisplay = (maxContentLength) => {
+    const ctn = filterContent;
+    let ctnSubstring = ctn.substring(0, maxContentLength); // 根据长度截断
+
+    const cutPoint = (ctnSubstring.lastIndexOf("<img") > 0) ?
+                      ctnSubstring.lastIndexOf("<img") : ctnSubstring.length;
+
+    ctnSubstring = ctnSubstring.substring(0, cutPoint)
+    setCutContentForDisplay(ctnSubstring);
+  }
+  
   useEffect(() => {
-    const length = fuzzyCalcContentLength(filterContent)
-    if (length < 262) {
+    const lengthInLine = parseInt((contentWrapperRef.current.offsetWidth || 704) / 16);
+    const length = fuzzyCalcContentLength(filterContent, lengthInLine);
+    const maxContentLength = lengthInLine * 6; // 如果默认长度是704，一共可容纳264个字符
+
+    if (length < maxContentLength && length <= 1200) { // 显示6行内容
       setHiddenMore(true);
     } else {
       setHiddenMore(false);
     }
     if (length > 1200) {
+      if(useShowMore) getCutContentForDisplay(1200);
       setContentTooLong(true)
     } else {
       setContentTooLong(false)
@@ -97,7 +113,7 @@ const Index = ({
         onClick={!showMore ? onShowMore : handleClick}
       >
         <View className={styles.content}>
-          <RichText content={filterContent} onClick={handleClick} />
+          <RichText content={(useShowMore && cutContentForDisplay) ? cutContentForDisplay : filterContent} onClick={handleClick} />
         </View>
       </View>
       {!loading && useShowMore && !showMore && (

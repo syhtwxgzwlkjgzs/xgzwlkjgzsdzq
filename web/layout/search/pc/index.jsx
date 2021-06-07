@@ -79,13 +79,16 @@ class SearchPCPage extends React.Component {
     if (type === '1') {
       this.props.search.postFollow(id).then(result => {
         if (result) {
-          this.props.search.updateActiveUserInfo(id, { isFollow: true })
+          const { isMutual = 0 } = result
+          this.props.search.updateActiveUserInfo(id, { isFollow: true, isMutual: !!isMutual })
         }
+      }).catch(err => {
+        Toast.info({ content: err });
       })
     } else {
       this.props.search.cancelFollow({ id, type: 1 }).then(result => {
         if (result) {
-          this.props.search.updateActiveUserInfo(id, { isFollow: false })
+          this.props.search.updateActiveUserInfo(id, { isFollow: false, isMutual: false })
         }
       })
     }
@@ -97,13 +100,13 @@ class SearchPCPage extends React.Component {
 
     switch (index) {
       case 0:
-        pos = this.treadingTopicRef.current.offsetTop;
+        pos = this.treadingTopicRef?.current?.offsetTop || 0;
         break;
       case 1:
-        pos = this.activeUsersRef.current.offsetTop;
+        pos = this.activeUsersRef?.current?.offsetTop || 0;
         break;
       case 2:
-        pos = this.hotTopicRef.current.offsetTop;
+        pos = this.hotTopicRef?.current?.offsetTop || 0;
         break;
       default:
         return;
@@ -128,20 +131,22 @@ class SearchPCPage extends React.Component {
   }
   handleScroll = ({ scrollTop } = {}) => {
     const HEADER_HEIGHT = 57;
-    const STEPPER_PADDING = 24;
+    const STEPPER_PADDING = 30;
 
-    const activeUsersPos = this.activeUsersRef.current.offsetTop,
+    const activeUsersPos = this.activeUsersRef?.current?.offsetTop || 0,
           activeUsersScrollTo = activeUsersPos + parseInt(HEADER_HEIGHT / 2) - STEPPER_PADDING;
 
-    const hotTopicPos = this.hotTopicRef.current.offsetTop,
+    const hotTopicPos = this.hotTopicRef?.current?.offsetTop || 0,
           hotTopicScrollTo = hotTopicPos + parseInt(HEADER_HEIGHT / 2) - STEPPER_PADDING;
 
-    if(scrollTop < activeUsersScrollTo) {
-      this.setState({stepIndex: 0}); // TODO: 暂时写死index，应该通过steps传回index
-    } else if(scrollTop < hotTopicScrollTo && scrollTop >= activeUsersScrollTo) {
-      this.setState({stepIndex: 1});
-    } else if(scrollTop >= hotTopicScrollTo) {
-      this.setState({stepIndex: 2});
+    if(scrollTop) {
+      if(scrollTop < activeUsersScrollTo) {
+        this.setState({stepIndex: 0}); // TODO: 暂时写死index，应该通过steps传回index
+      } else if(scrollTop < hotTopicScrollTo && scrollTop >= activeUsersScrollTo) {
+        this.setState({stepIndex: 1});
+      } else if(scrollTop >= hotTopicScrollTo) {
+        this.setState({stepIndex: 2});
+      }
     }
   }
 

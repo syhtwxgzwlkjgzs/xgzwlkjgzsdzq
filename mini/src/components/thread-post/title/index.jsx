@@ -13,7 +13,7 @@ import styles from './index.module.scss';
 
 import PropTypes from 'prop-types';
 
-const Index = ({ value, show, placeholder, onChange, onBlur }) => {
+const Index = ({ value, show, placeholder, onChange, onBlur, onFocus }) => {
   return (
     <View className={`${styles.container} ${show ? '' : styles['is-display']}`}>
       <Input
@@ -22,6 +22,8 @@ const Index = ({ value, show, placeholder, onChange, onBlur }) => {
         placeholder={placeholder}
         onChange={e => onChange(e.target.value)}
         onBlur={onBlur}
+        onFocus={onFocus}
+        maxLength={100}
       />
     </View>
   );
@@ -33,6 +35,7 @@ Index.propTypes = {
   placeholder: PropTypes.string,
   onChange: PropTypes.func,
   onBlur: PropTypes.func,
+  onFocus: PropTypes.func,
 };
 
 // 设置props默认类型
@@ -40,8 +43,9 @@ Index.defaultProps = {
   value: '',
   show: true,
   placeholder: '标题(可选)',
-  onChange: () => { },
-  onBlur: () => { },
+  onChange: () => {},
+  onBlur: () => {},
+  onFocus: () => {},
 };
 
 export default memo(Index);

@@ -19,15 +19,21 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
   // 选中项index
   const newFilterData = filterData.slice();
   if ( isShowDefault ) {
-    newFilterData[0].isActive = false;
-    newFilterData.unshift({
-      label: '默认', // 默认智能排序
+    newFilterData.splice(1, 0, {
+      label: '推荐', // 默认智能排序
       type: 'sequence',
-      isActive: true,
+      isActive: false,
     });
   }
   
   const [dataSource, setDataSource] = useState(deepClone(newFilterData));
+
+  const onClickSubmenu = (subIndex, index) => {
+    // 点击二级菜单的头部，清空所有选项
+    newDataSource.map(item => {
+      item.isActive = false
+    })
+  }
 
   // 点击筛选项，获取目标值
   const onClick = (subIndex, index) => {
@@ -106,7 +112,7 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
                   key={index} 
                   index={index} 
                   title={title(item.label)} 
-                  style={{ padding: '3px 0' }}
+                  style={{ padding: '3px 2%', height: '55px' }}
                 >
                   {
                     item.children.map((secondItem, secondIndex) => {
@@ -124,9 +130,11 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
                   }
                 </Menu.SubMenu>
             ) : (
-                <Menu.Item onClick={onClick} key={index} index={`${index}`} style={{ padding: '0 16px' }}>
-                  {item.label}
-                  { item.isActive && <div className={styles.line}></div> }
+                <Menu.Item onClick={onClick} key={index} index={`${index}`} style={index === 0 ? {padding: '0 2% 0 0'} : { padding: '0 2%' }}>
+                  <div className={styles.label}>
+                    { item.label }
+                    { item.isActive && <div className={styles.line}></div> }
+                  </div>
                 </Menu.Item>
             )
           ))

@@ -14,20 +14,32 @@ class UserCenterFriends extends React.Component {
     withHeaderUserInfo: false,
     userName: null,
     userGroup: null,
-    followHandler: async () => { },
-    unFollowHandler: async () => { },
-    onContainerClick: async ({ id }) => { },
+    itemStyle: {},
+    itemWrapperStyle: {},
+    followHandler: async () => {},
+    unFollowHandler: async () => {},
+    onContainerClick: async ({ id }) => {},
   };
 
   render() {
     const myid = this.props.user.id;
     return (
-      <div onClick={async () => {
-        await this.props.onContainerClick({
-          id: this.props.id,
-        });
-      }}>
-        <div className={styles.friendItem}>
+      <div
+        style={{
+          ...this.props.itemWrapperStyle,
+        }}
+        onClick={async () => {
+          await this.props.onContainerClick({
+            id: this.props.id,
+          });
+        }}
+      >
+        <div
+          style={{
+            ...this.props.itemStyle,
+          }}
+          className={styles.friendItem}
+        >
           <div className={styles.friendInfo}>
             <div className={styles.friendAvatar}>
               <Avatar
@@ -44,56 +56,58 @@ class UserCenterFriends extends React.Component {
             </div>
           </div>
 
-          {this.props.id != myid && <div className={styles.friendAction}>
-            {this.props.type === 'follow' && (
-              <Button
-                type={'primary'}
-                className={styles.friendActionFollow}
-                onClick={async (e) => {
-                  e.stopPropagation();
-                  await this.props.followHandler({
-                    id: this.props.id,
-                  });
-                }}
-              >
-                <span>+</span>
-                {/* <Icon size={14} name={'PlusOutlined'} /> */}
-                <span>关注</span>
-              </Button>
-            )}
+          {this.props.id != myid && (
+            <div className={styles.friendAction}>
+              {this.props.type === 'follow' && (
+                <Button
+                  type={'primary'}
+                  className={styles.friendActionFollow}
+                  onClick={async (e) => {
+                    e.stopPropagation();
+                    await this.props.followHandler({
+                      id: this.props.id,
+                    });
+                  }}
+                >
+                  <span>+</span>
+                  {/* <Icon size={14} name={'PlusOutlined'} /> */}
+                  <span>关注</span>
+                </Button>
+              )}
 
-            {this.props.type === 'friend' && (
-              <Button
-                type={'primary'}
-                className={styles.friendActionFriend}
-                onClick={async (e) => {
-                  e.stopPropagation();
-                  await this.props.unFollowHandler({
-                    id: this.props.id,
-                  });
-                }}
-              >
-                <Icon size={10} name={'WithdrawOutlined'} />
-                <span>互关</span>
-              </Button>
-            )}
+              {this.props.type === 'friend' && (
+                <Button
+                  type={'primary'}
+                  className={styles.friendActionFriend}
+                  onClick={async (e) => {
+                    e.stopPropagation();
+                    await this.props.unFollowHandler({
+                      id: this.props.id,
+                    });
+                  }}
+                >
+                  <Icon size={10} name={'WithdrawOutlined'} />
+                  <span>互关</span>
+                </Button>
+              )}
 
-            {this.props.type === 'followed' && (
-              <Button
-                type={'primary'}
-                className={styles.friendActionFollowed}
-                onClick={async (e) => {
-                  e.stopPropagation();
-                  await this.props.unFollowHandler({
-                    id: this.props.id,
-                  });
-                }}
-              >
-                <Icon size={10} name={'CheckOutlined'} />
-                <span>已关注</span>
-              </Button>
-            )}
-          </div>}
+              {this.props.type === 'followed' && (
+                <Button
+                  type={'primary'}
+                  className={styles.friendActionFollowed}
+                  onClick={async (e) => {
+                    e.stopPropagation();
+                    await this.props.unFollowHandler({
+                      id: this.props.id,
+                    });
+                  }}
+                >
+                  <Icon size={10} name={'CheckOutlined'} />
+                  <span>已关注</span>
+                </Button>
+              )}
+            </div>
+          )}
         </div>
       </div>
     );

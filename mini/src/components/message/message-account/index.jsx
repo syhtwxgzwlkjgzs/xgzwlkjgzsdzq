@@ -37,10 +37,10 @@ const Index = ({ message, subPage }) => {
     data.forEach(item => {
       list.push({
         id: item.id,
+        isFirst: item.isFirst, // 标识消息主题来源于主题或评论
         createdAt: item.createdAt,
         threadId: item.threadId,
-        content: item.postContent,
-        title: item.threadTitle,
+        content: item.isFirst ? (item.threadTitle || item.replyPostContent) : item.postContent,
         type: item.type,
         avatar: item.userAvatar,
         userId: item.userId,
@@ -67,7 +67,7 @@ const Index = ({ message, subPage }) => {
         totalCount: replyUnread || 0,
       },
       {
-        iconName: 'LikeOutlined',
+        iconName: 'PraiseOutlined',
         title: '点赞我的',
         link: '/subPages/message/index?page=account&subPage=like',
         totalCount: likeUnread || 0,
@@ -79,11 +79,11 @@ const Index = ({ message, subPage }) => {
     <View className={styles.container}>
       <Notice
         noMore={currentPage >= totalPage}
-        topCard={
-          type === 'accountMsgList'
-            ? <Card items={items} onClick={(url) => Taro.navigateTo({ url })} />
-            : null
-        }
+        // topCard={
+        //   type === 'accountMsgList'
+        //     ? <Card items={items} onClick={(url) => Taro.navigateTo({ url })} />
+        //     : null
+        // }
         list={handleRenderList(list)}
         type='account'
         onPullDown={() => fetchMessageData(1)}

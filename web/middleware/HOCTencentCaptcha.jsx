@@ -3,39 +3,53 @@ import { inject } from 'mobx-react';
 
 export default function HOCTencentCaptcha(Component) {
   @inject('site')
+
   class HOCTencentCaptchaComponent extends React.Component {
-    captcha = null;
-    constructor(props) {
-      super(props);
+    tcaptcha = null;
+    qcloudCaptcha = false;
+
+    componentDidMount() {
+      this.loadTencentCaptcha();
     }
 
-    showCaptcha = () => new Promise((resolve) => {
-      // 验证码实例为空，则创建实例
-      const { webConfig } = this.props.site;
-      const qcloudCaptcha = webConfig?.qcloud?.qcloudCaptcha;
-      const qcloudCaptchaAppId = webConfig?.qcloud?.qcloudCaptchaAppId;
 
-      if (qcloudCaptcha) {
-        import('@discuzq/sdk/dist/common_modules/sliding-captcha').then(({
-          TencentCaptcha,
-        }) => {
-          this.captcha = new TencentCaptcha(qcloudCaptchaAppId, (res) => {
-            if (res.ret === 0) {
-              resolve({
-                captchaRandStr: res.randstr,
-                captchaTicket: res.ticket,
-              });
-            }
-          });
-          // 显示验证码
-          this.captcha.show();
-        });
-      } else {
+    loadTencentCaptcha = () => {
+      const { webConfig } = this.props.site;
+      this.qcloudCaptcha = webConfig?.qcloud?.qcloudCaptcha;
+
+      if (!this.qcloudCaptcha) return;
+      if (typeof window === 'undefined' || window.TencentCaptcha) return;
+      const script = window.document.createElement('script');
+      script.src = 'https://ssl.captcha.qq.com/TCaptcha.js';
+      script.async = true;
+      window.document.body.append(script);
+    }
+
+    showCaptcha = () => new Promise((resolve, reject) => {
+      if (!this.qcloudCaptcha) {
         resolve({
-          captchaRandStr: null,
-          captchaTicket: null,
+          captchaRandStr: '',
+          captchaTicket: '',
         });
+        return;
       }
+
+      if (!window.TencentCaptcha)  {
+        reject({ Code: 'captcha_not_available', Message: '图形验证码加载失败，请刷新页面' });
+        return;
+      }
+
+      const qcloudCaptchaAppId = this.props.site?.webConfig?.qcloud?.qcloudCaptchaAppId;
+      this.tcaptcha = new window.TencentCaptcha(qcloudCaptchaAppId, (res) => {
+        if (res.ret === 0) {
+          return resolve({
+            captchaRandStr: res.randstr,
+            captchaTicket: res.ticket,
+          });
+        }
+      });
+      // 显示验证码
+      this.tcaptcha.show();
     })
 
     render() {

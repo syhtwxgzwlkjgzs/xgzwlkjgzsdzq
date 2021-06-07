@@ -97,7 +97,7 @@ class TopicSelect extends Component {
     const { finish, keywords } = this.state;
 
     const content = (
-      <div className={styles.wrapper}>
+      <div className={styles.wrapper} onClick={e => e.stopPropagation()}>
 
         {/* top */}
         <div className={styles.header}>

@@ -1,8 +1,20 @@
 import { action } from 'mobx';
 import MessageStore from './store';
-import { readDialogList, readMsgList, createDialog, deleteMsg, deleteDialog, readDialogMsgList, createDialogMsg, readUnreadCount } from '@server';
+import { readDialogList, readMsgList, createDialog, deleteMsg, deleteDialog, readDialogMsgList, createDialogMsg, readUnreadCount, readDialogIdByUsername, updateDialog } from '@server';
 
 class MessageAction extends MessageStore {
+  // 根据username获取dialogId
+  @action.bound
+  async readDialogIdByUsername(username) {
+    return readDialogIdByUsername({ params: { username } });
+  }
+
+  // 把对话消息设置为已读
+  @action.bound
+  async updateDialog(dialogId) {
+    updateDialog({ data: { dialogId } });
+  }
+
   // 获取未读消息数量
   @action.bound
   async readUnreadCount() {
@@ -10,10 +22,10 @@ class MessageAction extends MessageStore {
     const { code, data } = ret;
     if (code === 0) {
       const { unreadNotifications, typeUnreadNotifications } = data;
-      const { questioned = 0, receiveredpacket = 0, related = 0, replied = 0, system = 0, withdrawal = 0, liked = 0, rewarded = 0, threadrewarded = 0 } = typeUnreadNotifications;
+      const { threadrewardedexpired = 0, receiveredpacket = 0, related = 0, replied = 0, system = 0, withdrawal = 0, liked = 0, rewarded = 0, threadrewarded = 0 } = typeUnreadNotifications;
       this.totalUnread = unreadNotifications;
       this.threadUnread = system;
-      this.financialUnread = questioned + receiveredpacket + withdrawal + rewarded + threadrewarded;
+      this.financialUnread = threadrewardedexpired + receiveredpacket + withdrawal + rewarded + threadrewarded;
       this.accountUnread = related + replied + liked;
       this.atUnread = related;
       this.replyUnread = replied;
@@ -38,6 +50,7 @@ class MessageAction extends MessageStore {
       },
     };
   }
+
   // 设置消息列表数据
   @action
   setMsgList(currentPage, key, ret) {
@@ -60,42 +73,49 @@ class MessageAction extends MessageStore {
       }
     }
   }
+
   // 获取账号消息
   @action.bound
   async readAccountMsgList(page = 1) {
     const ret = await readMsgList(this.assemblyParams(page, 'related,replied,liked'));
     this.setMsgList(page, 'accountMsgList', ret);
   }
+
   // 获取@我的消息
   @action.bound
   async readAtMsgList(page = 1) {
     const ret = await readMsgList(this.assemblyParams(page, 'related'));
     this.setMsgList(page, 'atMsgList', ret);
   }
+
   // 获取回复我的消息
   @action.bound
   async readReplyMsgList(page = 1) {
     const ret = await readMsgList(this.assemblyParams(page, 'replied'));
     this.setMsgList(page, 'replyMsgList', ret);
   }
+
   // 获取点赞我的消息
   @action.bound
   async readLikeMsgList(page = 1) {
     const ret = await readMsgList(this.assemblyParams(page, 'liked'));
     this.setMsgList(page, 'likeMsgList', ret);
   }
+
   // 获取财务消息
   @action.bound
   async readFinancialMsgList(page = 1) {
-    const ret = await readMsgList(this.assemblyParams(page, 'rewarded,questioned,threadrewarded,receiveredpacket,withdrawal'));
+    const ret = await readMsgList(this.assemblyParams(page, 'rewarded,threadrewardedexpired,threadrewarded,receiveredpacket,withdrawal'));
     this.setMsgList(page, 'financialMsgList', ret);
   }
+
   // 获取帖子通知
   @action.bound
   async readThreadMsgList(page = 1) {
     const ret = await readMsgList(this.assemblyParams(page, 'system'));
     this.setMsgList(page, 'threadMsgList', ret);
   }
+
   // 获取对话列表
   @action.bound
   async readDialogList(page = 1) {
@@ -116,8 +136,8 @@ class MessageAction extends MessageStore {
         perPage: 200,
         page,
         filter: {
-          dialogId
-        }
+          dialogId,
+        },
       },
     });
     this.setMsgList(page, 'dialogMsgList', ret);
@@ -166,7 +186,8 @@ class MessageAction extends MessageStore {
           list.splice(index, 1);
           this[key] = {
             ...data,
-            list
+            list,
+            totalCount: data.totalCount - 1,
           }
           throw 'break';
         }

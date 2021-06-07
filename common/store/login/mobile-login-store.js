@@ -2,7 +2,7 @@ import { observable, action, computed } from 'mobx';
 import { smsSend, smsLogin } from '@server';
 import { get } from '../../utils/get';
 import setAccessToken from '../../utils/set-access-token';
-import { checkUserStatus, toTCaptcha } from '@common/store/login/util';
+import { checkUserStatus } from '@common/store/login/util';
 
 export const MOBILE_LOGIN_STORE_ERRORS = {
   MOBILE_VERIFY_ERROR: {
@@ -26,15 +26,15 @@ export const MOBILE_LOGIN_STORE_ERRORS = {
     Message: '验证码缺失',
   },
   NEED_BIND_USERNAME: {
-    Code: 'mbl_0004',
+    Code: 'common_0001',
     Message: '需要补充昵称',
   },
   NEED_COMPLETE_REQUIRED_INFO: {
-    Code: 'mbl_0005',
+    Code: 'common_0002',
     Message: '需要补充附加信息',
   },
   NEED_ALL_INFO: {
-    Code: 'mbl_0006',
+    Code: 'common_0003',
     Message: '需要补充昵称和附加信息',
   },
   NEED_BIND_WECHAT: {
@@ -159,8 +159,8 @@ export default class mobileLoginStore {
 
     checkCompleteUserInfo = (smsLoginResp) => {
       // 如果没有填写昵称，抛出需要填写昵称的状态码
-      const isMissNickname = get(smsLoginResp, 'data.isMissNickname', false);
-      const isMissRequireInfo = get(smsLoginResp, 'data.userStatus') === 10;
+      const isMissNickname = get(smsLoginResp, 'data.isMissNickname', false);// 缺少昵称
+      const isMissRequireInfo = get(smsLoginResp, 'data.userStatus') === 10; // 缺少补充信息
 
       if (isMissRequireInfo && isMissNickname) {
         this.needToCompleteExtraInfo = true;

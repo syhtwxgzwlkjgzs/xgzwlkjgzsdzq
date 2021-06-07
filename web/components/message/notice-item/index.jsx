@@ -18,7 +18,7 @@
  *
  */
 import React, { Component } from 'react';
-import { Avatar, Badge, Icon } from '@discuzq/design';
+import { Avatar, Icon } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import classNames from 'classnames';
 import styles from './index.module.scss';
@@ -30,13 +30,7 @@ import { diffDate } from '@common/utils/diff-date';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import PropTypes from 'prop-types';
-
-// 账户信息前置语
-const threadTips = {
-  replied: '回复了你',
-  related: '@了你',
-  liked: '点赞了你',
-};
+import UnreadRedDot from '@components/unread-red-dot';
 
 @inject('site')
 @observer
@@ -46,7 +40,7 @@ class Index extends Component {
     const { type, site } = this.props;
     const url = site?.webConfig?.setSite?.siteFavicon;
     if (type === 'thread') {
-      return url || '/favicon.ico';
+      return url || '/dzq-img/default-favicon.png';
     }
     return avatar;
   };
@@ -57,45 +51,52 @@ class Index extends Component {
     return stringToColor(character);
   };
 
-  // 未读消息数
-  getUnReadCount = (count) => {
-    return count > 99 ? '99+' : (count || null);
-  };
+
 
   // 针对财务消息，获取后缀提示语
   getFinancialTips = (item) => {
     if (item.type === 'rewarded') {
       return '打赏了你';
     }
-    if (item.type === 'questioned') {
-      return '悬赏了你';
-    }
     if (item.type === 'receiveredpacket') {
       return '获取红包';
+    }
+    if (item.type === 'threadrewarded') {
+      return '悬赏了你';
     }
     if (item.type === 'withdrawal') {
       return '获取提现';
     }
   };
 
+  // 账号信息前置语
+  getAccountTips = (item) => {
+    switch (item.type) {
+      case 'replied':
+        return `回复了你的${item.isFirst ? '主题' : '评论'}`;
+      case 'related':
+        return `@了你`;
+      case 'liked':
+        return `点赞了你的${item.isFirst ? '主题' : '评论'}`;
+    }
+  };
+
   filterTag(html) {
-    return html?.replace(/<(\/)?(p|r|t|br)[^>]*>|[\r\n]/g, '');
+    if (typeof html !== 'string') return ''; // 兜底后端返回空数组的错误数据
+    return html?.replace(/<(\/)?([beprt]|br|div)[^>]*>|[\r\n]/gi, '');
   }
 
-  // parse content
+  // parse content 对于需要显示title作为内容的消息，在对应组件内做预处理后统一传入content属性
   parseHTML = () => {
     const { type, item } = this.props;
-    // 1 获取基础内容，财务信息、账户信息优先使用title展示
-    let _content = ['financial', 'account'].includes(type) ? item.title || item.content : item.content;
-    // 2 过滤内容
-    _content = this.filterTag(_content);
-    // 3 拼接account前置tip
+    let _content = item.content;
+
     if (type === 'account') {
-      const tip = `<span class=\"${styles.tip}\">${threadTips[item.type]}</span>`;
-      _content = tip + _content;
+      const tip = `<span class=\"${styles.tip}\">${this.getAccountTips(item)}</span>`;
+      _content = tip + item.content;
     }
-    // 4 return
-    return _content ? xss(s9e.parse(_content)) : '加载中...';
+
+    return this.filterTag(xss(s9e.parse(this.filterTag(_content))));
   };
 
   // 跳转用户中心
@@ -111,7 +112,7 @@ class Index extends Component {
       // 后续用户中心做好后，需拼接用户id
       canJump && Router.push({ url: `/user/${item.userId}` });
     }
-    
+
   };
 
   // 跳转主题详情or私信
@@ -122,7 +123,7 @@ class Index extends Component {
       Router.push({ url: `/thread/${item.threadId}` });
     }
     if (type === 'chat') {
-      Router.push({ url: `/message?page=chat&dialogId=${item.dialogId}` });
+      Router.push({ url: `/message?page=chat&dialogId=${item.dialogId}&username=${item.username}` });
     }
   };
 
@@ -134,28 +135,27 @@ class Index extends Component {
     return (
       <div className={styles.wrapper} onClick={(e) => this.toDetailOrChat(e, item)}>
         {/* 默认block */}
-        <div className={styles.block}>
+        <div className={isPC ? styles['block-pc'] : styles.block}>
           {/* 头像 */}
           <div className={styles.avatar} onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}>
-            <Badge
-              className={classNames({
-                [styles.badge]: type === 'chat' && item.unreadCount > 9
-              })}
-              circle
-              info={ type === 'chat' && this.getUnReadCount(item.unreadCount)}
-            >
-              {avatarUrl ? (
-                <Avatar image={avatarUrl} circle={true} />
-              ) : (
-                <Avatar
-                  text={item.username}
-                  circle={true}
-                  style={{
-                    backgroundColor: `#${this.getBackgroundColor(item.username)}`,
-                  }}
-                />
-              )}
-            </Badge>
+
+            {/* 未读消息红点 */}
+            <UnreadRedDot type='avatar' unreadCount={item.unreadCount}>
+              {
+                avatarUrl ? (
+                  <Avatar image={avatarUrl} circle={true} />
+                ) : (
+                  <Avatar
+                    text={item.username}
+                    circle={true}
+                    style={{
+                      backgroundColor: `#${this.getBackgroundColor(item.username)}`,
+                    }}
+                  />
+                )
+              }
+            </UnreadRedDot>
+
           </div>
           {/* 详情 */}
           <div
@@ -175,6 +175,7 @@ class Index extends Component {
                 })}
                 onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
               >
+                {/* 仅帖子通知没有username，使用title代替显示 */}
                 {item.username || this.filterTag(item.title)}
               </div>
               {['chat', 'thread'].includes(type) && (
@@ -190,7 +191,7 @@ class Index extends Component {
                 <p className={styles['content-html']} style={isPC ? { paddingRight: '20px' } : {}}>
                   在帖子"
                   <span
-                    className={styles['single-line']}
+                    className={`${styles['financial-content']} ${styles['single-line']}`}
                     style={{
                       maxWidth: `${isPC ? '400px' : '90px'}`,
                       display: 'inline-block',
@@ -222,7 +223,13 @@ class Index extends Component {
         </div>
         {/* PC删除 */}
         {isPC && (
-          <div className={styles.delete} onClick={() => onBtnClick(item)}>
+          <div
+            className={styles.delete}
+            onClick={(e) => {
+              e.stopPropagation();
+              onBtnClick(item);
+            }}
+          >
             <Icon className={styles.icon} name="DeleteOutlined" size={14} />
           </div>
         )}

@@ -7,7 +7,7 @@ import styles from './index.module.scss';
 
 const Index = ({ message }) => {
   const { readFinancialMsgList, financialMsgList, deleteMsg } = message;
-  const { list, currentPage, totalPage, totalCount } = financialMsgList;
+  const { list, currentPage, totalPage } = financialMsgList;
 
   // 初始化
   useEffect(() => {
@@ -23,12 +23,21 @@ const Index = ({ message }) => {
   const formatFinancialList = (list = []) => {
     const newList = [];
     list.forEach(({
-      amount, content, createdAt, id, threadId, type, userAvatar: avatar, userId, username
+      amount, cashActualAmount, content, createdAt, id, threadId, threadTitle, type, userAvatar, userId, username
     }) => {
       newList.push({
-        amount, content, createdAt, id, threadId, type, avatar, userId, username
+        amount: amount || cashActualAmount || 0,
+        content: threadTitle || content,
+        createdAt,
+        id,
+        threadId,
+        type,
+        avatar: userAvatar,
+        userId,
+        username
       });
     });
+
     return newList;
   };
 
@@ -38,10 +47,8 @@ const Index = ({ message }) => {
   }, [list])
 
   return (
-    <View className={styles.wrapper}>
+    <View className={styles.container}>
       <Notice
-        infoIdx={2}
-        totalCount={totalCount}
         noMore={currentPage >= totalPage}
         list={renderList}
         type='financial'

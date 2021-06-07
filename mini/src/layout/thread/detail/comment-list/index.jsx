@@ -29,8 +29,8 @@ class RenderCommentList extends React.Component {
       inputText: '请输入内容', // 默认回复框placeholder内容
     };
 
-    this.commentData = null;
-    this.replyData = null;
+    // this.commentData = null;
+    // this.replyData = null;
 
     this.recordCommentLike = {
       // 记录当前评论点赞状态
@@ -64,7 +64,7 @@ class RenderCommentList extends React.Component {
   async likeClick(data) {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -103,7 +103,7 @@ class RenderCommentList extends React.Component {
   async replyLikeClick(reply, comment) {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -145,6 +145,7 @@ class RenderCommentList extends React.Component {
 
   // 点击评论的删除
   async deleteClick(data) {
+    this.props.keepCurrentPosition();
     this.commentData = data;
     this.setState({
       showDeletePopup: true,
@@ -172,86 +173,90 @@ class RenderCommentList extends React.Component {
 
   // 点击评论的回复
   replyClick(comment) {
-    if (!this.props.user.isLogin()) {
-      Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
-      return;
-    }
+    this.props.replyClick(comment);
+    // this.props.keepCurrentPosition();
+    // if (!this.props.user.isLogin()) {
+    //   Toast.info({ content: '请先登录!' });
+    //   goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+    //   return;
+    // }
 
-    this.commentData = comment;
-    this.replyData = null;
-    const userName = comment?.user?.nickname || comment?.user?.userName;
-    this.setState({
-      showCommentInput: true,
-      inputText: userName ? `回复${userName}` : '请输入内容',
-    });
+    // this.commentData = comment;
+    // this.replyData = null;
+    // const userName = comment?.user?.nickname || comment?.user?.userName;
+    // this.setState({
+    //   showCommentInput: true,
+    //   inputText: userName ? `回复${userName}` : '请输入内容',
+    // });
   }
 
   // 点击回复的回复
   replyReplyClick(reply, comment) {
-    if (!this.props.user.isLogin()) {
-      Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
-      return;
-    }
+    this.props.replyReplyClick(reply, comment);
+    // this.props.keepCurrentPosition();
+    // if (!this.props.user.isLogin()) {
+    //   Toast.info({ content: '请先登录!' });
+    //   goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+    //   return;
+    // }
 
-    this.commentData = null;
-    this.replyData = reply;
-    this.replyData.commentId = comment.id;
-    const userName = reply?.user?.nickname || reply?.user?.userName;
+    // this.commentData = null;
+    // this.replyData = reply;
+    // this.replyData.commentId = comment.id;
+    // const userName = reply?.user?.nickname || reply?.user?.userName;
 
-    this.setState({
-      showCommentInput: true,
-      inputText: userName ? `回复${userName}` : '请输入内容',
-    });
+    // this.setState({
+    //   showCommentInput: true,
+    //   inputText: userName ? `回复${userName}` : '请输入内容',
+    // });
   }
 
   // 创建回复评论+回复回复接口
-  async createReply(val) {
-    if (!val) {
-      Toast.info({ content: '请输入内容!' });
-      return;
-    }
+  // async createReply(val) {
+  //   if (!val) {
+  //     Toast.info({ content: '请输入内容!' });
+  //     return;
+  //   }
 
-    const id = this.props.thread?.threadData?.id;
-    if (!id) return;
+  //   const id = this.props.thread?.threadData?.id;
+  //   if (!id) return;
 
-    const params = {
-      id,
-      content: val,
-    };
+  //   const params = {
+  //     id,
+  //     content: val,
+  //   };
 
-    // 楼中楼回复
-    if (this.replyData) {
-      params.replyId = this.replyData.id;
-      params.isComment = true;
-      params.commentId = this.replyData.commentId;
-      params.commentPostId = this.replyData.id;
-    }
-    // 回复评论
-    if (this.commentData) {
-      params.replyId = this.commentData.id;
-      params.isComment = true;
-      params.commentId = this.commentData.id;
-    }
+  //   // 楼中楼回复
+  //   if (this.replyData) {
+  //     params.replyId = this.replyData.id;
+  //     params.isComment = true;
+  //     params.commentId = this.replyData.commentId;
+  //     params.commentPostId = this.replyData.id;
+  //   }
+  //   // 回复评论
+  //   if (this.commentData) {
+  //     params.replyId = this.commentData.id;
+  //     params.isComment = true;
+  //     params.commentId = this.commentData.id;
+  //   }
 
-    const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
+  //   const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
 
-    if (success) {
-      this.setState({
-        showCommentInput: false,
-        inputValue: '',
-      });
-      Toast.success({
-        content: '回复成功',
-      });
-      return true;
-    }
+  //   if (success) {
+  //     this.setState({
+  //       showCommentInput: false,
+  //       inputValue: '',
+  //     });
+  //     Toast.success({
+  //       content: '回复成功',
+  //     });
+  //     return true;
+  //   }
 
-    Toast.error({
-      content: msg,
-    });
-  }
+  //   Toast.error({
+  //     content: msg,
+  //   });
+  // }
 
   // 点击编辑
   editClick(comment) {
@@ -271,7 +276,7 @@ class RenderCommentList extends React.Component {
   onAboptClick(data) {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 

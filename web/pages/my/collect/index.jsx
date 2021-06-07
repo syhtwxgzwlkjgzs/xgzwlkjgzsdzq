@@ -114,6 +114,8 @@ class Index extends React.Component {
         page: this.state.page + 1,
       });
     }
+
+    return
   };
 
   render() {
@@ -122,7 +124,15 @@ class Index extends React.Component {
     const { firstLoading } = this.state;
 
     if (platform === 'pc') {
-      return <IndexPCPage firstLoading={firstLoading} dispatch={this.dispatch} />;
+      return (
+        <IndexPCPage
+          page={this.state.page}
+          totalPage={this.state.totalPage}
+          totalCount={this.state.totalCount}
+          firstLoading={firstLoading}
+          dispatch={this.dispatch}
+        />
+      );
     }
 
     return (

@@ -18,11 +18,13 @@ import { inject, observer } from 'mobx-react';
   const onClick = (e) => {
     e.stopPropagation();
     index.setHiddenTabBar(true)
+    index.setHasOnScrollToLower(false)
     setVisible(true);
   };
 
   const onHidden = () => {
     index.setHiddenTabBar(false)
+    index.setHasOnScrollToLower(true)
 
     setVisible(false);
   };

@@ -80,6 +80,7 @@
               height: 22px;
               position: relative;
               top: 6px;
+              display: inline-block;
             }
           }
 
@@ -98,6 +99,10 @@
               @include lamp-clamp(3);
             }
           }
+        }
+
+        .imageDisplay {
+          margin-top: $margin-2n;
         }
       }
       .commentListFooter {

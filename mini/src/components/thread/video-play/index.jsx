@@ -1,10 +1,13 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import Video from '@discuzq/design/dist/components/video/index';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import { noop } from '../utils';
 import { View, Text } from '@tarojs/components'
 import { getElementRect, randomStr } from '../utils'
+import Taro from '@tarojs/taro';
+
 
 /**
  * 视频
@@ -27,6 +30,7 @@ const Index = ({
   money = 0,
   status = 0,
   onPay = noop,
+  baselayout = {},
 }) => {
   let player = null;
   const videoId = useRef(`video${randomStr()}`);
@@ -35,6 +39,32 @@ const Index = ({
   const onReady = (ins) => {
     player = ins;
   };
+
+  const onPlay = (e) => {
+    if(baselayout) {
+
+      // 暂停之前正在播放的视频
+      if(baselayout.playingVideoDom) {
+        if(baselayout.playingVideoDom !== e.target.id) {
+          Taro.createVideoContext(baselayout.playingVideoDom)?.pause();
+        }
+      }
+
+       // 暂停之前正在播放的音频
+      if (baselayout.playingAudioDom) {
+        baselayout.playingAudioDom.pause();
+      }
+
+      if (baselayout.playingAudioDom) {
+        if(baselayout.playingAudioDom !== e.target.id) {
+          baselayout.playingAudioDom.pause();
+        }
+      }
+
+      baselayout.playingVideoDom = e.target.id;
+
+    }
+  }
 
   useEffect(() => {
     getElementRect(videoId.current).then(res => {
@@ -49,6 +79,7 @@ const Index = ({
           <Video
             className={styles.videoBox}
             onReady={onReady}
+            onPlay={onPlay}
             src={url}
             width={width}
             height={9 * (width) / 16 || '224'}
@@ -75,4 +106,4 @@ const Index = ({
   );
 };
 
-export default React.memo(Index);
+export default inject('baselayout')(observer(Index));

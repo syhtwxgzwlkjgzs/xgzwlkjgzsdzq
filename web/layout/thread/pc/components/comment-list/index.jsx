@@ -13,6 +13,7 @@ import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import ImageDisplay from '@components/thread/image-display';
 import classNames from 'classnames';
+import { debounce } from '@common/utils/throttle-debounce.js'
 
 @observer
 class CommentList extends React.Component {
@@ -105,9 +106,9 @@ class CommentList extends React.Component {
     typeof this.props.reportClick === 'function' && this.props.reportClick(data);
   }
 
-  async onSubmit(value) {
+  async onSubmit(value, imageList) {
     if (typeof this.props.onSubmit === 'function') {
-      const success = await this.props.onSubmit(value);
+      const success = await this.props.onSubmit(value, imageList);
       if (success) {
         this.setState({
           replyId: null,
@@ -202,9 +203,9 @@ class CommentList extends React.Component {
                         <span>回复</span>
                       </div>
                       {this.props.isShowAdopt ? (
-                        <div className={styles.commentAdopt}>
+                        <div className={styles.commentAdopt} onClick={() => this.props.onAboptClick()}>
                           <Icon className={styles.icon} name="ExactnessOutlined"></Icon>
-                          <span onClick={() => this.props.onAboptClick()}>采纳</span>
+                          <span>采纳</span>
                         </div>
                       ) : (
                         ''
@@ -234,7 +235,7 @@ class CommentList extends React.Component {
                   <div className={styles.commentInput}>
                     <CommentInput
                       height="label"
-                      onSubmit={(value) => this.onSubmit(value)}
+                      onSubmit={(value, imageList) => this.onSubmit(value, imageList)}
                       placeholder={this.state.placeholder}
                     ></CommentInput>
                   </div>
@@ -262,7 +263,7 @@ class CommentList extends React.Component {
                         replyClick={() => this.replyReplyClick(this.needReply[0])}
                         deleteClick={() => this.replyDeleteClick(this.needReply[0])}
                         toCommentDetail={() => this.toCommentDetail()}
-                        onSubmit={(value) => this.onSubmit(value)}
+                        onSubmit={(value, imageList) => this.onSubmit(value, imageList)}
                         isShowInput={this.state.replyId && this.state.replyId === this.needReply[0].id}
                       ></ReplyList>
                     ) : (
@@ -275,7 +276,7 @@ class CommentList extends React.Component {
                           replyClick={() => this.replyReplyClick(val)}
                           deleteClick={() => this.replyDeleteClick(val)}
                           toCommentDetail={() => this.toCommentDetail()}
-                          onSubmit={(value) => this.onSubmit(value)}
+                          onSubmit={(value, imageList) => this.onSubmit(value, imageList)}
                           isShowInput={this.state.replyId && this.state.replyId === val.id}
                         ></ReplyList>
                       ))

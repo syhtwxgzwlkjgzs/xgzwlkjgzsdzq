@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
+import Router from '@discuzq/sdk/dist/router';
 
 import AuthorInfo from './components/author-info/index';
 import CommentInput from './components/comment-input/index';
@@ -79,15 +80,47 @@ class ThreadPCPage extends React.Component {
     const offsetHeight = this.threadBodyRef?.current?.offsetHeight;
     const scrollHeight = this.threadBodyRef?.current?.scrollHeight;
     const { isCommentReady, isNoMore } = this.props.thread;
-    if (scrollDistance + offsetHeight >= scrollHeight && !this.state.isCommentLoading && isCommentReady && !isNoMore) {
+    // 记录当前的滚动位置
+    this.props.thread.setScrollDistance(scrollDistance);
+    if (
+      scrollDistance + offsetHeight >= scrollHeight - 20 &&
+      !this.state.isCommentLoading &&
+      isCommentReady &&
+      !isNoMore
+    ) {
       this.page = this.page + 1;
       this.loadCommentList();
     }
   }
 
+  // 使用了H5页面的页面加载跳转逻辑
+  componentDidMount() {
+    // 当内容加载完成后，获取评论区所在的位置
+    this.position = this.commentDataRef?.current?.offsetTop - 50;
+
+    // 是否定位到评论位置
+    if (this.props?.thread?.isPositionToComment) {
+      // TODO:需要监听帖子内容加载完成事件
+      setTimeout(() => {
+        this.threadBodyRef.current.scrollTo(0, this.position);
+      }, 1000);
+      return;
+    }
+
+    // 滚动到记录的指定位置
+    this.threadBodyRef.current.scrollTo(0, this.props.thread.scrollDistance);
+  }
+
+  componentDidUpdate() {
+    // 当内容加载完成后，获取评论区所在的位置
+    if (this.props.thread.isReady) {
+      this.position = this.commentDataRef?.current?.offsetTop - 50;
+    }
+  }
+
   componentWillUnmount() {
     // 清空数据
-    this.props?.thread && this.props.thread.reset();
+    // this.props?.thread && this.props.thread.reset();
   }
 
   // 加载评论列表
@@ -159,7 +192,6 @@ class ThreadPCPage extends React.Component {
 
     // 举报
     if (type === 'report') {
-      console.log('举报');
       this.setState({ showReportPopup: true });
     }
   }
@@ -303,22 +335,24 @@ class ThreadPCPage extends React.Component {
   }
 
   // 点击发布按钮
-  async onPublishClick(val) {
+  async onPublishClick(val, imageList) {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
       goToLoginPage({ url: '/user/login' });
       return;
     }
 
-    if (!val) {
+    const valuestr = val.replace(/\s/g, '');
+    // 如果内部为空，且只包含空格或空行
+    if (!valuestr) {
       Toast.info({ content: '请输入内容' });
       return;
     }
-    return this.comment ? await this.updateComment(val) : await this.createComment(val);
+    return this.comment ? await this.updateComment(val, imageList) : await this.createComment(val, imageList);
   }
 
   // 创建评论
-  async createComment(val) {
+  async createComment(val, imageList) {
     const id = this.props.thread?.threadData?.id;
 
     const params = {
@@ -329,6 +363,18 @@ class ThreadPCPage extends React.Component {
       isNoMore: this.props?.thread?.isNoMore,
       attachments: [],
     };
+
+    if (imageList?.length) {
+      params.attachments = imageList
+        .filter((item) => item.status === 'success' && item.response)
+        .map((item) => {
+          const { id } = item.response;
+          return {
+            id,
+            type: 'attachments',
+          };
+        });
+    }
 
     const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
     if (success) {
@@ -361,7 +407,7 @@ class ThreadPCPage extends React.Component {
   }
 
   // 更新评论
-  async updateComment(val) {
+  async updateComment(val, imageList) {
     if (!this.comment) return;
 
     const id = this.props.thread?.threadData?.id;
@@ -371,6 +417,19 @@ class ThreadPCPage extends React.Component {
       content: val,
       attachments: [],
     };
+
+    if (imageList?.length) {
+      params.attachments = imageList
+        .filter((item) => item.status === 'success' && item.response)
+        .map((item) => {
+          const { id } = item.response;
+          return {
+            id,
+            type: 'attachments',
+          };
+        });
+    }
+
     const { success, msg } = await this.props.comment.updateComment(params, this.props.thread);
     if (success) {
       Toast.success({
@@ -395,7 +454,6 @@ class ThreadPCPage extends React.Component {
     }
 
     this.comment = comment;
-    console.log(this.comment);
     this.setState({
       inputValue: comment.content,
       showCommentInput: true,
@@ -563,27 +621,6 @@ class ThreadPCPage extends React.Component {
     }
   }
 
-  // 使用了H5页面的页面加载跳转逻辑
-  componentDidMount() {
-    // 当内容加载完成后，获取评论区所在的位置
-    this.position = this.commentDataRef?.current?.offsetTop - 50;
-
-    // 是否定位到评论位置
-    if (this.props?.thread?.isPositionToComment) {
-      // TODO:需要监听帖子内容加载完成事件
-      setTimeout(() => {
-        this.threadBodyRef.current.scrollTo(0, this.position);
-      }, 1000);
-    }
-  }
-
-  componentDidUpdate() {
-    // 当内容加载完成后，获取评论区所在的位置
-    if (this.props.thread.isReady) {
-      this.position = this.commentDataRef?.current?.offsetTop - 50;
-    }
-  }
-
   // 点击标签 TODO:带上参数
   onTagClick() {
     // TODO:目前后台只返回了一个子标签，未返回父标签
@@ -592,6 +629,19 @@ class ThreadPCPage extends React.Component {
       this.props.index.refreshHomeData({ categoryIds: [categoryId] });
     }
     this.props.router.push('/');
+  }
+
+  // 点击发送私信
+  onPrivateLetter() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
+    const { username } = this.props.thread?.authorInfo;
+    if (!username) return;
+    Router.push({ url: `/message?page=chat&username=${username}` });
   }
 
   render() {
@@ -638,7 +688,7 @@ class ThreadPCPage extends React.Component {
                     router={this.props.router}
                     sort={(flag) => this.onSortChange(flag)}
                     onEditClick={(comment) => this.onEditClick(comment)}
-                    onPublishClick={(value) => this.onPublishClick(value)}
+                    onPublishClick={(value, imageList) => this.onPublishClick(value, imageList)}
                     onReportClick={(comment) => this.onReportClick(comment)}
                   ></RenderCommentList>
                   {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
@@ -651,12 +701,13 @@ class ThreadPCPage extends React.Component {
           </div>
 
           {/* 右边信息 */}
-          <div className={layout.bodyRigth}>
+          <div className={`${layout.bodyRigth} ${isSelf ? layout.positionSticky : ''}`}>
             <div className={layout.authorInfo}>
               {threadStore?.authorInfo ? (
                 <AuthorInfo
                   user={threadStore.authorInfo}
                   onFollowClick={() => this.onFollowClick()}
+                  onPrivateLetter={() => this.onPrivateLetter()}
                   isShowBtn={!isSelf}
                 ></AuthorInfo>
               ) : (

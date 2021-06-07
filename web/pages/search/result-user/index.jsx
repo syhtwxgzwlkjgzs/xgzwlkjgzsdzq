@@ -4,7 +4,7 @@ import IndexH5Page from '@layout/search/result-user/h5';
 import IndexPCPage from '@layout/search/result-user/pc';
 import { readTopicsList, readUsersList } from '@server';
 import { Toast } from '@discuzq/design';
-
+import ViewAdapter from '@components/view-adapter';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
 @inject('site')
@@ -64,23 +64,22 @@ class Index extends React.Component {
 
     if (type === 'refresh') {
       this.page = 1;
+      search.setUsers(null);
     } else if (type === 'moreData') {
       this.page += 1;
     }
-
     await search.getUsersList({ search: data, perPage: this.perPage, page: this.page });
     return;
   }
 
   render() {
-    const { site } = this.props;
-    const { platform } = site;
-
-    if (platform === 'pc') {
-      return <IndexPCPage dispatch={this.dispatch} />;
-    }
-
-    return <IndexH5Page dispatch={this.dispatch} />;
+    return (
+      <ViewAdapter
+        h5={<IndexH5Page dispatch={this.dispatch} />}
+        pc={<IndexPCPage dispatch={this.dispatch} />}
+        title='活跃用户'
+      />
+    );
   }
 }
 

@@ -2,13 +2,13 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Avatar, ImagePreviewer } from '@discuzq/design';
 import { diffDate } from '@common/utils/diff-date';
 import { inject, observer } from 'mobx-react';
-import { useRouter } from 'next/router';
-
+import s9e from '@common/utils/s9e';
+import xss from '@common/utils/xss';
 import styles from './index.module.scss';
 
 const DialogBox = (props) => {
-  const { shownMessages, platform, message, user, dialogId, showEmoji } = props;
-  const { readDialogMsgList, dialogMsgList, dialogMsgListLength } = message;
+  const { platform, message, user, dialogId, showEmoji } = props;
+  const { readDialogMsgList, dialogMsgList, dialogMsgListLength, updateDialog } = message;
 
   const [previewerVisibled, setPreviewerVisibled] = useState(false);
   const [defaultImg, setDefaultImg] = useState('');
@@ -16,12 +16,7 @@ const DialogBox = (props) => {
   // const dialogId = router.query.dialogId;
   const dialogBoxRef = useRef();
   const timeoutId = useRef();
-  useEffect(() => {
-    updateMsgList();
-    return () => {
-      clearTimeout(timeoutId.current);
-    };
-  }, []);
+  useEffect(() => () => clearTimeout(timeoutId.current), []);
 
   useEffect(() => {
     if (dialogId) {
@@ -54,6 +49,8 @@ const DialogBox = (props) => {
   const messagesHistory = useMemo(() => {
     setTimeout(() => {
       scrollEnd();
+      // 把消息状态更新为已读
+      updateDialog(dialogId);
     }, 100);
     return dialogMsgList.list.map(item => ({
       timestamp: item.createdAt,
@@ -81,15 +78,22 @@ const DialogBox = (props) => {
                 <Avatar image={userAvatar || '/favicon.ico'} circle={true} />
               </div>
               {imageUrl ? (
-                <div className={styles.msgContent}>
-                  {imageUrl && <img style={{ width: '200px' }} src={imageUrl} onClick={() => {
-                    setDefaultImg(imageUrl);
-                    setPreviewerVisibled(true);
-                  }} />}
+                <div className={`${styles.msgContent} ${styles.msgImgContent}`}>
+                  {imageUrl && (
+                    <img
+                      style={{ width: '200px' }}
+                      src={imageUrl}
+                      onClick={() => {
+                        setDefaultImg(imageUrl);
+                        setPreviewerVisibled(true);
+                      }}
+                      onLoad={scrollEnd}
+                    />
+                  )}
                 </div>
               ) : (
                 <div className={styles.msgContent} dangerouslySetInnerHTML={{
-                  __html: text,
+                  __html: xss(s9e.parse(text)),
                 }}></div>
               )}
             </div>

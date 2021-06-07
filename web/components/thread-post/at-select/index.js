@@ -111,7 +111,7 @@ class AtSelect extends Component {
   formatData = (item) => {
     const isFollow = this.state.keywords === '';
     const avatar = isFollow ? item?.user?.avatar : item.avatar;
-    const username = isFollow ? item?.user?.userName : item.nickname;
+    const username = isFollow ? item?.user?.userName : item.username;
     const groupName = isFollow ? item?.group?.groupName : item.groupName;
     const userId = isFollow ? item.user?.pid : item.userId;
     return { avatar, username, groupName, userId };
@@ -128,22 +128,23 @@ class AtSelect extends Component {
       return (
         <div className={styles['at-item']} key={userId}>
           <div className={styles['at-item__inner']} >
-            <div className={styles.avatar}>
-              {avatar
-                ? <Avatar image={avatar} />
-                : <Avatar
-                  text={username}
-                  style={{
-                    backgroundColor: `#${this.getBackgroundColor(username)}`,
-                  }}
-                />
-              }
-            </div>
-            <div className={styles.info}>
-              <div className={styles.username}>{username}</div>
-              <div className={styles.group}>{groupName}</div>
-            </div>
-            <Checkbox name={username}></Checkbox>
+            <Checkbox name={username}>
+              <div className={styles.avatar}>
+                {avatar
+                  ? <Avatar image={avatar} />
+                  : <Avatar
+                    text={username}
+                    style={{
+                      backgroundColor: `#${this.getBackgroundColor(username)}`,
+                    }}
+                  />
+                }
+              </div>
+              <div className={styles.info}>
+                <div className={styles.username}>{username}</div>
+                <div className={styles.group}>{groupName}</div>
+              </div>
+            </Checkbox>
           </div>
         </div>
       );
@@ -155,7 +156,7 @@ class AtSelect extends Component {
     const { keywords, checkUser, finish } = this.state;
 
     const content = (
-      <div className={styles.wrapper}>
+      <div className={styles.wrapper} onClick={e => e.stopPropagation()}>
 
         {/* top */}
         <div className={styles.header}>

@@ -91,7 +91,8 @@
     left: 0;
     right: 0;
     padding: $padding-2n $padding-4n $padding-10;
-    // @include ios-safe-area-inset-bottom;
+    padding-bottom: constant(safe-area-inset-bottom);  ///兼容 IOS<11.2/
+    padding-bottom: env(safe-area-inset-bottom);  ///兼容 IOS>11.2/
     &::before {
       content: '';
       display: block;
@@ -105,8 +106,12 @@
 
     .btn{
       height: 42px;
-      font-size: rem($font-size-middle);
+      font-size: $font-size-middle;
       border-radius: 5px;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 }

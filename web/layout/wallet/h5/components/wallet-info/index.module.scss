@@ -18,7 +18,7 @@
     align-items: center;
     padding-top: rem($padding-5n);
     .avatar {
-        border: solid rem(4) var(--color-white);
+        border: solid rem(3) var(--color-white);
     }
     .name {
         font-family: 'PingFangSC-Regular';
@@ -84,6 +84,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        cursor: pointer;
         .icon {
             margin-left: rem($margin-2n);
         }

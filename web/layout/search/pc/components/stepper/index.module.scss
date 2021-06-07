@@ -6,6 +6,7 @@
   padding: rem($padding-6n);
   background: var(--color-white);
   border-radius: rem($border-radius-small);
+  box-sizing: border-box;
   .stepsItem {
     display: flex;
     padding-bottom: rem(40);
@@ -18,7 +19,7 @@
       background: var(--border-line-color);
       position: absolute;
       top: rem($font-line-height-small);
-      left: rem($padding-2n);
+      left: rem($padding-2n + 1px);
     }
     &:last-child {
       padding-bottom: 0;
@@ -60,5 +61,10 @@
       background: var(--color-primary);
       border-radius: 50%;
     }
+  }
+
+  .badgeMargin {
+    margin-left: 32px;
+    margin-bottom: 3px;
   }
 }

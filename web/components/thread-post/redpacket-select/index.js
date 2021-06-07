@@ -103,7 +103,7 @@ const Index = ({ data, confirm, cancel, pc, visible }) => {
   };
 
   const content = (
-    <div className={styles['redpacket-box']}>
+    <div className={styles['redpacket-box']} onClick={e => e.stopPropagation()}>
       {/* 发放规则 */}
       <div className={styles['line-box']}>
         <div className={styles.label}>发放规则</div>
@@ -122,7 +122,7 @@ const Index = ({ data, confirm, cancel, pc, visible }) => {
       <div className={styles['line-box']}>
         <div className={styles.label}>{rule === 1 ? '红包总金额' : '红包单个金额'}</div>
         <div className={styles.item}>
-          <Input htmlType="number" mode="number" placeholder="金额" value={price} onChange={e => onPriceChang(e.target.value)} />元
+          <Input mode="number" placeholder="金额" value={price} onChange={e => onPriceChang(e.target.value)} />元
         </div>
       </div>
       {/* 红包个数 */}

@@ -135,7 +135,7 @@ class UsernameH5Login extends React.Component {
           />
           {/* 输入框 end */}
           {/* 登录按钮 start */}
-          <Button className={platform === 'h5' ? layout.button : layout.pc_button} type="primary" onClick={this.handleLoginButtonClick}>
+          <Button disabled={!this.props.userLogin.isInfoComplete} className={platform === 'h5' ? layout.button : layout.pc_button} type="primary" onClick={this.handleLoginButtonClick}>
             登录
           </Button>
           {/* 登录按钮 end */}

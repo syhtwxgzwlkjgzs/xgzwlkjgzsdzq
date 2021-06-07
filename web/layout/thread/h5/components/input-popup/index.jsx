@@ -38,6 +38,8 @@ const InputPop = (props) => {
         const success = await onSubmit(value, imageList);
         if (success) {
           setValue('');
+          setShowPicture(false);
+          setImageList([]);
         }
       } catch (error) {
         console.log(error);
@@ -88,7 +90,7 @@ const InputPop = (props) => {
     const newValue = value.substr(0, insertPosition) + (emoji.code || '') + value.substr(insertPosition);
     setValue(newValue);
 
-    setShowEmojis(false);
+    // setShowEmojis(false);
   };
 
   // 完成@人员选择
@@ -146,7 +148,7 @@ const InputPop = (props) => {
 
       !isAllLegal && Toast.info({ content: `仅支持${supportImgExt}类型的图片` });
 
-      setImageUploading(true);
+      cloneList?.length && setImageUploading(true);
 
       return true;
     }
@@ -154,12 +156,17 @@ const InputPop = (props) => {
     return true;
   };
 
-  const onComplete = (value, file) => {
+  const onComplete = (value, file, list) => {
     if (value.code === 0) {
       file.response = value.data;
     }
+    setImageUploading(list?.length && list.some((image) => image.status === 'uploading'));
+  };
 
-    setImageUploading(imageList?.length && imageList.some((image) => image.status === 'uploading'));
+  const onFail = () => {
+    Toast.error({
+      content: '图片上传失败',
+    });
   };
 
   return (
@@ -177,7 +184,8 @@ const InputPop = (props) => {
               placeholder={inputText}
               disabled={loading}
               forwardedRef={textareaRef}
-              autofocus={true}
+              autoFocus={true}
+              onFocus={() => setShowEmojis(false)}
             ></Textarea>
           </div>
 
@@ -189,6 +197,7 @@ const InputPop = (props) => {
                   onChange={handleUploadChange}
                   onComplete={onComplete}
                   beforeUpload={(cloneList, showFileList) => beforeUpload(cloneList, showFileList, THREAD_TYPE.image)}
+                  onFail={onFail}
                 />
               </div>
               <Divider className={styles.divider}></Divider>
@@ -225,15 +234,15 @@ const InputPop = (props) => {
             </div>
           </div>
         </div>
+        {showEmojis && (
+          <div className={styles.emojis}>
+            <Emoji show={showEmojis} emojis={emojis} onClick={onEmojiClick} />
+          </div>
+        )}
       </Popup>
 
       {showAt && <AtSelect visible={showAt} getAtList={onAtListChange} onCancel={onAtIconClick} />}
 
-      {showEmojis && (
-        <div className={styles.emojis}>
-          <Emoji show={showEmojis} emojis={emojis} onClick={onEmojiClick} />
-        </div>
-      )}
     </div>
   );
 };

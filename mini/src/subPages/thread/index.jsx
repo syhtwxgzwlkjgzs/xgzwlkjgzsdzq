@@ -1,24 +1,28 @@
 import React from 'react';
-import { getCurrentInstance } from '@tarojs/taro';
-import Taro from '@tarojs/taro';
+import Taro, { getCurrentInstance } from '@tarojs/taro';
+import Router from '@discuzq/sdk/dist/router';
 import Page from '@components/page';
 import { inject } from 'mobx-react';
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import ThreadMiniPage from '@layout/thread/index';
 import PayBoxProvider from '@components/payBox/payBoxProvider';
+import withShare from '@common/utils/withShare/withShare';
 import ErrorMiniPage from '../../layout/error/index';
 
 const MemoToastProvider = React.memo(ToastProvider);
-
 @inject('site')
 @inject('thread')
 @inject('user')
+@inject('index')
+@inject('search')
+@inject('topic')
+@withShare()
 class Detail extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       isServerError: false,
+      serverErrorMsg: '',
     };
   }
 
@@ -27,6 +31,30 @@ class Detail extends React.Component {
       this.props.thread.reset();
       this.getPageDate(this.props.router.query.id);
     }
+  }
+
+  // 页面分享
+  $getShareData(data) {
+    const { title, threadId } = this.props.thread.threadData;
+    const defalutTitle = title;
+    const defalutPath = `/subPages/thread/index?id=${threadId}`;
+    if (data.from === 'timeLine') {
+      return {
+        title: defalutTitle,
+      };
+    }
+    if (data.from === 'menu') {
+      return {
+        title: defalutTitle,
+        path: defalutPath,
+      };
+    }
+    this.props.thread.shareThread(threadId, this.props.index, this.props.search, this.props.topic);
+    
+    return {
+      title: defalutTitle,
+      path: defalutPath,
+    };
   }
 
   async componentDidShow() {
@@ -48,6 +76,18 @@ class Detail extends React.Component {
       const res = await this.props.thread.fetchThreadDetail(id);
 
       if (res.code !== 0) {
+        // 404
+        if (res.code === -4004) {
+          Router.replace({ url: '/subPages/404/index' });
+          return;
+        }
+
+        if (res.code > -5000 && res.code < -4000) {
+          this.setState({
+            serverErrorMsg: res.msg,
+          });
+        }
+
         this.setState({
           isServerError: true,
         });
@@ -78,7 +118,7 @@ class Detail extends React.Component {
 
   render() {
     return this.state.isServerError ? (
-      <ErrorMiniPage />
+      <ErrorMiniPage text={this.state.serverErrorMsg} />
     ) : (
       <Page>
         <MemoToastProvider>

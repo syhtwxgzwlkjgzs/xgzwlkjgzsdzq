@@ -207,7 +207,8 @@ class SearchAction extends SearchStore {
    if (result.code === 0 && result.data) {
      return result.data;
    }
-   return null;
+
+   return Promise.reject(result?.msg || '接口请求失败');
  };
 
  /**
@@ -283,6 +284,12 @@ class SearchAction extends SearchStore {
       data.isFollow = isFollow;
     }
 
+    // 更新点赞
+    const { isMutual } = obj;
+    if (!typeofFn.isUndefined(isMutual) && !typeofFn.isNull(isMutual)) {
+      data.isMutualFollow = isMutual;
+    }
+
     if (store?.pageData) {
       const newArr = store.pageData.slice()
       newArr[index] = data;
@@ -353,7 +360,7 @@ class SearchAction extends SearchStore {
       targetThreads.forEach(targetThread => {
         if (!targetThread) return;
 
-        const { index, data } = targetThread; // 这里是数组
+        const { index, data, store } = targetThread; // 这里是数组
         const { updateType, updatedInfo, user } = obj;
 
         if(!data && !data?.likeReward && !data?.likeReward?.users) return;
@@ -383,8 +390,8 @@ class SearchAction extends SearchStore {
           data.likeReward.shareCount = data.likeReward.shareCount + 1;
         }
 
-        if (this.threads?.pageData) {
-          this.threads.pageData[index] = data;
+        if (store.pageData) {
+          store.pageData[index] = data;
         }
       });
 
@@ -408,6 +415,15 @@ class SearchAction extends SearchStore {
       for (let i = 0; i < pageData.length; i++)  {
         if (pageData[i].threadId === threadId) {
           threadArr.push({ index: i, data: pageData[i], store: this.indexThreads });
+        }
+      }
+    }
+
+    if (this.searchThreads) {
+      const { pageData = [] } = this.searchThreads;
+      for (let i = 0; i < pageData.length; i++)  {
+        if (pageData[i].threadId === threadId) {
+          threadArr.push({ index: i, data: pageData[i], store: this.searchThreads });
         }
       }
     }

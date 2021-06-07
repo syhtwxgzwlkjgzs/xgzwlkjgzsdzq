@@ -1,6 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
+import Router from '@discuzq/sdk/dist/router';
 import styles from './index.module.scss';
 import AuthorInfo from '../../pc/components/author-info/index';
 import CommentList from '../../pc/components/comment-list/index';
@@ -220,7 +221,9 @@ class CommentPCPage extends React.Component {
       return;
     }
 
-    if (!val) {
+    const valuestr = val.replace(/\s/g, '');
+    // 如果内部为空，且只包含空格或空行
+    if (!valuestr) {
       Toast.info({ content: '请输入内容' });
       return;
     }
@@ -274,6 +277,19 @@ class CommentPCPage extends React.Component {
     Toast.error({
       content: msg,
     });
+  }
+
+  // 点击发送私信
+  onPrivateLetter() {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
+    const { username } = this.props.comment?.authorInfo;
+    if (!username) return;
+    Router.push({ url: `/message?page=chat&username=${username}` });
   }
 
   render() {
@@ -348,6 +364,7 @@ class CommentPCPage extends React.Component {
                   user={this.props.comment?.authorInfo}
                   onFollowClick={() => this.onFollowClick()}
                   isShowBtn={!isSelf}
+                  onPrivateLetter={() => this.onPrivateLetter()}
                 ></AuthorInfo>
               ) : (
                 <LoadingTips isError={isAuthorInfoError} type="init"></LoadingTips>

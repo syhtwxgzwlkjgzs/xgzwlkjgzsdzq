@@ -135,10 +135,9 @@ class Index extends React.Component {
     }, 1000)
 
     onClickUser = (e) => {
-      e && e.stopPropagation()
-
-      const { user = {} } = this.props.data || {};
-      this.props.router.push(`/user/${user?.userId}`);
+        e && e.stopPropagation()
+        const { user = {} } = this.props.data || {};
+        this.props.router.push(`/user/${user?.userId}`);
     }
 
     onClick = (e) => {
@@ -158,6 +157,10 @@ class Index extends React.Component {
 
       if (threadId !== '') {
         this.props.router.push(`/thread/${threadId}`);
+
+        this.props.index.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
+        this.props.search.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
+        this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
       } else {
         console.log('帖子不存在');
       }

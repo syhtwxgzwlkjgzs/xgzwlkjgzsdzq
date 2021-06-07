@@ -1,6 +1,7 @@
 @import '@common/styles/index.scss';
 .content{
   height: 100%;
+  background: $white;
   // 头部
   .header{
     height: rem(164);
@@ -35,10 +36,10 @@
     }
   }
   .user_info_content{
-    width: rem(343);
+    width: calc(100vw - 32px);
     height: rem(213);
     position: absolute;
-    margin-left: -171.5px;
+    margin-left: calc(16px - 50vw);
     left: 50%;
     top: rem(-60);
     background: var(--color-white);
@@ -48,6 +49,7 @@
     box-sizing: border-box;
   }
   .user_info_name{
+    @include text-ellipsis;
     font-weight: 600;
     font-size: rem(16);
     line-height: rem(24);
@@ -60,31 +62,36 @@
     font-size: rem(12);
     line-height: rem(22);
     color: var(--color-text-secondary);
+    padding-top: $padding-1n;
   }
   .user_info_invite{
-    width: rem(311);
+    width: 100%;
     height: rem(78);
     border-radius: rem(5);
     background: $comment-bg-color;
+    margin-top: $margin-2n;
   }
   @mixin userInfoInvite {
-    width: rem(154);
+    width: 50%;
     height: rem(78);
     display: inline-block;
     text-align: center;
+    box-sizing: border-box;
     .invite_num_title{
+      @include text-ellipsis;
       font-weight: normal;
-      font-size: rem(14);
-      line-height: rem(24);
-      color: #4f5a70;
+      font-size: $font-size-base;
+      line-height: $font-line-height-base;
+      color: $text-color-regular;
       opacity: 1;
-      padding-top: rem(16);
+      padding-top: rem($padding-4n);
     }
     .invite_num_content{
+      @include text-ellipsis;
       font-weight: 600;
-      font-size: rem(16);
-      line-height: rem(26);
-      color: #0b0b37;
+      font-size: $font-size-middle;
+      line-height: $font-line-height-middle;
+      color: $text-color-primary;
     }
   }
   .invite_num{
@@ -98,28 +105,28 @@
 
   // 邀请列表 start
   .invite_list{
-    margin-bottom: rem(59);
+    background: $white;
     min-height: rem(285);
     box-sizing: border-box;
-    padding: rem(16);
-    padding-bottom: 0;
+    padding: rem($padding-4n);
+    padding-bottom: rem(59);
   }
   .invite_list_title{
-    font-size: rem(16);
+    font-size: rem($font-size-middle);
     vertical-align: middle;
     height: rem(24);
-    padding-bottom: $padding-4n;
+    padding-bottom: rem($padding-4n);
   }
   .invite_list_titleIcon{
-    line-height: rem(24);
+    line-height: rem($font-line-height-base);
     float: left;
   }
   .invite_list_titleText{
-    line-height: rem(24);
+    line-height: rem($font-line-height-base);
     float: left;
     font-weight: 600;
     color: var(--color-text-primary);
-    padding-left: rem(8);
+    padding-left: rem($padding-2n);
   }
   .invite_list_header{
     height: rem(36);
@@ -131,22 +138,27 @@
     font-size: rem(14);
     text-align: left;
     color: $text-color-regular;
+    display: flex;
   }
   @mixin inviteListName {
+    @include text-ellipsis;
     display: inline-block;
-    width: rem(110);
+    width: 34%;
     float: left;
     line-height: rem(36);
   }
   @mixin inviteListMoney {
+    @include text-ellipsis;
     display: inline-block;
-    width: rem(96);
+    width: 29%;
     float: left;
     line-height: rem(36);
   }
   @mixin inviteListTime {
+    @include text-ellipsis;
     display: inline-block;
     float: left;
+    flex: 1;
     line-height: rem(36);
   }
   .invite_list_headerName,.invite_list_itemName{
@@ -182,11 +194,13 @@
       height: rem(18);
       border-radius: $border-radius-circle;
       line-height: rem(18);
+      flex-shrink: 0;
     }
     span{
       font-weight: normal;
       padding-left: rem(8);
       color: var(--color-text-primary);
+      @include text-ellipsis;
     }
   }
   .invite_list_itemMoney{
@@ -244,6 +258,18 @@
     justify-content: center;
     font-size: rem($font-size-primary);
     color: var(--color-text-placeholder);
+  }
+  .loadMoreContainer {
+    flex: 1;
+    padding: rem($padding-4n);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: $text-color-placeholder;
+  }
+  .bottom_tips_wrap {
+    height: rem(46);
   }
 
 }

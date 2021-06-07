@@ -8,7 +8,19 @@ import goToLoginPage from '@common/utils/go-to-login-page';
 import styles from './index.module.scss';
 
 function avatar(props) {
-  const { image = '', name = '匿', onClick = () => {}, className = '', circle = true, size = 'primary', isShowUserInfo = false, userId = null, user: myself } = props;
+  const {
+    direction = 'right',
+    image = '',
+    name = '匿',
+    onClick = () => {},
+    className = '',
+    circle = true,
+    size = 'primary',
+    isShowUserInfo = false,
+    userId = null,
+    user: myself,
+    search,
+  } = props;
 
   const userName = useMemo(() => {
     const newName = (name || '').toLocaleUpperCase()[0];
@@ -35,6 +47,7 @@ function avatar(props) {
   const onMouseLeaveHandler = useCallback(() => {
     if (!userId) return;
     changeIsShow(false);
+    changeUserInfo('padding');
   });
 
   const followHandler = useCallback(async () => {
@@ -50,14 +63,21 @@ function avatar(props) {
     if (userInfo.follow === 0) {
       const res = await myself.postFollow(userId);
       if (res.success) {
-        userInfo.follow = res.data.isMutual ? 2 : 1;
+        const { isMutual = 0 } = res;
+        userInfo.follow = isMutual ? 2 : 1;
         userInfo.fansCount = userInfo.fansCount + 1;
+        search?.updateActiveUserInfo(userId, { isFollow: true, isMutual: !!isMutual })
+      } else {
+        Toast.info({ content: res.msg });
       }
     } else {
       const res = await myself.cancelFollow({ id: userId, type: 1 });
       if (res.success) {
         userInfo.follow = 0;
         userInfo.fansCount = userInfo.fansCount - 1;
+        search?.updateActiveUserInfo(userId, { isFollow: false, isMutual: false })
+      } else {
+        Toast.info({ content: res.msg });
       }
     }
     changeFollowStatus(false);
@@ -73,7 +93,7 @@ function avatar(props) {
       return;
     }
 
-    const username = myself?.userInfo.username;
+    const username = userInfo.username;
     if(username) {
       props.router.push(`/message?page=chat&username=${username}`);
     } else {
@@ -135,7 +155,7 @@ function avatar(props) {
 
     if (userInfo === 'padding') {
       return (
-        <div className={styles.userInfoBox}>
+        <div className={styles.userInfoBox} style={direction === 'left' ? {right: 0} : {left: 0}}>
           <div className={styles.userInfoContent}>
             <LoadingBox style={{ minHeight: '100%' }}/>
           </div>
@@ -144,14 +164,14 @@ function avatar(props) {
     }
 
     return (
-      <div id="avatar-popup" className={styles.userInfoBox}>
+      <div id="avatar-popup" className={`${styles.userInfoBox} ${direction}`} style={direction === 'left' ? {right: 0} : {left: 0}}>
         <div className={styles.userInfoContent}>
           <div className={styles.header}>
             <div className={styles.left}>
-              <Avatar className={styles.customAvatar} circle={true} image={userInfo.avatarUrl} siz='primary'></Avatar>
+              <Avatar className={styles.customAvatar} circle={true} image={userInfo.avatarUrl} siz='primary' onClick={onClick}></Avatar>
             </div>
             <div className={styles.right}>
-              <p className={styles.name}>{userInfo.username}</p>
+              <p className={styles.name}>{userInfo.nickname}</p>
               <p className={styles.text}>{userInfo.signature && userInfo.signature !== '' ? userInfo.signature : '暂无签名'}</p>
             </div>
           </div>
@@ -195,16 +215,18 @@ function avatar(props) {
               <Button 
                 onClick={blocking ? () => {} : blockingHandler}
                 loading={blocking}
-                className={[styles.btn, styles.block]}
-                className={`${styles.btn} ${userInfo.isDeny ? styles.blocked : styles.unblocked}`}
+                className={`${styles.btn} ${styles.blocked}`}
                 type='primary'
               >
                 {
-                  !blocking && userInfo.isDeny && (
-                    <Icon className={styles.icon} name="ShieldOutlined" size={12}/>
+                  !blocking &&
+                  (
+                    <>
+                      <Icon className={styles.icon} name="ShieldOutlined" size={12}/>
+                      {userInfo.isDeny ? (<span>已屏蔽</span>) : (<span>屏蔽</span>)}
+                    </>
                   )
                 }
-                屏蔽
               </Button>
             </div>
           }
@@ -216,18 +238,18 @@ function avatar(props) {
 
   if (image && image !== '') {
     return (
-      <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler} onClick={onClick}>
-        <Avatar className={className} circle={circle} image={image} size={size}></Avatar>
+      <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler} >
+        <Avatar className={className} circle={circle} image={image} size={size} onClick={onClick}></Avatar>
         {isShow && userInfoBox}
       </div>
     );
   }
 
   return (
-    <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler} onClick={onClick}>
-      <Avatar className={className} circle={circle} text={userName} size={size}></Avatar>
+    <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
+      <Avatar className={className} circle={circle} text={userName} size={size} onClick={onClick}></Avatar>
       {isShow && userInfoBox}
     </div>
   );
 }
-export default inject('user')(withRouter(avatar));
+export default inject('user', 'search')(withRouter(avatar));

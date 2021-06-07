@@ -169,14 +169,14 @@ export default inject('user')(
             {threadStore?.threadData?.title && <div className={topic.title}>{threadStore?.threadData?.title}</div>}
 
             {/* 文字 */}
-            {text && <PostContent useShowMore={false} content={text || ''} />}
+            {text && <PostContent useShowMore={false} content={text || ''} usePointer={false} />}
 
             {/* 付费附件：不能免费查看付费帖 && 需要付费 && 不是作者 && 没有付费 */}
             {!canFreeViewPost && isAttachmentPay && !isSelf && !isPayed && (
               <div style={{ textAlign: 'center' }} onClick={onContentClick}>
                 <Button className={topic.payButton} type="primary" size="large">
                   <div className={topic.pay}>
-                    <Icon className={topic.payIcon} name="DollarLOutlined" size={18}></Icon>
+                    <Icon className={topic.payIcon} name="GoldCoinOutlined" size={18}></Icon>
                     支付{attachmentPrice}元查看附件
                   </div>
                 </Button>
@@ -210,6 +210,7 @@ export default inject('user')(
                   image={parseContent?.GOODS?.imagePath}
                   amount={parseContent?.GOODS?.price}
                   title={parseContent?.GOODS?.title}
+                  onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
                 />
                 <Button
                   className={topic.buyBtn}
@@ -272,7 +273,7 @@ export default inject('user')(
               <div style={{ textAlign: 'center' }} onClick={onContentClick}>
                 <Button className={topic.payButton} type="primary" size="large">
                   <div className={topic.pay}>
-                    <Icon className={topic.payIcon} name="DollarLOutlined" size={18}></Icon>
+                    <Icon className={topic.payIcon} name="GoldCoinOutlined" size={18}></Icon>
                     支付{threadPrice}元查看剩余内容
                   </div>
                 </Button>

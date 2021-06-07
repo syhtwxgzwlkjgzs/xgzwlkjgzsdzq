@@ -1,18 +1,18 @@
-import React, { Component } from 'react'
-import styles from './index.module.scss'
+import React, { Component } from 'react';
+import styles from './index.module.scss';
 
 class CaptchaInput extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      isKeyBoardVisible: false
-    }
+    };
   }
 
-  validateTel = (value) => {
-    return (/^[1][3-9]\d{9}$/.test(value))
+  static defaultProps = {
+    visible: true
   }
+
+  validateTel = value => (/^[1][3-9]\d{9}$/.test(value))
 
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
@@ -25,15 +25,15 @@ class CaptchaInput extends Component {
   // 点击显示数字键盘
   handleClickPwdItem = () => {
     this.setState({
-      isKeyBoardVisible: true
-    })
+      isKeyBoardVisible: true,
+    });
   }
 
   // 点击取消
   handleCancel = () => {
     this.setState({
-      isKeyBoardVisible: false
-    })
+      isKeyBoardVisible: false,
+    });
   }
 
   // 匹配输入的数字
@@ -88,12 +88,14 @@ class CaptchaInput extends Component {
 
   // 监听键盘事件
   handleKeyDown = (e) => {
-    const { isBlur, currentStep } = this.props
+    // 不显示的时候不响应输入
+    if (!this.props.visible) return;
+    const { isBlur, currentStep } = this.props;
     // 只有当input失去焦点的时候才能进行更新
-    if (currentStep === 'second' && !isBlur) return
+    if (currentStep === 'second' && !isBlur) return;
     if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) {
       // 表示输入数字
-      let set_num = this.toMarryNumber(e.keyCode);
+      const set_num = this.toMarryNumber(e.keyCode);
       this.props.updatePwd && this.props.updatePwd(set_num, 'add');
     } else if (e.keyCode == 13) {
       // 表示输入回车
@@ -104,26 +106,6 @@ class CaptchaInput extends Component {
       // 其他非数字情况
     }
   };
-
-  keyboardClickHander = (e) => {
-    e && e.stopPropagation()
-    const key = e.target.getAttribute('data-key');
-    if (key == null) {
-      return null;
-    }
-    const { list = [] } = this.props;
-
-    if (key === '-1') {
-      if (list.length === 0) {
-        this.handleCancel()
-      } else {
-        this.props.updatePwd && this.props.updatePwd('', 'delete');
-      }
-
-    } else if (list.length < 6) {
-      this.props.updatePwd && this.props.updatePwd(key, 'add');
-    }
-  }
 
   renderPwdItem() {
     const { list = [] } = this.props;
@@ -147,67 +129,13 @@ class CaptchaInput extends Component {
     return nodeList;
   }
 
-  // 渲染键盘
-  renderKeyBoard = () => {
-    const { list = [] } = this.props
-    return (
-      <div className={styles.keyboard} onClick={this.keyboardClickHander}>
-        <div className={styles.line}>
-          <div data-key="1" className={styles.column}>
-            1
-        </div>
-          <div data-key="2" className={styles.column}>
-            2
-        </div>
-          <div data-key="3" className={styles.column}>
-            3
-        </div>
-        </div>
-        <div className={styles.line}>
-          <div data-key="4" className={styles.column}>
-            4
-        </div>
-          <div data-key="5" className={styles.column}>
-            5
-        </div>
-          <div data-key="6" className={styles.column}>
-            6
-        </div>
-        </div>
-        <div className={styles.line}>
-          <div data-key="7" className={styles.column}>
-            7
-        </div>
-          <div data-key="8" className={styles.column}>
-            8
-        </div>
-          <div data-key="9" className={styles.column}>
-            9
-        </div>
-        </div>
-        <div className={styles.line}>
-          <div className={`${styles.column} ${styles.special}`}></div>
-          <div data-key="0" className={styles.column}>
-            0
-        </div>
-          <div data-key="-1" className={`${styles.column} ${styles.special}`}>
-            {
-              list.length === 0 ? '取消' : '删除'
-            }
-          </div>
-        </div>
-      </div>
-    )
-  }
-
   render() {
-    const { isKeyBoardVisible } = this.state
     return (
       <div className={styles.payList} onClick={this.handleClickPwdItem}>
         {this.renderPwdItem()}
       </div>
-    )
+    );
   }
 }
 
-export default CaptchaInput
+export default CaptchaInput;

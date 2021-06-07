@@ -76,6 +76,8 @@ export { default as deleteDeny } from './user/deleteDeny';
 export { default as updateAvatar } from './user/updateAvatar';
 export { default as updateBackground } from './user/updateBackground';
 export { default as readUsersDeny } from './user/readUsersDeny';
+export { default as wechatRebindQrCodeGen } from './user/wechatRebindQrCodeGen';
+export { default as getWechatRebindStatus } from './user/getWechatRebindStatus';
 
 // 消息模块
 export { default as readDialogList } from './message/readDialogList';
@@ -86,6 +88,8 @@ export { default as deleteMsg } from './message/deleteMsg';
 export { default as readDialogMsgList } from './message/readDialogMsgList';
 export { default as createDialogMsg } from './message/createDialogMsg';
 export { default as readUnreadCount } from './message/readUnreadCount';
+export { default as readDialogIdByUsername } from './message/readDialogIdByUsername';
+export { default as updateDialog } from './message/updateDialog';
 
 // 邀请模块
 export { default as inviteUsersList } from './invite/inviteUsersList';

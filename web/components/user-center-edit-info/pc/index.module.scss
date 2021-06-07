@@ -36,6 +36,8 @@
   justify-content: space-between;
   border-bottom: rem(1) solid $border-color;
   transition: all 1s;
+  height: rem(70);
+  box-sizing: border-box;
 }
 .pcEditNicknameText {
   font-weight: normal;
@@ -53,6 +55,7 @@
   text-align: left;
   color: $text-color-primary;
   line-height: rem(70);
+  @include text-ellipsis();
 }
 .pcEditNicknameCallMsodify {
   font-weight: normal;
@@ -61,7 +64,22 @@
   text-align: right;
   color: $primary-color;
   cursor: pointer;
+  flex-shrink: 0;
+  margin-left: rem($margin-1n);
 }
+
+.pcEditNicknameCallMsodifyDisable {
+  font-weight: normal;
+  font-size: rem( $font-size-base);
+  line-height: rem(70);
+  text-align: right;
+  color: $disabled-color;
+  cursor: not-allowed;
+  flex-shrink: 0;
+  margin-left: rem($margin-1n);
+}
+
+
 .pcEditAutograph {
   padding-right: rem(194);
   height: rem(146);

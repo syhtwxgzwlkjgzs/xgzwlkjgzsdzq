@@ -21,6 +21,19 @@
       height: rem(423);
       border-radius: rem(var(--border-radius-small));
       background: $white;
+      box-sizing: border-box;
+      padding: rem($padding-6n);
+    }
+    .dzq-modal__body {
+      padding: 0;
+    }
+  }
+}
+
+.setUserWrapper {
+  :global {
+    .dzq-modal__container {
+      height: rem(206);
     }
   }
 }
@@ -31,11 +44,6 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: rem($margin-6n);
-    :global {
-      .dzq-icon {
-        font-size: $font-size-base !important;
-      }
-    }
   }
   .titleValue {
     flex: 1;
@@ -91,7 +99,7 @@
   }
   .tips {
     text-align: right;
-    color: $text-color-regular;
+    color: $primary-color;
     cursor: pointer;
   }
 } 

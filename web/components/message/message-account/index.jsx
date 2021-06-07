@@ -21,13 +21,13 @@ class Index extends React.Component {
           totalCount: 0,
         },
         {
-          iconName: 'MessageOutlined',
+          iconName: 'DiscussOutlined',
           title: '回复我的',
           link: '/message?page=account&subPage=reply',
           totalCount: 0,
         },
         {
-          iconName: 'LikeOutlined',
+          iconName: 'PraiseOutlined',
           title: '点赞我的',
           link: '/message?page=account&subPage=like',
           totalCount: 0,
@@ -106,10 +106,10 @@ class Index extends React.Component {
     data.forEach(item => {
       list.push({
         id: item.id,
+        isFirst: item.isFirst, // 标识消息主题来源于主题或评论
         createdAt: item.createdAt,
         threadId: item.threadId,
-        content: item.postContent,
-        title: item.threadTitle,
+        content: item.isFirst ? (item.threadTitle || item.replyPostContent) : item.postContent,
         type: item.type,
         avatar: item.userAvatar,
         userId: item.userId,
@@ -140,13 +140,14 @@ class Index extends React.Component {
     const card = <Card type={subPage} cardItems={items} onClick={this.toOtherMessage} />;
 
     return (
-      <div className={`${styles.wrapper} ${isPC ? styles.pc : ""}`}>
+      <div className={`${styles.wrapper} ${isPC ? styles.pc : styles.mobile}`}>
         <Notice
           infoIdx={3}
           totalCount={totalCount}
           noMore={currentPage >= totalPage}
           showHeader={!isPC}
-          topCard={(isPC || type === 'accountMsgList') ? card : null}
+          // topCard={(isPC || type === 'accountMsgList') ? card : null}
+          topCard={isPC ? card : null}
           list={renderList}
           type='account'
           onPullDown={() => this.fetchMessageData(1)}

@@ -19,80 +19,90 @@
   background: var(--comment-content-bg-color);
 }
 
-.scroll {
+
+.header {
   width: 100%;
-  height: calc(100vh - 58px);
-  overflow-y: scroll;
+}
 
-  .header {
-    width: 100%;
+.choiceTime {
+  height: rem(52);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: $comment-bg-color;
+  padding: 0 rem($padding-4n);
+
+  .status {
+    font-family: 'PingFangSC-Regular';
+    font-weight: normal;
+    color: #4f5a70;
+    font-size: rem($font-size-primary);
+
+    .icon {
+      margin-left: rem(9);
+    }
   }
+}
 
-  .choiceTime {
-    height: rem(52);
+.tabs {
+  width: 100%;
+  border-bottom: var(--border-border);
+
+  .tagbox {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    background-color: $comment-bg-color;
-    padding: 0 rem($padding-4n);
-
-    .status {
-      font-family: 'PingFangSC-Regular';
-      font-weight: normal;
-      color: #4f5a70;
-      font-size: rem($font-size-primary);
-
-      .icon {
-        margin-left: rem(9);
-      }
-    }
   }
 
-  .tabs {
-    width: 100%;
-    border-bottom: var(--border-border);
 
-    .tagbox {
+  :global {
+    .dzq-tabs__panel {
+      height: 0;
+    }
+
+    .dzq-tabs__list {
       display: flex;
-      justify-content: center;
-      align-items: center;
     }
 
+    .dzq-tabs__content {
+      padding-top: rem(1);
+      padding-left: 0;
+      padding-right: 0;
+    }
 
-    :global {
-      .dzq-tabs__panel {
-        height: 0;
-      }
+    .dzq-tabs__panel {
+      height: 0;
+    }
 
-      .dzq-tabs__list {
-        display: flex;
-      }
+    .dzq-tabs__list {
+      display: flex;
+    }
 
-      .dzq-tabs__content {
-        padding-top: rem(1);
-        padding-left: 0;
-        padding-right: 0;
-      }
+    .dzq-tabs__content {
+      padding-top: rem(1);
+      padding-left: 0;
+      padding-right: 0;
+    }
 
-      .dzq-tabs__label {
-        padding-bottom: rem(10) !important;
-        font-family: "PingFang SC";
-        font-weight: 600;
-        font-size: rem($font-size-primary);
-      }
+    .dzq-tabs__label {
+      padding-bottom: rem(10) !important;
+      font-family: 'PingFang SC';
+      font-weight: 600;
+      font-size: rem($font-size-primary);
+    }
 
-      .dzq-tabs__item {
-        height: rem(50);
-        box-sizing: border-box;
-        flex: 1;
+    .dzq-tabs__item {
+      height: rem(50);
+      box-sizing: border-box;
+      flex: 1;
 
-        &::after {
-          width: rem(82);
-          margin: auto;
-        }
+      &:after {
+        width: rem(82);
+        margin: auto;
       }
     }
   }
+
 }
 
 .tag {
@@ -117,7 +127,7 @@
   width: 100%;
   height: rem(69);
   box-sizing: border-box;
-  padding: $padding-2n $padding-4n 0px;
+  padding: $padding-2n $padding-4n 0;
   background: var(--color-white);
 
   .button {

@@ -2,11 +2,14 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import styles from './index.module.scss';
-import SectionTitle from '@components/section-title'
+import SectionTitle from '@components/section-title';
 import BaseLayout from '@components/base-layout';
 import ThreadContent from '@components/thread';
 import Copyright from '@components/copyright';
-// import data from './data';
+import PopTopic from '@components/pop-topic';
+import UserCenterFansPc from '@components/user-center/fans-pc';
+import SidebarPanel from '@components/sidebar-panel';
+
 
 @inject('site')
 @inject('index')
@@ -20,43 +23,47 @@ class CollectPCPage extends React.Component {
     this.props.router.push(`/search/result-post?keyword=${this.state.value || ''}`);
   };
 
+  fetchMoreData = () => {
+    const { dispatch } = this.props;
+    return dispatch('moreData');
+  };
+
   // 右侧 - 潮流话题 粉丝 版权信息
-  renderRight = () => {
-    return (
-      <div className={styles.right}>
-        <Copyright/>
-      </div>
-    )
-  }
-  // 中间 -- 我的收藏
-  renderContent = (data) => {
-    const num = 8;
-    const { threads } = data;
-    const { pageData } = threads || {};
-    return (
-      <div className={styles.content}>
-        <div className={styles.title}>
-          <SectionTitle
-            title="我的收藏"
-            icon={{ type: 3, name: 'CollectOutlined' }}
-            isShowMore={false}
-            rightText={`共有${num}条收藏`}
-          />
-        </div>
-        {
-          pageData?.map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />)
-        }
-      </div>
-    )
-  }
+  renderRight = () => (
+    <div className={styles.right}>
+      <PopTopic />
+      <UserCenterFansPc />
+      <Copyright />
+    </div>
+  );
+
   render() {
-    const { index, site } = this.props;
+    const { index } = this.props;
+    const { pageData, currentPage, totalPage  } = index.threads || {};
     return (
       <div className={styles.container}>
         <BaseLayout
-          right={ this.renderRight }
+          showRefresh={false}
+          noMore={currentPage >= totalPage}
+          onRefresh={this.fetchMoreData}
+          right={this.renderRight}
+          rightClass={styles.rightSide}
+          isShowLayoutRefresh={!!pageData?.length}
         >
-          { this.renderContent(index) }
+          <SidebarPanel
+            title="我的收藏"
+            type='normal'
+            isShowMore={false}
+            noData={!pageData?.length}
+            isLoading={!pageData}
+            icon={{ type: 3, name: 'CollectOutlined' }}
+            rightText={`共有${this.props.totalCount}条收藏`}
+            mold='plane'
+          >
+            {pageData?.map((item, index) => (
+              <ThreadContent className={index === 0 && styles.threadStyle} data={item} key={index} />
+            ))}
+          </SidebarPanel>
         </BaseLayout>
       </div>
     );

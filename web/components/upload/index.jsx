@@ -24,7 +24,6 @@ export default function DzqUpload(props) {
     className,
   } = props;
   const multiple = limit > 1;
-
   const post = async (file, list, updater) => { // file, list, updater
     const formData = new FormData();
     formData.append('file', file.originFileObj);
@@ -40,28 +39,32 @@ export default function DzqUpload(props) {
       updater(list);
     });
     if (ret.code === 0) {
-      onSuccess(ret, file);
-      onComplete(ret, file);
       file.status = 'success';
       updater(list);
+      onSuccess({ ...ret, type: file.type }, file);
+      onComplete({ ...ret, type: file.type }, file, list);
     } else {
-      onFail(ret, file);
-      onComplete(ret, file);
       file.status = 'error';
       updater(list);
+      onFail(ret, file);
+      onComplete(ret, file, list);
       return false;
     }
-    return ret;
+    return { ...ret, type: file.type };
   };
 
   // TODO: 因为上传组件不支持传class和style，所以在外面增加了一层dom
   const clsName = isCustomUploadIcon ? `${styles['dzq-custom-upload']} ${styles['dzq-upload-reset']} ${className}` : `${styles['dzq-upload-reset']}  ${className}`;
+  const formatFileList = (fileList || []).map(item => {
+    const type = item?.fileType?.toString() || item?.type?.toString();
+    return { ...item, type };
+  });
   return (
-    <div className={clsName}>
+    <div className={clsName} onClick={e => e.stopPropagation() }>
       <Upload
         progressRender={(file) => <ProgressRender file={file} />}
         listType={listType}
-        fileList={fileList}
+        fileList={formatFileList}
         limit={limit}
         multiple={multiple}
         onRemove={(file) => {

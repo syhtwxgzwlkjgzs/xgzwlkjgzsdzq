@@ -39,6 +39,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   line-height: rem(20);
+
+  &.pc {
+    max-width: rem(210);
+  }
 }
 
 .groupName {
@@ -51,7 +55,9 @@
   text-overflow: ellipsis;
   line-height: rem(20);
 }
-
+.groupNameText {
+  max-width: rem(62.5);
+}
 .meta {
   margin-top: rem(1);
   color: var(--color-text-secondary);
@@ -102,52 +108,11 @@
   right: 0;
   display: flex;
 
-  .categoryEssence {
-    box-sizing: border-box;
-    color: var(--color-orange);
-    border: rem(1) solid var(--color-orange6);
-    &:after {
-      background-color: var(--color-orange);
-    }
-  }
-
-  .pay {
-    color: $success-color;
-    border: rem(1) solid $success-color;
-    &:after {
-      background-color: $success-color;
-    }
-  }
-
-  .reward {
-    color: $warn-color;
-    border: rem(1) solid $warn-color;
-    &:after {
-      background-color: $warn-color;
-    }
-  }
-
-  .red {
-    color: $text-color-error;
-    border: rem(1) solid $text-color-error;
-    &:after {
-      background-color: $text-color-error;
-    }
-  }
-
-  > div {
-    margin-left: rem(8);
-  }
   :global {
     .dzq-tag{
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      &:after {
-      z-index: 1;
+      margin-left: rem(8);
+      
     }
-  }
   }
 }
 .listItemIcon {

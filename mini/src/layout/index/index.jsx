@@ -15,17 +15,27 @@ class Index extends React.Component {
   prePage = 10;
 
   state = {
-    isError: false
+    isError: false,
+    errorText: '加载失败'
   }
 
   async componentDidMount() {
-    const { site } = this.props;
+    const { index } = this.props
+    const { essence = 0, sequence = 0, attention = 0, sort = 1 } = index.filter;
+
+    let newTypes = this.handleString2Arr(index.filter, 'types');
+
+    let categoryIds = this.handleString2Arr(index.filter, 'categoryids');
+    
     this.props.index.getReadCategories();
     this.props.index.getRreadStickList();
     try {
-      await this.props.index.getReadThreadList({sequence: this.props.site.checkSiteIsOpenDefautlThreadListData() ? 1 : 0});
+      await this.props.index.getReadThreadList({
+        sequence, 
+        filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort } 
+      });
     } catch (error) {
-      this.setState({ isError: true })
+      this.setState({ isError: true, errorText: error })
     }
   }
 
@@ -58,7 +68,11 @@ class Index extends React.Component {
 
     if (type === 'click-filter') { // 点击tab
       this.page = 1;
-      await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
+      try {
+        await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
+      } catch (error) {
+        this.setState({ isError: true, errorText: error })
+      }
     } else if (type === 'moreData') {
       this.page += 1;
       return await index.getReadThreadList({
@@ -81,7 +95,7 @@ class Index extends React.Component {
     return (
       <View>
         <MemoToastProvider>
-          <IndexPageContent dispatch={this.dispatch} isError={this.state.isError} />
+          <IndexPageContent dispatch={this.dispatch} isError={this.state.isError} errorText={this.state.errorText} />
         </MemoToastProvider>
       </View>
     );

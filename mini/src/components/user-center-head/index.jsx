@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import Button from '@discuzq/design/dist/components/button/index';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import Router from '@discuzq/sdk/dist/router';
+import { getCurrentInstance } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
+import styles from './index.module.scss';
 
 @inject('site')
 @inject('user')
@@ -15,110 +16,114 @@ import { View, Text } from '@tarojs/components';
 class index extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-    };
+    this.state = {};
   }
 
   static defaultProps = {
     isOtherPerson: false, // 表示是否是其他人
-  }
+  };
 
   // 点击屏蔽
   handleChangeShield = (isDeny) => {
-    const { query = {} } = this.props.router
+    const { query = {} } = this.props.router;
     if (isDeny) {
-      this.props.user.undenyUser(query.otherId)
-      this.props.user.setTargetUserNotBeDenied()
+      this.props.user.undenyUser(query.otherId);
+      this.props.user.setTargetUserNotBeDenied();
       Toast.success({
         content: '解除屏蔽成功',
         hasMask: false,
         duration: 1000,
-      })
+      });
     } else {
-      this.props.user.denyUser(query.otherId)
-      this.props.user.setTargetUserDenied()
+      this.props.user.denyUser(query.otherId);
+      this.props.user.setTargetUserDenied();
       Toast.success({
         content: '屏蔽成功',
         hasMask: false,
         duration: 1000,
-      })
+      });
     }
-  }
+  };
 
   // 点击关注
   handleChangeAttention = async (follow) => {
-    const { query = {} } = this.props.router
+    const { query = {} } = this.props.router;
     if (query.otherId) {
       if (follow !== 0) {
-        await this.props.user.cancelFollow({ id: query.otherId, type: 1 })
-        await this.props.user.getTargetUserInfo(query.otherId)
+        await this.props.user.cancelFollow({ id: query.otherId, type: 1 });
+        await this.props.user.getTargetUserInfo(query.otherId);
       } else {
-        await this.props.user.postFollow(query.otherId)
-        await this.props.user.getTargetUserInfo(query.otherId)
+        await this.props.user.postFollow(query.otherId);
+        await this.props.user.getTargetUserInfo(query.otherId);
       }
     }
-  }
+  };
 
   logout = () => {
     clearLoginStatus();
     this.props.user.removeUserInfo();
     this.props.site.getSiteInfo();
-    Router.reLaunch({url: '/pages/index/index'});
-  }
+    Router.reLaunch({ url: '/pages/index/index' });
+  };
 
   // 点击粉丝列表
   goToFansList = () => {
-    const { query = {} } = this.props.router
-    if (query.otherId) {
-      Router.push({ url: `/my/fans?isOtherPerson=${this.props.isOtherPerson}&otherId=${query.otherId}` })
+    const { otherId } = getCurrentInstance().router.params;
+    if (otherId) {
+      Router.push({ url: `/subPages/my/fans/index?isOtherPerson=${this.props.isOtherPerson}&otherId=${otherId}` });
     } else {
-      Router.push({ url: `/my/fans?isOtherPerson=${this.props.isOtherPerson}` })
+      Router.push({ url: `/subPages/my/fans/index?isOtherPerson=${this.props.isOtherPerson}` });
     }
-  }
+  };
 
   // 点击关注列表
   goToFollowsList = () => {
-    const { query = {} } = this.props.router
-    if (query.otherId) {
-      Router.push({ url: `/my/follows?isOtherPerson=${this.props.isOtherPerson}&otherId=${query.otherId}` })
+    const { otherId } = getCurrentInstance().router.params;
+    if (otherId) {
+      Router.push({ url: `/subPages/my/follows/index?isOtherPerson=${this.props.isOtherPerson}&otherId=${otherId}` });
     } else {
-      Router.push({ url: `/my/follows?isOtherPerson=${this.props.isOtherPerson}` })
+      Router.push({ url: `/subPages/my/follows/index?isOtherPerson=${this.props.isOtherPerson}` });
     }
-  }
+  };
 
   // 点击编辑资料
   goToMyEditInfo = () => {
-    Router.push({ url: `edit/index` })
-  }
+    Router.push({ url: `edit/index` });
+  };
 
   // 点击发送私信
   handleMessage = () => {
-    const {username} = this.props.user.targetUser;
-    Router.push({ url: `/message?page=chat&username=${username}` })
+    const { username } = this.props.user.targetUser;
+    Router.push({ url: `/message?page=chat&username=${username}` });
+  };
+
+  // 点击我的点赞
+  handleMyLike = () => {
+    Router.push({ url: '/subPages/my/like/index' });
   }
 
   // 渲染关注状态
   renderFollowedStatus = (follow) => {
-    let icon = ""
-    let text = ""
+    let icon = '';
+    let text = '';
     switch (follow) {
       case 0: // 表示未关注
-        icon = "PlusOutlined"
-        text = '关注'
+        icon = 'PlusOutlined';
+        text = '关注';
         break;
       case 1:
-        icon = "CheckOutlined"
-        text = '已关注'
-        break
+        icon = 'CheckOutlined';
+        text = '已关注';
+        break;
       case 2:
-        icon = "WithdrawOutlined"
-        text = '相互关注'
-        break
+        icon = 'WithdrawOutlined';
+        text = '相互关注';
+        break;
       default:
         break;
     }
-    return { icon, text }
-  }
+    return { icon, text };
+  };
 
   render() {
     const { targetUser } = this.props.user;
@@ -128,7 +133,7 @@ class index extends Component {
         {/* 上 */}
         <View className={styles.h5boxTop}>
           <View className={styles.headImgBox}>
-            <Avatar image={user.avatarUrl} size='big' name={user.username} />
+            <Avatar image={user.avatarUrl} size="big" name={user.username} />
           </View>
           {/* 粉丝|关注|点赞 */}
           <View className={styles.userMessageList}>
@@ -140,7 +145,7 @@ class index extends Component {
               <Text>关注</Text>
               <Text>{user.followCount || 0}</Text>
             </View>
-            <View className={styles.userMessageListItem}>
+            <View onClick={this.handleMyLike} className={styles.userMessageListItem}>
               <Text>点赞</Text>
               <Text>{user.likedCount || 0}</Text>
             </View>
@@ -183,17 +188,20 @@ class index extends Component {
           }
         </View>
         {/* 右上角屏蔽按钮 */}
-        {
-          this.props.isOtherPerson && (
-            <View onClick={() => { this.handleChangeShield(user.isDeny) }} className={styles.shieldBtn}>
-              <Icon name="ShieldOutlined" />
-              <Text>{user.isDeny ? '解除屏蔽' : '屏蔽'}</Text>
-            </View>
-          )
-        }
+        {this.props.isOtherPerson && (
+          <View
+            onClick={() => {
+              this.handleChangeShield(user.isDeny);
+            }}
+            className={styles.shieldBtn}
+          >
+            <Icon name="ShieldOutlined" />
+            <Text>{user.isDeny ? '解除屏蔽' : '屏蔽'}</Text>
+          </View>
+        )}
       </View>
     );
   }
 }
 
-export default index
+export default index;

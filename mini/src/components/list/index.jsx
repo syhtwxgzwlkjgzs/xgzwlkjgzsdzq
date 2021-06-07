@@ -21,23 +21,28 @@ const List = forwardRef(({
   noMore,
   onRefresh,
   onScroll = noop,
+  hasOnScrollToLower = false,
   showRefresh = true,
   preload = 30,
-  requestError = false
+  requestError = false,
+  errorText = '加载失败'
 }, ref) => {
   const listWrapper = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [errText, setErrText] = useState(errorText);
 
   useEffect(() => {
-    if (noMore) {
-      setIsLoading(true);
-    }
+      setIsLoading(noMore);
   }, [noMore]);
 
   useEffect(() => {
     setIsError(requestError)
   }, [requestError])
+
+  useEffect(() => {
+    setErrText(errorText)
+  }, [errorText])
 
   // useEffect(() => {
   //   onTouchMove();
@@ -69,7 +74,7 @@ const List = forwardRef(({
   };
 
   const onTouchMove = (e) => {
-    if (e && !isLoading.current && onRefresh && !isLoading && !requestError) {
+    if (e && onRefresh && !isLoading && !requestError) {
       setIsLoading(true);
       if (typeof(onRefresh) === 'function') {
         const promise = onRefresh()
@@ -83,9 +88,10 @@ const List = forwardRef(({
               }
             }, 0);
           })
-          .catch(() => {
+          .catch((err) => {
             setIsLoading(false);
             setIsError(true);
+            setErrText(err || '加载失败')
           })
           .finally(() => {
             if (noMore) {
@@ -97,7 +103,7 @@ const List = forwardRef(({
       }
     }
   };
-  
+
   const handleScroll = (e) => {
     onScroll(e);
   }
@@ -111,17 +117,17 @@ const List = forwardRef(({
     }
 
   return (
-    <ScrollView 
-      scrollY 
-      className={`${styles.container} ${className}`} 
-      style={{ height }} 
-      onScrollToLower={onTouchMove}
+    <ScrollView
+      scrollY
+      className={`${styles.container} ${className}`}
+      style={{ height }}
+      onScrollToLower={hasOnScrollToLower ? onTouchMove : null}
       lowerThreshold={80}
       onScroll={handleScroll}
     >
       {children}
       {onRefresh && showRefresh && !isError && <RefreshView noMore={noMore} />}
-      {isError && <ErrorView onClick={handleError} />}
+      {isError && <ErrorView text={errText} onClick={handleError} />}
     </ScrollView>
   );
 });

@@ -7,22 +7,29 @@
     display: flex;
     justify-content: center;
     padding: rem($padding-2n);
+    @include media('l-pc') {
+      padding: rem($padding-2n) 1.5%;
+    }
+    @include media('s-pc') {
+      padding: rem($padding-2n) 2%;
+    }
     box-sizing: border-box;
     background: var(--color-white);
     position: fixed;
     top: 0;
     left: 0;
     height: rem(60);
-    min-width: rem(1150);
     width: 100%;
     border-bottom: 1px solid var(--border-line-color);
     z-index: $zindex-backtotop;
     .headerContent{
-      width: rem(1436);
+      max-width: rem(1420);
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
       .left{
+        width: 50%;
         display: flex;
         align-items: center;
         .siteLogo{
@@ -32,14 +39,33 @@
         }
         .inputBox{
           margin-left: rem(20);
-          input{
-            line-height: normal;
+          flex:1;
+          :global{
+            .dzq-input{
+              width: 100%;
+            }
+            input{
+              line-height: normal;
+              max-width: rem(580);
+              width: 100%;
+            }
           }
         }
       }
       .right{
         display: flex;
         align-items: center;
+
+        :global{
+          .dzq-dropdown-menu{
+            top: rem(45);
+          }
+          .dzq-dropdown-menu__item{
+            padding: rem($padding-10) 0;
+            line-height: rem(26);
+          }
+        }
+
         .iconList{
           display: flex;
           align-items: center;
@@ -60,10 +86,25 @@
             div{
               color: var(--color-text-secondary);
             }
-            p{
+            .iconText{
               font-size: rem($font-size-primary);
               margin-left: rem($margin-2n);
               color: var(--color-text-regular);
+            }
+            @include media('xl-pc') {
+              .iconText{
+                display: block;
+              }
+            }
+            @include media('l-pc') {
+              .iconText{
+                display: block;
+              }
+            }
+            @include media('s-pc') {
+              .iconText{
+                display: none;
+              }
             }
           }
         }
@@ -83,6 +124,8 @@
             margin-left: rem(8);
             color: $text-color-regular;
             font-size: rem($font-size-primary);
+            max-width: rem(200);
+            @include text-ellipsis();
           }
           .userBtn{
             margin-right: rem(16);
@@ -100,5 +143,9 @@
       }
 
     }
+  }
+
+  .headerDropMenuIcon {
+    margin-right: rem(4);
   }
 }

@@ -29,14 +29,14 @@ class PC extends React.Component {
         草稿箱
       </div>
       <div className={styles['header-right']}>
-        共有{ this.props.index.threads?.totalCount || 0 }条草稿
+        共有{ this.props.index.drafts?.totalCount || 0 }条草稿
       </div>
     </div>
   )
 
   renderContent = () => {
     const { index } = this.props;
-    const list = (index.threads && index.threads.pageData) || [];
+    const list = (index.drafts && index.drafts.pageData) || [];
     return (
       <div className={styles.wrapper}>
         {this.renderHeader()}
@@ -45,8 +45,8 @@ class PC extends React.Component {
           {list.map((item, index) => (
             <div className={styles.item} key={index}>
               <div className={styles['item-left']}>
-                <ThreadCenterView data={item} />
-                <div className={styles['item-time']}>编辑于&nbsp;{item.diffTime}</div>
+                <ThreadCenterView data={item} onClick={() => this.props.onEdit(item)}/>
+                <div className={styles['item-time']}>编辑于&nbsp;{item.updatedAt}</div>
               </div>
               <div className={styles['item-right']}>
                 <div className={styles['item-operate']} onClick={() => this.props.onEdit(item)}>
@@ -65,7 +65,7 @@ class PC extends React.Component {
 
   render() {
     const { index } = this.props;
-    const { currentPage, totalPage } = index.threads || {};
+    const { currentPage, totalPage } = index.drafts || {};
     return (
       <BaseLayout
         onRefresh={this.onPullingUp}

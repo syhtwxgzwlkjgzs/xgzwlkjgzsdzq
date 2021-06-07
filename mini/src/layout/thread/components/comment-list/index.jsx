@@ -10,9 +10,13 @@ import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import classNames from 'classnames';
 import ImageDisplay from '@components/thread/image-display';
+import RichText from '@discuzq/design/dist/components/rich-text/index';
+import { handleLink } from '@components/thread/utils';
+import Router from '@discuzq/sdk/dist/router';
 
 import redPacketMini from '../../../../../../web/public/dzq-img/redpacket-mini.png';
 import coin from '../../../../../../web/public/dzq-img/coin.png';
+
 @observer
 class CommentList extends React.Component {
   constructor(props) {
@@ -95,6 +99,16 @@ class CommentList extends React.Component {
     };
   }
 
+  handleClick(e, node) {
+    e && e.stopPropagation();
+    const url = handleLink(node);
+    if (url) {
+      Router.push({ url });
+    } else {
+      this.toCommentDetail();
+    }
+  }
+
   render() {
     const { canDelete, canEdit, canLike, canHide } = this.generatePermissions(this.props.data);
 
@@ -149,10 +163,11 @@ class CommentList extends React.Component {
                 {this.props.data?.user?.nickname || this.props.data?.user?.userName || '未知用户'}
               </View>
               {/* 评论内容 */}
-              <View
+              <RichText
                 className={classNames(styles.commentListText, this.state.isShowOne && styles.isShowOne)}
-                dangerouslySetInnerHTML={{ __html: this.filterContent() }}
-              ></View>
+                content={this.filterContent()}
+                onClick={this.handleClick.bind(this)}
+              />
               {/* 图片展示 */}
               {this.props.data?.images && (
                 <View className={styles.imageDisplay}>

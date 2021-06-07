@@ -9,11 +9,11 @@ import footer from './footer.module.scss';
 
 import NoMore from './components/no-more';
 import LoadingTips from './components/loading-tips';
-
 import styleVar from '@common/styles/theme/default.scss.json';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Input from '@discuzq/design/dist/components/input/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
+import Button from '@discuzq/design/dist/components/button/index';
 import Header from '@components/header';
 import goToLoginPage from '@common/utils/go-to-login-page';
 
@@ -25,14 +25,12 @@ import InputPopup from './components/input-popup';
 import throttle from '@common/utils/thottle';
 import xss from '@common/utils/xss';
 
-import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import threadPay from '@common/pay-bussiness/thread-pay';
 import RewardPopup from './components/reward-popup';
-
 import RenderThreadContent from './detail/content';
 import RenderCommentList from './detail/comment-list';
 import classNames from 'classnames';
-
+import { debounce } from '../../components/thread/utils';
 @inject('site')
 @inject('user')
 @inject('thread')
@@ -44,7 +42,6 @@ import classNames from 'classnames';
 class ThreadH5Page extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       showReportPopup: false, // 是否弹出举报弹框
       showDeletePopup: false, // 是否弹出删除弹框
@@ -55,7 +52,9 @@ class ThreadH5Page extends React.Component {
       setTop: false, // 置顶
       showContent: '',
       // inputValue: '', // 评论内容
+      inputText: '请输入内容', // 默认回复框placeholder内容
       toView: '', // 接收元素id用来滚动定位
+      position: 0,
     };
 
     this.perPage = 5;
@@ -65,18 +64,21 @@ class ThreadH5Page extends React.Component {
     // 滚动定位相关属性
     this.threadBodyRef = React.createRef();
     this.commentDataRef = React.createRef();
-    this.position = 0;
     this.nextPosition = 0;
     this.flag = true;
+    this.currentPosition = 0;
 
     // 修改评论数据
     this.comment = null;
+
+    this.commentData = null;
+    this.replyData = null;
+    this.commentType = null;
 
     // 举报内容选项
     this.reportContent = ['广告垃圾', '违规内容', '恶意灌水', '重复发帖'];
     this.inputText = '其他理由...';
   }
-
   // 滚动事件
   handleOnScroll = (e) => {
     // 加载评论列表
@@ -87,6 +89,7 @@ class ThreadH5Page extends React.Component {
     if (this.flag) {
       this.nextPosition = e.detail?.scrollTop || 0;
     }
+    this.currentPosition = e.detail?.scrollTop || 0;
   };
 
   // 触底事件
@@ -102,18 +105,29 @@ class ThreadH5Page extends React.Component {
     // 当内容加载完成后，获取评论区所在的位置
     //this.position = this.commentDataRef?.current?.offsetTop - 50;
     // 是否定位到评论位置
-    // if (this.props?.thread?.isPositionToComment) {
-    //   // TODO:需要监听帖子内容加载完成事件
-    //   setTimeout(() => {
-    //     this.threadBodyRef.current.scrollTo(0, this.position);
-    //   }, 1000);
-    // }
+    if (this.props?.thread?.isPositionToComment) {
+      // TODO:需要监听帖子内容加载完成事件
+      setTimeout(() => {
+        this.onMessageClick();
+      }, 1200);
+    }
   }
 
   componentDidUpdate() {
     // 当内容加载完成后，获取评论区所在的位置
     if (this.props.thread.isReady) {
       // this.position = this.commentDataRef?.current?.offsetTop - 50;
+
+      const { id, title } = this.props?.thread?.threadData;
+      if (id) {
+        // 分享相关数据
+        this.shareData = {
+          comeFrom: 'thread',
+          threadId: id,
+          title,
+          path: `/subPages/thread/index?id=${id}`,
+        };
+      }
     }
   }
 
@@ -128,20 +142,26 @@ class ThreadH5Page extends React.Component {
     if (this.flag) {
       this.flag = !this.flag;
     } else {
-      if (this.position <= 0) {
-        this.position = this.nextPosition + 1;
+      if (this.state.position <= 0) {
+        this.setState({ position: this.nextPosition + 1 });
       } else {
-        this.position = this.nextPosition - 1;
+        this.setState({ position: this.nextPosition - 1 });
       }
       this.flag = !this.flag;
     }
   }
 
+  // 保持当前位置
+  keepCurrentPosition = () => {
+    this.setState({ position: this.currentPosition });
+  };
+
   // 点击收藏icon
   async onCollectionClick() {
+    this.keepCurrentPosition();
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -203,19 +223,23 @@ class ThreadH5Page extends React.Component {
 
   // 点击评论
   onInputClick() {
+    this.keepCurrentPosition();
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
+    this.commentType = 'comment';
 
     this.setState({
       showCommentInput: true,
+      inputText: '请输入内容',
     });
   }
 
   // 点击更多icon
   onMoreClick = () => {
+    this.keepCurrentPosition();
     // this.setState({
     //   text: !this.state.text,
     // });
@@ -225,7 +249,7 @@ class ThreadH5Page extends React.Component {
   onOperClick = (type) => {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -249,7 +273,7 @@ class ThreadH5Page extends React.Component {
     // 编辑
     if (type === 'edit') {
       if (!this.props.thread?.threadData?.id) return;
-      Taro.navigateTo({
+      Taro.redirectTo({
         url: `/subPages/thread/post/index?id=${this.props.thread?.threadData?.id}}`,
       });
     }
@@ -365,12 +389,12 @@ class ThreadH5Page extends React.Component {
 
     if (success) {
       Toast.success({
-        content: '删除成功，即将跳转至首页',
+        content: '删除成功，即将跳转至上一页',
       });
 
       setTimeout(() => {
-        Taro.redirectTo({
-          url: '/pages/index/index',
+        Taro.navigateBack({
+          delta: 1,
         });
       }, 1000);
 
@@ -388,16 +412,29 @@ class ThreadH5Page extends React.Component {
   }
 
   // 点击发布按钮
-  async onPublishClick(val) {
-    if (!val) {
-      Toast.info({ content: '请输入内容!' });
+  async publishClick(val, imageList) {
+    const valuestr = val.replace(/\s/g, '');
+    // 如果内部为空，且只包含空格或空行
+    if (!valuestr) {
+      Toast.info({ content: '请输入内容' });
       return;
     }
-    return this.comment ? await this.updateComment(val) : await this.createComment(val);
+
+    if (this.commentType === 'comment') {
+      return await this.onPublishClick(val, imageList);
+    }
+    if (this.commentType === 'reply') {
+      return await this.createReply(val, imageList);
+    }
+  }
+
+  // 发布评论
+  async onPublishClick(val, imageList) {
+    return this.comment ? await this.updateComment(val, imageList) : await this.createComment(val, imageList);
   }
 
   // 创建评论
-  async createComment(val) {
+  async createComment(val, imageList) {
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
@@ -406,8 +443,34 @@ class ThreadH5Page extends React.Component {
       isNoMore: this.props?.thread?.isNoMore,
       attachments: [],
     };
+
+    if (imageList?.length) {
+      params.attachments = imageList
+        .filter((item) => item.status === 'success' && item.response)
+        .map((item) => {
+          const { id } = item.response;
+          return {
+            id,
+            type: 'attachments',
+          };
+        });
+    }
+
     const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
     if (success) {
+      // 更新帖子中的评论数据
+      this.props.thread.updatePostCount(this.props.thread.totalCount);
+      // 更新列表store数据
+      this.props.thread.updateListStore(this.props.index, this.props.search, this.props.topic);
+
+      // 是否红包帖
+      const isRedPack = this.props.thread?.threadData?.displayTag?.isRedPack;
+      // TODO:可以进一步细化判断条件，是否还有红包
+      if (isRedPack) {
+        // 评论获得红包帖，更新帖子数据
+        this.props.thread.fetchThreadDetail(id);
+      }
+
       Toast.success({
         content: '评论成功',
       });
@@ -447,12 +510,121 @@ class ThreadH5Page extends React.Component {
     });
   }
 
+  /*   btnClick() {
+    const shareData = {
+      comeFrom: 'thread',
+      threadId: this.props.thread?.threadData?.id,
+      title: '',
+      path: `/subPages/thread/index?id=${this.props.thread?.threadData?.id}`
+    }
+    this.setState({shareData:shareData});
+  }*/
+
   // 点击编辑评论
   onEditClick(comment) {
     this.comment = comment;
     this.setState({
       inputValue: comment.content,
       showCommentInput: true,
+    });
+  }
+
+  // 点击评论的回复
+  replyClick(comment) {
+    this.keepCurrentPosition();
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+      return;
+    }
+    this.commentType = 'reply';
+
+    this.commentData = comment;
+    this.replyData = null;
+    const userName = comment?.user?.nickname || comment?.user?.userName;
+    this.setState({
+      showCommentInput: true,
+      inputText: userName ? `回复${userName}` : '请输入内容',
+    });
+  }
+
+  // 点击回复的回复
+  replyReplyClick(reply, comment) {
+    this.keepCurrentPosition();
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+      return;
+    }
+    this.commentType = 'reply';
+
+    this.commentData = null;
+    this.replyData = reply;
+    this.replyData.commentId = comment.id;
+    const userName = reply?.user?.nickname || reply?.user?.userName;
+
+    this.setState({
+      showCommentInput: true,
+      inputText: userName ? `回复${userName}` : '请输入内容',
+    });
+  }
+
+  // 创建回复评论+回复回复接口
+  async createReply(val, imageList) {
+    if (!val) {
+      Toast.info({ content: '请输入内容!' });
+      return;
+    }
+
+    const id = this.props.thread?.threadData?.id;
+    if (!id) return;
+
+    const params = {
+      id,
+      content: val,
+    };
+
+    // 楼中楼回复
+    if (this.replyData) {
+      params.replyId = this.replyData.id;
+      params.isComment = true;
+      params.commentId = this.replyData.commentId;
+      params.commentPostId = this.replyData.id;
+    }
+    // 回复评论
+    if (this.commentData) {
+      params.replyId = this.commentData.id;
+      params.isComment = true;
+      params.commentId = this.commentData.id;
+    }
+
+    if (imageList?.length) {
+      params.attachments = imageList
+        .filter((item) => item.status === 'success' && item.response)
+        .map((item) => {
+          const { id } = item.response;
+          return {
+            id,
+            type: 'attachments',
+          };
+        });
+    }
+
+    const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
+
+    if (success) {
+      this.setState({
+        showCommentInput: false,
+        inputValue: '',
+      });
+      Toast.success({
+        content: '回复成功',
+      });
+      return true;
+    }
+
+    Toast.error({
+      content: msg,
     });
   }
 
@@ -468,7 +640,7 @@ class ThreadH5Page extends React.Component {
   async onLikeClick() {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -487,29 +659,11 @@ class ThreadH5Page extends React.Component {
     }
   }
 
-  // 分享
-  async onShareClick() {
-    Toast.info({ content: '复制链接成功' });
-
-    const { title = '' } = this.props.thread?.threadData || {};
-    h5Share({ title, path: `thread/${this.props.thread?.threadData?.threadId}` });
-
-    const id = this.props.thread?.threadData?.id;
-
-    const { success, msg } = await this.props.thread.shareThread(id);
-
-    if (!success) {
-      Toast.error({
-        content: msg,
-      });
-    }
-  }
-
   // 付费支付
   async onPayClick() {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -528,7 +682,7 @@ class ThreadH5Page extends React.Component {
   onRewardClick() {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-authorization/index' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -590,6 +744,7 @@ class ThreadH5Page extends React.Component {
       canShare: this.props.user.isLogin(),
       canCollect: this.props.user.isLogin(),
     };
+
     // 更多弹窗界面
     const moreStatuses = {
       isEssence: threadStore?.threadData?.displayTag?.isEssence,
@@ -616,7 +771,7 @@ class ThreadH5Page extends React.Component {
           ref={this.hreadBodyRef}
           id="hreadBodyId"
           scrollY
-          scrollTop={this.position}
+          scrollTop={this.state.position}
           lowerThreshold={50}
           onScrollToLower={() => this.scrollToLower()}
           scrollIntoView={this.state.toView}
@@ -632,7 +787,7 @@ class ThreadH5Page extends React.Component {
                 onLikeClick={() => this.onLikeClick()}
                 onOperClick={(type) => this.onOperClick(type)}
                 onCollectionClick={() => this.onCollectionClick()}
-                onShareClick={() => this.onShareClick()}
+                // onShareClick={() => this.onShareClick()}
                 onReportClick={() => this.onReportClick()}
                 onContentClick={() => this.onContentClick()}
                 onRewardClick={() => this.onRewardClick()}
@@ -652,6 +807,9 @@ class ThreadH5Page extends React.Component {
                       router={this.props.router}
                       sort={(flag) => this.onSortChange(flag)}
                       onEditClick={(comment) => this.onEditClick(comment)}
+                      keepCurrentPosition={() => this.keepCurrentPosition()}
+                      replyReplyClick={(reply, comment) => this.replyReplyClick(reply, comment)}
+                      replyClick={(comment) => this.replyClick(comment)}
                     ></RenderCommentList>
                     {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
                     {isNoMore && (
@@ -702,12 +860,15 @@ class ThreadH5Page extends React.Component {
                   size="20"
                   name="CollectOutlinedBig"
                 ></Icon>
-                <Icon
-                  onClick={() => this.onShareClick()}
-                  className={footer.icon}
-                  size="20"
-                  name="ShareAltOutlined"
-                ></Icon>
+
+                {/* 分享button */}
+                <Button
+                  className={classNames(footer.share, footer.icon)}
+                  openType="share"
+                  data-shareData={this.shareData}
+                >
+                  <Icon className={footer.icon} size="20" name="ShareAltOutlined"></Icon>
+                </Button>
               </View>
             </View>
           </View>
@@ -717,10 +878,12 @@ class ThreadH5Page extends React.Component {
           <Fragment>
             {/* 评论弹层 */}
             <InputPopup
+              inputText={this.state.inputText}
               visible={this.state.showCommentInput}
               onClose={() => this.onClose()}
               initValue={this.state.inputValue}
-              onSubmit={(value) => this.onPublishClick(value)}
+              onSubmit={(value, imgList) => this.publishClick(value, imgList)}
+              site={this.props.site}
             ></InputPopup>
 
             {/* 更多弹层 */}

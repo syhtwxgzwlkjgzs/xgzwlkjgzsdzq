@@ -6,40 +6,91 @@ import SidebarPanel from '@components/sidebar-panel';
 import ThreadContent from '@components/thread';
 import Copyright from '@components/copyright';
 import { withRouter } from 'next/router';
-import UserCenterFans from '@components/user-center-fans';
-import UserCenterFollow from '@components/user-center-follow';
+import UserCenterFansPc from '@components/user-center/fans-pc';
+import UserCenterFollowsPc from '@components/user-center/follows-pc';
 import UserCenterFansPopup from '@components/user-center-fans-popup';
 import UserCenterFollowPopup from '@components/user-center-follow-popup';
-
+import Router from '@discuzq/sdk/dist/router';
+import UserCenterThreads from '@components/user-center-threads';
+import List from '@components/list';
 
 @inject('site')
 @inject('user')
 @observer
 class PCMyPage extends React.Component {
+  targetUserId = null;
   constructor(props) {
     super(props);
     this.props.user.cleanTargetUserThreads();
     this.state = {
       showFansPopup: false, // 是否弹出粉丝框
       showFollowPopup: false, // 是否弹出关注框
+      fetchUserInfoLoading: true
     };
   }
+
   componentDidMount = async () => {
     const { query } = this.props.router;
-    if (query.otherId) {
-      await this.props.user.getTargetUserInfo(query.otherId);
+    const id = this.props.user?.id;
+    if (String(id) === query.id) {
+      Router.replace({ url: '/my' });
+      return;
     }
+    if (query.id) {
+      this.targetUserId = query.id;
+      await this.props.user.getTargetUserInfo(query.id);
+      this.setState({
+        fetchUserInfoLoading: false,
+      });
+    }
+  };
+
+  componentDidUpdate = async () => {
+    const { query } = this.props.router;
+    const id = this.props.user?.id;
+
+    if (String(id) === query.id) {
+      Router.replace({ url: '/my' });
+      return;
+    }
+
+    if (String(this.targetUserId) === String(query.id)) return;
+    this.targetUserId = query.id;
+    if (query.id) {
+      this.setState({
+        fetchUserInfoLoading: true,
+      });
+      this.props.user.removeTargetUserInfo();
+      await this.props.user.getTargetUserInfo(query.id);
+      await this.fetchTargetUserThreads();
+      this.setState({
+        fetchUserInfoLoading: false,
+      });
+    }
+  };
+
+  componentWillUnmount() {
+    this.props.user.removeTargetUserInfo();
   }
+
   fetchTargetUserThreads = async () => {
     const { query } = this.props.router;
-    if (query.otherId) {
-      await this.props.user.getTargetUserThreads(query.otherId);
+    if (query.id) {
+      await this.props.user.getTargetUserThreads(query.id);
     }
-  }
+    return;
+  };
+
+  formatUserThreadsData = (targetUserThreads) => {
+    if (Object.keys(targetUserThreads).length === 0) return [];
+    return Object.values(targetUserThreads).reduce((fullData, pageData) => [...fullData, ...pageData]);
+  };
+
   // 点击粉丝更多
   moreFans = () => {
     this.setState({ showFansPopup: true });
   };
+
   // 点击粉丝关注更多
   moreFollow = () => {
     this.setState({ showFollowPopup: true });
@@ -47,85 +98,50 @@ class PCMyPage extends React.Component {
 
   onSearch = (value) => {
     this.props.router.replace(`/search?keyword=${value}`);
-  }
+  };
+
   renderRight = () => {
     const { query } = this.props.router;
-    const { targetUser } = this.props.user;
-    const user = targetUser || {} ;
+    const id = query?.id;
     return (
       <>
-        <SidebarPanel
-          type="normal"
-          isNoData={Number(user.fansCount) === 0}
-          title="粉丝"
-          leftNum={user.fansCount || 0}
-          onShowMore={this.moreFans}
-        >
-          {Number(user.fansCount) !== 0 && (
-            <UserCenterFans
-              style={{
-                overflow: 'hidden',
-              }}
-              userId={query.otherId}
-              className={styles.friendsWrapper}
-              limit={5}
-            />
-          )}
-        </SidebarPanel>
-        <div className={styles.hr}></div>
-        <SidebarPanel
-          type="normal"
-          isNoData={Number(user.followCount) === 0}
-          title="关注"
-          leftNum={user.followCount}
-          onShowMore={this.moreFollow}
-        >
-          {Number(user.followCount) !== 0 && (
-            <UserCenterFollow
-              style={{
-                overflow: 'hidden',
-              }}
-              userId={query.otherId}
-              className={styles.friendsWrapper}
-              limit={5}
-            />
-          )}
-        </SidebarPanel>
-        <Copyright/>
-    </>
+        <UserCenterFansPc userId={id} />
+
+        <UserCenterFollowsPc userId={id} />
+        <Copyright />
+      </>
     );
-  }
+  };
+
   renderContent = () => {
+    const { fetchUserInfoLoading } = this.state
     const { user } = this.props;
-    const { targetUserThreads, targetUserThreadsTotalCount } = user;
+    const { targetUserThreads, targetUserThreadsTotalCount, targetUserThreadsPage, targetUserThreadsTotalPage } = user;
     return (
       <div className={styles.userContent}>
         <SidebarPanel
           title="主题"
-          type='normal'
+          type="normal"
           bigSize={true}
-          isShowMore={!targetUserThreads}
-          leftNum ={`${targetUserThreadsTotalCount}个主题`}
-          noData={!targetUserThreads?.length}
+          isShowMore={false}
+          isLoading={fetchUserInfoLoading}
+          leftNum={`${targetUserThreadsTotalCount}个主题`}
+          noData={!this.formatUserThreadsData(targetUserThreads)?.length}
+          mold='plane'
         >
-          {/* FIXME: pc 切换到新逻辑 */}
-          {/* {
-            targetUserThreads?.map((item, index) => (
-              <div>
-                  <ThreadContent className={styles.wrapper} showBottom={false} data={item} key={index} />
-                  <div className={styles.hr}></div>
-              </div>
-            ))
-          } */}
+          {this.formatUserThreadsData(targetUserThreads)
+            && this.formatUserThreadsData(targetUserThreads).length > 0 && (
+              <UserCenterThreads data={this.formatUserThreadsData(targetUserThreads)} />
+          )}
         </SidebarPanel>
       </div>
     );
-  }
+  };
+
   render() {
+    const { fetchUserInfoLoading } = this.state
     const { user } = this.props;
-    const { targetUserThreadsPage, targetUserThreadsTotalPage } = user;
-    const { pageData } = [];
-    const { query } = this.props.router;
+    const { targetUserThreadsPage, targetUserThreadsTotalPage, targetUserThreads } = user;
     return (
       <>
         <UserBaseLaout
@@ -135,23 +151,12 @@ class PCMyPage extends React.Component {
           noMore={targetUserThreadsTotalPage < targetUserThreadsPage}
           showRefresh={false}
           onSearch={this.onSearch}
-          right={ this.renderRight }
+          right={this.renderRight}
+          immediateCheck={true}
+          showLayoutRefresh={!!this.formatUserThreadsData(targetUserThreads)?.length && !fetchUserInfoLoading}
         >
-          { this.renderContent() }
+          {this.renderContent()}
         </UserBaseLaout>
-
-        <UserCenterFansPopup
-          visible={this.state.showFansPopup}
-          onClose={() => this.setState({ showFansPopup: false })}
-          isOtherFans={true}
-          id={query.otherId}
-        />
-        <UserCenterFollowPopup
-          visible={this.state.showFollowPopup}
-          onClose={() => this.setState({ showFollowPopup: false })}
-          isOtherFans={true}
-          id={query.otherId}
-        />
       </>
     );
   }

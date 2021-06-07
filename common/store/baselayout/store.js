@@ -8,6 +8,16 @@ class IndexStore {
 
   @observable isJumpingToTop = false;
 
+  @observable playingVideoPos = -1;
+
+  @observable playingVideoDom = ""; // Video的selector string
+
+  @observable playingAudioPos = -1;
+
+  @observable playingAudioDom = null; // 来自组件Audio的context
+
+  @observable playingAudioWrapperId = ""; // 小程序用于定位，web用于记录当前播放的音频
+
 }
 
 export default IndexStore;

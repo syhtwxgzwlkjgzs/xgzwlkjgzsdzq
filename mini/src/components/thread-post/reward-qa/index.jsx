@@ -9,6 +9,7 @@ import classNames from 'classnames';
 import styles from './index.module.scss';
 
 import DateTimePicker from '../date-time-picker';
+import { getDate } from '../date-time-picker/utils';
 
 @inject('threadPost')
 @observer
@@ -17,8 +18,8 @@ class RewardQa extends Component {
     super();
     this.state = {
       money: '', // 悬赏金额
-      times: '', // 悬赏时间
-      initValue: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), // 时间选择框初始值
+      times: getDate(Date.now() + 1 * 25 * 60 * 60 * 1000), // 悬赏时间
+      initValue: Date.now() + 1 * 25 * 60 * 60 * 1000, // 时间选择框初始值
     };
     this.timeRef = React.createRef();
   }
@@ -38,7 +39,7 @@ class RewardQa extends Component {
 
   openTimePicker = () => { // 开启时间选择框
     const { openModal } = this.timeRef.current;
-    openModal();
+    openModal(this.state.times);
   }
 
   onConfirm = (val) => { // 监听时间选中

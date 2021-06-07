@@ -23,6 +23,18 @@ const setWalletInfoPageData = (data, obj, {
 
 class WalletAction extends WalletStore {
     @action
+    resetInfo = () => {
+      // 收入明细
+      this.incomeDetail = {}
+      // 支出明细
+      this.expandDetail = {}
+      // 冻结明细
+      this.freezeDetail = {}
+      // 提现明细
+      this.cashDetail = {}
+    }
+
+    @action
     getUserWalletInfo = async () => {
       const walletInfoRes = await readWalletUser();
       if (walletInfoRes.code === 0) {
@@ -37,7 +49,7 @@ class WalletAction extends WalletStore {
       const param = {
         walletLogType: 'income',
         page,
-        perPage: 20,
+        perPage: 22,
       };
       const filter = {
         startTime: time.getMonthStartAndEnd(date)[0],
@@ -77,7 +89,7 @@ class WalletAction extends WalletStore {
       const param = {
         walletLogType: 'expend',
         page,
-        perPage: 20,
+        perPage: 22,
       };
       const filter = {
         startTime: time.getMonthStartAndEnd(date)[0],
@@ -118,7 +130,7 @@ class WalletAction extends WalletStore {
         params: {
           walletLogType: 'freeze',
           page,
-          perPage: 20,
+          perPage: 22,
         },
       });
 
@@ -144,7 +156,7 @@ class WalletAction extends WalletStore {
       const { page = 1, date = time.formatDate(new Date(), 'YYYY-MM'), type = 'all' } = props;
       const param = {
         page,
-        perPage: 20,
+        perPage: 22,
       };
 
       const filter = {

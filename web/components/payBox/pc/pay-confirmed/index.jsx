@@ -142,7 +142,8 @@ export default class index extends Component {
     this.setState({
       paymentType: 'wallet',
       list:[],
-      imageShow: false
+      imageShow: false,
+      isSubmit: false
     });
     this.props.payBox.payWay = PAYWAY_MAP.WALLET;
     this.props.payBox.password = null;

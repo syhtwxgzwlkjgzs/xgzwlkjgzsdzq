@@ -6,6 +6,7 @@ import CommonPayoffPwd from '../../components/common-paypwd-content';
 import { Dialog, Divider, Icon, Toast } from '@discuzq/design';
 import { PAY_BOX_ERROR_CODE_MAP, STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants';
 import throttle from '@common/utils/thottle.js';
+import Router from '@discuzq/sdk/dist/router';
 
 @inject('site')
 @inject('user')
@@ -52,7 +53,7 @@ class Index extends React.Component {
         },
         () => {
           if (this.state.list.length === 6) {
-            throttle(this.submitPwa(),500);
+            throttle(this.submitPwa(), 500);
           }
         },
       );
@@ -85,11 +86,17 @@ class Index extends React.Component {
         },
         () => {
           if (this.state.list.length === 6) {
-            throttle(this.submitPwa(),500);
+            throttle(this.submitPwa(), 500);
           }
         },
       );
     }
+  }
+
+  handleForgetPayPwd = () => {
+    Router.push({ url: '/my/edit/find-paypwd?type=payBox' });
+    this.initState()
+    this.props.payBox.visible = false;
   }
 
   async submitPwa() {
@@ -107,10 +114,10 @@ class Index extends React.Component {
         });
         setTimeout(() => {
           this.props.payBox.clear();
-        },500)
+        }, 500);
       } catch (error) {
         Toast.error({
-          content: '支付失败，请重新输入',
+          content: error.Message || '支付失败，请重新输入',
           hasMask: false,
           duration: 1000,
         });
@@ -154,7 +161,7 @@ class Index extends React.Component {
 
             <CommonPayoffPwd list={list} updatePwd={this.updatePwd} whetherIsShowPwdBox={true} />
             {/* TODO: 忘记支付密码的链接添加 */}
-            <div className={styles.forgetPasswordContainer}>
+            <div className={styles.forgetPasswordContainer} onClick={this.handleForgetPayPwd}>
               <span>忘记支付密码?</span>
             </div>
             {/* 关闭按钮 */}
@@ -168,11 +175,11 @@ class Index extends React.Component {
   };
 
   render() {
-    const { list = [] } = this.state;
+    const { list = [], isShow } = this.state;
     return (
       <div style={{ position: 'relative', zIndex: 1400 }}>
         {this.renderDialogPayment()}
-        <div className={styles.keyboard} onClick={this.keyboardClickHander}>
+        <div style={{display:!isShow && 'none'}} className={styles.keyboard} onClick={this.keyboardClickHander}>
           <div className={styles.line}>
             <div data-key="1" className={styles.column}>
               1

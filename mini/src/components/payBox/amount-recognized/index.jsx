@@ -109,7 +109,7 @@ export default class AmountRecognized extends Component {
               type === ORDER_TRADE_TYPE.COMBIE_PAYMENT ? (
                 <>
                   {
-                    tradeContent.map((item, index) => {
+                    this.state.tradeContent.map((item, index) => {
                       const amount_ = item.type === ORDER_TRADE_TYPE.RED_PACKET ? redAmount : rewardAmount
                       return <>
                         <View className={styles.acExplain}>
@@ -117,9 +117,9 @@ export default class AmountRecognized extends Component {
                           <Text className={styles.acExplainValue}>{this.renderDiffTradeType(item.type)}</Text>
                         </View>
                         <Divider className={styles.acExplainDivider} />
-                        <View className={styles.acExplain}>
+                        <View className={styles.acExplain} style={{display: 'flex'}}>
                           <Text className={styles.acExplainLabel}>商品名称</Text>{' '}
-                          <Text className={styles.acExplainValue}>{title}</Text>
+                          <Text style={{display: 'block'}} className={styles.acExplainValue}>{title}</Text>
                         </View>
                         <Divider className={styles.acExplainDivider} />
                         <View className={styles.acExplain}>

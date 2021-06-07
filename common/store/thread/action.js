@@ -21,6 +21,11 @@ class ThreadAction extends ThreadStore {
   }
 
   @action
+  setScrollDistance(scrollDistance) {
+    this.scrollDistance = scrollDistance;
+  }
+
+  @action
   async fetchAuthorInfo(userId) {
     const userRes = await readUser({ params: { pid: userId } });
     if (userRes.code === 0) {
@@ -345,7 +350,7 @@ class ThreadAction extends ThreadStore {
       TopicStore?.deleteThreadsData && TopicStore.deleteThreadsData({ id });
 
       return {
-        code:  res.code,
+        code: res.code,
         msg: '操作成功',
         success: true,
       };
@@ -363,7 +368,7 @@ class ThreadAction extends ThreadStore {
    * @param {number} threadId 帖子id
    */
   @action
-  async shareThread(threadId) {
+  async shareThread(threadId, IndexStore, SearchStore, TopicStore) {
     if (!threadId) {
       return {
         msg: '参数不完整',
@@ -378,6 +383,17 @@ class ThreadAction extends ThreadStore {
 
     if (res.code === 0) {
       this.threadData.likeReward.shareCount = this.threadData?.likeReward?.shareCount - 0 + 1;
+
+      // 更新列表相关数据
+      IndexStore.updateAssignThreadInfo(threadId, {
+        updateType: 'share',
+      });
+      SearchStore.updateAssignThreadInfo(threadId, {
+        updateType: 'share',
+      });
+      TopicStore.updateAssignThreadInfo(threadId, {
+        updateType: 'share',
+      });
 
       return {
         msg: '操作成功',
