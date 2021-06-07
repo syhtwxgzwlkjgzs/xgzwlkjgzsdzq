@@ -16,6 +16,11 @@
     justify-content: space-between;
     border-bottom: 1px solid #F4F6F7;
     padding: $padding-4n 0;
+
+    .gotoIcon {
+      margin-left: 8px;
+    }
+
     >div:nth-child(2) {
       margin-left: $margin-2n;
     }
@@ -59,7 +64,7 @@
     .userCenterEditWeChat {
       display: flex;
       align-items: center;
-      span {
+      text {
         margin-left: $margin-4n;
       }
     }
@@ -71,7 +76,7 @@
   padding: $padding-4n;
   box-sizing: border-box;
   padding-top: 0;
-  
+
   .actionButtonContentWrapper {
     display: flex;
     justify-content: center;
