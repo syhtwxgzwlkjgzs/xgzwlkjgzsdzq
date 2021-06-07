@@ -14,14 +14,6 @@
   color: var(--color-text-primary);
   place-self: flex-start;
 }
-@mixin banner {
-  height: rem(140);
-  text-align: center;
-  background-color: $primary-color;
-  img {
-    margin-top: rem(67);
-  }
-}
 @mixin input {
   width: 100%;
   box-sizing: border-box;
