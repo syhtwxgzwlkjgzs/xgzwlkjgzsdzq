@@ -28,6 +28,7 @@ class CommentH5Page extends React.Component {
       showCommentInput: false, // 是否弹出评论框
       commentSort: true, // ture 评论从旧到新 false 评论从新到旧
       showDeletePopup: false, // 是否弹出删除弹框
+      showReplyDeletePopup:false, // 是否弹出回复删除弹框
       inputText: '请输入内容', // 默认回复框placeholder内容
     };
 
@@ -106,6 +107,39 @@ class CommentH5Page extends React.Component {
   onBtnClick() {
     this.deleteComment();
     this.setState({ showDeletePopup: false });
+  }
+
+  // 点击回复的删除
+  async replyDeleteClick(reply,comment) {
+    this.commentData = comment;
+    this.replyData = reply;
+    this.setState({
+      showReplyDeletePopup: true,
+    });
+  }
+
+  //删除回复
+  async replyDeleteComment() {
+    if (!this.replyData.id) return;
+
+    const params = {}
+    if (this.replyData && this.commentData) {
+      params.replyData = this.replyData;//本条回复信息
+      params.commentData = this.commentData;//回复对应的评论信息
+    }
+    const { success, msg } = await this.props.comment.deleteReplyComment(params, this.props.thread);
+    this.setState({
+      showReplyDeletePopup: false,
+    });
+    if (success) {
+      Toast.success({
+        content: '删除成功',
+      });
+      return;
+    }
+    Toast.error({
+      content: msg,
+    });
   }
 
   // 点击评论的赞
@@ -355,6 +389,7 @@ class CommentH5Page extends React.Component {
               deleteClick={() => this.deleteClick(commentData)}
               replyLikeClick={(reploy) => this.replyLikeClick(reploy, commentData)}
               replyReplyClick={(reploy) => this.replyReplyClick(reploy, commentData)}
+              replyDeleteClick={(reply) => this.replyDeleteClick(reply, commentData)}
               onMoreClick={() => this.onMoreClick()}
               isHideEdit={true}
             ></CommentList>
@@ -386,6 +421,13 @@ class CommentH5Page extends React.Component {
             onClose={() => this.setState({ showDeletePopup: false })}
             onBtnClick={(type) => this.onBtnClick(type)}
           />
+
+          {/* 删除回复弹层 */}
+          <DeletePopup
+            visible={this.state.showReplyDeletePopup}
+            onClose={() => this.setState({ showReplyDeletePopup: false })}
+            onBtnClick={() => this.replyDeleteComment()}
+          ></DeletePopup>
 
           {/* 举报弹层 */}
           <ReportPopup

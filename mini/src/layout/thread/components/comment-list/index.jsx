@@ -58,6 +58,14 @@ class CommentList extends React.Component {
     typeof this.props.deleteClick === 'function' && this.props.deleteClick();
   }
 
+  // 点击回复删除
+  replyDeleteClick(data) {
+    this.setState({
+      replyId: data?.id,
+    });
+    typeof this.props.replyDeleteClick === 'function' && this.props.replyDeleteClick(data);
+  }
+
   // 点击评论编辑
   editClick() {
     typeof this.props.editClick === 'function' && this.props.editClick();
@@ -200,6 +208,7 @@ class CommentList extends React.Component {
                         avatarClick={() => this.reployAvatarClick(this.needReply[0])}
                         likeClick={() => this.replyLikeClick(this.needReply[0])}
                         replyClick={() => this.replyReplyClick(this.needReply[0])}
+                        deleteClick={() => this.replyDeleteClick(this.needReply[0])}
                         toCommentDetail={() => this.toCommentDetail()}
                       ></ReplyList>
                     ) : (
@@ -210,6 +219,7 @@ class CommentList extends React.Component {
                           avatarClick={() => this.reployAvatarClick(val)}
                           likeClick={() => this.replyLikeClick(val)}
                           replyClick={() => this.replyReplyClick(val)}
+                          deleteClick={() => this.replyDeleteClick(val)}
                           toCommentDetail={() => this.toCommentDetail()}
                         ></ReplyList>
                       ))
