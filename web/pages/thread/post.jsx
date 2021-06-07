@@ -460,7 +460,7 @@ class PostPage extends React.Component {
       return;
     }
     if (!this.isAudioUploadDone) {
-      Toast.info({ content: '请等待语音上传完成在发布' });
+      Toast.info({ content: '请等待语音上传完成再发布' });
       return;
     }
     if (!this.isVideoUploadDone) {
