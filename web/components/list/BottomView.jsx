@@ -5,6 +5,11 @@ import { noop } from '@components/thread/utils';
 
 import styles from './index.module.scss';
 
+/**
+ * 
+ * @param {function} handleError 处理点击报错信息
+ * @returns 
+ */
 const Index = ({ 
     isError = false, 
     noMore = false, 
@@ -14,11 +19,11 @@ const Index = ({
     noMoreText = '没有更多内容了', 
     errorText = '加载失败', 
     handleError = noop,
-    onRefresh,
-    isBox = false
+    isBox = false,
+    className=''
 }) => {
     return (
-        <div className={isBox ? styles.bottomViewBox : ''}>
+        <div className={`${className} ${isBox ? styles.bottomViewBox : ''}`}>
             {!isError ? (
                 loadingView || <RefreshView noMore={noMore} loadText={loadingText} noMoreText={noMoreText} />
             ) : (

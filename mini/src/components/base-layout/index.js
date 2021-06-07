@@ -6,6 +6,7 @@ import List from '../list'
 import BottomNavBar from '../bottom-nav-bar'
 import { useDidShow } from '@tarojs/taro'
 import Taro from '@tarojs/taro';
+import { throttle } from '@common/utils/throttle-debounce.js';
 
 import styles from './index.module.scss';
 
@@ -23,10 +24,9 @@ import styles from './index.module.scss';
         {(props) => <View>中间</View>}
       </BaseLayout>
 */
-const baseLayoutWhiteList = ['home'];
 
 const BaseLayout = (props) => {
-  const { index, showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr, onScroll = () => {} } = props;
+  const { index, showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr, onScroll = () => {}, baselayout, pageName } = props;
   const [height, setHeight] = useState(600);
 
   // 避免小程序通过手势返回上一页时，无法重置参数
@@ -34,16 +34,6 @@ const BaseLayout = (props) => {
     index.setHiddenTabBar(false)
     index.setHasOnScrollToLower(true)
   })
-
-  const debounce = (fn, wait) => {
-    let timer = null;
-    return () => {
-      if(timer !== null){
-        clearTimeout(timer);
-      }
-      timer = setTimeout(fn, wait);
-    }
-  }
 
   // const pullDownWrapper = useRef(null)
   const listRef = useRef(null);
@@ -56,13 +46,25 @@ const BaseLayout = (props) => {
 
   // }, [])
 
-  const handleScroll = (e) => {
+  useEffect(() => {
+    if (baselayout.videoFullScreenStatus === "offFullScreen" &&
+        pageName && baselayout[pageName] > 0) {
+      setTimeout(() => {
+        listRef.current.jumpToScrollTop(baselayout[pageName]);
+        baselayout.videoFullScreenStatus = "";
+      }, 0);
+    }
+  }, [baselayout.videoFullScreenStatus])
+
+  const handleScroll = throttle((e) => {
 
     onScroll(e);
 
     const { baselayout } = props;
     const playingVideoDom = baselayout.playingVideoDom;
     const playingAudioDom = baselayout.playingAudioDom;
+
+    if (e?.detail?.scrollTop && pageName) baselayout[pageName] = e.detail.scrollTop;
 
     Taro.getSystemInfo({
       success(res) {
@@ -92,7 +94,7 @@ const BaseLayout = (props) => {
       }
     });
 
-  }
+  }, 50);
 
   return (
     <View className={styles.container}>
