@@ -3,7 +3,7 @@ import style from './index.module.scss';
 import { Icon, Tag  } from '@discuzq/design';
 import { withRouter } from 'next/router';
 import { inject, observer } from 'mobx-react';
-import LoadingBox from '@components/loading-box';
+import BottomView from '@components/list/BottomView';
 import isServer from '@common/utils/is-server';
 import { debounce } from '@common/utils/throttle-debounce';
 
@@ -14,6 +14,8 @@ class Index extends React.Component {
     super(props);
     this.state = {
       windowSize: null,
+      loading: true,
+      isError: false
     };
   }
 
@@ -50,7 +52,11 @@ class Index extends React.Component {
   }
 
   loadData = async () => {
-    await this.props.index.getRecommends();
+    try {
+      await this.props.index.getRecommends();
+    } catch (error) {
+      this.setState({ isError: true, errorText: error })
+    }
   }
 
   recommendDetails = (item) => {
@@ -61,10 +67,16 @@ class Index extends React.Component {
   render () {
     const { recommends, recommendsStatus } = this.props.index || [];
     const { filterCount = 5 } = this.props
+    const { isError, errorText } = this.state
     return (
-      <div className={style.recommend} style={{maxHeight: (this.state.windowSize?.innerHeight - 80) || '600px'}}>
+      <div className={style.recommend} style={{
+        /* stylelint-disable */
+        maxHeight: (this.state.windowSize?.innerHeight - 80) || '600px'
+      }}>
         <div className={style.recommendContent}>推荐内容</div>
-        { recommendsStatus === 'loading' && <LoadingBox/> }
+        { (recommendsStatus === 'loading' || recommendsStatus === 'error') && (
+            <BottomView isBox isError={isError} isLoading={recommendsStatus === 'loading'} errorText={errorText} noMore={false} loadingText='正在加载' /> 
+        )}
         {
           recommendsStatus === 'none' && recommends?.filter((_, index) => index < filterCount).map((item, index) => {
             let titleString = item.title;

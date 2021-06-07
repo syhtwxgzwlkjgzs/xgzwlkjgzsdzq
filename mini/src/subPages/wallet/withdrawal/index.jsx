@@ -2,7 +2,7 @@ import React from 'react';
 import Withdrawal from '@layout/wallet/withdrawal';
 import { readWalletUser } from '@server';
 import Page from '@components/page';
-import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
+// import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 
 class WalletPage extends React.Component {
   constructor(props) {
@@ -27,9 +27,9 @@ class WalletPage extends React.Component {
   render() {
     return (
       <Page>
-        <ToastProvider>
+        {/* <ToastProvider> */}
           <Withdrawal walletData={this.state.walletData} />
-        </ToastProvider>
+        {/* </ToastProvider> */}
       </Page>
     );
   }

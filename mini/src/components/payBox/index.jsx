@@ -12,7 +12,7 @@ import { STEP_MAP } from '../../../../common/constants/payBoxStoreConstants';
 import AmountRecognized from './amount-recognized';
 import PayConfirmed from './pay-confirmed';
 import PayPwd from './payPwd';
-import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
+// import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import { get } from '../../../../common/utils/get';
 
 class PayBoxEmitter extends EventEmitter {}
@@ -66,7 +66,7 @@ export default class PayBox extends Component {
   render() {
     return (
       <>
-        <ToastProvider>
+        {/* <ToastProvider> */}
           <View>
             <Popup
               position="bottom"
@@ -82,7 +82,7 @@ export default class PayBox extends Component {
             </Popup>
           </View>
           {this.props.payBox.step === STEP_MAP.WALLET_PASSWORD && <PayPwd />}
-        </ToastProvider>
+        {/* </ToastProvider> */}
       </>
     );
   }

@@ -2,9 +2,9 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexPageContent from './content';
 import { View } from '@tarojs/components';
-import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
+// import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 
-const MemoToastProvider = React.memo(ToastProvider)
+// const MemoToastProvider = React.memo(ToastProvider)
 
 @inject('site')
 @inject('index')
@@ -94,9 +94,9 @@ class Index extends React.Component {
   render() {
     return (
       <View>
-        <MemoToastProvider>
+        {/* <MemoToastProvider> */}
           <IndexPageContent dispatch={this.dispatch} isError={this.state.isError} errorText={this.state.errorText} />
-        </MemoToastProvider>
+        {/* </MemoToastProvider> */}
       </View>
     );
   }
