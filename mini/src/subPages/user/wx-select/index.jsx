@@ -32,8 +32,7 @@ class WXSelect extends Component {
   componentDidHide() { }
 
   handleAutobindCallback = async () => {
-    const { sessionToken, inviteCodeFromParams } = getCurrentInstance().router.params;
-
+    const { sessionToken, inviteCode: inviteCodeFromParams } = getCurrentInstance().router.params;
     try {
       const inviteCode = inviteCodeFromParams || this.props.invite.getInviteCode()
       const res = await usernameAutoBind({
