@@ -72,7 +72,7 @@ class SearchH5Page extends React.Component {
         onClickTabBar={this.onClickTabBar}
         pageName="search"
       >
-        <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} isShowBottom={false} />
+        <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} isShowBottom={false} searchWhileTyping/>
         <SidebarPanel
           icon={{ type: 1, name: 'StrongSharpOutlined' }} 
           title="潮流话题" 
