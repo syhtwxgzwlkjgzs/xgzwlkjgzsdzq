@@ -142,7 +142,7 @@ const List = forwardRef(({
             setIsLoading(true);
             setIsError(true);
             setErrText(err || '加载失败')
-            onError();
+            onError(err);
           });
       } else {
         console.error('上拉刷新，必须返回promise');

@@ -313,3 +313,8 @@
 .pickerIconIsActive {
   color: $text-color-primary-color;
 }
+
+.datePickerIconOpen {
+  transform: rotateZ(270deg);
+  color: $text-color-primary-color;
+}

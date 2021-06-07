@@ -1,9 +1,11 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import styles from './index.module.scss';
 import Tip from '../tip';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import { View, Text } from '@tarojs/components'
 import ShareButton from '../share-button'
+import Popup from '@discuzq/design/dist/components/popup/index';
+
 /**
  * 帖子底部内容
  * @prop {array}    userImgs 点赞分享用户信息
@@ -53,13 +55,19 @@ const Index = ({
   const handleClickShare = () => {
     setShow(true)
   }
+
+  useEffect(() => {
+    index.setHiddenTabBar(show)
+  }, [show])
+
+  const onClose = () => {
+    setShow(false)
+  }
+
   const needHeight = useMemo(() => userImgs.length !== 0 || comment > 0 || sharing > 0, [userImgs, comment, sharing])
   const thread = index
   return (
     <View>
-      {
-        show && <ShareButton setShow={setShow} tipData={tipData} index={thread}></ShareButton>
-      }
       <View className={needHeight ? styles.user : styles.users}>
         {userImgs.length !== 0 ? <View className={styles.userImg}>
           <View className={styles.portrait}>
@@ -112,6 +120,14 @@ const Index = ({
           ))
         }
       </View>
+
+      <Popup
+        position="bottom"
+        visible={show}
+        onClose={onClose}
+      >
+        <ShareButton setShow={setShow} tipData={tipData} index={thread}></ShareButton>
+      </Popup>
     </View>
   );
 };

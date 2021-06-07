@@ -40,7 +40,7 @@ const BaseLayout = forwardRef((props, ref) => {
     onScroll = noop,
     immediateCheck=false,
     requestError=false,
-    errorText='',
+    errorText='加载失败',
     rightClass = '',
     isShowLayoutRefresh = true
   } = props;
@@ -65,21 +65,9 @@ const BaseLayout = forwardRef((props, ref) => {
     }),
   );
 
-  // const updateSize = debounce(() => {
-  //   if (window) {
-  //     const current = window.innerWidth;
-  //     console.log(current);
-  //   }
-  // }, 50);
-
   useEffect(() => {
-    // if (window) {
-    //   window.addEventListener('resize', updateSize);
-    //   return () => {
-    //       window.removeEventListener('resize', updateSize);
-    //   };
-    // }
-  }, []);
+    setIsError(requestError);
+  }, [requestError])
 
   // list组件，接口请求出错回调
   const onError = () => {
@@ -93,15 +81,12 @@ const BaseLayout = forwardRef((props, ref) => {
   if (left && right) {
     cls = styles['col-3'];
   }
+
   return (
     <div className={styles.container}>
         {(header && header({ ...props })) || <Header onSearch={onSearch} />}
 
-
-
         <div className={`${styles.body} ${cls}`}>
-
-
           <List {...props} immediateCheck={immediateCheck} className={styles.list} wrapperClass={styles.wrapper} ref={listRef} onError={onError} onScroll={onScroll}>
             {
               (pageName === 'home' || left) && (
@@ -114,7 +99,7 @@ const BaseLayout = forwardRef((props, ref) => {
             <div className={styles.center}>
               {typeof(children) === 'function' ? children({ ...props }) : children}
               {!isError && isShowLayoutRefresh && onRefresh && <RefreshView noMore={noMore} />}
-              {isError && <ErrorView />}
+              {isError && <ErrorView text={errorText} />}
             </div>
 
             {
@@ -125,9 +110,7 @@ const BaseLayout = forwardRef((props, ref) => {
               )
             }
           </List>
-
         </div>
-        
 
       {typeof(footer) === 'function' ? footer({ ...props }) : footer}
     </div>

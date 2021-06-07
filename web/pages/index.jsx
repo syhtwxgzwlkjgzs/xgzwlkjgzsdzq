@@ -15,7 +15,9 @@ class Index extends React.Component {
 
   state = {
     isError: false,
-    errorText: ''
+    errorText: '',
+    categoryError: false,
+    categoryErrorText: '',
   }
 
   page = 1;
@@ -62,8 +64,13 @@ class Index extends React.Component {
     const hasThreadsData = !!index.threads;
 
     if (!hasCategoriesData) {
-      this.props.index.getReadCategories();
+      try {
+        await this.props.index.getReadCategories();
+      } catch (error) {
+        this.setState({ categoryError: true, categoryErrorText: error })
+      }
     }
+
     if (!hasSticksData) {
       this.props.index.getRreadStickList(categoryIds);
     }
@@ -140,7 +147,7 @@ class Index extends React.Component {
     const { site } = this.props;
     const { platform } = site;
     if (platform === 'pc') {
-      return <IndexPCPage dispatch={this.dispatch} isError={this.state.isError} errorText={this.state.errorText} />;
+      return <IndexPCPage dispatch={this.dispatch} {...this.state} />;
     }
     return <IndexH5Page dispatch={this.dispatch} isError={this.state.isError} errorText={this.state.errorText} />;
   }

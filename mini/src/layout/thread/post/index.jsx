@@ -361,8 +361,8 @@ class Index extends Component {
   // 红包tag展示
   redpacketContent = () => {
     const { postData, redpacketTotalAmount: amount } = this.props.threadPost;
-    const { redpacket: { rule, number } } = postData;
-    return `${rule === 1 ? '随机红包' : '定额红包'}\\总金额 ${amount}元\\${number}个`;
+    const { redpacket: { rule, number, condition, likenum } } = postData;
+    return `${rule === 1 ? '随机红包' : '定额红包'}\\总金额${amount}元\\${number}个${condition === 1 && likenum > 0 ?  `\\集赞个数${likenum}` : ''}`;
   }
 
   // 验证码滑动成功的回调
@@ -379,6 +379,7 @@ class Index extends Component {
 
   handleSubmit = async (isDraft) => {
     // 1 校验
+    const { threadId } = this.state;
     const { threadPost, site } = this.props;
     const { postData, redpacketTotalAmount } = threadPost;
     if (!isDraft && !postData.contentText) {
@@ -410,9 +411,13 @@ class Index extends Component {
     }
 
     // 4 支付流程
-    const { rewardQa } = postData;
-    const rewardAmount = (Number(rewardQa.value) || 0);
-    const redAmount = (Number(redpacketTotalAmount) || 0);
+    const { rewardQa, redpacket } = postData;
+
+    // 如果是编辑的悬赏帖子，则不用再次支付
+    const rewardAmount = (threadId && rewardQa.id) ? 0 : (Number(rewardQa.value) || 0);
+    // 如果是编辑的红包帖子，则不用再次支付
+    const redAmount = (threadId && redpacket.id) ? 0 : (Number(redpacketTotalAmount) || 0);
+
     const amount = rewardAmount + redAmount;
     const options = { amount };
     if (!isDraft && amount) {
@@ -452,7 +457,6 @@ class Index extends Component {
     });
     // 6 根据是否存在主题id，选择更新主题、新建主题
     let ret = {};
-    const { threadId } = this.state;
     if (threadId) {
       ret = await threadPost.updateThread(threadId);
     } else {
@@ -672,7 +676,7 @@ class Index extends Component {
                 {(Boolean(postData.price || postData.attachmentPrice)) && (
                   <Units
                     type='tag'
-                    tagContent={`付费总额${postData.price + postData.attachmentPrice}元`}
+                    tagContent={`付费总额${(postData.price || postData.attachmentPrice).toFixed(2)}元`}
                     onTagClick={() => {
                       if (postData.price) {
                         this.handlePluginClick({ type: THREAD_TYPE.paidPost })
@@ -702,7 +706,7 @@ class Index extends Component {
                 {rewardQa.value &&
                   <Units
                     type='tag'
-                    tagContent={`悬赏金额${rewardQa.value}元\\结束时间${rewardQa.times}`}
+                    tagContent={`悬赏金额${(rewardQa.value).toFixed(2)}元\\结束时间 ${rewardQa.times}`}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
                     isCloseShow={this.state.postType !== 'isEdit'}
                     onTagRemoveClick={() => { setPostData({ rewardQa: {} }) }}

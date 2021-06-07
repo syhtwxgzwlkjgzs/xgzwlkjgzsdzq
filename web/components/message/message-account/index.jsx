@@ -102,7 +102,7 @@ class Index extends React.Component {
 
   // 处理、过滤数据
   handleRenderList = (data = []) => {
-    let list = [];
+    const list = [];
     data.forEach(item => {
       list.push({
         id: item.id,
