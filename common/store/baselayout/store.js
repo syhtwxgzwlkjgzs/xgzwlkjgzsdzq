@@ -18,6 +18,8 @@ class IndexStore {
 
   @observable playingAudioWrapperId = ""; // 小程序用于定位，web用于记录当前播放的音频
 
+  @observable videoFullScreenStatus = ""; // 视频全屏播放的状态
+
 }
 
 export default IndexStore;
