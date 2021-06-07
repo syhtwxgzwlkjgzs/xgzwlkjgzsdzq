@@ -78,7 +78,7 @@ class ThreadPostStore {
   @computed get redpacketTotalAmount() { // 计算红包总额
     const { rule = 1, price = 0, number } = this.postData.redpacket;
     return rule === 1
-      ? parseFloat(price)
+      ? parseFloat(price).toFixed(2)
       : (parseFloat(price) * parseInt(number)).toFixed(2);
   }
 
