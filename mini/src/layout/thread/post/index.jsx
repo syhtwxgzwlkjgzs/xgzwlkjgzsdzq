@@ -676,6 +676,7 @@ class Index extends Component {
                 {(Boolean(postData.price || postData.attachmentPrice)) && (
                   <Units
                     type='tag'
+                    style={{ marginTop: 0, paddingRight: '8px' }}
                     tagContent={`付费总额${(postData.price || postData.attachmentPrice).toFixed(2)}元`}
                     onTagClick={() => {
                       if (postData.price) {
@@ -696,6 +697,7 @@ class Index extends Component {
                 {redpacket.price &&
                   <Units
                     type='tag'
+                    style={{ marginTop: 0, paddingRight: '8px' }}
                     tagContent={this.redpacketContent()}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.redPacket })}
                     isCloseShow={this.state.postType !== 'isEdit'}
@@ -706,6 +708,7 @@ class Index extends Component {
                 {rewardQa.value &&
                   <Units
                     type='tag'
+                    style={{ marginTop: 0, paddingRight: '8px' }}
                     tagContent={`悬赏金额${(rewardQa.value).toFixed(2)}元\\结束时间 ${rewardQa.times}`}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
                     isCloseShow={this.state.postType !== 'isEdit'}

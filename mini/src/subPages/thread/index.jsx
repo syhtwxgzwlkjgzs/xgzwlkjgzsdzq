@@ -3,13 +3,12 @@ import Taro, { getCurrentInstance } from '@tarojs/taro';
 import Router from '@discuzq/sdk/dist/router';
 import Page from '@components/page';
 import { inject } from 'mobx-react';
-import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import ThreadMiniPage from '@layout/thread/index';
-import PayBoxProvider from '@components/payBox/payBoxProvider';
+// import PayBoxProvider from '@components/payBox/payBoxProvider';
 import withShare from '@common/utils/withShare/withShare';
 import ErrorMiniPage from '../../layout/error/index';
 
-const MemoToastProvider = React.memo(ToastProvider);
+// const MemoToastProvider = React.memo(ToastProvider);
 @inject('site')
 @inject('thread')
 @inject('user')
@@ -121,11 +120,11 @@ class Detail extends React.Component {
       <ErrorMiniPage text={this.state.serverErrorMsg} />
     ) : (
       <Page>
-        <MemoToastProvider>
-          <PayBoxProvider>
+        {/* <MemoToastProvider> */}
+          {/* <PayBoxProvider> */}
             <ThreadMiniPage></ThreadMiniPage>
-          </PayBoxProvider>
-        </MemoToastProvider>
+          {/* </PayBoxProvider> */}
+        {/* </MemoToastProvider> */}
       </Page>
     );
   }

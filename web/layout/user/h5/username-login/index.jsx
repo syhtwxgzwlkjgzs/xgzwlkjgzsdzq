@@ -81,8 +81,6 @@ class UsernameH5Login extends React.Component {
 
   handleLoginButtonClick = async () => {
     try {
-      goToLoginPage({ url: '/user/register' });
-      this.props.router.push({  url:'/register',query: { test: 111 } });
       const resp = await this.props.userLogin.login();
       const uid = get(resp, 'uid', '');
       this.props.user.updateUserInfo(uid);

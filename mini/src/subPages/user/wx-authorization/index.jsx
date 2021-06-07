@@ -4,14 +4,14 @@ import { View, Navigator } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import Button from '@discuzq/design/dist/components/button/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
-import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
+// import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Page from '@components/page';
 import { miniLogin } from '@server';
 import { checkUserStatus } from '@common/store/login/util';
 import layout from './index.module.scss';
 import { getParamCode, getUserProfile } from '../common/utils'
 
-const MemoToastProvider = React.memo(ToastProvider);
+// const MemoToastProvider = React.memo(ToastProvider);
 const NEED_BIND_OR_REGISTER_USER = -7016;
 
 @inject('site')
@@ -70,7 +70,7 @@ class WXAuthorization extends Component {
 
     return (
       <Page>
-        <MemoToastProvider>
+        {/* <MemoToastProvider> */}
           <View className={layout.container}>
             <View className={layout.content}>
               <View className={layout.title}>授权登录小程序</View>
@@ -98,7 +98,7 @@ class WXAuthorization extends Component {
               </View>
             </View>
           </View>
-        </MemoToastProvider>
+        {/* </MemoToastProvider> */}
       </Page>
     );
   }
