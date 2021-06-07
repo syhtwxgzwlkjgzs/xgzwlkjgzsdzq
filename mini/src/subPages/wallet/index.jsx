@@ -4,7 +4,6 @@ import { getCurrentInstance } from '@tarojs/taro';
 import Wallet from '../../layout/wallet/index';
 import { readWalletUser } from '@server';
 
-
 class WalletPage extends React.Component {
   constructor(props) {
     super(props);
@@ -12,7 +11,7 @@ class WalletPage extends React.Component {
       walletData: null,
     };
   }
-  
+
   componentDidMount() {
     this.getWallet();
   }
@@ -23,10 +22,12 @@ class WalletPage extends React.Component {
       await this.setState({ walletData: res.data });
     }
     console.log(res);
-  }
+  };
 
   render() {
-    return <Wallet walletData={this.state.walletData}></Wallet>
+    return (
+      <Wallet walletData={this.state.walletData}></Wallet>
+    );
   }
 }
 

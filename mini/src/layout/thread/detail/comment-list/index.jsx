@@ -25,6 +25,7 @@ class RenderCommentList extends React.Component {
       showCommentInput: false, // 是否弹出评论框
       commentSort: true, // ture 评论从旧到新 false 评论从新到旧
       showDeletePopup: false, // 是否弹出删除弹框
+      showReplyDeletePopup:false, // 是否弹出回复删除弹框
       inputText: '请输入内容', // 默认回复框placeholder内容
     };
 
@@ -317,6 +318,39 @@ class RenderCommentList extends React.Component {
     this.setState({ showAboptPopup: false });
   }
 
+  // 点击回复的删除
+  async replyDeleteClick(reply,comment) {
+    this.commentData = comment;
+    this.replyData = reply;
+    this.setState({
+      showReplyDeletePopup: true,
+    });
+  }
+
+  //删除回复
+  async replyDeleteComment() {
+    if (!this.replyData.id) return;
+
+    const params = {}
+    if (this.replyData && this.commentData) {
+      params.replyData = this.replyData;//本条回复信息
+      params.commentData = this.commentData;//回复对应的评论信息
+    }
+    const { success, msg } = await this.props.comment.deleteReplyComment(params, this.props.thread);
+    this.setState({
+      showReplyDeletePopup: false,
+    });
+    if (success) {
+      Toast.success({
+        content: '删除成功',
+      });
+      return;
+    }
+    Toast.error({
+      content: msg,
+    });
+  }
+
   render() {
     const { totalCount, commentList } = this.props.thread;
 
@@ -351,6 +385,7 @@ class RenderCommentList extends React.Component {
                 editClick={() => this.editClick(val)}
                 replyLikeClick={(reploy) => this.replyLikeClick(reploy, val)}
                 replyReplyClick={(reploy) => this.replyReplyClick(reploy, val)}
+                replyDeleteClick={(reply) => this.replyDeleteClick(reply, val)}
                 onCommentClick={() => this.onCommentClick(val)}
                 onAboptClick={() => this.onAboptClick(val)}
                 isShowOne={true}
@@ -378,6 +413,13 @@ class RenderCommentList extends React.Component {
           onBtnClick={() => this.deleteComment()}
         ></DeletePopup>
 
+        {/* 删除回复弹层 */}
+        <DeletePopup
+          visible={this.state.showReplyDeletePopup}
+          onClose={() => this.setState({ showReplyDeletePopup: false })}
+          onBtnClick={() => this.replyDeleteComment()}
+        />
+        
         {/* 采纳弹层 */}
         {parseContent?.REWARD?.money && (
           <AboptPopup

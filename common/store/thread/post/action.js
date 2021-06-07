@@ -208,36 +208,28 @@ class ThreadPostAction extends ThreadPostStore {
     const imageIds = Object.values(images).map(item => item.id);
     const docIds = Object.values(files).map(item => item.id);
     const contentIndexes = {};
-    if (imageIds.length > 0) {
-      contentIndexes[THREAD_TYPE.image] = {
-        tomId: THREAD_TYPE.image,
-        body: { imageIds },
-      };
-    }
-    if (video.id) {
-      contentIndexes[THREAD_TYPE.video] = {
-        tomId: THREAD_TYPE.video,
-        body: { videoId: video.id },
-      };
-    }
-    if (docIds.length > 0) {
-      contentIndexes[THREAD_TYPE.file] = {
-        tomId: THREAD_TYPE.file,
-        body: { docIds },
-      };
-    }
+    contentIndexes[THREAD_TYPE.image] = {
+      tomId: THREAD_TYPE.image,
+      body: { imageIds },
+    };
+    contentIndexes[THREAD_TYPE.video] = {
+      tomId: THREAD_TYPE.video,
+      body: { videoId: video.id || '' },
+    };
+    contentIndexes[THREAD_TYPE.file] = {
+      tomId: THREAD_TYPE.file,
+      body: { docIds },
+    };
     if (product.id) {
       contentIndexes[THREAD_TYPE.goods] = {
         tomId: THREAD_TYPE.goods,
         body: { ...product },
       };
     }
-    if (audio.id) {
-      contentIndexes[THREAD_TYPE.voice] = {
-        tomId: THREAD_TYPE.voice,
-        body: { audioId: audio.id },
-      };
-    }
+    contentIndexes[THREAD_TYPE.voice] = {
+      tomId: THREAD_TYPE.voice,
+      body: { audioId: audio.id || '' },
+    };
 
     const draftData = draft ? 1 : 0;
     if (redpacket.price && !redpacket.id) {
@@ -268,11 +260,19 @@ class ThreadPostAction extends ThreadPostStore {
       },
     };
     if (position.address) params.position = position;
-    if (!!price) {
-      params.price = price;
-      params.freeWords = freeWords;
+    else {
+      // 主要是编辑时删除位置的情况
+      params.position = {
+        longitude: 0,
+        latitude: 0,
+        cityname: '',
+        address: '',
+        location: '',
+      };
     }
-    if (!!attachmentPrice) params.attachmentPrice = attachmentPrice;
+    params.price = price || 0;
+    params.freeWords = freeWords || 0;
+    params.attachmentPrice = attachmentPrice || 0;
     if (this.postData.draft) params.draft = this.postData.draft;
     if (this.postData.anonymous) params.anonymous = this.postData.anonymous;
     const contentIndexes = this.gettContentIndexes();
@@ -282,7 +282,7 @@ class ThreadPostAction extends ThreadPostStore {
 
   @action
   formatThreadDetailToPostData(detail) {
-    const { title, categoryId, content, freewords = 1, isDraft } = detail || {};
+    const { title, categoryId, content, freewords = 1, isDraft, user } = detail || {};
     const price = Number(detail.price);
     const attachmentPrice = Number(detail.attachmentPrice);
     let position = {};
@@ -311,10 +311,10 @@ class ThreadPostAction extends ThreadPostStore {
           files[item.id] = { ...item, type: item.fileType, name: item.fileName };
         });
       }
-      if (tomId === THREAD_TYPE.voice) audio = contentindexes[index].body;
+      if (tomId === THREAD_TYPE.voice) audio = contentindexes[index].body || {};
       if (tomId === THREAD_TYPE.goods) product = contentindexes[index].body;
       if (tomId === THREAD_TYPE.video) {
-        video = contentindexes[index].body;
+        video = contentindexes[index].body || {};
         video.thumbUrl = video.mediaUrl;
       }
       if (tomId === THREAD_TYPE.redPacket) {
@@ -323,11 +323,12 @@ class ThreadPostAction extends ThreadPostStore {
       }
       // expiredAt: rewardQa.times, price: rewardQa.value, type: 0
       if (tomId === THREAD_TYPE.reward) rewardQa = {
-        ...contentindexes[index].body,
+        ...(contentindexes[index].body || {}),
         times: formatDate(contentindexes[index].body.expiredAt?.replace(/-/g, '/'), 'yyyy/MM/dd hh:mm'),
         value: contentindexes[index].body.money || '',
       };
     });
+    const anonymous = user && user.nickname === '匿名用户' ? 1 : 0;
     this.setPostData({
       // 标题去掉富文本
       title: title.replace(/<[^<>]+>/g, ''),
@@ -345,6 +346,7 @@ class ThreadPostAction extends ThreadPostStore {
       files,
       freeWords: freewords,
       isDraft,
+      anonymous,
     });
   }
 
