@@ -153,8 +153,16 @@ class index extends Component {
             <View><Icon name="RightOutlined" /></View>
           </View> */}
           <View className={styles.userCenterEditBtn}>
-            <Button onClick={this.handleCancel}>取消</Button>
-            <Button onClick={this.handleUpdateEditedUserInfo} type="primary">保存</Button>
+            <Button onClick={this.handleCancel}>
+              <View className={styles.actionButtonContentWrapper}>
+                取消
+              </View>
+            </Button>
+            <Button onClick={this.handleUpdateEditedUserInfo} type="primary">
+              <View className={styles.actionButtonContentWrapper}>
+                保存
+              </View>
+            </Button>
           </View>
         </View>
       </View>

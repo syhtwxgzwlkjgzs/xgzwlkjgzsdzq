@@ -8,7 +8,7 @@ import Router from '@discuzq/sdk/dist/router';
 class UserCenterAction extends React.Component {
   // 点击我的消息
   handleMyMessage = () => {
-    Router.push({ url: '/message' });
+    Router.push({ url: '/subPages/message/index' });
   };
 
   // 点击我的钱包
@@ -111,7 +111,7 @@ class UserCenterAction extends React.Component {
             <View onClick={this.handleMyDraft} className={styles.userCenterActionItem}>
               <View className={styles.userCenterActionItemIcon}>
                 <Badge>
-                  <Icon name={'RecycleBinOutlined'} color={'#4F5A70'} size={20} />
+                  <Icon name={'RetrieveOutlined'} color={'#4F5A70'} size={20} />
                 </Badge>
               </View>
               <View className={styles.userCenterActionItemDesc}>我的草稿箱</View>
