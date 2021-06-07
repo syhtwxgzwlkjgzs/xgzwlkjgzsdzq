@@ -25,6 +25,9 @@ export default class ReplyList extends React.Component {
   replyClick() {
     typeof this.props.replyClick === 'function' && this.props.replyClick();
   }
+  deleteClick() {
+    typeof this.props.likeClick === 'function' && this.props.deleteClick();
+  }
 
   generatePermissions(data = {}) {
     return {
@@ -55,7 +58,7 @@ export default class ReplyList extends React.Component {
   }
 
   render() {
-    const { canLike } = this.generatePermissions(this.props.data);
+    const { canLike, canDelete } = this.generatePermissions(this.props.data);
 
     return (
       <View className={styles.replyList}>
@@ -122,6 +125,20 @@ export default class ReplyList extends React.Component {
                 <View className={styles.replyReply}>
                   <Text onClick={() => this.replyClick()}>回复</Text>
                 </View>
+                {canDelete && <View className={styles.replyReply}>
+                  <Text onClick={() => this.deleteClick()}>删除</Text>
+                </View>}
+
+
+{/*                <View className={styles.replyReply}>
+                   {canEdit && <View className={styles.revise} onClick={() => this.editClick()}>编辑</View>}
+                  {canDelete && (
+                    <View  onClick={() => this.replyDeleteClick()}>
+                      {canDelete}
+                    </View>
+                  )}
+                </View>*/}
+
               </View>
             </View>
           )}
