@@ -75,7 +75,7 @@ class Index extends React.Component {
       }}>
         <div className={style.recommendContent}>推荐内容</div>
         { (recommendsStatus === 'loading' || recommendsStatus === 'error') && (
-            <BottomView isBox isError={isError} isLoading={recommendsStatus === 'loading'} errorText={errorText} noMore={false} loadingText='正在加载' /> 
+            <BottomView isBox isError={isError} errorText={errorText} noMore={false} loadingText='正在加载' /> 
         )}
         {
           recommendsStatus === 'none' && recommends?.filter((_, index) => index < filterCount).map((item, index) => {

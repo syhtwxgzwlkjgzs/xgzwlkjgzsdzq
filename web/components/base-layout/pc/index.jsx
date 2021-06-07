@@ -2,8 +2,7 @@ import React,  { useCallback, useEffect, useImperativeHandle, useRef, useState, 
 import { Flex } from '@discuzq/design';
 import Header from '@components/header';
 import List from '@components/list';
-import RefreshView from '@components/list/RefreshView';
-import ErrorView from '@components/list/ErrorView';
+import BottomView from '@components/list/BottomView';
 import { noop } from '@components/thread/utils';
 
 import styles from './index.module.scss';
@@ -27,26 +26,24 @@ import styles from './index.module.scss';
 const baseLayoutWhiteList = ['home', 'search'];
 
 const BaseLayout = forwardRef((props, ref) => {
-  const {
-    header = null,
-    left = null,
-    children = null,
-    right = null,
-    footer = null,
-    onSearch,
-    noMore = false,
-    onRefresh,
-    pageName = '',
-    onScroll = noop,
-    immediateCheck=false,
-    requestError=false,
-    errorText='加载失败',
-    rightClass = '',
-    isShowLayoutRefresh = true
-  } = props;
+    // UI设置相关
+    const { header = null, left = null, children = null, right = null, footer = null, rightClass = '' } = props
+
+    // List组件相关
+    const { noMore = false, onRefresh, onScroll = noop, immediateCheck = false } = props
+  
+    // Header组件相关
+    const { onSearch } = props
+  
+    // 自定义加载视图 & 报错视图
+    const { requestError = false, errorText = '', isShowLayoutRefresh = true } = props
+  
+    // 页面滑动位置缓存相关
+    const { pageName = '' } = props
 
   const listRef = useRef(null);
   const [isError, setIsError] = useState(false);
+  const [isErrorText, setIsErrorText] = useState('加载失败')
 
   const debounce = (fn, wait) => {
     let timer = null;
@@ -65,13 +62,16 @@ const BaseLayout = forwardRef((props, ref) => {
     }),
   );
 
+  // 处理错误提示
   useEffect(() => {
     setIsError(requestError);
-  }, [requestError])
+    setIsErrorText(errorText)
+  }, [requestError, errorText])
 
   // list组件，接口请求出错回调
-  const onError = () => {
+  const onError = (err) => {
     setIsError(true);
+    setIsErrorText(err)
   };
 
   let cls = styles['col-1'];
@@ -98,8 +98,9 @@ const BaseLayout = forwardRef((props, ref) => {
 
             <div className={styles.center}>
               {typeof(children) === 'function' ? children({ ...props }) : children}
-              {!isError && isShowLayoutRefresh && onRefresh && <RefreshView noMore={noMore} />}
-              {isError && <ErrorView text={errorText} />}
+              {isShowLayoutRefresh && onRefresh && (
+                <BottomView isError={isError} errorText={isErrorText} noMore={noMore} /> 
+              )}
             </div>
 
             {

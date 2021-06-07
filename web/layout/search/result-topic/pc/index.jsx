@@ -60,28 +60,9 @@ class SearchResultTopicPCPage extends React.Component {
     )
   }
 
-  renderContent = (pageData) => {
-    return (
-      <SidebarPanel 
-        title="潮流话题" 
-        type='normal'
-        isShowMore={false}
-        noData={!pageData?.length}
-        isLoading={!pageData}
-        icon={{ type: 1, name: 'StrongSharpOutlined' }}
-      >
-        <div className={styles.topic}>
-          {pageData?.map((item, index) => (
-            <TopicItem data={item} key={index} onClick={this.onTopicClick} />  
-          ))}
-        </div>
-        
-      </SidebarPanel>
-    )
-  }
-
   render() {
     const { pageData, currentPage, totalPage } = this.props.search.topics || {};
+
     return (
       <BaseLayout
         noMore={currentPage >= totalPage} 
@@ -91,7 +72,21 @@ class SearchResultTopicPCPage extends React.Component {
         onSearch={this.onSearch}
         right={ this.renderRight }
       >
-        { this.renderContent(pageData) }
+        <SidebarPanel 
+          title="潮流话题" 
+          type='normal'
+          isShowMore={false}
+          noData={!pageData?.length}
+          isLoading={!pageData}
+          icon={{ type: 1, name: 'StrongSharpOutlined' }}
+        >
+          <div className={styles.topic}>
+            {pageData?.map((item, index) => (
+              <TopicItem data={item} key={index} onClick={this.onTopicClick} />  
+            ))}
+          </div>
+          
+        </SidebarPanel>
       </BaseLayout>
     );
   }
