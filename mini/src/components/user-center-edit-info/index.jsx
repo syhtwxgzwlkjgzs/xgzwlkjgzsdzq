@@ -179,15 +179,11 @@ class index extends Component {
         {/* bottom */}
         <View className={styles.userCenterEditBottom}>
           <View className={styles.userCenterEditBtn}>
-            <Button onClick={this.handleCancel} className={styles.btn}>
-              <View className={styles.actionButtonContentWrapper}>
-                取消
-              </View>
+            <Button full onClick={this.handleCancel} className={styles.btn}>
+              取消
             </Button>
-            <Button className={styles.btn} onClick={this.handleUpdateEditedUserInfo} type="primary">
-              <View className={styles.actionButtonContentWrapper}>
-                保存
-              </View>
+            <Button full className={styles.btn} onClick={this.handleUpdateEditedUserInfo} type="primary">
+              保存
             </Button>
           </View>
         </View>
