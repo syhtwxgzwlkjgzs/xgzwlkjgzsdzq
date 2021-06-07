@@ -12,6 +12,7 @@ import InputPopup from '../components/input-popup';
 import ReportPopup from '../components/report-popup';
 import goToLoginPage from '@common/utils/go-to-login-page';
 
+
 @inject('site')
 @inject('user')
 @inject('comment')
@@ -26,6 +27,7 @@ class CommentH5Page extends React.Component {
       showMorePopup: false, // 是否弹出更多弹框
       showCommentInput: false, // 是否弹出评论框
       showDeletePopup: false, // 是否弹出删除弹框
+      showReplyDeletePopup:false, // 是否弹出回复删除弹框
       inputText: '请输入内容', // 默认回复框placeholder内容
     };
 
@@ -104,6 +106,39 @@ class CommentH5Page extends React.Component {
   onBtnClick() {
     this.deleteComment();
     this.setState({ showDeletePopup: false });
+  }
+
+  // 点击回复的删除
+  async replyDeleteClick(reply,comment) {
+    this.commentData = comment;
+    this.replyData = reply;
+    this.setState({
+      showReplyDeletePopup: true,
+    });
+  }
+
+  //删除回复
+  async replyDeleteComment() {
+    if (!this.replyData.id) return;
+
+    const params = {}
+    if (this.replyData && this.commentData) {
+      params.replyData = this.replyData;//本条回复信息
+      params.commentData = this.commentData;//回复对应的评论信息
+    }
+    const { success, msg } = await this.props.comment.deleteReplyComment(params, this.props.thread);
+    this.setState({
+      showReplyDeletePopup: false,
+    });
+    if (success) {
+      Toast.success({
+        content: '删除成功',
+      });
+      return;
+    }
+    Toast.error({
+      content: msg,
+    });
   }
 
   // 点击评论的赞
@@ -270,7 +305,7 @@ class CommentH5Page extends React.Component {
     }
 
     const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
-    console.log(this.props.comment.commentDetail)
+
     if (success) {
       this.setState({
         showCommentInput: false,
@@ -357,22 +392,23 @@ class CommentH5Page extends React.Component {
             </View>
           </View> */}
 
-          {/* 内容 */}
-          <View className={styles.content}>
-            {isReady && (
-              <CommentList
-                data={commentData}
-                likeClick={() => this.likeClick(commentData)}
-                replyClick={() => this.replyClick(commentData)}
-                deleteClick={() => this.deleteClick(commentData)}
-                replyLikeClick={(reploy) => this.replyLikeClick(reploy, commentData)}
-                replyReplyClick={(reploy) => this.replyReplyClick(reploy, commentData)}
-                onMoreClick={() => this.onMoreClick()}
-                isHideEdit={true}
-              ></CommentList>
-            )}
-          </View>
+        {/* 内容 */}
+        <View className={styles.content}>
+          {isReady && (
+            <CommentList
+              data={commentData}
+              likeClick={() => this.likeClick(commentData)}
+              replyClick={() => this.replyClick(commentData)}
+              deleteClick={() => this.deleteClick(commentData)}
+              replyLikeClick={(reploy) => this.replyLikeClick(reploy, commentData)}
+              replyReplyClick={(reploy) => this.replyReplyClick(reploy, commentData)}
+              replyDeleteClick={(reply) => this.replyDeleteClick(reply, commentData)}
+              onMoreClick={() => this.onMoreClick()}
+              isHideEdit={true}
+            ></CommentList>
+          )}
         </View>
+
         <View className={styles.footer}>
           {/* 评论弹层 */}
           <InputPopup
@@ -400,6 +436,13 @@ class CommentH5Page extends React.Component {
             onBtnClick={(type) => this.onBtnClick(type)}
           />
 
+          {/* 删除回复弹层 */}
+          <DeletePopup
+            visible={this.state.showReplyDeletePopup}
+            onClose={() => this.setState({ showReplyDeletePopup: false })}
+            onBtnClick={() => this.replyDeleteComment()}
+          ></DeletePopup>
+
           {/* 举报弹层 */}
           <ReportPopup
             reportContent={this.reportContent}
@@ -409,6 +452,7 @@ class CommentH5Page extends React.Component {
             onOkClick={(data) => this.onReportOk(data)}
           ></ReportPopup>
         </View>
+      </View>
       </View>
     );
   }

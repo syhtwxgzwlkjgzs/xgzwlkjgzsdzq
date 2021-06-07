@@ -39,6 +39,11 @@ class ThreadStore {
   @computed get isNoMore() {
     return this.commentList?.length >= this.totalCount;
   }
+
+  // 帖子标题
+  @computed get title() {
+    return this.threadData?.title || '';
+  }
 }
 
 export default ThreadStore;

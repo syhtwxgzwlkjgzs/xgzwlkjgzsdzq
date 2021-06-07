@@ -165,23 +165,31 @@ class index extends Component {
             this.props.isOtherPerson ? (
               <>
                 <Button onClick={() => { this.handleChangeAttention(user.follow) }} type="primary" className={user.follow === 2 && styles.userFriendsBtn}>
+                <View className={styles.actionButtonContentWrapper}>
                   <Icon name={this.renderFollowedStatus(user.follow).icon} />
                   <Text className={styles.userBtnText}>{this.renderFollowedStatus(user.follow).text}</Text>
+                  </View>
                 </Button>
                 <Button onClick={this.handleMessage}>
+                <View className={styles.actionButtonContentWrapper}>
                   <Icon name="NewsOutlined" />
                   <Text className={styles.userBtnText}>发私信</Text>
+                  </View>
                 </Button>
               </>
             ) : (
               <>
                 <Button onClick={this.goToMyEditInfo} type="primary">
-                  <Icon name="CompileOutlined" />
-                  <Text className={styles.userBtnText}>编辑资料</Text>
+                  <View className={styles.actionButtonContentWrapper}>
+                    <Icon name="CompileOutlined" />
+                    <Text className={styles.userBtnText}>编辑资料</Text>
+                  </View>
                 </Button>
                 <Button onClick={this.logout}>
-                  <Icon name="PoweroffOutlined" />
-                  <Text className={styles.userBtnText}>退出登录</Text>
+                  <View className={styles.actionButtonContentWrapper}>
+                    <Icon name="PoweroffOutlined" />
+                    <Text className={styles.userBtnText}>退出登录</Text>
+                  </View>
                 </Button>
               </>
             )
