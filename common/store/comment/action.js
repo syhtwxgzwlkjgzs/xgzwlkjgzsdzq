@@ -1,6 +1,6 @@
 import { action } from 'mobx';
 import CommentStore from './store';
-import { readCommentDetail, updateComment, createPosts, updatePosts, readUser, deleteFollow } from '@server';
+import { readCommentDetail, updateComment, createPosts, updatePosts, readUser, deleteFollow, updateSingleReply } from '@server';
 import xss from '@common/utils/xss';
 
 class CommentAction extends CommentStore {
@@ -81,6 +81,10 @@ class CommentAction extends CommentStore {
     this.threadId = id;
   }
 
+  @action
+  deleteReplyToList() {
+    this.commentDetail?.commentPosts.pop();
+  }
   /**
    * 创建评论
    * @param {object} params * 参数
@@ -218,7 +222,6 @@ class CommentAction extends CommentStore {
         success: false,
       };
     }
-
     const requestParams = {
       id,
       replyId,
@@ -231,9 +234,8 @@ class CommentAction extends CommentStore {
     const res = await createPosts({ data: requestParams });
 
     if (res.code === 0 && res?.data?.id && ThreadStore) {
-      const { commentList } = ThreadStore;
 
-      // 更新评论列表中的回复数据
+      const { commentList } = ThreadStore;
       if (commentList?.length) {
         commentList.forEach((comment) => {
           if (commentId === comment.id) {
@@ -266,7 +268,7 @@ class CommentAction extends CommentStore {
    * @returns {object} 处理结果
    */
   @action
-  async updateLiked(params) {
+  async updateLiked(params,T) {
     const { id, isLiked } = params;
     if (!id) {
       return {
@@ -319,7 +321,6 @@ class CommentAction extends CommentStore {
         },
       },
     };
-
     const res = await updateComment({ data: requestParams });
     if (res.code === 0 && ThreadStore) {
       // 更新评论列表
@@ -341,6 +342,60 @@ class CommentAction extends CommentStore {
       msg: res.msg,
       success: false,
     };
+  }
+
+  /**
+   * 删除评论回复
+   * @param {number} replyId * 评论回复id
+   * @returns {object} 处理结果
+   */
+  @action
+  async deleteReplyComment(params, ThreadStore) {
+    const {id: replyId} = params.replyData;
+    const {id: commentId} = params.commentData;
+    if (!replyId) {
+      return {
+        success: false,
+        msg: '回复评论id不存在',
+      };
+    }
+    const requestParams = {
+      pid: replyId,
+      data: {
+        attributes: {
+          isDeleted: 1,
+        },
+      },
+    };
+    const res = await updateComment({ data: requestParams });
+    if (res.code === 0 && ThreadStore) {
+      const {commentList} = ThreadStore;
+      //在评论列表页
+      if (commentList?.length){
+        commentList.map((comment)=> {
+          if (commentId === comment.id) {
+            comment.replyCount =comment.replyCount - 1;
+            comment.lastThreeComments?.splice(0, 1);//把要删除的评论回复从全局状态里删除
+          }
+        })
+        //更新评论列表
+        const res = await updateSingleReply({params: {pid:Number(commentId)}});
+        if (res.code === 0 && res.data) {
+          commentList.map((comment) => {
+            if (comment.id === commentId) {
+              comment.lastThreeComments?.push((res.data))
+            }
+          })
+        }
+      }
+
+      this.deleteReplyToList()
+      return {
+        msg: '操作成功',
+        success: true,
+      };
+
+    }
   }
 
   /**
