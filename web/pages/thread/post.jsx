@@ -58,6 +58,7 @@ class PostPage extends React.Component {
   }
 
   componentDidMount() {
+    this.redirectToHome();
     this.props.router.events.on('routeChangeStart', this.handleRouteChange);
     this.fetchPermissions();
     // 如果本地缓存有数据，这个目前主要用于定位跳出的情况
@@ -79,6 +80,20 @@ class PostPage extends React.Component {
   componentWillUnmount() {
     this.captcha = '';
     this.props.router.events.off('routeChangeStart', this.handleRouteChange);
+  }
+
+  componentDidUpdate() {
+    this.redirectToHome();
+  }
+
+  redirectToHome() {
+    if (!this.props.user.threadExtendPermissions.createThread) {
+      Toast.info({ content: '您没有发帖权限，即将回到首页' });
+      const timer = setTimeout(() => {
+        clearTimeout(timer);
+        this.props.router.replace('/');
+      }, 1000);
+    }
   }
 
   handleRouteChange = (url) => {
