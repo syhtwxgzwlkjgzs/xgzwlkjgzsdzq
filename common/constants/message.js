@@ -5,7 +5,7 @@
 // 侧边栏常量
 export const sidebarData = [
   {
-    iconName: 'CommentOutlined',
+    iconName: 'MyPrivateLetterOutlined',
     iconColor: '#7BA5F9',
     content: '我的私信',
     type: 'index',
