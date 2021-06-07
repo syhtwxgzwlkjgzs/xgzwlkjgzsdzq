@@ -69,22 +69,6 @@ const BaseLayout = forwardRef((props, ref) => {
     setIsError(requestError);
   }, [requestError])
 
-  // const updateSize = debounce(() => {
-  //   if (window) {
-  //     const current = window.innerWidth;
-  //     console.log(current);
-  //   }
-  // }, 50);
-
-  useEffect(() => {
-    // if (window) {
-    //   window.addEventListener('resize', updateSize);
-    //   return () => {
-    //       window.removeEventListener('resize', updateSize);
-    //   };
-    // }
-  }, []);
-
   // list组件，接口请求出错回调
   const onError = () => {
     setIsError(true);
@@ -97,16 +81,12 @@ const BaseLayout = forwardRef((props, ref) => {
   if (left && right) {
     cls = styles['col-3'];
   }
-  console.log(isError, errorText);
+
   return (
     <div className={styles.container}>
         {(header && header({ ...props })) || <Header onSearch={onSearch} />}
 
-
-
         <div className={`${styles.body} ${cls}`}>
-
-
           <List {...props} immediateCheck={immediateCheck} className={styles.list} wrapperClass={styles.wrapper} ref={listRef} onError={onError} onScroll={onScroll}>
             {
               (pageName === 'home' || left) && (
@@ -130,9 +110,7 @@ const BaseLayout = forwardRef((props, ref) => {
               )
             }
           </List>
-
         </div>
-        
 
       {typeof(footer) === 'function' ? footer({ ...props }) : footer}
     </div>
