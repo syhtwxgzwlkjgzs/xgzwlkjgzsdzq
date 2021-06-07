@@ -31,18 +31,6 @@
     padding: 0 $padding-2n;
 
     :global {
-      .dzq-badge {
-        width: 100%;
-        height: 100%;
-
-        .dzq-badge__circle {
-          top: rem(10px);
-          right: rem(2px);
-        }
-        .dzq-badge__info {
-          display: none;
-        }
-      }
       .dzq-avatar {
         width: 100%;
         height: 100%;
@@ -66,15 +54,6 @@
       }
     }
 
-    .badge {
-      :global {
-        .dzq-badge__circle {
-          padding: 0 rem(6px);
-          width: auto;
-          border-radius: $border-radius-8;
-        }
-      }
-    }
   }
 
   .detail {
