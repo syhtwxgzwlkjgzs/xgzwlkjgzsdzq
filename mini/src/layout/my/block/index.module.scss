@@ -22,6 +22,14 @@
   min-height: 100vh;
   background-color: var(--background-color);
 }
+
+.shieldList {
+  View:last-child {
+    margin-bottom: constant(safe-area-inset-bottom); ///兼容 IOS<11.2/
+    margin-bottom: env(safe-area-inset-bottom); ///兼容 IOS>11.2/
+  }
+}
+
 .titleBox {
   width: 100%;
   height: rem(53);
