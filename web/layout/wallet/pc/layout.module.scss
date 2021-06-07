@@ -16,6 +16,7 @@
 
   .title {
     padding-left: rem($padding-2n);
+    font-size: rem($font-size-middle);
   }
 }
 
@@ -160,11 +161,13 @@
     .react-datepicker {
       // 整个盒子
       display: flex;
+      width: 304px;
       height: 252px;
       font-size: $font-size-middle;
       border-radius: $border-radius-small;
       overflow: hidden;
-
+      border: none;
+      box-shadow: 0 0 rem(8) $border-shadow-color;
       &__header,
       &-time__header {
         padding-top: 16px;
@@ -190,7 +193,8 @@
 
       &__time-container,
       &__month-text {
-        width: 90px !important;
+        width: 33.3% !important;
+        font-size: rem($font-size-primary);
       }
 
       &__time-list {
@@ -230,6 +234,70 @@
       &__month {
         margin: $margin-4n;
       }
+    }
+    .react-datepicker__month-container {
+      width: 304px;
+    }
+    .react-datepicker__month-wrapper {
+      display: flex;
+      align-items: center;
+    }
+
+    .react-datepicker__header {
+      height: rem(54);
+      box-sizing: border-box;
+      padding-top: 0;
+      line-height: rem(54);
+      font-weight: normal;
+      color: $text-color-primary;
+      font-size: rem($font-size-middle);
+      &::before {
+        content: "<";
+        display: block;
+        height: 12px;
+        width: 12px;
+        position: absolute;
+        left: 24px;
+        color: $text-color-secondary;
+      }
+      &::after {
+        content: ">";
+        display: block;
+        height: 12px;
+        width: 12px;
+        position: absolute;
+        right: 24px;
+        top: 0;
+        color: $text-color-secondary;
+      }
+    }
+
+    .react-datepicker__navigation--previous {
+      border-color: transparent !important;
+      left: 16px;
+      top: 16px;
+      &:hover {
+        border-color: transparent;
+      }
+      &:focus {
+        border-color: transparent;
+      }
+    }
+
+    .react-datepicker__navigation--next {
+      border-color: transparent !important;
+      right: 16px;
+      top: 16px;
+      &:hover {
+        border-color: transparent;
+      }
+      &:focus {
+        border-color: transparent;
+      }
+    }
+
+    .react-datepicker__header:not(.react-datepicker__header--has-time-select) {
+      border-top-right-radius: 0;
     }
 
     .react-datepicker__day-name,
