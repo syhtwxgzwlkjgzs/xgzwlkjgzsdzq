@@ -23,7 +23,7 @@ class ThreadPostAction extends ThreadPostStore {
    */
   @action.bound
   async updateThread(id) {
-    const params = this.getCreateThreadParams();
+    const params = this.getCreateThreadParams(true);
     const ret = await updateThread({ ...params, threadId: Number(id) });
     return ret;
   }
@@ -252,7 +252,7 @@ class ThreadPostAction extends ThreadPostStore {
    * 获取发帖时需要的参数
    */
   @action
-  getCreateThreadParams() {
+  getCreateThreadParams(isUpdate) {
     const { title, categoryId, contentText, position, price, attachmentPrice, freeWords } = this.postData;
     const params = {
       title, categoryId, content: {
@@ -261,8 +261,8 @@ class ThreadPostAction extends ThreadPostStore {
     };
     if (position.address) params.position = position;
     else {
-      // 主要是编辑时删除位置的情况
-      params.position = {
+      // 主要是编辑时删除位置的情况，暂时区别开编辑和发帖，因为后台没有更新接口避免影响发帖
+      if (isUpdate) params.position = {
         longitude: 0,
         latitude: 0,
         cityname: '',
