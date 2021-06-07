@@ -6,7 +6,8 @@ import Toast from '@discuzq/design/dist/components/toast/index';
 import Spin from '@discuzq/design/dist/components/spin/index';
 import { extensionList, isPromise, noop } from '../utils';
 import goToLoginPage from '@common/utils/go-to-login-page';
-import { View, Text } from '@tarojs/components'
+import { View, Text } from '@tarojs/components';
+import Taro from '@tarojs/taro';
 import Downloader from './downloader';
 
 
@@ -60,28 +61,68 @@ const Index = ({
       downloading[index] = true;
       setDownloading([...downloading]);
 
+      if(!item?.url) {
+        setErrorMsg("获取下载链接失败");
+        setTimeout(() => {
+          setErrorMsg("");
+        }, 3000);
+        downloading[index] = false;
+        setDownloading([...downloading]);
+        return;
+      }
+      console.log(`item.url`, item.url)
+      Taro.downloadFile({
+        url: item.url,
+        success: function (res) {
+          Taro.openDocument({
+            filePath: res.tempFilePath,
+            success: function (res) {
+              setSuccessMsg("下载成功");
+            },
+            fail: function (error) {
+              setErrorMsg("小程序暂不支持下载此类文件\n请点击“链接”获取下载链接");
+              console.error(error.errMsg)
+            },
+            complete: function () {
+            }
+          })
+        },
+        fail: function (error) {
+          setErrorMsg("下载链接无效");
+          console.error(error.errMsg)
+        },
+        complete: function () {
+          setTimeout(() => {
+            setErrorMsg("");
+            setSuccessMsg("");
+          }, 3000);
+          downloading[index] = false;
+          setDownloading([...downloading]);
+        }
+      })
+
+
+    } else {
+      onPay();
+    }
+  };
+
+  const onLinkShare = (item, index) => {
+    if (!isPay) {
       const attachmentId = item.id;
       thread.fetchThreadAttachmentUrl(threadId, attachmentId).then((res) => {
         if(res?.code === 0 && res?.data) {
           const { url } = res.data;
-          const extension = item?.extension;
-
-          downloader?.download(url, true).then((path) => {
-            wx.openDocument({
-              filePath: path,
-              fileType: extension, // 微信支持下载文件类型：doc, docx, xls, xlsx, ppt, pptx, pdf
-              success(res) {
-                setSuccessMsg("下载成功");
-              },
-              fail(error) {
-                setErrorMsg("小程序暂不支持下载此类文件");
-                console.error(error.errMsg);
-              },
-            });
-          }).catch((error) => {
-            setErrorMsg(["下载失败"]);
-            console.error(error.errMsg)
-          });
+          Taro.setClipboardData({
+            data: url,
+            success: function (res) {
+              Taro.getClipboardData({
+                success: function (res) {
+                  // setSuccessMsg("下载链接已复制到剪贴板");
+                }
+              })
+            }
+          })
         } else {
           setErrorMsg(res?.msg);
           console.error(res);
@@ -95,18 +136,8 @@ const Index = ({
           setErrorMsg("");
           setSuccessMsg("");
         }, 3000);
-        downloading[index] = false;
-        setDownloading([...downloading]);
       });
 
-    } else {
-      onPay();
-    }
-  };
-
-  const onPreviewer = (url) => {
-    if (!isPay) {
-      window.open(url, '_self');
     } else {
       onPay();
     }
@@ -150,11 +181,13 @@ const Index = ({
           </View>
 
           <View className={styles.right}>
-            {/* <Text className={styles.Text} onClick={() => onPreviewer(item.url)}>浏览</Text> */}
-            { downloading[index] ?
-              <Spin type="spinner" /> :
-              <Text onClick={() => onDownLoad(item, index)}>下载</Text>
-            }
+            <Text onClick={() => onLinkShare(item, index)}>链接</Text>
+            <View className={styles.label}>
+              { downloading[index] ?
+                <Spin className={styles.spinner} type="spinner" /> :
+                <Text onClick={() => onDownLoad(item, index)}>下载</Text>
+              }
+            </View>
           </View>
         </View>
       </View>

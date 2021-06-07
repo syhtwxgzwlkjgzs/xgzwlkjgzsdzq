@@ -1,8 +1,10 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import styles from './index.module.scss';
+import goToLoginPage from '@common/utils/go-to-login-page';
 import { Icon, Toast } from '@discuzq/design';
 import { extensionList, isPromise, noop } from '../utils';
+
+import styles from './index.module.scss';
 
 /**
  * 附件
@@ -18,6 +20,7 @@ const Index = ({
   onPay = noop,
   threadId = null,
   thread = null,
+  user = null,
 }) => {
   // 处理文件大小的显示
   const handleFileSize = (fileSize) => {
@@ -33,6 +36,13 @@ const Index = ({
 
   const onDownLoad = (item) => {
     if(!item || !threadId) return;
+
+    // 对没有登录的先登录
+    if (!user?.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
 
     if (!isPay) {
       let toastInstance = Toast.loading({
@@ -138,4 +148,4 @@ const Index = ({
   );
 };
 
-export default inject('thread')(observer(Index));
+export default inject('thread', 'user')(observer(Index));
