@@ -3,9 +3,7 @@
 .container {
   height: 100vh;
 }
-.banner {
-  @include banner;
-}
+
 
 .content {
   @include content;
