@@ -172,10 +172,10 @@ class WalletInfo extends React.Component {
         key: 'status',
         render: item => <span className={
           classNames(styles.normalText,{
-            [styles.wait]: item.cashStatus === 1,
-            [styles.remitedFailed]: item.cashStatus === 3 || item.cashStatus === 6,
-            [styles.pass]: item.cashStatus === 4,
-            [styles.remited]: item.cashStatus === 5
+            [styles.wait]: Number(item.cashStatus) === 1,
+            [styles.remitedFailed]: Number(item.cashStatus) === 3 || Number(item.cashStatus) === 6,
+            [styles.pass]: Number(item.cashStatus) === 4,
+            [styles.remited]: Number(item.cashStatus) === 5
           })
         }>{STATUS_MAP[item.cashStatus] || '暂无内容'}</span>,
       },

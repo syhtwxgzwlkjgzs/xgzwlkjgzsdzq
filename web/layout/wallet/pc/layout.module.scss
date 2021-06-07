@@ -161,8 +161,8 @@
     .react-datepicker {
       // 整个盒子
       display: flex;
-      width: 304px;
-      height: 252px;
+      width: rem(304);
+      height: rem(252);
       font-size: $font-size-middle;
       border-radius: $border-radius-small;
       overflow: hidden;
@@ -170,7 +170,7 @@
       box-shadow: 0 0 rem(8) $border-shadow-color;
       &__header,
       &-time__header {
-        padding-top: 16px;
+        padding-top: rem($padding-4n);
         font-size: $font-size-middle;
         border-radius: 0;
         border: $border-solid-1;
@@ -236,7 +236,7 @@
       }
     }
     .react-datepicker__month-container {
-      width: 304px;
+      width: rem(304);
     }
     .react-datepicker__month-wrapper {
       display: flex;
@@ -254,19 +254,19 @@
       &::before {
         content: "<";
         display: block;
-        height: 12px;
-        width: 12px;
+        height: rem(12);
+        width: rem(12);
         position: absolute;
-        left: 24px;
+        left: rem(24);
         color: $text-color-secondary;
       }
       &::after {
         content: ">";
         display: block;
-        height: 12px;
-        width: 12px;
+        height: rem(12);
+        width: rem(12);
         position: absolute;
-        right: 24px;
+        right: rem(24);
         top: 0;
         color: $text-color-secondary;
       }
@@ -274,8 +274,8 @@
 
     .react-datepicker__navigation--previous {
       border-color: transparent !important;
-      left: 16px;
-      top: 16px;
+      left: rem(16);
+      top: rem(16);
       &:hover {
         border-color: transparent;
       }
@@ -286,8 +286,8 @@
 
     .react-datepicker__navigation--next {
       border-color: transparent !important;
-      right: 16px;
-      top: 16px;
+      right: rem(16);
+      top: rem(16);
       &:hover {
         border-color: transparent;
       }
@@ -303,11 +303,11 @@
     .react-datepicker__day-name,
     .react-datepicker__day,
     .react-datepicker__time-name {
-      width: 24px !important;
-      height: 24px !important;
-      line-height: 24px !important;
-      margin-left: 10px !important;
-      margin-bottom: 8px !important;
+      width: rem(24) !important;
+      height: rem(24) !important;
+      line-height: rem($font-line-height-primary) !important;
+      margin-left: rem(10) !important;
+      margin-bottom: rem(8) !important;
     }
 
     .react-datepicker__day:hover,
@@ -326,13 +326,13 @@
     }
 
     .react-datepicker__time-list-item {
-      height: 20px;
+      height: rem(20);
       display: flex;
       align-items: center;
     }
 
     .react-datepicker__time-list-item--selected {
-      height: 20px;
+      height: rem(20);
       background-color: $primary-color !important;
     }
 
