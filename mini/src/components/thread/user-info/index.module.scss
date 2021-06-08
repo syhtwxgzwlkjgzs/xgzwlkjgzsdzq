@@ -28,7 +28,7 @@
 }
 
 .name {
-  color: var(--color-text-primary);
+  color: $text-color-primary;
   font-size: $font-size-primary;
   font-weight: bold;
   max-width: 100px;
@@ -39,7 +39,7 @@
 }
 
 .groupName {
-  color: var(--color-text-secondary);
+  color: $text-color-secondary;
   font-size: $font-size-label;
   margin-left: $margin-2n;
   max-width: 100px;
@@ -54,7 +54,7 @@
 
 .meta {
   margin-top: 1px;
-  color: var(--color-text-secondary);
+  color: $text-color-secondary;
   display: flex;
   align-items: center;
   font-size: $font-size-label;
@@ -105,16 +105,18 @@
 
   .categoryEssence {
     box-sizing: border-box;
-    color: var(--color-orange);
+    color: $tag-text-color1;
     border: 1px solid var(--color-orange6);
+
     &:after {
-      background-color: var(--color-orange);
+      background-color: $tag-text-color1;
     }
   }
 
   .pay {
     color: $success-color;
     border: 1px solid $success-color;
+
     &:after {
       background-color: $success-color;
     }
@@ -123,6 +125,7 @@
   .reward {
     color: $warn-color;
     border: 1px solid $warn-color;
+
     &:after {
       background-color: $warn-color;
     }
@@ -131,6 +134,7 @@
   .red {
     color: $text-color-error;
     border: 1px solid $text-color-error;
+
     &:after {
       background-color: $text-color-error;
     }
@@ -139,15 +143,16 @@
   > View {
     margin-left: 8px;
   }
+
   :global {
-    .dzq-tag{
+    .dzq-tag {
       display: flex;
       align-items: center;
       justify-content: center;
 
       &:after {
-      z-index: 1;
+        z-index: 1;
+      }
     }
-  }
   }
 }

@@ -10,7 +10,7 @@
 
 .header {
   width: 100%;
-  background: var(--color-white);
+  background: $white;
 }
 
 .body {
@@ -37,12 +37,12 @@
     .authorInfo {
       width: 100%;
       max-height: rem(306);
-      background: var(--color-white);
+      background: $white;
       margin-bottom: rem(20);
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: var(--border-radius-small);
+      border-radius: $border-radius-small;
     }
 
     .qrcode {
@@ -51,8 +51,8 @@
 
     .recommend {
       width: 100%;
-      background: var(--color-white);
-      border-radius: var(--border-radius-small);
+      background: $white;
+      border-radius: $border-radius-small;
     }
 
     .copyright {
@@ -73,17 +73,17 @@
 .editCmment {
   position: relative;
   width: rem(600);
-  background: var(--color-white);
+  background: $white;
   margin: auto;
   padding: rem(24);
-  border-radius: var(--border-radius-small);
+  border-radius: $border-radius-small;
 
   .close {
     position: absolute;
     top: rem(16);
     right: rem(16);
     cursor: pointer;
-    color: var(--color-text-secondary);
+    color: $text-color-secondary;
     font-size: rem(18);
   }
 

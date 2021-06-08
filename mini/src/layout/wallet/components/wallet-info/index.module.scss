@@ -2,12 +2,17 @@
 
 
 .container {
+<<<<<<< Updated upstream
     background: var(--color-primary);
     padding: 14px 16px 16px;
+=======
+    background: $primary-color;
+    padding: 16px;
+>>>>>>> Stashed changes
 }
 
 .totalAmount {
-    color: var(--color-white);
+    color: $white;
     text-align: left;
     .moneyTitle {
         font-family: 'PingFangSC-Regular';
@@ -28,14 +33,14 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
-    color: var(--color-white);
+    color: $white;
     text-align: left;
     .statusTitle {
         font-family: 'PingFangSC-Regular';
         font-weight: normal;
         font-size: 14px;
         line-height: 24px;
-      
+
     }
     .statusNum {
         font-family: 'PingFang SC';

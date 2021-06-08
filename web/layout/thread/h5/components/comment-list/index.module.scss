@@ -14,7 +14,7 @@
       .revise {
         font-size: rem($font-size-primary);
         text-align: left;
-        color: var(--color-text-secondary);
+        color: $text-color-secondary;
       }
 
       .headerRigth {
@@ -25,22 +25,22 @@
         .showMoneyNum {
           font-size: rem($font-size-label);
           text-align: left;
-          color: var(--color-text-primary);
+          color: $text-color-primary;
           margin-left: rem($margin-2n);
           .moneyNumber {
-            color: var(--color-error);
+            color: $error-color;
           }
         }
         .more {
           margin-top: rem($margin-2n);
           font-size: rem($font-size-label);
           text-align: left;
-          color: var(--color-text-primary);
+          color: $text-color-primary;
           margin-left: rem($margin-6n);
           .moreIcon {
             margin-top: rem(1);
             line-height: rem(20);
-            color: var(--color-text-secondary);
+            color: $text-color-secondary;
           }
         }
       }
@@ -64,7 +64,7 @@
           font-size: rem($font-size-primary);
           line-height: rem(20);
           text-align: left;
-          color: var(--color-text-primary);
+          color: $text-color-primary;
         }
         .commentListText {
           margin-top: rem($margin-1n);
@@ -72,7 +72,7 @@
           line-height: rem(24);
           text-align: left;
           word-break: break-all;
-          color: var(--color-text-primary);
+          color: $text-color-primary;
 
           :global {
             .qq-emotion {
@@ -114,7 +114,7 @@
           font-size: rem($font-size-primary);
           line-height: rem(16.8);
           text-align: left;
-          color: var(--color-text-secondary);
+          color: $text-color-secondary;
           padding-top: rem($padding-2n);
           .commentTime {
             // flex: 1;
@@ -143,7 +143,7 @@
           font-size: rem($font-size-primary);
           line-height: rem($font-line-height-middle);
           text-align: left;
-          color: var(--color-text-primary);
+          color: $text-color-primary;
           padding-top: rem($padding-4n);
         }
       }

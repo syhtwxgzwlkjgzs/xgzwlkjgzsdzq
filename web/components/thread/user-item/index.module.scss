@@ -39,10 +39,10 @@
       border-radius: 50%;
       height: rem(20);
       width: rem(20);
-      border: var(--color-white) solid rem(1);
+      border: $white solid rem(1);
       text-align: center;
       line-height: rem(20);
-      color: var(--color-white);
+      color: $white;
       &.like {
         background-color: $error-color;
       }
@@ -58,11 +58,11 @@
     justify-content: center;
     font-size: rem($font-size-primary);
     .title {
-      color: var(--color-text-primary);
+      color: $text-color-primary;
       line-height: rem(20);
     }
     .subTitle {
-      color: var(--color-text-secondary);
+      color: $text-color-secondary;
       line-height: rem(17);
       font-size: rem($font-size-small);
     }
@@ -70,7 +70,7 @@
 
   .footer {
     font-size: rem($font-size-label);
-    color: var(--color-text-secondary);
+    color: $text-color-secondary;
     display: flex;
     align-items: center;
     .label {

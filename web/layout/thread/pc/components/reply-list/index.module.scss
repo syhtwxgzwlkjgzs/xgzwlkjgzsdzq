@@ -20,7 +20,7 @@
         font-size: rem($font-size-primary);
         line-height: rem(20);
         text-align: left;
-        color: var(--color-text-primary);
+        color: $text-color-primary;
       }
 
       .replyListText {
@@ -30,7 +30,7 @@
         font-size: rem($font-size-middle);
         margin-top: rem(4);
         text-align: left;
-        color: var(--color-text-primary);
+        color: $text-color-primary;
         width: 100%;
         word-break: break-all;
         line-height: $font-line-height-middle;
@@ -94,7 +94,7 @@
             margin-right: rem($margin-2n);
             line-height: rem(20);
             text-align: left;
-            color: var(--color-primary);
+            color: $primary-color;
           }
         }
       }
@@ -105,13 +105,13 @@
       justify-content: space-between;
       font-size: rem($font-size-primary);
       text-align: left;
-      color: var(--color-text-secondary);
+      color: $text-color-secondary;
       padding-top: rem($padding-2n);
       .replyTime {
         font-size: rem($font-size-label);
       }
       .commentLiked {
-        color: var(--color-primary);
+        color: $primary-color;
       }
       .commentLike {
         display: flex;
@@ -149,7 +149,7 @@
 }
 
 .active {
-  color: var(--color-primary);
+  color: $primary-color;
 }
 
 .commentInput {

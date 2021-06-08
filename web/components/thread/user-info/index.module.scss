@@ -31,7 +31,7 @@
 }
 
 .name {
-  color: var(--color-text-primary);
+  color: $text-color-primary;
   font-size: rem($font-size-primary);
   font-weight: bold;
   max-width: rem(100);
@@ -46,7 +46,7 @@
 }
 
 .groupName {
-  color: var(--color-text-secondary);
+  color: $text-color-secondary;
   font-size: rem($font-size-label);
   margin-left: rem($margin-2n);
   max-width: rem(100);
@@ -60,7 +60,7 @@
 }
 .meta {
   margin-top: rem(1);
-  color: var(--color-text-secondary);
+  color: $text-color-secondary;
   display: flex;
   align-items: center;
   font-size: rem($font-size-label);
@@ -111,7 +111,7 @@
   :global {
     .dzq-tag{
       margin-left: rem(8);
-      
+
     }
   }
 }

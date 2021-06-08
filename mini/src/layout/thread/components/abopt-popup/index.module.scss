@@ -1,13 +1,13 @@
 @import '@common/styles/index.scss';
 
 .container {
-  background: var(--color-white);
+  background: $white;
   border-radius: $border-radius-big $border-radius-big 0 0;
 }
 
 .main {
   padding: $padding-4n $padding-4n 0;
-  border-bottom: --border-border;
+  border-bottom: var(--border-border);
 }
 
 .header {
@@ -15,7 +15,7 @@
   font-size: $font-size-middle;
   line-height: 17.8px;
   text-align: left;
-  color: var(--color-text-primary);
+  color: $text-color-primary;
 }
 
 .body {
@@ -46,7 +46,7 @@
           height: 0px;
           padding: 5px;
           border-radius: 50%;
-          border: solid 7px var(--color-primary);
+          border: solid 7px $primary-color;
         }
         .dzq-slider__progress--active {
           height: 4px;
@@ -98,13 +98,13 @@
     line-height: $font-line-height-base;
     border-radius: $border-radius-small;
     color: $text-color-primary;
-    background: var(--background-color-text2);
+    background: $text-bg-color2;
   }
   .ok {
     width: 167px;
     height: 42px;
     line-height: $font-line-height-base;
     border-radius: $border-radius-small;
-    background: var(--color-primary);
+    background: $primary-color;
   }
 }

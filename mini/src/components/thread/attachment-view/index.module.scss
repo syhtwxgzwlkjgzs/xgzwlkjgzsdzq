@@ -32,7 +32,7 @@
       align-items: center;
     }
   }
-  
+
   .span {
     cursor: pointer;
   }
@@ -47,16 +47,16 @@
     flex: 1;
   }
   .size {
-    color: var(--color-text-regular);
+    color: $text-color-regular;
     font-size: $font-size-label;
     line-height: 17px;
   }
   .containerIcon {
-    color: var(--color-success);
+    color: $success-color;
     font-size: 20px;
   }
   .content {
-    color: --color-text-primary;
+    color: $text-color-primary;
     font-size: $font-size-primary;
     display: block;
     overflow: hidden;

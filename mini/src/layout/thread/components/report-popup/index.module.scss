@@ -1,7 +1,7 @@
 @import '@common/styles/index.scss';
 
 .container {
-  background: var(--color-white);
+  background: $white;
   border-radius: $border-radius-big $border-radius-big 0 0;
   padding: $padding-4n;
 }
@@ -37,7 +37,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px var(--border-line-color);
+    border-bottom: 1px $border-color;
     font-size: $font-size-base;
     color: $text-color-regular;
     :global {

@@ -2,15 +2,20 @@
 
 .container {
   padding: $padding-4n $padding-4n 0;
-  background: var(--color-white);
+  background: $white;
 }
 
 .content {
   display: flex;
   justify-content: space-between;
   font-weight: normal;
+<<<<<<< Updated upstream
   padding-bottom: $padding-2n;
   color: var(--color-text-primary);
+=======
+  padding-bottom: $padding-4n;
+  color: $text-color-primary;
+>>>>>>> Stashed changes
   .text {
     font-family: 'PingFangSC-Regular';
     font-size: $font-size-primary;
@@ -33,13 +38,13 @@
   font-size: $font-size-label;
   .time {
     text-align: left;
-    color: var(--color-text-secondary);
+    color: $text-color-secondary;
     padding-bottom: $padding-4n;
   }
   .payStatusTrue {
     color: $text-color-regular;
   }
   .payStatusFalse {
-    color: var(--color-primary);
+    color: $primary-color;
   }
 }

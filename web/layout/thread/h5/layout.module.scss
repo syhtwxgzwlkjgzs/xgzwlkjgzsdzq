@@ -56,7 +56,7 @@
   padding-left: rem($padding-4n);
   padding-right: rem($padding-4n);
   box-sizing: border-box;
-  background: var(--color-white);
+  background: $white;
   border-top: var(--border-border);
   display: flex;
   align-items: center;

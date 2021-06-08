@@ -2,7 +2,7 @@
 
 .container {
     padding: rem($padding-4n) rem($padding-4n) 0;
-    background: var(--color-white);
+    background: $white;
 }
 
 .content {
@@ -10,7 +10,7 @@
     justify-content: space-between;
     font-weight: normal;
     padding-bottom: rem($padding-4n);
-    color: var(--color-text-primary);
+    color: $text-color-primary;
     .text {
         font-family: 'PingFangSC-Regular';
         font-size: rem($font-size-primary);
@@ -33,13 +33,13 @@
     font-size: rem($font-size-label);
     .time {
         text-align: left;
-        color: var(--color-text-secondary);
+        color: $text-color-secondary;
         padding-bottom: rem($padding-4n);
     }
     .payStatusTrue {
         color: $text-color-regular;
     }
     .payStatusFalse {
-        color: var(--color-primary);
+        color: $primary-color;
     }
 }

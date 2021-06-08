@@ -5,12 +5,12 @@
   cursor: pointer;
   width: 100%;
   height: 100%;
-  border-radius: 5px;
+  border-radius: $border-radius-small;
   :global(video) {
-    border-radius: 5px;
+    border-radius: $border-radius-small;
   }
   .videoBox {
-    border-radius: 5px;
+    border-radius: $border-radius-small;
   }
   .payBox {
     position: absolute;
@@ -19,7 +19,7 @@
     bottom: 0;
     right: 0;
     background-color: rgba(0, 0, 0, 0.6);
-    border-radius: 5px;
+    border-radius: $border-radius-small;
     overflow: hidden;
 
     .alert {
@@ -28,11 +28,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      border-top-left-radius: 5px;
-      border-top-right-radius: 5px;
+      border-top-left-radius: $border-radius-small;
+      border-top-right-radius: $border-radius-small;
       .tipsIcon {
       }
-    
+
       .tipsText {
         margin-left: $margin-2n;
         font-size: $font-size-base;

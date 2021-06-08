@@ -3,7 +3,7 @@
   box-sizing: border-box;
   padding: 0 rem($padding-4n);
   padding-bottom: 0;
-  background: var(--color-white);
+  background: $white;
 }
 // &:hover {
 //   background: rgba(229, 242, 255, 0.3);
@@ -14,7 +14,7 @@
   font-size: rem($font-size-middle);
   font-weight: bold;
   line-height: rem(22);
-  color: var(--color-text-primary);
+  color: $text-color-primary;
   margin-bottom: rem($margin-4n);
   width: 100%;
 }
@@ -48,7 +48,7 @@
   height: rem(52);
   display: flex;
   align-items: center;
-  border-top: var(--border-line-color) solid rem(1);
+  border-top: $border-color solid rem(1);
   margin-top: rem(12);
 }
 .pay {

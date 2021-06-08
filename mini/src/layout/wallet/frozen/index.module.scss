@@ -11,7 +11,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--color-white);
+  background: $white;
   font-size: $font-size-primary;
   font-weight: bold;
   padding: 0 $padding-4n;
@@ -20,6 +20,7 @@
   font-family: 'PingFangSC-Regular';
   font-weight: normal;
   text-align: left;
+<<<<<<< Updated upstream
   color: var(--color-text-secondary);
   
   .totalMoneyNumber {
@@ -32,6 +33,13 @@
   background: var(--color-white);
   margin-bottom: constant(safe-area-inset-bottom); ///兼容 IOS<11.2/
   margin-bottom: env(safe-area-inset-bottom); ///兼容 IOS>11.2/
+=======
+  color: $text-color-secondary;
+}
+
+.body {
+  background: $white;
+>>>>>>> Stashed changes
   .content {
     font-weight: normal;
     padding: $padding-4n 0;
@@ -42,6 +50,7 @@
       justify-content: space-between;
       font-family: 'PingFang SC';
       text-align: left;
+<<<<<<< Updated upstream
       color: var(--color-text-primary);
       .title {
         font-weight: normal;
@@ -51,6 +60,9 @@
         font-weight: var(--font-weight-regular);
         font-size: $font-size-middle;
       }
+=======
+      color: $text-color-primary;
+>>>>>>> Stashed changes
     }
     .lower {
       display: flex;
@@ -58,8 +70,13 @@
       font-family: 'PingFangSC-Regular';
       font-size: $font-size-label;
       text-align: left;
+<<<<<<< Updated upstream
       color: var(--color-text-secondary);
       padding-top: $padding-2n;
+=======
+      color: $text-color-secondary;
+      padding-top: $padding-5n;
+>>>>>>> Stashed changes
     }
   }
 }
