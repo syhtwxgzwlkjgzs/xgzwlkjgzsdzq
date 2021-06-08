@@ -193,7 +193,6 @@ class Index extends Component {
 
   // 点击发帖插件时回调，如上传图片、视频、附件或艾特、话题等
   handlePluginClick(item) {
-    const { postType } = this.state;
     const { postData } = this.props.threadPost;
     // 匹配附件、图片、语音上传
     this.setState({
@@ -214,7 +213,7 @@ class Index extends Component {
     switch (item.type) {
       // 根据类型分发具体操作
       case THREAD_TYPE.reward:
-        if (!canEditReward) {
+        if (!this.state.canEditReward) {
           return this.postToast('再编辑时不可操作悬赏');
         }
         nextRoute = '/subPages/thread/selectReward/index';
@@ -225,7 +224,7 @@ class Index extends Component {
         this.resetOperationType();
         break;
       case THREAD_TYPE.redPacket:
-        if (!canEditRedpacket) {
+        if (!this.state.canEditRedpacket) {
           return this.postToast('再编辑时不可操作红包');
         }
         nextRoute = '/subPages/thread/selectRedpacket/index';
