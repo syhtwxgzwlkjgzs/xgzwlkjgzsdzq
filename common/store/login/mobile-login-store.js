@@ -38,12 +38,12 @@ export const MOBILE_LOGIN_STORE_ERRORS = {
     Message: '需要补充昵称和附加信息',
   },
   NEED_BIND_WECHAT: {
-    Code: 8000,
+    Code: -8000,
     Message: '需要绑定微信',
   },
 };
 
-const NEED_BIND_TOKEN_FLAG = 8000;
+const NEED_BIND_TOKEN_FLAG = -8000;
 
 export default class mobileLoginStore {
     codeTimmer = null;
