@@ -42,7 +42,7 @@ class ThreadStore {
 
   // 帖子标题
   @computed get title() {
-    return this.threadData?.title || '';
+    return this.threadData?.title.slice(0, 15) || this.threadData?.categoryName || '';
   }
 }
 
