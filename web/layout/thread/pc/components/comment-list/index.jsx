@@ -13,6 +13,7 @@ import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import ImageDisplay from '@components/thread/image-display';
 import PostContent from '@components/thread/post-content';
+import { debounce } from '@common/utils/throttle-debounce';
 
 @observer
 class CommentList extends React.Component {
@@ -194,7 +195,7 @@ class CommentList extends React.Component {
                     <div className={styles.extraBottom}>
                       <div
                         className={classnames(styles.commentLike, this.props?.data?.isLiked && styles.active)}
-                        onClick={() => this.likeClick(canLike)}
+                        onClick={debounce(() => this.likeClick(canLike), 500)}
                       >
                         <Icon className={styles.icon} name="LikeOutlined"></Icon>
                         赞&nbsp;{this.props?.data?.likeCount > 0 ? this.props.data.likeCount : ''}
