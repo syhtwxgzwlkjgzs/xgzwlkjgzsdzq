@@ -15,9 +15,9 @@ $tabs-list-min-height: 70vh;
       position: absolute;
       right: rem(16);
       left: rem(16);
-      height: 1px;
+      height: rem(1);
       bottom: 0;
-      background-color: rgba(238, 238, 238, 0.75);
+      background-color: $border-color;
     }
   }
 }
