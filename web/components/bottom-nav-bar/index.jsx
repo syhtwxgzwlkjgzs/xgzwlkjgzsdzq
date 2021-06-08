@@ -67,7 +67,7 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
             <div key={idx} className={styles.item + (i.active ? ` ${styles.active}` : '')} onClick={() => handleClick(i, idx)}>
               {
                 i.icon === 'MailOutlined' ? (
-                  <UnreadRedDot unreadCount={totalUnread}>
+                  <UnreadRedDot type="icon" style={{width: '22px', margin: '0 auto'}} unreadCount={totalUnread}>
                     <Icon name={i.icon} size={22} />
                   </UnreadRedDot>
                 ) : (
