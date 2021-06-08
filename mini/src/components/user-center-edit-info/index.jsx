@@ -80,7 +80,7 @@ class index extends Component {
 
   handleGoToEditAccountPwd = () => {
     console.log('去到修改账户密码页面');
-    Router.push({url: `pwd/index`})
+    Router.push({url: `/subPages/user/reset-password/index`})
   }
 
   handleGoToEditPayPwd = () => {
