@@ -81,99 +81,77 @@ http.interceptors.response.use((res) => {
   // if (data.Code === -4002) {
   //   Router.redirect({url: '/user/login'});
   // }
+  let url = null;
   switch (data.Code) {
     case JUMP_TO_404: {
-      let url;
       if (process.env.DISCUZ_ENV === 'web') {
         url = '/404';
       } else {
         url = '/subPages/404/index'
       }
-      Router.replace({
-        url
-      });
       break;
     }
     case JUMP_TO_LOGIN: {
-      let url;
       if (process.env.DISCUZ_ENV === 'web') {
         url = '/user/login';
       } else {
         url = '/subPages/user/wx-auth/index'
       }
-      Router.replace({
-        url
-      });
       break;
     }
     case JUMP_TO_REGISTER: {
-      let url;
       if (process.env.DISCUZ_ENV === 'web') {
         url = '/user/register';
       } else {
         url = '/subPages/user/wx-auth/index'
       }
-      Router.replace({
-        url
-      });
       break;
     }
     case JUMP_TO_AUDIT: {
-      let url;
       if (process.env.DISCUZ_ENV === 'web') {
         url = '/user/status?statusCode=2';
       } else {
         url = '/subPages/user/status/index?statusCode=2'
       }
-      Router.replace({
-        url
-      });
       break;
     }
     case JUMP_TO_HOME_INDEX: {
-      let url;
       if (process.env.DISCUZ_ENV === 'web') {
         url = '/';
       } else {
         url = '/pages/index/index'
       }
-      Router.replace({
-        url
-      });
       break;
     }
     case SITE_CLOSED: {
-      let url;
       if (process.env.DISCUZ_ENV === 'web') {
         url = '/close';
       } else {
         url = '/subPages/close/index'
       }
-      Router.replace({
-        url
-      });
       break;
     }
     case JUMP_TO_PAY_SITE: {
-      let url;
       if (process.env.DISCUZ_ENV === 'web') {
         url = '/forum/partner-invite';
       } else {
         url = '/subPages/forum/partner-invite/index'
       }
-      Router.replace({
-        url
-      });
       break;
     }
     default:  // 200 状态码
-    if (status === 200) {
-      return Promise.resolve({
-        code: data.Code,
-        data: reasetData(data.Data),
-        msg: data.Message,
-      });
-    }
+      if (url) {
+        Router.replace({
+          url
+        });
+      }
+      if (status === 200) {
+        return Promise.resolve({
+          code: data.Code,
+          data: reasetData(data.Data),
+          msg: data.Message,
+        });
+      }
   }
 
   return Promise.resolve({
