@@ -139,7 +139,12 @@ class Index extends Component {
         {/* 默认block */}
         <div className={isPC ? styles['block-pc'] : styles.block}>
           {/* 头像 */}
-          <div className={styles.avatar} onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}>
+          <div
+            className={classNames(styles.avatar, {
+              [styles['unset-cursor']]: type === 'thread'
+            })}
+            onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
+          >
 
             {/* 未读消息红点 */}
             <UnreadRedDot type='avatar' unreadCount={item.unreadCount}>
@@ -174,6 +179,7 @@ class Index extends Component {
               <div
                 className={classNames(styles.name, {
                   [styles['single-line']]: true,
+                  [styles['unset-cursor']]: type === 'thread'
                 })}
                 onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
               >

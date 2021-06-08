@@ -1,9 +1,8 @@
 @import '@common/styles/index.scss';
 .dzq-emoji {
   position: absolute !important;
-  //bottom: 40px;
-  top: rem(52);
-  left: -5px;
+  bottom: 45px;
+  left: 0;
   right: 0;
   margin: 0 rem($margin-4n);
   padding-bottom: rem($padding-10);
@@ -60,4 +59,16 @@
   width: calc(100vw - 16px * 2);
   height: 200px;
   margin-left: 0;
+}
+.atTop {
+  position: absolute !important;
+  left: -15px;
+  top: rem(52);
+  right: 0;
+  margin: 0 rem($margin-4n);
+  padding-bottom: rem($padding-10);
+  height: rem(175);
+  border-radius: rem($border-radius-small);
+  border: $border-solid-1;
+  background-color: var(--color-white);
 }

@@ -15,25 +15,27 @@ class Index extends Component {
   componentWillMount() { }
 
   componentDidMount() {
-    const { commonLogin } = this.props;
-    const { statusCode } = getCurrentInstance().router.params;
-    if (statusCode === '2') {
-      this.timer = setInterval(() => {
-        if (commonLogin.statusCountDown === 0) {
-          redirectTo({
-            url: `/pages/index/index`
-          });
-          clearInterval(this.timer);
-          return;
-        }
-        commonLogin.setStatusCountDown(commonLogin.statusCountDown - 1);
-      }, 1000)
-    }
+    // TODO: 暂时取消倒计时跳转首页
+    this.props.commonLogin.setStatusCountDown(0);
+    // const { commonLogin } = this.props;
+    // const { statusCode } = getCurrentInstance().router.params;
+    // if (statusCode === '2') {
+    //   this.timer = setInterval(() => {
+    //     if (commonLogin.statusCountDown === 0) {
+    //       redirectTo({
+    //         url: `/pages/index/index`
+    //       });
+    //       clearInterval(this.timer);
+    //       return;
+    //     }
+    //     commonLogin.setStatusCountDown(commonLogin.statusCountDown - 1);
+    //   }, 1000)
+    // }
   }
 
   componentWillUnmount() {
-    this.props.commonLogin.setStatusCountDown(5);
-    clearInterval(this.timer);
+    // this.props.commonLogin.setStatusCountDown(5);
+    // clearInterval(this.timer);
   }
 
   componentDidShow() { }

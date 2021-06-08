@@ -1,10 +1,11 @@
 import React from 'react';
+import { View } from '@tarojs/components';
 import styles from './index.module.scss';
 import classNames from 'classnames';
 import { Badge } from '@discuzq/design';
 
 
-const Index = ({ children, unreadCount, type = '', style={} }) => {
+const Index = ({ children, unreadCount, type = '', style}) => {
 
   // 转换未读消息数
   const getUnReadCount = (count) => {
@@ -12,7 +13,7 @@ const Index = ({ children, unreadCount, type = '', style={} }) => {
   };
 
   return (
-    <div
+    <View
       className={classNames({
         'normal-badge': true,
         'avatar-badge': type === 'avatar',
@@ -24,7 +25,7 @@ const Index = ({ children, unreadCount, type = '', style={} }) => {
       <Badge circle info={getUnReadCount(unreadCount)}>
         {children}
       </Badge>
-    </div>
+    </View>
   );
 };
 
