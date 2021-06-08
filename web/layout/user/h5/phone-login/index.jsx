@@ -181,6 +181,7 @@ class LoginPhoneH5Page extends React.Component {
             phoneNumCallback={this.handlePhoneNumCallback}
             phoneCodeCallback={this.handlePhoneCodeCallback}
             sendCodeCallback={this.handleSendCodeButtonClick}
+            enterCallback={this.handleLoginButtonClick}
             codeTimeout={mobileLogin.codeTimeout}
           />
           {/* 登录按钮 start */}
