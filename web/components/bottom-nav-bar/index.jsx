@@ -29,6 +29,7 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
   // 每20秒更新一次未读消息
   const timeoutRef = useRef();
   const updateUnreadMessage = () => {
+    if (!user.id) return;
     timeoutRef.current = setTimeout(() => {
       readUnreadCount();
       updateUnreadMessage();

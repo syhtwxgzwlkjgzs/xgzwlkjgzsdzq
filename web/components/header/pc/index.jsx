@@ -30,6 +30,7 @@ class Header extends React.Component {
 
   // 每20秒更新一次未读消息
   updateUnreadMessage() {
+    if (!this.props.user.id) return;
     const { message: { readUnreadCount } } = this.props;
     this.timeoutId = setTimeout(() => {
       readUnreadCount();
