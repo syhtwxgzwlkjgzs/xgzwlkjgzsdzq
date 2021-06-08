@@ -3,7 +3,7 @@
 
 .container {
     background: var(--color-primary);
-    padding: 16px;
+    padding: 14px 16px 16px;
 }
 
 .totalAmount {
@@ -14,7 +14,7 @@
         font-weight: normal;
         font-size: 14px;
         line-height: 16.8px;
-        padding: 8px 0;
+        padding-bottom: 8px;
     }
     .moneyNum {
         font-family: "PingFang SC";

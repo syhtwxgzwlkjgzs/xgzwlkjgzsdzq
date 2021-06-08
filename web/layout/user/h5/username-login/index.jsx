@@ -13,6 +13,7 @@ import { genMiniScheme } from '@server';
 import Protocol from '../components/protocol';
 import browser from '../../../../../common/utils/browser';
 import PcBodyWrap from '../components/pc-body-wrap';
+import goToLoginPage from '../../../../../common/utils/go-to-login-page';
 
 @inject('site')
 @inject('user')

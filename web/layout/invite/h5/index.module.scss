@@ -24,15 +24,14 @@
     left: 50%;
     margin-left: -60px;
     top: rem(-120);
-    border-radius: 50%;
-    background: var(--color-white);
-    border: rem(1) solid var(--color-white);
+    border-radius: $border-radius-circle;
+    background: $white;
+    border: rem(1) solid $white;
     overflow: hidden;
     z-index: 3;
     :global(.dzq-avatar__img),:global(.dzq-avatar__text) {
       width: rem(118);
       height: rem(118);
-      line-height: rem(118);
     }
   }
   .user_info_content{
@@ -42,32 +41,32 @@
     margin-left: calc(16px - 50vw);
     left: 50%;
     top: rem(-60);
-    background: var(--color-white);
-    border-radius: rem(5);
+    background: $white;
+    border-radius: rem($border-radius-small);
     text-align: center;
-    padding: 0 rem(16);
+    padding: 0 rem($padding-4n);
     box-sizing: border-box;
   }
   .user_info_name{
     @include text-ellipsis;
     font-weight: 600;
-    font-size: rem(16);
-    line-height: rem(24);
-    color: var(--color-text-primary);
+    font-size: rem($font-size-middle);
+    line-height: rem($font-line-height-base);
+    color: $text-color-primary;
     opacity: 1;
-    margin-top: rem(68);
+    margin-top: rem($padding-1n * 17);
   }
   .user_info_tag{
     font-weight: normal;
-    font-size: rem(12);
-    line-height: rem(22);
-    color: var(--color-text-secondary);
+    font-size: rem($font-size-small);
+    line-height: rem($font-line-height-small);
+    color: $text-color-secondary;
     padding-top: $padding-1n;
   }
   .user_info_invite{
     width: 100%;
     height: rem(78);
-    border-radius: rem(5);
+    border-radius: rem($border-radius-small);
     background: $comment-bg-color;
     margin-top: $margin-2n;
   }
@@ -99,7 +98,7 @@
   }
   .invite_money{
     @include userInfoInvite;
-    border-left: rem(1) solid var(--color-white);
+    border-left: rem(1) solid $white;
   }
   // 用户信息 end
 
@@ -109,7 +108,7 @@
     min-height: rem(285);
     box-sizing: border-box;
     padding: rem($padding-4n);
-    padding-bottom: rem(59);
+    padding-bottom: rem($padding-10 * 6);
   }
   .invite_list_title{
     font-size: rem($font-size-middle);
@@ -125,41 +124,45 @@
     line-height: rem($font-line-height-base);
     float: left;
     font-weight: 600;
-    color: var(--color-text-primary);
+    color: $text-color-primary;
     padding-left: rem($padding-2n);
   }
   .invite_list_header{
     height: rem(36);
-    padding: 0 rem(8);
+    padding: 0 rem($padding-2n);
     box-sizing: border-box;
-    border-radius: rem(5) rem(5) 0 0;
+    border-radius: rem($border-radius-small) rem($border-radius-small) 0 0;
     background: $comment-bg-color;
     font-weight: normal;
-    font-size: rem(14);
+    font-size: rem($font-size-base);
     text-align: left;
     color: $text-color-regular;
     display: flex;
   }
   @mixin inviteListName {
     @include text-ellipsis;
-    display: inline-block;
     width: 34%;
     float: left;
-    line-height: rem(36);
+    display: flex;
+    align-items: center;
   }
   @mixin inviteListMoney {
-    @include text-ellipsis;
-    display: inline-block;
     width: 29%;
     float: left;
-    line-height: rem(36);
+    display: flex;
+    align-items: center;
+    span {
+      @include text-ellipsis;
+    }
   }
   @mixin inviteListTime {
-    @include text-ellipsis;
-    display: inline-block;
     float: left;
     flex: 1;
-    line-height: rem(36);
+    display: flex;
+    align-items: center;
+    span {
+      @include text-ellipsis;
+    }
   }
   .invite_list_headerName,.invite_list_itemName{
     @include inviteListName;
@@ -176,48 +179,46 @@
     display: flex;
     height: rem(54);
     line-height: rem(54);
-    padding: 0 rem(8);
+    padding: 0 rem($padding-2n);
     box-sizing: border-box;
-    font-size: rem(14);
+    font-size: rem($font-size-base);
   }
   .invite_list_itemName{
     @include inviteListName;
     box-sizing: border-box;
-    padding-right: rem(14);
+    padding-right: rem($padding-14);
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    display: flex;
-    align-items: center;
     .invite_list_itemAvatar {
       width: rem(18);
       height: rem(18);
       border-radius: $border-radius-circle;
-      line-height: rem(18);
+      line-height: rem($font-line-height-xs);
       flex-shrink: 0;
     }
     span{
       font-weight: normal;
-      padding-left: rem(8);
-      color: var(--color-text-primary);
+      padding-left: rem($padding-2n);
+      color: $text-color-primary;
       @include text-ellipsis;
     }
   }
   .invite_list_itemMoney{
     @include inviteListMoney;
     box-sizing: border-box;
-    padding-right: rem(14);
+    padding-right: rem($padding-14);
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
     font-weight: normal;
-    font-size: rem(16);
-    color: var(--color-error);
+    font-size: rem($font-size-middle);
+    color: $error-color;
   }
   .invite_list_itemTime{
     @include inviteListTime;
     @include text-ellipsis;
-    color: var(--color-text-secondary);
+    color: $text-color-secondary;
   }
   .invite_list_itemLine{
     height: rem(1);
@@ -235,18 +236,18 @@
     box-sizing: border-box;
     position: fixed;
     bottom: 0;
-    padding: rem(8) rem(16);
-    background: var(--color-white);
-    border-top: rem(1) solid var(--border-line-color);
+    padding: rem($padding-2n) rem($padding-4n);
+    background: $white;
+    border-top: $border-solid-1;
     .invite_bottom_button{
       width: 100%;
       height: rem(42);
-      background: var(--color-primary);
+      background: $primary-color;
       font-weight: normal;
-      line-height: rem(24);
+      line-height: rem($font-line-height-base);
       text-align: center;
-      color: var(--color-white);
-      font-size: rem(16);
+      color: $white;
+      font-size: rem($font-size-middle);
     }
   }
   // 邀请朋友 end
@@ -257,7 +258,7 @@
     align-items: center;
     justify-content: center;
     font-size: rem($font-size-primary);
-    color: var(--color-text-placeholder);
+    color: $text-color-placeholder;
   }
   .loadMoreContainer {
     flex: 1;

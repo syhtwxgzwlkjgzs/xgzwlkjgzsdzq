@@ -82,21 +82,23 @@ class Index extends Component {
   };
 
   filterTag(html) {
-    if (typeof html !== 'string') return ''; // 兜底后端返回空数组的错误数据
     return html?.replace(/<(\/)?([beprt]|br|div)[^>]*>|[\r\n]/gi, '');
   }
 
   // parse content 对于需要显示title作为内容的消息，在对应组件内做预处理后统一传入content属性
   parseHTML = () => {
     const { type, item } = this.props;
-    let _content = item.content;
+    let _content = (typeof item.content === 'string' && item.content !== 'undefined') ? item.content : '';
 
     if (type === 'account') {
       const tip = `<span class=\"${styles.tip}\">${this.getAccountTips(item)}</span>`;
-      _content = tip + item.content;
+      _content = tip + _content;
     }
 
-    return this.filterTag(xss(s9e.parse(this.filterTag(_content))));
+    let t = xss(s9e.parse(this.filterTag(_content)));
+    t = (typeof t === 'string') ? t : '';
+
+    return t;
   };
 
   // 跳转用户中心

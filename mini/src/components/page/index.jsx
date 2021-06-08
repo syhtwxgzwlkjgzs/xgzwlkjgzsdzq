@@ -7,36 +7,37 @@ import Router from '@discuzq/sdk/dist/router';
 import { getCurrentInstance } from '@tarojs/taro';
 import PayBoxProvider from '@components/payBox/payBoxProvider';
 import { MINI_SITE_JOIN_WHITE_LIST } from '@common/constants/site';
+import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 
 @inject('user')
 @inject('site')
 @observer
 export default class Page extends React.Component {
-
   static defaultProps = {
     withLogin: false,
-    noWithLogin: false
-  }
+    noWithLogin: false,
+    disabledToast: false,
+  };
 
   constructor(props) {
     super(props);
     const { noWithLogin, withLogin, user } = this.props;
     // 是否必须登录
-    if ( withLogin && !user.isLogin()) {
+    if (withLogin && !user.isLogin()) {
       Router.redirect({
-        url: '/subPages/user/wx-auth/index'
+        url: '/subPages/user/wx-auth/index',
       });
     }
 
     // 是否必须不登录
     if (noWithLogin && user.isLogin()) {
       Router.redirect({
-        url: '/pages/index/index'
+        url: '/pages/index/index',
       });
     }
     this.state = {
-      isRender: this.isPass()
-    }
+      isRender: this.isPass(),
+    };
   }
 
   // 检查是否满足渲染条件
@@ -46,16 +47,17 @@ export default class Page extends React.Component {
     if (site && site.webConfig) {
       // 关闭站点
       if (path !== '/subPage/close/index' && site.closeSiteConfig) {
-        Router.redirect({url:'/subPages/close/index'});
+        Router.redirect({ url: '/subPages/close/index' });
         return false;
       }
       // 付费加入
       if (
-        (path !== '/subPages/forum/partner-invite/index' && site?.webConfig?.setSite?.siteMode === 'pay')
-        && (!user.isLogin() || (user.isLogin() && !user.paid))
-        && !MINI_SITE_JOIN_WHITE_LIST.includes(path)
+        path !== '/subPages/forum/partner-invite/index' &&
+        site?.webConfig?.setSite?.siteMode === 'pay' &&
+        (!user.isLogin() || (user.isLogin() && !user.paid)) &&
+        !MINI_SITE_JOIN_WHITE_LIST.includes(path)
       ) {
-        Router.redirect({url: '/subPages/forum/partner-invite/index'});
+        Router.redirect({ url: '/subPages/forum/partner-invite/index' });
         return false;
       }
       // TODO: 强制绑定方案待定
@@ -68,11 +70,8 @@ export default class Page extends React.Component {
         // 前置：没有开启微信
         if (!site.isOffiaccountOpen && !site.isMiniProgramOpen) {
           // 绑定昵称：没有开启短信，也没有绑定昵称
-          if (
-            path !== '/subPages/user/bind-nickname/index'
-            && !user.nickname
-          ) {
-            Router.redirect({url: '/subPages/user/bind-nickname/index'});
+          if (path !== '/subPages/user/bind-nickname/index' && !user.nickname) {
+            Router.redirect({ url: '/subPages/user/bind-nickname/index' });
             return false;
           }
         }
@@ -96,14 +95,13 @@ export default class Page extends React.Component {
   }
 
   render() {
-    const { site } = this.props;
+    const { site, disabledToast } = this.props;
     const { isRender } = this.state;
-    if(!isRender) return null;
+    if (!isRender) return null;
     return (
       <View className={`${styles['dzq-page']} dzq-theme-${site.theme}`}>
-        <PayBoxProvider>
-          {this.createContent()}
-        </PayBoxProvider>
+        <PayBoxProvider>{this.createContent()}</PayBoxProvider>
+        {!disabledToast && <ToastProvider></ToastProvider>}
       </View>
     );
   }

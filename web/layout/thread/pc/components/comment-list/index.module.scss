@@ -45,21 +45,32 @@
           color: var(--color-text-primary);
           word-break: break-word;
 
-          p {
-            line-height: rem(24);
+          :global {
+            .qq-emotion {
+              width: rem(22);
+              height: rem(22);
+            }
+
+            .dzq-p  {
+              margin-bottom: 0;
+            }
           }
 
-          img {
-            height: rem(22);
-          }
+          // p {
+          //   line-height: rem(24);
+          // }
 
-          &.isShowOne {
-            @include lamp-clamp(2);
+          // img {
+          //   height: rem(22);
+          // }
 
-            // p {
-            //   @include lamp-clamp(2);
-            // }
-          }
+          // &.isShowOne {
+          //   @include lamp-clamp(2);
+
+          //   // p {
+          //   //   @include lamp-clamp(2);
+          //   // }
+          // }
         }
         .imageDisplay {
           margin-top: rem($margin-2n);
