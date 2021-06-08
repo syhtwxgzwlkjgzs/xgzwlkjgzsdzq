@@ -41,6 +41,7 @@ const config = {
         'user/wx-auth/index',
         'user/wx-authorization/index',
         'user/supplementary/index',
+        'user/reset-password/index',
         'wallet/index',
         'wallet/frozen/index',
         'wallet/withdrawal/index',
