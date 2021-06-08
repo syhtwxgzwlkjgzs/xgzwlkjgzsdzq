@@ -8,9 +8,7 @@ export default function index() {
   return (
     // <ToastProvider>
     <Page>
-      <View>
         <UserCenterEditPayPwd />
-      </View>
     </Page>
     // </ToastProvider>
   );

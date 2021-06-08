@@ -1,11 +1,11 @@
 import React from 'react';
 import UserCenterEditUserName from '../../../../components/user-center-edit-username';
-import { View } from '@tarojs/components';
+import Page from '@components/page';
 
 export default function index() {
   return (
-    <View>
+    <Page>
       <UserCenterEditUserName />
-    </View>
+    </Page>
   )
 }
