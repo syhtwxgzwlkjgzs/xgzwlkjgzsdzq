@@ -9,6 +9,7 @@ import BaseLayout from '@components/base-layout';
 import Router from '@discuzq/sdk/dist/router';
 import { View, Text } from '@tarojs/components';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
+import SectionTitle from '@components/section-title'
 
 @inject('site')
 @inject('user')
@@ -81,14 +82,18 @@ class H5OthersPage extends React.Component {
           )}
 
           <View className={styles.unit}>
-            <View className={styles.threadUnit}>
+            {/* <View className={styles.threadUnit}>
               <View className={styles.threadTitle}>主题</View>
               <View className={styles.threadCount}>{targetUserThreadsTotalCount}个主题</View>
-            </View>
+            </View> */}
 
             {/* <View className={styles.ViewiderContainer}>
               <Viewider className={styles.Viewider} />
             </View> */}
+
+            <View className={styles.threadHeader}>
+              <SectionTitle title='主题' isShowMore={false} leftNum={`${targetUserThreadsTotalCount}个主题`} />
+            </View>
 
             <View className={styles.threadItemContainer}>
               {this.formatUserThreadsData(targetUserThreads)

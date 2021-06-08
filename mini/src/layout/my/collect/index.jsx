@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import ThreadContent from '@components/thread';
 import styles from './index.module.scss';
 import BaseLayout from '@components/base-layout'
-import { View } from '@tarojs/components'
+import { View, Text } from '@tarojs/components'
 
 @inject('site')
 @inject('index')
@@ -18,7 +18,13 @@ class Index extends React.Component {
         noMore={currentPage >= totalPage}
         onRefresh={this.props.dispatch}
       >
-        {pageData?.length !== 0 && <View className={styles.titleBox}>{`${totalCount || 0} 条收藏`}</View>}
+        {pageData?.length !== 0 && 
+          <View className={styles.titleBox}>
+            <Text className={styles.num}>
+              {`${totalCount || 0}`}
+            </Text> 
+            条收藏
+          </View>}
     
         {pageData?.map((item, index) => (
           <ThreadContent key={index} data={item} />

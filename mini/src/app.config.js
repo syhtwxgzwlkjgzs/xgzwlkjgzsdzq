@@ -57,6 +57,7 @@ const config = {
         'my/edit/paypwd/index',
         'my/edit/reset/paypwd/index',
         'my/edit/find/paypwd/index',
+        'my/edit/username/index',
         'my/fans/index',
         'my/follows/index',
         'my/block/index',
