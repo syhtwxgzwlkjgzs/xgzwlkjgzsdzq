@@ -15,6 +15,7 @@ import classnames from 'classnames';
 import topic from './index.module.scss';
 import { minus } from '@common/utils/calculate';
 import { parseContentData } from '../../utils';
+import { debounce } from '@common/utils/throttle-debounce';
 
 // 帖子内容
 export default inject('user')(
@@ -311,19 +312,19 @@ export default inject('user')(
         <div className={topic.bottomOperate}>
           <div
             className={classnames(topic.item, threadStore?.threadData?.isLike && topic.active)}
-            onClick={onLikeClick}
+            onClick={debounce(onLikeClick, 500)}
           >
             <Icon name="LikeOutlined"></Icon>
             <span>赞</span>
           </div>
           <div
             className={classnames(topic.item, threadStore?.threadData?.isFavorite && topic.active)}
-            onClick={onCollectionClick}
+            onClick={debounce(onCollectionClick, 500)}
           >
             <Icon name="CollectOutlined"></Icon>
             <span>收藏</span>
           </div>
-          <div className={classnames(topic.item)} onClick={onShareClick}>
+          <div className={classnames(topic.item)} onClick={debounce(onShareClick, 500)}>
             <Icon name="ShareAltOutlined"></Icon>
             <span>分享</span>
           </div>

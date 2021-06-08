@@ -10,20 +10,20 @@ export default class InviteStore {
   @observable totalPage = 0;
   @observable currentPage = 0;
 
-  @computed get isNoData () {
+  @computed get isNoData() {
     return this.currentPage >= this.totalPage;
   }
 
-  @action setInviteLoading (loading) {
+  @action setInviteLoading(loading) {
     this.inviteLoading = loading;
   }
 
   @action getInviteCode(router) {
     let inviteCode;
     if (typeof window === 'object') {
-      inviteCode = inviteCode || window?.sessionStorage?.getItem('inviteCode') || router?.query?.inviteCode || '';
+      inviteCode = this.inviteCode || window?.sessionStorage?.getItem('inviteCode') || router?.query?.inviteCode || '';
     }
-    return inviteCode || this.inviteCode;
+    return inviteCode;
   }
 
   @action setInviteCode(code) {
@@ -45,7 +45,7 @@ export default class InviteStore {
     this.currentPage = res.currentPage;
     this.inviteLoading = false;
     const listData = get(res, 'pageData.inviteUsersList', null);
-    this.inviteUsersList = this.inviteUsersList?.concat(listData) || listData;
+    this.inviteUsersList = page === 1 ? listData : this.inviteUsersList?.concat(listData);
   }
 
   @action

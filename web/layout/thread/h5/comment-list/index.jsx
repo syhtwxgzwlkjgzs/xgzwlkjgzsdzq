@@ -8,7 +8,7 @@ import { parseContentData } from '../../utils';
 import InputPopup from '../components/input-popup';
 import DeletePopup from '@components/thread-detail-pc/delete-popup';
 import goToLoginPage from '@common/utils/go-to-login-page';
-import { debounce } from '@common/utils/throttle-debounce.js';
+import { debounce } from '@common/utils/throttle-debounce';
 // 评论列表
 @inject('thread')
 @inject('comment')
@@ -151,7 +151,6 @@ class RenderCommentList extends React.Component {
   // 删除评论
   async deleteComment() {
     if (!this.commentData.id) return;
-    console.log('thread,comment',this.props.thread)
     const { success, msg } = await this.props.comment.delete(this.commentData.id, this.props.thread);
     this.setState({
       showDeletePopup: false,
@@ -167,9 +166,8 @@ class RenderCommentList extends React.Component {
     });
   }
 
-
   // 点击回复的删除
-  async replyDeleteClick(reply,comment) {
+  async replyDeleteClick(reply, comment) {
     this.commentData = comment;
     this.replyData = reply;
     this.setState({
@@ -181,10 +179,10 @@ class RenderCommentList extends React.Component {
   async replyDeleteComment() {
     if (!this.replyData.id) return;
 
-    const params = {}
+    const params = {};
     if (this.replyData && this.commentData) {
-      params.replyData = this.replyData;//本条回复信息
-      params.commentData = this.commentData;//回复对应的评论信息
+      params.replyData = this.replyData; //本条回复信息
+      params.commentData = this.commentData; //回复对应的评论信息
     }
     const { success, msg } = await this.props.comment.deleteReplyComment(params, this.props.thread);
     this.setState({
@@ -391,12 +389,13 @@ class RenderCommentList extends React.Component {
               <CommentList
                 data={val}
                 key={val.id}
+                likeClick={debounce(() => this.likeClick(val), 500)}
                 lickClick={debounce(() => this.likeClick(val), 1000)}
                 avatarClick={() => this.avatarClick(val)}
                 replyClick={() => this.replyClick(val)}
                 deleteClick={() => this.deleteClick(val)}
                 editClick={() => this.editClick(val)}
-                replyLikeClick={(reply) => this.replyLikeClick(reply, val)}
+                replyLikeClick={debounce((reply) => this.replyLikeClick(reply, val), 500)}
                 replyReplyClick={(reply) => this.replyReplyClick(reply, val)}
                 replyDeleteClick={(reply) => this.replyDeleteClick(reply, val)}
                 onCommentClick={() => this.onCommentClick(val)}
@@ -427,13 +426,11 @@ class RenderCommentList extends React.Component {
           onBtnClick={() => this.deleteComment()}
         ></DeletePopup>
 
-        {/*-------------------------------------------------------------*/}
         <DeletePopup
-            visible={this.state.showReplyDeletePopup}
-            onClose={() => this.setState({ showReplyDeletePopup: false })}
-            onBtnClick={() => this.replyDeleteComment()}
+          visible={this.state.showReplyDeletePopup}
+          onClose={() => this.setState({ showReplyDeletePopup: false })}
+          onBtnClick={() => this.replyDeleteComment()}
         />
-        {/*-------------------------------------------------------------*/}
 
         {/* 采纳弹层 */}
         {parseContent?.REWARD?.money && (

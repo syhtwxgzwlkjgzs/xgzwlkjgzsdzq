@@ -10,11 +10,12 @@ import xss from '@common/utils/xss';
 import ImageDisplay from '@components/thread/image-display';
 import classNames from 'classnames';
 import PostContent from '@components/thread/post-content';
+import { debounce } from '@common/utils/throttle-debounce';
 
 @observer
 class CommentList extends React.Component {
   constructor(props) {
-    console.log(props)
+    console.log(props);
     super(props);
     this.state = {
       isHideEdit: this.props.isHideEdit, // 隐藏评论编辑删除
@@ -168,7 +169,7 @@ class CommentList extends React.Component {
                   <div className={styles.commentTime}>{diffDate(this.props.data.createdAt)}</div>
                   <div className={styles.extraBottom}>
                     <div className={this.props?.data?.isLiked ? styles.commentLike : styles.commentLiked}>
-                      <span onClick={() => this.likeClick(canLike)}>
+                      <span onClick={debounce(() => this.likeClick(canLike), 500)}>
                         赞&nbsp;{this.props?.data?.likeCount > 0 ? this.props.data.likeCount : ''}
                       </span>
                     </div>

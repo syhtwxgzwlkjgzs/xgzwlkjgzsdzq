@@ -5,11 +5,13 @@ import Tideway from '@components/pop-topic';
 import ThreadCenterView from '@components/thread/ThreadCenterView';
 import NoData from '@components/no-data';
 import Copyright from '@components/copyright';
+import UserCenterFansPc from '@components/user-center/fans-pc';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import { withRouter } from 'next/router';
 
 @inject('index')
+@inject('user')
 @observer
 class PC extends React.Component {
   // 加载更多
@@ -18,6 +20,7 @@ class PC extends React.Component {
   renderRight = () => (
     <>
       <Tideway />
+      <UserCenterFansPc userId={this.props.user.id} />
       <Copyright />
     </>
   );

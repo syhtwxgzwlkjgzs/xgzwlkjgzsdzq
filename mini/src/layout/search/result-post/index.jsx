@@ -60,7 +60,7 @@ class SearchResultPostH5Page extends React.Component {
           showHeader={false}
       >
         <View className={styles.topBox}>
-          <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} isShowBottom={false} />
+          <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} isShowBottom={false} searchWhileTyping/>
         </View>
         {
           pageData?.map((item, index) => (

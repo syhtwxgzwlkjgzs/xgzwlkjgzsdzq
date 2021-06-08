@@ -12,18 +12,21 @@ import styles from './index.module.scss';
 @observer
 class InstantMessaging extends React.Component {
   state = {
-    dialogBoxRef: React.createRef(),
+    showEmoji: false,
   };
 
   render() {
-    const { messagesHistory = [], onSubmit, site } = this.props;
-    const { dialogBoxRef } = this.state;
-    const { platform } = site;
+    const { messagesHistory = [], onSubmit, site, dialogId, username } = this.props;
+    const { showEmoji } = this.state;
 
     return (
       <View className={styles.container}>
-        <DialogBox shownMessages={messagesHistory} dialogBoxRef={dialogBoxRef} platform={platform} />
-        <InteractionBox onSubmit={onSubmit} dialogBoxRef={dialogBoxRef} platform={platform} />
+        <DialogBox dialogId={dialogId} showEmoji={showEmoji} />
+        <InteractionBox username={username} dialogId={dialogId} showEmoji={showEmoji} setShowEmoji={(show) => {
+          this.setState({
+            showEmoji: show,
+          });
+        }} />
       </View>
     );
   }

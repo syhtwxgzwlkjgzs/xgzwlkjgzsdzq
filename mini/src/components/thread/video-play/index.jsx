@@ -66,6 +66,15 @@ const Index = ({
     }
   }
 
+  const onFullscreenChange = (e) => { // 该函数在进出全屏的时候各被调用一次
+    e && e.stopPropagation();
+    if(baselayout.videoFullScreenStatus === "") { // 第一次调用
+      baselayout.videoFullScreenStatus = "inFullScreen";
+    } else if(baselayout.videoFullScreenStatus === "inFullScreen") { //第二次调用
+      baselayout.videoFullScreenStatus = "offFullScreen";
+    }
+  }
+
   useEffect(() => {
     getElementRect(videoId.current).then(res => {
       setWidth(res?.width || 378);
@@ -80,6 +89,7 @@ const Index = ({
             className={styles.videoBox}
             onReady={onReady}
             onPlay={onPlay}
+            onFullscreenChange={onFullscreenChange}
             src={url}
             width={width}
             height={9 * (width) / 16 || '224'}
