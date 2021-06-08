@@ -3,7 +3,7 @@ import MessageAccount from '@components/message/message-account';
 import MessageIndex from '@components/message/message-index';
 import MessageThread from '@components/message/message-thread';
 import MessageFinancial from '@components/message/message-financial';
-import MessageChat from '@components/message/message-chat';
+import InstantMessaging from '@components/message/instant-messaging';
 
 const Index = ({ page, subPage, dialogId, username }) => {
   switch (page) {
@@ -16,7 +16,7 @@ const Index = ({ page, subPage, dialogId, username }) => {
     case 'financial':
       return <MessageFinancial />;
     case 'chat':
-      return <MessageChat dialogId={dialogId} username={username} />;
+      return <InstantMessaging dialogId={dialogId} username={username} />;
   }
 };
 

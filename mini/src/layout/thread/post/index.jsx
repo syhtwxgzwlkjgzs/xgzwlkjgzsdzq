@@ -57,7 +57,7 @@ class Index extends Component {
     const { params } = getCurrentInstance().router;
     const id = parseInt(params.id);
     if (id) { // 请求主题
-      this.setState({ threadId: id, postType: 'isEdit' })
+      this.setState({ threadId: id })
       this.setPostDataById(id);
     } else {
       // this.openSaveDraft(); // 现阶段，自动保存功能关闭
@@ -135,8 +135,8 @@ class Index extends Component {
         .replace(/<span.*?>(.*?)<\/span>/g, `$1`);
       ret.data.content.text = realText;
       threadPost.formatThreadDetailToPostData(ret.data);
-      this.setState({ postType: isDraft === 1 ? 'isDraft' : 'isEdit' });
-      // isDraft === 1 && this.openSaveDraft(); // 现阶段，自动保存功能关闭
+      this.setState({ postType: isDraft ? 'isDraft' : 'isEdit' });
+      // isDraft && this.openSaveDraft(); // 现阶段，自动保存功能关闭
     } else {
       // 请求失败，弹出错误消息
       this.postToast(ret.msg);
@@ -568,7 +568,13 @@ class Index extends Component {
 
   // 处理左上角按钮点击跳路由
   handlePageJump = async (canJump = false, url) => {
-    const { postData:{contentText} } = this.props.threadPost;
+    const { postType, threadId } = this.state;
+    // 已发布主题再编辑，不可保存草稿
+    if (postType === "isEdit") {
+      return Taro.redirectTo({ url: `/subPages/thread/index?id=${threadId}` });
+    }
+
+    const { postData: { contentText } } = this.props.threadPost;
     if (!canJump && contentText !== '') {
       this.setState({ showDraftOption: true });
       return
