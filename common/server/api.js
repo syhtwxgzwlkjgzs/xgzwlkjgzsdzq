@@ -140,11 +140,6 @@ http.interceptors.response.use((res) => {
       break;
     }
     default:  // 200 状态码
-      if (url) {
-        Router.replace({
-          url
-        });
-      }
       if (status === 200) {
         return Promise.resolve({
           code: data.Code,
@@ -152,6 +147,11 @@ http.interceptors.response.use((res) => {
           msg: data.Message,
         });
       }
+  }
+  if (url) {
+    Router.replace({
+      url
+    });
   }
 
   return Promise.resolve({
