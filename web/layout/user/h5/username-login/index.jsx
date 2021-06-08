@@ -34,11 +34,11 @@ class UsernameH5Login extends React.Component {
   loginErrorHandler = async (e) => {
     const { site } = this.props;
     // 跳转补充信息页
-    if (isExtFieldsOpen(site) && e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
-      this.props.commonLogin.needToCompleteExtraInfo = true;
-      this.props.router.push('/user/supplementary');
-      return;
-    }
+    // if (isExtFieldsOpen(site) && e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+    //   this.props.commonLogin.needToCompleteExtraInfo = true;
+    //   this.props.router.push('/user/supplementary');
+    //   return;
+    // }
 
     // 微信绑定
     if (e.Code === NEED_BIND_WEIXIN_FLAG) {
@@ -139,6 +139,7 @@ class UsernameH5Login extends React.Component {
             value={this.props.userLogin.password}
             placeholder="输入您的登录密码"
             onChange={this.handlePasswordChange}
+            onEnter={this.handleLoginButtonClick}
           />
           {/* 输入框 end */}
           {/* 登录按钮 start */}

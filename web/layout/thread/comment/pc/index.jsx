@@ -27,6 +27,7 @@ class CommentPCPage extends React.Component {
     this.state = {
       commentSort: true, // ture 评论从旧到新 false 评论从新到旧
       showDeletePopup: false, // 是否弹出删除弹框
+      showReplyDeletePopup:false, // 是否弹出回复删除弹框
       commentId: null, // 当前点击的commentid
     };
 
@@ -140,6 +141,39 @@ class CommentPCPage extends React.Component {
       });
       const { threadId } = this.props.comment;
       threadId && this.props.router.push(`/thread/${threadId}`);
+      return;
+    }
+    Toast.error({
+      content: msg,
+    });
+  }
+
+  // 点击回复的删除
+  async replyDeleteClick(reply,comment) {
+    this.commentData = comment;
+    this.replyData = reply;
+    this.setState({
+      showReplyDeletePopup: true,
+    });
+  }
+
+  //删除回复
+  async replyDeleteComment() {
+    if (!this.replyData.id) return;
+
+    const params = {}
+    if (this.replyData && this.commentData) {
+      params.replyData = this.replyData;//本条回复信息
+      params.commentData = this.commentData;//回复对应的评论信息
+    }
+    const { success, msg } = await this.props.comment.deleteReplyComment(params, this.props.thread);
+    this.setState({
+      showReplyDeletePopup: false,
+    });
+    if (success) {
+      Toast.success({
+        content: '删除成功',
+      });
       return;
     }
     Toast.error({
@@ -307,8 +341,9 @@ class CommentPCPage extends React.Component {
                   data={commentData}
                   likeClick={() => this.likeClick(commentData)}
                   replyClick={() => this.replyClick(commentData)}
-                  replyLikeClick={(reploy) => this.replyLikeClick(reploy, commentData)}
-                  replyReplyClick={(reploy) => this.replyReplyClick(reploy, commentData)}
+                  replyLikeClick={(reply) => this.replyLikeClick(reply, commentData)}
+                  replyReplyClick={(reply) => this.replyReplyClick(reply, commentData)}
+                  replyDeleteClick={(reply) => this.replyDeleteClick(reply, commentData)}
                   isHideEdit={true}
                   isFirstDivider={true}
                   isShowInput={this.state.commentId === commentData.id}
@@ -343,9 +378,16 @@ class CommentPCPage extends React.Component {
 
         {/* 删除弹层 */}
         <DeletePopup
-          visible={this.state.showDeletePopup}
-          onClose={() => this.setState({ showDeletePopup: false })}
-          onBtnClick={() => this.deleteComment()}
+            visible={this.state.showDeletePopup}
+            onClose={() => this.setState({ showDeletePopup: false })}
+            onBtnClick={() => this.deleteComment()}
+        ></DeletePopup>
+
+        {/* 删除回复弹层 */}
+        <DeletePopup
+          visible={this.state.showReplyDeletePopup}
+          onClose={() => this.setState({ showReplyDeletePopup: false })}
+          onBtnClick={() => this.replyDeleteComment()}
         ></DeletePopup>
       </div>
     );

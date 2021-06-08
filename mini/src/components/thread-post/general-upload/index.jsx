@@ -16,8 +16,7 @@ import { THREAD_TYPE } from '@common/constants/thread-post';
 
 export default inject('threadPost', 'site')(observer(({ type, threadPost, site, audioUpload }) => {
   const { postData, setPostData } = threadPost;
-  const { webConfig } = site;
-
+  const { webConfig, envConfig } = site;
   const localData = JSON.parse(JSON.stringify(postData));
 
   const { images, files, audio } = localData;
@@ -69,7 +68,7 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
       const tempFilePath = file.path || file.tempFilePath;
       const token = locals.get(constants.ACCESS_TOKEN_NAME);
       Taro.uploadFile({
-        url: `https://discuzv3-dev.dnspod.dev//apiv3/attachments`,
+        url: `${envConfig.COMMON_BASE_URL}/apiv3/attachments`,
         filePath: tempFilePath,
         name: 'file',
         header: {

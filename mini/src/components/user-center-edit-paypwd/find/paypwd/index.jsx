@@ -1,26 +1,44 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react';
+import Taro from '@tarojs/taro';
 import Button from '@discuzq/design/dist/components/button/index';
 import Input from '@discuzq/design/dist/components/input/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
-import Header from '@components/header';
 import styles from './index.module.scss';
 import CaptchaInput from '../../../user-center-edit-mobile/captcha-input';
 import VerifyCode from '../../../user-center-edit-mobile/verify-code';
 import { View, Text } from '@tarojs/components';
-
+import classNames from 'classnames';
+import throttle from '@common/utils/thottle.js';
 @inject('site')
+@inject('user')
+@inject('payBox')
 @observer
 class index extends Component {
 
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       list: [],
-      current_step: 'second', // 表示当前步骤
-      bind_mobile: null,
-      is_blur: true, // 表示是否失焦
-    }
+      currentStep: 'second', // 表示当前步骤
+      isBlur: true, // 表示是否失焦
+      isKeyBoardVisible: false, // 是否显示键盘
+      initTimeValue: null,
+      payPassword: null,
+      payPasswordConfirmation: null
+    };
+  }
+
+  initState = () => {
+    this.setState({
+      list: [],
+      currentStep: 'second', // 表示当前步骤
+      isBlur: true, // 表示是否失焦
+      isKeyBoardVisible: false, // 是否显示键盘
+      initTimeValue: null,
+      payPassword: null,
+      payPasswordConfirmation: null
+    })
   }
 
   updatePwd = (set_num, type) => {
@@ -28,7 +46,8 @@ class index extends Component {
     if (type == 'add') {
       let list_ = [...list];
       if (list.length >= 6) {
-        list_ = list_.join('').substring(0, 5).split('');
+        list_ = list_.join('').substring(0, 5)
+          .split('');
       }
       this.setState(
         {
@@ -37,6 +56,9 @@ class index extends Component {
         () => {
           if (this.state.list.length === 6) {
             // this.submitPwa();
+            this.setState({
+              isKeyBoardVisible: false
+            })
           }
         },
       );
@@ -49,77 +71,159 @@ class index extends Component {
 
   // 点击下一步
   handleStepBtn = () => {
-    this.setState({
-      current_step: 'second',
-      list: []
+    if (this.getDisabledWithButton()) return
+    const { list = [], payPassword, payPasswordConfirmation } = this.state
+    if (payPassword !== payPasswordConfirmation) {
+      Toast.error({
+        content: '两次密码输入有误',
+        hasMask: false,
+        duration: 1000,
+      });
+      this.initState()
+      return
+    }
+    const mobile = this.props?.user.originalMobile;
+    const code = list.join("")
+    this.props.payBox.forgetPayPwd({
+      mobile,
+      code,
+      payPassword,
+      payPasswordConfirmation
+    }).then(res => {
+      Toast.success({
+        content: "重置密码成功",
+        hasMask: false,
+        duration: 1000,
+      })
+      Taro.navigateTo({url: '/subPages/my/edit/index'})
+      this.initState()
+    }).catch((err) => {
+      Toast.error({
+        content: err.Msg || "重置密码失败",
+        hasMask: false,
+        duration: 1000,
+      })
+      this.initState();
     })
   }
 
   handleInputChange = (e) => {
     this.setState({
-      bind_mobile: e.target.value,
-      is_blur: false
-    })
+      payPassword: e.target.value,
+      isBlur: false,
+    });
+  }
+
+  handleInputChange1 = (e) => {
+    this.setState({
+      payPasswordConfirmation: e.target.value,
+      isBlur: false,
+    });
   }
 
   handleInputFocus = (e) => {
     this.setState({
-      is_blur: false
-    })
+      isBlur: false,
+      isKeyBoardVisible: false
+    });
   }
 
   handleInputBlur = (e) => {
     this.setState({
-      is_blur: true
-    })
+      payPassword: e.target.value,
+      isBlur: true,
+    });
   }
 
   handleInputFocus1 = () => {
     this.setState({
-      is_blur: false
-    })
+      isBlur: false,
+      isKeyBoardVisible: false
+    });
   }
 
   handleInputBlur1 = (e) => {
     this.setState({
-      is_blur: true
+      payPasswordConfirmation: e.target.value,
+      isBlur: true,
+    });
+  }
+
+  getVerifyCode = throttle(async ({ calback }) => {
+    let { captchaRandStr, captchaTicket } = await this.props.showCaptcha()
+    const mobile = this.props?.user.originalMobile;
+    this.props.payBox.sendSmsVerifyCode({ mobile, captchaRandStr, captchaTicket }).then(res => {
+      this.setState({
+        initTimeValue: res.interval,
+      }, () => {
+        if (calback && typeof calback === 'function') calback();
+      });
+    }).catch((err) => {
+      Toast.error({
+        content: err.Message || '获取验证码失败',
+        hasMask: false,
+        duration: 1000,
+      })
+      this.setState({
+        list: [],
+        initTimeValue: null
+      });
+      if (calback && typeof calback === 'function') calback(err);
+    })
+  }, 300)
+
+  // 点击切换弹出键盘事件
+  handleKeyBoardVisible = () => {
+    this.setState({
+      isKeyBoardVisible: !this.state.isKeyBoardVisible
     })
   }
 
-  getVerifyCode = ({ calback }) => {
-    if (calback && typeof calback === 'function') calback()
+  /**
+ * 获取按钮禁用状态
+ * @returns true 表示禁用 false表示不禁用
+ */
+  getDisabledWithButton = () => {
+    const { list = [], payPassword, payPasswordConfirmation } = this.state;
+    let disabled = false
+    disabled = !payPassword || !payPasswordConfirmation || list.length !== 6
+    return disabled
   }
 
   render() {
-    const { current_step, list = [], is_blur } = this.state
+    const { currentStep, list = [], isBlur, isKeyBoardVisible, initTimeValue, payPassword, payPasswordConfirmation } = this.state;
+    const mobile = this.props?.user.mobile;
     return (
-      <View>
-        <View className={styles.content}>
-          <Text className={styles.setTtile}>找回密码</Text>
+        <View id={styles.findPayPwdContent}>
+          <View className={styles.content}>
+            <Text className={styles.setTtile}>找回支付密码</Text>
+            <View className={styles.labelInfo}>
+              <View>
+                <Text className={styles.labelName}>手机号</Text>
+                <Text className={styles.labelValue} style={{ border: 'none' }}>{mobile}</Text>
+              </View>
+              <View>
+                <VerifyCode key={initTimeValue} initTimeValue={initTimeValue} key={currentStep} text={'发送验证码'} getVerifyCode={this.getVerifyCode} />
+              </View>
+            </View>
+            <View className={styles.bindCode}>
+              <Text>验证码</Text>
+              <CaptchaInput handleKeyBoardVisible={this.handleKeyBoardVisible} isKeyBoardVisible={isKeyBoardVisible} currentStep={currentStep} updatePwd={this.updatePwd} list={list} isBlur={isBlur} />
+            </View>
+          </View>
           <View className={styles.labelInfo}>
-            <View>
-              <Text className={styles.labelName}>手机号</Text>
-              <Text className={styles.labelValue} style={{ border: 'none' }}>18270****420</Text>
-            </View>
-            <View>
-              <VerifyCode key={current_step} text={"发送验证码"} getVerifyCode={this.getVerifyCode} />
-            </View>
+            <View className={styles.labelValue}><Input trim className={styles.input} value={payPassword} onChange={this.handleInputChange} onFocus={this.handleInputFocus} onBlur={this.handleInputBlur} mode="password" placeholder="设置新密码" type="number" maxLength={6} /></View>
           </View>
-          <View className={styles.bindCode}>
-            <Text>请输入短信验证码</Text>
-            <CaptchaInput current_step={current_step} updatePwd={this.updatePwd} list={list} is_blur={is_blur} />
+          <View className={styles.labelInfo}>
+            <View className={styles.labelValue}><Input trim className={styles.input} value={payPasswordConfirmation} onFocus={this.handleInputFocus1} onChange={this.handleInputChange1} onBlur={this.handleInputBlur1} mode="password" placeholder="重复新密码" type="number" maxLength={6} /></View>
+          </View>
+          <View className={classNames(styles.bottom, {
+            [styles.btnPosition]: !!isKeyBoardVisible,
+            [styles.bgBtnColor]: !this.getDisabledWithButton(),
+          })}>
+            <Button disabled={this.getDisabledWithButton()} full onClick={this.handleStepBtn} type={'primary'} className={styles.btn}>提交</Button>
           </View>
         </View>
-        <View className={styles.labelInfo}>
-          <View className={styles.labelValue}><Input onChange={this.handleInputChange} onFocus={this.handleInputFocus} onBlur={this.handleInputBlur} mode="password" placeholder="请输入新密码" /></View>
-        </View>
-        <View className={styles.labelInfo}>
-          <View className={styles.labelValue}><Input onFocus={this.handleInputFocus1} onChange={this.handleInputChange1} onBlur={this.handleInputBlur1} mode="password" placeholder="请重复输入新密码" /></View>
-        </View>
-        <View className={styles.bottom}>
-          <Button onClick={this.handleStepBtn} type={"primary"} className={styles.btn}>提交</Button>
-        </View>
-      </View>
     )
   }
 }

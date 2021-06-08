@@ -8,7 +8,7 @@ import DeletePopup from '@components/thread-detail-pc/delete-popup';
 import { Icon, Toast } from '@discuzq/design';
 import classnames from 'classnames';
 import goToLoginPage from '@common/utils/go-to-login-page';
-import { debounce } from '@common/utils/throttle-debounce.js'
+
 const typeMap = {
   101: 'IMAGE',
   102: 'VOICE',
@@ -36,6 +36,7 @@ class RenderCommentList extends React.Component {
       showCommentInput: false, // 是否弹出评论框
       commentSort: true, // ture 评论从旧到新 false 评论从新到旧
       showDeletePopup: false, // 是否弹出删除弹框
+      showReplyDeletePopup: false, // 是否弹出回复删除弹框
       placeholder: '写下我评论...', // 默认回复框placeholder内容
       commentId: null,
     };
@@ -137,6 +138,39 @@ class RenderCommentList extends React.Component {
     const { success, msg } = await this.props.comment.delete(this.commentData.id, this.props.thread);
     this.setState({
       showDeletePopup: false,
+    });
+    if (success) {
+      Toast.success({
+        content: '删除成功',
+      });
+      return;
+    }
+    Toast.error({
+      content: msg,
+    });
+  }
+
+  // 点击回复的删除
+  async replyDeleteClick(reply, comment) {
+    this.commentData = comment;
+    this.replyData = reply;
+    this.setState({
+      showReplyDeletePopup: true,
+    });
+  }
+
+  //删除回复
+  async replyDeleteComment() {
+    if (!this.replyData.id) return;
+
+    const params = {};
+    if (this.replyData && this.commentData) {
+      params.replyData = this.replyData; // 本条回复信息
+      params.commentData = this.commentData; // 回复对应的评论信息
+    }
+    const { success, msg } = await this.props.comment.deleteReplyComment(params, this.props.thread);
+    this.setState({
+      showReplyDeletePopup: false,
     });
     if (success) {
       Toast.success({
@@ -345,7 +379,7 @@ class RenderCommentList extends React.Component {
           )}
           <div className={comment.sort} onClick={() => this.onSortClick()}>
             <Icon className={comment.sortIcon} name="SortOutlined" size={14}></Icon>
-            <span className={comment.sortText}>{this.state.commentSort ? '评论从新到旧' : '评论从旧到新'}</span>
+            <span className={comment.sortText}>{this.state.commentSort ? '评论从旧到新' : '评论从新到旧'}</span>
           </div>
         </div>
 
@@ -359,18 +393,27 @@ class RenderCommentList extends React.Component {
           ></CommentInput>
         </div>
 
+        {/* 评论弹层 */}
+        {/* <InputPopup
+            visible={this.state.showCommentInput}
+            onClose={() => this.onClose()}
+            initValue={this.state.inputValue}
+            onSubmit={value => this.onPublishClick(value)}
+          ></InputPopup> */}
+
         <div className={comment.body}>
           {commentList.map((val, index) => (
             <div className={comment.commentItems} key={val.id || index}>
               <CommentList
                 data={val}
                 key={val.id}
-                likeClick={debounce(() => this.likeClick(val),300)}
+                likeClick={() => this.likeClick(val)}
                 replyClick={() => this.replyClick(val)}
                 deleteClick={() => this.deleteClick(val)}
                 editClick={() => this.editClick(val)}
-                replyLikeClick={debounce((reply) => this.replyLikeClick(reply, val),300)}
+                replyLikeClick={(reply) => this.replyLikeClick(reply, val)}
                 replyReplyClick={(reply) => this.replyReplyClick(reply, val)}
+                replyDeleteClick={(reply) => this.replyDeleteClick(reply, val)}
                 reportClick={() => this.reportClick(val)}
                 onCommentClick={() => this.onCommentClick(val)}
                 onSubmit={(val, imageList) => this.createReply(val, imageList)}
@@ -392,6 +435,13 @@ class RenderCommentList extends React.Component {
           onClose={() => this.setState({ showDeletePopup: false })}
           onBtnClick={() => this.deleteComment()}
         ></DeletePopup>
+
+        {/* 删除回复弹层 */}
+        <DeletePopup
+          visible={this.state.showReplyDeletePopup}
+          onClose={() => this.setState({ showReplyDeletePopup: false })}
+          onBtnClick={() => this.replyDeleteComment()}
+        />
 
         {/* 采纳弹层 */}
         {parseContent?.REWARD?.money && (

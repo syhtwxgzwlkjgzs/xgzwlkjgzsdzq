@@ -5,6 +5,7 @@ import IndexPCPage from '@layout/index/pc';
 import { readCategories, readStickList, readThreadList } from '@server';
 import { Toast } from '@discuzq/design';
 import HOCFetchSiteData from '../middleware/HOCFetchSiteData';
+import ViewAdapter from '@components/view-adapter';
 
 @inject('site')
 @inject('index')
@@ -15,7 +16,9 @@ class Index extends React.Component {
 
   state = {
     isError: false,
-    errorText: ''
+    errorText: '',
+    categoryError: false,
+    categoryErrorText: '',
   }
 
   page = 1;
@@ -62,8 +65,13 @@ class Index extends React.Component {
     const hasThreadsData = !!index.threads;
 
     if (!hasCategoriesData) {
-      this.props.index.getReadCategories();
+      try {
+        await this.props.index.getReadCategories();
+      } catch (error) {
+        this.setState({ categoryError: true, categoryErrorText: error })
+      }
     }
+
     if (!hasSticksData) {
       this.props.index.getRreadStickList(categoryIds);
     }
@@ -137,12 +145,11 @@ class Index extends React.Component {
   }
 
   render() {
-    const { site } = this.props;
-    const { platform } = site;
-    if (platform === 'pc') {
-      return <IndexPCPage dispatch={this.dispatch} isError={this.state.isError} errorText={this.state.errorText} />;
-    }
-    return <IndexH5Page dispatch={this.dispatch} isError={this.state.isError} errorText={this.state.errorText} />;
+    return <ViewAdapter
+            h5={<IndexH5Page dispatch={this.dispatch} isError={this.state.isError} errorText={this.state.errorText} />}
+            pc={<IndexPCPage dispatch={this.dispatch} {...this.state} />}
+            title=''
+          />;
   }
 }
 

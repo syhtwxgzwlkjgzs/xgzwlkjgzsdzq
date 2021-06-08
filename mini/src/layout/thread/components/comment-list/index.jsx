@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import { View, Text, Image } from '@tarojs/components';
@@ -9,10 +8,11 @@ import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import classNames from 'classnames';
 import ImageDisplay from '@components/thread/image-display';
-import RichText from '@discuzq/design/dist/components/rich-text/index';
 import { handleLink } from '@components/thread/utils';
 import Router from '@discuzq/sdk/dist/router';
 import PostContent from '@components/thread/post-content';
+import { debounce } from '@common/utils/throttle-debounce';
+import styles from './index.module.scss';
 import redPacketMini from '../../../../../../web/public/dzq-img/redpacket-mini.png';
 import coin from '../../../../../../web/public/dzq-img/coin.png';
 import ReplyList from '../reply-list/index';
@@ -62,6 +62,14 @@ class CommentList extends React.Component {
     typeof this.props.deleteClick === 'function' && this.props.deleteClick();
   }
 
+  // 点击回复删除
+  replyDeleteClick(data) {
+    this.setState({
+      replyId: data?.id,
+    });
+    typeof this.props.replyDeleteClick === 'function' && this.props.replyDeleteClick(data);
+  }
+
   // 点击评论编辑
   editClick() {
     typeof this.props.editClick === 'function' && this.props.editClick();
@@ -93,7 +101,9 @@ class CommentList extends React.Component {
 
   handleClick(e, node) {
     e && e.stopPropagation();
-    const url = handleLink(node);
+    const {url, isExternaLink } = handleLink(node)
+    if(isExternaLink) return
+    
     if (url) {
       Router.push({ url });
     } else {
@@ -185,7 +195,7 @@ class CommentList extends React.Component {
                   <View className={styles.commentTime}>{diffDate(this.props.data.createdAt)}</View>
                   <View className={styles.extraBottom}>
                     <View className={this.props?.data?.isLiked ? styles.commentLike : styles.commentLiked}>
-                      <Text onClick={() => this.likeClick(canLike)}>
+                      <Text onClick={debounce(() => this.likeClick(canLike), 500)}>
                         赞&nbsp;{this.props?.data?.likeCount > 0 ? this.props.data.likeCount : ''}
                       </Text>
                     </View>
@@ -201,7 +211,7 @@ class CommentList extends React.Component {
                       <View className={styles.extra}>
                         {/* {canEdit && <View className={styles.revise} onClick={() => this.editClick()}>编辑</View>} */}
                         {canHide && (
-                          <View className={styles.revise} onClick={() => this.deleteClick()}>
+                          <View className={styles.revise} onClick={debounce(() => this.deleteClick(), 500)}>
                             删除
                           </View>
                         )}
@@ -226,6 +236,7 @@ class CommentList extends React.Component {
                         avatarClick={() => this.reployAvatarClick(this.needReply[0])}
                         likeClick={() => this.replyLikeClick(this.needReply[0])}
                         replyClick={() => this.replyReplyClick(this.needReply[0])}
+                        deleteClick={() => this.replyDeleteClick(this.needReply[0])}
                         toCommentDetail={() => this.toCommentDetail()}
                       ></ReplyList>
                     ) : (
@@ -236,6 +247,7 @@ class CommentList extends React.Component {
                           avatarClick={() => this.reployAvatarClick(val)}
                           likeClick={() => this.replyLikeClick(val)}
                           replyClick={() => this.replyReplyClick(val)}
+                          deleteClick={() => this.replyDeleteClick(val)}
                           toCommentDetail={() => this.toCommentDetail()}
                         ></ReplyList>
                       ))

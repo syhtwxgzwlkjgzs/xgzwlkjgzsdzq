@@ -9,21 +9,49 @@ import InteractionBox from './interaction-box';
 import styles from './index.module.scss';
 
 @inject('site')
+@inject('message')
 @observer
 class InstantMessaging extends React.Component {
   state = {
-    dialogBoxRef: React.createRef(),
+    showEmoji: false,
+    dialogId: '',
   };
 
+  componentDidMount() {
+    this.updateDialogId(this.props.dialogId);
+  }
+
+  componentWillUnmount() {
+    this.props.message.clearMessage();
+  }
+
+  updateDialogId(dialogId) {
+    this.setState({
+      dialogId
+    });
+  }
+
   render() {
-    const { messagesHistory = [], onSubmit, site } = this.props;
-    const { dialogBoxRef } = this.state;
-    const { platform } = site;
+    const { username } = this.props;
+    const { showEmoji, dialogId } = this.state;
 
     return (
       <View className={styles.container}>
-        <DialogBox shownMessages={messagesHistory} dialogBoxRef={dialogBoxRef} platform={platform} />
-        <InteractionBox onSubmit={onSubmit} dialogBoxRef={dialogBoxRef} platform={platform} />
+        <DialogBox dialogId={dialogId} showEmoji={showEmoji} />
+        <InteractionBox
+          username={username}
+          showEmoji={showEmoji}
+          dialogId={dialogId}
+          showEmoji={showEmoji}
+          setShowEmoji={(show) => {
+            this.setState({
+              showEmoji: show,
+            });
+          }}
+          updateDialogId={(dialogId) => {
+            this.updateDialogId(dialogId);
+          }}
+        />
       </View>
     );
   }

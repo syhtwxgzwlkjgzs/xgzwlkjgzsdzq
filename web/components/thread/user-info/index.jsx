@@ -39,11 +39,11 @@ export default function UserInfo(props) {
   const isPc = props.platform === 'pc';
 
   return (
-    <div className={classNames(styles.contianer, !props.hideInfoPopip && styles.cursor)}>
+    <div className={styles.contianer}>
       <Avatar
         isShowUserInfo={!props.hideInfoPopip && props.platform === 'pc'}
         userId={props.userId}
-        className={styles.avatar}
+        className={classNames(styles.avatar, !props.hideInfoPopip && styles.cursor)}
         circle={true}
         image={props.avatar}
         name={props.name || ''}
@@ -52,7 +52,7 @@ export default function UserInfo(props) {
 
       <div className={styles.right}>
         <div className={styles.info}>
-          <div className={classNames(styles.name, props.platform === 'pc' && styles.pc)}>{props.name}</div>
+          <div className={classNames(styles.name, props.platform === 'pc' && styles.pc, !props.hideInfoPopip && styles.cursor)} onClick={(e) => props.onClick(e)}>{props.name}</div>
           {props.groupName && <div className={`${styles.groupName} ${tagsNumber > 3 ? styles.groupNameText : ''}`}>{props.groupName}</div>}
         </div>
 

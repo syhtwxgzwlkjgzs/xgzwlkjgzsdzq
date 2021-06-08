@@ -75,16 +75,21 @@
       }
     }
     .userNameOrTeam {
+      display: flex;
+      align-items: center;
       line-height: rem($font-line-height-small);
-      >span:nth-child(1) {
+      .userNickname {
+        display: block;
         font-size: rem($font-size-large);
         font-weight: 600;
         color: $text-color-primary;
         margin-right: rem($margin-2n);
+        @include text-ellipsis();
       }
-      >span:nth-child(2) {
+      .groupName {
         font-size: rem($font-size-small);
         color: $text-color-regular;
+        flex-shrink: 0;
       }
     }
     .userBtn {

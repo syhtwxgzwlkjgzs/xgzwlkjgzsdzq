@@ -70,14 +70,14 @@ class SearchResultPage extends React.Component {
   render() {
     const { keyword } = this.state;
 
-    const { searchTopics, searchUsers, searchThreads } = this.props.search;
+    const { searchTopics, searchUsers, searchThreads, searchTopicsError, searchUsersError, searchThreadsError } = this.props.search;
     const { pageData: topicsPageData } = searchTopics || {};
     const { pageData: usersPageData } = searchUsers || {};
     const { pageData: threadsPageData } = searchThreads || {};
 
     return (
       <BaseLayout allowRefresh={false} showHeader={false}>
-        <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
+        <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} searchWhileTyping/>
 
         <SidebarPanel
           title="用户" 
@@ -85,6 +85,8 @@ class SearchResultPage extends React.Component {
           isLoading={!usersPageData}
           noData={!usersPageData?.length}
           platform='h5'
+          isError={searchUsersError.isError}
+          errorText={searchUsersError.errorText}
         >
           {
             usersPageData?.length && <SearchUsers data={usersPageData} onItemClick={this.onUserClick} />
@@ -98,6 +100,8 @@ class SearchResultPage extends React.Component {
           noData={!threadsPageData?.length}
           platform='h5'
           className={threadsPageData?.length && styles.bottom}
+          isError={searchThreadsError.isError}
+          errorText={searchThreadsError.errorText}
         >
           {
             threadsPageData?.length &&<SearchPosts data={threadsPageData.filter((_, index) => index < 3)} onItemClick={this.onPostClick} />
@@ -110,6 +114,8 @@ class SearchResultPage extends React.Component {
           isLoading={!topicsPageData}
           noData={!topicsPageData?.length}
           platform='h5'
+          isError={searchTopicsError.isError}
+          errorText={searchTopicsError.errorText}
         >
           {
             topicsPageData?.length && <SearchTopics data={topicsPageData} onItemClick={this.onTopicClick} />

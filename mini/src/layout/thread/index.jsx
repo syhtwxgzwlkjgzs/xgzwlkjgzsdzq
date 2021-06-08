@@ -14,7 +14,6 @@ import Icon from '@discuzq/design/dist/components/icon/index';
 import Input from '@discuzq/design/dist/components/input/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import Button from '@discuzq/design/dist/components/button/index';
-import Header from '@components/header';
 import goToLoginPage from '@common/utils/go-to-login-page';
 
 import ReportPopup from './components/report-popup';
@@ -23,14 +22,14 @@ import DeletePopup from './components/delete-popup';
 import MorePopup from './components/more-popup';
 import InputPopup from './components/input-popup';
 import throttle from '@common/utils/thottle';
-import xss from '@common/utils/xss';
 
 import threadPay from '@common/pay-bussiness/thread-pay';
 import RewardPopup from './components/reward-popup';
 import RenderThreadContent from './detail/content';
 import RenderCommentList from './detail/comment-list';
 import classNames from 'classnames';
-import { debounce } from '../../components/thread/utils';
+import { debounce } from '@common/utils/throttle-debounce';
+
 @inject('site')
 @inject('user')
 @inject('thread')
@@ -54,7 +53,6 @@ class ThreadH5Page extends React.Component {
       // inputValue: '', // 评论内容
       inputText: '请输入内容', // 默认回复框placeholder内容
       toView: '', // 接收元素id用来滚动定位
-      position: 0,
     };
 
     this.perPage = 5;
@@ -62,6 +60,7 @@ class ThreadH5Page extends React.Component {
     this.commentDataSort = true;
 
     // 滚动定位相关属性
+    this.position = 0;
     this.threadBodyRef = React.createRef();
     this.commentDataRef = React.createRef();
     this.nextPosition = 0;
@@ -142,23 +141,17 @@ class ThreadH5Page extends React.Component {
     if (this.flag) {
       this.flag = !this.flag;
     } else {
-      if (this.state.position <= 0) {
-        this.setState({ position: this.nextPosition + 1 });
+      if (this.position <= 0) {
+        this.position = this.nextPosition + 1;
       } else {
-        this.setState({ position: this.nextPosition - 1 });
+        this.position = this.nextPosition - 1;
       }
       this.flag = !this.flag;
     }
   }
 
-  // 保持当前位置
-  keepCurrentPosition = () => {
-    this.setState({ position: this.currentPosition });
-  };
-
   // 点击收藏icon
   async onCollectionClick() {
-    this.keepCurrentPosition();
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
       goToLoginPage({ url: '/subPages/user/wx-auth/index' });
@@ -223,7 +216,6 @@ class ThreadH5Page extends React.Component {
 
   // 点击评论
   onInputClick() {
-    this.keepCurrentPosition();
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
       goToLoginPage({ url: '/subPages/user/wx-auth/index' });
@@ -239,7 +231,6 @@ class ThreadH5Page extends React.Component {
 
   // 点击更多icon
   onMoreClick = () => {
-    this.keepCurrentPosition();
     // this.setState({
     //   text: !this.state.text,
     // });
@@ -531,7 +522,6 @@ class ThreadH5Page extends React.Component {
 
   // 点击评论的回复
   replyClick(comment) {
-    this.keepCurrentPosition();
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
       goToLoginPage({ url: '/subPages/user/wx-auth/index' });
@@ -550,7 +540,6 @@ class ThreadH5Page extends React.Component {
 
   // 点击回复的回复
   replyReplyClick(reply, comment) {
-    this.keepCurrentPosition();
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
       goToLoginPage({ url: '/subPages/user/wx-auth/index' });
@@ -771,7 +760,7 @@ class ThreadH5Page extends React.Component {
           ref={this.hreadBodyRef}
           id="hreadBodyId"
           scrollY
-          scrollTop={this.state.position}
+          scrollTop={this.position}
           lowerThreshold={50}
           onScrollToLower={() => this.scrollToLower()}
           scrollIntoView={this.state.toView}
@@ -784,12 +773,12 @@ class ThreadH5Page extends React.Component {
               <RenderThreadContent
                 store={threadStore}
                 fun={fun}
-                onLikeClick={() => this.onLikeClick()}
+                onLikeClick={debounce(() => this.onLikeClick(), 500)}
                 onOperClick={(type) => this.onOperClick(type)}
-                onCollectionClick={() => this.onCollectionClick()}
+                onCollectionClick={debounce(() => this.onCollectionClick(), 500)}
                 // onShareClick={() => this.onShareClick()}
                 onReportClick={() => this.onReportClick()}
-                onContentClick={() => this.onContentClick()}
+                onContentClick={debounce(() => this.onContentClick(), 500)}
                 onRewardClick={() => this.onRewardClick()}
                 onTagClick={() => this.onTagClick()}
                 onPayClick={() => this.onPayClick()}
@@ -807,7 +796,6 @@ class ThreadH5Page extends React.Component {
                       router={this.props.router}
                       sort={(flag) => this.onSortChange(flag)}
                       onEditClick={(comment) => this.onEditClick(comment)}
-                      keepCurrentPosition={() => this.keepCurrentPosition()}
                       replyReplyClick={(reply, comment) => this.replyReplyClick(reply, comment)}
                       replyClick={(comment) => this.replyClick(comment)}
                     ></RenderCommentList>
@@ -856,7 +844,7 @@ class ThreadH5Page extends React.Component {
                 <Icon
                   color={this.props.thread?.isFavorite ? styleVar['--color-primary'] : ''}
                   className={footer.icon}
-                  onClick={() => this.onCollectionClick()}
+                  onClick={debounce(() => this.onCollectionClick(), 500)}
                   size="20"
                   name="CollectOutlinedBig"
                 ></Icon>

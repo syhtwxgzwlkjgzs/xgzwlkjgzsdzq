@@ -80,7 +80,7 @@ export const defaultIcon = [
     type: THREAD_TYPE.redPacket,
   },
   {
-    name: 'DollarLOutlined', // 付费
+    name: 'GoldCoinOutlined', // 付费
     active: activeColor,
     id: defaultOperation.pay,
     menu: [
@@ -128,6 +128,11 @@ export const attachIcon = [
     name: 'QuestionOutlined',
     active: activeColor,
     type: THREAD_TYPE.reward,
+  },
+  {
+    name: 'AnonymityOutlined',
+    active: activeColor,
+    type: THREAD_TYPE.anonymity,
   },
 ];
 

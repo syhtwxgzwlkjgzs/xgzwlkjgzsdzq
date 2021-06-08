@@ -153,7 +153,7 @@ class SearchPCPage extends React.Component {
   // 中间 -- 潮流话题 活跃用户 热门内容
   renderContent = () => {
 
-    const { indexTopics, indexUsers, indexThreads } = this.props.search;
+    const { indexTopics, indexUsers, indexThreads, indexTopicsError, indexUsersError, indexThreadsError } = this.props.search;
     const userId = this.props.user?.userInfo?.id
 
     const { pageData: topicsPageData } = indexTopics || {};
@@ -170,6 +170,8 @@ class SearchPCPage extends React.Component {
             noData={!topicsPageData?.length}
             onShowMore={this.redirectToSearchResultTopic}
             icon={{ type: 1, name: 'StrongSharpOutlined' }}
+            isError={indexTopicsError.isError}
+            errorText={indexTopicsError.errorText}
           >
             <div className={styles.topic}>
               {topicsPageData?.map((item, index) => (
@@ -187,24 +189,27 @@ class SearchPCPage extends React.Component {
             noData={!usersPageData?.length}
             onShowMore={this.redirectToSearchResultUser}
             icon={{ type: 2, name: 'MemberOutlined' }}
+            isError={indexUsersError.isError}
+            errorText={indexUsersError.errorText}
           >
             <ActiveUsersMore data={usersPageData} onItemClick={this.onUserClick} onFollow={this.onFollow} userId={userId} />
           </SidebarPanel>
         </div>
 
         <div ref={this.hotTopicRef}>
-          <div className={styles.postTitle}>
-            <SectionTitle
-              title="热门内容"
-              icon={{ type: 3, name: 'HotOutlined' }}
-              onShowMore={this.redirectToSearchResultPost}
-            />
-          </div>
-          <div className={styles.postContent}>
-            {
-              threadsPageData?.length ? threadsPageData.map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />) : <LoadingView data={threadsPageData} />
-            }
-          </div>
+          <SidebarPanel 
+            type='normal'
+            isLoading={!threadsPageData}
+            noData={!threadsPageData?.length}
+            title="热门内容"
+            icon={{ type: 3, name: 'HotOutlined' }}
+            onShowMore={this.redirectToSearchResultPost}
+            mold='plane'
+            isError={indexThreadsError.isError}
+            errorText={indexThreadsError.errorText}
+          >
+            {threadsPageData?.map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />)}
+          </SidebarPanel>
         </div>
       </div>
     )
@@ -218,24 +223,12 @@ class SearchPCPage extends React.Component {
           onScroll={ this.handleScroll }
           jumpTo={this.state.position}
           pageName="search"
+          showRefresh={false}
         >
           { this.renderContent() }
         </BaseLayout>
     );
   }
-}
-
-const LoadingView = ({data}) => {
-  if (data) {
-    return (
-      <Nodata className={styles.noData} />
-    )
-  }
-  return (
-    <div className={styles.loading}>
-      <Spin type="spinner" />
-    </div>
-  )
 }
 
 export default withRouter(SearchPCPage);

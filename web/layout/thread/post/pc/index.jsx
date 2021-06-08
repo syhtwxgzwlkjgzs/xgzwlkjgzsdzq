@@ -131,6 +131,8 @@ class ThreadPCPage extends React.Component {
               {/* 设置的金额相关展示 */}
               <MoneyDisplay
                 pc
+                canEditReward={this.props.canEditReward}
+                canEditRedpacket={this.props.canEditRedpacket}
                 payTotalMoney={threadPost.payTotalMoney}
                 redTotalMoney={threadPost.redpacketTotalAmount}
                 postData={postData} setPostData={this.props.setPostData}
@@ -179,7 +181,7 @@ class ThreadPCPage extends React.Component {
             </div>
             <ClassifyPopup pc />
             <div className={styles.footer}>
-              <Button type="info" onClick={() => this.props.handleSubmit(true)}>保存至草稿箱</Button>
+              <Button type="info" disabled={this.props.postType === "isEdit"} onClick={() => this.props.handleSubmit(true)}>保存至草稿箱</Button>
               <Button type="primary" onClick={() => this.props.handleSubmit()}>发布</Button>
             </div>
           </div>

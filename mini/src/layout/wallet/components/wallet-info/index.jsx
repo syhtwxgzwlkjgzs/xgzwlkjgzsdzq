@@ -17,6 +17,10 @@ class WalletInfo extends React.Component {
     this.state = {};
   }
 
+  moneyFormat = (freezeAmount, availableAmount) => {
+    return (parseFloat(freezeAmount) + parseFloat(availableAmount)).toFixed(2);
+  }
+
   render() {
     return (
         <View className={styles.container}>
@@ -25,7 +29,7 @@ class WalletInfo extends React.Component {
                 {
                   this.props.walletData?.freezeAmount && this.props.walletData?.availableAmount
                     ? <View className={styles.moneyNum}>
-                    {Number(this.props.walletData?.freezeAmount) + Number(this.props.walletData?.availableAmount)}
+                    {this.moneyFormat(this.props.walletData?.freezeAmount, this.props.walletData?.availableAmount)}
                   </View> : <View className={styles.moneyNum}></View>
                 }
             </View>

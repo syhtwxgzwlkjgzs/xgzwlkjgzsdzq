@@ -165,7 +165,7 @@ export default class index extends Component {
           {/* 上传封面图 */}
           <div className={styles.userCenterupload} onClick={this.handleBackgroundUpload}>
             <Icon name="UploadingOutlined" size={12} className={styles.userCenteruploadIcon} />
-            上传封面图
+            上传封面图片
           </div>
           {/* 返回我的主页 */}
           <div

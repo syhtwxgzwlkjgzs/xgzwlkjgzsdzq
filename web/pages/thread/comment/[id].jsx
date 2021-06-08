@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'next/router';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { readCommentDetail } from '@server';
 import CommentH5Page from '@layout/thread/comment/h5';
 import CommentPCPage from '@layout/thread/comment/pc';
@@ -8,9 +8,11 @@ import ErrorPCPage from '@layout/error/pc';
 import ErrorH5Page from '@layout/error/h5';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import Router from '@discuzq/sdk/dist/router';
+import ViewAdapter from '@components/view-adapter';
 
 @inject('site')
 @inject('comment')
+@observer
 class CommentDetail extends React.Component {
   static async getInitialProps(ctx) {
     const id = ctx?.query?.id;
@@ -100,7 +102,8 @@ class CommentDetail extends React.Component {
         <ErrorPCPage text={this.state.serverErrorMsg} />
       );
     }
-    return platform === 'h5' ? <CommentH5Page /> : <CommentPCPage />;
+
+    return <ViewAdapter h5={<CommentH5Page />} pc={<CommentPCPage />} />;
   }
 }
 

@@ -4,9 +4,13 @@ import { Tag } from '@discuzq/design';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 import { defaultOperation, paidOption } from '@common/constants/const';
 import { plus } from '@common/utils/calculate';
+import { inject, observer } from 'mobx-react';
+import { withRouter } from 'next/router';
 
-export default function MoneyDisplay(props) {
+function MoneyDisplay(props) {
   const {
+    canEditRedpacket,
+    canEditReward,
     postData = {},
     onAttachClick = () => { },
     onDefaultClick = () => {},
@@ -30,7 +34,7 @@ export default function MoneyDisplay(props) {
       )}
       {/* 红包 */}
       {postData.redpacket.price && (
-        <Tag closeable
+        <Tag closeable={canEditRedpacket}
           onClose={() => {
             onDefaultClick({
               id: defaultOperation.redpacket,
@@ -51,7 +55,7 @@ export default function MoneyDisplay(props) {
       )}
       {/* 悬赏问答内容标识 */}
       {(postData.rewardQa.value && postData.rewardQa.times) && (
-        <Tag closeable
+        <Tag closeable={canEditReward}
           onClose={() => onAttachClick({ type: THREAD_TYPE.reward }, { rewardQa: {} }) }
           onClick={() => {
             onAttachClick({ type: THREAD_TYPE.reward });
@@ -65,3 +69,5 @@ export default function MoneyDisplay(props) {
     </div>
   );
 }
+
+export default inject('threadPost')(observer(withRouter(MoneyDisplay)));

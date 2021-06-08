@@ -9,6 +9,7 @@ import CommentInput from '../comment-input/index';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import ImageDisplay from '@components/thread/image-display';
+import { debounce } from '@common/utils/throttle-debounce';
 
 @observer
 export default class ReplyList extends React.Component {
@@ -45,6 +46,9 @@ export default class ReplyList extends React.Component {
     });
     typeof this.props.replyClick === 'function' && this.props.replyClick();
   }
+  deleteClick() {
+    typeof this.props.deleteClick === 'function' && this.props.deleteClick();
+  }
 
   generatePermissions(data = {}) {
     return {
@@ -57,7 +61,7 @@ export default class ReplyList extends React.Component {
   }
 
   render() {
-    const { canLike } = this.generatePermissions(this.props.data);
+    const { canLike, canDelete } = this.generatePermissions(this.props.data);
 
     return (
       <div className={styles.replyList}>
@@ -117,7 +121,7 @@ export default class ReplyList extends React.Component {
             <div className={styles.extraBottom}>
               <div
                 className={classnames(styles.commentLike, this.props?.data?.isLiked && styles.active)}
-                onClick={() => this.likeClick(canLike)}
+                onClick={debounce(() => this.likeClick(canLike), 500)}
               >
                 <Icon className={styles.icon} name="LikeOutlined"></Icon>
                 赞&nbsp;{this.props?.data?.likeCount > 0 ? this.props.data.likeCount : ''}
@@ -132,6 +136,12 @@ export default class ReplyList extends React.Component {
                 <Icon className={styles.icon} name="MessageOutlined"></Icon>
                 <span>回复</span>
               </div>
+              {canDelete && (
+                  <div className={styles.replyDelete} onClick={() => this.deleteClick()}>
+                    <Icon className={styles.icon} name="DeleteOutlined"></Icon>
+                    <span>删除</span>
+                  </div>
+              )}
             </div>
           </div>
 

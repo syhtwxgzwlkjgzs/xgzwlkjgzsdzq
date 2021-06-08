@@ -30,6 +30,7 @@ const Index = (props) => {
     header = null,
     left = null,
     children = null,
+    contentHeader = null,
     right = null,
     footer = null,
     onSearch,
@@ -96,24 +97,26 @@ const Index = (props) => {
     <div className={styles.container}>
       {(header && header({ ...props })) || <Header onSearch={onSearch} />}
       <List {...props} className={styles.list} wrapperClass={styles.wrapper}>
-        <div className={styles.headerbox}>
-          <div className={styles.userHeader}>
-            <div className={styles.headImgWrapper}>
-              <UserCenterHeaderImage isOtherPerson={isOtherPerson} />
-              {/* 背景图加载状态 */}
-              {isUploadBackgroundUrl && (
-                <div className={styles.uploadBgUrl}>
-                  <div className={styles.uploadCon}>
-                    <Icon name="UploadingOutlined" size={12} />
-                    <span className={styles.uploadText}>上传中...</span>
-                  </div>
+        {
+          (contentHeader && contentHeader({ ...props }))
+          || <div className={styles.headerbox}>
+              <div className={styles.userHeader}>
+                <div className={styles.headImgWrapper}>
+                  <UserCenterHeaderImage isOtherPerson={isOtherPerson} />
+                  {/* 背景图加载状态 */}
+                  {isUploadBackgroundUrl && (
+                    <div className={styles.uploadBgUrl}>
+                      <div className={styles.uploadCon}>
+                        <Icon name="UploadingOutlined" size={12} />
+                        <span className={styles.uploadText}>上传中...</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
+                <UserCenterHead handleSetBgLoadingStatus={handleSetBgLoadingStatus} platform='pc' isOtherPerson={isOtherPerson} />
+              </div>
             </div>
-            <UserCenterHead handleSetBgLoadingStatus={handleSetBgLoadingStatus} platform='pc' isOtherPerson={isOtherPerson} />
-          </div>
-        </div>
-
+        }
         <div className={styles.content}>
           {
             showLeft && (

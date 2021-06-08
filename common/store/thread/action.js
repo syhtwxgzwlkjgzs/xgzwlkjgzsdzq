@@ -5,6 +5,7 @@ import {
   operateThread,
   readCommentList,
   readThreadDetail,
+  readThreadAttachmentUrl,
   shareThread,
   readUser,
   createReports,
@@ -76,6 +77,18 @@ class ThreadAction extends ThreadStore {
     const { code, data } = ret;
     if (code === 0) this.setThreadData(data);
     return ret;
+  }
+
+  /**
+   * 获取帖子内的附件url
+   * @param {number} id 帖子id
+   * @param {number} 帖子中的附件id
+   * @returns 附件url
+   */
+  @action
+  async fetchThreadAttachmentUrl(threadId, attachmentsId) {
+    const params = { threadId, attachmentsId };
+    return await readThreadAttachmentUrl({ params });
   }
 
   @action
@@ -385,13 +398,13 @@ class ThreadAction extends ThreadStore {
       this.threadData.likeReward.shareCount = this.threadData?.likeReward?.shareCount - 0 + 1;
 
       // 更新列表相关数据
-      IndexStore.updateAssignThreadInfo(threadId, {
+      IndexStore?.updateAssignThreadInfo(threadId, {
         updateType: 'share',
       });
-      SearchStore.updateAssignThreadInfo(threadId, {
+      SearchStore?.updateAssignThreadInfo(threadId, {
         updateType: 'share',
       });
-      TopicStore.updateAssignThreadInfo(threadId, {
+      TopicStore?.updateAssignThreadInfo(threadId, {
         updateType: 'share',
       });
 

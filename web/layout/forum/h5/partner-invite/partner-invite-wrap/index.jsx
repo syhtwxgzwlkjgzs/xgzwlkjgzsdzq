@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
 import List from '@components/list';
-import BaseLayout from '@components/base-layout';
+import BaseLayout from '@components/user-center-base-laout-pc';
 import layout from './index.module.scss';
 
 @inject('site')
@@ -15,7 +15,7 @@ import layout from './index.module.scss';
 @observer
 class PartnerInviteWrap extends React.Component {
   render() {
-    const { site, children, renderRight } = this.props;
+    const { site, children, renderRight, contentHeader } = this.props;
     const { platform } = site;
     if (platform === 'h5') {
       return (
@@ -28,6 +28,7 @@ class PartnerInviteWrap extends React.Component {
     return (
     <BaseLayout
       right={ renderRight }
+      contentHeader={ contentHeader }
     >
       { children }
     </BaseLayout>

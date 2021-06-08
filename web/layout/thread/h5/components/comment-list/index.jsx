@@ -10,10 +10,12 @@ import xss from '@common/utils/xss';
 import ImageDisplay from '@components/thread/image-display';
 import classNames from 'classnames';
 import PostContent from '@components/thread/post-content';
+import { debounce } from '@common/utils/throttle-debounce';
 
 @observer
 class CommentList extends React.Component {
   constructor(props) {
+    console.log(props);
     super(props);
     this.state = {
       isHideEdit: this.props.isHideEdit, // 隐藏评论编辑删除
@@ -71,6 +73,11 @@ class CommentList extends React.Component {
     typeof this.props.replyReplyClick === 'function' && this.props.replyReplyClick(data);
   }
 
+  // 点击回复删除
+  replyDeleteClick(data) {
+    typeof this.props.replyDeleteClick === 'function' && this.props.replyDeleteClick(data);
+  }
+
   reployAvatarClick(data) {
     typeof this.props.reployAvatarClick === 'function' && this.props.reployAvatarClick(data);
   }
@@ -126,13 +133,14 @@ class CommentList extends React.Component {
         </div>
         <div className={styles.content}>
           <div className={styles.commentListAvatar} onClick={() => this.avatarClick()}>
+            {/*头像和昵称*/}
             <Avatar
               image={this.props.data?.user?.avatar}
               name={this.props.data?.user?.nickname || this.props.data?.user?.userName || ''}
               circle={true}
             ></Avatar>
           </div>
-
+          {/*评论内容*/}
           <div className={styles.commentListContent}>
             <div className={styles.commentListContentText}>
               <div className={styles.commentListName}>
@@ -165,7 +173,7 @@ class CommentList extends React.Component {
                   <div className={styles.commentTime}>{diffDate(this.props.data.createdAt)}</div>
                   <div className={styles.extraBottom}>
                     <div className={this.props?.data?.isLiked ? styles.commentLike : styles.commentLiked}>
-                      <span onClick={() => this.likeClick(canLike)}>
+                      <span onClick={debounce(() => this.likeClick(canLike), 500)}>
                         赞&nbsp;{this.props?.data?.likeCount > 0 ? this.props.data.likeCount : ''}
                       </span>
                     </div>
@@ -206,6 +214,7 @@ class CommentList extends React.Component {
                         avatarClick={() => this.reployAvatarClick(this.needReply[0])}
                         likeClick={() => this.replyLikeClick(this.needReply[0])}
                         replyClick={() => this.replyReplyClick(this.needReply[0])}
+                        deleteClick={() => this.replyDeleteClick(this.needReply[0])}
                         toCommentDetail={() => this.toCommentDetail()}
                       ></ReplyList>
                     ) : (
@@ -216,6 +225,7 @@ class CommentList extends React.Component {
                           avatarClick={() => this.reployAvatarClick(val)}
                           likeClick={() => this.replyLikeClick(val)}
                           replyClick={() => this.replyReplyClick(val)}
+                          deleteClick={() => this.replyDeleteClick(val)}
                           toCommentDetail={() => this.toCommentDetail()}
                         ></ReplyList>
                       ))

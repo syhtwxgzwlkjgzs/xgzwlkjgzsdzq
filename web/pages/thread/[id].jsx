@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'next/router';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { readThreadDetail, readCommentList } from '@server';
 import ThreadH5Page from '@layout/thread/h5';
 import ThreadPCPage from '@layout/thread/pc';
@@ -8,10 +8,12 @@ import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import Router from '@discuzq/sdk/dist/router';
 import ErrorPCPage from '@layout/error/pc';
 import ErrorH5Page from '@layout/error/h5';
+import ViewAdapter from '@components/view-adapter';
 
 @inject('site')
 @inject('thread')
 @inject('user')
+@observer
 class Detail extends React.Component {
   static async getInitialProps(ctx) {
     const id = ctx?.query?.id;
@@ -161,7 +163,7 @@ class Detail extends React.Component {
       );
     }
 
-    return platform === 'h5' ? <ThreadH5Page /> : <ThreadPCPage />;
+    return <ViewAdapter h5={<ThreadH5Page />} pc={<ThreadPCPage />} title={this.props?.thread?.title || ''} />;
   }
 }
 

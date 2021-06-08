@@ -11,6 +11,7 @@ import ImageDisplay from '@components/thread/image-display';
 import RichText from '@discuzq/design/dist/components/rich-text/index';
 import { handleLink } from '@components/thread/utils';
 import Router from '@discuzq/sdk/dist/router';
+import { debounce } from '@common/utils/throttle-debounce';
 
 @observer
 export default class ReplyList extends React.Component {
@@ -24,6 +25,9 @@ export default class ReplyList extends React.Component {
   }
   replyClick() {
     typeof this.props.replyClick === 'function' && this.props.replyClick();
+  }
+  deleteClick() {
+    typeof this.props.likeClick === 'function' && this.props.deleteClick();
   }
 
   generatePermissions(data = {}) {
@@ -46,7 +50,9 @@ export default class ReplyList extends React.Component {
 
   handleClick(e, node) {
     e && e.stopPropagation();
-    const url = handleLink(node);
+    const {url, isExternaLink } = handleLink(node)
+    if(isExternaLink) return
+
     if (url) {
       Router.push({ url });
     } else {
@@ -55,7 +61,7 @@ export default class ReplyList extends React.Component {
   }
 
   render() {
-    const { canLike } = this.generatePermissions(this.props.data);
+    const { canLike, canDelete } = this.generatePermissions(this.props.data);
 
     return (
       <View className={styles.replyList}>
@@ -115,13 +121,27 @@ export default class ReplyList extends React.Component {
               <View className={styles.replyTime}>{diffDate(this.props.data.createdAt)}</View>
               <View className={styles.extraBottom}>
                 <View className={this.props?.data?.isLiked ? styles.replyLike : styles.replyLiked}>
-                  <Text onClick={() => this.likeClick(canLike)}>
+                  <Text onClick={debounce(() => this.likeClick(canLike), 500)}>
                     赞&nbsp;{this.props?.data?.likeCount === 0 ? '' : this.props.data.likeCount}
                   </Text>
                 </View>
                 <View className={styles.replyReply}>
                   <Text onClick={() => this.replyClick()}>回复</Text>
                 </View>
+                {canDelete && (
+                  <View className={styles.replyReply}>
+                    <Text onClick={debounce(() => this.deleteClick(), 500)}>删除</Text>
+                  </View>
+                )}
+
+                {/*                <View className={styles.replyReply}>
+                   {canEdit && <View className={styles.revise} onClick={() => this.editClick()}>编辑</View>}
+                  {canDelete && (
+                    <View  onClick={() => this.replyDeleteClick()}>
+                      {canDelete}
+                    </View>
+                  )}
+                </View>*/}
               </View>
             </View>
           )}

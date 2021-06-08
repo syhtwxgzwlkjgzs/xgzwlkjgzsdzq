@@ -13,6 +13,7 @@ import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import ImageDisplay from '@components/thread/image-display';
 import PostContent from '@components/thread/post-content';
+import { debounce } from '@common/utils/throttle-debounce';
 
 @observer
 class CommentList extends React.Component {
@@ -87,6 +88,14 @@ class CommentList extends React.Component {
     });
 
     typeof this.props.replyReplyClick === 'function' && this.props.replyReplyClick(data);
+  }
+
+  // 点击回复删除
+  replyDeleteClick(data) {
+    this.setState({
+      replyId: data?.id,
+    });
+    typeof this.props.replyDeleteClick === 'function' && this.props.replyDeleteClick(data);
   }
 
   reployAvatarClick(data) {
@@ -186,7 +195,7 @@ class CommentList extends React.Component {
                     <div className={styles.extraBottom}>
                       <div
                         className={classnames(styles.commentLike, this.props?.data?.isLiked && styles.active)}
-                        onClick={() => this.likeClick(canLike)}
+                        onClick={debounce(() => this.likeClick(canLike), 500)}
                       >
                         <Icon className={styles.icon} name="LikeOutlined"></Icon>
                         赞&nbsp;{this.props?.data?.likeCount > 0 ? this.props.data.likeCount : ''}
@@ -260,6 +269,7 @@ class CommentList extends React.Component {
                         avatarClick={() => this.reployAvatarClick(this.needReply[0])}
                         likeClick={() => this.replyLikeClick(this.needReply[0])}
                         replyClick={() => this.replyReplyClick(this.needReply[0])}
+                        deleteClick={() => this.replyDeleteClick(this.needReply[0])}
                         toCommentDetail={() => this.toCommentDetail()}
                         onSubmit={(value, imageList) => this.onSubmit(value, imageList)}
                         isShowInput={this.state.replyId && this.state.replyId === this.needReply[0].id}
@@ -272,6 +282,7 @@ class CommentList extends React.Component {
                           avatarClick={() => this.reployAvatarClick(val)}
                           likeClick={() => this.replyLikeClick(val)}
                           replyClick={() => this.replyReplyClick(val)}
+                          deleteClick={() => this.replyDeleteClick(val)}
                           toCommentDetail={() => this.toCommentDetail()}
                           onSubmit={(value, imageList) => this.onSubmit(value, imageList)}
                           isShowInput={this.state.replyId && this.state.replyId === val.id}

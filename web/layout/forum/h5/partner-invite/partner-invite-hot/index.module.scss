@@ -1,6 +1,7 @@
 @import '@common/styles/index.scss';
 
 .hot{
+  background-color: $white;
   padding: rem($padding-4n);
   padding-top: 0;
 
@@ -17,7 +18,7 @@
 .pc_hot_title {
   padding: 0 rem($padding-6n);
   border-radius: rem($border-radius-small);
-  background: var(--color-white);
+  background: $white;
 }
 .spinner {
   width: 100%;
@@ -26,10 +27,10 @@
   align-items: center;
   color: $text-color-placeholder;
   height: rem(60);
-  background: var(--color-white);
+  background: $white;
 }
 .threadContent {
   border-radius: rem($border-radius-small);
   padding: $padding-2n $padding-6n 0;
-  margin-bottom: rem(16);
+  margin-bottom: rem($margin-4n);
 }
