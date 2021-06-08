@@ -6,10 +6,11 @@ import Popup from '@discuzq/design/dist/components/popup/index';
 import { Button, View } from '@tarojs/components';
 import { miniLogin } from '@server';
 import setAccessToken from '@common/utils/set-access-token';
-import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus } from '@common/store/login/util';
+import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus, isExtFieldsOpen } from '@common/store/login/util';
 import Page from '@components/page';
 import { getParamCode, getUserProfile } from '../common/utils'
 import layout from './index.module.scss';
+import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 
 const NEED_BIND_OR_REGISTER_USER = -7016;
 @inject('site')
@@ -74,6 +75,14 @@ class MiniAuth extends React.Component {
         });
         return;
       }
+      // 注册信息补充
+      const { site } = this.props;
+      if (isExtFieldsOpen(site) && resp.code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+        this.props.commonLogin.needToCompleteExtraInfo = true;
+        redirectTo({ url: '/subPages/user/supplementary/index' });
+        return;
+      }
+
       throw {
         Code: resp.code,
         Message: resp.msg,

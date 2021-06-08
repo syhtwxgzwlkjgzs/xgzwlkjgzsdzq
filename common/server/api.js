@@ -13,7 +13,7 @@ import { handleError } from '@discuzq/sdk/dist/api/utils/handle-error';
 
 let globalToast = null;
 const api = apiIns({
-  baseURL: ENV_CONFIG.COMMOM_BASE_URL && ENV_CONFIG.COMMOM_BASE_URL !== '' ? ENV_CONFIG.COMMOM_BASE_URL : isServer() ? '' : window.location.origin,
+  baseURL: ENV_CONFIG.COMMON_BASE_URL && ENV_CONFIG.COMMON_BASE_URL !== '' ? ENV_CONFIG.COMMON_BASE_URL : isServer() ? '' : window.location.origin,
   timeout: isServer() ? 2000 : 0,
   // 200 到 504 状态码全都进入成功的回调中
   validateStatus(status) {

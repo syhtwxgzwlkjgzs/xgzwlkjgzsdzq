@@ -1,11 +1,11 @@
 import React from 'react';
 import UserCenterEditAccountPwd from '../../../../components/user-center-edit-account-pwd';
-import { View } from '@tarojs/components';
+import Page from '@components/page';
 
 export default function index() {
   return (
-    <View>
+    <Page>
       <UserCenterEditAccountPwd />
-    </View>
+    </Page>
   )
 }

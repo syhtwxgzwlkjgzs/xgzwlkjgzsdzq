@@ -13,7 +13,9 @@ import Router from '@discuzq/sdk/dist/router';
 export const TopicItem = ({ data, onClick = noop }) => {
     const click = useCallback((e, node) => {
       e && e.stopPropagation();
-      const url = handleLink(node)
+      const {url, isExternaLink } = handleLink(node)
+      if(isExternaLink) return
+      
       if (url) {
         Router.push({url}) 
       } else {

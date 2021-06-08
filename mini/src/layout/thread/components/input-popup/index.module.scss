@@ -93,13 +93,16 @@
   // position: absolute;
   // left: 0;
   // bottom: 50px;
-  height: 218px;
+  // height: 218px;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: $zindex-dialog;
   overflow-y: scroll;
+  background: $white;
+  padding-bottom: constant(safe-area-inset-bottom); ///兼容 IOS<11.2/
+  padding-bottom: env(safe-area-inset-bottom); ///兼容 IOS>11.2/
   
   :global {
     .dzq-toolbar-emoji {

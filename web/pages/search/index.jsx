@@ -39,9 +39,7 @@ class Index extends React.Component {
     const { platform } = this.props.site || {};
 
     if (platform === 'pc') {
-      search.setIndexTopics(null);
-      search.setIndexUsers(null);
-      search.setIndexThreads(null);
+      search.resetIndexData();
     } else {
       serverSearch && serverSearch.indexTopics && search.setIndexTopics(serverSearch.indexTopics);
       serverSearch && serverSearch.indexUsers && search.setIndexUsers(serverSearch.indexUsers);

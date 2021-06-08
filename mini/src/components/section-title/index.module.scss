@@ -18,9 +18,10 @@
   justify-content: space-between;
   align-items: center;
   padding: $padding-4n 0;
-  border-bottom: 1px solid var(--border-line-color);
+  // border-bottom: 1px solid var(--border-line-color);
   box-sizing: border-box;
   background-color: $white;
+  height: rem(54);
   .title {
     font-size: $font-size-middle;
   }
@@ -31,6 +32,7 @@
   color: var(--color-text-primary);
   margin-left: $padding-2n;
 }
+
 .left {
   display: flex;
   align-items: center;
@@ -65,9 +67,10 @@
 .num {
   font-size: $font-size-label;
   color: var(--color-text-secondary);
-  margin-left: $margin-2n;
+  margin-left: $margin-3n;
   line-height: $font-line-height-primary;
 }
+
 .text {
   font-size: $font-size-label;
   color: $text-color-regular;

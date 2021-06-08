@@ -7,13 +7,14 @@ import layout from './index.module.scss';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
 import { NEED_BIND_WEIXIN_FLAG, NEED_BIND_PHONE_FLAG } from '@common/store/login/user-login-store';
-import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
+import { BANNED_USER, REVIEWING, REVIEW_REJECT, isExtFieldsOpen } from '@common/store/login/util';
 import { get } from '@common/utils/get';
 import { genMiniScheme } from '@server';
 import Protocol from '../components/protocol';
 import browser from '../../../../../common/utils/browser';
 import PcBodyWrap from '../components/pc-body-wrap';
-import goToLoginPage from '../../../../../common/utils/go-to-login-page';
+
+import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 
 @inject('site')
 @inject('user')
@@ -31,6 +32,14 @@ class UsernameH5Login extends React.Component {
   };
 
   loginErrorHandler = async (e) => {
+    const { site } = this.props;
+    // 跳转补充信息页
+    if (isExtFieldsOpen(site) && e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+      this.props.commonLogin.needToCompleteExtraInfo = true;
+      this.props.router.push('/user/supplementary');
+      return;
+    }
+
     // 微信绑定
     if (e.Code === NEED_BIND_WEIXIN_FLAG) {
       const { wechatEnv, platform } = this.props.site;
@@ -130,6 +139,7 @@ class UsernameH5Login extends React.Component {
             value={this.props.userLogin.password}
             placeholder="输入您的登录密码"
             onChange={this.handlePasswordChange}
+            onEnter={this.handleLoginButtonClick}
           />
           {/* 输入框 end */}
           {/* 登录按钮 start */}

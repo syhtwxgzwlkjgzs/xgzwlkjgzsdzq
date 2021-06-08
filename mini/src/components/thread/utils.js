@@ -1,6 +1,9 @@
 import { createContext } from 'react';
 import Taro from '@tarojs/taro';
 
+//URL正则
+const urlReg = /^((https?|ftp|file):\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+
 export const ThreadCommonContext = createContext();
 
 export const noop = () => {};
@@ -11,8 +14,9 @@ export const filterClickClassName = (dom) => {
   const blacklistHTML = ['img'];
   // const whitelist = [];
   const { className = '', localName = '' } = dom;
-  const blacklistFilter = blacklistClass.filter(item => className.indexOf(item) !== -1);
-  if (blacklistFilter.length && blacklistHTML.indexOf(localName) !== -1) { // TODO 点击头像暂时跳转帖子详情
+  const blacklistFilter = blacklistClass.filter((item) => className.indexOf(item) !== -1);
+  if (blacklistFilter.length && blacklistHTML.indexOf(localName) !== -1) {
+    // TODO 点击头像暂时跳转帖子详情
     return true;
   }
   if (blacklistFilter.length || blacklistHTML.indexOf(localName) !== -1) {
@@ -33,33 +37,42 @@ export const debounce = (func, wait) => {
     }, wait);
     if (callNow) func.apply(context, args);
   };
-}
+};
 
 // 处理附件的数据
 export const handleAttachmentData = (data) => {
   const newData = { text: data?.text || '' };
   const values = Object.values(data?.indexes || {});
   values.forEach((item) => {
-    let { tomId } = item;
+    let { tomId, threadId } = item;
     // 防止后台返回的字段类型不对
-    tomId = `${tomId}`
-    if (tomId === '101') { // 图片
+    tomId = `${tomId}`;
+    if (tomId === '101') {
+      // 图片
       newData.imageData = item.body;
-    } else if (tomId === '102') { // 音频
+    } else if (tomId === '102') {
+      // 音频
       newData.audioData = item.body;
-    } else if (tomId === '103') { // 视频
+    } else if (tomId === '103') {
+      // 视频
       newData.videoData = item.body;
-    } else if (tomId === '104') { // 商品
+    } else if (tomId === '104') {
+      // 商品
       newData.goodsData = item.body;
-    } else if (tomId === '105') { // 问答
+    } else if (tomId === '105') {
+      // 问答
       newData.qaData = item.body;
-    } else if (tomId === '106') { // 红包
+    } else if (tomId === '106') {
+      // 红包
       newData.redPacketData = item.body;
-    } else if (tomId === '107') { // 悬赏
+    } else if (tomId === '107') {
+      // 悬赏
       newData.rewardData = item.body;
-    } else if (tomId === '108') { // 附件
+    } else if (tomId === '108') {
+      // 附件
       newData.fileData = item.body;
     }
+    newData.threadId = threadId;
   });
 
   return newData;
@@ -67,16 +80,32 @@ export const handleAttachmentData = (data) => {
 
 export const extensionList = [
   '7Z',
-  'AI', 'APK',
-  'CAD', 'CDR',
-  'DOC', 'DOCX',
-  'EPS', 'EXE', 'IPA',
-  'MP3', 'MP4', 'PDF', 'PPT', 'PSD', 'RAR', 'TXT', 'XLS', 'XLSX', 'ZIP', 'JPG', 'WAV',
+  'AI',
+  'APK',
+  'CAD',
+  'CDR',
+  'DOC',
+  'DOCX',
+  'EPS',
+  'EXE',
+  'IPA',
+  'MP3',
+  'MP4',
+  'PDF',
+  'PPT',
+  'PSD',
+  'RAR',
+  'TXT',
+  'XLS',
+  'XLSX',
+  'ZIP',
+  'JPG',
+  'WAV',
 ];
 
 export const isPromise = (obj) => {
   return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';
-}
+};
 
 /* dispatch 类型常量 */
 export const ON_LIKE = 'ON_LIKE'; // 点赞事件
@@ -103,40 +132,51 @@ export const randomStr = (len = 16) => {
   return str;
 };
 
-export const getElementRect = async (eleId = '', delay = 200) => new Promise((resovle, reject) => {
-  const t = setTimeout(() => {
-    clearTimeout(t);
+export const getElementRect = async (eleId = '', delay = 200) =>
+  new Promise((resovle, reject) => {
+    const t = setTimeout(() => {
+      clearTimeout(t);
 
-    Taro.createSelectorQuery()
-      .select(`#${eleId}`)
-      .boundingClientRect((rect) => {
-        if (rect) {
-          resovle(rect);
-        } else {
-          // reject('获取不到元素');
-          resovle({ width: 378 });
-        }
-      })
-      .exec();
-  }, delay);
-});
+      Taro.createSelectorQuery()
+        .select(`#${eleId}`)
+        .boundingClientRect((rect) => {
+          if (rect) {
+            resovle(rect);
+          } else {
+            // reject('获取不到元素');
+            resovle({ width: 378 });
+          }
+        })
+        .exec();
+    }, delay);
+  });
 
-export const handleLink = (e) => {
-  const href = e?.attribs?.href
+export const handleLink = (node) => {
+  const href = node?.attribs?.href;
   if (href) {
-    const urls = href.split('/')
-    let url = '/subPages'
-    urls?.filter(item => item).forEach((item, index, arr) => {
-      if (index !== arr.length - 1) {
-        url += `/${item}`
-      } else {
-        url += `/index?id=${item}`
-      }
-    })
+    // 处理外部链接
+    const isExternaLink = urlReg.test(href);
+    if (isExternaLink) {
+      Taro.setClipboardData({
+        data: href,
+      });
+      return { url: '', isExternaLink: true };
+    }
 
-    return url
+    const urls = href.split('/');
+    let url = '/subPages';
+    urls
+      ?.filter((item) => item)
+      .forEach((item, index, arr) => {
+        if (index !== arr.length - 1) {
+          url += `/${item}`;
+        } else {
+          url += `/index?id=${item}`;
+        }
+      });
+
+    return { url };
   }
 
-  return ''
-}
-
+  return { url: '' };
+};
