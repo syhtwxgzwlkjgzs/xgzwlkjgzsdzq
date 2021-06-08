@@ -68,7 +68,7 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
       const tempFilePath = file.path || file.tempFilePath;
       const token = locals.get(constants.ACCESS_TOKEN_NAME);
       Taro.uploadFile({
-        url: `${envConfig.COMMOM_BASE_URL}/apiv3/attachments`,
+        url: `${envConfig.COMMON_BASE_URL}/apiv3/attachments`,
         filePath: tempFilePath,
         name: 'file',
         header: {
