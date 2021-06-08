@@ -257,7 +257,7 @@ class ThreadPostAction extends ThreadPostStore {
     const params = {
       title, categoryId, content: {
         text: emojiFormatForCommit(contentText).replace(/\n/g, '<br />')
-          .replace(/@(.*)<\/p>/g, '@$1 </p>'),
+          .replace(/@([^@<]+)<\/p>/g, '@$1 </p>'),
       },
     };
     if (position.address) params.position = position;
