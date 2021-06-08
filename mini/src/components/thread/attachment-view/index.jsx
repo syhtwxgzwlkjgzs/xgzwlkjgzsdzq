@@ -88,7 +88,7 @@ const Index = ({
           })
         },
         fail: function (error) {
-          setErrorMsg("下载链接无效");
+          setErrorMsg(error.errMsg);
           console.error(error.errMsg)
         },
         complete: function () {
@@ -118,7 +118,6 @@ const Index = ({
             success: function (res) {
               Taro.getClipboardData({
                 success: function (res) {
-                  // setSuccessMsg("下载链接已复制到剪贴板");
                 }
               })
             }

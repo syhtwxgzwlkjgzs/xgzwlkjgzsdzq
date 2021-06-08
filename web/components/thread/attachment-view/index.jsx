@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import { Icon, Toast } from '@discuzq/design';
 import { extensionList, isPromise, noop } from '../utils';
+import { copyToClipboard } from '@common/utils/copyToClipboard';
 
 import styles from './index.module.scss';
 
@@ -71,9 +72,14 @@ const Index = ({
     }
   };
 
-  const onPreviewer = (url) => {
+  const onLinkShare = (item) => {
     if (!isPay) {
-      window.open(url);
+      if(!item?.url) return;
+      copyToClipboard(item.url);
+      Toast.success({
+        content: '链接复制成功',
+        duration: 1000,
+      });
     } else {
       onPay();
     }
@@ -108,8 +114,10 @@ const Index = ({
           </div>
 
           <div className={styles.right}>
-            {/* <span className={styles.span} onClick={() => onPreviewer(item.url)}>浏览</span> */}
-            <span className={styles.span} onClick={() => onDownLoad(item)}>下载</span>
+            <span className={styles.span} onClick={() => onLinkShare(item)}>链接</span>
+            <div className={styles.label}>
+              <span className={styles.span} onClick={() => onDownLoad(item)}>下载</span>
+            </div>
           </div>
         </div>
       </div>
