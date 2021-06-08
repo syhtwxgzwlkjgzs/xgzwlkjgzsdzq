@@ -10,19 +10,17 @@ export default class InviteStore {
   @observable totalPage = 0;
   @observable currentPage = 0;
 
-  @computed get isNoData () {
+  @computed get isNoData() {
     return this.currentPage >= this.totalPage;
   }
 
-  @action setInviteLoading (loading) {
+  @action setInviteLoading(loading) {
     this.inviteLoading = loading;
   }
 
   @action getInviteCode(router) {
     let inviteCode;
     if (typeof window === 'object') {
-      console.log('invite coee');
-      console.log(router.query.inviteCode);
       inviteCode = this.inviteCode || window?.sessionStorage?.getItem('inviteCode') || router?.query?.inviteCode || '';
     }
     return inviteCode;
