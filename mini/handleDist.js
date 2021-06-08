@@ -2,6 +2,7 @@ const fs = require('fs'),
   util = require('util'),
   cp = require('child_process'),
   path = require('path');
+const miniConfig = require('./src/app.config');
 
 (async () => {
   // 检查dist目标中是否有标记文件，如无则继续执行
@@ -36,9 +37,20 @@ const fs = require('fs'),
   });
 
 
-  // 分包中的wxss文件添加对分包中common.wxss的引用
-  fs.writeFile('./dist/subPages/thread/selectProduct/index.wxss', '', (error) => {});
-  fs.writeFile('./dist/subPages/thread/selectAt/index.wxss', '', (error) => {});
+  // 给没有index.wxss的子页面创建index.wxss文件
+  const subPages = miniConfig.subPackages[0].pages;
+  subPages.forEach((page) => {
+    const subPageWxss = `./dist/subPages/${page.substring(0, page.length - 6)}/index.wxss`;
+    try {
+      fs.accessSync(subPageWxss);
+    } catch(e) {
+      fs.writeFile(subPageWxss, '', (error) => {});
+      console.log(`${subPageWxss} 成功创建！`)
+    }
+  });
+
+
+  // 分包子页面中的wxss文件添加对分包中common.wxss的引用
   function subPagesAddWxss(url) {
     const ext = '.wxss';
     fs.readdir(url, function (err, files) {

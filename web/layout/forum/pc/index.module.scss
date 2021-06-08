@@ -6,7 +6,7 @@
 // 模块标题
 .mode_title {
   font-size: $font-size-base;
-  line-height: 18px;
+  line-height: $font-line-height-xs;
   color: $text-color-secondary;
 }
 // 模块文本
@@ -30,14 +30,14 @@
   padding: $padding-2n $padding-4n;
   display: flex;
   .user_label_item{
+    @include text-ellipsis;
     display: flex;
     align-items: center;
     flex: 1;
     text-align: center;
     font-size: $font-size-base;
-    line-height: 18px;
+    line-height: $font-line-height-xs;
     color: $text-color-regular;
-    @include text-ellipsis;
   }
 }
 // 用户信息内容一栏
@@ -50,12 +50,12 @@
   padding: $padding-2n $padding-4n;
   border-bottom: $border-solid-1;
   .user_value_item {
+    @include text-ellipsis;
     display: flex;
     align-items: center;
     flex: 1;
     line-height: $font-line-height-base;
     color: $text-color-primary;
-    @include text-ellipsis;
     span {
       @include text-ellipsis;
     }
@@ -63,19 +63,21 @@
       border-radius: $border-radius-circle;
       width: 38px;
       height: 38px;
-      line-height: 38px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       flex-shrink: 0;
     }
     .user_value_name {
-      padding-left: $padding-4n;
       @include text-ellipsis;
+      padding-left: $padding-4n;
     }
   }
 }
 
 .container {
   width: 100%;
-  background-color: var(--color-white);
+  background-color: $white;
   box-sizing: border-box;
   padding: $padding-6n;
   margin-bottom: $margin-4n;
@@ -107,7 +109,7 @@
 .my_permission {
   position: relative;
   @mixin item {
-    padding: $padding-2n 14px;
+    padding: $padding-2n $padding-14;
   }
   @mixin scrollbar_forum {
     &::-webkit-scrollbar {
@@ -150,7 +152,7 @@
     @include item;
     font-weight: normal;
     font-size: $font-size-base;
-    line-height: 18px;
+    line-height: $font-line-height-xs;
     text-align: center;
     color: $text-color-regular;
     border: $border-solid-1;
@@ -164,7 +166,7 @@
   .plate_tr {
     height: 48px;
     .plate_td {
-      padding: 14px;;
+      padding: $padding-14;
     }
   }
   .my_permission_common {
@@ -224,7 +226,6 @@
     align-items: center;
     justify-content: center;
     border: $border-solid-1;
-    // border-right: none;
     border-bottom: none;
   }
   .permission_common_scroll {
@@ -259,4 +260,7 @@
     bottom: 0;
     @include scroll_border;
   }
+}
+.content_header {
+  min-height: 10px;
 }

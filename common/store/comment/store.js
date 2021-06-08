@@ -18,6 +18,11 @@ class CommentStore {
   @computed get isReady() {
     return !!this.commentDetail?.id;
   }
+
+  // 内容
+  @computed get content() {
+    return this.commentDetail?.content;
+  }
 }
 
 export default CommentStore;

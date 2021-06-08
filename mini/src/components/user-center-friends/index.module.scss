@@ -8,7 +8,8 @@
   justify-content: space-between;
   align-items: center;
   flex-shrink: 0;
-  padding: rem($padding-4n);
+  padding: rem($padding-4n) 0;
+  margin: 0 $margin-4n;
 }
 
 .friendInfo {

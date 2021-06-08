@@ -1,6 +1,6 @@
 @import '@common/styles/index.scss';
 @mixin content {
-  padding: rem(48) rem($padding-6n);;
+  padding: rem($padding-6n * 2) rem($padding-6n);;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,16 +11,8 @@
   font-size: rem($font-size-large);
   line-height: rem($font-line-height-large);
   text-align: left;
-  color: var(--color-text-primary);
+  color: $text-color-primary;
   place-self: flex-start;
-}
-@mixin banner {
-  height: rem(140);
-  text-align: center;
-  background-color: $primary-color;
-  img {
-    margin-top: rem(67);
-  }
 }
 @mixin input {
   width: 100%;
@@ -36,7 +28,6 @@
     border: none;
     padding: 0;
     height: auto;
-    // height: rem(22);
     line-height: rem($font-line-height-base);
     border-radius: 0;
     -webkit-tap-highlight-color: transparent;
@@ -48,16 +39,9 @@
   :global(.dzq-input__icon){
     position: relative;
     font-size: rem($font-size-middle) !important;
-    color: var(--color-disabled2);
-    width: rem(20);
-    height: rem(20);
-    line-height: rem(20);
-    &:hover {
-      color: var(--color-disabled2);
-    }
-    &:active {
-      color: $primary-color;
-    }
+    width: rem(24);
+    height: rem(24);
+    line-height: rem($font-line-height-base);
   }
 }
 @mixin passwordInput {
@@ -68,20 +52,20 @@
 @mixin button {
   width: 100%;
   height: rem(42);
-  margin-top: rem(32);
+  margin-top: rem($margin-4n * 2);
   font-size: rem($font-size-middle);
   padding: rem($padding-10) 0;
   box-sizing: border-box;
-  color: var(--color-white);
-  background: var(--color-primary);
-  border: var(--color-primary);
+  color: $white;
+  background: $primary-color;
+  border: $primary-color;
   &:active{
-    background: var(--color-primary6);
-    border-color: var(--color-primary6);
+    background: $primary-color6;
+    border-color: $primary-color6;
   }
   &:global(.is-disabled){
-    background-color: var(--color-disabled);
-    border-color: var(--color-disabled);
+    background-color: $disabled-color;
+    border-color: $disabled-color;
   }
 }
 @mixin functionalRegion {
@@ -94,7 +78,7 @@
   }
 }
 @mixin otherLoginText {
-  margin-top: rem(32);
+  margin-top: rem($margin-4n * 2);
   font-size: rem($font-size-small);
   text-align: center;
   line-height: rem($font-line-height-middle);
@@ -110,18 +94,19 @@
   margin: 0 rem($margin-4n);
   width: rem(40);
   height: rem(40);
-  line-height: rem(38);
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   background: $comment-bg-color;
 }
 @mixin titleTips {
   place-self: flex-start;
   font-size: rem($font-size-middle);
-  margin: rem(32) 0;
+  margin: rem($margin-4n * 2) 0;
   line-height: rem($font-line-height-large);
   text-align: left;
-  color: var(--color-text-primary);
+  color: $text-color-primary;
   display: flex;
   flex-direction: column;
   img {
@@ -169,10 +154,10 @@
   width: 1100px;
   border-radius: $border-radius-small;
   background: $white;
-  box-shadow: 0 0 8px $border-shadow-color2;
-  margin: 60px auto 0;
+  box-shadow: $border-shadow-color-8;
+  margin: $margin-10 * 6 auto 0;
   text-align: center;
-  padding-bottom: 50px;
+  padding-bottom: $padding-10 * 5;
   min-height: calc(100vh - 198px);
 }
 @mixin pc_content {
@@ -185,22 +170,28 @@
   line-height: $font-line-height-large;
   color: $text-color-primary;
   text-align: center;
-  padding-bottom: 32px;
+  padding-bottom: $padding-4n * 2;
 }
 @mixin pc_button {
   width: 300px;
   height: 36px;
 }
 @mixin pc_otherLoginText {
-  margin-top: 32px;
+  margin-top: $margin-4n * 2;
   font-weight: normal;
-  font-size: 12px;
+  font-size: $font-size-small;
   line-height: $font-line-height-middle;
   color: $icon-color;
   span {
     cursor: pointer;
     color: $primary-color;
   }
+}
+
+@mixin pc_otherLogin_button {
+  margin: $margin-4n;
+  display: flex;
+  justify-content: center;
 }
 
 @mixin pc_otherLoginBtn {
@@ -210,8 +201,9 @@
   margin: 0 $margin-4n;
   width: 40px;
   height: 40px;
-  line-height: 40px;
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
 }
 
@@ -220,7 +212,7 @@
   margin-bottom: $margin-6n;
   -webkit-tap-highlight-color: transparent;
   :global(.dzq-input__icon){
-    font-size: 16px !important;
+    font-size: $font-size-middle !important;
   }
 }
 
@@ -242,11 +234,11 @@
   padding-bottom: $padding-2n;
 }
 @mixin pc_titleTips {
-  margin-bottom: 32px;
+  margin-bottom: $margin-4n * 2;
   font-size: $font-size-middle;
   line-height: $font-line-height-large;
   text-align: left;
-  color: var(--color-text-primary);
+  color: $text-color-primary;
   img {
     width: 30px;
     height: 30px;
@@ -271,18 +263,18 @@
 
 // -------------------------------------小程序
 @mixin mini_container {
-  background-color: var(--color-white);
+  background-color: $white;
   height: 100vh;
 }
 @mixin mini_content {
-  padding: 48px $padding-6n;
+  padding: $padding-6n * 2 $padding-6n;
 }
 @mixin mini_title {
   font-weight: 600;
   font-size: $font-size-large;
   line-height: $font-line-height-large;
   text-align: left;
-  color: var(--color-text-primary);
+  color: $text-color-primary;
 }
 @mixin mini_functionalRegion {
   text-align: center;
@@ -293,7 +285,7 @@
 }
 @mixin mini_tips {
   font-size: $font-size-middle;
-  margin: 32px 0;
+  margin: $margin-4n * 2 0;
   line-height: $font-line-height-middle;
   text-align: left;
   color: $text-color-primary;
@@ -303,10 +295,11 @@
 @mixin mini_button {
   width: 327px;
   height: 42px;
-  margin-top: 32px;
+  margin-top: $margin-4n * 2;
   font-size: $font-size-middle;
-  padding: $padding-10 0;
-  line-height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   box-sizing: border-box;
 }
 
@@ -331,33 +324,19 @@
   }
   :global(.dzq-icon-EyeOutlined) {
     top: 17px;
-    line-height: 36px;
-    z-index: 3;
-    color: var(--color-disabled2) !important;
+    z-index: $zindex-tooltip;
+    color: $disabled-color2 !important;
     &:hover {
       color: $primary-color !important;
     }
   }
   :global(.dzq-input__icon){
     top: 17px;
-    line-height: 36px;
-    z-index: 3;
+    z-index: $zindex-tooltip;
     font-size: $font-size-middle !important;
-    color: var(--color-disabled2) !important;
+    color: $disabled-color2 !important;
     &:hover {
       color: $primary-color !important;
     }
   }
-}
-@mixin mini_captchaBtn{
-  position: absolute;
-  right: 0;
-  bottom: 18px;
-  text-align: center;
-  border-radius: $border-radius-small;
-  font-size: $font-size-base;
-  color: $text-color-secondary;
-  cursor: pointer;
-  padding-right: $padding-2n;
-  z-index: 2;
 }
