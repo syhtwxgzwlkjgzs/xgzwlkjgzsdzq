@@ -3,7 +3,7 @@
 .container {
   width: 100%;
   background: var(--color-white);
-  padding: rem($padding-6n) rem($padding-6n) rem($padding-4n) rem($padding-6n);
+  padding: rem($padding-4n) rem($padding-6n) rem($padding-4n) rem($padding-6n);
   border-radius: var(--border-radius-small);
   box-sizing: border-box;
 }
@@ -59,11 +59,12 @@
     color: var(--color-text-secondary);
   }
 }
-
 .essence {
   margin-right: rem($margin-2n);
 }
-
+.divider{
+  margin-top: rem($margin-4n);
+}
 .title {
   color: var(--color-text-primary);
   line-height: 21px;
