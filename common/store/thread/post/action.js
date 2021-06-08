@@ -282,7 +282,7 @@ class ThreadPostAction extends ThreadPostStore {
 
   @action
   formatThreadDetailToPostData(detail) {
-    const { title, categoryId, content, freewords = 1, isDraft, user, isAnonymous } = detail || {};
+    const { title, categoryId, content, freewords = 0, isDraft, isAnonymous } = detail || {};
     const price = Number(detail.price);
     const attachmentPrice = Number(detail.attachmentPrice);
     let position = {};
