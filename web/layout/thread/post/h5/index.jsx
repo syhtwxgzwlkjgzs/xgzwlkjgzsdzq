@@ -308,6 +308,8 @@ class ThreadCreate extends React.Component {
             || !!(postData.price || postData.attachmentPrice)
           ) && (
             <MoneyDisplay
+              canEditReward={this.props.canEditReward}
+              canEditRedpacket={this.props.canEditRedpacket}
               payTotalMoney={threadPost.payTotalMoney}
               redTotalMoney={threadPost.redpacketTotalAmount}
               postData={postData}
