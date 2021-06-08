@@ -12,16 +12,14 @@ import styles from './index.module.scss';
 const SearchUsers = ({ data = [], onItemClick }) => (
   <div className={styles.list}>
     {data.map((item, index) => (
-      <UserItem 
-        key={index} 
-        imgSrc={item.avatar} 
-        needPadding={true}
-        needBottomLine={true}
-        title={item.nickname} 
-        userId={item.userId} 
-        label={item.groupName} 
-        onClick={onItemClick} 
-        itemStyle={{padding: '16px 0 16px 0'}}
+      <UserItem
+        key={index}
+        imgSrc={item.avatar}
+        title={item.nickname}
+        userId={item.userId}
+        label={item.groupName}
+        onClick={onItemClick}
+        className={styles.userItem}
       />
     ))}
   </div>

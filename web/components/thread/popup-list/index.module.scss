@@ -5,7 +5,21 @@ $tabs-list-min-height: 70vh;
 .list {
   overflow-y: auto;
   height: 70vh;
-  // min-height: 40vh;
+  .userItem {
+    padding: rem($padding-2n) rem($padding-4n);
+  }
+  .pcItem {
+    padding: $padding-4n;
+    &:after {
+      content: ' ';
+      position: absolute;
+      right: rem(16);
+      left: rem(16);
+      height: rem(1);
+      bottom: 0;
+      background-color: $border-color;
+    }
+  }
 }
 
 .tabs {

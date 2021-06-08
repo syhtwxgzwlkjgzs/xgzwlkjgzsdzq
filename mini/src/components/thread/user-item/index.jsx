@@ -29,9 +29,8 @@ const Index = ({
   onClick = noop,
   userId,
   platform,
-  needPadding = false,
-  needBottomLine = false,
   itemStyle = {},
+  className = '',
 }) => {
   const handleClick = (e) => {
     e.stopPropagation();
@@ -45,11 +44,7 @@ const Index = ({
                             (type === 2) ? styles.heart :
                             (type === 3) ? styles.heart : "";
 
-  const classString = `
-    ${styles.listItem}
-    ${needBottomLine ? styles.bottomLine : ""}
-    ${needPadding ?  styles.h5Padding : "" }
-  `;
+  const classString = `${styles.listItem} ${className}`;
 
   return (
     <View className={classString.trim()} key={index} onClick={handleClick} style={itemStyle}>
