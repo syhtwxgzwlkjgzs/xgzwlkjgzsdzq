@@ -39,12 +39,12 @@ class Index extends Component {
 
   handleDelete = async (item) => { // 删除草稿事件
     const { thread, index } = this.props;
-    this.toastInstance = Toast.loading({
-      content: '删除中...',
-      duration: 0,
+    Taro.showToast({
+      title: '删除中...',
+      icon: 'loading',
     });
     const res = await thread.delete(item.threadId);
-    this.toastInstance?.destroy();
+    Taro.hideToast();
     if (res.code === 0) {
       const data = (index.drafts?.pageData || []).filter(elem => elem.threadId !== item.threadId);
       const total = index.drafts?.totalCount - 1;
