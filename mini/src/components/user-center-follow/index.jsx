@@ -264,6 +264,7 @@ class UserCenterFollows extends React.Component {
                     unFollowHandler={this.unFollowUser}
                     itemStyle={this.props.itemStyle}
                   />
+                  {this.props.splitElement}
                 </View>
               );
             })}
