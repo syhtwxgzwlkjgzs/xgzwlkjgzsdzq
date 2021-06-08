@@ -115,7 +115,19 @@ class index extends Component {
     return (
       <View className={styles.userCenterEditLabel}>
         <Text className={styles.userLabelName}>昵称</Text>
-        <View className={styles.uerInputItem}>{isClickNickName ? <Input focus={true} maxLength={10} value={this.user.editNickName} onChange={this.handleChangeNickName} onBlur={this.handleBlurNickName} /> : this.user.editNickName}</View>
+        <View className={styles.uerInputItem}>
+          {isClickNickName ? (
+            <Input
+              focus={true}
+              maxLength={10}
+              value={this.user.editNickName}
+              onChange={this.handleChangeNickName}
+              onBlur={this.handleBlurNickName}
+            />
+          ) : (
+            this.user.editNickName
+          )}
+        </View>
       </View>
     );
   };
@@ -124,7 +136,7 @@ class index extends Component {
     // 条件都满足时才显示微信
     const IS_WECHAT_ACCESSABLE = this.props.site.wechatEnv !== 'none' && !!this.user.wxNickname;
     return (
-      <View>
+      <View className={styles.userCenterWrapper}>
         {/* 头部 */}
         <View>
           <UserCenterEditHeader />
@@ -185,10 +197,10 @@ class index extends Component {
         <View className={styles.userCenterEditBottom}>
           <View className={styles.userCenterEditBtn}>
             <Button full onClick={this.handleCancel} className={styles.btn}>
-              取消
+              <View className={styles.buttonContent}>取消</View>
             </Button>
             <Button full className={styles.btn} onClick={this.handleUpdateEditedUserInfo} type="primary">
-              保存
+              <View className={styles.buttonContent}>保存</View>
             </Button>
           </View>
         </View>

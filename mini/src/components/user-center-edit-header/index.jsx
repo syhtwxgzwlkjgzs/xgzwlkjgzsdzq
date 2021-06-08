@@ -7,7 +7,7 @@ import Icon from '@discuzq/design/dist/components/icon/index';
 import Input from '@discuzq/design/dist/components/input/index';
 import { inject, observer } from 'mobx-react';
 import { ACCEPT_IMAGE_TYPES } from '@common/constants/thread-post';
-import { View, Text } from '@tarojs/components';
+import { View, Text, Canvas } from '@tarojs/components';
 import locals from '@common/utils/local-bridge';
 import getConfig from '@common/config';
 import constants from '@common/constants';
@@ -22,6 +22,8 @@ export default class index extends Component {
     super(props);
     this.state = {
       isClickSignature: false,
+      canvasHeight: 0,
+      canvasWidth: 0,
     };
     this.config = getConfig();
     this.user = this.props.user || {};
@@ -45,53 +47,200 @@ export default class index extends Component {
     });
   };
 
-  uploadAvatarImpl = async (fileList) => {
-    const token = locals.get(constants.ACCESS_TOKEN_NAME);
-    const uploadRes = await Taro.uploadFile({
-      url: `${this.config.COMMOM_BASE_URL}/apiv3/users/avatar`,
-      filePath: fileList[0].path,
-      header: {
-        'Content-Type': 'multipart/form-data',
-        authorization: `Bearer ${token}`,
-      },
-      name: 'avatar',
+  getCanvasImg = async (file) => {
+    const imgInfo = await Taro.getImageInfo({
+      src: file.path,
     });
-    try {
-      const parsedData = JSON.parse(uploadRes.data);
-      console.log(parsedData);
-      if (parsedData.Code === 0) {
-        Toast.success({
-          content: '上传成功',
-          duration: 2000
+    const canvasContext = Taro.createCanvasContext('photoCanvas', this.$scope);
+    let canvasHeight, canvasWidth;
+    if (imgInfo && imgInfo.orientation) {
+      const { width, height } = imgInfo;
+      canvasHeight = height;
+      canvasWidth = width;
+
+      this.setState({
+        canvasHeight,
+        canvasWidth,
+      });
+
+      const img = file.path;
+
+      switch (imgInfo.orientation) {
+        case 'down':
+          canvasWidth = width;
+          canvasHeight = height;
+          //需要旋转180度
+          this.setState({
+            canvasWidth: width,
+            canvasHeight: height,
+          });
+          canvasContext.translate(width / 2, height / 2);
+          canvasContext.rotate((180 * Math.PI) / 180);
+          canvasContext.drawImage(img, -width / 2, -height / 2, width, height);
+          break;
+        case 'left':
+          canvasWidth = width;
+          canvasHeight = height;
+          canvasContext.translate(height / 2, width / 2);
+          this.setState({
+            canvasWidth: height,
+            canvasHeight: width,
+          });
+          //顺时针旋转270度
+          canvasContext.rotate((270 * Math.PI) / 180);
+          canvasContext.drawImage(img, -width / 2, -height / 2, width, height);
+          break;
+        case 'right':
+          // canvasWidth = width;
+          // canvasHeight = height;
+          // this.setState({
+          //   canvasWidth: height,
+          //   canvasHeight: width,
+          // });
+          // canvasContext.translate(height / 2, width / 2);
+          // //顺时针旋转90度
+          // canvasContext.rotate((90 * Math.PI) / 180);
+          // canvasContext.drawImage(img, -width / 2, -height / 2, width, height);
+          canvasHeight = height;
+          canvasWidth = width;
+          canvasContext.drawImage(img, 0, 0);
+          break;
+        default:
+          canvasHeight = height;
+          canvasWidth = width;
+          canvasContext.drawImage(img, 0, 0);
+      }
+    }
+
+    const drawPromisify = () =>
+      new Promise((resolve) => {
+        canvasContext.draw(false, () => {
+          Taro.canvasToTempFilePath({
+            canvasId: 'photoCanvas',
+            width: canvasWidth,
+            height: canvasHeight,
+            destWidth: 1200,
+            destHeight: 800,
+            x: 0,
+            y: 0,
+            success: (res) => {
+              resolve(res);
+            },
+            fail: (err) => {
+              console.error('failed', err);
+
+              Toast.error({
+                content: '图像转换失败',
+                duration: 2000
+              })
+            },
+            onError: (err) => {
+              console.error('error', err);
+
+              Toast.error({
+                content: '图像转换错误',
+                duration: 2000
+              })
+            },
+          });
         });
-      } else {
+      });
+
+    const res = await drawPromisify();
+
+    return res;
+
+  };
+
+  uploadAvatarImpl = async (fileList) => {
+    try {
+      const token = locals.get(constants.ACCESS_TOKEN_NAME);
+      const file = await this.getCanvasImg(fileList[0]);
+      const uploadRes = await Taro.uploadFile({
+        url: `${this.config.COMMOM_BASE_URL}/apiv3/users/avatar`,
+        filePath: file.tempFilePath,
+        header: {
+          'Content-Type': 'multipart/form-data',
+          authorization: `Bearer ${token}`,
+        },
+        name: 'avatar',
+      });
+      try {
+        const parsedData = JSON.parse(uploadRes.data);
+        console.log(parsedData);
+        if (parsedData.Code === 0) {
+          Toast.success({
+            content: '上传成功',
+            duration: 2000,
+          });
+          this.props.user.userInfo.avatarUrl = parsedData.Data.avatarUrl;
+          this.props.user.userInfo = { ...this.props.user.userInfo };
+        } else {
+          Toast.error({
+            content: parsedData.Message,
+            duration: 2000,
+          });
+        }
+      } catch (e) {
+        console.error(e);
         Toast.error({
-          content: parsedData.Message,
-          duration: 2000
-        })
+          content: '解析失败',
+          duration: 2000,
+        });
       }
     } catch (e) {
-      console.log(e);
+      console.error(e);
       Toast.error({
-        content: '解析失败',
-        duration: 2000
-      })
+        content: '上传失败，网络错误',
+        duration: 2000,
+      });
     }
   };
 
   uploadBackgroundImpl = async (fileList) => {
-    const token = locals.get(constants.ACCESS_TOKEN_NAME);
-    const uploadRes = await Taro.uploadFile({
-      url: `${this.config.COMMOM_BASE_URL}/apiv3/users/background`,
-      filePath: fileList[0].path,
-      header: {
-        'Content-Type': 'multipart/form-data',
-        authorization: `Bearer ${token}`,
-      },
-      name: 'background',
-    });
-    console.log(uploadRes.data)
-  }
+    try {
+      const token = locals.get(constants.ACCESS_TOKEN_NAME);
+      const file = await this.getCanvasImg(fileList[0]);
+      const uploadRes = await Taro.uploadFile({
+        url: `${this.config.COMMOM_BASE_URL}/apiv3/users/background`,
+        filePath: file.tempFilePath,
+        header: {
+          'Content-Type': 'multipart/form-data',
+          authorization: `Bearer ${token}`,
+        },
+        name: 'background',
+      });
+      try {
+        console.log(uploadRes)
+        const parsedData = JSON.parse(uploadRes.data);
+        if (parsedData.Code === 0) {
+          Toast.success({
+            content: '上传成功',
+            duration: 2000,
+          });
+          this.props.user.userInfo.backgroundUrl = parsedData.Data.backgroundUrl;
+          this.props.user.userInfo = { ...this.props.user.userInfo };
+        } else {
+          Toast.error({
+            content: parsedData.Message,
+            duration: 2000,
+          });
+        }
+      } catch (e) {
+        console.log(e);
+        Toast.error({
+          content: '解析失败',
+          duration: 2000,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+      Toast.error({
+        content: '上传失败，网络错误',
+        duration: 2000,
+      });
+    }
+  };
 
   onAvatarChange = async (fileList) => {
     await this.uploadAvatarImpl(fileList);
@@ -150,6 +299,17 @@ export default class index extends Component {
               <Text className={styles.text}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</Text>
             )}
           </View>
+          <Canvas
+            type="33"
+            canvasId={'photoCanvas'}
+            style={{
+              position: 'fixed',
+              top: 0,
+              zIndex: -10000,
+              width: this.state.canvasWidth,
+              height: this.state.canvasHeight,
+            }}
+          />
         </View>
       </>
     );
