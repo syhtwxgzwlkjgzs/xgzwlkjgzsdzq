@@ -7,8 +7,8 @@ import layout from './index.module.scss';
 import PhoneInput from '@components/login/phone-input';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
-import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
-import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
+import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
+import { BANNED_USER, REVIEWING, REVIEW_REJECT, isExtFieldsOpen } from '@common/store/login/util';
 import { get } from '@common/utils/get';
 import { genMiniScheme } from '@server';
 import PcBodyWrap from '../components/pc-body-wrap';
@@ -62,11 +62,13 @@ class LoginPhoneH5Page extends React.Component {
         return;
       }
 
-      // if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
-      //   this.props.commonLogin.needToCompleteExtraInfo = true;
-      //   this.props.router.push('/user/supplementary');
-      //   return;
-      // }
+      const { site } = this.props;
+      // 跳转补充信息页
+      if (isExtFieldsOpen(site) && e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+        this.props.commonLogin.needToCompleteExtraInfo = true;
+        this.props.router.push('/user/supplementary');
+        return;
+      }
 
       if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_ALL_INFO.Code) {
         this.props.commonLogin.needToSetNickname = true;
@@ -157,7 +159,7 @@ class LoginPhoneH5Page extends React.Component {
   }
 
   render() {
-    const { mobileLogin, site, commonLogin} = this.props;
+    const { mobileLogin, site, commonLogin } = this.props;
     const { platform } = site;
     const isAnotherLoginWayAvaliable = this.props.site.wechatEnv !== 'none' || this.props.site.isUserLoginVisible;
     // 接受监听一下协议的数据，不能去掉，去掉后协议的点击无反应
