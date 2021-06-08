@@ -33,6 +33,8 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
       } else {
         categoryIds = []
       }
+    } else {
+      categoryIds = [categoryIds[1]]
     }
 
     onNavigationClick({ categoryIds, sequence })

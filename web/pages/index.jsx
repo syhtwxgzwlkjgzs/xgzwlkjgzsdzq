@@ -145,10 +145,11 @@ class Index extends React.Component {
   }
 
   render() {
+    const { categoryName = '' } = this.props.index || {}
     return <ViewAdapter
             h5={<IndexH5Page dispatch={this.dispatch} isError={this.state.isError} errorText={this.state.errorText} />}
             pc={<IndexPCPage dispatch={this.dispatch} {...this.state} />}
-            title=''
+            title={categoryName}
           />;
   }
 }

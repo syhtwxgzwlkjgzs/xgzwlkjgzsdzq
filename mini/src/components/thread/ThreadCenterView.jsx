@@ -65,24 +65,26 @@ const Index = (props) => {
               />
             </BrWrapper>
           )}
-          {imageData && (
+          {imageData?.length !== 0 && (
             <BrWrapper>
               <ImageDisplay platform="h5" imgData={imageData} isPay={needPay} onPay={onPay} onClickMore={onClick} />
             </BrWrapper>
           )}
-          {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} />}
-          {fileData && <AttachmentView threadId={threadId} attachments={fileData} onPay={onPay} isPay={needPay} />}
+          {audioData && <BrWrapper><AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} /></BrWrapper>}
+          {fileData?.length !== 0 && <BrWrapper><AttachmentView threadId={threadId} attachments={fileData} onPay={onPay} isPay={needPay} /></BrWrapper>}
           {goodsData && (
-            <ProductItem
-              image={goodsData.imagePath}
-              amount={goodsData.price}
-              title={goodsData.title}
-              onClick={onClick}
-            />
+            <BrWrapper>
+              <ProductItem
+                image={goodsData.imagePath}
+                amount={goodsData.price}
+                title={goodsData.title}
+                onClick={onClick}
+              />
+            </BrWrapper>
           )}
-          {rewardData && <Packet type={1} money={rewardData.money} onClick={onClick} />}
+          {rewardData && <BrWrapper><Packet type={1} money={rewardData.money} onClick={onClick} /></BrWrapper>}
           {redPacketData && (
-            <Packet money={redPacketData.money || 0} onClick={onClick} condition={redPacketData.condition} />
+            <BrWrapper><Packet money={redPacketData.money || 0} onClick={onClick} condition={redPacketData.condition} /></BrWrapper>
           )}
         </View>
       </View>
