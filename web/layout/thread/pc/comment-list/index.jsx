@@ -379,7 +379,7 @@ class RenderCommentList extends React.Component {
           )}
           <div className={comment.sort} onClick={() => this.onSortClick()}>
             <Icon className={comment.sortIcon} name="SortOutlined" size={14}></Icon>
-            <span className={comment.sortText}>{this.state.commentSort ? '评论从新到旧' : '评论从旧到新'}</span>
+            <span className={comment.sortText}>{this.state.commentSort ? '评论从旧到新' : '评论从新到旧'}</span>
           </div>
         </div>
 
