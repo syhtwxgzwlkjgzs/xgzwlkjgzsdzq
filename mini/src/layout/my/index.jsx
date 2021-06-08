@@ -9,6 +9,7 @@ import UserCenterAction from '@components/user-center-action';
 import UserCenterThreads from '@components/user-center-threads';
 import BaseLayout from '@components/base-layout'
 import UserCenterPost from '../../components/user-center-post';
+import SectionTitle from '@components/section-title'
 
 @inject('user')
 @observer
@@ -40,7 +41,7 @@ export default class index extends Component {
 
     // 避免第一次进入页面时，触发了上拉加载
     if (!isLoading) {
-      return user.getUserThreads
+      return this.props.user.getUserThreads
     }
     return Promise.resolve()
   }
@@ -71,15 +72,18 @@ export default class index extends Component {
           </View>
 
           <View className={styles.unit}>
-            <View className={styles.threadUnit}>
+            {/* <View className={styles.threadUnit}>
               <View className={styles.threadTitle}>主题</View>
               <View className={styles.threadCount}>{userThreadsTotalCount}个主题</View>
             </View>
 
             <View className={styles.dividerContainer}>
               <Divider className={styles.divider} />
+            </View> */}
+            <View className={styles.threadHeader}>
+              <SectionTitle title='主题' isShowMore={false} leftNum={`${userThreadsTotalCount}个主题`} />
             </View>
-
+            
             <View className={styles.threadItemContainer}>
               {!isLoading && formattedUserThreads?.length > 0 && <UserCenterThreads data={formattedUserThreads} />}
             </View>
