@@ -77,10 +77,6 @@ class CommentList extends React.Component {
     typeof this.props.replyDeleteClick === 'function' && this.props.replyDeleteClick(data);
   }
 
-  reployAvatarClick(data) {
-    typeof this.props.reployAvatarClick === 'function' && this.props.reployAvatarClick(data);
-  }
-
   generatePermissions(data = {}) {
     return {
       canApprove: data.canApprove || false,
@@ -210,7 +206,7 @@ class CommentList extends React.Component {
                         data={this.needReply[0]}
                         key={this.needReply[0].id}
                         isShowOne={true}
-                        avatarClick={() => this.reployAvatarClick(this.needReply[0])}
+                        avatarClick={() => this.avatarClick(this.needReply[0])}
                         likeClick={() => this.replyLikeClick(this.needReply[0])}
                         replyClick={() => this.replyReplyClick(this.needReply[0])}
                         deleteClick={() => this.replyDeleteClick(this.needReply[0])}
@@ -221,7 +217,7 @@ class CommentList extends React.Component {
                         <ReplyList
                           data={val}
                           key={val.id || index}
-                          avatarClick={() => this.reployAvatarClick(val)}
+                          avatarClick={() => this.replyAvatarClick(val)}
                           likeClick={() => this.replyLikeClick(val)}
                           replyClick={() => this.replyReplyClick(val)}
                           deleteClick={() => this.replyDeleteClick(val)}

@@ -359,6 +359,11 @@ class RenderCommentList extends React.Component {
     this.setState({ showAboptPopup: false });
   }
 
+  avatarClick(data) {
+    const { userId = {} } = data || {};
+    this.props.router.push(`/user/${userId}`);
+  }
+
   render() {
     const { totalCount, commentList } = this.props.thread;
     // 是否作者自己
@@ -387,6 +392,7 @@ class RenderCommentList extends React.Component {
                 data={val}
                 key={val.id}
                 lickClick={debounce(() => this.likeClick(val), 1000)}
+                avatarClick={() => this.avatarClick(val)}
                 replyClick={() => this.replyClick(val)}
                 deleteClick={() => this.deleteClick(val)}
                 editClick={() => this.editClick(val)}
