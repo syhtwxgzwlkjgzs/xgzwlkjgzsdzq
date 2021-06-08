@@ -72,7 +72,7 @@ class SearchAction extends SearchStore {
    * 发现模块 - 重置搜索结果页数据
    */
    @action
-   resetIndexData() {
+   resetSearchData() {
      this.searchTopicsError = { isError: false, errorText: '' }
      this.searchUsersError = { isError: false, errorText: '' }
      this.searchThreadsError = { isError: false, errorText: '' }
