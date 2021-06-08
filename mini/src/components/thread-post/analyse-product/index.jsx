@@ -17,7 +17,7 @@ const Index = inject('threadPost', 'site')(observer(({ threadPost, site }) => {
       <View className={styles['product']}>
         {goodImages.map((item) => (
           <View className={styles['product-type']}>
-            <Image src={`${envConfig.COMMOM_BASE_URL}/${item.src}`} style={{width: `${item.width}px`, height: `${item.height}px`}} />
+            <Image src={`${envConfig.COMMON_BASE_URL}/${item.src}`} style={{width: `${item.width}px`, height: `${item.height}px`}} />
             <Text>{item.name}</Text>
           </View>
         ))}
