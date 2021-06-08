@@ -78,9 +78,15 @@ const Index = ({
             filePath: res.tempFilePath,
             success: function (res) {
               setSuccessMsg("下载成功");
+              setTimeout(() => {
+                setSuccessMsg("");
+              }, 3000);
             },
             fail: function (error) {
               setErrorMsg("小程序暂不支持下载此类文件\n请点击“链接”获取下载链接");
+              setTimeout(() => {
+                setErrorMsg("");
+              }, 3000);
               console.error(error.errMsg)
             },
             complete: function () {
@@ -89,6 +95,9 @@ const Index = ({
         },
         fail: function (error) {
           setErrorMsg(error.errMsg);
+          setTimeout(() => {
+            setErrorMsg("");
+          }, 3000);
           console.error(error.errMsg)
         },
         complete: function () {
