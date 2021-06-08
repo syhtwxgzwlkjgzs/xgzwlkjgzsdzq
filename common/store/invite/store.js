@@ -45,7 +45,7 @@ export default class InviteStore {
     this.currentPage = res.currentPage;
     this.inviteLoading = false;
     const listData = get(res, 'pageData.inviteUsersList', null);
-    this.inviteUsersList = this.inviteUsersList?.concat(listData) || listData;
+    this.inviteUsersList = page === 1 ? listData : this.inviteUsersList?.concat(listData);
   }
 
   @action
