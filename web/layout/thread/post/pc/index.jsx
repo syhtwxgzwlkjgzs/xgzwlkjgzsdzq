@@ -131,6 +131,8 @@ class ThreadPCPage extends React.Component {
               {/* 设置的金额相关展示 */}
               <MoneyDisplay
                 pc
+                canEditReward={this.props.canEditReward}
+                canEditRedpacket={this.props.canEditRedpacket}
                 payTotalMoney={threadPost.payTotalMoney}
                 redTotalMoney={threadPost.redpacketTotalAmount}
                 postData={postData} setPostData={this.props.setPostData}
