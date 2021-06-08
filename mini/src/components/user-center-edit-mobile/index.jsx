@@ -11,7 +11,7 @@ import Router from '@discuzq/sdk/dist/router';
 import { View, Text } from '@tarojs/components';
 import throttle from '@common/utils/thottle.js';
 import classNames from 'classnames';
-import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
+import { toTCaptcha } from '@common/utils/to-tcaptcha'
 
 @inject('site')
 @inject('user')
@@ -27,6 +27,8 @@ class index extends Component {
       isBlur: false, // 表示是否失焦
       isKeyBoardVisible: false, // 表示是否显示键盘
     }
+    this.ticket = ''; // 腾讯云验证码返回票据
+    this.randstr = ''; // 腾讯云验证码返回随机字符串
   }
   initState = () => {
     this.setState({
@@ -36,6 +38,31 @@ class index extends Component {
       isBlur: false, // 表示是否失焦
       isKeyBoardVisible: false, // 表示是否显示键盘
     });
+  }
+
+  omponentDidMount() {
+    // 监听腾讯验证码事件
+    Taro.eventCenter.on('captchaResult', this.handleCaptchaResult);
+    Taro.eventCenter.on('closeChaReault', this.handleCloseChaReault);
+  }
+
+  componentWillUnmount() {
+    // 卸载监听腾讯验证码事件
+    Taro.eventCenter.off('captchaResult', this.handleCaptchaResult)
+    Taro.eventCenter.off('closeChaReault', this.handleCloseChaReault)
+  }
+
+  // 验证码滑动成功的回调
+  handleCaptchaResult = (result) => {
+    this.ticket = result.ticket;
+    this.randstr = result.randstr;
+    this.getVerifyCode();
+  }
+
+  // 验证码点击关闭的回调
+  handleCloseChaReault = () => {
+    this.ticket = '';
+    this.randstr = '';
   }
 
   // 点击切换弹出键盘事件
@@ -151,13 +178,27 @@ class index extends Component {
     const { originalMobile } = this.props.user;
     const { currentStep } = this.state;
     if (currentStep === 'first') {
-      const { captchaRandStr, captchaTicket } = await this.props.showCaptcha();
-      this.props.user.sendSmsVerifyCode({ mobile: originalMobile, captchaRandStr, captchaTicket })
+      // 验证码
+      const { webConfig } = this.props.site;
+      const qcloudCaptcha = webConfig?.qcloud?.qcloudCaptcha;
+      if (qcloudCaptcha) {
+        if (!this.ticket || !this.randstr) {
+          const qcloudCaptchaAppId = webConfig?.qcloud?.qcloudCaptchaAppId;
+          await toTCaptcha(qcloudCaptchaAppId)
+          return false;
+        }
+      };
+      // const { captchaRandStr, captchaTicket } = await this.props.showCaptcha();
+      console.log(this.randstr,'this.randstr');
+      this.props.user.sendSmsVerifyCode({ mobile: originalMobile, captchaRandStr: this.randstr, captchaTicket: this.ticket })
         .then((res) => {
           this.setState({
             initTimeValue: res.interval,
           });
           if (calback && typeof calback === 'function') calback();
+          // 清除
+          this.ticket = '';
+          this.randstr = '';
         })
         .catch((err) => {
           Toast.error({
@@ -169,6 +210,9 @@ class index extends Component {
             list: [],
           });
           if (calback && typeof calback === 'function') calback(err);
+          // 清除
+          this.ticket = '';
+          this.randstr = '';
         });
     } else if (currentStep === 'second') {
       const { bindMobile } = this.state;
@@ -216,7 +260,6 @@ class index extends Component {
     const { mobile } = this.props?.user;
     const value_pass_check = currentStep === 'second' ? this.validateTel(bindMobile) : true;
     return (
-      <ToastProvider>
         <View id={styles.editMobileContent}>
           <View className={styles.content}>
             {
@@ -253,7 +296,6 @@ class index extends Component {
             <Button full disabled={this.getDisabledWithButton()} onClick={this.handleStepBtn} type={'primary'} className={styles.btn}>提交</Button>
           </View>
         </View>
-      </ToastProvider>
     )
   }
 }
