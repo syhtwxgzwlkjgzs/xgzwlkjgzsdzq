@@ -138,15 +138,15 @@ class index extends Component {
           {/* 粉丝|关注|点赞 */}
           <View className={styles.userMessageList}>
             <View onClick={this.goToFansList} className={styles.userMessageListItem}>
-              <Text>粉丝</Text>
+              <Text className={styles.useText}>粉丝</Text>
               <Text>{user.fansCount || 0}</Text>
             </View>
             <View onClick={this.goToFollowsList} className={styles.userMessageListItem}>
-              <Text>关注</Text>
+              <Text className={styles.useText}>关注</Text>
               <Text>{user.followCount || 0}</Text>
             </View>
             <View onClick={this.handleMyLike} className={styles.userMessageListItem}>
-              <Text>点赞</Text>
+              <Text className={styles.useText}>点赞</Text>
               <Text>{user.likedCount || 0}</Text>
             </View>
           </View>
