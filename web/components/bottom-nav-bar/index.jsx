@@ -29,6 +29,7 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
   // 每20秒更新一次未读消息
   const timeoutRef = useRef();
   const updateUnreadMessage = () => {
+    if (!user.id) return;
     timeoutRef.current = setTimeout(() => {
       readUnreadCount();
       updateUnreadMessage();
@@ -67,7 +68,7 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
             <div key={idx} className={styles.item + (i.active ? ` ${styles.active}` : '')} onClick={() => handleClick(i, idx)}>
               {
                 i.icon === 'MailOutlined' ? (
-                  <UnreadRedDot unreadCount={totalUnread}>
+                  <UnreadRedDot type="icon" style={{width: '22px', margin: '0 auto'}} unreadCount={totalUnread}>
                     <Icon name={i.icon} size={22} />
                   </UnreadRedDot>
                 ) : (
