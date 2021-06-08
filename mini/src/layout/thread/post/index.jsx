@@ -137,7 +137,7 @@ class Index extends Component {
         .replace(/<span.*?>(.*?)<\/span>/g, `$1`);
       ret.data.content.text = realText;
       threadPost.formatThreadDetailToPostData(ret.data);
-      const { postData: { isDraft, redpacket, rewardQa } } = this.props.threadPost
+      const { postData: { redpacket, rewardQa } } = this.props.threadPost
         this.setState({
           postType: isDraft ? 'isDraft' : 'isEdit',
           canEditRedpacket: isDraft || !(redpacket.money > 0),
