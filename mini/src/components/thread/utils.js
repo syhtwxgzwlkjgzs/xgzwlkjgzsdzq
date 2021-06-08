@@ -40,7 +40,7 @@ export const handleAttachmentData = (data) => {
   const newData = { text: data?.text || '' };
   const values = Object.values(data?.indexes || {});
   values.forEach((item) => {
-    let { tomId } = item;
+    let { tomId, threadId } = item;
     // 防止后台返回的字段类型不对
     tomId = `${tomId}`
     if (tomId === '101') { // 图片
@@ -60,6 +60,7 @@ export const handleAttachmentData = (data) => {
     } else if (tomId === '108') { // 附件
       newData.fileData = item.body;
     }
+    newData.threadId = threadId;
   });
 
   return newData;

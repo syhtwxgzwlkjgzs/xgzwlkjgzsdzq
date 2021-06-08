@@ -56,6 +56,7 @@ const Index = (props) => {
           redPacketData,
           rewardData,
           fileData,
+          threadId,
         } = handleAttachmentData(data);
 
         return (
@@ -81,7 +82,7 @@ const Index = (props) => {
                     )
                 }
                 {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} />}
-                {fileData && <AttachmentView attachments={fileData} onPay={onPay} isPay={needPay} />}
+                {fileData && <AttachmentView threadId={threadId} attachments={fileData} onPay={onPay} isPay={needPay} />}
                 {goodsData && <ProductItem
                     image={goodsData.imagePath}
                     amount={goodsData.price}

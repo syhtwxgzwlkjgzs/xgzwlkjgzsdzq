@@ -5,6 +5,8 @@ import SearchInput from '@components/search-input';
 import BaseLayout from '@components/base-layout';
 import UserItem from '@components/thread/user-item';
 
+import styles from './index.module.scss';
+
 @inject('site')
 @inject('search')
 @observer
@@ -68,9 +70,7 @@ class SearchResultUserH5Page extends React.Component {
               label={item.groupName}
               userId={item.userId}
               onClick={this.onUserClick}
-              needPadding={true}
-              needBottomLine={true}
-              itemStyle={{paddingTop: '16px', paddingBottom: '16px'}}
+              className={styles.userItem}
             />
           ))
         }

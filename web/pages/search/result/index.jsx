@@ -38,19 +38,12 @@ class Index extends React.Component {
     const { serverSearch, search } = this.props;
 
     // 初始化数据到store中
-    search.setSearchTopics(null);
-    search.setSearchUsers(null);
-    search.setSearchThreads(null);
+    search.resetSearchData();
   }
 
   async componentDidMount() {
     const { search, router } = this.props;
     const { keyword = '' } = router?.query;
-
-    // 当服务器无法获取数据时，触发浏览器渲染
-    const hasSearchTopics = !!search.searchTopics;
-    const hasSearchUsers = !!search.searchUsers;
-    const hasSearchThreads = !!search.searchThreads;
 
     await search.getSearchData({
       hasTopics: false,
@@ -64,9 +57,7 @@ class Index extends React.Component {
   dispatch = async (type, data = '') => {
     const { search } = this.props;
 
-    search.setSearchTopics(null);
-    search.setSearchUsers(null);
-    search.setSearchThreads(null);
+    search.resetSearchData();
     search.getSearchData({ search: data, type: 1 });
   }
 
