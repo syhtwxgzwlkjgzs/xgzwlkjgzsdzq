@@ -174,15 +174,23 @@ export default class index extends Component {
         console.log(parsedData);
         if (parsedData.Code === 0) {
           Toast.success({
-            content: '上传成功',
+            content: '上传头像成功',
+            hasMask: false,
             duration: 2000,
+          });
+          this.setState({
+            isUploadAvatarUrl: false,
           });
           this.props.user.userInfo.avatarUrl = parsedData.Data.avatarUrl;
           this.props.user.userInfo = { ...this.props.user.userInfo };
         } else {
           Toast.error({
-            content: parsedData.Message,
+            content: parsedData.Message || '上传头像失败',
+            hasMask: false,
             duration: 2000,
+          });
+          this.setState({
+            isUploadAvatarUrl: false,
           });
         }
       } catch (e) {
@@ -191,12 +199,18 @@ export default class index extends Component {
           content: '解析失败',
           duration: 2000,
         });
+        this.setState({
+          isUploadAvatarUrl: false,
+        });
       }
     } catch (e) {
       console.error(e);
       Toast.error({
         content: '上传失败，网络错误',
         duration: 2000,
+      });
+      this.setState({
+        isUploadAvatarUrl: false,
       });
     }
   };
@@ -220,14 +234,21 @@ export default class index extends Component {
         if (parsedData.Code === 0) {
           Toast.success({
             content: '上传成功',
+            hasMask: false,
             duration: 2000,
+          });
+          this.setState({
+            isUploadBackgroundUrl: false,
           });
           this.props.user.userInfo.backgroundUrl = parsedData.Data.backgroundUrl;
           this.props.user.userInfo = { ...this.props.user.userInfo };
         } else {
           Toast.error({
-            content: parsedData.Message,
+            content: parsedData.Message || "上传背景图片失败",
             duration: 2000,
+          });
+          this.setState({
+            isUploadBackgroundUrl: false,
           });
         }
       } catch (e) {
@@ -236,6 +257,9 @@ export default class index extends Component {
           content: '解析失败',
           duration: 2000,
         });
+        this.setState({
+          isUploadBackgroundUrl: false,
+        });
       }
     } catch (e) {
       console.log(e);
@@ -243,14 +267,23 @@ export default class index extends Component {
         content: '上传失败，网络错误',
         duration: 2000,
       });
+      this.setState({
+        isUploadBackgroundUrl: false,
+      });
     }
   };
 
   onAvatarChange = async (fileList) => {
+    this.setState({
+      isUploadAvatarUrl: true,
+    });
     await this.uploadAvatarImpl(fileList);
   };
 
   onBackgroundChange = async (fileList) => {
+    this.setState({
+      isUploadBackgroundUrl: true,
+    });
     await this.uploadBackgroundImpl(fileList);
   };
 
@@ -279,17 +312,32 @@ export default class index extends Component {
 
   render() {
     const { isUploadAvatarUrl, isUploadBackgroundUrl, inputWidth } = this.state
-    console.log(inputWidth);
     return (
       <>
         <View className={styles.userCenterEditHeader}>
-          <UserCenterHeaderImage onClick={this.handleBackgroundUpload} />
+          <View className={styles.bgContent}>
+            <UserCenterHeaderImage onClick={this.handleBackgroundUpload} />
+            {/* 背景图加载状态 */}
+            {isUploadBackgroundUrl && (
+              <View className={styles.uploadBgUrl}>
+                <Icon name="UploadingOutlined" size={12} />
+                <Text className={styles.uploadText}>上传中...</Text>
+              </View>
+            )}
+          </View>
           <View className={styles.headImgBox}>
             <Avatar image={this.user.avatarUrl} size="big" name={this.user.username} />
             {/* 相机图标 */}
             <View className={styles.userCenterEditCameraIcon} onClick={this.handleAvatarUpload}>
               <Icon name="CameraOutlined" />
             </View>
+            {/* 上传中样式处理 */}
+            {isUploadAvatarUrl && (
+              <View className={styles.uploadAvatar}>
+                <Icon name="UploadingOutlined" size={12} />
+                <Text className={styles.uploadText}>上传中...</Text>
+              </View>
+            )}
           </View>
           {/* 编辑修改说明 */}
           <View className={styles.userCenterEditDec}>

@@ -177,6 +177,7 @@ class index extends Component {
   getVerifyCode = throttle(async ({ calback }) => {
     const { originalMobile } = this.props.user;
     const { currentStep } = this.state;
+    return
     if (currentStep === 'first') {
       // 验证码
       const { webConfig } = this.props.site;
