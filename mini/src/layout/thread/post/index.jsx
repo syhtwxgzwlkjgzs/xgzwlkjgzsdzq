@@ -605,8 +605,8 @@ class Index extends Component {
   render() {
     const { permissions } = this.props.user;
     const { categories } = this.props.index;
-    const { postData, setPostData, setCursorPosition, navInfo } = this.props.threadPost;
-    const { rewardQa, redpacket, video, product, position } = postData;
+    const { postData, setPostData, setCursorPosition, navInfo, cursorPosition } = this.props.threadPost;
+    const { rewardQa, redpacket, video, product, position, contentText = '' } = postData;
     const {
       isShowTitle,
       maxLength,
@@ -776,12 +776,20 @@ class Index extends Component {
               onSubmit={() => this.handleSubmit()}
             />
             {/* 通过键盘改变的高度一起来控制表情的显示和隐藏，直接通过 showEmoji 来进行数据的改变，渲染慢 */}
-            <Emoji show={bottomHeight === 0 && showEmoji} onHide={() => {
-              this.setState({
-                showEmoji: false
-              });
-            }} />
-
+            <Emoji
+              show={bottomHeight === 0 && showEmoji}
+              onHide={() => {
+                this.setState({
+                  showEmoji: false
+                });
+              }}
+              onClick={(emoji) => {
+                setPostData({
+                  contentText: contentText.slice(0, cursorPosition) + emoji.code + contentText.slice(cursorPosition)
+                });
+                setCursorPosition(cursorPosition + emoji.code.length);
+              }}
+            />
           </View>
         </View>
 

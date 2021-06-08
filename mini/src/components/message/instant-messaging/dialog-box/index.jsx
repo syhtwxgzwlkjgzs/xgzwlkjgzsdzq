@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useMemo } from 'react';
+import React, { useRef, useEffect, useMemo, useState } from 'react';
 import { View, Image } from '@tarojs/components';
 import Avatar from '@discuzq/design/dist/components/avatar/index';
 import { diffDate } from '@common/utils/diff-date';
@@ -76,13 +76,13 @@ const DialogBox = (props) => {
     })).reverse();
   }, [dialogMsgListLength]);
 
-
-
-
-
+  const [previewImageUrls, setPreviewImageUrls] = useState([]);
+  useMemo(() => {
+    setPreviewImageUrls(dialogMsgList.list.filter(item => !!item.imageUrl).map(item => item.imageUrl).reverse());
+  }, [dialogMsgList]);
 
   return (
-    <View className={showEmoji ? styles['dialogBox-emoji'] : styles.dialogBox} ref={dialogBoxRef}>
+    <View className={styles.dialogBox} style={{ bottom: showEmoji ? '385px' : '52px' }} ref={dialogBoxRef}>
       <View className={styles.box__inner}>
         {messagesHistory.map(({ timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl }, idx) => (
           <React.Fragment key={idx}>
@@ -99,8 +99,10 @@ const DialogBox = (props) => {
                       style='width: 200px;'
                       src={imageUrl}
                       onClick={() => {
-                        setDefaultImg(imageUrl);
-                        setPreviewerVisibled(true);
+                        Taro.previewImage({
+                          current: imageUrl,
+                          urls: previewImageUrls
+                        });
                       }}
                       onLoad={scrollEnd}
                     />
