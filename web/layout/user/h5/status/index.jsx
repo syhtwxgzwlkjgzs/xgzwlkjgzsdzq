@@ -17,23 +17,25 @@ import PcBodyWrap from '../components/pc-body-wrap';
 @observer
 class StatusH5Page extends React.Component {
   componentDidMount() {
-    const { router, commonLogin } = this.props;
-    const { statusCode } = router.query;
-    if (statusCode === '2') {
-      this.timer = setInterval(() => {
-        if (commonLogin.statusCountDown === 0) {
-          window.location.replace('/');
-          clearInterval(this.timer);
-          return;
-        }
-        commonLogin.setStatusCountDown(commonLogin.statusCountDown - 1);
-      }, 1000)
-    }
+    // TODO: 暂时取消倒计时跳转首页
+    this.props.commonLogin.setStatusCountDown(0);
+    // const { router, commonLogin } = this.props;
+    // const { statusCode } = router.query;
+    // if (statusCode === '2') {
+    //   this.timer = setInterval(() => {
+    //     if (commonLogin.statusCountDown === 0) {
+    //       window.location.replace('/');
+    //       clearInterval(this.timer);
+    //       return;
+    //     }
+    //     commonLogin.setStatusCountDown(commonLogin.statusCountDown - 1);
+    //   }, 1000)
+    // }
   }
 
   componentWillUnmount() {
-    this.props.commonLogin.setStatusCountDown(5);
-    clearInterval(this.timer);
+    // this.props.commonLogin.setStatusCountDown(5);
+    // clearInterval(this.timer);
   }
 
   render() {
