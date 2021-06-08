@@ -22,11 +22,13 @@
   .header {
     padding: $padding-4n 0;
   }
+
+  .brWrapper {
+    margin-top: $margin-4n;
+  }
+
   .content {
     position: relative;
-    >view {
-      margin-top: $margin-4n;
-    }
 
     .cover {
       position: absolute;

@@ -1,11 +1,11 @@
 import React from 'react';
-import UserCenterEditMobile from '../../../../components/user-center-edit-mobile/index';
+import UserCenterEditUserName from '../../../../components/user-center-edit-username';
 import Page from '@components/page';
 
 export default function index() {
   return (
     <Page>
-      <UserCenterEditMobile />
+      <UserCenterEditUserName />
     </Page>
   )
 }
