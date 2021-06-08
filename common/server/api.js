@@ -89,6 +89,9 @@ http.interceptors.response.use((res) => {
       } else {
         url = '/subPages/404/index'
       }
+      Router.replace({
+        url
+      });
       break;
     }
     case JUMP_TO_LOGIN: {
@@ -97,6 +100,9 @@ http.interceptors.response.use((res) => {
       } else {
         url = '/subPages/user/wx-auth/index'
       }
+      Router.replace({
+        url
+      });
       break;
     }
     case JUMP_TO_REGISTER: {
@@ -105,6 +111,9 @@ http.interceptors.response.use((res) => {
       } else {
         url = '/subPages/user/wx-auth/index'
       }
+      Router.replace({
+        url
+      });
       break;
     }
     case JUMP_TO_AUDIT: {
@@ -113,6 +122,9 @@ http.interceptors.response.use((res) => {
       } else {
         url = '/subPages/user/status/index?statusCode=2'
       }
+      Router.replace({
+        url
+      });
       break;
     }
     case JUMP_TO_HOME_INDEX: {
@@ -121,6 +133,9 @@ http.interceptors.response.use((res) => {
       } else {
         url = '/pages/index/index'
       }
+      Router.replace({
+        url
+      });
       break;
     }
     case SITE_CLOSED: {
@@ -129,6 +144,9 @@ http.interceptors.response.use((res) => {
       } else {
         url = '/subPages/close/index'
       }
+      Router.replace({
+        url
+      });
       break;
     }
     case JUMP_TO_PAY_SITE: {
@@ -137,6 +155,9 @@ http.interceptors.response.use((res) => {
       } else {
         url = '/subPages/forum/partner-invite/index'
       }
+      Router.replace({
+        url
+      });
       break;
     }
     default:  // 200 状态码
@@ -147,11 +168,6 @@ http.interceptors.response.use((res) => {
           msg: data.Message,
         });
       }
-  }
-  if (url) {
-    Router.replace({
-      url
-    });
   }
 
   return Promise.resolve({

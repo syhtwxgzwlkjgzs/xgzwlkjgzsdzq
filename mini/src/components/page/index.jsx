@@ -8,6 +8,7 @@ import { getCurrentInstance } from '@tarojs/taro';
 import PayBoxProvider from '@components/payBox/payBoxProvider';
 import { MINI_SITE_JOIN_WHITE_LIST } from '@common/constants/site';
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
+import Taro from '@tarojs/taro'
 
 @inject('user')
 @inject('site')
@@ -83,6 +84,14 @@ export default class Page extends React.Component {
 
   createContent() {
     const { children, site } = this.props;
+    const routerList = Taro.getCurrentPages();
+    const currRouter = routerList[routerList.length - 1];
+    if ( currRouter ) {
+      const path = currRouter.route;
+      if ( path === 'subPages/404/index' || path === 'subPages/505/index' ) {
+        return children;
+      }
+    }
 
     if (!site.webConfig && !site.closeSiteConfig) {
       return (
