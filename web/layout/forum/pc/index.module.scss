@@ -54,6 +54,7 @@
     display: flex;
     align-items: center;
     flex: 1;
+    font-size: $font-size-base;
     line-height: $font-line-height-base;
     color: $text-color-primary;
     span {
@@ -80,7 +81,7 @@
   background-color: $white;
   box-sizing: border-box;
   padding: $padding-6n;
-  margin-bottom: $margin-4n;
+  margin-bottom: $margin-6n;
   .title {
     padding-bottom: $padding-6n;
     display: flex;
@@ -178,6 +179,7 @@
     display: flex;
     border-bottom: $border-solid-1;
     border-radius: $border-radius-small;
+    overflow: hidden;
   }
   .permission_common_left {
     background: $body-bg-color;
