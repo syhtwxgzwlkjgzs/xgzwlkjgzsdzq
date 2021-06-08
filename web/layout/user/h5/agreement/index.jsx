@@ -22,7 +22,6 @@ const PROTOCAL = {
 class BindNicknameH5Page extends React.Component {
 
   getProtocalData() {
-    console.log(222, this.props)
     const { router, site } = this.props;
 
     const { type } = router.query;
