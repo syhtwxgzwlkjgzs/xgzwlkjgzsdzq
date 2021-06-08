@@ -14,7 +14,6 @@ import Icon from '@discuzq/design/dist/components/icon/index';
 import Input from '@discuzq/design/dist/components/input/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import Button from '@discuzq/design/dist/components/button/index';
-import Header from '@components/header';
 import goToLoginPage from '@common/utils/go-to-login-page';
 
 import ReportPopup from './components/report-popup';
@@ -23,14 +22,14 @@ import DeletePopup from './components/delete-popup';
 import MorePopup from './components/more-popup';
 import InputPopup from './components/input-popup';
 import throttle from '@common/utils/thottle';
-import xss from '@common/utils/xss';
 
 import threadPay from '@common/pay-bussiness/thread-pay';
 import RewardPopup from './components/reward-popup';
 import RenderThreadContent from './detail/content';
 import RenderCommentList from './detail/comment-list';
 import classNames from 'classnames';
-import { debounce } from '../../components/thread/utils';
+import { debounce } from '@common/utils/throttle-debounce';
+
 @inject('site')
 @inject('user')
 @inject('thread')
@@ -774,12 +773,12 @@ class ThreadH5Page extends React.Component {
               <RenderThreadContent
                 store={threadStore}
                 fun={fun}
-                onLikeClick={() => this.onLikeClick()}
+                onLikeClick={debounce(() => this.onLikeClick(), 500)}
                 onOperClick={(type) => this.onOperClick(type)}
-                onCollectionClick={() => this.onCollectionClick()}
+                onCollectionClick={debounce(() => this.onCollectionClick(), 500)}
                 // onShareClick={() => this.onShareClick()}
                 onReportClick={() => this.onReportClick()}
-                onContentClick={() => this.onContentClick()}
+                onContentClick={debounce(() => this.onContentClick(), 500)}
                 onRewardClick={() => this.onRewardClick()}
                 onTagClick={() => this.onTagClick()}
                 onPayClick={() => this.onPayClick()}
@@ -845,7 +844,7 @@ class ThreadH5Page extends React.Component {
                 <Icon
                   color={this.props.thread?.isFavorite ? styleVar['--color-primary'] : ''}
                   className={footer.icon}
-                  onClick={() => this.onCollectionClick()}
+                  onClick={debounce(() => this.onCollectionClick(), 500)}
                   size="20"
                   name="CollectOutlinedBig"
                 ></Icon>

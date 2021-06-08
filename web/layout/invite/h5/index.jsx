@@ -51,7 +51,6 @@ class InviteH5Page extends React.Component {
 
   // 加载更多函数
   loadMore = async () => {
-    console.log('?');
     const { invite } = this.props;
     if (!this.checkLoadCondition()) return;
     return await invite.getInviteUsersList(invite.currentPage + 1);

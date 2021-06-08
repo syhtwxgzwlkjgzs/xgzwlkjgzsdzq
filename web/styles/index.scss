@@ -26,6 +26,11 @@
 .dzq-br {
   display: none;
 }
+.dzq-pre {
+  .dzq-br {
+    display: block;
+  }
+}
 
 * {
   font-family: $font-family;

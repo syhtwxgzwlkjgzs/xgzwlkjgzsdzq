@@ -119,4 +119,4 @@ const DialogBox = (props) => {
   );
 };
 
-export default  inject('message', 'user')(observer(DialogBox));
+export default inject('message', 'user')(observer(DialogBox));

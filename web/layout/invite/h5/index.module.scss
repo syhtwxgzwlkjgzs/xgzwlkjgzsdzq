@@ -12,7 +12,7 @@
   }
   // 用户信息 start
   .user_info{
-    height: rem(165);
+    height: rem(170);
     background: $comment-bg-color;
     position: relative;
   }
@@ -36,7 +36,6 @@
   }
   .user_info_content{
     width: calc(100vw - 32px);
-    height: rem(213);
     position: absolute;
     margin-left: calc(16px - 50vw);
     left: 50%;
@@ -44,7 +43,7 @@
     background: $white;
     border-radius: rem($border-radius-small);
     text-align: center;
-    padding: 0 rem($padding-4n);
+    padding: 0 rem($padding-4n) rem($padding-4n);
     box-sizing: border-box;
   }
   .user_info_name{
