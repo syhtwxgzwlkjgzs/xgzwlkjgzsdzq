@@ -11,6 +11,12 @@
     left: 50%;
     top: 228px;
     transform: translateX(-50%) translateY(-100%);
+    :global {
+      .dzq-avatar {
+        border: 3px solid;
+        box-sizing: border-box;
+      }
+    }
   }
   .userCenterEditDec {
     position: absolute;
@@ -71,4 +77,13 @@
       }
     }
   }
+}
+
+.hiddenElement {
+  position: absolute;
+  z-index: -1;
+  visibility: hidden;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

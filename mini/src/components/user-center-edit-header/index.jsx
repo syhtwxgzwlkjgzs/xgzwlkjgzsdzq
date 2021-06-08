@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import UserCenterHeaderImage from '@components/user-center-header-images';
@@ -16,9 +17,13 @@ export default class index extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      isClickSignature: false
+      isClickSignature: false, // 是否点击签名
+      isUploadAvatarUrl: false, // 是否上传头像
+      isUploadBackgroundUrl: false, // 是否上传背景图片
+      inputWidth: '100%'
     }
-    this.user = this.props.user || {}
+    this.user = this.props.user || {};
+    this.hiddenElement = React.createRef();
   }
 
   avatarUploaderRef = React.createRef(null);
@@ -43,13 +48,17 @@ export default class index extends Component {
   // 点击编辑签名
   handleClickSignature = () => {
     this.setState({
-      isClickSignature: !this.state.isClickSignature
+      isClickSignature: !this.state.isClickSignature,
+      inputWidth: this.hiddenElement.current?.offsetWidth
     })
   }
 
   // 签名change事件
   handleChangeSignature = (e) => {
-    this.props.user.editSignature = e.target.value
+    this.props.user.editSignature = e.target.value;
+    this.setState({
+      inputWidth: this.hiddenElement.current?.offsetWidth
+    })
   }
 
   handleBlurSignature = (e) => {
@@ -60,6 +69,8 @@ export default class index extends Component {
   }
 
   render() {
+    const { isUploadAvatarUrl, isUploadBackgroundUrl, inputWidth } = this.state
+    console.log(inputWidth);
     return (
       <>
         <View className={styles.userCenterEditHeader}>
@@ -78,11 +89,13 @@ export default class index extends Component {
             <Icon onClick={this.handleClickSignature} name="CompileOutlined" />
             {
               this.state.isClickSignature ? (
-                <Text className={styles.text}><Input maxLength={20} focus={true} onChange={this.handleChangeSignature} onBlur={this.handleBlurSignature} value={this.user.editSignature} placeholder="这个人很懒，什么也没留下~" /></Text>
+                <Text className={styles.text}><Input maxLength={50} focus={true} onChange={this.handleChangeSignature} onBlur={this.handleBlurSignature} value={this.user.editSignature} placeholder="这个人很懒，什么也没留下~" /></Text>
               ) : (
                 <Text className={styles.text}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</Text>
               )
             }
+            {/* 隐藏span--获取该内容宽度--赋值给input */}
+            <View style={{maxWidth: '80%'}} ref={this.hiddenElement} className={styles.hiddenElement}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</View>
           </View>
         </View>
       </>

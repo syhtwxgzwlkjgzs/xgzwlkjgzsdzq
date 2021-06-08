@@ -1,5 +1,4 @@
 @import '@common/styles/index.scss';
-@import '@common/styles/_variable.scss';
 
 .h5box {
     width: 100%;
@@ -25,6 +24,12 @@
         left: 20%;
         top: 60%;
         transform: translateX(-50%) translateY(-100%);
+        :global {
+          .dzq-avatar {
+            border: 3px solid;
+            box-sizing: border-box;
+          }
+        }
     }
 
     .actionButtonContentWrapper {
@@ -77,16 +82,21 @@
       }
     }
     .userNameOrTeam {
+      display: flex;
+      align-items: center;
       line-height: $font-line-height-small;
-      >text:nth-child(1) {
+      .userNickname {
+        display: block;
         font-size: $font-size-large;
         font-weight: 600;
         color: $text-color-primary;
         margin-right: $margin-2n;
+        @include text-ellipsis();
       }
-      >text:nth-child(2) {
+      .groupName {
         font-size: $font-size-small;
         color: $text-color-regular;
+        flex-shrink: 0;
       }
     }
     .userBtn {
