@@ -10,7 +10,7 @@
   box-shadow: $border-shadow-color;
   background: $white;
   box-sizing: border-box;
-  padding: 84px $padding-6n $padding-4n;
+  padding: $padding-3n * 7 $padding-6n $padding-4n;
   margin-bottom: $margin-5n;
   .user_card_main {
     width: 292px;
@@ -19,7 +19,7 @@
     background: $primary-color;
     margin: 0 auto;
     box-sizing: border-box;
-    padding: 68px $padding-4n $padding-4n;
+    padding: $padding-1n * 17 $padding-4n $padding-4n;
     text-align: center;
     position: relative;
     .user_card_avatar {
@@ -30,15 +30,14 @@
       left: 50%;
       margin-left: -60px;
       top: -60px;
-      border-radius: 50%;
+      border-radius: $border-radius-circle;
       background: var(--color-white);
-      border: 1px solid var(--color-white);
+      border: 1px solid $white;
       overflow: hidden;
       z-index: 3;
       :global(.dzq-avatar__img),:global(.dzq-avatar__text) {
         width: 118px;
         height: 118px;
-        line-height: 118px;
       }
 
     }
@@ -105,10 +104,10 @@
     text-align: center;
     font-weight: normal;
     font-size: rem($font-size-label);
-    color: var(--color-text-secondary);
+    color: $text-color-secondary;
     padding-top: $padding-2n;
     span {
-      color: var(--color-primary);
+      color: $primary-color;
     }
   }
 }

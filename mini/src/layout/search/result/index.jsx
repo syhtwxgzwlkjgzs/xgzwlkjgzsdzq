@@ -77,7 +77,7 @@ class SearchResultPage extends React.Component {
 
     return (
       <BaseLayout allowRefresh={false} showHeader={false}>
-        <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
+        <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} searchWhileTyping/>
 
         <SidebarPanel
           title="用户" 

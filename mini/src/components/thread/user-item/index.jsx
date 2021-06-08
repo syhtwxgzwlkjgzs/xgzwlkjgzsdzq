@@ -31,6 +31,7 @@ const Index = ({
   platform,
   needPadding = false,
   needBottomLine = false,
+  itemStyle = {},
 }) => {
   const handleClick = (e) => {
     e.stopPropagation();
@@ -51,7 +52,7 @@ const Index = ({
   `;
 
   return (
-    <View className={classString.trim()} key={index} onClick={handleClick}>
+    <View className={classString.trim()} key={index} onClick={handleClick} style={itemStyle}>
       <View className={styles.wrapper}>
           <View className={styles.header}>
               <Avatar

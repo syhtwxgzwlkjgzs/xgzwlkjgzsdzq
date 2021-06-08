@@ -49,7 +49,7 @@ const CommentInput = inject('site')((props) => {
   const onEventClick = useCallback((e) => {
     e && e.stopPropagation();
     if (e.target.id === 'emojiBtn') {
-      setShowEmojis(!showEmojis);
+      // setShowEmojis(!showEmojis);
       return;
     }
     setShowEmojis(false);
@@ -218,7 +218,7 @@ const CommentInput = inject('site')((props) => {
       {showAt && <AtSelect pc visible={showAt} getAtList={onAtListChange} onCancel={onAtIconClick} />}
 
       <div className={styles.footer}>
-        {showEmojis && <Emoji pc show={showEmojis} emojis={emojis} onClick={onEmojiClick} />}
+        {showEmojis && <Emoji pc show={showEmojis} emojis={emojis} onClick={onEmojiClick} atTop={false}/>}
 
         <div className={styles.linkBtn}>
           <Icon

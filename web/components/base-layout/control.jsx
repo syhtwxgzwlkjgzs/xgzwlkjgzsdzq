@@ -36,8 +36,6 @@ const BaseLayoutControl = (props) => {
 
   const [listRef, setListRef] = useState(null);
   const [baseLayoutWhiteList, setBaseLayoutWhiteList] = useState(['home', 'search']);
-  const [videoList, setVideoList] = useState([]);
-  const [playingIdx, setPlayingIdx] = useState(0);
   const layoutRef = useRef(null);
 
   useEffect(() => {

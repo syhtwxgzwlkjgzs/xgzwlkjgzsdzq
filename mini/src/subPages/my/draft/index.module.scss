@@ -1,48 +1,35 @@
-@import '@common/styles/index.scss';
+@import "@common/styles/index.scss";
 
-.drafts-box {
+.wrapper {
   height: 100vh;
-  display: flex;
-  flex-direction: column;
+  height: calc(100vh - constant(safe-area-inset-bottom));
+  height: calc(100vh - env(safe-area-inset-bottom));
   background-color: $body-bg-color;
-  font-family:$font-family ;
+  font-family: $font-family;
+}
 
-  .list {
-    flex: 1;
+.header {
+  padding: 0 $padding-4n;
+  margin-bottom: $margin-10;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  font-size: $font-size-base;
+  background-color: $white;
+  color: $text-color-regular;
+}
+.item {
+  margin: 0 $margin-4n;
+  padding: $padding-4n 0;
+  width: calc(100vw - 0.08rem * 2);
+  border-bottom: $border-solid-1;
+  overflow: hidden;
+  &.border-none {
+    border: none;
   }
-
-  .drafts-lenth {
-    height: 55px;
-    padding-left: $padding-4n;
-    line-height: 55px;
-    font-size: $font-size-base;
-    color: $text-color-regular;
-    background-color: $white;
-    margin-bottom: $margin-10;
-  }
-
-  .drafts-listbox {
-    width: 100%;
-    padding: 0 $padding-4n;
-    background-color: $white;
-
-    .drafts-list {
-      width: 100%;
-      min-height: 48px;
-      padding-bottom: $padding-4n;
-      border-bottom: $border-solid-1;
-    }
-
-    .drafts-list-finally {
-      width: 100%;
-      min-height: 48px;
-      padding-bottom: $padding-4n;
-    }
-
-    .drafts-time {
-      font-size: $font-size-small;
-      margin-top: $margin-2n;
-      color: $text-color-secondary;
-    }
+  &-time {
+    margin-top: $margin-2n;
+    font-size: $font-size-small;
+    color: $text-color-secondary;
   }
 }

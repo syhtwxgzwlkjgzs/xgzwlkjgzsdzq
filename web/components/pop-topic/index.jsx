@@ -11,6 +11,12 @@ class Index extends React.Component {
     super(props);
   }
 
+  state = {
+    topics: null,
+    isError: false,
+    errorText: '加载失败'
+  }
+
   componentDidMount() {
     this.loadData()
   }
@@ -20,10 +26,19 @@ class Index extends React.Component {
   }
 
   loadData = async () => {
-    const { pageData = [] } = this.props.search.topics || { pageData: [] };
-    if (!pageData.length) {
-      await this.props.search.getTopicsList();
-    }
+    try {
+      const res = await this.props.search.getTopicsList();
+      if (res) {
+        this.setState({
+          topics: res,
+        });
+      }
+    } catch (error) {
+      this.setState({
+        isError: true,
+        errorText: error
+      });
+    } 
   }
 
   redirectToSearchResultTopic = () => {
@@ -31,7 +46,8 @@ class Index extends React.Component {
   };
 
   render () {
-    const { pageData } = this.props.search.topics || {};
+    const { pageData } = this.state.topics || {};
+    const { isError, errorText } = this.state
 
     return (
       <SidebarPanel 
@@ -39,6 +55,8 @@ class Index extends React.Component {
         isLoading={!pageData}
         noData={!pageData?.length} 
         onShowMore={this.redirectToSearchResultTopic}
+        isError={isError}
+        errorText={errorText}
       >
           <TrendingTopic data={pageData?.filter((_, index) => index < 10)} onItemClick={this.onTopicClick}/>
       </SidebarPanel>

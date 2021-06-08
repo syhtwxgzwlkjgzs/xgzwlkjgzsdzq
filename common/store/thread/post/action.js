@@ -256,7 +256,8 @@ class ThreadPostAction extends ThreadPostStore {
     const { title, categoryId, contentText, position, price, attachmentPrice, freeWords } = this.postData;
     const params = {
       title, categoryId, content: {
-        text: emojiFormatForCommit(contentText).replace(/\n/g, '<br />'),
+        text: emojiFormatForCommit(contentText).replace(/\n/g, '<br />')
+          .replace(/@([^@<]+)<\/p>/g, '@$1 </p>'),
       },
     };
     if (position.address) params.position = position;
@@ -282,7 +283,7 @@ class ThreadPostAction extends ThreadPostStore {
 
   @action
   formatThreadDetailToPostData(detail) {
-    const { title, categoryId, content, freewords = 1, isDraft, user } = detail || {};
+    const { title, categoryId, content, freewords = 0, isDraft, isAnonymous } = detail || {};
     const price = Number(detail.price);
     const attachmentPrice = Number(detail.attachmentPrice);
     let position = {};
@@ -328,7 +329,7 @@ class ThreadPostAction extends ThreadPostStore {
         value: contentindexes[index].body.money || '',
       };
     });
-    const anonymous = user && user.nickname === '匿名用户' ? 1 : 0;
+    const anonymous = isAnonymous ? 1 : 0;
     this.setPostData({
       // 标题去掉富文本
       title: title.replace(/<[^<>]+>/g, ''),

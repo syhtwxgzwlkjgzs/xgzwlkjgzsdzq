@@ -50,7 +50,7 @@ class FrozenAmount extends React.Component {
         <View className={styles.header}>
           <View className={styles.record}>共有{this.state.totalCount}条记录</View>
           {/* TODO: 后台未返回涉及金额字段 */}
-          <View className={styles.totalMoney}>涉及金额 {this.props.wallet.walletInfo.freezeAmount} 元</View>
+          <View className={styles.totalMoney}>涉及金额 <Text className={styles.totalMoneyNumber}>{this.props.wallet.walletInfo.freezeAmount} 元</Text></View>
         </View>
         <List
           className={styles.body}
@@ -60,8 +60,8 @@ class FrozenAmount extends React.Component {
           {this.listRenderDataFilter().map((value) => (
             <View className={styles.content} key={value.id}>
               <View className={styles.upper}>
-                <View>{value.title || value.changeDesc}</View>
-                <View>{value.amount}</View>
+                <View className={styles.title}>{value.title || value.changeDesc}</View>
+                <View className={styles.amount}>{value.amount}</View>
               </View>
               <View className={styles.lower}>
                 <View>{diffDate(time.formatDate(value.createdAt, 'YYYY-MM-DD'))}</View>
