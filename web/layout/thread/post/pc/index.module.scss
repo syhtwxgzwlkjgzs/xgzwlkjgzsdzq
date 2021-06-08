@@ -24,6 +24,11 @@
       }
     }
   }
+  @include media('s-pc') {
+    &-inner {
+      padding: 48px 52px;
+    }
+  }
 }
 .editor {
   position: relative;
@@ -65,7 +70,6 @@
   bottom: 0;
   left: 0;
   padding: $padding-4n $padding-6n;
-  width: calc(892px - 44px);
   :global {
     .dzq-tag {
       @include tag-default;
