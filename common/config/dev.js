@@ -1,4 +1,4 @@
 module.exports = {
   TITLE: 'Discuz!Q',
-  COMMON_BASE_URL: 'https://discuzv3-dev.dnspod.dev',
+  COMMON_BASE_URL: 'https://bbsv3.techo.chat',
 };
