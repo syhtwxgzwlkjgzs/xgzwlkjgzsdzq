@@ -92,6 +92,10 @@
   display: flex;
   align-items: center;
 
+  :global(.dzq-icon) {
+    cursor: default;
+  }
+
   span {
     margin-left: rem($margin-1n);
     font-size: rem($font-size-label);
