@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 import classNames from 'classnames';
 import styles from './index.module.scss';
 
-import Header from '@components/header';
 import SliderScroll from '@components/slider-scroll';
 import ThreadCenterView from '@components/thread/ThreadCenterView';
 
