@@ -14,9 +14,11 @@ class UserCenterHeaderImage extends React.Component {
       backgroundUrl = this.props.user.targetUserBackgroundUrl;
     }
 
-    Object.assign(userImageStyle, {
-      backgroundImage: `url(${backgroundUrl})`
-    })
+    if (backgroundUrl) {
+      Object.assign(userImageStyle, {
+        backgroundImage: `url(${backgroundUrl})`
+      })
+    }
 
     return (
       <View

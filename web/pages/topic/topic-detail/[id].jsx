@@ -4,6 +4,7 @@ import IndexH5Page from '@layout/topic/topic-detail/h5';
 import IndexPCPage from '@layout/topic/topic-detail/pc';
 import { readTopicsList } from '@server';
 import { Toast } from '@discuzq/design';
+import ViewAdapter from '@components/view-adapter';
 
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
@@ -55,14 +56,11 @@ class Index extends React.Component {
     // this.toastInstance?.destroy();
   }
   render() {
-    const { site } = this.props;
-    const { platform } = site;
-
-    if (platform === 'pc') {
-      return <IndexPCPage dispatch={this.dispatch} />;
-    }
-
-    return <IndexH5Page dispatch={this.dispatch} />;
+    return <ViewAdapter
+            h5={<IndexH5Page dispatch={this.dispatch} />}
+            pc={<IndexPCPage dispatch={this.dispatch} />}
+            title='话题详情'
+          />;
   }
 }
 

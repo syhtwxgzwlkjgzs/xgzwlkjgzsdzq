@@ -29,6 +29,8 @@
   padding-bottom: rem($padding-4n);
   justify-content: space-between;
   border-bottom: 1px solid $body-bg-color;
+  height: rem(20);
+  line-height: rem(20);
   &:last-child {
     border-bottom: none;
   }

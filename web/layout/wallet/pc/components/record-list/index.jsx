@@ -163,22 +163,29 @@ class WalletInfo extends React.Component {
   getWithdrawalColumns = () => {
     const columns = [
       {
-        title: '提现',
-        key: 'cashApplyAmount',
-        render: item => <span  className={`${styles.frozenAmount}`}>{item.cashApplyAmount}</span>,
-      },
-      {
-        title: '流水号',
+        title: '交易号',
         key: 'type',
         render: item => <span className={styles.normalText}>{item.tradeNo || '暂无内容'}</span>,
       },
       {
-        title: '状态',
+        title: '提现状态',
         key: 'status',
-        render: item => <span className={styles.normalText}>{STATUS_MAP[item.cashStatus] || '暂无内容'}</span>,
+        render: item => <span className={
+          classNames(styles.normalText,{
+            [styles.wait]: Number(item.cashStatus) === 1,
+            [styles.remitedFailed]: Number(item.cashStatus) === 3 || Number(item.cashStatus) === 6,
+            [styles.pass]: Number(item.cashStatus) === 4,
+            [styles.remited]: Number(item.cashStatus) === 5
+          })
+        }>{STATUS_MAP[item.cashStatus] || '暂无内容'}</span>,
       },
       {
-        title: '时间',
+        title: '提现金额',
+        key: 'cashApplyAmount',
+        render: item => <span className={`${styles.frozenAmount}`}>-{item.cashApplyAmount}</span>,
+      },
+      {
+        title: '提现时间',
         key: 'time',
         render: item => (
           <span className={`${styles.timer}`}>{item.tradeTime ? time.formatDate(item.tradeTime, 'YYYY-MM-DD HH:mm') : '暂无'}</span>

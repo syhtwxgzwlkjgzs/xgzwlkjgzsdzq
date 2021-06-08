@@ -153,7 +153,7 @@ class SearchPCPage extends React.Component {
   // 中间 -- 潮流话题 活跃用户 热门内容
   renderContent = () => {
 
-    const { indexTopics, indexUsers, indexThreads } = this.props.search;
+    const { indexTopics, indexUsers, indexThreads, indexTopicsError, indexUsersError, indexThreadsError } = this.props.search;
     const userId = this.props.user?.userInfo?.id
 
     const { pageData: topicsPageData } = indexTopics || {};
@@ -170,6 +170,8 @@ class SearchPCPage extends React.Component {
             noData={!topicsPageData?.length}
             onShowMore={this.redirectToSearchResultTopic}
             icon={{ type: 1, name: 'StrongSharpOutlined' }}
+            isError={indexTopicsError.isError}
+            errorText={indexTopicsError.errorText}
           >
             <div className={styles.topic}>
               {topicsPageData?.map((item, index) => (
@@ -187,6 +189,8 @@ class SearchPCPage extends React.Component {
             noData={!usersPageData?.length}
             onShowMore={this.redirectToSearchResultUser}
             icon={{ type: 2, name: 'MemberOutlined' }}
+            isError={indexUsersError.isError}
+            errorText={indexUsersError.errorText}
           >
             <ActiveUsersMore data={usersPageData} onItemClick={this.onUserClick} onFollow={this.onFollow} userId={userId} />
           </SidebarPanel>
@@ -201,6 +205,8 @@ class SearchPCPage extends React.Component {
             icon={{ type: 3, name: 'HotOutlined' }}
             onShowMore={this.redirectToSearchResultPost}
             mold='plane'
+            isError={indexThreadsError.isError}
+            errorText={indexThreadsError.errorText}
           >
             {threadsPageData?.map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />)}
           </SidebarPanel>
@@ -223,19 +229,6 @@ class SearchPCPage extends React.Component {
         </BaseLayout>
     );
   }
-}
-
-const LoadingView = ({data}) => {
-  if (data) {
-    return (
-      <Nodata className={styles.noData} />
-    )
-  }
-  return (
-    <div className={styles.loading}>
-      <Spin type="spinner" />
-    </div>
-  )
 }
 
 export default withRouter(SearchPCPage);
