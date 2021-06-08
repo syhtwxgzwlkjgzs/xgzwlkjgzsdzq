@@ -27,6 +27,8 @@ class Index extends Component {
     this.state = {
       threadId: '', // 主题id
       postType: 'isFirst', // 发布状态 isFirst-首次，isEdit-再编辑，isDraft-草稿
+      canEditRedpacket: true, // 可编辑红包
+      canEditReward: true, // 可编辑悬赏
       isShowTitle: true, // 默认显示标题
       maxLength: 5000, // 文本输入最大长度
       showClassifyPopup: false, // 切换分类弹框show
@@ -135,7 +137,12 @@ class Index extends Component {
         .replace(/<span.*?>(.*?)<\/span>/g, `$1`);
       ret.data.content.text = realText;
       threadPost.formatThreadDetailToPostData(ret.data);
-      this.setState({ postType: isDraft ? 'isDraft' : 'isEdit' });
+      const { postData: { isDraft, redpacket, rewardQa } } = this.props.threadPost
+        this.setState({
+          postType: isDraft ? 'isDraft' : 'isEdit',
+          canEditRedpacket: isDraft || !(redpacket.money > 0),
+          canEditReward: isDraft || !(rewardQa.money > 0),
+        });
       // isDraft && this.openSaveDraft(); // 现阶段，自动保存功能关闭
     } else {
       // 请求失败，弹出错误消息
@@ -207,7 +214,7 @@ class Index extends Component {
     switch (item.type) {
       // 根据类型分发具体操作
       case THREAD_TYPE.reward:
-        if (postType === 'isEdit') {
+        if (!canEditReward) {
           return this.postToast('再编辑时不可操作悬赏');
         }
         nextRoute = '/subPages/thread/selectReward/index';
@@ -218,7 +225,7 @@ class Index extends Component {
         this.resetOperationType();
         break;
       case THREAD_TYPE.redPacket:
-        if (postType === 'isEdit') {
+        if (!canEditRedpacket) {
           return this.postToast('再编辑时不可操作红包');
         }
         nextRoute = '/subPages/thread/selectRedpacket/index';
@@ -728,7 +735,7 @@ class Index extends Component {
                     style={{ marginTop: 0, paddingRight: '8px' }}
                     tagContent={this.redpacketContent()}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.redPacket })}
-                    isCloseShow={this.state.postType !== 'isEdit'}
+                    isCloseShow={this.state.canEditRedpacket}
                     onTagRemoveClick={() => { setPostData({ redpacket: {} }) }}
                   />
                 }
@@ -739,7 +746,7 @@ class Index extends Component {
                     style={{ marginTop: 0, paddingRight: '8px' }}
                     tagContent={`悬赏金额${(rewardQa.value).toFixed(2)}元\\结束时间 ${rewardQa.times}`}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
-                    isCloseShow={this.state.postType !== 'isEdit'}
+                    isCloseShow={this.state.canEditReward}
                     onTagRemoveClick={() => { setPostData({ rewardQa: {} }) }}
                   />
                 }
