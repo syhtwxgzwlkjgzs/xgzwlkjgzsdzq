@@ -14,10 +14,9 @@
 
   .totalAmount {
     width: 100%;
-    height: 167px;
+    height: 134px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     color: var(--color-white);
     text-align: center;
@@ -27,7 +26,7 @@
       font-weight: normal;
       font-size: $font-size-primary;
       line-height: 16.8px;
-      padding: $padding-2n 0;
+      padding: 14px 0;
     }
     .moneyNum {
       font-family: 'PingFang SC';
