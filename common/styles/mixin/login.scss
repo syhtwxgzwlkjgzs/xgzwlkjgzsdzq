@@ -148,14 +148,20 @@
   margin-top: $margin-4n;
 }
 
+@mixin otherLogin_button {
+  margin: rem($margin-4n);
+  display: flex;
+  justify-content: center;
+}
+
 // ------------PC;
 
 @mixin pc_container {
-  width: 1100px;
+  width: 100%;
   border-radius: $border-radius-small;
   background: $white;
   box-shadow: $border-shadow-color-8;
-  margin: $margin-10 * 6 auto 0;
+  margin: 0 auto;
   text-align: center;
   padding-bottom: $padding-10 * 5;
   min-height: calc(100vh - 198px);
@@ -186,12 +192,6 @@
     cursor: pointer;
     color: $primary-color;
   }
-}
-
-@mixin pc_otherLogin_button {
-  margin: $margin-4n;
-  display: flex;
-  justify-content: center;
 }
 
 @mixin pc_otherLoginBtn {
