@@ -110,10 +110,10 @@ class DateTimePicker extends Component {
 
     const year = Number(yearStr.substr(0, yearStr.length - 1));
     const month = Number(monthStr.substr(0, monthStr.length - 1));
-    const day = Number(dayStr.substr(0, dayStr.length - 1));
 
     // 禁用时间
     if (!this.props.disabledTime) {
+      const day = Number(dayStr.substr(0, dayStr.length - 1));
       const hourStr = hourList[hourIdx];
       const minuteStr = minuteList[minuteIdx];
       const hour = Number(hourStr.substr(0, hourStr.length - 1));
@@ -121,6 +121,7 @@ class DateTimePicker extends Component {
       this.setState({
         hour,
         minute,
+        day,
       });
     }
 
@@ -133,7 +134,6 @@ class DateTimePicker extends Component {
       selectIndexList,
       year,
       month,
-      day,
     });
   };
 
@@ -174,12 +174,14 @@ class DateTimePicker extends Component {
                   }
                 </PickerViewColumn>
                 {/*日*/}
+                {!this.props.disabledTime && (
                 <PickerViewColumn className="picker-view-column">
                   {
                     dayList.length && dayList.map((item, index) =>
                       <View key={String(index)} className="pick-view-column-item">{item}</View>)
                   }
                 </PickerViewColumn>
+                )}
                 {/*时*/}
                 {!this.props.disabledTime && (
                   <PickerViewColumn className="picker-view-column">

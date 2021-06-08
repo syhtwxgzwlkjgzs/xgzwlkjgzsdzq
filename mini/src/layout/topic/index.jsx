@@ -49,7 +49,7 @@ class TopicPage extends React.Component {
     return (
       <View className={styles.topicWrap}>
         <View className={styles.topBox}>
-          <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} />
+          <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} searchWhileTyping/>
         </View>
        <TopicHeader onClick={this.onFilter} />
         

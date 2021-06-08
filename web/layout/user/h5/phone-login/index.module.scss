@@ -3,9 +3,7 @@
 .container {
   height: 100vh;
 }
-.banner {
-  @include banner;
-}
+
 .content {
   @include content;
   .title {
@@ -60,7 +58,7 @@
     font-size: $font-size-base;
   }
   .pc_otherLogin_button{
-    margin: $margin-4n;
+    @include pc_otherLogin_button;
     .button_left {
       @include pc_otherLoginBtn;
     }

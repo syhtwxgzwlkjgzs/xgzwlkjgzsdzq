@@ -3,9 +3,7 @@
 .container {
   height: 100vh;
 }
-.banner {
-  @include banner;
-}
+
 .content {
   @include content;
   .button {
@@ -15,7 +13,7 @@
     @include functionalRegion;
     line-height: rem($font-line-height-base);
     text-align: center;
-    margin-top: rem(32);
+    margin-top: rem($margin-4n * 2);
   }
   .icon{
     width: rem(327);
@@ -34,8 +32,8 @@
 }
 .pc_content {
   width: 300px;
-  margin: 20px auto 0;
-  padding-bottom: 30px;
+  margin: $margin-5n auto 0;
+  padding-bottom: $padding-10 * 3;
   .pc_functionalRegion {
     @include functionalRegion;
     font-weight: 600;
@@ -43,7 +41,7 @@
     line-height: $font-line-height-large;
     color: $text-color-primary;
     text-align: center;
-    padding-bottom: 32px;
+    padding-bottom: $padding-4n * 2;
   }
   .pc_button {
     @include pc_button;

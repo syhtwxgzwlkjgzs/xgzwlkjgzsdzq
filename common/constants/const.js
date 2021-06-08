@@ -129,6 +129,11 @@ export const attachIcon = [
     active: activeColor,
     type: THREAD_TYPE.reward,
   },
+  {
+    name: 'AnonymityOutlined',
+    active: activeColor,
+    type: THREAD_TYPE.anonymity,
+  },
 ];
 
 // 发帖底部付费选项
