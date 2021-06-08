@@ -11,7 +11,7 @@ import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
 import throttle from '@common/utils/thottle.js';
 import { View, Text } from '@tarojs/components';
-import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
+
 @inject('site')
 @inject('user')
 @observer
@@ -141,8 +141,7 @@ class index extends Component {
     // 条件都满足时才显示微信
     const IS_WECHAT_ACCESSABLE = this.props.site.wechatEnv !== 'none' && !!this.user.wxNickname;
     return (
-      <ToastProvider>
-        <View>
+        <View className={styles.userCenterWrapper}>
           {/* 头部 */}
           <View><UserCenterEditHeader /></View>
           {/* middle */}
@@ -215,7 +214,6 @@ class index extends Component {
             </Button>
           </View>
         </View>
-      </ToastProvider>
     )
   }
 }

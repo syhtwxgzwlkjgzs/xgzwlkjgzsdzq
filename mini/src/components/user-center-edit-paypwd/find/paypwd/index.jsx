@@ -10,7 +10,6 @@ import VerifyCode from '../../../user-center-edit-mobile/verify-code';
 import { View, Text } from '@tarojs/components';
 import classNames from 'classnames';
 import throttle from '@common/utils/thottle.js';
-import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 @inject('site')
 @inject('user')
 @inject('payBox')
@@ -195,7 +194,6 @@ class index extends Component {
     const { currentStep, list = [], isBlur, isKeyBoardVisible, initTimeValue, payPassword, payPasswordConfirmation } = this.state;
     const mobile = this.props?.user.mobile;
     return (
-      <ToastProvider>
         <View id={styles.findPayPwdContent}>
           <View className={styles.content}>
             <Text className={styles.setTtile}>找回支付密码</Text>
@@ -226,7 +224,6 @@ class index extends Component {
             <Button disabled={this.getDisabledWithButton()} full onClick={this.handleStepBtn} type={'primary'} className={styles.btn}>提交</Button>
           </View>
         </View>
-      </ToastProvider>
     )
   }
 }

@@ -9,7 +9,6 @@ import Router from '@discuzq/sdk/dist/router';
 import { View, Text } from '@tarojs/components';
 import throttle from '@common/utils/thottle.js';
 import classNames from 'classnames';
-import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 @inject('site')
 @inject('user')
 @inject('payBox')
@@ -176,7 +175,6 @@ class index extends Component {
 
   render() {
     return (
-      <ToastProvider>
         <View id={styles.setPayPwdContent}>
           {this.props.user?.canWalletPay ? this.renderCanPayPwd() : this.renderSetPayPwd()}
           <View className={classNames(styles.bottom, {
@@ -203,7 +201,6 @@ class index extends Component {
             )}
           </View>
         </View>
-      </ToastProvider>
     );
   }
 }

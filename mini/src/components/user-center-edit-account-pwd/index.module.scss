@@ -41,6 +41,8 @@
   margin-top: rem($margin-6n);
 }
 #accountPwdContent {
+  height: 100vh;
+  background-color: $white;
   .bottom {
     position: fixed;
     bottom: 0;

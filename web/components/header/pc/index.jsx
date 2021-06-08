@@ -30,6 +30,7 @@ class Header extends React.Component {
 
   // 每20秒更新一次未读消息
   updateUnreadMessage() {
+    if (!this.props.user.id) return;
     const { message: { readUnreadCount } } = this.props;
     this.timeoutId = setTimeout(() => {
       readUnreadCount();
@@ -204,16 +205,16 @@ class Header extends React.Component {
                   <p className={styles.iconText}>首页</p>
                 </div>
                 <div className={styles.iconItem} onClick={() => this.handleRouter('/message')}>
-                  <Icon
-                    onClick={() => {
-                      this.iconClickHandle('home');
-                    }}
-                    name="MailOutlined"
-                    size={17}
-                  />
-                  <UnreadRedDot unreadCount={totalUnread}>
-                    <p className={styles.iconText}>消息</p>
+                  <UnreadRedDot type="icon" style={{width: '17px'}} unreadCount={totalUnread}>
+                    <Icon
+                      onClick={() => {
+                        this.iconClickHandle('home');
+                      }}
+                      name="MailOutlined"
+                      size={17}
+                    />
                   </UnreadRedDot>
+                  <p className={styles.iconText}>消息</p>
                 </div>
                 <div className={styles.iconItem} onClick={() => this.handleRouter('/search')}>
                   <Icon

@@ -10,7 +10,6 @@ import Router from '@discuzq/sdk/dist/router';
 import { View, Text } from '@tarojs/components';
 import throttle from '@common/utils/thottle.js';
 import classNames from 'classnames';
-import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 
 @inject('payBox')
 @observer
@@ -76,7 +75,6 @@ export default class index extends Component {
     const newPayPwd = this.props.payBox?.newPayPwd
     const newPayPwdRepeat = this.props.payBox?.newPayPwdRepeat
     return (
-      <ToastProvider>
         <View id={styles.resetPayPwdContent}>
           <View className={styles.content}>
             <Text className={styles.setTtile}>设置新密码</Text>
@@ -97,7 +95,6 @@ export default class index extends Component {
             <Button full disabled={this.getDisabledWithButton()} onClick={this.handleSubmit} type={"primary"} className={styles.btn}>提交</Button>
           </View>
         </View>
-      </ToastProvider>
     )
   }
 }

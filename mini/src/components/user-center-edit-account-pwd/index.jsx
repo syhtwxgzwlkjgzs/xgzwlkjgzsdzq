@@ -11,7 +11,6 @@ import { View, Text } from '@tarojs/components';
 import throttle from '@common/utils/thottle.js';
 import { trimLR } from '@common/utils/get-trimly.js';
 import classNames from 'classnames';
-import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 @inject('site')
 @inject('user')
 @observer
@@ -212,7 +211,6 @@ class index extends Component {
 
   render() {
     return (
-      <ToastProvider>
         <View id={styles.accountPwdContent}>
           <View className={styles.content}>
             {this.props.user?.hasPassword ? this.renderHasPassword() : this.renderHasNoPassword()}
@@ -236,7 +234,6 @@ class index extends Component {
             >提交</Button>
           </View>
         </View>
-      </ToastProvider>
     )
   }
 }
