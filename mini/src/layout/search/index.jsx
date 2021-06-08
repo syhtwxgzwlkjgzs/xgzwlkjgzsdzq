@@ -46,7 +46,7 @@ class SearchH5Page extends React.Component {
   };
 
   render() {
-    const { indexTopics, indexUsers, indexThreads } = this.props.search;
+    const { indexTopics, indexUsers, indexThreads, indexTopicsError, indexUsersError, indexThreadsError } = this.props.search;
     const { pageData: topicsPageData } = indexTopics || {};
     const { pageData: usersPageData } = indexUsers || {};
     const { pageData: threadsPageData } = indexThreads || {};
@@ -60,6 +60,8 @@ class SearchH5Page extends React.Component {
           isLoading={!topicsPageData}
           noData={!topicsPageData?.length}
           platform='h5'
+          isError={indexTopicsError.isError}
+          errorText={indexTopicsError.errorText}
         >
           {
             topicsPageData?.length && <TrendingTopics data={topicsPageData} onItemClick={this.onTopicClick} />
@@ -73,6 +75,8 @@ class SearchH5Page extends React.Component {
           isLoading={!usersPageData}
           noData={!usersPageData?.length}
           platform='h5'
+          isError={indexUsersError.isError}
+          errorText={indexUsersError.errorText}
         >
           {
             usersPageData?.length && <ActiveUsers data={usersPageData} onItemClick={this.onUserClick} />
@@ -86,6 +90,8 @@ class SearchH5Page extends React.Component {
           isLoading={!threadsPageData}
           noData={!threadsPageData?.length}
           platform='h5'
+          isError={indexThreadsError.isError}
+          errorText={indexThreadsError.errorText}
         >
           {
             threadsPageData?.length && <PopularContents data={threadsPageData} />

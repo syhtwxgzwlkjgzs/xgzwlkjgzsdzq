@@ -168,6 +168,9 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
       } else {
         if (index === 2) return null; // 非付费用户不需显示付费列表
       }
+
+      const userItemClass = `${styles.userItem} ${tipData?.platform === 'pc' ? styles.pcItem : ''}`;
+
       return (
         <Tabs.TabPanel
           key={index}
@@ -192,8 +195,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
                           platform={platform}
                           onClick={onUserClick}
                           type={item.type}
-                          needPadding={true}
-                          needBottomLine={tipData?.platform === 'pc'}
+                          className={userItemClass.trim()}
                         />
                     ))
                   }

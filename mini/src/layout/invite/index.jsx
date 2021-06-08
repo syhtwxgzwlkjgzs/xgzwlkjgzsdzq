@@ -88,10 +88,11 @@ class InviteH5Page extends React.Component {
                           size='small'
                           text={item?.nickname?.substring(0, 1)}
                         />
-                        <View>{item.nickname}</View>
+                        <View className={layout.invite_list_username}>{item.nickname}</View>
                       </View>
                       <View className={layout.invite_list_itemMoney}>+{item.bounty}</View>
                       <View className={layout.invite_list_itemTime}>{item.joinedAt}</View>
+                      <View className={layout.invite_list_itemLine}></View>
                   </View>
                 ))
               }

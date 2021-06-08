@@ -8,6 +8,11 @@ import Header from '@components/header';
 import PcBodyWrap from '../components/pc-body-wrap';
 import * as protocolType from '../constants/protocol';
 
+const PROTOCAL = {
+  PRIVACY: 'privacy',
+  REGISTER: 'register'
+}
+
 @inject('site')
 @inject('user')
 @inject('thread')
@@ -15,10 +20,35 @@ import * as protocolType from '../constants/protocol';
 @inject('nicknameBind')
 @observer
 class BindNicknameH5Page extends React.Component {
-  render() {
-    const { router } = this.props;
+
+  getProtocalData() {
+    const { router, site } = this.props;
+
     const { type } = router.query;
-    const protocolData = protocolType[type];
+
+    const { webConfig: { agreement } } = site;
+    const { privacy, privacyContent, register, registerContent } = agreement;
+
+    let title = '';
+    let content = '';
+
+    if (type === PROTOCAL.PRIVACY) {
+      title = '隐私协议';
+      content = privacy ? privacyContent : '';
+    } else if (type === PROTOCAL.REGISTER) {
+      title = '注册协议';
+      content = register ? registerContent : ''
+    }
+
+    return {
+      title,
+      content
+    };
+  }
+
+  render() {
+    const protocolData = this.getProtocalData()
+
     return (
       <PcBodyWrap>
       <div className={layout.pc_container}>
@@ -28,23 +58,11 @@ class BindNicknameH5Page extends React.Component {
           <div className={layout.title}>
             {protocolData.title}
           </div>
-          {
-            protocolData?.content?.map((item, index) =>  (
-              <div key={index}>
-                <div className={layout.item_title}>
-                  {item.title}
-                </div>
-                {
-                  item?.content?.map((text, textIndex) => (
-                    <div key={textIndex} className={layout.item_content}>
-                      {text}
-                    </div>
-                  ))
-                }
-              </div>
-            )
-            )
-          }
+          <div className={layout.item_content}>
+            <pre>
+              {protocolData.content}
+            </pre>
+          </div>
         </div>
         </div>
       </div>
