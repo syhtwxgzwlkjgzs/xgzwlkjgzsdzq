@@ -102,6 +102,22 @@ class WalletH5Page extends React.Component {
     );
   };
 
+  // 加载更多
+  loadMore = () => {
+    console.log('触发啦');
+    switch (this.state.tabsType) {
+      case 'income':
+        this.fetchIncomeDetail();
+        break;
+      case 'pay':
+        this.fetchExpendDetail();
+        break;
+      case 'withdrawal':
+        this.fetchCashDetail();
+        break;
+    }
+  };
+
   handleTimeSelectorClick = () => {
     this.setState({ consumptionTimeshow: true });
   };
@@ -328,11 +344,16 @@ class WalletH5Page extends React.Component {
     const incomeData = this.listRenderDataFilter(incomeDetail) || [];
     const expandData = this.listRenderDataFilter(expandDetail) || [];
     const cashData = this.listRenderDataFilter(cashDetail) || [];
-
+    console.log(this.state.page, this.state.totalPage, this.state.page > this.state.totalPage);
     return (
       <Page>
         <View className={layout.container}>
-          <View className={layout.scroll}>
+          <List
+            onRefresh={this.loadMore}
+            noMore={this.state.page > this.state.totalPage}
+            hasOnScrollToLower={true}
+            className={layout.scroll}
+          >
             <View className={layout.header}>
               <WalletInfo
                 walletData={walletInfo}
@@ -358,50 +379,31 @@ class WalletH5Page extends React.Component {
             <View className={layout.tabs}>
               <Tabs scrollable={true} className={layout.tabList} onActive={this.onTabActive}>
                 {tabList.map(([id, label, icon]) => (
-                  <Tabs.TabPanel key={id} id={id} label={label} name={icon.name}>
-                    {this.state.tabsType === 'income' && (
-                      <List
-                        className={layout.list}
-                        noMore={this.state.page > this.state.totalPage}
-                        onRefresh={this.fetchIncomeDetail}
-                      >
-                        {incomeData.map((value, index) => (
-                          <IncomeList key={value.id} incomeVal={value} itemKey={index} dataLength={incomeData.length} />
-                        ))}
-                      </List>
-                    )}
-                    {this.state.tabsType === 'pay' && (
-                      <List
-                        className={layout.list}
-                        noMore={this.state.page > this.state.totalPage}
-                        onRefresh={this.fetchExpendDetail}
-                      >
-                        {expandData.map((value, index) => (
-                          <PayList key={value.id} payVal={value} itemKey={index} dataLength={expandData.length} />
-                        ))}
-                      </List>
-                    )}
-                    {this.state.tabsType === 'withdrawal' && (
-                      <List
-                        className={layout.list}
-                        noMore={this.state.page > this.state.totalPage}
-                        onRefresh={this.fetchCashDetail}
-                      >
-                        {cashData.map((value, index) => (
-                          <WithdrawalList
-                            key={value.id}
-                            withdrawalVal={value}
-                            itemKey={index}
-                            dataLength={cashData.length}
-                          />
-                        ))}
-                      </List>
-                    )}
-                  </Tabs.TabPanel>
+                  <Tabs.TabPanel key={id} id={id} label={label} name={icon.name}></Tabs.TabPanel>
                 ))}
               </Tabs>
+              {this.state.tabsType === 'income' && (
+                incomeData.map((value, index) => (
+                    <IncomeList key={value.id} incomeVal={value} itemKey={index} dataLength={incomeData.length} />
+                  ))
+              )}
+              {this.state.tabsType === 'pay' && (
+                expandData.map((value, index) => (
+                    <PayList key={value.id} payVal={value} itemKey={index} dataLength={expandData.length} />
+                  ))
+              )}
+              {this.state.tabsType === 'withdrawal' && (
+                cashData.map((value, index) => (
+                    <WithdrawalList
+                      key={value.id}
+                      withdrawalVal={value}
+                      itemKey={index}
+                      dataLength={cashData.length}
+                    />
+                  ))
+              )}
             </View>
-          </View>
+          </List>
 
           <View className={layout.footer}>
             <Button className={layout.button} onClick={this.toWithrawal} type="primary">
