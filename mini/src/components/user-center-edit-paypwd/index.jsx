@@ -80,18 +80,27 @@ class index extends Component {
     const { id } = this.props.user;
     this.props.payBox
       .setPayPassword(id)
-      .then((res) => {
+      .then(async (res) => {
         Toast.success({
           content: '设置密码成功',
           hasMask: false,
           duration: 1000,
         });
         const { type } = getCurrentInstance().router.params;
+        const { id } = this.props?.user;
         if (type === 'paybox') {
           const { id } = this.props?.user;
-          this.props.user.updateUserInfo(id);
-          this.props.payBox.visible = true;
-          this.props.payBox.password = null;
+          try {
+            await this.props.user.updateUserInfo(id);
+            this.props.payBox.visible = true;
+            this.props.payBox.password = null;
+            await this.props.payBox.getWalletInfo(id);
+          } catch (error) {
+            Toast.error({
+              content: '获取用户钱包信息失败',
+              duration: 1000,
+            });
+          }
         }
         Taro.navigateBack({ url: '/subPages/my/edit/index' });
         this.props.user.userInfo.canWalletPay = true;
