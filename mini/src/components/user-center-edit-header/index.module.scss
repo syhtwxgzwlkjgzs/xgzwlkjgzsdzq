@@ -1,5 +1,20 @@
 @import '@common/styles/index.scss';
-@import '@common/styles/_variable.scss';
+
+@mixin uploadStyles {
+  transition: all .5s;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: $mask-bg-color;
+  color: #fff;
+}
 
 .userCenterEditHeader {
   position: relative;
@@ -25,11 +40,13 @@
     padding: 0;
     justify-content: center;
     align-items: center;
-    width: 100%;
+    left: 0;
+    right: 0;
+    height: 20px;
+    line-height: 20px;
     .text {
-      display: block;
-      text-align: center;
-      font-size: $font-size-base;
+      // text-align: center;
+      font-size: rem($font-size-base);
       text-overflow: -o-ellipsis-lastline;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -39,23 +56,40 @@
       -webkit-box-orient: vertical;
       line-height: 1.2;
       color: $text-color-primary;
-      margin-left: $margin-2n;
+    }
+    .userCenterEditDecItem {
+      display: flex;
+      padding: 0 $padding-4n;
+      justify-content: center;
+      align-items: center;
       :global {
         .dzq-input {
           width: 100%;
-          height: 16px;
         }
+      }
+    }
+    .compileIcon {
+      margin-right: rem($margin-2n);
+    }
+    .userSignatureInput {
+      height: 20px;
+      line-height: 20px;
+      display: flex;
+      align-items: center;
+      :global {
         .dzq-input__inner {
           width: 100%;
           line-height: 1;
-          height: 16px;
+          height: 20px;
           border: none;
+          line-height: 20px;
+          padding: 0;
         }
       }
     }
     .dzq-icon {
       color: $text-color-regular;
-      font-size: $font-size-middle;
+      font-size: rem($font-size-middle);
     }
   }
   .userCenterEditCameraIcon {
@@ -71,10 +105,32 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 1;
     :global {
       .dzq-icon {
         color: $white;
       }
+    }
+  }
+}
+
+// 上传样式
+.uploadAvatar {
+  @include uploadStyles();
+  z-index: 0;
+  .uploadText {
+    margin-left: $margin-2n;
+  }
+}
+.bgContent {
+  position: relative;
+  // 上传背景图片样式
+  .uploadBgUrl {
+    @include uploadStyles();
+    z-index: 0;
+    border-radius: 0;
+    .uploadText {
+      margin-left: $margin-2n;
     }
   }
 }
@@ -87,3 +143,4 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+

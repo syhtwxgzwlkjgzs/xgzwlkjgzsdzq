@@ -293,29 +293,35 @@ export default class index extends Component {
           </View>
           {/* 编辑修改说明 */}
           <View className={styles.userCenterEditDec}>
-            <Icon onClick={this.handleClickSignature} name="CompileOutlined" />
-          {
-            this.state.isClickSignature ? (
-              <View className={styles.text}><Input maxLength={50} focus={true} onChange={this.handleChangeSignature} onBlur={this.handleBlurSignature} value={this.user.editSignature} placeholder="这个人很懒，什么也没留下~" /></View>
-            ) : (
-              <Text className={styles.text}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</Text>
-            )
-          }
-          {/* 隐藏span--获取该内容宽度--赋值给input */}
-          <View style={{ maxWidth: '80%' }} ref={this.hiddenElement} className={styles.hiddenElement}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</View>
+            <View className={styles.userCenterEditDecItem}>
+              <Icon className={styles.compileIcon} onClick={this.handleClickSignature} name="CompileOutlined" />
+              {
+                this.state.isClickSignature ? (
+                  <View
+                    style={{ width: inputWidth + 10, minWidth: !this.user.editSignature && '180px' }}
+                  >
+                    <Input trim className={styles.userSignatureInput} maxLength={50} focus={true} onChange={this.handleChangeSignature} onBlur={this.handleBlurSignature} value={this.user.editSignature} placeholder="这个人很懒，什么也没留下~" />
+                  </View>
+                ) : (
+                  <View style={{ minWidth: !this.user.editSignature && '180px' }} className={styles.text}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</View>
+                )
+              }
+              {/* 隐藏span--获取该内容宽度--赋值给input */}
+              <View style={{ maxWidth: '80%' }} ref={this.hiddenElement} className={styles.hiddenElement}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</View>
+            </View>
+          </View>
+          <Canvas
+            type="33"
+            canvasId={'photoCanvas'}
+            style={{
+              position: 'fixed',
+              top: 0,
+              zIndex: -10000,
+              width: this.state.canvasWidth,
+              height: this.state.canvasHeight,
+            }}
+          />
         </View>
-        <Canvas
-          type="33"
-          canvasId={'photoCanvas'}
-          style={{
-            position: 'fixed',
-            top: 0,
-            zIndex: -10000,
-            width: this.state.canvasWidth,
-            height: this.state.canvasHeight,
-          }}
-        />
-      </View>
       </>
     );
   }

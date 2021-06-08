@@ -63,6 +63,7 @@
   border-bottom: 1px solid var(--comment-content-bg-color);
   box-sizing: border-box;
   height: 52px;
+  overflow: hidden;
   .uerInputItem {
     height: 52px;
     line-height: 51px;
@@ -91,9 +92,12 @@
         padding: 0;
       }
     }
+    @include text-ellipsis();
   }
   .userLabelName {
     color: $text-color-regular;
+    flex-shrink: 0;
+    margin-right: $margin-2n;
   }
 }
 .userCenterEditBtn {

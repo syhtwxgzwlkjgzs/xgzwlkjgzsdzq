@@ -88,18 +88,14 @@ class index extends Component {
   }, 300);
 
   handleGoToEditMobile = () => {
-    // FIXME: 暂时页面缺失
     if (!this.user.mobile) {
-      return
-      Router.push({ url: '/user/bind-phone' });
+      Taro.navigateTo({ url: '/subPages/user/bind-phone/index' });
       return;
     }
     Taro.navigateTo({ url: '/subPages/my/edit/mobile/index' });
   };
 
   handleGoToEditUserName = () => {
-    // FIXME: 页面缺失
-    return
     if (!this.props.user.canEditUsername) {
       Toast.error({
         content: '用户名一年只能修改一次',
@@ -122,7 +118,7 @@ class index extends Component {
   renderInputNickName = () => {
     const { isClickNickName } = this.state;
     return (
-      <View className={styles.userCenterEditLabel}>
+      <View className={styles.userCenterEditLabel} style={{overflow: 'hidden'}}>
         <Text className={styles.userLabelName}>昵称</Text>
         <View className={styles.uerInputItem}>
           {isClickNickName ? (

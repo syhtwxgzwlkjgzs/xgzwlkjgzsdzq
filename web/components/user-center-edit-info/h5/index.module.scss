@@ -66,10 +66,13 @@
   border-bottom: 1px solid var(--comment-content-bg-color);
   box-sizing: border-box;
   height: rem(52);
+  overflow: hidden;
+  color: $text-color-primary;
   .uerInputItem {
     height: rem(52);
     line-height: rem(51);
     font-size: rem($font-size-base);
+    @include text-ellipsis();
     :global {
       .dzq-icon {
         color: $text-color-secondary;
@@ -95,11 +98,10 @@
       }
     }
   }
-  >label {
+  .userLabelName {
     color: $text-color-regular;
-  }
-  >div {
-    color: $text-color-primary;
+    margin-right: rem($margin-2n);
+    flex-shrink: 0;
   }
 }
 
