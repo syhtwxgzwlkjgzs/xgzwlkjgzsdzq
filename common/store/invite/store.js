@@ -21,9 +21,11 @@ export default class InviteStore {
   @action getInviteCode(router) {
     let inviteCode;
     if (typeof window === 'object') {
-      inviteCode = inviteCode || window?.sessionStorage?.getItem('inviteCode') || router?.query?.inviteCode || '';
+      console.log('invite coee');
+      console.log(router.query.inviteCode);
+      inviteCode = this.inviteCode || window?.sessionStorage?.getItem('inviteCode') || router?.query?.inviteCode || '';
     }
-    return inviteCode || this.inviteCode;
+    return inviteCode;
   }
 
   @action setInviteCode(code) {
