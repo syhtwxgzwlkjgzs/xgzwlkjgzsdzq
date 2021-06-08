@@ -72,6 +72,7 @@ class Index extends React.Component {
             showPullDown={false}
             onRefresh={this.loadMore}
             noMore={userShieldTotalPage < userShieldPage}
+            className={styles.shieldList}
           >
             <View className={styles.blockSplitLine} />
             {userShield.map((item, index) => (

@@ -88,10 +88,7 @@ page {
       .tag-toolbar {
         display: flex;
         flex-wrap: wrap;
-        padding: 0 $padding-4n;
-        // display: flex;
-        // align-items: center;
-        // flex-wrap: wrap;
+        padding: 8px $padding-4n 0 $padding-4n;
         background: $white;
         border-bottom: $border-solid-1;
       }

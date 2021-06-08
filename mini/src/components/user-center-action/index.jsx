@@ -31,6 +31,7 @@ class UserCenterAction extends React.Component {
 
   // 草稿箱
   handleMyDraft = () => {
+    Router.push({ url: '/subPages/my/draft/index' });
   }
 
   // 点击站点信息

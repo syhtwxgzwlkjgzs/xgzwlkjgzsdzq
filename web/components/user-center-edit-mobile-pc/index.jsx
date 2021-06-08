@@ -232,11 +232,15 @@ class index extends Component {
         <Dialog visible={this.props.visible} onClose={this.props.onClose}>
           <div className={styles.userMobileContent}>
             <div className={styles.title}>
-              <span className={styles.titleValue}>修改手机号</span>
+              <span className={styles.titleValue}>{currentStep === 'first' ? '验证旧手机' : '绑定手机号'}</span>
               <Icon onClick={this.handleClose} name="CloseOutlined" size={12} color={'#8490A8'} />
             </div>
             <div className={`${styles.inputItem}`}>
-              <div className={styles.labelName}>{currentStep === 'first' ? '验证旧手机' : '设置新手机'}</div>
+              {/* {
+                currentStep === 'first' && (
+                  <div className={styles.labelName}>验证旧手机</div>
+                )
+              } */}
               <div className={styles.mobileItem}>
                 {
                   currentStep === 'first' ? (
@@ -246,16 +250,16 @@ class index extends Component {
                   )
                 }
                 <div className={`${styles.labelValue} ${styles.verifyCodeBtn}`}>
-                  <VerifyCode initTimeValue={this.state.initTimeValue} value_pass_check={valuePassCheck} key={currentStep} text={'发送验证码'} getVerifyCode={this.getVerifyCode} />
+                  <VerifyCode className={styles.btnColor} btnType={true} initTimeValue={this.state.initTimeValue} value_pass_check={valuePassCheck} key={currentStep} text={currentStep === 'first' ? '发送验证码' : '获取验证码'} getVerifyCode={this.getVerifyCode} />
                 </div>
               </div>
             </div>
             <div className={styles.inputItem}>
-              <div className={styles.labelName}>请输入短信验证码</div>
+              <div className={styles.labelName}>请输入手机验证码</div>
               <CaptchaInput currentStep={currentStep} updatePwd={this.updatePwd} list={list} isBlur={isBlur} visible={this.props.visible} />
             </div>
             <div className={styles.bottom}>
-              <Button disabled={this.getDisabledWithButton()} onClick={this.handleStepBtn} type={'primary'} className={styles.btn}>{this.state.currentStep === 'first' ? '下一步' : '提交'}</Button>
+              <Button disabled={this.getDisabledWithButton()} onClick={this.handleStepBtn} type={'primary'} className={styles.btn}>{this.state.currentStep === 'first' ? '下一步' : '提交修改'}</Button>
             </div>
           </div>
         </Dialog>
