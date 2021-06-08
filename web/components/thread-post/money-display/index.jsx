@@ -4,8 +4,10 @@ import { Tag } from '@discuzq/design';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 import { defaultOperation, paidOption } from '@common/constants/const';
 import { plus } from '@common/utils/calculate';
+import { inject, observer } from 'mobx-react';
+import { withRouter } from 'next/router';
 
-export default function MoneyDisplay(props) {
+function MoneyDisplay(props) {
   const {
     postData = {},
     onAttachClick = () => { },
@@ -14,6 +16,9 @@ export default function MoneyDisplay(props) {
     redTotalMoney,
   } = props;
   const clsName = props.pc ? styles.pc : styles.h5;
+
+  // 编辑非草稿文章
+  const isEdit = props.router?.query?.id; // && !props.threadPost?.postData?.isDraft;
 
   return (
     <div id="dzq-money-box" className={`${styles['money-box']} ${clsName}`} onClick={e => e.stopPropagation()}>
@@ -30,7 +35,7 @@ export default function MoneyDisplay(props) {
       )}
       {/* 红包 */}
       {postData.redpacket.price && (
-        <Tag closeable
+        <Tag closeable={!isEdit}
           onClose={() => {
             onDefaultClick({
               id: defaultOperation.redpacket,
@@ -51,7 +56,7 @@ export default function MoneyDisplay(props) {
       )}
       {/* 悬赏问答内容标识 */}
       {(postData.rewardQa.value && postData.rewardQa.times) && (
-        <Tag closeable
+        <Tag closeable={!isEdit}
           onClose={() => onAttachClick({ type: THREAD_TYPE.reward }, { rewardQa: {} }) }
           onClick={() => {
             onAttachClick({ type: THREAD_TYPE.reward });
@@ -65,3 +70,5 @@ export default function MoneyDisplay(props) {
     </div>
   );
 }
+
+export default inject('threadPost')(observer(withRouter(MoneyDisplay)));

@@ -58,6 +58,7 @@ class PostPage extends React.Component {
   }
 
   componentDidMount() {
+    this.redirectToHome();
     this.props.router.events.on('routeChangeStart', this.handleRouteChange);
     this.fetchPermissions();
     // 如果本地缓存有数据，这个目前主要用于定位跳出的情况
@@ -79,6 +80,20 @@ class PostPage extends React.Component {
   componentWillUnmount() {
     this.captcha = '';
     this.props.router.events.off('routeChangeStart', this.handleRouteChange);
+  }
+
+  componentDidUpdate() {
+    this.redirectToHome();
+  }
+
+  redirectToHome() {
+    if (!this.props.user.threadExtendPermissions.createThread) {
+      Toast.info({ content: '您没有发帖权限，即将回到首页' });
+      const timer = setTimeout(() => {
+        clearTimeout(timer);
+        this.props.router.replace('/');
+      }, 1000);
+    }
   }
 
   handleRouteChange = (url) => {
@@ -247,11 +262,15 @@ class PostPage extends React.Component {
     const { router, threadPost } = this.props;
     const { query } = router;
     const { postData } = threadPost;
-    if (query && query.id) {
+    if (query && query.id) { // TODO:  目前后端接口对于草稿文章也不能编辑 !postData.isDraft
       if (item.type === THREAD_TYPE.reward && postData.rewardQa.money > 0) {
         Toast.info({ content: '悬赏内容不能再次编辑' });
         return false;
       }
+    }
+    if (item.type === THREAD_TYPE.anonymity) {
+      if (postData.anonymous) this.setPostData({ anonymous: 0 });
+      else this.setPostData({ anonymous: 1 });
     }
     if (data) {
       this.setPostData(data);
@@ -286,7 +305,8 @@ class PostPage extends React.Component {
     const { router, threadPost } = this.props;
     const { query } = router;
     const { postData } = threadPost;
-    if (query && query.id) {
+
+    if (query && query.id) { // TODO:  目前后端接口对于草稿文章也不能编辑 !postData.isDraft
       if (item.type === THREAD_TYPE.redPacket && postData.redpacket.money > 0) {
         Toast.info({ content: '红包内容不能再次编辑' });
         return false;
@@ -437,15 +457,27 @@ class PostPage extends React.Component {
     this.setState({ atList });
   };
 
+  checkAttachPrice = () => {
+    const { postData } = this.props.threadPost;
+    // 附件付费设置了需要判断是否进行了附件的上传
+    if (postData.attachmentPrice) {
+      if (!(postData.audio.id || postData.video.id
+        || Object.keys(postData.images)?.length
+        || Object.keys(postData.files)?.length)) return false;
+      return true;
+    }
+    return true;
+  }
+
   // 发布提交
   handleSubmit = async (isDraft) => {
-    const { postData, setPostData } = this.props.threadPost;
+    const { postData } = this.props.threadPost;
     if (!this.props.user.threadExtendPermissions.createThread) {
       Toast.info({ content: '您没有发帖权限' });
       return;
     }
     if (!this.isAudioUploadDone) {
-      Toast.info({ content: '请等待语音上传完成在发布' });
+      Toast.info({ content: '请等待语音上传完成再发布' });
       return;
     }
     if (!this.isVideoUploadDone) {
@@ -462,6 +494,10 @@ class PostPage extends React.Component {
     }
     if (!isDraft && !postData.contentText) {
       Toast.info({ content: '请填写您要发布的内容' });
+      return;
+    }
+    if (!this.checkAttachPrice()) {
+      Toast.info({ content: '请先上传附件、图片、视频或者语音' });
       return;
     }
     // if (!isDraft && this.state.count > MAX_COUNT) {

@@ -1,5 +1,9 @@
 @import '@common/styles/index.scss';
 
+.userCenterWrapper {
+  height: 100vh;
+}
+
 .userCenterEditMiddle {
   padding: $padding-4n;
   padding-bottom: 0;
@@ -102,6 +106,8 @@
   padding: 0 $padding-4n;
   .btn {
     height: 42px;
+    padding: 0;
+    line-height: 42px;
     font-size: $font-size-middle;
     border: none;
     border-radius: 5px;
@@ -110,5 +116,12 @@
   .btn:nth-child(1) {
     margin-right: $margin-10;
     background-color: $text-bg-color2;
+  }
+
+  .buttonContent {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }

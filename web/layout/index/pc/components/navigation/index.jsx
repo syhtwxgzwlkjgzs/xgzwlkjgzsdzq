@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, Card } from '@discuzq/design';
 import { noop } from '@components/thread/utils'
-import LoadingTips from '../../../../thread/pc/components/loading-tips';
 import styles from './index.module.scss';
 import isServer from '../../../../../../common/utils/is-server';
-import LoadingBox from '@components/loading-box';
+// import LoadingBox from '@components/loading-box';
+import BottomView from '@components/list/BottomView';
 
-const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, defaultFisrtIndex = -1, defaultSecondIndex = -1 }) => {
+const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, defaultFisrtIndex = -1, defaultSecondIndex = -1, isError = false, errorText }) => {
   const [fistIndex, setFistIndex] = useState(defaultFisrtIndex);
   const [secondIndex, setSecondIndex] = useState(defaultSecondIndex);
 
@@ -107,8 +107,8 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
       {
         categories?.length ?
           <CategoriesContent />
-        :
-          <LoadingBox />
+          :
+          <BottomView isBox isError={isError} errorText={errorText} noMore={false} loadingText='正在加载' />
       }
     </Card>
   );

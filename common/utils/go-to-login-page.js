@@ -23,12 +23,12 @@ function getH5LoginPath(redirectPath) {
 
 export default function goToLoginPage(options) {
   // 默认跳转路径
-  const { pathname, search: query, hash } = window.location;
-  const loginPath = browser.env('weixin') ? getWeiXinLoginPath(pathname) : getH5LoginPath(pathname);
+  // const { pathname, search: query, hash } = window.location;
+  // const loginPath = browser.env('weixin') ? getWeiXinLoginPath(pathname) : getH5LoginPath(pathname);
   Router.push({
-    pathname: loginPath,
-    query,
-    hash,
+    // pathname: loginPath,
+    // query,
+    // hash,
     ...options,
   });
 }

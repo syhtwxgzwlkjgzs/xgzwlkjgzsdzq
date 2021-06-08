@@ -105,7 +105,10 @@
         width: 166px;
         height: 44px;
         font-size: $font-size-middle;
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
         :global {
           .dzq-icon {
             vertical-align: middle;
@@ -130,7 +133,10 @@
       position: absolute;
       top: -26;
       right: 16;
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
       :global {
         .dzq-icon {
           vertical-align: middle;

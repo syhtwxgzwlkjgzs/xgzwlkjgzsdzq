@@ -71,7 +71,8 @@ class App extends Component {
 
   // 初始化站点数据
   async initSiteData() {
-    const { site, user } = this.store;
+
+    const { site, user} = this.store;
 
     let loginStatus = false;
 

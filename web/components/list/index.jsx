@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
 import { noop, isPromise } from '@components/thread/utils';
 import styles from './index.module.scss';
-import RefreshView from './RefreshView';
-import ErrorView from './ErrorView';
+import BottomView from './BottomView';
 
 /**
  * 列表组件，集成上拉刷新能力
@@ -142,7 +141,7 @@ const List = forwardRef(({
             setIsLoading(true);
             setIsError(true);
             setErrText(err || '加载失败')
-            onError();
+            onError(err);
           });
       } else {
         console.error('上拉刷新，必须返回promise');
@@ -166,8 +165,7 @@ const List = forwardRef(({
         onScroll={onTouchMove}
       >
         {children}
-        {onRefresh && showRefresh && !isError && <RefreshView noMore={noMore} />}
-        {showRefresh && isError && <ErrorView text={errText} onClick={handleError} />}
+        {onRefresh && showRefresh && <BottomView isError={isError} errorText={errText} noMore={noMore} handleError={handleError} />}
       </div>
     </div>
   );

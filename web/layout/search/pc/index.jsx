@@ -193,18 +193,17 @@ class SearchPCPage extends React.Component {
         </div>
 
         <div ref={this.hotTopicRef}>
-          <div className={styles.postTitle}>
-            <SectionTitle
-              title="热门内容"
-              icon={{ type: 3, name: 'HotOutlined' }}
-              onShowMore={this.redirectToSearchResultPost}
-            />
-          </div>
-          <div className={styles.postContent}>
-            {
-              threadsPageData?.length ? threadsPageData.map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />) : <LoadingView data={threadsPageData} />
-            }
-          </div>
+          <SidebarPanel 
+            type='normal'
+            isLoading={!threadsPageData}
+            noData={!threadsPageData?.length}
+            title="热门内容"
+            icon={{ type: 3, name: 'HotOutlined' }}
+            onShowMore={this.redirectToSearchResultPost}
+            mold='plane'
+          >
+            {threadsPageData?.map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />)}
+          </SidebarPanel>
         </div>
       </div>
     )
@@ -218,6 +217,7 @@ class SearchPCPage extends React.Component {
           onScroll={ this.handleScroll }
           jumpTo={this.state.position}
           pageName="search"
+          showRefresh={false}
         >
           { this.renderContent() }
         </BaseLayout>

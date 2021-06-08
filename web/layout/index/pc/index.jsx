@@ -93,7 +93,7 @@ class IndexPCPage extends React.Component {
     let newCurrentIndex = id
     const newId = this.resetCategoryids(id)
     if (newId) {
-      const { categories = [] } = this.props.index
+      const { categories = [] } = this.props.index || {}
       categories.forEach(item => {
         if (item.children?.length) {
           const tmp = item.children.filter(children => children.pid === newId)
@@ -219,7 +219,6 @@ class IndexPCPage extends React.Component {
   renderLeft = (countThreads = 0) => {
     const { categories = [] } = this.props.index;
     const newCategories = this.handleCategories(categories);
-
     return (
       <div className={styles.indexLeft}>
         <div className={styles.indexLeftBox}>
@@ -228,7 +227,10 @@ class IndexPCPage extends React.Component {
             defaultFisrtIndex={this.defaultCategoryIds[0]} 
             defaultSecondIndex={this.defaultCategoryIds[1]} 
             totalThreads={countThreads} 
-            onNavigationClick={this.onNavigationClick} />
+            onNavigationClick={this.onNavigationClick} 
+            isError={this.props.categoryError}
+            errorText={this.props.categoryErrorText}
+          />
         </div>
       </div>
     );

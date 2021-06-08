@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import Taro from '@tarojs/taro';
 import UserCenterEditHeader from '../user-center-edit-header';
-import { Button, Icon, Input, Toast } from '@discuzq/design';
+import Button from '@discuzq/design/dist/components/button/index';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Input from '@discuzq/design/dist/components/input/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import { inject, observer } from 'mobx-react';
@@ -13,7 +16,6 @@ import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvid
 @inject('user')
 @observer
 class index extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -37,7 +39,7 @@ class index extends Component {
 
   // 点击取消
   handleCancel = () => {
-    Router.back();
+    Taro.navigateTo({url: '/subPages/my/index'})
     this.props.user.initEditInfo();
   };
 
@@ -88,6 +90,7 @@ class index extends Component {
   handleGoToEditMobile = () => {
     // FIXME: 暂时页面缺失
     if (!this.user.mobile) {
+      return
       Router.push({ url: '/user/bind-phone' });
       return;
     }
@@ -117,14 +120,26 @@ class index extends Component {
 
   // 渲染修改用户名
   renderInputNickName = () => {
-    const { isClickNickName } = this.state
+    const { isClickNickName } = this.state;
     return (
       <View className={styles.userCenterEditLabel}>
         <Text className={styles.userLabelName}>昵称</Text>
-        <View className={styles.uerInputItem}>{isClickNickName ? <Input focus={true} maxLength={10} value={this.user.editNickName} onChange={this.handleChangeNickName} onBlur={this.handleBlurNickName} /> : this.user.editNickName}</View>
+        <View className={styles.uerInputItem}>
+          {isClickNickName ? (
+            <Input
+              focus={true}
+              maxLength={10}
+              value={this.user.editNickName}
+              onChange={this.handleChangeNickName}
+              onBlur={this.handleBlurNickName}
+            />
+          ) : (
+            this.user.editNickName
+          )}
+        </View>
       </View>
-    )
-  }
+    );
+  };
 
   render() {
     // 条件都满足时才显示微信
@@ -195,15 +210,13 @@ class index extends Component {
             }
           </View>
           {/* bottom */}
-          <View className={styles.userCenterEditBottom}>
-            <View className={styles.userCenterEditBtn}>
-              <Button full onClick={this.handleCancel} className={styles.btn}>
-                取消
+          <View className={styles.userCenterEditBtn}>
+            <Button full onClick={this.handleCancel} className={styles.btn}>
+              取消
             </Button>
-              <Button full className={styles.btn} onClick={this.handleUpdateEditedUserInfo} type="primary">
-                保存
+            <Button full className={styles.btn} onClick={this.handleUpdateEditedUserInfo} type="primary">
+              保存
             </Button>
-            </View>
           </View>
         </View>
       </ToastProvider>
@@ -211,4 +224,4 @@ class index extends Component {
   }
 }
 
-export default index
+export default index;

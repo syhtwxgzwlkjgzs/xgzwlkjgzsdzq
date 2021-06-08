@@ -64,7 +64,7 @@ class SearchResultTopicH5Page extends React.Component {
           noMore={currentPage >= totalPage}
           showHeader={false}
         >
-          <SearchInput onSearch={this.onSearch} onCancel={this.onSearch} defaultValue={keyword} />
+          <SearchInput onSearch={this.onSearch} onCancel={this.onSearch} defaultValue={keyword} searchWhileTyping/>
           <View className={styles.wrapper}>
             {
               pageData?.map((item, index) => (
