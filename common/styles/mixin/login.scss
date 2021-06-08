@@ -59,6 +59,10 @@
   color: $white;
   background: $primary-color;
   border: $primary-color;
+  &:hover {
+    background: $primary-color;
+    border: $primary-color;
+  }
   &:active{
     background: $primary-color6;
     border-color: $primary-color6;
