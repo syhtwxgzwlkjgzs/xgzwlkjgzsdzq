@@ -9,6 +9,8 @@ import { withRouter } from 'next/router';
 
 function MoneyDisplay(props) {
   const {
+    canEditRedpacket,
+    canEditReward,
     postData = {},
     onAttachClick = () => { },
     onDefaultClick = () => {},
@@ -16,9 +18,6 @@ function MoneyDisplay(props) {
     redTotalMoney,
   } = props;
   const clsName = props.pc ? styles.pc : styles.h5;
-
-  // 编辑非草稿文章
-  const isEdit = props.router?.query?.id; // && !props.threadPost?.postData?.isDraft;
 
   return (
     <div id="dzq-money-box" className={`${styles['money-box']} ${clsName}`} onClick={e => e.stopPropagation()}>
@@ -35,7 +34,7 @@ function MoneyDisplay(props) {
       )}
       {/* 红包 */}
       {postData.redpacket.price && (
-        <Tag closeable={!isEdit}
+        <Tag closeable={canEditRedpacket}
           onClose={() => {
             onDefaultClick({
               id: defaultOperation.redpacket,
@@ -56,7 +55,7 @@ function MoneyDisplay(props) {
       )}
       {/* 悬赏问答内容标识 */}
       {(postData.rewardQa.value && postData.rewardQa.times) && (
-        <Tag closeable={!isEdit}
+        <Tag closeable={canEditReward}
           onClose={() => onAttachClick({ type: THREAD_TYPE.reward }, { rewardQa: {} }) }
           onClick={() => {
             onAttachClick({ type: THREAD_TYPE.reward });

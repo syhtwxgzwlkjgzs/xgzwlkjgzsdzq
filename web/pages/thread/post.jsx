@@ -30,6 +30,9 @@ class PostPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      postType: 'isFirst', // 发布状态 isFirst-首次，isEdit-再编辑，isDraft-草稿
+      canEditRedpacket: true, // 可编辑红包
+      canEditReward: true, // 可编辑悬赏
       emoji: {},
       // 分类选择显示状态
       categoryChooseShow: false,
@@ -135,6 +138,13 @@ class PostPage extends React.Component {
       } else ret = await thread.fetchThreadDetail(id);
       if (ret.code === 0) {
         threadPost.formatThreadDetailToPostData(ret.data);
+        // 设置主题状态、是否能操作红包和悬赏
+        const { postData: { isDraft, redpacket, rewardQa } } = this.props.threadPost
+        this.setState({
+          postType: isDraft ? 'isDraft' : 'isEdit',
+          canEditRedpacket: isDraft || !(redpacket.money > 0),
+          canEditReward: isDraft || !(rewardQa.money > 0),
+        });
       } else {
         Toast.error({ content: ret.msg });
       }
@@ -258,16 +268,11 @@ class PostPage extends React.Component {
       // this.setState({ curPaySelect: THREAD_TYPE.voice })
     }
 
+    const { postData } = this.props.threadPost;
 
-    // 如果是编辑操作
-    const { router, threadPost } = this.props;
-    const { query } = router;
-    const { postData } = threadPost;
-    if (query && query.id) { // TODO:  目前后端接口对于草稿文章也不能编辑 !postData.isDraft
-      if (item.type === THREAD_TYPE.reward && postData.rewardQa.money > 0) {
-        Toast.info({ content: '悬赏内容不能再次编辑' });
-        return false;
-      }
+    if (item.type === THREAD_TYPE.reward && !this.state.canEditReward) {
+      Toast.info({ content: '悬赏内容不能再次编辑' });
+      return false;
     }
     if (item.type === THREAD_TYPE.anonymity) {
       if (postData.anonymous) this.setPostData({ anonymous: 0 });
@@ -303,16 +308,13 @@ class PostPage extends React.Component {
 
   // 表情等icon
   handleDefaultIconClick = (item, child, data) => {
-    const { router, threadPost } = this.props;
-    const { query } = router;
-    const { postData } = threadPost;
+    const { postData } = this.props.threadPost;
 
-    if (query && query.id) { // TODO:  目前后端接口对于草稿文章也不能编辑 !postData.isDraft
-      if (item.type === THREAD_TYPE.redPacket && postData.redpacket.money > 0) {
-        Toast.info({ content: '红包内容不能再次编辑' });
-        return false;
-      }
+    if (item.type === THREAD_TYPE.redPacket && !this.state.canEditRedpacket) {
+      Toast.info({ content: '红包内容不能再次编辑' });
+      return false;
     }
+
     if (data) {
       this.setPostData(data);
       return false;
