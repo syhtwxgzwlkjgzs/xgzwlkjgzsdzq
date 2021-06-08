@@ -154,8 +154,8 @@ class index extends Component {
         {/* 中 用户昵称和他所在的用户组名称 */}
         <div>
           <div className={styles.userNameOrTeam}>
-            <span>{user.nickname}</span>
-            <span>{user.group?.groupName}</span>
+            <span className={styles.userNickname}>{user.nickname}</span>
+            <span className={styles.groupName}>{user.group?.groupName}</span>
           </div>
           <p className={styles.text}>{user.signature || '这个人很懒，什么也没留下~'}</p>
         </div>

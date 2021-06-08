@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react';
+import Taro from '@tarojs/taro';
 import Button from '@discuzq/design/dist/components/button/index';
 import Input from '@discuzq/design/dist/components/input/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
@@ -7,177 +8,235 @@ import Header from '@components/header';
 import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
 import { View, Text } from '@tarojs/components';
-
+import throttle from '@common/utils/thottle.js';
+import { trimLR } from '@common/utils/get-trimly.js';
+import classNames from 'classnames';
+import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
+@inject('site')
 @inject('user')
 @observer
 class index extends Component {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      oldPassword: null, // 旧密码
-      newPassword: null, // 新密码
-      newPasswordRepeat: null, // 确认密码
-    }
-  }
-
-  initState = () => {
-    this.setState({
-      oldPassword: null, // 旧密码
-      newPassword: null, // 新密码
-      newPasswordRepeat: null, // 确认密码
-    })
-  }
-
   componentDidMount() {
-    this.initState()
-  }
-
-  componentWillUnmount() {
-    this.initState()
+    this.props.user.clearUserAccountPassword();
   }
 
   // 点击忘记密码
   handleResetPwd = () => {
-    Router.push({ url: '/user/reset-password/index' })
-  }
+    if (!this.props.user.mobile) {
+      Toast.error({
+        content: '需要首先绑定手机号才能进行此操作',
+        duration: 2000
+      });
+      return;
+    }
+    // FIXME: 页面缺失
+    // Taro.navigateTo({ url: '/subPages/user/reset-password' });
+  };
 
   // 输入旧密码
   handleSetOldPwd = (e) => {
-    this.setState({
-      oldPassword: e.target.value
-    })
-  }
+    if (trimLR(e.target.value) === "" || !e.target.value) {
+      this.props.user.oldPassword = null;
+      return
+    }
+    this.props.user.oldPassword = e.target.value;
+  };
 
   // 设置账户密码
   handleSetPwd = (e) => {
-    this.setState({
-      newPassword: e.target.value
-    })
-  }
+    if (trimLR(e.target.value) === "" || !e.target.value) {
+      this.props.user.newPassword = null;
+      return
+    }
+    this.props.user.newPassword = e.target.value;
+  };
 
   // 确认新密码
   hadleNewPasswordRepeat = (e) => {
-    this.setState({
-      newPasswordRepeat: e.target.value
-    })
-  }
+    if (trimLR(e.target.value) === "" || !e.target.value) {
+      this.props.user.newPasswordRepeat = null;
+      return
+    }
+    this.props.user.newPasswordRepeat = e.target.value;
+  };
 
   // 点击提交
-  handleSubmit = async () => {
-    const { oldPassword, newPassword, newPasswordRepeat } = this.state
+  handleSubmit = throttle(async () => {
+    if (this.getDisabledWithButton()) return;
+    const newPassword = this.props.user?.newPassword;
+    const newPasswordRepeat = this.props.user?.newPasswordRepeat;
     if (newPassword !== newPasswordRepeat) {
       Toast.error({
         content: '两次密码输入有误',
         hasMask: false,
         duration: 1000,
-      })
-      return
+      });
+      this.props.user.clearUserAccountPassword();
+      return;
     }
-    this.props.user.oldPassword = oldPassword
-    this.props.user.newPassword = newPassword
-    this.props.user.newPasswordRepeat = newPasswordRepeat
     if (this.props.user.hasPassword) {
-      this.props.user.resetUserPassword().then(res => {
-        Toast.success({
-          content: '修改密码成功',
-          hasMask: false,
-          duration: 1000,
+      this.props.user
+        .resetUserPassword()
+        .then((res) => {
+          Toast.success({
+            content: '修改密码成功',
+            hasMask: false,
+            duration: 1000,
+          });
+          Taro.navigateBack({ delta: 1 });
+          this.props.user.clearUserAccountPassword();
         })
-        Router.back()
-      }).catch((err) => {
-        Toast.error({
-          content: err.Message || '修改密码失败, 请重新设置',
-          hasMask: false,
-          duration: 1000,
-        })
-        this.props.user.newPassword = null
-        this.props.user.newPasswordRepeat = null
-        this.initState()
-      })
+        .catch((err) => {
+          Toast.error({
+            content: err.Message || '修改密码失败, 请重新设置',
+            hasMask: false,
+            duration: 1000,
+          });
+          this.props.user.clearUserAccountPassword();
+        });
     } else {
-      this.props.user.setUserPassword().then(res => {
-        Toast.success({
-          content: '设置密码成功',
-          hasMask: false,
-          duration: 1000,
+      this.props.user
+        .setUserPassword()
+        .then((res) => {
+          Toast.success({
+            content: '设置密码成功',
+            hasMask: false,
+            duration: 1000,
+          });
+          Taro.navigateBack({ delta: 1 });
+          this.props.user.clearUserAccountPassword();
         })
-        Router.back()
-      }).catch((err) => {
-        Toast.error({
-          content: err.Message || '设置密码失败, 请重新设置',
-          hasMask: false,
-          duration: 1000,
-        })
-        this.props.user.oldPassword = null
-        this.props.user.newPassword = null
-        this.props.user.newPasswordRepeat = null
-        this.initState()
-      })
+        .catch((err) => {
+          Toast.error({
+            content: err.Message || '设置密码失败, 请重新设置',
+            hasMask: false,
+            duration: 1000,
+          });
+          this.props.user.clearUserAccountPassword();
+        });
     }
+  }, 300);
 
+  /**
+ * 获取禁用按钮状态
+ * @returns true 表示禁用 false 表示不禁用
+ */
+  getDisabledWithButton = () => {
+    const oldPassword = this.props.user?.oldPassword;
+    const newPassword = this.props.user?.newPassword;
+    const newPasswordRepeat = this.props.user?.newPasswordRepeat;
 
-  }
-
-  // 渲染未设置密码
-  renderHasNoPassword = () => {
-    const { newPassword, newPasswordRepeat } = this.state
-    return (
-      <>
-        <h3>设置密码</h3>
-        <View className={styles.labelInfo}>
-          <View className={styles.labelValue}>{this.props.user?.username}</View>
-        </View>
-        <View className={styles.labelInfo}>
-          <View className={styles.labelValue}><Input onChange={this.handleSetPwd} mode="password" placeholder="请设置密码" value={newPassword} /></View>
-        </View>
-        <View className={styles.labelInfo}>
-          <View onChange={this.hadleNewPasswordRepeat} className={styles.labelValue}><Input mode="password" placeholder="请确认密码" value={newPasswordRepeat} /></View>
-        </View>
-      </>
-    )
-  }
-
-  // 渲染已设置密码
-  renderHasPassword = () => {
-    const { newPassword, newPasswordRepeat } = this.state
-    return (
-      <>
-        <Text className={styles.setTitle}>修改密码</Text>
-        <View className={styles.labelInfo}>
-          <View className={styles.labelValue}>{this.props.user?.username}</View>
-        </View>
-        <View className={styles.labelInfo}>
-          <View className={styles.labelValue}><Input onChange={this.handleSetOldPwd} mode="password" placeholder="请输入旧密码" /></View>
-        </View>
-        <View className={styles.labelInfo}>
-          <View className={styles.labelValue}><Input value={newPassword} onChange={this.handleSetPwd} mode="password" placeholder="请输入新密码" /></View>
-        </View>
-        <View className={styles.labelInfo}>
-          <View className={styles.labelValue}><Input onChange={this.hadleNewPasswordRepeat} mode="password" value={newPasswordRepeat} placeholder="请重复输入新密码" /></View>
-        </View>
-      </>
-    )
-  }
-
-  render() {
-    const { oldPassword, newPassword, newPasswordRepeat } = this.state
-    let isSubmit = false
+    let isSubmit = false;
     if (this.props.user?.hasPassword) {
       isSubmit = !oldPassword || !newPassword || !newPasswordRepeat
     } else {
-      isSubmit = (!newPassword || !newPasswordRepeat)
+      isSubmit = !newPassword || !newPasswordRepeat;
     }
-    return (
-      <View>
-        <View className={styles.content}>
-          {this.props.user?.hasPassword ? this.renderHasPassword() : this.renderHasNoPassword()}
-        </View>
-        <View onClick={this.handleResetPwd} className={styles.tips}>忘记旧密码？</View>
-        <View className={styles.bottom}>
-          <Button onClick={this.handleSubmit} disabled={isSubmit} type={"primary"} className={styles.btn}>提交</Button>
+    return isSubmit;
+  };
+
+  // 渲染未设置密码
+  renderHasNoPassword = () => (
+    <>
+      <View className={styles.title}>设置密码</View>
+      <View className={styles.labelInfo}>
+        <View className={styles.labelValue}>
+          <Input
+            className={styles.input}
+            onChange={this.handleSetPwd}
+            mode="password"
+            placeholder="请设置密码"
+            value={this.props.user?.newPassword}
+            trim
+          />
         </View>
       </View>
+      <View className={styles.labelInfo}>
+        <View className={styles.labelValue}>
+          <Input
+            className={styles.input}
+            mode="password"
+            placeholder="请确认密码"
+            value={this.props.user?.newPasswordRepeat}
+            onChange={this.hadleNewPasswordRepeat}
+            trim
+          />
+        </View>
+      </View>
+    </>
+  );
+
+  // 渲染已设置密码
+  renderHasPassword = () => (
+    <>
+      <View className={styles.title}>修改密码</View>
+      <View className={styles.labelInfo}>
+        <View className={styles.labelValue}>
+          <Input
+            className={styles.input}
+            value={this.props.user?.oldPassword}
+            onChange={this.handleSetOldPwd}
+            mode="password"
+            placeholder="请输入旧密码"
+            trim
+          />
+        </View>
+      </View>
+      <View className={styles.labelInfo}>
+        <View className={styles.labelValue}>
+          <Input
+            className={styles.input}
+            value={this.props.user?.newPassword}
+            onChange={this.handleSetPwd}
+            mode="password"
+            placeholder="请输入新密码"
+            trim
+          />
+        </View>
+      </View>
+      <View className={styles.labelInfo}>
+        <View className={styles.labelValue}>
+          <Input
+            className={styles.input}
+            onChange={this.hadleNewPasswordRepeat}
+            mode="password"
+            value={this.props.user?.newPasswordRepeat}
+            placeholder="请重复输入新密码"
+            trim
+          />
+        </View>
+      </View>
+    </>
+  );
+
+  render() {
+    return (
+      <ToastProvider>
+        <View id={styles.accountPwdContent}>
+          <View className={styles.content}>
+            {this.props.user?.hasPassword ? this.renderHasPassword() : this.renderHasNoPassword()}
+          </View>
+          {
+            (this.props.site?.isSmsOpen && this.props.user?.hasPassword) && (
+              <View onClick={this.handleResetPwd} className={styles.tips}>忘记旧密码？</View>
+            )
+          }
+          <View
+            className={classNames(styles.bottom, {
+              [styles.bgBtnColor]: !this.getDisabledWithButton(),
+            })}
+          >
+            <Button
+              full
+              onClick={this.handleSubmit}
+              disabled={this.getDisabledWithButton()}
+              type={'primary'}
+              className={styles.btn}
+            >提交</Button>
+          </View>
+        </View>
+      </ToastProvider>
     )
   }
 }

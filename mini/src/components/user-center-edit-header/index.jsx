@@ -21,12 +21,16 @@ export default class index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isClickSignature: false,
+      isClickSignature: false, // 是否点击签名
+      isUploadAvatarUrl: false, // 是否上传头像
+      isUploadBackgroundUrl: false, // 是否上传背景图片
+      inputWidth: '100%',
       canvasHeight: 0,
       canvasWidth: 0,
-    };
+    }
     this.config = getConfig();
     this.user = this.props.user || {};
+    this.hiddenElement = React.createRef();
   }
 
   handleAvatarUpload = () => {
@@ -254,13 +258,17 @@ export default class index extends Component {
   handleClickSignature = () => {
     this.setState({
       isClickSignature: !this.state.isClickSignature,
-    });
-  };
+      inputWidth: this.hiddenElement.current?.offsetWidth
+    })
+  }
 
   // 签名change事件
   handleChangeSignature = (e) => {
     this.props.user.editSignature = e.target.value;
-  };
+    this.setState({
+      inputWidth: this.hiddenElement.current?.offsetWidth
+    })
+  }
 
   handleBlurSignature = (e) => {
     this.props.user.editSignature = e.target.value;
@@ -270,6 +278,8 @@ export default class index extends Component {
   };
 
   render() {
+    const { isUploadAvatarUrl, isUploadBackgroundUrl, inputWidth } = this.state
+    console.log(inputWidth);
     return (
       <>
         <View className={styles.userCenterEditHeader}>
@@ -284,33 +294,28 @@ export default class index extends Component {
           {/* 编辑修改说明 */}
           <View className={styles.userCenterEditDec}>
             <Icon onClick={this.handleClickSignature} name="CompileOutlined" />
-            {this.state.isClickSignature ? (
-              <View className={styles.text}>
-                <Input
-                  maxLength={20}
-                  focus={true}
-                  onChange={this.handleChangeSignature}
-                  onBlur={this.handleBlurSignature}
-                  value={this.user.editSignature}
-                  placeholder="这个人很懒，什么也没留下~"
-                />
-              </View>
+          {
+            this.state.isClickSignature ? (
+              <View className={styles.text}><Input maxLength={50} focus={true} onChange={this.handleChangeSignature} onBlur={this.handleBlurSignature} value={this.user.editSignature} placeholder="这个人很懒，什么也没留下~" /></View>
             ) : (
               <Text className={styles.text}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</Text>
-            )}
-          </View>
-          <Canvas
-            type="33"
-            canvasId={'photoCanvas'}
-            style={{
-              position: 'fixed',
-              top: 0,
-              zIndex: -10000,
-              width: this.state.canvasWidth,
-              height: this.state.canvasHeight,
-            }}
-          />
+            )
+          }
+          {/* 隐藏span--获取该内容宽度--赋值给input */}
+          <View style={{ maxWidth: '80%' }} ref={this.hiddenElement} className={styles.hiddenElement}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</View>
         </View>
+        <Canvas
+          type="33"
+          canvasId={'photoCanvas'}
+          style={{
+            position: 'fixed',
+            top: 0,
+            zIndex: -10000,
+            width: this.state.canvasWidth,
+            height: this.state.canvasHeight,
+          }}
+        />
+      </View>
       </>
     );
   }
