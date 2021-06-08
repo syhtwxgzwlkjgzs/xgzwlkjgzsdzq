@@ -169,6 +169,7 @@ class ThreadCreate extends React.Component {
     const timer = setTimeout(() => {
       if (timer) clearTimeout(timer);
       const postBottombar = document.querySelector('#post-bottombar');
+      if (!postBottombar) return;
       this.positionDisplay();
       this.setPostBox('clear');
       postBottombar.style.top = 'auto';

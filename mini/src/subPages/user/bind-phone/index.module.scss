@@ -15,14 +15,6 @@
   .captchaInput{
     position: relative;
   }
-  .sendCaptcha {
-    @include mini_captchaBtn;
-    color: $primary-color;
-    font-size: $font-size-base;
-  }
-  .countDown {
-    @include mini_captchaBtn;
-  }
   .button {
     @include mini_button;
   }

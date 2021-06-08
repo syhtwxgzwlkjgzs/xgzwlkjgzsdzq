@@ -15,7 +15,7 @@ export const COMMON_LOGIN_STORE_ERRORS = {
     Message: '需要补充昵称和附加信息',
   },
   NEED_BIND_WECHAT: {
-    Code: 8000,
+    Code: -8000,
     Message: '需要绑定微信',
   },
 };
@@ -46,7 +46,7 @@ const networkRequestCatcher = async () => {
 
 const isExtFieldsOpen = (site) => {
   const { setSite: { openExtFields } = {} } = site.webConfig;
-  return openExtFields === '0' ;
+  return openExtFields === '1' ;
 };
 
 

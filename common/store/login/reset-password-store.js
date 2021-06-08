@@ -132,7 +132,7 @@ export default class resetPasswordStore {
     sendCode = async ({captchaRandStr, captchaTicket}) => {
       try {
         const smsResp = await smsSend({
-          timeout: 3000,
+
           data: {
             mobile: this.mobile,
             type: 'reset_pwd',
@@ -165,7 +165,7 @@ export default class resetPasswordStore {
 
       try {
         const resetPwdResp = await smsResetPwd({
-          timeout: 3000,
+
           data: {
             mobile: this.mobile,
             password: this.newPassword,

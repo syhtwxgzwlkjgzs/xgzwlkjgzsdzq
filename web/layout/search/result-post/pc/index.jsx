@@ -27,26 +27,6 @@ class SearchResultPostH5Page extends React.Component {
     return dispatch('moreData', keyword);
   };
 
-  renderContent = (pageData) => {
-    return (
-      <SidebarPanel 
-        title="热门内容" 
-        type='normal'
-        isShowMore={false}
-        isLoading={!pageData}
-        noData={!pageData?.length}
-        icon={{ type: 3, name: 'HotOutlined' }}
-        mold='plane'
-      >
-        {
-          pageData?.map((item, index) => (
-            <ThreadContent className={index ===0 && styles.borderRadius} showBottom={false} data={item} key={index} />
-          ))
-        }
-      </SidebarPanel>
-    )
-  }
-
   searchData = (keyword) => {
     const { dispatch } = this.props;
     dispatch('refresh', keyword);
@@ -69,7 +49,21 @@ class SearchResultPostH5Page extends React.Component {
         showRefresh={false}
         isShowLayoutRefresh={!!pageData?.length}
       >
-        { this.renderContent(pageData) }
+        <SidebarPanel 
+          title="热门内容" 
+          type='normal'
+          isShowMore={false}
+          isLoading={!pageData}
+          noData={!pageData?.length}
+          icon={{ type: 3, name: 'HotOutlined' }}
+          mold='plane'
+        >
+          {
+            pageData?.map((item, index) => (
+              <ThreadContent className={index ===0 ? styles.borderRadius : ''} showBottom={false} data={item} key={index} />
+            ))
+          }
+        </SidebarPanel>
       </BaseLayout>
     );
   }

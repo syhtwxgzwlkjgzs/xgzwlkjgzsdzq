@@ -54,7 +54,6 @@ class ThreadH5Page extends React.Component {
       // inputValue: '', // 评论内容
       inputText: '请输入内容', // 默认回复框placeholder内容
       toView: '', // 接收元素id用来滚动定位
-      position: 0,
     };
 
     this.perPage = 5;
@@ -62,6 +61,7 @@ class ThreadH5Page extends React.Component {
     this.commentDataSort = true;
 
     // 滚动定位相关属性
+    this.position = 0;
     this.threadBodyRef = React.createRef();
     this.commentDataRef = React.createRef();
     this.nextPosition = 0;
@@ -142,23 +142,17 @@ class ThreadH5Page extends React.Component {
     if (this.flag) {
       this.flag = !this.flag;
     } else {
-      if (this.state.position <= 0) {
-        this.setState({ position: this.nextPosition + 1 });
+      if (this.position <= 0) {
+        this.position = this.nextPosition + 1;
       } else {
-        this.setState({ position: this.nextPosition - 1 });
+        this.position = this.nextPosition - 1;
       }
       this.flag = !this.flag;
     }
   }
 
-  // 保持当前位置
-  keepCurrentPosition = () => {
-    this.setState({ position: this.currentPosition });
-  };
-
   // 点击收藏icon
   async onCollectionClick() {
-    this.keepCurrentPosition();
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
       goToLoginPage({ url: '/subPages/user/wx-auth/index' });
@@ -223,7 +217,6 @@ class ThreadH5Page extends React.Component {
 
   // 点击评论
   onInputClick() {
-    this.keepCurrentPosition();
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
       goToLoginPage({ url: '/subPages/user/wx-auth/index' });
@@ -239,7 +232,6 @@ class ThreadH5Page extends React.Component {
 
   // 点击更多icon
   onMoreClick = () => {
-    this.keepCurrentPosition();
     // this.setState({
     //   text: !this.state.text,
     // });
@@ -389,12 +381,12 @@ class ThreadH5Page extends React.Component {
 
     if (success) {
       Toast.success({
-        content: '删除成功，即将跳转至首页',
+        content: '删除成功，即将跳转至上一页',
       });
 
       setTimeout(() => {
-        Taro.redirectTo({
-          url: '/pages/index/index',
+        Taro.navigateBack({
+          delta: 1,
         });
       }, 1000);
 
@@ -413,6 +405,13 @@ class ThreadH5Page extends React.Component {
 
   // 点击发布按钮
   async publishClick(val, imageList) {
+    const valuestr = val.replace(/\s/g, '');
+    // 如果内部为空，且只包含空格或空行
+    if (!valuestr) {
+      Toast.info({ content: '请输入内容' });
+      return;
+    }
+
     if (this.commentType === 'comment') {
       return await this.onPublishClick(val, imageList);
     }
@@ -423,10 +422,6 @@ class ThreadH5Page extends React.Component {
 
   // 发布评论
   async onPublishClick(val, imageList) {
-    if (!val) {
-      Toast.info({ content: '请输入内容!' });
-      return;
-    }
     return this.comment ? await this.updateComment(val, imageList) : await this.createComment(val, imageList);
   }
 
@@ -528,7 +523,6 @@ class ThreadH5Page extends React.Component {
 
   // 点击评论的回复
   replyClick(comment) {
-    this.keepCurrentPosition();
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
       goToLoginPage({ url: '/subPages/user/wx-auth/index' });
@@ -547,7 +541,6 @@ class ThreadH5Page extends React.Component {
 
   // 点击回复的回复
   replyReplyClick(reply, comment) {
-    this.keepCurrentPosition();
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
       goToLoginPage({ url: '/subPages/user/wx-auth/index' });
@@ -768,7 +761,7 @@ class ThreadH5Page extends React.Component {
           ref={this.hreadBodyRef}
           id="hreadBodyId"
           scrollY
-          scrollTop={this.state.position}
+          scrollTop={this.position}
           lowerThreshold={50}
           onScrollToLower={() => this.scrollToLower()}
           scrollIntoView={this.state.toView}
@@ -804,7 +797,6 @@ class ThreadH5Page extends React.Component {
                       router={this.props.router}
                       sort={(flag) => this.onSortChange(flag)}
                       onEditClick={(comment) => this.onEditClick(comment)}
-                      keepCurrentPosition={() => this.keepCurrentPosition()}
                       replyReplyClick={(reply, comment) => this.replyReplyClick(reply, comment)}
                       replyClick={(comment) => this.replyClick(comment)}
                     ></RenderCommentList>

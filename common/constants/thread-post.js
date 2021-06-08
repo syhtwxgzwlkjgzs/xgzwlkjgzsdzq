@@ -53,6 +53,7 @@ export const THREAD_TYPE = {
   draft: 117, // 草稿
   saveDraft: 118, // 保存草稿
   abandonDraft: 119, // 不保存草稿
+  anonymity: 10001, // 匿名
 };
 
 // 图片类型

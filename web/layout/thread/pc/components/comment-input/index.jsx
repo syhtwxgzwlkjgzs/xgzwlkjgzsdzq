@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useState, Fragment } from 'react';
+import React, { createRef, useEffect, useState, Fragment, useCallback } from 'react';
 import { Textarea, Toast, Divider, Button, Icon } from '@discuzq/design';
 import styles from './index.module.scss';
 import { readEmoji } from '@common/server';
@@ -36,6 +36,24 @@ const CommentInput = inject('site')((props) => {
   useEffect(() => {
     setValue(initValue);
   }, [initValue]);
+
+  // 点击其他地方emoji输入框收起
+  useEffect(() => {
+    showEmojis ? window.addEventListener('click', onEventClick) : window.removeEventListener('click', onEventClick);
+
+    return () => {
+      window.removeEventListener('click', onEventClick);
+    };
+  }, [showEmojis]);
+
+  const onEventClick = useCallback((e) => {
+    e && e.stopPropagation();
+    if (e.target.id === 'emojiBtn') {
+      // setShowEmojis(!showEmojis);
+      return;
+    }
+    setShowEmojis(false);
+  }, []);
 
   const onSubmitClick = async () => {
     if (typeof onSubmit === 'function') {
@@ -200,7 +218,7 @@ const CommentInput = inject('site')((props) => {
       {showAt && <AtSelect pc visible={showAt} getAtList={onAtListChange} onCancel={onAtIconClick} />}
 
       <div className={styles.footer}>
-        {showEmojis && <Emoji pc show={showEmojis} emojis={emojis} onClick={onEmojiClick} />}
+        {showEmojis && <Emoji pc show={showEmojis} emojis={emojis} onClick={onEmojiClick} atTop={false}/>}
 
         <div className={styles.linkBtn}>
           <Icon
@@ -208,6 +226,7 @@ const CommentInput = inject('site')((props) => {
             size="20"
             className={classnames(styles.btnIcon, showEmojis && styles.actived)}
             onClick={onEmojiIconClick}
+            id="emojiBtn"
           ></Icon>
           <Icon
             name="AtOutlined"

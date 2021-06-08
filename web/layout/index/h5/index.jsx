@@ -32,11 +32,29 @@ class IndexH5Page extends React.Component {
   }
 
   async componentDidMount() {
+    try {
+      this.handleWeiXinShare()
+    } catch (error) {
+      
+    }
+
+    const { filter = {} } = this.props.index;
+
+    const newFilter = { ...this.state.filter, ...filter };
+    const { categoryids = [] } = newFilter;
+
+    const currentIndex = this.resetCurrentIndex(categoryids[0] || 'all');
+
+    this.setState({ filter: newFilter, currentIndex });
+  }
+
+  componentWillUnmount() {
+    const { filter } = this.state;
+    this.props.index.setFilter(filter);
+  }
+
+  handleWeiXinShare = async () => {
     await initJSSdk(['updateAppMessageShareData', 'updateTimelineShareData', 'checkJsApi']);
-    wx.ready(() => {
-      console.log(111);
-      alert('ready');
-    });
     const { site } = this.props;
     const title = site.webConfig.setSite.siteName || 'Discuz! Q';
     const desc = site.webConfig.setSite.siteIntroduction || 'Discuz! Q官方论坛';
@@ -52,29 +70,15 @@ class IndexH5Page extends React.Component {
         link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
         imgUrl, // 分享图标
       });
-    });
-
-    wx.ready(() => {      // 需在用户可能点击分享按钮前就先调用
+    
       wx.updateTimelineShareData({
         title, // 分享标题
         link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
         imgUrl, // 分享图标
       });
+
+      console.log(111);
     });
-
-    const { filter = {} } = this.props.index;
-
-    const newFilter = { ...this.state.filter, ...filter };
-    const { categoryids = [] } = newFilter;
-
-    const currentIndex = this.resetCurrentIndex(categoryids[0] || 'all');
-
-    this.setState({ filter: newFilter, currentIndex });
-  }
-
-  componentWillUnmount() {
-    const { filter } = this.state;
-    this.props.index.setFilter(filter);
   }
 
   checkIsOpenDefaultTab() {

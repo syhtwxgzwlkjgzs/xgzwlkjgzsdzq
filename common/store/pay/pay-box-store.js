@@ -151,7 +151,6 @@ class PayBoxStore {
         isAnonymous: this.isAnonymous,
       };
       const createRes = await createOrders({
-        timeout: 3000,
         data,
       });
       if (get(createRes, 'code') === 0) {
@@ -496,7 +495,7 @@ class PayBoxStore {
     captchaRandStr,
   }) {
     const smsResp = await smsSend({
-      timeout: 3000,
+
       data: {
         mobile,
         type: 'reset_pay_pwd',

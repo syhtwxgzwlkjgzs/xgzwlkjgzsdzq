@@ -151,7 +151,8 @@ class IndexAction extends IndexStore {
       this.setCategories(data);
       return this.categories;
     }
-    return null;
+    
+    return Promise.reject(result?.msg || '加载失败');
   }
 
   /**
@@ -385,8 +386,8 @@ class IndexAction extends IndexStore {
       }
     } catch(err) {
       console.err(err);
-      this.updateRecommendsStatus('none');
-      return null
+      this.updateRecommendsStatus('error');
+      return Promise.reject(err?.msg || '加载失败');
     }
    }
 

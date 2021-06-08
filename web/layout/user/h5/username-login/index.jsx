@@ -13,6 +13,7 @@ import { genMiniScheme } from '@server';
 import Protocol from '../components/protocol';
 import browser from '../../../../../common/utils/browser';
 import PcBodyWrap from '../components/pc-body-wrap';
+import goToLoginPage from '../../../../../common/utils/go-to-login-page';
 
 @inject('site')
 @inject('user')
@@ -87,13 +88,10 @@ class UsernameH5Login extends React.Component {
         content: '登录成功',
         hasMask: false,
         duration: 1000,
+        onClose() {
+          window.location.href = '/';
+        },
       });
-      // FIXME: Toast 暂时不支持回调能力
-      // FIXME: 使用 window 跳转用来解决，获取 forum 在登录前后不同的问题，后续需要修改 store 完成
-      setTimeout(() => {
-        window.location.href = '/';
-        return;
-      }, 1000);
     } catch (e) {
       this.loginErrorHandler(e);
     }

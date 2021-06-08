@@ -6,9 +6,9 @@ import { observer, inject } from 'mobx-react';
 import { goodImages } from '@common/constants/const';
 import styles from './index.module.scss';
 
-const Index = inject('threadPost')(observer(({ threadPost }) => {
+const Index = inject('threadPost', 'site')(observer(({ threadPost, site }) => {
   const { fetchProductAnalysis, setPostData } = threadPost;
-
+  const { envConfig } = site;
   const [url, setUrl] = useState('');
 
   return (
@@ -17,7 +17,7 @@ const Index = inject('threadPost')(observer(({ threadPost }) => {
       <View className={styles['product']}>
         {goodImages.map((item) => (
           <View className={styles['product-type']}>
-            <Image src={`https://discuzv3-dev.dnspod.dev/${item.src}`} style={{width: `${item.width}px`, height: `${item.height}px`}} />
+            <Image src={`${envConfig.COMMOM_BASE_URL}/${item.src}`} style={{width: `${item.width}px`, height: `${item.height}px`}} />
             <Text>{item.name}</Text>
           </View>
         ))}

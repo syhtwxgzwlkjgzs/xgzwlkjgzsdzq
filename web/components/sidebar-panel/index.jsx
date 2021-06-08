@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
-import { Spin } from '@discuzq/design';
 import SectionTitle from '@components/section-title';
-import NoData from '@components/no-data';
+import BottomView from '@components/list/BottomView';
 import styles from './index.module.scss';
 
 /**
@@ -27,7 +26,9 @@ const WrapperContent = (props) => {
     type = 'small',
     className = '',
     platform = 'pc',
-    isNeedBottom = true
+    isNeedBottom = true,
+    errorText = '',
+    isError = false
   } = props;
 
   const isNoData = useMemo(() => !children || !!noData, [noData, children]);
@@ -39,18 +40,11 @@ const WrapperContent = (props) => {
     }
     return styles.containerH5;
   }, [platform, type]);
+
   return (
     <div className={`${styles.container} ${pcStyle} ${className} ${isNeedBottom && styles.bottom}`}>
       {header || <SectionTitle {...props} />}
-      {
-        isLoading ? (
-          <div className={styles.spinner}>
-            <Spin type="spinner" />
-          </div>
-        ) : (
-          isNoData ? <NoData /> : children
-        )
-      }
+      {(!isLoading && !isNoData) ? children : <BottomView isError={isError} errorText={errorText} noMore={!isLoading && isNoData} loadingText='正在加载' />}
       {footer}
     </div>
   )
@@ -65,6 +59,9 @@ const PlaneContent = (props) => {
     type = 'small',
     className = '',
     platform = 'pc',
+    titleWrapper = '',
+    errorText = '',
+    isError = false
   } = props;
   const isNoData = useMemo(() => !children || !!noData, [noData, children]);
 
@@ -77,18 +74,10 @@ const PlaneContent = (props) => {
   }, [platform, type]);
   return (
     <div className={className}>
-      <div className={`${pcStyle} ${styles.containerPlane}`}>
+      <div className={`${pcStyle} ${styles.containerPlane} ${titleWrapper}`}>
         {header || <SectionTitle {...props} />}
       </div>
-      {
-        isLoading ? (
-          <div className={styles.spinner}>
-            <Spin type="spinner" />
-          </div>
-        ) : (
-          isNoData ? <NoData className={styles.container} /> : children
-        )
-      }
+      {(!isLoading && !isNoData) ? children : <BottomView className={styles.bottomView} isError={isError} errorText={errorText} noMore={!isLoading && isNoData} loadingText='正在加载' />}
     </div>
   )
 }

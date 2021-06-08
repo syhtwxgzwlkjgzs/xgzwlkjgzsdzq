@@ -59,6 +59,7 @@ class ThreadPostStore {
     orderSn: '', // 支付订单号
     ticket: '', // 腾讯云验证码返回票据
     randstr: '', // 腾讯云验证码返回随机字符串
+    isDraft: false, // 是否是编辑的草稿
   }
 
   @computed get payTotalMoney() {
@@ -78,7 +79,7 @@ class ThreadPostStore {
   @computed get redpacketTotalAmount() { // 计算红包总额
     const { rule = 1, price = 0, number } = this.postData.redpacket;
     return rule === 1
-      ? parseFloat(price)
+      ? parseFloat(price).toFixed(2)
       : (parseFloat(price) * parseInt(number)).toFixed(2);
   }
 

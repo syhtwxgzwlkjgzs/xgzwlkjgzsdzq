@@ -1,37 +1,16 @@
 import React, { Component } from 'react';
-import { View } from '@tarojs/components';
-import Taro from '@tarojs/taro';
-import Page from '@components/page';
-import Toast from '@discuzq/design/dist/components/toast/index';
-import List from '@components/list';
 import { inject, observer } from 'mobx-react';
-import SliderScroll from '@components/slider-scroll';
+import Taro from '@tarojs/taro';
+import { View } from '@tarojs/components';
+import Toast from '@discuzq/design/dist/components/toast/index';
+import classNames from 'classnames';
 import { THREAD_LIST_FILTER_COMPLEX } from '@common/constants/index';
-import { diffDate } from '@common/utils/diff-date';
 
 import styles from './index.module.scss';
-// TODO: 目前页面使用的数据展示待组件编辑优化
-class DraftItem extends React.Component { // 草稿箱渲染部分
 
-  handleEdit = (item) => {
-    Taro.navigateTo({ url: `/subPages/thread/post/index?id=${item.threadId}` })
-  } // 点击进入草稿箱
-
-  render() {
-    const { item, listlength, index } = this.props;
-    return (
-      <View className={styles['drafts-listbox']} >
-        <View
-          className={index === listlength - 1 ? styles['drafts-list-finally'] : styles['drafts-list']}
-          onClick={this.handleEdit}
-        >
-          <View dangerouslySetInnerHTML={{ __html: item.content.text }} />
-          <View className={styles['drafts-time']}>{diffDate(item.createdAt)}</View>
-        </View>
-      </View>
-    )
-  }
-}
+import Page from '@components/page';
+import SliderScroll from '@components/slider-scroll';
+import ThreadCenterView from '@components/thread/ThreadCenterView';
 
 @inject('index')
 @inject('thread')
@@ -48,6 +27,7 @@ class Index extends Component {
     if (isMore) this.page += 1;
     else this.page = 1;
     await index.getReadThreadList({
+      isDraft: true,
       page: this.page,
       perPage: this.perPage,
       filter: { complex: THREAD_LIST_FILTER_COMPLEX.draft },
@@ -55,45 +35,59 @@ class Index extends Component {
     return;
   }
 
+  handleEdit = item => Taro.navigateTo({url: `/subPages/thread/post/index?id=${item.threadId}`});
+
   handleDelete = async (item) => { // 删除草稿事件
     const { thread, index } = this.props;
-    // this.toastInstance = Toast.loading({
-    //   content: '删除中...',
-    //   duration: 0,
-    // });
-    let time = 0;
-    Toast.loading({
-      content: '删除中...',
-      duration: time,
+    Taro.showToast({
+      title: '删除中...',
+      icon: 'loading',
     });
     const res = await thread.delete(item.threadId);
-    // this.toastInstance?.destroy();
-    time = 1
+    Taro.hideToast();
     if (res.code === 0) {
-      const data = (index.threads?.postData || []).filter(elem => elem.threadId !== item.threadId);
-      index.setThreads(data);
+      const data = (index.drafts?.pageData || []).filter(elem => elem.threadId !== item.threadId);
+      const total = index.drafts?.totalCount - 1;
+      index.setDrafts({ ...index.drafts, totalCount: total, pageData: data });
     } else {
       Toast.error({ content: res.msg });
     }
   }
 
+  // 渲染草稿单项
+  renderItem = ({ item, isLast }) => {
+    return (
+      <View
+        className={classNames(styles.item, { [styles['border-none']]: isLast })}
+        onClick={() => this.handleEdit(item)}
+      >
+        <ThreadCenterView data={item} onClick={() => this.handleEdit(item)} />
+        <View className={styles['item-time']}>编辑于&nbsp;{item.updatedAt}</View>
+      </View>
+    )
+  }
+
+  // 处理列表数据
+  getRenderList = (data = []) => {
+    return data.map(item => ({ id: item.threadId, ...item }));
+  }
+
   render() {
-    const { index: data } = this.props;
-    const { currentPage, totalPage } = data.threads || {};
-    const list = (data.threads && data.threads.pageData) || [];
+    const { currentPage, totalPage, totalCount, pageData } = this.props.index?.drafts || {};
+    const topCard = (<View className={styles.header}>{totalCount || 0}&nbsp;条草稿</View>);
+
     return (
       <Page>
-        <View className={styles['drafts-box']}>
-          <List onRefresh={() => this.fetchData(true)} className={styles.list} noMore={currentPage >= totalPage}>
-            <View className={styles['drafts-lenth']}>{list.length} 条草稿</View>
-            <SliderScroll
-              data={data}
-              list={list}
-              RenderItem={DraftItem}
-              listlength={list.length}
-              onBtnClick={item => this.handleDelete(item)}
-            />
-          </List>
+        <View className={styles.wrapper}>
+          <SliderScroll
+            topCard={topCard}
+            list={this.getRenderList(pageData)}
+            RenderItem={this.renderItem}
+            noMore={currentPage >= totalPage}
+            onPullDown={() => this.fetchData(false)}
+            onScrollBottom={() => this.fetchData(true)}
+            onBtnClick={this.handleDelete}
+          />
         </View >
       </Page>
     );

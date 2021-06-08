@@ -39,7 +39,7 @@ class RewardQa extends Component {
 
   openTimePicker = () => { // 开启时间选择框
     const { openModal } = this.timeRef.current;
-    openModal();
+    openModal(this.state.times);
   }
 
   onConfirm = (val) => { // 监听时间选中

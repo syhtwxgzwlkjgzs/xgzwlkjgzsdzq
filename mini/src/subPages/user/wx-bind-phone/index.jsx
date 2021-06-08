@@ -7,14 +7,14 @@ import Input from '@discuzq/design/dist/components/input/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import Avatar from '@discuzq/design/dist/components/avatar/index';
 import { toTCaptcha } from '@common/utils/to-tcaptcha'
-import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
+// import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Page from '@components/page';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import { get } from '@common/utils/get';
 import PhoneInput from '@components/login/phone-input'
 import layout from './index.module.scss';
 
-const MemoToastProvider = React.memo(ToastProvider)
+// const MemoToastProvider = React.memo(ToastProvider)
 
 @inject('site')
 @inject('user')
@@ -26,6 +26,7 @@ class Index extends Component {
     super();
     this.ticket = ''; // 腾讯云验证码返回票据
     this.randstr = ''; // 腾讯云验证码返回随机字符串
+    this.onFocus = () => {}
   }
 
 
@@ -43,9 +44,9 @@ class Index extends Component {
 
   // 验证码滑动成功的回调
   handleCaptchaResult = (result) => {
-    console.log('captcha：', result);
     this.ticket = result.ticket;
     this.randstr = result.randstr;
+    this.handleSendCodeButtonClick();
   }
 
   // 验证码点击关闭的回调
@@ -58,19 +59,28 @@ class Index extends Component {
     try{
       // 发送前校验
       this.props.wxPhoneBind.beforeSendVerify();
+      if (onFocus) {
+        this.onFocus = onFocus;
+      }
       // 验证码
       const { webConfig } = this.props.site;
       const qcloudCaptcha = webConfig?.qcloud?.qcloudCaptcha;
       if (qcloudCaptcha) {
-        const qcloudCaptchaAppId = webConfig?.qcloud?.qcloudCaptchaAppId;
-        await toTCaptcha(qcloudCaptchaAppId)
+        if (!this.ticket || !this.randstr) {
+          const qcloudCaptchaAppId = webConfig?.qcloud?.qcloudCaptchaAppId;
+          await toTCaptcha(qcloudCaptchaAppId)
+          return false;
+        }
       };
       // 发送
       await this.props.wxPhoneBind.sendCode({
-        captchaRandStr: this.ticket,
-        captchaTicket: this.randstr
+        captchaRandStr: this.randstr,
+        captchaTicket: this.ticket
       });
-      onFocus();
+      // 清除
+      this.ticket = '';
+      this.randstr = '';
+      this.onFocus();
     }catch(e){
       Toast.error({
         content: e.Message,
@@ -127,7 +137,7 @@ class Index extends Component {
 
     return (
       <Page>
-        <MemoToastProvider>
+        {/* <MemoToastProvider> */}
         <View className={layout.container}>
           <View className={layout.content}>
             <View className={layout.title}>手机号登陆，并绑定微信账号</View>
@@ -151,7 +161,7 @@ class Index extends Component {
             {/* 登录按钮 end */}
           </View>
         </View>
-        </MemoToastProvider>
+        {/* </MemoToastProvider> */}
       </Page>
     );
   }

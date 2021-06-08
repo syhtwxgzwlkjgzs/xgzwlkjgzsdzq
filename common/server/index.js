@@ -8,11 +8,13 @@ export { default as genMiniQrcode } from './login/genMiniQrcode';
 export { default as smsSend } from './smsSend';
 export { default as smsLogin } from './login/smsLogin';
 export { default as readThreadDetail } from './thread/readThreadDetail';
+export { default as readThreadAttachmentUrl } from './thread/readThreadAttachmentUrl';
 export { default as updateThreads } from './thread/updateThreads';
 export { default as readCommentList } from './thread/readCommentList';
 export { default as readReplyList } from './thread/readReplyList';
 export { default as createPosts } from './thread/createPosts';
 export { default as updateComment } from './thread/updateComment';
+export { default as updateSingleReply } from './thread/updateSingleReply'
 export { default as readCommentDetail } from './thread/readCommentDetail';
 export { default as operateThread } from './thread/operateThread';
 export { default as shareThread } from './thread/shareThread';

@@ -20,8 +20,7 @@
     font-size: rem($font-size-base);
   }
   .otherLogin-button{
-    text-align: center;
-    margin: rem($margin-4n);
+    @include otherLogin_button;
   }
   .otherLogin-button-weixin {
     @include otherLoginBtn;
@@ -52,7 +51,7 @@
     font-size: $font-size-base;
   }
   .pc_otherLogin_button{
-    margin: $margin-4n;
+    @include otherLogin_button;
     .button_left {
       @include pc_otherLoginBtn;
     }

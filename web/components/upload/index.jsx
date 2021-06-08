@@ -24,7 +24,8 @@ export default function DzqUpload(props) {
     className,
   } = props;
   const multiple = limit > 1;
-  const post = async (file, list, updater) => { // file, list, updater
+  const post = async (file, list, updater) => {
+    // file, list, updater
     const formData = new FormData();
     formData.append('file', file.originFileObj);
     Object.keys(data).forEach((item) => {
@@ -33,9 +34,9 @@ export default function DzqUpload(props) {
     // TODO:进度条目前有问题
     const ret = await createAttachment(formData, (progressEvent) => {
       // progressEvent
-      const complete = (progressEvent.loaded / progressEvent.total * 100 | 0);
+      const complete = ((progressEvent.loaded / progressEvent.total) * 100) | 0;
       file.status = 'uploading';
-      file.percent = complete;
+      file.percent = complete === 100 ? 99 : complete;
       updater(list);
     });
     if (ret.code === 0) {
@@ -54,13 +55,16 @@ export default function DzqUpload(props) {
   };
 
   // TODO: 因为上传组件不支持传class和style，所以在外面增加了一层dom
-  const clsName = isCustomUploadIcon ? `${styles['dzq-custom-upload']} ${styles['dzq-upload-reset']} ${className}` : `${styles['dzq-upload-reset']}  ${className}`;
-  const formatFileList = (fileList || []).map(item => {
+  const clsName = isCustomUploadIcon
+    ? `${styles['dzq-custom-upload']} ${styles['dzq-upload-reset']} ${className}`
+    : `${styles['dzq-upload-reset']}  ${className}`;
+  const formatFileList = (fileList || []).map((item) => {
     const type = item?.fileType?.toString() || item?.type?.toString();
-    return { ...item, type };
+    const size = item?.fileSize || item?.size;
+    return { ...item, type, size };
   });
   return (
-    <div className={clsName} onClick={e => e.stopPropagation() }>
+    <div className={clsName} onClick={(e) => e.stopPropagation()}>
       <Upload
         progressRender={(file) => <ProgressRender file={file} />}
         listType={listType}
@@ -80,8 +84,8 @@ export default function DzqUpload(props) {
         customRequest={post}
         accept={accept}
       >
-        {(!isCustomUploadIcon) && (
-          <Button type='text' className={classNames(styles['flex-column-center'], styles['text-grey'])}>
+        {!isCustomUploadIcon && (
+          <Button type="text" className={classNames(styles['flex-column-center'], styles['text-grey'])}>
             <Icon name="PlusOutlined" size={16}></Icon>
             <span className="dzq-upload__btntext">{btnText}</span>
           </Button>
@@ -106,10 +110,10 @@ DzqUpload.defaultProps = {
   limit: 1, // 上传限制的个数
   accept: '', // 上传允许的类型
   isCustomUploadIcon: false, // 是否自定义上传按钮
-  onRemove: () => { },
-  beforeUpload: () => { },
-  onChange: () => { },
-  onSuccess: () => { },
-  onFail: () => { },
+  onRemove: () => {},
+  beforeUpload: () => {},
+  onChange: () => {},
+  onSuccess: () => {},
+  onFail: () => {},
   onComplete: () => {},
 };

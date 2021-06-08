@@ -4,24 +4,31 @@
   padding-top: rem($padding-4n);
   .replyListAvatar {
     margin-right: rem($margin-10);
+    margin-top: rem($margin-10);
   }
   .replyListContent {
     width: 100%;
     .replyListContentText {
-      padding: rem($padding-4n);
+      padding-right: rem($padding-4n);
       border-radius: rem($border-radius-small);
       background-color: $comment-bg-color;
       .replyListName {
+        padding-top: rem($padding-2n);
+        padding-left: rem($padding-3n);
+        padding-right: rem($padding-3n);
         font-weight: var(--font-weight-regular);
         font-size: rem($font-size-primary);
-        line-height: rem(22);
+        line-height: rem(20);
         text-align: left;
         color: var(--color-text-primary);
       }
 
       .replyListText {
-        margin-top: rem($margin-1n);
+        //padding-bottom: rem($padding-2n);
+        padding-left: rem($padding-3n);
+        padding-right: rem($padding-3n);
         font-size: rem($font-size-middle);
+        margin-top: rem(4);
         text-align: left;
         color: var(--color-text-primary);
         width: 100%;
@@ -66,7 +73,7 @@
           word-break: initial;
           align-items: center;
           justify-content: flex-start;
-          height: rem(28);
+          height: rem(22);
 
           .replyedAvatar {
             display: inline-block;
@@ -85,7 +92,7 @@
             font-weight: var(--font-weight-regular);
             font-size: rem($font-size-primary);
             margin-right: rem($margin-2n);
-            line-height: rem(18);
+            line-height: rem(20);
             text-align: left;
             color: var(--color-primary);
           }
@@ -119,7 +126,10 @@
         cursor: pointer;
       }
       .replyDelete {
-        // flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        cursor: pointer;
       }
     }
   }

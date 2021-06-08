@@ -3,7 +3,6 @@ import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import { View, Text, Image } from '@tarojs/components';
-import ReplyList from '../reply-list/index';
 import { diffDate } from '@common/utils/diff-date';
 import { observer } from 'mobx-react';
 import s9e from '@common/utils/s9e';
@@ -13,9 +12,10 @@ import ImageDisplay from '@components/thread/image-display';
 import RichText from '@discuzq/design/dist/components/rich-text/index';
 import { handleLink } from '@components/thread/utils';
 import Router from '@discuzq/sdk/dist/router';
-
+import PostContent from '@components/thread/post-content';
 import redPacketMini from '../../../../../../web/public/dzq-img/redpacket-mini.png';
 import coin from '../../../../../../web/public/dzq-img/coin.png';
+import ReplyList from '../reply-list/index';
 
 @observer
 class CommentList extends React.Component {
@@ -60,6 +60,14 @@ class CommentList extends React.Component {
   // 点击评论删除
   deleteClick() {
     typeof this.props.deleteClick === 'function' && this.props.deleteClick();
+  }
+
+  // 点击回复删除
+  replyDeleteClick(data) {
+    this.setState({
+      replyId: data?.id,
+    });
+    typeof this.props.replyDeleteClick === 'function' && this.props.replyDeleteClick(data);
   }
 
   // 点击评论编辑
@@ -150,21 +158,32 @@ class CommentList extends React.Component {
             ></Avatar>
           </View>
           <View className={styles.commentListContent}>
-            <View className={styles.commentListContentText} onClick={() => this.toCommentDetail()}>
+            <View className={styles.commentListContentText}>
               <View className={styles.commentListName}>
                 {this.props.data?.user?.nickname || this.props.data?.user?.userName || '未知用户'}
               </View>
               {/* 评论内容 */}
-              <RichText
+              <View className={classNames(styles.commentListText)}>
+                <PostContent
+                  onRedirectToDetail={() => this.toCommentDetail()}
+                  useShowMore={!!this.state.isShowOne}
+                  content={this.props?.data?.content}
+                  customHoverBg={true}
+                  onClick={this.handleClick.bind(this)}
+                ></PostContent>
+              </View>
+              {/* <RichText
                 className={classNames(styles.commentListText, this.state.isShowOne && styles.isShowOne)}
                 content={this.filterContent()}
                 onClick={this.handleClick.bind(this)}
-              />
+              /> */}
               {/* 图片展示 */}
-              {this.props.data?.images && (
+              {this.props.data?.images ? (
                 <View className={styles.imageDisplay}>
                   <ImageDisplay platform="h5" imgData={this.props.data?.images} />
                 </View>
+              ) : (
+                ''
               )}
             </View>
             {/* 底部操作栏 */}
@@ -215,6 +234,7 @@ class CommentList extends React.Component {
                         avatarClick={() => this.reployAvatarClick(this.needReply[0])}
                         likeClick={() => this.replyLikeClick(this.needReply[0])}
                         replyClick={() => this.replyReplyClick(this.needReply[0])}
+                        deleteClick={() => this.replyDeleteClick(this.needReply[0])}
                         toCommentDetail={() => this.toCommentDetail()}
                       ></ReplyList>
                     ) : (
@@ -225,6 +245,7 @@ class CommentList extends React.Component {
                           avatarClick={() => this.reployAvatarClick(val)}
                           likeClick={() => this.replyLikeClick(val)}
                           replyClick={() => this.replyReplyClick(val)}
+                          deleteClick={() => this.replyDeleteClick(val)}
                           toCommentDetail={() => this.toCommentDetail()}
                         ></ReplyList>
                       ))

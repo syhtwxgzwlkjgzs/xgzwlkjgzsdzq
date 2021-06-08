@@ -18,6 +18,7 @@ import List from '@components/list';
 // react-datepicker 中文化使用，参考：https://stackoverflow.com/questions/54399084/change-locale-in-react-datepicker
 import zhCN from 'date-fns/locale/zh-CN';
 import 'react-datepicker/dist/react-datepicker.css';
+import classnames from 'classnames';
 
 @inject('site')
 @inject('wallet')
@@ -33,6 +34,7 @@ class ThreadPCPage extends React.Component {
       totalCount: null,
       selectType: 'all', // 筛选类型
       consumptionTime: new Date(),
+      datePickerOpen: false,
     };
   }
 
@@ -235,7 +237,7 @@ class ThreadPCPage extends React.Component {
     const data = this.renderSelectContent();
     return (
       <Dropdown.Menu defaultKey={['all']}>
-        {data.map(item => (
+        {data.map((item) => (
           <Dropdown.Item key={item.id} id={item.id}>
             {item.title}
           </Dropdown.Item>
@@ -265,7 +267,7 @@ class ThreadPCPage extends React.Component {
         defaultType.title = '全部状态';
     }
 
-    const dataSourceArray = Object.values(dataSource).map(item => ({ title: item.text, id: item.code }));
+    const dataSourceArray = Object.values(dataSource).map((item) => ({ title: item.text, id: item.code }));
 
     dataSourceArray.unshift(defaultType);
 
@@ -308,7 +310,7 @@ class ThreadPCPage extends React.Component {
     } else if (this.state.activeType === 'frozen') {
       return this.fetchFreezeDetail();
     } else {
-      return Promise.reject('没有找到此类型')
+      return Promise.reject('没有找到此类型');
     }
   };
 
@@ -334,7 +336,7 @@ class ThreadPCPage extends React.Component {
                 {activeType === 'income' ? <Icon name="TicklerOutlined" size="18" color="#3ac15f"></Icon> : ''}
                 {activeType === 'pay' ? <Icon name="WallOutlined" size="18" color="#2469f6"></Icon> : ''}
                 {activeType === 'withdrawal' ? <Icon name="TransferOutOutlined" size="18" color="#e02433"></Icon> : ''}
-                <div className={layout.title}>{recordType[activeType]}</div>
+                <div className={activeType === 'frozen' ? '' : layout.title}>{recordType[activeType]}</div>
               </div>
             </div>
             <div className={layout.choice}>
@@ -347,6 +349,16 @@ class ThreadPCPage extends React.Component {
                         selected={this.state.consumptionTime}
                         showMonthYearPicker
                         maxDate={new Date()}
+                        onCalendarClose={() => {
+                          this.setState({
+                            datePickerOpen: false,
+                          });
+                        }}
+                        onCalendarOpen={() => {
+                          this.setState({
+                            datePickerOpen: true,
+                          });
+                        }}
                         onChange={(date) => {
                           this.setState(
                             {
@@ -359,12 +371,15 @@ class ThreadPCPage extends React.Component {
                         }}
                         dateFormat="yyyy年MM月"
                       />
+                      <Icon name={'RightOutlined'} size={12} className={classnames(layout.datePickerIcon, {
+                        [layout.datePickerIconOpen]: this.state.datePickerOpen
+                      })} />
                     </div>
                     <div className={layout.choiceType}>
                       <Dropdown
                         onChange={this.handleChangeSelectedType}
                         placement="right"
-                        // trigger="click"
+                        trigger="click"
                         menu={this.renderDropdownMenu()}
                       >
                         <div>{this.renderSelectedType()}</div>
@@ -372,14 +387,12 @@ class ThreadPCPage extends React.Component {
                     </div>
                   </>
                 )}
-                {
-                  activeType === 'frozen' && (
-                    <div className={layout.frozenText}>
-                      <span>涉及金额</span>
-                      <span className={layout.frozenAmount}>{walletInfo.freezeAmount} 元</span>
-                    </div>
-                  )
-                }
+                {activeType === 'frozen' && (
+                  <div className={layout.frozenText}>
+                    <span>涉及金额</span>
+                    <span className={layout.frozenAmount}>{walletInfo.freezeAmount} 元</span>
+                  </div>
+                )}
               </div>
               {this.state.totalCount !== null && (
                 <div className={layout.recordNumber}>共有{this.state.totalCount}条记录</div>

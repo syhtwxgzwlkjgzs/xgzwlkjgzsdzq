@@ -75,7 +75,7 @@ class SearchResultH5Page extends React.Component {
 
     return (
       <BaseLayout allowRefresh={false}>
-        <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} />
+        <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} searchWhileTyping/>
 
         <SidebarPanel
           title="用户" 

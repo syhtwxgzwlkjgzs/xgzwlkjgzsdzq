@@ -54,7 +54,8 @@ const Index = inject('user', 'threadPost')(observer((props) => {
             clickCb(item);
           }}
           name={item.name}
-          color={item.type === operationType && item.active}
+          color={((item.type === operationType && item.type !== THREAD_TYPE.anonymity)
+            || (threadPost.postData.anonymous && item.type === THREAD_TYPE.anonymity)) && item.active}
           size='20'
         />
       );

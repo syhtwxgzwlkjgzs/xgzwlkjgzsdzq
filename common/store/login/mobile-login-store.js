@@ -38,12 +38,12 @@ export const MOBILE_LOGIN_STORE_ERRORS = {
     Message: '需要补充昵称和附加信息',
   },
   NEED_BIND_WECHAT: {
-    Code: 8000,
+    Code: -8000,
     Message: '需要绑定微信',
   },
 };
 
-const NEED_BIND_TOKEN_FLAG = 8000;
+const NEED_BIND_TOKEN_FLAG = -8000;
 
 export default class mobileLoginStore {
     codeTimmer = null;
@@ -120,7 +120,6 @@ export default class mobileLoginStore {
     sendCode = async ({ captchaRandStr, captchaTicket }) => {
       try {
         const smsResp = await smsSend({
-          timeout: 3000,
           data: {
             mobile: this.mobile,
             type: 'login',
@@ -186,7 +185,7 @@ export default class mobileLoginStore {
 
       try {
         const smsLoginResp = await smsLogin({
-          timeout: 3000,
+
           data: {
             mobile: this.mobile,
             code: this.code,

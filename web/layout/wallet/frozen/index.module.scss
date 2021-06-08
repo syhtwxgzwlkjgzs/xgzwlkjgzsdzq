@@ -7,45 +7,67 @@
 }
 
 .header {
-    height: rem(50);
+  height: rem(50);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--color-white);
+  font-size: rem($font-size-primary);
+  font-weight: bold;
+  padding: 0 rem($padding-4n);
+  margin-bottom: rem($margin-2n);
+
+  font-family: 'PingFangSC-Regular';
+  font-weight: normal;
+  text-align: left;
+  color: var(--color-text-secondary);
+}
+
+.totalMoney {
+  font-family: 'PingFangSC-Regular';
+  font-weight: normal;
+  font-size: rem($font-size-base);
+  line-height: rem(16);
+  color: $text-color-regular;
+}
+
+.num {
+  font-weight: 600;
+  margin-left: rem($margin-2n);
+}
+
+
+.content {
+  position: relative;
+  background-color: $white;
+  font-weight: normal;
+  padding: rem($padding-4n);
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: rem($padding-4n);
+    left: rem($padding-4n);
+    height: 1px;
+    background-color: $border-color;
+  }
+  
+  .upper {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    background: var(--color-white);
+    font-family: 'PingFang SC';
     font-size: rem($font-size-primary);
-    font-weight: bold;
-    padding: 0 rem($padding-4n);
-    margin-bottom: rem($margin-2n);
-
+    text-align: left;
+    color: var(--color-text-primary);
+  }
+  .lower {
+    display: flex;
+    justify-content: space-between;
     font-family: 'PingFangSC-Regular';
-    font-weight: normal;
+    font-size: rem($font-size-label);
     text-align: left;
     color: var(--color-text-secondary);
+    padding-top: rem($padding-5n);
+  }
 }
 
-.body {
-    background: var(--color-white);
-    .content {
-        font-weight: normal;
-        padding: rem($padding-4n);
-        border-bottom: var(--border-border);
-        .upper {
-            display: flex;
-            justify-content: space-between;
-            font-family: "PingFang SC";
-            font-size: rem($font-size-primary);
-            text-align: left;
-            color: var(--color-text-primary);
-        }
-        .lower {
-            display: flex;
-            justify-content: space-between;
-            font-family: 'PingFangSC-Regular';
-            font-size: rem($font-size-label);
-            text-align: left;
-            color: var(--color-text-secondary);
-            padding-top: rem($padding-5n);
-        }
-    }
-
-}

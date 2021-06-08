@@ -161,9 +161,10 @@ export default function HOCFetchSiteData(Component) {
       switch (result.code) {
         case 0:
           break;
-        case -3005: site.setCloseSiteConfig(result.data);
+        case -3005: // 关闭站点
+          site.setCloseSiteConfig(result.data);
           break;
-        case -4002:
+        case -4002:// token无效
           clearLoginStatus();
           window.location.reload();
           break;

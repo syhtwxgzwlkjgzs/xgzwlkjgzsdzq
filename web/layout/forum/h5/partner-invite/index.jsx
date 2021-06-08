@@ -81,8 +81,8 @@ class PartnerInviteH5Page extends React.Component {
     }
   }
 
-  handleJoinSite = () => {
-    const { user, site } = this.props;
+  handleJoinSite = async () => {
+    const { user, site, router } = this.props;
     if (!user?.isLogin()) {
       goToLoginPage({ url: '/user/login' });
       return;
@@ -96,24 +96,13 @@ class PartnerInviteH5Page extends React.Component {
           type: 1, // 站点付费注册
         },
         isAnonymous: false, // 是否匿名
-        success: (orderInfo) => {
-          Toast.success({
-            content: `订单 ${orderInfo.orderSn} 支付成功, 即将进入站点`,
-            hasMask: false,
-            duration: 3000,
-            onClose() {
-              window.location.href = '/';
-            },
-          });
+        success: async () => {
+          await user.updateUserInfo(user.id);
+          await site.getSiteInfo();
+          router.replace('/');
         }, // 支付成功回调
-        failed: (orderInfo) => {
-          Toast.error({
-            content: `订单 ${orderInfo.orderSn} 支付失败`,
-            hasMask: false,
-            duration: 2000,
-          });
-        }, // 支付失败回调
-        completed: (orderInfo) => {}, // 支付完成回调(成功或失败)
+        completed: (orderInfo) => {
+        }, // 支付完成回调(成功或失败)
       });
       return;
     }
@@ -123,7 +112,7 @@ class PartnerInviteH5Page extends React.Component {
   // 右侧 - 潮流话题 粉丝 版权信息
   renderRight = () => {
     const { inviteData } = this.props.invite;
-    const { site: { platform, webConfig }, forum } = this.props;
+    const { site: { platform, webConfig = {} }, forum } = this.props;
     const { invitorName, invitorAvatar } = this.state;
     const { setSite: { siteMode, sitePrice, siteMasterScale, siteExpire } = {} } = webConfig;
     const { updataTime } = forum;
@@ -198,15 +187,48 @@ class PartnerInviteH5Page extends React.Component {
               : <></>
           }
           <div className={layout.user_card_button} onClick={this.handleJoinSite}>{siteMode === 'pay' ? `¥ ${sitePrice}` : ''} 立即加入</div>
-          {siteMode === 'pay' ? <div className={layout.bottom_title}>有效期：<span>{siteExpire}天</span></div> : <></>}
+          {(siteMode === 'pay' && siteExpire) ? <div className={layout.bottom_title}>有效期：<span>{siteExpire}天</span></div> : <></>}
         </div>
         <Copyright/>
       </>
     );
   }
 
+  contentHeader = () => {
+    const { site: { platform, webConfig = {} } } = this.props;
+    if (platform === 'h5') {
+      return <></>;
+    }
+    const siteAuthor = get(webConfig, 'setSite.siteAuthor.username', '');
+    const siteInstall = get(webConfig, 'setSite.siteInstall', '');
+    // 兼容ios
+    const [siteTimer] = siteInstall.split(' ');
+    const startDate = Date.parse(siteTimer);
+    const endDate = Date.parse(new Date());
+    const createDays = numberFormat(parseInt(Math.abs(startDate  -  endDate) / 1000 / 60 / 60 / 24, 10));
+    return (
+      <div className={pclayout.content_header}>
+        <img
+            className={pclayout.logo}
+            mode="aspectFit"
+            src='/dzq-img/join-banner-bg.png'
+        />
+        <ul className={pclayout.joinInfo}>
+            <li className={pclayout.item}>
+              <span className={pclayout.text}>站长</span>
+              <span className={pclayout.content}>{siteAuthor || '--'}</span>
+            </li>
+            <li className={pclayout.item}>
+              <span className={pclayout.text}>已创建</span>
+              <span className={pclayout.content}>{createDays || 0}天</span>
+            </li>
+          </ul>
+      </div>
+    );
+  };
+
   render() {
-    const { site: { platform, webConfig }, forum: { updataTime } } = this.props;
+    const { site: { platform, webConfig = {} }, forum: { updataTime } } = this.props;
     const { inviteCode } = this.props.router.query;
     const { setSite: { siteMode, siteExpire, sitePrice, siteMasterScale } = {} } = webConfig;
     const { invitorName, invitorAvatar } = this.state;
@@ -214,7 +236,7 @@ class PartnerInviteH5Page extends React.Component {
     // 内容数
     const countThreads = get(webConfig, 'other.countThreads', '');
     return (
-      <PartnerInviteWrap renderRight={this.renderRight}>
+      <PartnerInviteWrap renderRight={this.renderRight} contentHeader={this.contentHeader}>
         <div className={layout.content}>
           {/* 站点信息 start */}
           <SiteInfo threadTotal={countThreads} updataTime={ updataTime }/>
@@ -247,7 +269,7 @@ class PartnerInviteH5Page extends React.Component {
                       </div>
                       : <></>
                   }
-                  {siteMode === 'pay' ? <div className={layout.bottom_title}>有效期：<span>{siteExpire}天</span></div> : <></>}
+                  {(siteMode === 'pay' && siteExpire) ? <div className={layout.bottom_title}>有效期：<span>{siteExpire}天</span></div> : <></>}
                   <Button className={layout.bottom_button} onClick={this.handleJoinSite}>
                     {siteMode === 'pay' ? `¥${sitePrice}` : ''} 立即加入
                   </Button>

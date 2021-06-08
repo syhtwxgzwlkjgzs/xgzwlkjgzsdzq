@@ -21,6 +21,11 @@ export default class ReplyList extends React.Component {
     typeof this.props.replyClick === 'function' && this.props.replyClick();
   }
 
+  deleteClick() {
+    typeof this.props.deleteClick === 'function' && this.props.deleteClick();
+  }
+  deleteClick1() {
+  }
   generatePermissions(data = {}) {
     return {
       canApprove: data.canApprove || false,
@@ -40,8 +45,7 @@ export default class ReplyList extends React.Component {
   }
 
   render() {
-    const { canLike } = this.generatePermissions(this.props.data);
-
+    const { canLike, canDelete } = this.generatePermissions(this.props.data);
     return (
       <div className={styles.replyList}>
         <div className={styles.replyListAvatar} onClick={this.props.avatarClick('2')}>
@@ -56,36 +60,36 @@ export default class ReplyList extends React.Component {
           <div className={styles.replyListContentText}>
             <div className={styles.replyListName}>{this.props.data.user.nickname || this.props.data.user.userName}</div>
             <div className={styles.replyListText}>
-              {this.props.data.commentUserId && this.props?.data?.commentUser ? (
-                // 二级回复用户
+              {this.props.data.commentUserId ? (
                 <div className={styles.commentUser}>
                   <div className={styles.replyedAvatar} onClick={this.props.avatarClick('3')}>
                     <Avatar
                       className={styles.avatar}
-                      image={this.props.data?.commentUser?.avatar}
-                      name={this.props.data?.commentUser?.nickname || this.props.data?.commentUser?.userName || ''}
+                      image={this.props.data.replyUser.avatar}
+                      name={this.props.data.replyUser.nickname || this.props.data.replyUser.userName || ''}
                       circle={true}
                       size="small"
                     ></Avatar>
                   </div>
                   <span className={styles.replyedUserName}>
-                    {this.props.data?.commentUser?.nickname || this.props.data?.commentUser?.userName}
+                    {this.props.data.replyUser.nickname || this.props.data.replyUser.userName}
                   </span>
                 </div>
               ) : (
                 ''
               )}
-              {/* 评论内容 */}
               <span
                 className={classnames(styles.content, this.props.isShowOne && styles.isShowOne)}
                 dangerouslySetInnerHTML={{ __html: this.filterContent() }}
               ></span>
 
               {/* 图片展示 */}
-              {(this.props.data?.images || this.props.data?.attachments) && (
+              {this.props.data?.images || this.props.data?.attachments ? (
                 <div className={styles.imageDisplay}>
                   <ImageDisplay platform="h5" imgData={this.props.data?.images || this.props.data?.attachments} />
                 </div>
+              ) : (
+                ''
               )}
             </div>
           </div>
@@ -100,6 +104,10 @@ export default class ReplyList extends React.Component {
               <div className={styles.replyReply}>
                 <span onClick={() => this.replyClick()}>回复</span>
               </div>
+              {canDelete && <div className={styles.replyDelete}>
+                <span onClick={() => this.deleteClick()}>删除</span>
+              </div>}
+
             </div>
           </div>
         </div>

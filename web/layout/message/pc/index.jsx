@@ -13,7 +13,7 @@ import Stepper from '../../search/pc/components/stepper';
 import { sidebarData as sidebarDataOriginal } from '@common/constants/message';
 import UserCenterFollowsPc from '@components/user-center/follows-pc';
 
-const Index = ({ page, subPage, dialogId, username, message }) => {
+const Index = ({ page, subPage, dialogId, username, message, user }) => {
   const router = useRouter();
 
   const { threadUnread, financialUnread, accountUnread } = message;
@@ -62,7 +62,7 @@ const Index = ({ page, subPage, dialogId, username, message }) => {
       <div className={styles['stepper-container']}>
         <Stepper onItemClick={sidebarClick} selectIndex={sidebarIndex} data={sidebarData} />
       </div>
-      <UserCenterFollowsPc />
+      <UserCenterFollowsPc userId={user.id} />
       <Copyright />
     </div>
   );
@@ -80,4 +80,4 @@ const Index = ({ page, subPage, dialogId, username, message }) => {
   );
 };
 
-export default inject('message')(observer(Index));
+export default inject('message', 'user')(observer(Index));

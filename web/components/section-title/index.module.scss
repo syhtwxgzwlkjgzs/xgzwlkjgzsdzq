@@ -18,7 +18,7 @@
   justify-content: space-between;
   align-items: center;
   padding: rem($padding-4n) 0;
-  border-bottom: 1px solid var(--border-line-color);
+  // border-bottom: 1px solid var(--border-line-color);
   box-sizing: border-box;
   background-color: $white;
   .title {
@@ -81,5 +81,5 @@
   color: var(--color-warn);
 }
 .icon3 {
-  color: var(--color-error);
+  color: $primary-color;
 }

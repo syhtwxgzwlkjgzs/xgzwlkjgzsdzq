@@ -14,6 +14,15 @@ class SearchStore {
   @observable searchTopics = null
   @observable searchUsers = null
   @observable searchThreads = null
+
+  // 错误信息
+  @observable indexTopicsError = { isError: false, errorText: '' }
+  @observable indexUsersError = { isError: false, errorText: '' }
+  @observable indexThreadsError = { isError: false, errorText: '' }
+
+  @observable searchTopicsError = { isError: false, errorText: '' }
+  @observable searchUsersError = { isError: false, errorText: '' }
+  @observable searchThreadsError = { isError: false, errorText: '' }
 }
 
 export default SearchStore;

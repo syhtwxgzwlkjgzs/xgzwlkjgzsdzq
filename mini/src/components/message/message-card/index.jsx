@@ -1,7 +1,6 @@
 import React from 'react';
 import { View } from '@tarojs/components';
-import classNames from 'classnames';
-import Badge from '@discuzq/design/dist/components/badge/index';
+import UnreadRedDot from '@components/unread-red-dot';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import PropTypes from 'prop-types';
 
@@ -15,15 +14,9 @@ const Index = (props) => {
       {items.map(({ iconName, title, link, totalCount }, idx) => (
         <View key={idx} className={styles.item} onClick={() => onClick(link)}>
           <View className={styles.left}>
-            <Badge
-              className={classNames({
-                [styles.badge]: totalCount > 9
-              })}
-              circle
-              info={totalCount > 99 ? '99+' : totalCount || null}
-            >
+            <UnreadRedDot type='avatar' unreadCount={totalCount}>
               <Icon name={iconName} className={styles.icon} size={20} />
-            </Badge>
+            </UnreadRedDot>
           </View>
           <View className={styles.center}>{title}</View>
           <View className={styles.arrow}>

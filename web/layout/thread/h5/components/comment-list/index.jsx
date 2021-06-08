@@ -9,10 +9,12 @@ import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import ImageDisplay from '@components/thread/image-display';
 import classNames from 'classnames';
+import PostContent from '@components/thread/post-content';
 
 @observer
 class CommentList extends React.Component {
   constructor(props) {
+    console.log(props)
     super(props);
     this.state = {
       isHideEdit: this.props.isHideEdit, // 隐藏评论编辑删除
@@ -70,6 +72,11 @@ class CommentList extends React.Component {
     typeof this.props.replyReplyClick === 'function' && this.props.replyReplyClick(data);
   }
 
+  // 点击回复删除
+  replyDeleteClick(data) {
+    typeof this.props.replyDeleteClick === 'function' && this.props.replyDeleteClick(data);
+  }
+
   reployAvatarClick(data) {
     typeof this.props.reployAvatarClick === 'function' && this.props.reployAvatarClick(data);
   }
@@ -125,24 +132,35 @@ class CommentList extends React.Component {
         </div>
         <div className={styles.content}>
           <div className={styles.commentListAvatar} onClick={() => this.avatarClick()}>
+            {/*头像和昵称*/}
             <Avatar
               image={this.props.data?.user?.avatar}
               name={this.props.data?.user?.nickname || this.props.data?.user?.userName || ''}
               circle={true}
             ></Avatar>
           </div>
-
+          {/*评论内容*/}
           <div className={styles.commentListContent}>
-            <div className={styles.commentListContentText} onClick={() => this.toCommentDetail()}>
+            <div className={styles.commentListContentText}>
               <div className={styles.commentListName}>
                 {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
               </div>
-              <div
+              <div className={classNames(styles.commentListText)}>
+                <PostContent
+                  onRedirectToDetail={() => this.toCommentDetail()}
+                  useShowMore={!!this.state.isShowOne}
+                  content={this.props?.data?.content}
+                  customHoverBg={true}
+                ></PostContent>
+              </div>
+
+              {/* <div
                 className={classNames(styles.commentListText, this.props.isShowOne && styles.isShowOne)}
                 dangerouslySetInnerHTML={{ __html: this.filterContent() }}
-              ></div>
+                onClick={() => this.toCommentDetail()}
+              ></div> */}
               {/* 图片展示 */}
-              {this.props.data?.images && (
+              {this.props.data?.images.length > 0 && (
                 <div className={styles.imageDisplay}>
                   <ImageDisplay platform="h5" imgData={this.props.data?.images} />
                 </div>
@@ -195,6 +213,7 @@ class CommentList extends React.Component {
                         avatarClick={() => this.reployAvatarClick(this.needReply[0])}
                         likeClick={() => this.replyLikeClick(this.needReply[0])}
                         replyClick={() => this.replyReplyClick(this.needReply[0])}
+                        deleteClick={() => this.replyDeleteClick(this.needReply[0])}
                         toCommentDetail={() => this.toCommentDetail()}
                       ></ReplyList>
                     ) : (
@@ -205,6 +224,7 @@ class CommentList extends React.Component {
                           avatarClick={() => this.reployAvatarClick(val)}
                           likeClick={() => this.replyLikeClick(val)}
                           replyClick={() => this.replyReplyClick(val)}
+                          deleteClick={() => this.replyDeleteClick(val)}
                           toCommentDetail={() => this.toCommentDetail()}
                         ></ReplyList>
                       ))

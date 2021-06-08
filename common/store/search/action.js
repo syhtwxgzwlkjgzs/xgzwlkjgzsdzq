@@ -55,6 +55,34 @@ class SearchAction extends SearchStore {
   }
 
   /**
+   * 发现模块 - 重置首页数据
+   */
+  @action
+  resetIndexData() {
+    this.indexTopicsError = { isError: false, errorText: '' }
+    this.indexUsersError = { isError: false, errorText: '' }
+    this.indexThreadsError = { isError: false, errorText: '' }
+    
+    this.setIndexTopics(null)
+    this.setIndexUsers(null)
+    this.setIndexThreads(null)
+  }
+
+  /**
+   * 发现模块 - 重置搜索结果页数据
+   */
+   @action
+   resetIndexData() {
+     this.searchTopicsError = { isError: false, errorText: '' }
+     this.searchUsersError = { isError: false, errorText: '' }
+     this.searchThreadsError = { isError: false, errorText: '' }
+
+     this.setSearchTopics(null)
+     this.setSearchUsers(null)
+     this.setSearchThreads(null)
+   }
+
+  /**
    * 发现模块 - 首页数据
    * @param {object} search * 搜索值
    * @param {number} type * 0: 发现页发起请求 1：发现搜索结果页发起请求
@@ -88,8 +116,11 @@ class SearchAction extends SearchStore {
           type === 0 ? this.setIndexTopics(code === 0 ? data : {}) : this.setSearchTopics(code === 0 ? data : {});
         })
         .catch((err) => {
-          console.error(err);
-          this.setSearchTopics({});
+          if (type === 0) {
+            this.indexTopicsError = { isError: true, errorText: err?.msg || '加载失败' }
+          } else {
+            this.searchTopicsError = { isError: true, errorText: err?.msg || '加载失败' }
+          }
         })
     }
     if ( !hasUsers ) {
@@ -99,8 +130,11 @@ class SearchAction extends SearchStore {
           type === 0 ? this.setIndexUsers(code === 0 ? data : {}) : this.setSearchUsers(code === 0 ? data : {});
         })
         .catch((err) => {
-          console.error(err);
-          this.setSearchUsers({});
+          if (type === 0) {
+            this.indexUsersError = { isError: true, errorText: err?.msg || '加载失败' }
+          } else {
+            this.searchUsersError = { isError: true, errorText: err?.msg || '加载失败' }
+          }
         })
     }
     if ( !hasThreads ) {
@@ -110,8 +144,11 @@ class SearchAction extends SearchStore {
           type === 0 ? this.setIndexThreads(code === 0 ? data : {}) : this.setSearchThreads(code === 0 ? data : {});
         })
         .catch((err) => {
-          console.error(err);
-          this.setSearchThreads({});
+          if (type === 0) {
+            this.indexThreadsError = { isError: true, errorText: err?.msg || '加载失败' }
+          } else {
+            this.searchThreadsError = { isError: true, errorText: err?.msg || '加载失败' }
+          }
         })
     }
   };
@@ -135,8 +172,6 @@ class SearchAction extends SearchStore {
         const newPageData = this.topics.pageData.slice();
         this.setTopics({ ...result.data, pageData: newPageData });
       } else {
-        // 首次加载，先置空，是为了列表回到顶部
-        this.setTopics({ pageData: [] });
         this.setTopics(result.data);
       }
       return result.data;
@@ -161,8 +196,6 @@ class SearchAction extends SearchStore {
         const newPageData = this.users.pageData.slice();
         this.setUsers({ ...data, pageData: newPageData });
       } else {
-        // 首次加载，先置空，是为了列表回到顶部
-        this.setUsers({ pageData: [] });
         this.setUsers(data);
       }
       return result;
