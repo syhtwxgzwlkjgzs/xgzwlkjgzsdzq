@@ -24,7 +24,7 @@ export const BANNED_USER = -4009; // 禁用
 export const REVIEWING = 2; // 审核
 export const REVIEW_REJECT = -4007; // 审核拒绝
 
-let captcha = null;
+const captcha = null;
 
 const throwFormattedError = (error) => {
   if (error.code) {
@@ -70,9 +70,9 @@ const checkCompleteUserInfo = (resp) => {
     throw COMMON_LOGIN_STORE_ERRORS.NEED_BIND_USERNAME;
   }
 
-  // if (isMissRequireInfo) {
-  //   throw COMMON_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO;
-  // }
+  if (isMissRequireInfo) {
+    throw COMMON_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO;
+  }
 };
 
 /**

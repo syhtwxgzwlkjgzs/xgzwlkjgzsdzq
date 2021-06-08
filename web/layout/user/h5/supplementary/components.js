@@ -119,9 +119,9 @@ const getAttachment = (ret) => {
     Toast.error({ content: `${ret.msg} 上传失败` });
     return false;
   }
-  const { data: { file_path, attachment, id, uuid } } = ret;
+  const { data: { url, id } } = ret;
 
-  return { url: `${file_path}${attachment}`, id, uuid };
+  return { url, id};
 };
 
 export function CreatePhotoUploader(field, layout) {
