@@ -101,7 +101,9 @@ class CommentList extends React.Component {
 
   handleClick(e, node) {
     e && e.stopPropagation();
-    const url = handleLink(node);
+    const {url, isExternaLink } = handleLink(node)
+    if(isExternaLink) return
+    
     if (url) {
       Router.push({ url });
     } else {

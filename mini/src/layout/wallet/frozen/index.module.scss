@@ -30,8 +30,6 @@
 
 .body {
   background: var(--color-white);
-  margin-bottom: constant(safe-area-inset-bottom); ///兼容 IOS<11.2/
-  margin-bottom: env(safe-area-inset-bottom); ///兼容 IOS>11.2/
   .content {
     font-weight: normal;
     padding: $padding-4n 0;
@@ -62,4 +60,8 @@
       padding-top: $padding-2n;
     }
   }
+}
+.body + View {
+  margin-bottom: constant(safe-area-inset-bottom); ///兼容 IOS<11.2/
+  margin-bottom: env(safe-area-inset-bottom); ///兼容 IOS>11.2/
 }

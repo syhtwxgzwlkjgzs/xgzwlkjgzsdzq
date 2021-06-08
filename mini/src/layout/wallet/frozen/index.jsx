@@ -16,6 +16,7 @@ class FrozenAmount extends React.Component {
       page: 1,
       totalCount: 0,
       totalPage: 1,
+      height: '100vh'
     };
   }
 
@@ -31,7 +32,9 @@ class FrozenAmount extends React.Component {
   };
 
   fetchFreezeDetail = async () => {
-    const freezeRes = await this.props.wallet.getFreezeDetail();
+    const freezeRes = await this.props.wallet.getFreezeDetail({
+      page: this.state.page
+    });
     const { totalCount, totalPage } = freezeRes;
     const pageData = {
       totalCount,
@@ -47,30 +50,33 @@ class FrozenAmount extends React.Component {
     return (
       <View className={styles.container}>
         {/* <Header></Header> */}
-        <View className={styles.header}>
-          <View className={styles.record}>共有{this.state.totalCount}条记录</View>
-          {/* TODO: 后台未返回涉及金额字段 */}
-          <View className={styles.totalMoney}>涉及金额 <Text className={styles.totalMoneyNumber}>{this.props.wallet.walletInfo.freezeAmount} 元</Text></View>
-        </View>
         <List
-          className={styles.body}
           onRefresh={this.fetchFreezeDetail}
           noMore={this.state.page > this.state.totalPage}
+          hasOnScrollToLower={true}
+          height={this.state.height}
         >
-          {this.listRenderDataFilter().map((value) => (
-            <View className={styles.content} key={value.id}>
-              <View className={styles.upper}>
-                <View className={styles.title}>{value.title || value.changeDesc}</View>
-                <View className={styles.amount}>{value.amount}</View>
-              </View>
-              <View className={styles.lower}>
-                <View>{diffDate(time.formatDate(value.createdAt, 'YYYY-MM-DD'))}</View>
-                <View>
-                  ID: <Text>{value.id}</Text>
+          <View className={styles.header}>
+            <View className={styles.record}>共有{this.state.totalCount}条记录</View>
+            {/* TODO: 后台未返回涉及金额字段 */}
+            <View className={styles.totalMoney}>涉及金额 <Text className={styles.totalMoneyNumber}>{this.props.wallet.walletInfo.freezeAmount} 元</Text></View>
+          </View>
+            <View className={styles.body}>
+            {this.listRenderDataFilter().map((value) => (
+              <View className={styles.content} key={value.id}>
+                <View className={styles.upper}>
+                  <View className={styles.title}>{value.title || value.changeDesc}</View>
+                  <View className={styles.amount}>{value.amount}</View>
+                </View>
+                <View className={styles.lower}>
+                  <View>{diffDate(time.formatDate(value.createdAt, 'YYYY-MM-DD'))}</View>
+                  <View>
+                    ID: <Text>{value.id}</Text>
+                  </View>
                 </View>
               </View>
+            ))}
             </View>
-          ))}
         </List>
       </View>
     );
