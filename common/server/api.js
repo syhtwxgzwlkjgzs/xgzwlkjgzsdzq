@@ -25,6 +25,14 @@ const api = apiIns({
 
 const { http } = api;
 
+const JUMP_TO_404 = -4004; // 资源不存在
+const JUMP_TO_LOGIN = -3001; // 到登录页
+const JUMP_TO_REGISTER = -3002; // 到注册页
+const JUMP_TO_AUDIT = -3003; // 到注册审核页
+const JUMP_TO_HOME_INDEX = -3004; // 到首页
+const SITE_CLOSED = -3005; // 站点关闭
+const JUMP_TO_PAY_SITE = -3006; // 到付费加入页面
+
 // 处理数据异常，当数据为空对象或空数组，都将统一返回null
 function reasetData(data) {
   if (!data) return null;
@@ -73,14 +81,95 @@ http.interceptors.response.use((res) => {
   // if (data.Code === -4002) {
   //   Router.redirect({url: '/user/login'});
   // }
-  // 200 状态码
-  if (status === 200) {
-    return Promise.resolve({
-      code: data.Code,
-      data: reasetData(data.Data),
-      msg: data.Message,
-    });
+  let url = null;
+  switch (data.Code) {
+    case JUMP_TO_404: {
+      if (process.env.DISCUZ_ENV === 'web') {
+        url = '/404';
+      } else {
+        url = '/subPages/404/index'
+      }
+      Router.replace({
+        url
+      });
+      break;
+    }
+    case JUMP_TO_LOGIN: {
+      if (process.env.DISCUZ_ENV === 'web') {
+        url = '/user/login';
+      } else {
+        url = '/subPages/user/wx-auth/index'
+      }
+      Router.replace({
+        url
+      });
+      break;
+    }
+    case JUMP_TO_REGISTER: {
+      if (process.env.DISCUZ_ENV === 'web') {
+        url = '/user/register';
+      } else {
+        url = '/subPages/user/wx-auth/index'
+      }
+      Router.replace({
+        url
+      });
+      break;
+    }
+    case JUMP_TO_AUDIT: {
+      if (process.env.DISCUZ_ENV === 'web') {
+        url = '/user/status?statusCode=2';
+      } else {
+        url = '/subPages/user/status/index?statusCode=2'
+      }
+      Router.replace({
+        url
+      });
+      break;
+    }
+    case JUMP_TO_HOME_INDEX: {
+      if (process.env.DISCUZ_ENV === 'web') {
+        url = '/';
+      } else {
+        url = '/pages/index/index'
+      }
+      Router.replace({
+        url
+      });
+      break;
+    }
+    case SITE_CLOSED: {
+      if (process.env.DISCUZ_ENV === 'web') {
+        url = '/close';
+      } else {
+        url = '/subPages/close/index'
+      }
+      Router.replace({
+        url
+      });
+      break;
+    }
+    case JUMP_TO_PAY_SITE: {
+      if (process.env.DISCUZ_ENV === 'web') {
+        url = '/forum/partner-invite';
+      } else {
+        url = '/subPages/forum/partner-invite/index'
+      }
+      Router.replace({
+        url
+      });
+      break;
+    }
+    default:  // 200 状态码
+      if (status === 200) {
+        return Promise.resolve({
+          code: data.Code,
+          data: reasetData(data.Data),
+          msg: data.Message,
+        });
+      }
   }
+
   return Promise.resolve({
     code: status,
     data: null,

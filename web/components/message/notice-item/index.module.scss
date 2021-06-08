@@ -141,6 +141,7 @@
       margin-left: $margin-2n;
       .middle {
         line-height: rem(22);
+        cursor: unset;
       }
     }
     /*财务详情*/
@@ -204,5 +205,9 @@
 
   .multiple-line {
     @include lamp-clamp(3);
+  }
+  
+  .unset-cursor {
+    cursor: unset !important;
   }
 }

@@ -1,5 +1,7 @@
 import React from 'react';
 import { Input, Icon } from '@discuzq/design';
+import { debounce } from '@common/utils/throttle-debounce.js';
+
 
 import styles from './index.module.scss';
 
@@ -12,13 +14,26 @@ import styles from './index.module.scss';
  * @prop {string} isShowCancel 是否显示取消按钮
  */
 
-const SearchInput = ({ onSearch, onCancel, defaultValue = '', isShowCancel = true, isShowBottom = true }) => {
+const SearchInput = ({
+  onSearch,
+  onCancel,
+  defaultValue = '',
+  isShowCancel = true,
+  isShowBottom = true,
+  searchWhileTyping = false,
+  searchWhileTypingStartsAt = 0,
+}) => {
   const [value, setValue] = React.useState(defaultValue);
   const [isShow, setIsShow] = React.useState(false);
   const inputChange = (e) => {
     setValue(e.target.value);
     if (e.target.value.length > 0) {
       setIsShow(true)
+    }
+    if(searchWhileTyping && e.target.value.length >= searchWhileTypingStartsAt) {
+      debounce(() => {
+        onSearch(e.target.value);
+      }, 800)();
     }
   }
   const clearInput = () => {

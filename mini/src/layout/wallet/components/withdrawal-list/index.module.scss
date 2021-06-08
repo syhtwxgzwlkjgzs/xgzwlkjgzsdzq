@@ -9,7 +9,7 @@
   display: flex;
   justify-content: space-between;
   font-weight: normal;
-  padding-bottom: $padding-4n;
+  padding-bottom: 6px;
   color: var(--color-text-primary);
   .text {
     font-family: 'PingFangSC-Regular';
@@ -55,6 +55,6 @@
   font-size: $font-size-label;
   text-align: left;
   color: var(--color-text-secondary);
-  padding: $padding-4n 0;
+  padding: $padding-2n 0 22px;
   border-bottom: var(--border-border);
 }

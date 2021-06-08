@@ -4,8 +4,8 @@
 import React, { Component } from 'react';
 import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
-import Badge from '@discuzq/design/dist/components/badge/index';
 import Avatar from '@discuzq/design/dist/components/avatar/index';
+import UnreadRedDot from '@components/unread-red-dot';
 import { inject, observer } from 'mobx-react';
 import classNames from 'classnames';
 import styles from './index.module.scss';
@@ -76,14 +76,17 @@ class Index extends Component {
   // parse content
   parseHTML = () => {
     const { type, item } = this.props;
-    let _content = typeof item.content === 'string' ? item.content : '';
+    let _content = (typeof item.content === 'string' && item.content !== 'undefined') ? item.content : '';
 
     if (type === 'account') {
       const tip = `<span class=\"${styles.tip}\">${this.getAccountTips(item)}</span>`;
       _content = tip + _content;
     }
 
-    return xss(s9e.parse(this.filterTag(_content)));
+    let t = xss(s9e.parse(this.filterTag(_content)));
+    t = (typeof t === 'string') ? t : '';
+
+    return t;
   }
 
   // 跳转用户中心
@@ -119,13 +122,7 @@ class Index extends Component {
             className={styles.avatar}
             onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
           >
-            <Badge
-              className={classNames({
-                [styles.badge]: type === 'chat' && item.unreadCount > 9
-              })}
-              circle
-              info={type === 'chat' && this.getUnReadCount(item.unreadCount)}
-            >
+            <UnreadRedDot type='avatar' unreadCount={item.unreadCount}>
               {avatarUrl
                 ? <Avatar image={avatarUrl} circle={true} />
                 : <Avatar
@@ -136,7 +133,7 @@ class Index extends Component {
                   }}
                 />
               }
-            </Badge>
+            </UnreadRedDot>
           </View>
           {/* 详情 */}
           <View className={classNames(styles.detail, {

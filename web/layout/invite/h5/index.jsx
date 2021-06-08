@@ -51,7 +51,6 @@ class InviteH5Page extends React.Component {
 
   // 加载更多函数
   loadMore = async () => {
-    console.log('?');
     const { invite } = this.props;
     if (!this.checkLoadCondition()) return;
     return await invite.getInviteUsersList(invite.currentPage + 1);
@@ -90,7 +89,7 @@ class InviteH5Page extends React.Component {
                     className={layout.invite_num_content}
                     title={numberFormat(inviteData.totalInviteUsers)}
                   >
-                    {numberFormat(inviteData.totalInviteUsers) || '--'}
+                    {numberFormat(inviteData.totalInviteUsers)}
                   </div>
                 </div>
                 <div className={layout.invite_money}>
@@ -125,8 +124,8 @@ class InviteH5Page extends React.Component {
                         />
                         <span>{item.nickname || '--'}</span>
                       </div>
-                      <span className={layout.invite_list_itemMoney} title={`+${item.bounty}`}>+{item.bounty}</span>
-                      <span className={layout.invite_list_itemTime} title={item.joinedAt || '--'}>{item.joinedAt || '--'}</span>
+                      <div className={layout.invite_list_itemMoney} title={`+${item.bounty}`}><span>+{item.bounty}</span></div>
+                      <div className={layout.invite_list_itemTime} title={item.joinedAt || '--'}><span>{item.joinedAt || '--'}</span></div>
                       <div className={layout.invite_list_itemLine}></div>
                   </div>
                 ))

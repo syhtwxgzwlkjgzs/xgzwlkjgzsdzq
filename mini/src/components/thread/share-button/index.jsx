@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Button, Text } from '@tarojs/components'
 import styles from './index.module.scss'
 import Icon from '@discuzq/design/dist/components/icon/index';
-import Taro from '@tarojs/taro'
+import Taro, { useDidHide } from '@tarojs/taro'
 
 const index = ({setShow, tipData, index}) => {
     const {threadId} = tipData
@@ -26,10 +26,17 @@ const index = ({setShow, tipData, index}) => {
     const CreateCard = () => {
         Taro.navigateTo({url: `/subPages/create-card/index?threadId=${threadId}`})
     }
+
+    // 当页面被隐藏时（去分享）,收起弹窗
+    // TODO 最好是做成点击按钮之后，就收起弹窗
+    useDidHide(() => {
+        setShow(false) 
+    })
+
     return (
         <View className={styles.contain}>
             <View className={styles.choice}>
-                <View className={styles.fabulous} onClick={CreateCard}>
+                {/* <View className={styles.fabulous} onClick={CreateCard}>
                     <View className={styles.fabulousIcon}>
                         <Icon name='PictureOutlinedBig' className={styles.icon} size={24}>
                         </Icon>
@@ -37,7 +44,7 @@ const index = ({setShow, tipData, index}) => {
                     <Text className={styles.fabulousPost}>
                         生成海报
                     </Text>
-                </View>
+                </View> */}
                 <Button className={styles.fabulous} openType='share' plain='true' data-shareData={shareData}>
                     <View className={styles.fabulousIcon}>
                         <Icon name='WeChatOutlined' className={styles.icon} size={24}>
