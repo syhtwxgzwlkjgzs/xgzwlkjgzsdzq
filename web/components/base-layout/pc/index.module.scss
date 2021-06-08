@@ -129,7 +129,7 @@
   
   .center {
     position: relative;
-    max-width: rem(750);
+    // max-width: rem(750);
     display: flex;
     flex-direction: column;
     flex: -1;
@@ -139,7 +139,7 @@
   .left {
     position: sticky;
     top: rem(0);
-    max-width: rem(300);
+    // max-width: rem(300);
     flex: -1;
     flex-shrink: 0;
   }
@@ -147,7 +147,7 @@
   .right {
     position: sticky;
     top: rem(0);
-    max-width: rem(330);
+    // max-width: rem(330);
     flex: -1;
     flex-shrink: 0;
     &.home-right {
