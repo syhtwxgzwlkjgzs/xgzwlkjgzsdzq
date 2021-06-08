@@ -5,27 +5,58 @@
     width: 100%;
     height: 100%;
 
-    .dzq-badge__circle{
+    .dzq-badge {
+      width: 100%;
+      height: 100%;
+    }
+
+    .dzq-badge__circle {
+      height: 16px;
+      line-height: 16px;
+      font-size: $font-size-small;
+      font-weight: normal;
       color: $white !important;
+      background: $error-color !important;
+      border-radius: $border-radius-8 !important;
     }
   }
 
   .avatar-badge {
-    .dzq-badge__circle{
+    .dzq-badge__circle {
       top: rem(8px);
       right: rem(2px);
     }
   }
 
-  .special-badge {
-    .dzq-badge__circle{
-      padding: 0 rem(6px);
-      width: auto;
-      border-radius: $border-radius-8;
+  .icon-badge {
+    .dzq-badge__circle {
+      top: 2px;
+    }
+    &.special-badge {
+      .dzq-badge__circle {
+        right: -5px;
+      }
+    }
+    &.large-badge {
+      .dzq-badge__circle {
+        right: -8px;
+      }
     }
   }
+
+  .special-badge {
+    .dzq-badge__circle {
+      width: rem(26px);
+    }
+  }
+
+  .large-badge {
+    .dzq-badge__circle {
+      width: rem(34px);
+    }
+  }
+
+  .dzq-badge__info {
+    display: none;
+  }
 }
-
-
-
-

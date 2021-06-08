@@ -33,10 +33,8 @@ class Index extends React.Component {
     const topCard = (<div className={styles.header}>{totalCount || 0}&nbsp;条草稿</div>);
     return (
       <div className={styles.wrapper}>
-        <Header />
         <SliderScroll
-          height='calc(100vh - 40px)'
-          withTopBar={true}
+          showHeader={true}
           topCard={topCard}
           list={this.getRenderList(pageData)}
           RenderItem={this.renderItem}
