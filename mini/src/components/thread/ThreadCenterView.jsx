@@ -63,37 +63,48 @@ const Index = (props) => {
               {text && <PostContent content={text} onPay={onPay} onRedirectToDetail={onClick} />}
               <View className={styles.content}>
                 {videoData && (
-                  <VideoPlay
-                    url={videoData.mediaUrl}
-                    coverUrl={videoData.coverUrl}
-                    onPay={onPay}
-                    isPay={needPay}
-                    status={videoData.status}
-                  />
+                  <BrWrapper>
+                    <VideoPlay
+                      url={videoData.mediaUrl}
+                      coverUrl={videoData.coverUrl}
+                      onPay={onPay}
+                      isPay={needPay}
+                      status={videoData.status}
+                    />
+                  </BrWrapper>
                 )}
                 {imageData && (
+                  <BrWrapper>
                     <ImageDisplay
                         platform='h5'
                         imgData={imageData}
                         isPay={needPay}
                         onPay={onPay}
                         onClickMore={onClick} />
-                    )
-                }
-                {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} />}
-                {fileData && <AttachmentView attachments={fileData} onPay={onPay} isPay={needPay} />}
-                {goodsData && <ProductItem
-                    image={goodsData.imagePath}
-                    amount={goodsData.price}
-                    title={goodsData.title}
-                    onClick={onClick}
-                />}
-                {rewardData && <Packet
-                  type={1}
-                  money={rewardData.money}
-                  onClick={onClick}
-                />}
-                {redPacketData && <Packet money={redPacketData.money || 0} onClick={onClick} condition={redPacketData.condition} />}
+                  </BrWrapper>
+                )}
+                {audioData && <BrWrapper><AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} /></BrWrapper>}
+                {fileData && <BrWrapper><AttachmentView attachments={fileData} onPay={onPay} isPay={needPay} /></BrWrapper>}
+                {goodsData && (
+                  <BrWrapper>
+                    <ProductItem
+                      image={goodsData.imagePath}
+                      amount={goodsData.price}
+                      title={goodsData.title}
+                      onClick={onClick}
+                    />
+                  </BrWrapper>
+                )}
+                {rewardData && (
+                  <BrWrapper>
+                    <Packet
+                      type={1}
+                      money={rewardData.money}
+                      onClick={onClick}
+                    />
+                  </BrWrapper>
+                )}
+                {redPacketData &&  <BrWrapper><Packet money={redPacketData.money || 0} onClick={onClick} condition={redPacketData.condition} /></BrWrapper>}
               </View>
           </View>
         );
@@ -118,6 +129,14 @@ const Index = (props) => {
             }
         </>
     )
+}
+
+const BrWrapper = ({ children }) => {
+  return (
+    <View className={styles.brWrapper}>
+      { children }
+    </View>
+  )
 }
 
 export default React.memo(Index)
