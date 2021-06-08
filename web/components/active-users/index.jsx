@@ -13,6 +13,8 @@ class Index extends React.Component {
 
   state = {
     users: null,
+    isError: false,
+    errorText: '加载失败'
   }
 
   componentDidMount() {
@@ -28,23 +30,32 @@ class Index extends React.Component {
   };
 
   loadData = async () => {
-    const res = await this.props.search.getUsersList();
-    if (res && res.code === 0 && res.data) {
+    try {
+      const res = await this.props.search.getUsersList();
+      if (res && res.code === 0 && res.data) {
+        this.setState({
+          users: res.data,
+        });
+      }
+    } catch (error) {
       this.setState({
-        users: res.data,
+        isError: true,
+        errorText: error
       });
-    }
+    } 
   }
 
   render() {
     const { pageData } = this.state.users || {};
-
+    const { isError, errorText } = this.state
     return (
       <SidebarPanel
         title="活跃用户"
         onShowMore={this.redirectToSearchResultUser}
         isLoading={!pageData}
         noData={!pageData?.length}
+        isError={isError}
+        errorText={errorText}
       >
         <ActiveUsers data={pageData} direction='left' onItemClick={this.onUserClick}/>
       </SidebarPanel>

@@ -5,7 +5,7 @@ import { Icon, Toast, Avatar, Spin } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
 import NoData from '@components/no-data';
-import BaseLayout from '@components/base-layout';
+import BaseLayout from '@components/user-center-base-laout-pc';
 import UserCenterFansPc from '@components/user-center/fans-pc';
 import UserCenterFriendPc from '@components/user-center/friend-pc';
 import { numberFormat } from '@common/utils/number-format';
@@ -25,6 +25,8 @@ class InvitePCPage extends React.Component {
       const { invite } = this.props;
       await invite.getInviteUsersList();
     } catch (e) {
+      const { invite } = this.props;
+      invite.setInviteLoading(false);
       Toast.error({
         content: e.Message,
       });
@@ -62,6 +64,8 @@ class InvitePCPage extends React.Component {
       });
     }
   }
+
+  contentHeader = () => <div className={layout.content_header}></div>;
 
   // 右侧 - 潮流话题 粉丝 版权信息
   renderRight = () => {
@@ -108,7 +112,9 @@ class InvitePCPage extends React.Component {
         right={ this.renderRight }
         onRefresh={this.loadMore}
         showRefresh={false}
+        contentHeader={this.contentHeader}
         isShowLayoutRefresh={false}
+        showLayoutRefresh={false}
       >
         <div
           className={layout.container}

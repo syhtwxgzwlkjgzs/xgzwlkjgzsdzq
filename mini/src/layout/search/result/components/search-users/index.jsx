@@ -20,6 +20,7 @@ const SearchUsers = ({ data = [], onItemClick }) => (
         needBottomLine={true}
         label={item.groupName}
         onClick={onItemClick}
+        itemStyle={{padding: '16px 0 16px 0'}}
       />
     ))}
   </View>

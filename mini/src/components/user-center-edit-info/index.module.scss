@@ -8,6 +8,8 @@
     font-size: $font-size-middle;
     font-weight: 600;
   }
+
+
   .userCenterEditItem {
     display: flex;
     align-items: center;
@@ -69,6 +71,14 @@
   padding: $padding-4n;
   box-sizing: border-box;
   padding-top: 0;
+  
+  .actionButtonContentWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
   h3 {
     margin-top: $margin-4n;
     // margin-bottom: 16;

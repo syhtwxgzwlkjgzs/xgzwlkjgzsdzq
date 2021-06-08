@@ -12,12 +12,6 @@
   .captchaInput{
     position: relative;
   }
-  .sendCaptcha {
-    @include mini_captchaBtn;
-  }
-  .countDown {
-    @include mini_captchaBtn;
-  }
 }
 .content {
   @include mini_content;

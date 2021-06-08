@@ -45,12 +45,12 @@
       width: rem(100);
       height: rem(100);
       border-radius: rem($border-radius-small);
-      background: var(--background-color);
+      background: $body-bg-color;
       border: $border-solid-1;
       text-align: center;
       line-height: rem(100);
       font-size: rem($font-size-large);
-      color: var(--color-text-secondary);
+      color: $text-color-secondary;
     }
     :global(.dzq-upload) {
       padding: 0;
@@ -74,7 +74,7 @@
       display: inline-block;
       font-size: rem($font-size-base);
       line-height: rem($font-line-height-base);
-      color: var(--color-text-primary);
+      color: $text-color-primary;
       float: right;
       :global(.dzq-upload) {
         padding: 0;

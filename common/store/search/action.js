@@ -135,8 +135,6 @@ class SearchAction extends SearchStore {
         const newPageData = this.topics.pageData.slice();
         this.setTopics({ ...result.data, pageData: newPageData });
       } else {
-        // 首次加载，先置空，是为了列表回到顶部
-        this.setTopics({ pageData: [] });
         this.setTopics(result.data);
       }
       return result.data;
@@ -161,8 +159,6 @@ class SearchAction extends SearchStore {
         const newPageData = this.users.pageData.slice();
         this.setUsers({ ...data, pageData: newPageData });
       } else {
-        // 首次加载，先置空，是为了列表回到顶部
-        this.setUsers({ pageData: [] });
         this.setUsers(data);
       }
       return result;

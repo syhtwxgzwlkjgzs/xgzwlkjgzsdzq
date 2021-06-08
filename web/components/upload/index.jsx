@@ -60,7 +60,8 @@ export default function DzqUpload(props) {
     : `${styles['dzq-upload-reset']}  ${className}`;
   const formatFileList = (fileList || []).map((item) => {
     const type = item?.fileType?.toString() || item?.type?.toString();
-    return { ...item, type };
+    const size = item?.fileSize || item?.size;
+    return { ...item, type, size };
   });
   return (
     <div className={clsName} onClick={(e) => e.stopPropagation()}>
