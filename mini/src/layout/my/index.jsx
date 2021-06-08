@@ -8,6 +8,7 @@ import UserCenterHead from '@components/user-center-head';
 import UserCenterAction from '@components/user-center-action';
 import UserCenterThreads from '@components/user-center-threads';
 import BaseLayout from '@components/base-layout'
+import UserCenterPost from '../../components/user-center-post';
 
 @inject('user')
 @observer
@@ -64,6 +65,11 @@ export default class index extends Component {
           <View className={styles.unit}>
             <UserCenterAction />
           </View>
+
+          <View className={styles.unit}>
+            <UserCenterPost />
+          </View>
+
           <View className={styles.unit}>
             <View className={styles.threadUnit}>
               <View className={styles.threadTitle}>主题</View>

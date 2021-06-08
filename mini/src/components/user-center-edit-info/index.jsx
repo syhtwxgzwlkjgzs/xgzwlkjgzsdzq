@@ -39,7 +39,7 @@ class index extends Component {
 
   // 点击取消
   handleCancel = () => {
-    Taro.navigateTo({url: '/subPages/my/index'})
+    Taro.navigateBack()
     this.props.user.initEditInfo();
   };
 
@@ -108,7 +108,7 @@ class index extends Component {
 
   handleGoToEditAccountPwd = () => {
     Taro.navigateTo({ url: '/subPages/my/edit/pwd/index' });
-  };
+  }
 
   handleGoToEditPayPwd = () => {
     Taro.navigateTo({ url: '/subPages/my/edit/paypwd/index' });

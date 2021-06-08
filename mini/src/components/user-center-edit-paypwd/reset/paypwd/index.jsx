@@ -49,9 +49,10 @@ export default class index extends Component {
         hasMask: false,
         duration: 1000,
       })
-      Taro.navigateTo({url: '/subPages/my/index'})
+      Taro.navigateBack({url: '/subPages/my/edit/index'})
       this.props.payBox.clearPayPassword()
     }).catch((err) => {
+      console.error(err);
       Toast.error({
         content: err.Msg || '修改密码失败',
         hasMask: false,

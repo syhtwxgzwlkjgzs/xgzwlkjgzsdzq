@@ -636,7 +636,7 @@ class PostPage extends React.Component {
   };
 
   render() {
-    const { isPC } = this.props.site;
+    // const { isPC } = this.props.site;
 
     const pc = (
       <IndexPCPage

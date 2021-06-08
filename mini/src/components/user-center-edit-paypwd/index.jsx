@@ -93,7 +93,8 @@ class index extends Component {
           this.props.payBox.visible = true;
           this.props.payBox.password = null;
         }
-        Taro.navigateTo({ url: '/subPages/my/index' });
+        Taro.navigateBack({ url: '/subPages/my/edit/index' });
+        this.props.user.userInfo.canWalletPay = true;
         this.props.payBox.password = null;
       })
       .catch((err) => {

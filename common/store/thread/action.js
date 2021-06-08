@@ -385,13 +385,13 @@ class ThreadAction extends ThreadStore {
       this.threadData.likeReward.shareCount = this.threadData?.likeReward?.shareCount - 0 + 1;
 
       // 更新列表相关数据
-      IndexStore.updateAssignThreadInfo(threadId, {
+      IndexStore?.updateAssignThreadInfo(threadId, {
         updateType: 'share',
       });
-      SearchStore.updateAssignThreadInfo(threadId, {
+      SearchStore?.updateAssignThreadInfo(threadId, {
         updateType: 'share',
       });
-      TopicStore.updateAssignThreadInfo(threadId, {
+      TopicStore?.updateAssignThreadInfo(threadId, {
         updateType: 'share',
       });
 

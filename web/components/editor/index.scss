@@ -91,7 +91,12 @@
     }
 
     .vditor-panel {
-      display: none !important;
+      span {
+        display: none !important;
+      }
+      span[aria-label^="语言"] {
+        display: inline-block !important;
+      }
     }
   }
 

@@ -30,7 +30,7 @@ class index extends Component {
       return;
     }
     // FIXME: 页面缺失
-    // Taro.navigateTo({ url: '/subPages/user/reset-password' });
+    Taro.navigateTo({ url: '/subPages/user/reset-password/index' });
   };
 
   // 输入旧密码
@@ -104,6 +104,7 @@ class index extends Component {
             duration: 1000,
           });
           Taro.navigateBack({ delta: 1 });
+          this.props.user.userInfo.hasPassword = true;
           this.props.user.clearUserAccountPassword();
         })
         .catch((err) => {

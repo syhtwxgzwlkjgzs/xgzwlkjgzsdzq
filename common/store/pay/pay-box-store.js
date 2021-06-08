@@ -478,7 +478,7 @@ class PayBoxStore {
 
     throw {
       Code: resetPayPwdRes.code,
-      Msg: resetPayPwdRes.message,
+      Msg: resetPayPwdRes.msg,
     };
   }
 
