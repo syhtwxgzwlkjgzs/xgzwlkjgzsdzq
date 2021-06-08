@@ -14,6 +14,7 @@ import { minus } from '@common/utils/calculate';
 import classnames from 'classnames';
 import UserInfo from '@components/thread/user-info';
 import styles from './index.module.scss';
+import { debounce } from '@common/utils/throttle-debounce';
 
 // 帖子内容
 const RenderThreadContent = inject('user')(
@@ -89,7 +90,7 @@ const RenderThreadContent = inject('user')(
 
     const onClickUser = (e) => {
       typeof props.onClickUser === 'function' && props.onClickUser(e);
-    }
+    };
 
     return (
       <div className={`${styles.container}`}>
@@ -263,7 +264,7 @@ const RenderThreadContent = inject('user')(
               {/* 点赞 */}
               <div
                 className={classnames(styles.liked, threadStore?.threadData?.isLike && styles.actived)}
-                onClick={onLikeClick}
+                onClick={debounce(onLikeClick, 500)}
               >
                 <Icon name="LikeOutlined" size={20}></Icon>
                 {threadStore?.threadData?.likeReward?.likePayCount > 0 && (
