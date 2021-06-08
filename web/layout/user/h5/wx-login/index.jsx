@@ -12,7 +12,7 @@ import Protocol from '../components/protocol';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT, isExtFieldsOpen } from '@common/store/login/util';
 import PcBodyWrap from '../components/pc-body-wrap';
 import { genMiniScheme } from '@common/server';
-import { MOBILE_LOGIN_STORE_ERRORS } from '@/common/store/login/mobile-login-store';
+import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 
 
 @inject('site')
@@ -103,12 +103,12 @@ class WXLoginH5Page extends React.Component {
           clearInterval(this.timer);
         }
         const { site } = this.props;
-        // 跳转补充信息页
-        if (isExtFieldsOpen(site) && e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
-          this.props.commonLogin.needToCompleteExtraInfo = true;
-          this.props.router.push('/user/supplementary');
-          return;
-        }
+        // // 跳转补充信息页
+        // if (isExtFieldsOpen(site) && e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+        //   this.props.commonLogin.needToCompleteExtraInfo = true;
+        //   this.props.router.push('/user/supplementary');
+        //   return;
+        // }
         // 跳转状态页
         if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
           this.props.commonLogin.setStatusMessage(e.Code, e.Message);
