@@ -5,8 +5,8 @@ import setAccessToken from '../../utils/set-access-token';
 import { checkUserStatus } from '@common/store/login/util';
 
 
-export const NEED_BIND_WEIXIN_FLAG = 8000;
-export const NEED_BIND_PHONE_FLAG = 8001;
+export const NEED_BIND_WEIXIN_FLAG = -8000;
+export const NEED_BIND_PHONE_FLAG = -8001;
 
 export default class UserLoginStore {
   @observable username = '';
@@ -71,7 +71,7 @@ export default class UserLoginStore {
         // });
         const uid = get(loginResp, 'data.uid', '');
         throw {
-          Code: 8000,
+          Code: -8000,
           Message: '需要绑定微信',
           sessionToken: get(loginResp, 'data.sessionToken'),
           nickname: get(loginResp, 'data.nickname'),
