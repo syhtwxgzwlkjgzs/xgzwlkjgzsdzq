@@ -1,15 +1,8 @@
 @import '@common/styles/index.scss';
-@import '@common/styles/_variable.scss';
 
 .content {
   padding: $padding-6n;
   padding-bottom: 0;
-  h3 {
-    font-size: $font-size-large;
-    color: $text-color-primary;
-    margin-bottom: $margin-5n;
-    letter-spacing: 1px;
-  }
   .setTtile {
     display: block;
     font-size: $font-size-large;
@@ -42,9 +35,7 @@
       :global {
         .dzq-input__inner {
           border: none;
-
         }
-        
       }
     }
   }
@@ -54,15 +45,37 @@
   }
 }
 
-.bottom {
-  position: fixed;
-  bottom: 20px;
-  width: 100%;
-  border-top: 1px solid $border-color;
-  padding: $padding-2n $padding-4n $padding-10;
-  .btn {
-    width: 343px;
-    height: 42px;
-    font-size: $font-size-middle;
+#editMobileContent {
+  .bottom {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    // border-top: 1px solid $border-color;
+    padding: $padding-2n $padding-4n $padding-4n;
+    background-color: $white;
+    // @include ios-safe-area-inset-bottom;
+    display: flex;
+    .btn {
+      height: 42px;
+      font-size: $font-size-middle;
+      margin: auto;
+      border-radius: $border-radius-small;
+      padding: 0;
+      line-height: 42px;
+    }
+  }
+}
+
+.bgBtnColor {
+  :global {
+    .dzq-button--primary.is-mouseenter {
+      @include button-primary()
+    }
+  }
+}
+
+#editMobileContent {
+  .btnPosition {
+    bottom: 200px;
   }
 }

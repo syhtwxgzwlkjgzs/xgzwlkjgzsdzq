@@ -149,15 +149,19 @@ class index extends Component {
                 <Icon name="RightOutlined" size={12} />
               </View>
             </View>
-            <View className={styles.userCenterEditItem}>
-              <View className={styles.userCenterEditLabel}>
-                <Text className={styles.userLabelName}>手机号码</Text>
-              </View>
-              <View className={styles.userCenterEditValue} onClick={this.handleGoToEditMobile}>
-                <View className={styles.ucText}>{this.user.mobile || '去绑定'}</View>
-                <Icon name="RightOutlined" size={12} />
-              </View>
-            </View>
+            {
+              this.props.site?.isSmsOpen && (
+                <View className={styles.userCenterEditItem}>
+                  <View className={styles.userCenterEditLabel}>
+                    <Text className={styles.userLabelName}>手机号码</Text>
+                  </View>
+                  <View className={styles.userCenterEditValue} onClick={this.handleGoToEditMobile}>
+                    <View className={styles.ucText}>{this.user.mobile || '去绑定'}</View>
+                    <Icon name="RightOutlined" size={12} />
+                  </View>
+                </View>
+              )
+            }
             <View className={styles.userCenterEditItem}>
               <View className={styles.userCenterEditLabel}>
                 <Text className={styles.userLabelName}>账户密码</Text>

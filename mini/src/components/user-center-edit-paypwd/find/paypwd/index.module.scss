@@ -1,25 +1,19 @@
 @import '@common/styles/index.scss';
-@import '@common/styles/_variable.scss';
+@import '@common/styles/mixin/login.scss';
 
 .content {
   padding: $padding-6n;
   padding-bottom: 0;
-  h3 {
-    font-size: $font-size-large;
-    color: $text-color-primary;
-    margin-bottom: $margin-5n;
-    letter-spacing: 1px;
-  }
   .setTtile {
-    display: block;
     font-size: $font-size-large;
     color: $text-color-primary;
     margin-bottom: $margin-5n;
     letter-spacing: 1px;
+    display: block;
     font-weight: 600;
   }
   .labelInfo {
-    padding: $margin-10 0 $margin-6n;
+    padding: $margin-3n 0 $margin-4n;
     border-bottom: 1px solid $border-color;
     display: flex;
     align-items: center;
@@ -33,11 +27,6 @@
     .labelValue {
       color: $text-color-primary;
       font-size: $font-size-middle;
-      :global {
-        .dzq-input__icon {
-          line-height: 36px;
-        }
-      }
     }
     .codeBtn {
       height: 36px;
@@ -57,42 +46,58 @@
   }
 }
 
-.bottom {
-  position: fixed;
-  bottom: 20px;
-  width: 100%;
-  border-top: 1px solid $border-color;
-  padding: $padding-2n $padding-4n $padding-10;
-  .btn {
-    width: 343px;
-    height: 42px;
-    font-size: $font-size-middle;
+#findPayPwdContent {
+  .bottom {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid $border-color;
+    padding: $padding-2n $padding-4n $padding-4n;
+    display: flex;
+    justify-content: center;
+    background-color: $white;
+    .btn {
+      height: 42px;
+      line-height: 42px;
+      padding: 0;
+      font-size: $font-size-middle;
+      border-radius: $border-radius-small;
+    }
+  }
+}
+
+.bgBtnColor {
+  :global {
+    .dzq-button--primary.is-mouseenter {
+      @include button-primary()
+    }
   }
 }
 
 .labelInfo {
-  padding: $padding-6n;
+  padding: $padding-6n $padding-6n $padding-4n;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: 62px;
+  box-sizing: border-box;
   .labelValue {
     color: $text-color-primary;
     font-size: $font-size-middle;
     border-bottom: 1px solid $border-color;
     flex: 1;
-    :global {
-      .dzq-input {
-        width: 100%;
-      }
-      .dzq-input__inner {
-        width: 100%;
-        border: none;
-        font-size: $font-size-middle;
-      }
-      .dzq-input__icon {
-        line-height: 36px;
-      }
+    line-height: 62px;
+    .input {
+      @include input;
+      @include passwordInput;
     }
+
+  }
+}
+
+#findPayPwdContent {
+  .btnPosition {
+    bottom: 200px;
   }
 }
 

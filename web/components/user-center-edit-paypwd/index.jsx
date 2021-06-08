@@ -176,7 +176,7 @@ class index extends Component {
       <div id={styles.setPayPwdContent}>
         <Header />
         {this.props.user?.canWalletPay ? this.renderCanPayPwd() : this.renderSetPayPwd()}
-        <div className={styles.bottom}
+        <div
           className={classNames(styles.bottom,{
             [styles.bgBtnColor]: !this.getDisabledWithButton()
           })}
