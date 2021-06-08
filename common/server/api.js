@@ -25,13 +25,13 @@ const api = apiIns({
 
 const { http } = api;
 
-const JUMP_TO_404 = -4004;
-const JUMP_TO_LOGIN = -3001;
-const JUMP_TO_REGISTER = -3002;
-const JUMP_TO_AUDIT = -3003;
-const JUMP_TO_HOME_INDEX = -3004;
-const SITE_CLOSED = -3005;
-const JUMP_TO_PAY_SITE = -3006;
+const JUMP_TO_404 = -4004; // 资源不存在
+const JUMP_TO_LOGIN = -3001; // 到登录页
+const JUMP_TO_REGISTER = -3002; // 到注册页
+const JUMP_TO_AUDIT = -3003; // 到注册审核页
+const JUMP_TO_HOME_INDEX = -3004; // 到首页
+const SITE_CLOSED = -3005; // 站点关闭
+const JUMP_TO_PAY_SITE = -3006; // 到付费加入页面
 
 // 处理数据异常，当数据为空对象或空数组，都将统一返回null
 function reasetData(data) {
@@ -89,6 +89,9 @@ http.interceptors.response.use((res) => {
       } else {
         url = '/subPages/404/index'
       }
+      Router.replace({
+        url
+      });
       break;
     }
     case JUMP_TO_LOGIN: {
@@ -97,6 +100,9 @@ http.interceptors.response.use((res) => {
       } else {
         url = '/subPages/user/wx-auth/index'
       }
+      Router.replace({
+        url
+      });
       break;
     }
     case JUMP_TO_REGISTER: {
@@ -105,6 +111,9 @@ http.interceptors.response.use((res) => {
       } else {
         url = '/subPages/user/wx-auth/index'
       }
+      Router.replace({
+        url
+      });
       break;
     }
     case JUMP_TO_AUDIT: {
@@ -113,6 +122,9 @@ http.interceptors.response.use((res) => {
       } else {
         url = '/subPages/user/status/index?statusCode=2'
       }
+      Router.replace({
+        url
+      });
       break;
     }
     case JUMP_TO_HOME_INDEX: {
@@ -121,6 +133,9 @@ http.interceptors.response.use((res) => {
       } else {
         url = '/pages/index/index'
       }
+      Router.replace({
+        url
+      });
       break;
     }
     case SITE_CLOSED: {
@@ -129,6 +144,9 @@ http.interceptors.response.use((res) => {
       } else {
         url = '/subPages/close/index'
       }
+      Router.replace({
+        url
+      });
       break;
     }
     case JUMP_TO_PAY_SITE: {
@@ -137,14 +155,12 @@ http.interceptors.response.use((res) => {
       } else {
         url = '/subPages/forum/partner-invite/index'
       }
+      Router.replace({
+        url
+      });
       break;
     }
     default:  // 200 状态码
-      if (url) {
-        Router.replace({
-          url
-        });
-      }
       if (status === 200) {
         return Promise.resolve({
           code: data.Code,
