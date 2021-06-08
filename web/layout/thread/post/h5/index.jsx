@@ -184,9 +184,9 @@ class ThreadCreate extends React.Component {
 
   // 顶部导航栏点击后拦截回调
   handlePageJump = (link = '') => {
-    const { postData: { contentText } } = this.props.threadPost;
-
-    if (contentText !== '') {
+    const { postType, threadPost: {postData: { contentText }} } = this.props;
+  
+    if (postType !== "isEdit" && contentText !== '') {
       this.props.handleSetState({ draftShow: true, jumpLink: link });
       return;
     }

@@ -30,6 +30,7 @@ class PostPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      postType: 'isFirst', // 发布状态 isFirst-首次，isEdit-再编辑，isDraft-草稿
       emoji: {},
       // 分类选择显示状态
       categoryChooseShow: false,
@@ -135,6 +136,7 @@ class PostPage extends React.Component {
       } else ret = await thread.fetchThreadDetail(id);
       if (ret.code === 0) {
         threadPost.formatThreadDetailToPostData(ret.data);
+        this.setState({ postType: ret.data.isDraft ? 'isDraft' : 'isEdit' });
       } else {
         Toast.error({ content: ret.msg });
       }
