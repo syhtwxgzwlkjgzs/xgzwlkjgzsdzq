@@ -1,0 +1,20 @@
+.painter {
+    background-color: '#fff';
+    }
+    .cent {
+      background: --color(--qui-FC-FFF);
+      border-radius: 10px;
+      box-shadow: 0 3rpx 6rpx rgba(0, 0, 0, 0.16);
+      display: flex;
+      justify-content: center;
+    }
+    .centImage {
+      width: 100%;
+      display: block;
+    }
+    .canvasBox {
+      padding-top: 41rpx;
+      margin-bottom: 80rpx;
+    }
+  
+  

@@ -17,7 +17,7 @@
         display: flex;
         justify-content: space-around;
         align-items: center;
-        background-color: #fff;
+        background-color: #f8f8f8;
         Button {
           margin: 0px;
           padding: 0px;
@@ -28,14 +28,17 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             padding: $padding-10 0;
             //background-color: ;
             .fabulousIcon {
-              height: 35px;
+              height: $font-size-primary * 4;
+              width: $font-size-primary * 4;
               display: flex;
               align-items: center;
               justify-content: center;
               font-size: $font-size-primary ;
+              background-color: #fff;
             }
             .fabulousPost {
               font-size: $font-size-primary;
@@ -55,7 +58,7 @@
       background: var(--background-color-text2);
     }
     .bottom {
-      background-color: #fff;
+      background-color: #f8f8f8;
       height: 50px;
       font-size: 15px;
       line-height: 100rpx;
@@ -66,7 +69,7 @@
         display: block;
         content: '';
         width: 100%;
-        height: 20px;
+        height: env(safe-area-inset-bottom); 
         background-color:var(--background-color-text2);
       }
     }

@@ -17,7 +17,7 @@ export default class Simple extends React.Component {
       canvasStatus: null,
       rssConfig: {
         width: 750,
-        height: `${750 + obj.contentHeight * 24}`,
+        height: `${750 + obj.contentHeight * 24 + 48 + 200}`,
         backgroundColor: '#ffffff',
         debug: false,
         blocks: [
@@ -25,7 +25,7 @@ export default class Simple extends React.Component {
             x: 20,
             y: 20,
             width: 710,
-            height: 710,
+            height: 1358,
             paddingLeft: 0,
             paddingRight: 0,
             borderWidth: 0,
@@ -37,7 +37,7 @@ export default class Simple extends React.Component {
             x: 25,
             y: 25,
             width: 700,
-            height: 700,
+            height: 1348,
             paddingLeft: 0,
             paddingRight: 0,
             borderWidth: 0,
@@ -48,12 +48,19 @@ export default class Simple extends React.Component {
           // 分组
           {
             x: 75,
-            y: `${obj.contentHeight * 24 + 400}`,
+            y: `${obj.contentHeight * 24 + 448}`,
             width: `${obj.groupLength * 24 + 20}`,
             height: 44,
             backgroundColor: '#EFF3F5',
             // backgroundColor: '#f00'
-          }
+          },
+          {
+            x: 75,
+            y:270,
+            height:600,
+            width:600,
+            backgroundColor:'#f00'
+        }
         ],
         images: [
           // 头像
@@ -66,6 +73,14 @@ export default class Simple extends React.Component {
                 borderRadius: 80,
                 borderColor: '#000000',
                 zIndex: 10,
+            },
+            // 内容图片
+            {
+                url: obj.imgUrl,
+                x: 75,
+                y:270,
+                height:600,
+                width:600,
             }
         ],
         texts: [
@@ -91,11 +106,23 @@ export default class Simple extends React.Component {
               zIndex:10,
               baseLine: 'top'
             },
+            // 标题
+            {
+                text: `${obj.title}`,
+                x: 75,
+                y: 200,
+                width:600,
+                fontSize: 28,
+                fontWeight: 'bold',
+                textAlign: 'left',
+                zIndex: 10,
+                baseLine: 'top', 
+            },
             // 内容
             {
               text: `${obj.content}`,
               x: 75,
-              y: 200,
+              y: 248,
               width: 600,
               fontSize: 28,
               lineHeight: 38,
@@ -109,7 +136,7 @@ export default class Simple extends React.Component {
               text: `${obj.group}`,
               //  lineHeight: 50,
               x: 85,
-              y: obj.contentHeight * 24 + 410,
+              y: obj.contentHeight * 24 + 458,
               fontSize: 24,
               zIndex: 20,
               textAlign: 'left',

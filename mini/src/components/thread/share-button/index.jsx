@@ -24,6 +24,7 @@ const index = ({setShow, tipData, index}) => {
         setShow(false)
     }
     const CreateCard = () => {
+        setShow(false)
         Taro.navigateTo({url: `/subPages/create-card/index?threadId=${threadId}`})
     }
     return (
