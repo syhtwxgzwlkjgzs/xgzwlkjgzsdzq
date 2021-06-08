@@ -34,11 +34,11 @@ class UsernameH5Login extends React.Component {
   loginErrorHandler = async (e) => {
     const { site } = this.props;
     // 跳转补充信息页
-    if (isExtFieldsOpen(site) && e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
-      this.props.commonLogin.needToCompleteExtraInfo = true;
-      this.props.router.push('/user/supplementary');
-      return;
-    }
+    // if (isExtFieldsOpen(site) && e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+    //   this.props.commonLogin.needToCompleteExtraInfo = true;
+    //   this.props.router.push('/user/supplementary');
+    //   return;
+    // }
 
     // 微信绑定
     if (e.Code === NEED_BIND_WEIXIN_FLAG) {
