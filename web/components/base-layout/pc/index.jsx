@@ -87,7 +87,7 @@ const BaseLayout = forwardRef((props, ref) => {
 
   return (
     <div className={styles.container}>
-        {(header && header({ ...props })) || <Header errorText={errorText} onSearch={onSearch} />}
+        {(header && header({ ...props })) || <Header onSearch={onSearch} />}
 
         <div className={`${styles.body} ${cls}`}>
           <List {...props} immediateCheck={immediateCheck} className={styles.list} wrapperClass={styles.wrapper} ref={listRef} onError={onError} onScroll={onScroll}>
