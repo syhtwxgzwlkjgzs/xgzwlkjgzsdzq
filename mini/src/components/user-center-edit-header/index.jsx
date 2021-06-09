@@ -158,10 +158,10 @@ export default class index extends Component {
   uploadAvatarImpl = async (fileList) => {
     try {
       const token = locals.get(constants.ACCESS_TOKEN_NAME);
-      const file = await this.getCanvasImg(fileList[0]);
+      // const file = await this.getCanvasImg(fileList[0]);
       const uploadRes = await Taro.uploadFile({
         url: `${this.config.COMMON_BASE_URL}/apiv3/users/avatar`,
-        filePath: file.tempFilePath,
+        filePath: fileList[0].path,
         header: {
           'Content-Type': 'multipart/form-data',
           authorization: `Bearer ${token}`,
@@ -217,10 +217,10 @@ export default class index extends Component {
   uploadBackgroundImpl = async (fileList) => {
     try {
       const token = locals.get(constants.ACCESS_TOKEN_NAME);
-      const file = await this.getCanvasImg(fileList[0]);
+      // const file = await this.getCanvasImg(fileList[0]);
       const uploadRes = await Taro.uploadFile({
         url: `${this.config.COMMON_BASE_URL}/apiv3/users/background`,
-        filePath: file.tempFilePath,
+        filePath: fileList[0].path,
         header: {
           'Content-Type': 'multipart/form-data',
           authorization: `Bearer ${token}`,
@@ -361,6 +361,7 @@ export default class index extends Component {
             type="33"
             canvasId={'photoCanvas'}
             style={{
+              visibility: 'hidden',
               position: 'fixed',
               top: 0,
               zIndex: -10000,
