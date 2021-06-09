@@ -23,6 +23,10 @@ class SearchStore {
   @observable searchTopicsError = { isError: false, errorText: '' }
   @observable searchUsersError = { isError: false, errorText: '' }
   @observable searchThreadsError = { isError: false, errorText: '' }
+
+  @observable topicsError = { isError: false, errorText: '' }
+  @observable usersError = { isError: false, errorText: '' }
+  @observable threadsError = { isError: false, errorText: '' }
 }
 
 export default SearchStore;

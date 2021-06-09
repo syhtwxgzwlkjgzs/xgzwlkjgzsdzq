@@ -178,9 +178,9 @@ class SearchAction extends SearchStore {
         this.setTopics(result.data);
       }
       return result.data;
+    } else {
+      this.topicsError = { isError: true, errorText: result?.msg || '加载失败' }
     }
-
-    return Promise.reject(result?.msg || '');
   };
 
   /**
@@ -202,9 +202,9 @@ class SearchAction extends SearchStore {
         this.setUsers(data);
       }
       return result;
+    } else {
+      this.usersError = { isError: true, errorText: result?.msg || '加载失败' }
     }
-
-    return Promise.reject(result?.msg || '');
   };
 
   /**
@@ -227,9 +227,9 @@ class SearchAction extends SearchStore {
         this.setThreads(result.data);
       }
       return result.data;
+    } else {
+      this.threadsError = { isError: true, errorText: result?.msg || '加载失败' }
     }
-    
-    return Promise.reject(result?.msg || '');
   };
 
 /**
