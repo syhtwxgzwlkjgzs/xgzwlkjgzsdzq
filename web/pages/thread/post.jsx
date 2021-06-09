@@ -497,8 +497,10 @@ class PostPage extends React.Component {
       Toast.info({ content: '请等待文件上传完成再发布' });
       return;
     }
-    if (!isDraft && !postData.contentText) {
-      Toast.info({ content: '请填写您要发布的内容' });
+    const { images, video, files, audio } = postData;
+    if (!(postData.contentText || video.id || audio.id || Object.values(images).length
+      || Object.values(files).length)) {
+      Toast.info({ content: '请至少填写您要发布的内容或者上传图片、附件、视频、语音' });
       return;
     }
     if (!this.checkAttachPrice()) {
@@ -510,12 +512,13 @@ class PostPage extends React.Component {
     //   return;
     // }
     if (isDraft) {
-      const { contentText } = postData;
-      if (contentText === '') {
-        return Toast.info({ content: '内容不能为空' });
-      } else {
-        this.setPostData({ draft: 1 });
-      }
+      // const { contentText } = postData;
+      // if (contentText === '') {
+      //   return Toast.info({ content: '内容不能为空' });
+      // } else {
+      //   this.setPostData({ draft: 1 });
+      // }
+      this.setPostData({ draft: 1 });
     } else {
       this.setPostData({ draft: 0 });
     }
@@ -603,9 +606,10 @@ class PostPage extends React.Component {
         this.props.router.replace(`/thread/${data.threadId}`);
       } else {
         const { jumpLink } = this.state;
-        jumpLink ? Router.push({ url: jumpLink }) : Router.back();
-
-      };
+        if (!this.props.site.isPC) {
+          jumpLink ? Router.push({ url: jumpLink }) : Router.back();
+        }
+      }
       return true;
     }
     Toast.error({ content: msg });
