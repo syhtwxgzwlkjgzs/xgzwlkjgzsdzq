@@ -5,6 +5,7 @@ import { inject } from 'mobx-react';
 import ViewAdapter from '@components/view-adapter';
 
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
+import HOCWithNoPaid from '@middleware/HOCWithNoPaid';
 
 @inject('site')
 class ParnerInvite extends React.Component {
@@ -18,4 +19,4 @@ class ParnerInvite extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(withRouter(ParnerInvite));
+export default HOCFetchSiteData(HOCWithNoPaid(withRouter(ParnerInvite)));
