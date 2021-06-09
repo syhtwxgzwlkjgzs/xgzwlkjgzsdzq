@@ -51,7 +51,7 @@ class SearchResultPostH5Page extends React.Component {
       >
         <SidebarPanel 
           title="热门内容" 
-          type='normal'
+          type='large'
           isShowMore={false}
           isLoading={!pageData}
           noData={!pageData?.length}
