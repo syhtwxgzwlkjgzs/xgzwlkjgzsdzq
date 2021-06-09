@@ -19,6 +19,7 @@ const SearchUsers = ({ data = [], onItemClick }) => (
         label={item.groupName}
         onClick={onItemClick}
         className={styles.userItem}
+        userId={item.userId}
       />
     ))}
   </View>

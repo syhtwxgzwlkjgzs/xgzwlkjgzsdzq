@@ -95,6 +95,11 @@
       color: $text-color-secondary;
       line-height: 20px;
 
+      .content-html {
+        overflow: hidden;
+        word-break: break-all;
+      }
+
       :global {
         .qq-emotion {
           width: 20px;
