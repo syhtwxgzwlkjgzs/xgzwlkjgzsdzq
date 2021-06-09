@@ -1,10 +1,13 @@
 import React from 'react';
+import { observer, inject } from 'mobx-react';
 import { View } from '@tarojs/components';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Badge from '@discuzq/design/dist/components/badge/index';
 import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
-
+@inject('user')
+@inject('message')
+@observer
 class UserCenterAction extends React.Component {
   // 点击我的消息
   handleMyMessage = () => {
@@ -130,7 +133,7 @@ class UserCenterAction extends React.Component {
             </View>
           </View>
 
-          <View className={styles.userCenterActionItemContainer}>
+          <View className={styles.userCenterActionItemContainer} style={{ visibility: !this.props.user.isAdmini && 'hidden' }}>
             <View onClick={this.handleMyInvite} className={styles.userCenterActionItem}>
               <View className={styles.userCenterActionItemIcon}>
                 <Badge>
