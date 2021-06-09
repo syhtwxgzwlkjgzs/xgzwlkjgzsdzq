@@ -1,11 +1,14 @@
 @import '@common/styles/index.scss';
 .avatarBox{
+  position: relative;
+  .cursor {
+    @include cursor-on-pc;
+  }
   :global(.dzq-avatar--circle) {
     display: flex;
     justify-content: center;
     align-items: center;
   }
-  position: relative;
   .userInfoBox{
     position: absolute;
 

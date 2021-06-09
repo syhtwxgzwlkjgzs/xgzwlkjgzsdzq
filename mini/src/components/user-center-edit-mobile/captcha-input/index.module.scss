@@ -1,5 +1,4 @@
 @import '@common/styles/index.scss';
-@import '@common/styles/_variable.scss';
 
 .payList{
   display: flex;
@@ -7,10 +6,10 @@
   justify-content: space-between;
   .payListItem{
     border-bottom: var(--border-border);
-    width: 46px;
-    height: 49px;
+    width: 40px;
+    height: 53px;
     text-align: center;
-    line-height: 49px;
+    line-height: 53px;
     font-size: $font-size-middle;
     &:not(:last-child) {
       margin-right: $margin-2n;
@@ -21,6 +20,44 @@
     }
     &.activation{
       border-bottom-color: $border-color-hover;
+    }
+  }
+}
+
+.keyboard{
+  width: 100%;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 1111;
+  background-color: $white;
+  .line{
+    display: flex;
+    align-items: center;
+    .column{
+      box-sizing: border-box;
+      flex: 1;
+      font-size: $font-size-large;
+      color: var(--color-text-primary);
+      height: 50px;
+      text-align: center;
+      border: 1px solid var(--border-line-color);
+      border-bottom: none;
+      border-right: none;
+      line-height: 50px;
+    }
+    .special{
+      box-sizing: border-box;
+      flex: 1;
+      font-size: $font-size-middle;
+      color: var(--color-text-primary);
+      height: 50px;
+      text-align: center;
+      border: 1px solid var(--border-line-color);
+      border-bottom: none;
+      border-right: none;
+      line-height: 50px;
+      background: var(--comment-content-bg-color);
     }
   }
 }

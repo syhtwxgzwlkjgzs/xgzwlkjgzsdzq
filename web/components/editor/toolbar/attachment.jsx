@@ -58,7 +58,7 @@ function AttachmentToolbar(props) {
   function handleAttachClick(e, item) {
     let action = item.type;
     let actionItem = item;
-    if (currentAction === item.type) {
+    if (currentAction === item.type && currentAction !== THREAD_TYPE.anonymity) {
       action = '';
       actionItem = { type: '' };
     }
@@ -149,7 +149,7 @@ function AttachmentToolbar(props) {
     const cls = styles['dvditor-attachment-toolbar__item'];
     const activeCls = `${styles['dvditor-attachment-toolbar__item']} ${styles.active}`;
     const action = props.currentSelectedToolbar;
-    if (item.type === action) return activeCls;
+    if (item.type === action && item.type !== THREAD_TYPE.anonymity) return activeCls;
     const { postData } = props;
     if (item.type === THREAD_TYPE.reward && postData?.rewardQa?.value) return activeCls;
     if (item.type === THREAD_TYPE.goods && postData?.product?.id) return activeCls;

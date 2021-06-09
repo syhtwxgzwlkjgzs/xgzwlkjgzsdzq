@@ -37,6 +37,10 @@
     cursor: pointer;
   }
 
+  .label {
+    margin-left: rem($padding-4n);
+  }
+
   .containerText {
     display: flex;
     flex-direction: column;

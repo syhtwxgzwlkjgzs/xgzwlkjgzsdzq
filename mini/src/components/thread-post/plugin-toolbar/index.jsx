@@ -71,7 +71,7 @@ const Index = inject('user', 'threadPost')(observer((props) => {
         </View>
       </View>
     );
-  }, [tep, currentplug, operationType])
+  }, [tep, currentplug, operationType, threadPost.postData.anonymous])
 
   useEffect(() => {
     if (!operationType) {

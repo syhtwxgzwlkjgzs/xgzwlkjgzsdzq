@@ -197,7 +197,7 @@ class Index extends React.Component {
 
       return (
         <div className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`}>
-          <div className={styles.header} onClick={this.onClick}>
+          <div className={styles.header}>
               <UserInfo
                 name={user.nickname || ''}
                 avatar={user.avatar || ''}
