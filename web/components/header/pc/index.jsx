@@ -179,7 +179,7 @@ class Header extends React.Component {
   }
 
   render() {
-    const { site, user, message: { totalUnread,  }, errorText, forum } = this.props;
+    const { site, user, message: { totalUnread,  }, forum } = this.props;
     const { canViewThreads } = forum;
     return (
       <div className={styles.header}>
