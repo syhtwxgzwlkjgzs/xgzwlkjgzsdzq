@@ -14,7 +14,9 @@ import Router from '@discuzq/sdk/dist/router';
  const TopNews = ({ data = [], router, platform = 'h5'}) => {
   const onClick = ({ threadId } = {}, e, node) => {
     e && e.stopPropagation();
-    const url = handleLink(node)
+    const {url, isExternaLink } = handleLink(node)
+    if(isExternaLink) return
+    
     if (url) {
       Router.push({url}) 
     } else {

@@ -169,6 +169,7 @@ class ThreadCreate extends React.Component {
     const timer = setTimeout(() => {
       if (timer) clearTimeout(timer);
       const postBottombar = document.querySelector('#post-bottombar');
+      if (!postBottombar) return;
       this.positionDisplay();
       this.setPostBox('clear');
       postBottombar.style.top = 'auto';
@@ -183,9 +184,9 @@ class ThreadCreate extends React.Component {
 
   // 顶部导航栏点击后拦截回调
   handlePageJump = (link = '') => {
-    const { postData: { contentText } } = this.props.threadPost;
-
-    if (contentText !== '') {
+    const { postType, threadPost: {postData: { contentText }} } = this.props;
+  
+    if (postType !== "isEdit" && contentText !== '') {
       this.props.handleSetState({ draftShow: true, jumpLink: link });
       return;
     }
@@ -307,6 +308,8 @@ class ThreadCreate extends React.Component {
             || !!(postData.price || postData.attachmentPrice)
           ) && (
             <MoneyDisplay
+              canEditReward={this.props.canEditReward}
+              canEditRedpacket={this.props.canEditRedpacket}
               payTotalMoney={threadPost.payTotalMoney}
               redTotalMoney={threadPost.redpacketTotalAmount}
               postData={postData}

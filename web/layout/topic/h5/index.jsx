@@ -49,7 +49,7 @@ class TopicH5Page extends React.Component {
           onRefresh={this.fetchMoreData}
           noMore={currentPage >= totalPage}
       >
-        <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} isShowBottom={false} />
+        <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} isShowBottom={false} searchWhileTyping/>
         <TopicHeader onClick={this.onFilter} />
         <div className={styles.wrapper}>
           {

@@ -27,6 +27,8 @@ class Index extends Component {
     this.state = {
       threadId: '', // 主题id
       postType: 'isFirst', // 发布状态 isFirst-首次，isEdit-再编辑，isDraft-草稿
+      canEditRedpacket: true, // 可编辑红包
+      canEditReward: true, // 可编辑悬赏
       isShowTitle: true, // 默认显示标题
       maxLength: 5000, // 文本输入最大长度
       showClassifyPopup: false, // 切换分类弹框show
@@ -57,7 +59,7 @@ class Index extends Component {
     const { params } = getCurrentInstance().router;
     const id = parseInt(params.id);
     if (id) { // 请求主题
-      this.setState({ threadId: id, postType: 'isEdit' })
+      this.setState({ threadId: id })
       this.setPostDataById(id);
     } else {
       // this.openSaveDraft(); // 现阶段，自动保存功能关闭
@@ -130,11 +132,18 @@ class Index extends Component {
       this.setCategory(categoryId);
       const { content: { text } } = ret.data;
       // 小程序编辑帖子，要把内容中的img标签去掉。/todo: 防止把其他有效的img标签也去掉
-      const realText = text.replace(/<img.*?alt="(\w+)".*?>/g, `:$1:`).replace(/<span.*?>(.*?)<\/span>/g, `$1`);
+      const realText = text.replace(/<img.*?alt="(\w+)".*?>/g, `:$1:`)
+        .replace(/<br \/>/g, '\n')
+        .replace(/<span.*?>(.*?)<\/span>/g, `$1`);
       ret.data.content.text = realText;
       threadPost.formatThreadDetailToPostData(ret.data);
-      this.setState({ postType: isDraft === 1 ? 'isDraft' : 'isEdit' });
-      // isDraft === 1 && this.openSaveDraft(); // 现阶段，自动保存功能关闭
+      const { postData: { redpacket, rewardQa } } = this.props.threadPost
+        this.setState({
+          postType: isDraft ? 'isDraft' : 'isEdit',
+          canEditRedpacket: isDraft || !(redpacket.money > 0),
+          canEditReward: isDraft || !(rewardQa.money > 0),
+        });
+      // isDraft && this.openSaveDraft(); // 现阶段，自动保存功能关闭
     } else {
       // 请求失败，弹出错误消息
       this.postToast(ret.msg);
@@ -184,7 +193,6 @@ class Index extends Component {
 
   // 点击发帖插件时回调，如上传图片、视频、附件或艾特、话题等
   handlePluginClick(item) {
-    const { postType } = this.state;
     const { postData } = this.props.threadPost;
     // 匹配附件、图片、语音上传
     this.setState({
@@ -205,7 +213,7 @@ class Index extends Component {
     switch (item.type) {
       // 根据类型分发具体操作
       case THREAD_TYPE.reward:
-        if (postType === 'isEdit') {
+        if (!this.state.canEditReward) {
           return this.postToast('再编辑时不可操作悬赏');
         }
         nextRoute = '/subPages/thread/selectReward/index';
@@ -216,7 +224,7 @@ class Index extends Component {
         this.resetOperationType();
         break;
       case THREAD_TYPE.redPacket:
-        if (postType === 'isEdit') {
+        if (!this.state.canEditRedpacket) {
           return this.postToast('再编辑时不可操作红包');
         }
         nextRoute = '/subPages/thread/selectRedpacket/index';
@@ -251,6 +259,10 @@ class Index extends Component {
         break;
       case THREAD_TYPE.video:
         this.handleVideoUpload();
+        break;
+      case THREAD_TYPE.anonymity:
+        if (postData.anonymous) this.props.threadPost.setPostData({ anonymous: 0 });
+        else this.props.threadPost.setPostData({ anonymous: 1 });
         break;
       case 'emoji':
         this.setState({
@@ -377,6 +389,18 @@ class Index extends Component {
     Taro.hideLoading();
   }
 
+  checkAttachPrice = () => {
+    const { postData } = this.props.threadPost;
+    // 附件付费设置了需要判断是否进行了附件的上传
+    if (postData.attachmentPrice) {
+      if (!(postData.audio.id || postData.video.id
+        || Object.keys(postData.images)?.length
+        || Object.keys(postData.files)?.length)) return false;
+      return true;
+    }
+    return true;
+  }
+
   handleSubmit = async (isDraft) => {
     // 1 校验
     const { threadId } = this.state;
@@ -384,6 +408,10 @@ class Index extends Component {
     const { postData, redpacketTotalAmount } = threadPost;
     if (!isDraft && !postData.contentText) {
       this.postToast('请填写您要发布的内容');
+      return;
+    }
+    if (!this.checkAttachPrice()) {
+      this.postToast('请先上传附件、图片、视频或者语音');
       return;
     }
     // 2 验证码
@@ -546,7 +574,13 @@ class Index extends Component {
 
   // 处理左上角按钮点击跳路由
   handlePageJump = async (canJump = false, url) => {
-    const { postData:{contentText} } = this.props.threadPost;
+    const { postType, threadId } = this.state;
+    // 已发布主题再编辑，不可保存草稿
+    if (postType === "isEdit") {
+      return Taro.redirectTo({ url: `/subPages/thread/index?id=${threadId}` });
+    }
+
+    const { postData: { contentText } } = this.props.threadPost;
     if (!canJump && contentText !== '') {
       this.setState({ showDraftOption: true });
       return
@@ -577,8 +611,8 @@ class Index extends Component {
   render() {
     const { permissions } = this.props.user;
     const { categories } = this.props.index;
-    const { postData, setPostData, setCursorPosition, navInfo } = this.props.threadPost;
-    const { rewardQa, redpacket, video, product, position } = postData;
+    const { postData, setPostData, setCursorPosition, navInfo, cursorPosition } = this.props.threadPost;
+    const { rewardQa, redpacket, video, product, position, contentText = '' } = postData;
     const {
       isShowTitle,
       maxLength,
@@ -700,7 +734,7 @@ class Index extends Component {
                     style={{ marginTop: 0, paddingRight: '8px' }}
                     tagContent={this.redpacketContent()}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.redPacket })}
-                    isCloseShow={this.state.postType !== 'isEdit'}
+                    isCloseShow={this.state.canEditRedpacket}
                     onTagRemoveClick={() => { setPostData({ redpacket: {} }) }}
                   />
                 }
@@ -711,7 +745,7 @@ class Index extends Component {
                     style={{ marginTop: 0, paddingRight: '8px' }}
                     tagContent={`悬赏金额${(rewardQa.value).toFixed(2)}元\\结束时间 ${rewardQa.times}`}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
-                    isCloseShow={this.state.postType !== 'isEdit'}
+                    isCloseShow={this.state.canEditReward}
                     onTagRemoveClick={() => { setPostData({ rewardQa: {} }) }}
                   />
                 }
@@ -748,12 +782,20 @@ class Index extends Component {
               onSubmit={() => this.handleSubmit()}
             />
             {/* 通过键盘改变的高度一起来控制表情的显示和隐藏，直接通过 showEmoji 来进行数据的改变，渲染慢 */}
-            <Emoji show={bottomHeight === 0 && showEmoji} onHide={() => {
-              this.setState({
-                showEmoji: false
-              });
-            }} />
-
+            <Emoji
+              show={bottomHeight === 0 && showEmoji}
+              onHide={() => {
+                this.setState({
+                  showEmoji: false
+                });
+              }}
+              onClick={(emoji) => {
+                setPostData({
+                  contentText: contentText.slice(0, cursorPosition) + emoji.code + contentText.slice(cursorPosition)
+                });
+                setCursorPosition(cursorPosition + emoji.code.length);
+              }}
+            />
           </View>
         </View>
 

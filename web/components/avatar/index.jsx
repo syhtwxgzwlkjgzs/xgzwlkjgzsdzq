@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import LoadingBox from '@components/loading-box';
 import goToLoginPage from '@common/utils/go-to-login-page';
+import classNames from 'classnames';
 
 import styles from './index.module.scss';
 
@@ -167,11 +168,11 @@ function avatar(props) {
       <div id="avatar-popup" className={`${styles.userInfoBox} ${direction}`} style={direction === 'left' ? {right: 0} : {left: 0}}>
         <div className={styles.userInfoContent}>
           <div className={styles.header}>
-            <div className={styles.left}>
-              <Avatar className={styles.customAvatar} circle={true} image={userInfo.avatarUrl} siz='primary' onClick={onClick}></Avatar>
+            <div className={styles.left} onClick={onClick}>
+              <Avatar className={classNames(styles.customAvatar, styles.cursor)} circle={true} image={userInfo.avatarUrl} siz='primary'></Avatar>
             </div>
             <div className={styles.right}>
-              <p className={styles.name}>{userInfo.nickname}</p>
+              <p className={classNames(styles.name, styles.cursor)} onClick={onClick}>{userInfo.nickname}</p>
               <p className={styles.text}>{userInfo.signature && userInfo.signature !== '' ? userInfo.signature : '暂无签名'}</p>
             </div>
           </div>
@@ -239,7 +240,9 @@ function avatar(props) {
   if (image && image !== '') {
     return (
       <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler} >
-        <Avatar className={className} circle={circle} image={image} size={size} onClick={onClick}></Avatar>
+        <div onClick={onClick}>
+          <Avatar className={className} circle={circle} image={image} size={size}></Avatar>
+        </div>
         {isShow && userInfoBox}
       </div>
     );
@@ -247,7 +250,9 @@ function avatar(props) {
 
   return (
     <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
-      <Avatar className={className} circle={circle} text={userName} size={size} onClick={onClick}></Avatar>
+      <div className={styles.cursor} onClick={onClick}>
+        <Avatar class Name={className} circle={circle} text={userName} size={size} onClick={onClick}></Avatar>
+      </div>
       {isShow && userInfoBox}
     </div>
   );

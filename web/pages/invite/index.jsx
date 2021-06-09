@@ -2,6 +2,7 @@ import React from 'react';
 import InvitePCPage from '@layout/invite/pc';
 import InviteH5Page from '@layout/invite/h5';
 import { inject } from 'mobx-react';
+import { withRouter } from 'next/router';
 
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import HOCWithLogin from '@middleware/HOCWithLogin';
@@ -20,4 +21,4 @@ class Invite extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(HOCWithLogin(Invite));
+export default HOCFetchSiteData(HOCWithLogin(withRouter(Invite)));

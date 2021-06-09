@@ -16,6 +16,7 @@ import { withRouter } from 'next/router';
 import { tencentVodUpload } from '@common/utils/tencent-vod';
 import { plus } from '@common/utils/calculate';
 import { defaultOperation } from '@common/constants/const';
+import ViewAdapter from '@components/view-adapter';
 
 @inject('site')
 @inject('threadPost')
@@ -29,6 +30,9 @@ class PostPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      postType: 'isFirst', // 发布状态 isFirst-首次，isEdit-再编辑，isDraft-草稿
+      canEditRedpacket: true, // 可编辑红包
+      canEditReward: true, // 可编辑悬赏
       emoji: {},
       // 分类选择显示状态
       categoryChooseShow: false,
@@ -134,6 +138,13 @@ class PostPage extends React.Component {
       } else ret = await thread.fetchThreadDetail(id);
       if (ret.code === 0) {
         threadPost.formatThreadDetailToPostData(ret.data);
+        // 设置主题状态、是否能操作红包和悬赏
+        const { postData: { isDraft, redpacket, rewardQa } } = this.props.threadPost
+        this.setState({
+          postType: isDraft ? 'isDraft' : 'isEdit',
+          canEditRedpacket: isDraft || !(redpacket.money > 0),
+          canEditReward: isDraft || !(rewardQa.money > 0),
+        });
       } else {
         Toast.error({ content: ret.msg });
       }
@@ -257,16 +268,15 @@ class PostPage extends React.Component {
       // this.setState({ curPaySelect: THREAD_TYPE.voice })
     }
 
+    const { postData } = this.props.threadPost;
 
-    // 如果是编辑操作
-    const { router, threadPost } = this.props;
-    const { query } = router;
-    const { postData } = threadPost;
-    if (query && query.id) { // TODO:  目前后端接口对于草稿文章也不能编辑 !postData.isDraft
-      if (item.type === THREAD_TYPE.reward && postData.rewardQa.money > 0) {
-        Toast.info({ content: '悬赏内容不能再次编辑' });
-        return false;
-      }
+    if (item.type === THREAD_TYPE.reward && !this.state.canEditReward) {
+      Toast.info({ content: '悬赏内容不能再次编辑' });
+      return false;
+    }
+    if (item.type === THREAD_TYPE.anonymity) {
+      if (postData.anonymous) this.setPostData({ anonymous: 0 });
+      else this.setPostData({ anonymous: 1 });
     }
     if (data) {
       this.setPostData(data);
@@ -298,16 +308,13 @@ class PostPage extends React.Component {
 
   // 表情等icon
   handleDefaultIconClick = (item, child, data) => {
-    const { router, threadPost } = this.props;
-    const { query } = router;
-    const { postData } = threadPost;
+    const { postData } = this.props.threadPost;
 
-    if (query && query.id) { // TODO:  目前后端接口对于草稿文章也不能编辑 !postData.isDraft
-      if (item.type === THREAD_TYPE.redPacket && postData.redpacket.money > 0) {
-        Toast.info({ content: '红包内容不能再次编辑' });
-        return false;
-      }
+    if (item.type === THREAD_TYPE.redPacket && !this.state.canEditRedpacket) {
+      Toast.info({ content: '红包内容不能再次编辑' });
+      return false;
     }
+
     if (data) {
       this.setPostData(data);
       return false;
@@ -453,9 +460,21 @@ class PostPage extends React.Component {
     this.setState({ atList });
   };
 
+  checkAttachPrice = () => {
+    const { postData } = this.props.threadPost;
+    // 附件付费设置了需要判断是否进行了附件的上传
+    if (postData.attachmentPrice) {
+      if (!(postData.audio.id || postData.video.id
+        || Object.keys(postData.images)?.length
+        || Object.keys(postData.files)?.length)) return false;
+      return true;
+    }
+    return true;
+  }
+
   // 发布提交
   handleSubmit = async (isDraft) => {
-    const { postData, setPostData } = this.props.threadPost;
+    const { postData } = this.props.threadPost;
     if (!this.props.user.threadExtendPermissions.createThread) {
       Toast.info({ content: '您没有发帖权限' });
       return;
@@ -478,6 +497,10 @@ class PostPage extends React.Component {
     }
     if (!isDraft && !postData.contentText) {
       Toast.info({ content: '请填写您要发布的内容' });
+      return;
+    }
+    if (!this.checkAttachPrice()) {
+      Toast.info({ content: '请先上传附件、图片、视频或者语音' });
       return;
     }
     // if (!isDraft && this.state.count > MAX_COUNT) {
@@ -615,34 +638,32 @@ class PostPage extends React.Component {
   };
 
   render() {
-    const { isPC } = this.props.site;
+    // const { isPC } = this.props.site;
 
-    if (isPC) {
-      return (
-        <IndexPCPage
-          setPostData={data => this.setPostData(data)}
-          handleAttachClick={this.handleAttachClick}
-          handleDefaultIconClick={this.handleDefaultIconClick}
-          handleVideoUpload={this.handleVideoUpload}
-          handleVideoUploadComplete={this.handleVodUploadComplete}
-          beforeUpload={this.beforeUpload}
-          handleUploadChange={this.handleUploadChange}
-          handleUploadComplete={this.handleUploadComplete}
-          handleAudioUpload={this.handleAudioUpload}
-          handleEmojiClick={this.handleEmojiClick}
-          handleSetState={data => this.setState({ ...data })}
-          handleSubmit={this.handleSubmit}
-          saveDataLocal={this.saveDataLocal}
-          handleAtListChange={this.handleAtListChange}
-          handleVditorChange={this.handleVditorChange}
-          handleVditorFocus={this.handleVditorFocus}
-          handleVditorInit={this.handleVditorInit}
-          onVideoReady={this.onVideoReady}
-          {...this.state}
-        />
-      );
-    }
-    return (
+    const pc = (
+      <IndexPCPage
+        setPostData={data => this.setPostData(data)}
+        handleAttachClick={this.handleAttachClick}
+        handleDefaultIconClick={this.handleDefaultIconClick}
+        handleVideoUpload={this.handleVideoUpload}
+        handleVideoUploadComplete={this.handleVodUploadComplete}
+        beforeUpload={this.beforeUpload}
+        handleUploadChange={this.handleUploadChange}
+        handleUploadComplete={this.handleUploadComplete}
+        handleAudioUpload={this.handleAudioUpload}
+        handleEmojiClick={this.handleEmojiClick}
+        handleSetState={data => this.setState({ ...data })}
+        handleSubmit={this.handleSubmit}
+        saveDataLocal={this.saveDataLocal}
+        handleAtListChange={this.handleAtListChange}
+        handleVditorChange={this.handleVditorChange}
+        handleVditorFocus={this.handleVditorFocus}
+        handleVditorInit={this.handleVditorInit}
+        onVideoReady={this.onVideoReady}
+        {...this.state}
+      />
+    );
+    const h5 = (
       <IndexH5Page
         setPostData={data => this.setPostData(data)}
         handleAttachClick={this.handleAttachClick}
@@ -666,6 +687,10 @@ class PostPage extends React.Component {
         handleEditorBoxScroller={this.handleEditorBoxScroller}
         {...this.state}
       />
+    );
+
+    return (
+      <ViewAdapter h5={h5} pc={pc} title="发帖" />
     );
   }
 }

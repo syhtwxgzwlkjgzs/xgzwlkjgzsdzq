@@ -62,7 +62,7 @@ class index extends Component {
     const { isClickNickName } = this.state;
     return (
       <>
-        <label>昵称</label>
+        <label className={styles.userLabelName}>昵称</label>
         <div className={styles.uerInputItem}>
           {isClickNickName ? (
             <Input

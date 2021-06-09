@@ -1,10 +1,9 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { getCurrentInstance, navigateTo, redirectTo } from '@tarojs/taro';
+import Taro, { getCurrentInstance, navigateTo, redirectTo } from '@tarojs/taro';
 import Button from '@discuzq/design/dist/components/button/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import Input from '@discuzq/design/dist/components/input/index';
-import Taro from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import Page from '@components/page';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
@@ -25,6 +24,7 @@ class BindPhoneH5Page extends React.Component {
     super();
     this.ticket = ''; // 腾讯云验证码返回票据
     this.randstr = ''; // 腾讯云验证码返回随机字符串
+    this.onFocus = () => {}
   }
 
 
@@ -44,6 +44,7 @@ class BindPhoneH5Page extends React.Component {
   handleCaptchaResult = (result) => {
     this.ticket = result.ticket;
     this.randstr = result.randstr;
+    this.handleSendCodeButtonClick();
   }
 
   // 验证码点击关闭的回调
@@ -56,19 +57,28 @@ class BindPhoneH5Page extends React.Component {
     try{
       // 发送前校验
       this.props.mobileBind.beforeSendVerify();
+      if (onFocus) {
+        this.onFocus = onFocus;
+      }
       // 验证码
       const { webConfig } = this.props.site;
       const qcloudCaptcha = webConfig?.qcloud?.qcloudCaptcha;
       if (qcloudCaptcha) {
-        const qcloudCaptchaAppId = webConfig?.qcloud?.qcloudCaptchaAppId;
-        await toTCaptcha(qcloudCaptchaAppId)
+        if (!this.ticket || !this.randstr) {
+          const qcloudCaptchaAppId = webConfig?.qcloud?.qcloudCaptchaAppId;
+          toTCaptcha(qcloudCaptchaAppId)
+          return false;
+        }
       };
       // 发送
       await this.props.mobileBind.sendCode({
-        captchaRandStr: this.ticket,
-        captchaTicket: this.randstr
+        captchaRandStr: this.randstr,
+        captchaTicket: this.ticket
       });
-      onFocus();
+      // 清除
+      this.ticket = '';
+      this.randstr = '';
+      this.onFocus();
     }catch(e){
       Toast.error({
         content: e.Message,

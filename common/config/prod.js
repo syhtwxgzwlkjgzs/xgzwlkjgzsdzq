@@ -1,4 +1,5 @@
 module.exports = {
   TITLE: 'Discuz!Q',
-  COMMOM_BASE_URL: process.env.DISCUZ_ENV === 'web' ? '' : 'https://discuzv3-dev.dnspod.dev',
+  // COMMON_BASE_URL: process.env.DISCUZ_ENV === 'web' ? '' : 'https://www.techo.chat/',
+  COMMON_BASE_URL: process.env.DISCUZ_ENV === 'web' ? '' : 'https://bbsv3.techo.chat',
 };

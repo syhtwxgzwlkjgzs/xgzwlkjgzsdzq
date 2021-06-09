@@ -187,7 +187,7 @@ export default function DVditor(props) {
         minHeight: 44,
         // 编辑器初始化值
         tab: '  ',
-        value,
+        value: '',
         // 编辑器异步渲染完成后的回调方法
         after: () => {
           onInit(editor);
@@ -245,7 +245,7 @@ export default function DVditor(props) {
 
   return (
     <>
-      <div id={vditorId} className={className}>
+      <div id={vditorId} className={className} onClick={e => e.stopPropagation()}>
         <LoadingBox>编辑器加载中...</LoadingBox>
       </div>
       {/* {!pc && isFocus && <div className="dvditor__placeholder"></div>} */}

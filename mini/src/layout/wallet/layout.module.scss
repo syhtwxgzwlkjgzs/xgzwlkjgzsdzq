@@ -14,14 +14,16 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  background: var(--comment-content-bg-color);
+  background: $white;
 }
 
 .scroll {
   width: 100%;
-  height: calc(100vh - 58px);
+  height: calc(100vh - 58px - constant(safe-area-inset-bottom));
+  height: calc(100vh - 58px - env(safe-area-inset-bottom));
   overflow-y: scroll;
   flex: 1 0 auto;
+  background: var(--comment-content-bg-color);
 
   .header {
     width: 100%;
@@ -73,7 +75,7 @@
       }
 
       .dzq-tabs__label {
-        padding-bottom: rem(10) !important;
+        padding-bottom: $padding-2n !important;
         font-family: 'PingFang SC';
         font-weight: 600;
         font-size: rem($font-size-primary);
@@ -111,10 +113,14 @@
 
 .footer {
   width: 100%;
-  height: rem(69);
+  // height: rem(69);
   box-sizing: border-box;
-  padding: $padding-2n $padding-4n 0px;
+  padding: $padding-2n $padding-4n;
   background: var(--color-white);
+  position: fixed;
+  bottom: 0;
+  padding-bottom: constant(safe-area-inset-bottom); ///兼容 IOS<11.2/
+  padding-bottom: env(safe-area-inset-bottom); ///兼容 IOS>11.2/
 
   .button {
     width: 100%;

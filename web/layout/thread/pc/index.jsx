@@ -695,21 +695,25 @@ class ThreadPCPage extends React.Component {
     const { isAuthorInfoError } = threadStore;
     // 是否作者自己
     const isSelf = this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === threadStore?.threadData?.userId;
+    // 是否匿名
+    const isAnonymous = threadStore?.threadData?.isAnonymous;
 
     return (
       <div className={`${layout.bodyRigth} ${isSelf ? layout.positionSticky : ''}`}>
-        <div className={layout.authorInfo}>
-          {threadStore?.authorInfo ? (
-            <AuthorInfo
-              user={threadStore.authorInfo}
-              onFollowClick={() => this.onFollowClick()}
-              onPrivateLetter={() => this.onPrivateLetter()}
-              isShowBtn={!isSelf}
-            ></AuthorInfo>
-          ) : (
-            <LoadingTips type="init" isError={isAuthorInfoError}></LoadingTips>
-          )}
-        </div>
+        {!isAnonymous && (
+          <div className={layout.authorInfo}>
+            {threadStore?.authorInfo ? (
+              <AuthorInfo
+                user={threadStore.authorInfo}
+                onFollowClick={() => this.onFollowClick()}
+                onPrivateLetter={() => this.onPrivateLetter()}
+                isShowBtn={!isSelf}
+              ></AuthorInfo>
+            ) : (
+              <LoadingTips type="init" isError={isAuthorInfoError}></LoadingTips>
+            )}
+          </div>
+        )}
         <div className={layout.recommend}>
           <Recommend></Recommend>
         </div>

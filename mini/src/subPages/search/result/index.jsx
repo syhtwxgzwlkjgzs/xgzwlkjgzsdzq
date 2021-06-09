@@ -33,9 +33,7 @@ class Index extends React.Component {
   dispatch = async (type, data = '') => {
     const { search } = this.props;
 
-    search.setSearchTopics(null);
-    search.setSearchUsers(null);
-    search.setSearchThreads(null);  
+    search.resetSearchData(); 
     
     search.getSearchData({ search: data, type: 1 });
   }

@@ -12,6 +12,12 @@
   width: 100vw;
 }
 
+.emoji-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
 .inputWrapper {
   display: flex;
   background-color: $text-bg-color2;
@@ -24,6 +30,7 @@
       width: 100%;
     }
     .dzq-input__inner {
+      border: none;
       background-color: $text-bg-color2;
       border-top-right-radius: unset;
       border-bottom-right-radius: unset;

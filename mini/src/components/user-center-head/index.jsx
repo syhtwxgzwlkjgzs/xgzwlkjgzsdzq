@@ -94,7 +94,7 @@ class index extends Component {
   // 点击发送私信
   handleMessage = () => {
     const { username } = this.props.user.targetUser;
-    Router.push({ url: `/message?page=chat&username=${username}` });
+    Router.push({ url: `/subPages/message/index?page=chat&username=${username}` });
   };
 
   // 点击我的点赞
@@ -138,15 +138,15 @@ class index extends Component {
           {/* 粉丝|关注|点赞 */}
           <View className={styles.userMessageList}>
             <View onClick={this.goToFansList} className={styles.userMessageListItem}>
-              <Text>粉丝</Text>
+              <Text className={styles.useText}>粉丝</Text>
               <Text>{user.fansCount || 0}</Text>
             </View>
             <View onClick={this.goToFollowsList} className={styles.userMessageListItem}>
-              <Text>关注</Text>
+              <Text className={styles.useText}>关注</Text>
               <Text>{user.followCount || 0}</Text>
             </View>
             <View onClick={this.handleMyLike} className={styles.userMessageListItem}>
-              <Text>点赞</Text>
+              <Text className={styles.useText}>点赞</Text>
               <Text>{user.likedCount || 0}</Text>
             </View>
           </View>
@@ -154,8 +154,8 @@ class index extends Component {
         {/* 中 用户昵称和他所在的用户组名称 */}
         <View>
           <View className={styles.userNameOrTeam}>
-            <Text>{user.username}</Text>
-            <Text>{user.group?.groupName}</Text>
+            <Text className={styles.userNickname}>{user.username}</Text>
+            <Text className={styles.groupName}>{user.group?.groupName}</Text>
           </View>
           <Text className={styles.text}>{user.signature || '这个人很懒，什么也没留下~'}</Text>
         </View>
@@ -165,23 +165,31 @@ class index extends Component {
             this.props.isOtherPerson ? (
               <>
                 <Button onClick={() => { this.handleChangeAttention(user.follow) }} type="primary" className={user.follow === 2 && styles.userFriendsBtn}>
+                <View className={styles.actionButtonContentWrapper}>
                   <Icon name={this.renderFollowedStatus(user.follow).icon} />
                   <Text className={styles.userBtnText}>{this.renderFollowedStatus(user.follow).text}</Text>
+                  </View>
                 </Button>
                 <Button onClick={this.handleMessage}>
+                <View className={styles.actionButtonContentWrapper}>
                   <Icon name="NewsOutlined" />
                   <Text className={styles.userBtnText}>发私信</Text>
+                  </View>
                 </Button>
               </>
             ) : (
               <>
                 <Button onClick={this.goToMyEditInfo} type="primary">
-                  <Icon name="CompileOutlined" />
-                  <Text className={styles.userBtnText}>编辑资料</Text>
+                  <View className={styles.actionButtonContentWrapper}>
+                    <Icon name="CompileOutlined" />
+                    <Text className={styles.userBtnText}>编辑资料</Text>
+                  </View>
                 </Button>
                 <Button onClick={this.logout}>
-                  <Icon name="PoweroffOutlined" />
-                  <Text className={styles.userBtnText}>退出登录</Text>
+                  <View className={styles.actionButtonContentWrapper}>
+                    <Icon name="PoweroffOutlined" />
+                    <Text className={styles.userBtnText}>退出登录</Text>
+                  </View>
                 </Button>
               </>
             )

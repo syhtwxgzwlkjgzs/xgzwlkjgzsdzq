@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
-import Spin from '@discuzq/design/dist/components/spin/index';
 import SectionTitle from '@components/section-title';
-import NoData from '@components/no-data';
+import BottomView from '@components/list/BottomView';
 import styles from './index.module.scss';
 import { View, Text } from '@tarojs/components';
 
@@ -21,7 +20,9 @@ const Index = (props) => {
     type = 'small',
     className = '',
     platform = 'pc',
-    isNeedBottom = true
+    isNeedBottom = true,
+    errorText = '',
+    isError = false
   } = props;
 
   const isNoData = useMemo(() => !children || !!noData, [noData, children]);
@@ -37,15 +38,7 @@ const Index = (props) => {
   return (
     <View className={`${styles.container} ${pcStyle} ${className} ${isNeedBottom && styles.bottom}`}>
       {header || <SectionTitle {...props} />}
-      {
-        isLoading ? (
-          <View className={styles.spinner}>
-            <Spin type="spinner" />
-          </View>
-        ) : (
-          isNoData ? <NoData /> : children
-        )
-      }
+      {(!isLoading && !isNoData) ? children : <BottomView isError={isError} errorText={errorText} noMore={!isLoading && isNoData} loadingText='正在加载' />}
       {footer}
     </View>
   );
