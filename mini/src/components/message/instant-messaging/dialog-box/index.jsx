@@ -92,21 +92,19 @@ const DialogBox = (props) => {
                 <Avatar image={userAvatar || '/favicon.ico'} circle={true} />
               </View>
               {imageUrl ? (
-                // <View>
-                  <Image
-                    className={styles.msgImage}
-                    mode='widthFix'
-                    style='width: 200px;'
-                    src={imageUrl}
-                    onClick={() => {
-                      Taro.previewImage({
-                        current: imageUrl,
-                        urls: previewImageUrls
-                      });
-                    }}
-                    onLoad={scrollEnd}
-                  />
-                // </View>
+                <Image
+                  className={styles.msgImage}
+                  mode='widthFix'
+                  style='width: 200px;'
+                  src={imageUrl}
+                  onClick={() => {
+                    Taro.previewImage({
+                      current: imageUrl,
+                      urls: previewImageUrls
+                    });
+                  }}
+                  onLoad={scrollEnd}
+                />
               ) : (
                 <View className={styles.msgContent} dangerouslySetInnerHTML={{
                   __html: text,
