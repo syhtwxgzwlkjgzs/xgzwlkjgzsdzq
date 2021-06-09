@@ -497,8 +497,10 @@ class PostPage extends React.Component {
       Toast.info({ content: '请等待文件上传完成再发布' });
       return;
     }
-    if (!isDraft && !postData.contentText) {
-      Toast.info({ content: '请填写您要发布的内容' });
+    const { images, video, files, audio } = postData;
+    if (!(postData.contentText || video.id || audio.id || Object.values(images).length
+      || Object.values(files).length)) {
+      Toast.info({ content: '请至少填写您要发布的内容或者上传图片、附件、视频、语音' });
       return;
     }
     if (!this.checkAttachPrice()) {
