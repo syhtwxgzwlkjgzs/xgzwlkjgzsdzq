@@ -51,7 +51,7 @@ class SearchResultUserH5Page extends React.Component {
 
   render() {
     const { keyword } = this.state;
-    const { users } = this.props.search;
+    const { users, usersError } = this.props.search;
     const { pageData = [], currentPage, totalPage } = users || { pageData: [] };
 
     return (
@@ -59,6 +59,8 @@ class SearchResultUserH5Page extends React.Component {
         onRefresh={this.fetchMoreData}
         noMore={currentPage >= totalPage}
         showHeader={false}
+        requestError={usersError.isError}
+        errorText={usersError.errorText}
       >
         <SearchInput onSearch={this.onSearch} onCancel={this.onSearch} defaultValue={keyword} searchWhileTyping/>
         {
