@@ -69,7 +69,7 @@ class FrozenAmount extends React.Component {
                   <View className={styles.amount}>{value.amount}</View>
                 </View>
                 <View className={styles.lower}>
-                  <View>{diffDate(time.formatDate(value.createdAt, 'YYYY-MM-DD'))}</View>
+                  <View>{time.formatDate(value.createdAt, 'YYYY-MM-DD HH:mm')}</View>
                   <View>
                     ID: <Text>{value.id}</Text>
                   </View>
