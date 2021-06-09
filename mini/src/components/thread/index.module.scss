@@ -22,10 +22,6 @@
     padding: $padding-4n 0;
   }
 
-  .brWrapper {
-    margin-top: $margin-4n;
-  }
-
   .content {
     position: relative;
 
@@ -87,4 +83,8 @@
 
 .wrapper {
   overflow: hidden;
+}
+
+.brWrapper {
+  margin-top: $margin-4n;
 }
