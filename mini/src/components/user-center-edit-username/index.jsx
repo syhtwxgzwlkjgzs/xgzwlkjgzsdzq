@@ -23,6 +23,7 @@ export default class index extends Component {
         content: '修改用户名成功',
         duration: 1000
       })
+      this.props.user.userInfo.username = this.props.user.editUserName;
       setTimeout(() => {
         Taro.navigateTo({url: '/subPages/my/index'})
       }, 1000);

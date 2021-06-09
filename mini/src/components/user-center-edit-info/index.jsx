@@ -155,7 +155,7 @@ class index extends Component {
                 <Text className={styles.userLabelName}>用户名</Text>
               </View>
               <View className={styles.userCenterEditValue} onClick={this.handleGoToEditUserName}>
-                <View className={styles.ucText}>{this.user.editUserName}</View>
+                <View className={styles.ucText}>{this.user.username}</View>
                 <Icon name="RightOutlined" size={12} />
               </View>
             </View>
