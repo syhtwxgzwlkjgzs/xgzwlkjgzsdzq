@@ -116,7 +116,7 @@ import { View, Text } from '@tarojs/components'
   };
 
   const onUserClick = (userId = '') => {
-    Router.push({url: `/user/${userId}`});
+    Router.push({url: `/subPages/user/index?id=${userId}`});
   };
 
   const onClose = () => {
