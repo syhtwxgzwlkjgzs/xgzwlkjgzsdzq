@@ -606,6 +606,7 @@ class PostPage extends React.Component {
         this.props.router.replace(`/thread/${data.threadId}`);
       } else {
         const { jumpLink } = this.state;
+        Toast.info({ content: '保存草稿成功' });
         if (!this.props.site.isPC) {
           jumpLink ? Router.push({ url: jumpLink }) : Router.back();
         }

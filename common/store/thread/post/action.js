@@ -233,7 +233,7 @@ class ThreadPostAction extends ThreadPostStore {
         body: { ...product },
       };
     }
-    if (audio.id) {
+    if (audio.id || audio.threadVideoId) {
       contentIndexes[THREAD_TYPE.voice] = {
         tomId: THREAD_TYPE.voice,
         body: { audioId: audio.id },
