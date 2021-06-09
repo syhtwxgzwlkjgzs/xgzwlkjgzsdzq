@@ -8,8 +8,6 @@ import CommentInput from './components/comment-input/index';
 import LoadingTips from '@components/thread-detail-pc/loading-tips';
 import { Icon, Toast, Popup } from '@discuzq/design';
 import UserInfo from '@components/thread/user-info';
-import Header from '@components/header';
-import NoMore from './components/no-more';
 import RewardPopup from './components/reward-popup';
 import BaseLayout from '@components/base-layout';
 
@@ -19,7 +17,6 @@ import ReportPopup from './components/report-popup';
 import ShowTop from './components/show-top';
 import DeletePopup from '@components/thread-detail-pc/delete-popup';
 
-import throttle from '@common/utils/thottle';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import Copyright from '@components/copyright';
 import threadPay from '@common/pay-bussiness/thread-pay';
@@ -50,7 +47,8 @@ class ThreadPCPage extends React.Component {
       showRewardPopup: false, // 打赏弹窗
       isCommentLoading: false, // 列表loading
       setTop: false, // 置顶
-      inputValue: '', // 评论内容
+      inputValue: '', // 评论内容,
+      isBaseLayoutReady: false,
     };
 
     this.likedLoading = false;
@@ -76,28 +74,52 @@ class ThreadPCPage extends React.Component {
 
   // 滚动事件
   handleOnScroll() {
-    console.log(this.threadBodyRef.current);
-    // 加载评论列表
-    const scrollDistance = this.threadBodyRef?.current?.scrollTop;
-    const offsetHeight = this.threadBodyRef?.current?.offsetHeight;
-    const scrollHeight = this.threadBodyRef?.current?.scrollHeight;
-    const { isCommentReady, isNoMore } = this.props.thread;
-    // 记录当前的滚动位置
-    this.props.thread.setScrollDistance(scrollDistance);
-    if (
-      scrollDistance + offsetHeight >= scrollHeight - 20 &&
-      !this.state.isCommentLoading &&
-      isCommentReady &&
-      !isNoMore
-    ) {
-      this.page = this.page + 1;
-      this.loadCommentList();
+    // const threadBodyRef = this.threadBodyRef?.current?.listRef?.current?.listWrapper;
+
+    // if (threadBodyRef && threadBodyRef.current) {
+    //   // 加载评论列表
+    //   const scrollDistance = threadBodyRef?.current?.scrollTop;
+    //   const offsetHeight = threadBodyRef?.current?.offsetHeight;
+    //   const scrollHeight = threadBodyRef?.current?.scrollHeight;
+    //   const { isCommentReady, isNoMore } = this.props.thread;
+    //   // 记录当前的滚动位置
+    //   this.props.thread.setScrollDistance(scrollDistance);
+    //   if (
+    //     scrollDistance + offsetHeight >= scrollHeight - 20 &&
+    //     !this.state.isCommentLoading &&
+    //     isCommentReady &&
+    //     !isNoMore
+    //   ) {
+    this.page = this.page + 1;
+    return this.loadCommentList();
+    // }
+    // }
+  }
+
+  // baselayout componentDidMount 事件
+  onBaseLayoutReady() {
+    this.setState({
+      isBaseLayoutReady: true,
+    });
+  }
+
+  componentDidUpdate() {
+    if (this.state.isBaseLayoutReady) {
+      const threadBodyRef = this.threadBodyRef?.current?.listRef?.current?.listWrapper;
+      threadBodyRef && this.scrollToPostion(threadBodyRef);
+      this.setState({
+        isBaseLayoutReady: false,
+      });
     }
   }
 
-  // 使用了H5页面的页面加载跳转逻辑
-  componentDidMount() {
-    console.log(this.commentDataRef);
+  componentWillUnmount() {
+    // 清空数据
+    // this.props?.thread && this.props.thread.reset();
+  }
+
+  // 滚动到指定位置
+  scrollToPostion(scrollBodyRef) {
     // 当内容加载完成后，获取评论区所在的位置
     this.position = this.commentDataRef?.current?.offsetTop - 50;
 
@@ -105,25 +127,13 @@ class ThreadPCPage extends React.Component {
     if (this.props?.thread?.isPositionToComment) {
       // TODO:需要监听帖子内容加载完成事件
       setTimeout(() => {
-        // this.threadBodyRef?.current?.scrollTo(0, this.position);
+        scrollBodyRef?.current?.scrollTo(0, this.position);
       }, 1000);
       return;
     }
 
     // 滚动到记录的指定位置
-    // this.threadBodyRef?.current?.scrollTo(0, this.props.thread.scrollDistance);
-  }
-
-  componentDidUpdate() {
-    // 当内容加载完成后，获取评论区所在的位置
-    if (this.props.thread.isReady) {
-      this.position = this.commentDataRef?.current?.offsetTop - 50;
-    }
-  }
-
-  componentWillUnmount() {
-    // 清空数据
-    // this.props?.thread && this.props.thread.reset();
+    // scrollBodyRef?.current?.scrollTo(0, this.props.thread.scrollDistance);
   }
 
   // 加载评论列表
@@ -679,13 +689,13 @@ class ThreadPCPage extends React.Component {
                 onPublishClick={(value, imageList) => this.onPublishClick(value, imageList)}
                 onReportClick={(comment) => this.onReportClick(comment)}
               ></RenderCommentList>
-              {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
+              {/* {this.state.isCommentLoading && <LoadingTips></LoadingTips>} */}
             </Fragment>
           ) : (
             <LoadingTips isError={isCommentListError} type="init"></LoadingTips>
           )}
         </div>
-        {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
+        {/* {isNoMore && <NoMore empty={totalCount === 0}></NoMore>} */}
       </div>
     );
   }
@@ -728,18 +738,22 @@ class ThreadPCPage extends React.Component {
   }
 
   render() {
+    const { isCommentReady, isNoMore } = this.props.thread;
+
     return (
-      <div className={layout.container}>
+      <div>
         <ShowTop showContent={this.props.thread?.threadData?.isStick} setTop={this.state.setTop}></ShowTop>
-        {/* <div className={layout.header}>
-          <Header></Header>
-        </div> */}
 
         <BaseLayout
+          onRefresh={() => this.handleOnScroll()}
+          noMore={isNoMore}
           ref={this.threadBodyRef}
-          onScroll={() => throttle(this.handleOnScroll(), 500)}
+          showRefresh={false}
           right={this.renderRight()}
           pageName="detail"
+          isShowLayoutRefresh={isCommentReady}
+          ready={() => this.onBaseLayoutReady()}
+          rightClassName={layout.positionSticky}
         >
           {this.renderContent()}
         </BaseLayout>
