@@ -162,7 +162,7 @@ class CommentList extends React.Component {
           <View className={styles.commentListContent}>
             <View className={styles.commentListContentText}>
               <View className={styles.commentListName}>
-                {this.props.data?.user?.nickname || this.props.data?.user?.userName || '未知用户'}
+                {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
               </View>
               {/* 评论内容 */}
               <View className={classNames(styles.commentListText)}>
