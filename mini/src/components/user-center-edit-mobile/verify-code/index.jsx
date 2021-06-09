@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '@discuzq/design/dist/components/button/index';
 import styles from './index.module.scss';
+import { View } from '@tarojs/components';
 
 export default class VerificationCode extends React.Component {
 
@@ -67,14 +68,16 @@ export default class VerificationCode extends React.Component {
     const { value_pass_check } = this.props
     const { buttonDisabled } = this.state
     return (
-      <Button
-        className={`${styles.verifyCodeBtn} ${buttonDisabled && styles.verifyCodeDisabled}`}
-        type={!buttonDisabled ? 'primary' : 'text'}
-        disabled={buttonDisabled || !value_pass_check}
-        onClick={this.buttonClickAction.bind(this)}
-      >
-        {this.state.initTimeText}
-      </Button>
+      <View className={`${styles.verifyCodeBtn} ${buttonDisabled && styles.verifyCodeDisabled}`}>
+        <Button
+          className={styles.btn}
+          type={!buttonDisabled ? 'primary' : 'text'}
+          disabled={buttonDisabled || !value_pass_check}
+          onClick={this.buttonClickAction.bind(this)}
+        >
+          {this.state.initTimeText}
+        </Button>
+      </View>
     )
   }
 }
