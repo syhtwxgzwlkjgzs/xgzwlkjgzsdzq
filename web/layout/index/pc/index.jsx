@@ -63,6 +63,12 @@ class IndexPCPage extends React.Component {
     })
   }
 
+  componentWillUnmount() {
+    if (this.timer) {
+      clearInterval(this.timer);
+    }
+  }
+
   handleIntervalRequest = () => {
     const { essence, attention, sort, sequence } = this.state.filter;
     const { totalCount: nowTotal = -1 } = this.props.index?.threads || {};
