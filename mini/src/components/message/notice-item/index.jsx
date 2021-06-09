@@ -107,7 +107,7 @@ class Index extends Component {
       Taro.navigateTo({ url: `/subPages/thread/index?id=${item.id}` })
     }
     if (type === 'chat') {
-      Taro.navigateTo({ url: `/subPages/message/index?page=chat&dialogId=${item.dialogId}` });
+      Taro.navigateTo({ url: `/subPages/message/index?page=chat&dialogId=${item.dialogId}&nickname=${item.username}` });
     }
   }
 
