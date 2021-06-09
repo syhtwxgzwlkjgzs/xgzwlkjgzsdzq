@@ -53,7 +53,7 @@ class Index extends React.Component {
             <div className={styles.collectSplitLine}/>
             {pageData?.map((item, index) => (
               <div className={styles.listItem} key={index}>
-                <ThreadContent data={item} collect={'collect'} />
+                <ThreadContent data={item} isShowIcon />
               </div>
             ))}
           </List>
