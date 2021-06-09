@@ -154,7 +154,7 @@ class index extends Component {
         {/* 中 用户昵称和他所在的用户组名称 */}
         <View>
           <View className={styles.userNameOrTeam}>
-            <Text className={styles.userNickname}>{user.username}</Text>
+            <Text className={styles.userNickname}>{user.nickname}</Text>
             <Text className={styles.groupName}>{user.group?.groupName}</Text>
           </View>
           <Text className={styles.text}>{user.signature || '这个人很懒，什么也没留下~'}</Text>

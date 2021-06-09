@@ -84,7 +84,7 @@ const Index = inject('user', 'threadPost')(observer((props) => {
           setplugShow(false);
           onSetplugShow();
         }}>
-          <Icon name="MoreBOutlined" size='20' />
+          <Icon className={styles['icon-color']} name="MoreBOutlined" size='20' />
         </View>
       </View>
     );
@@ -124,7 +124,7 @@ const Index = inject('user', 'threadPost')(observer((props) => {
         onSetplugShow();
       }}>
         {(!plugShow) && (<Icon className={styles['icon-color']} name={currentplug.name || canInsertplugsin[0]?.name} size='20' />)}
-        <Icon name="MoreBOutlined" size='20' />
+        <Icon className={styles['icon-color']} name="MoreBOutlined" size='20' />
       </View>
     </View>
   );
