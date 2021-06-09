@@ -85,19 +85,18 @@ const DialogBox = (props) => {
                 <Avatar image={userAvatar || '/favicon.ico'} circle={true} />
               </div>
               {imageUrl ? (
-                <div className={`${styles.msgContent} ${styles.msgImgContent}`}>
-                  {imageUrl && (
-                    <img
-                      style={{ width: '200px' }}
-                      src={imageUrl}
-                      onClick={() => {
-                        setDefaultImg(imageUrl);
-                        setPreviewerVisibled(true);
-                      }}
-                      onLoad={scrollEnd}
-                    />
-                  )}
-                </div>
+                <img
+                  className={styles.msgImage}
+                  style={{ width: '200px' }}
+                  src={imageUrl}
+                  onClick={() => {
+                    setDefaultImg(imageUrl);
+                    setTimeout(() => {
+                      setPreviewerVisibled(true);
+                    }, 0);
+                  }}
+                  onLoad={scrollEnd}
+                />
               ) : (
                 <div className={styles.msgContent} dangerouslySetInnerHTML={{
                   __html: xss(s9e.parse(text)),
