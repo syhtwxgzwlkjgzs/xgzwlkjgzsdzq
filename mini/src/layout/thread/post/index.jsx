@@ -14,6 +14,7 @@ import VodUploader from 'vod-wx-sdk-v2';
 import { toTCaptcha } from '@common/utils/to-tcaptcha'
 import PayBox from '@components/payBox/index';
 import { ORDER_TRADE_TYPE } from '@common/constants/payBoxStoreConstants';
+import { get } from '@common/utils/get';
 
 @inject('index')
 @inject('site')
@@ -634,7 +635,8 @@ class Index extends Component {
     const contentStyle = {
       marginTop: navInfo.statusBarHeight > 30 ? `${navInfo.navHeight / 2}px` : '0px',
     }
-
+    const { site } = this.props;
+    const headTitle = get(site, 'webConfig.setSite.siteName', '');
     return (
       <>
         <View className={styles['container']}>
@@ -642,7 +644,7 @@ class Index extends Component {
           <View className={styles.topBar} style={navStyle}>
             <Icon name="RightOutlined" onClick={() => this.handlePageJump(false)} />
             <View className={styles['topBar-title']}>
-              发帖
+              <View className={styles['topBar-title-inner']}>{ headTitle ?  `发布 - ${headTitle}` : '发布' }</View>
             </View>
           </View>
 
