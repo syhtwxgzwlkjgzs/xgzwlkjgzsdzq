@@ -15,8 +15,6 @@ export default function fuzzyCalcContentLength(content, lengthInLine = 50) {
 
     let _content = content;
 
-    let _content = content;
-
     const EMOJ_SIZE = 1.5;
     const IMG_SIZE = lengthInLine * 4;
     const countImgs = (_content?.match(/<img/g) || []).length;
