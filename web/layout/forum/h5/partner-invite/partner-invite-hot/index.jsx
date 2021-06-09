@@ -26,7 +26,11 @@ class PartnerInviteHot extends React.Component {
   async componentDidMount() {
     const { forum, search } = this.props;
     try {
-      const threadList = await search.getThreadList();
+      const threadList = await search.getThreadList({
+        params: {
+          pay: 1
+        }
+      });
       forum.setThreadsPageData(threadList);
       this.setState({isLoading: false})
     } catch (e) {

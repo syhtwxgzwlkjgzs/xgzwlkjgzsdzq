@@ -9,12 +9,10 @@ import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 @inject('site')
 class ParnerInvite extends React.Component {
   render() {
-    const { router } = this.props;
-    const inviteCode = router?.query?.inviteCode;
     return <ViewAdapter
               h5={<ParnerInviteH5Page />}
               pc={<ParnerInviteH5Page />}
-              title={`${inviteCode ? '邀请进站' : '站点加入'} - ${this.props.site?.siteName}`}
+              title={`站点加入 - ${this.props.site?.siteName}`}
             />;
   }
 }

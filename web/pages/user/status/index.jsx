@@ -11,7 +11,7 @@ class Status extends React.Component {
     return <ViewAdapter
               h5={<StatusH5Page/>}
               pc={<StatusH5Page/>}
-              title={`状态 - ${this.props.site?.siteName}`}
+              title={`账号审核状态 - ${this.props.site?.siteName}`}
             />;
   }
 }
