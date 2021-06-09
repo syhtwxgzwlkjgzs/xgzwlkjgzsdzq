@@ -12,7 +12,7 @@ import Protocol from '../components/protocol';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT, isExtFieldsOpen } from '@common/store/login/util';
 import PcBodyWrap from '../components/pc-body-wrap';
 import { genMiniScheme } from '@common/server';
-import { MOBILE_LOGIN_STORE_ERRORS } from '@/common/store/login/mobile-login-store';
+import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 
 
 @inject('site')

@@ -10,7 +10,17 @@ import clearLoginStatus from '@common/utils/clear-login-status';
 import { Spin, Icon } from '@discuzq/design';
 import typeofFn from '@common/utils/typeof';
 import styles from './HOCFetchSiteData.module.scss';
-import { WEB_SITE_JOIN_WHITE_LIST } from '@common/constants/site';
+import {
+  WEB_SITE_JOIN_WHITE_LIST,
+  JUMP_TO_404,
+  INVALID_TOKEN,
+  JUMP_TO_LOGIN,
+  JUMP_TO_REGISTER,
+  JUMP_TO_AUDIT,
+  JUMP_TO_HOME_INDEX,
+  SITE_CLOSED,
+  JUMP_TO_PAY_SITE
+} from '@common/constants/site';
 
 // 获取全站数据
 export default function HOCFetchSiteData(Component) {
@@ -158,15 +168,35 @@ export default function HOCFetchSiteData(Component) {
 
     setAppCommonStatus(result) {
       const { site } = this.props;
+      console.log(result.code);
       switch (result.code) {
         case 0:
           break;
-        case -3005: // 关闭站点
+        case SITE_CLOSED: // 关闭站点
           site.setCloseSiteConfig(result.data);
+          Router.redirect({ url: '/close' });
           break;
-        case -4002:// token无效
+        case INVALID_TOKEN:// token无效
           clearLoginStatus();
           window.location.reload();
+          break;
+        case JUMP_TO_404:// 资源不存在
+          Router.redirect({ url: '/404' });
+          break;
+        case JUMP_TO_LOGIN:// 到登录页
+          Router.redirect({ url: '/user/login' });
+          break;
+        case JUMP_TO_REGISTER:// 到注册页
+          Router.redirect({ url: '/user/register' });
+          break;
+        case JUMP_TO_AUDIT:// 到审核页
+          Router.redirect({ url: '/user/status?statusCode=2' });
+          break;
+        case JUMP_TO_HOME_INDEX:// 到首页
+          Router.redirect({ url: '/' });
+          break;
+        case JUMP_TO_PAY_SITE:// 到付费加入页面
+          Router.redirect({ url: '/forum/partner-invite' });
           break;
         default: Router.redirect({ url: '/500' });
           break;
