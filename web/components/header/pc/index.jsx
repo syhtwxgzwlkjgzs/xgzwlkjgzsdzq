@@ -216,16 +216,19 @@ class Header extends React.Component {
                   </UnreadRedDot>
                   <p className={styles.iconText}>消息</p>
                 </div>
-                <div className={styles.iconItem} onClick={() => this.handleRouter('/search')}>
-                  <Icon
-                    onClick={() => {
-                      this.iconClickHandle('home');
-                    }}
-                    name="FindOutlined"
-                    size={17}
-                  />
-                  <p className={styles.iconText}>发现</p>
-                </div>
+                {
+                  user?.loginStatus &&
+                  <div className={styles.iconItem} onClick={() => this.handleRouter('/search')}>
+                    <Icon
+                      onClick={() => {
+                        this.iconClickHandle('home');
+                      }}
+                      name="FindOutlined"
+                      size={17}
+                    />
+                    <p className={styles.iconText}>发现</p>
+                  </div>
+                }
               </div>
               <div className={styles.border}></div>
               {this.renderUserInfo()}
