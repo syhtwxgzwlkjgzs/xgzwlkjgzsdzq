@@ -173,8 +173,7 @@ class Header extends React.Component {
   }
 
   render() {
-    const { site, user, message: { totalUnread,  } } = this.props;
-
+    const { site, user, message: { totalUnread,  }, errorText } = this.props;
     return (
       <div className={styles.header}>
         <div className={styles.headerFixedBox}>
@@ -217,7 +216,7 @@ class Header extends React.Component {
                   <p className={styles.iconText}>消息</p>
                 </div>
                 {
-                  user?.loginStatus &&
+                  errorText === '没有浏览权限' ? <></> :
                   <div className={styles.iconItem} onClick={() => this.handleRouter('/search')}>
                     <Icon
                       onClick={() => {
