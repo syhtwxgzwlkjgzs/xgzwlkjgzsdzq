@@ -214,7 +214,7 @@ class ThreadPostAction extends ThreadPostStore {
     };
     contentIndexes[THREAD_TYPE.video] = {
       tomId: THREAD_TYPE.video,
-      body: { videoId: video.id || '' },
+      body: { videoId: video.id || video.threadVideoId || '' },
     };
     contentIndexes[THREAD_TYPE.file] = {
       tomId: THREAD_TYPE.file,
