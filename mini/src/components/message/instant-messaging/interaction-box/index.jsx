@@ -5,8 +5,11 @@ import Icon from '@discuzq/design/dist/components/icon/index';
 import Input from '@discuzq/design/dist/components/input/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import Router from '@discuzq/sdk/dist/router';
+import constants from '@common/constants';
+import locals from '@common/utils/local-bridge';
 import { Emoji } from '@components/thread-post';
 import { inject, observer } from 'mobx-react';
+import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
 
 const InteractionBox = (props) => {
@@ -21,11 +24,6 @@ const InteractionBox = (props) => {
 
   const [isSubmiting, setIsSubmiting] = useState(false);
 
-  let toastInstance = null;
-
-
-  const uploadRef = useRef();
-
   // const checkToShowCurrentMsgTime = (curTimestamp) => {
   //   const DISPLAY_GAP_IN_MINS = 3;
   //   const diff = new Date(curTimestamp).getMinutes() - new Date(lastTimestamp).getMinutes();
@@ -37,18 +35,13 @@ const InteractionBox = (props) => {
   //     return true;
   //   }
   // };
-  const replaceRouteWidthDialogId = (dialogId) => {
-    updateDialogId(dialogId);
-    // Router.replace({ url: `/subPages/message/index?page=chat&username=${username}&dialogId=${dialogId}` });
-  };
-
 
   useEffect(async () => {
     if (username && !dialogId) {
       const res = await readDialogIdByUsername(username);
       const { code, data: { dialogId } } = res;
       if (code === 0 && dialogId) {
-        replaceRouteWidthDialogId(dialogId);
+        updateDialogId(dialogId);
       }
     }
 
@@ -56,7 +49,7 @@ const InteractionBox = (props) => {
       threadPost.fetchEmoji();
     }
     return () => {
-      toastInstance?.destroy();
+      Taro.hideLoading();
     };
   }, []);
 
@@ -70,7 +63,7 @@ const InteractionBox = (props) => {
         ...data,
       });
       setIsSubmiting(false);
-      toastInstance?.destroy();
+      Taro.hideLoading();
       if (ret.code === 0) {
         setTypingValue('');
         readDialogMsgList(dialogId);
@@ -86,9 +79,10 @@ const InteractionBox = (props) => {
         ...data,
       });
       setIsSubmiting(false);
+      Taro.hideLoading();
       if (ret.code === 0) {
         setTypingValue('');
-        replaceRouteWidthDialogId(ret.data.dialogId);
+        updateDialogId(ret.data.dialogId);
       } else {
         Toast.error({ content: ret.msg });
       }
@@ -102,18 +96,22 @@ const InteractionBox = (props) => {
   };
 
   // 触发图片选择
-  const uploadImage = () => {
-    uploadRef.current.click();
+  const chooseImage = () => {
+    Taro.chooseImage({
+      count: 1,
+      success(res) {
+        onImgChange(res.tempFiles)
+      }
+    });
   };
 
   // 图片上传之前，true-允许上传，false-取消上传
   const beforeUpload = (cloneList) => {
     const { webConfig } = props.site;
     if (!webConfig) return false;
-
     const file = cloneList[0];
     const { supportImgExt, supportMaxSize } = webConfig.setAttach;
-    const imageType = file.name.match(/\.([^\.]+)$/)[1].toLocaleLowerCase();
+    const imageType = file.path.match(/\.([^\.]+)$/)[1].toLocaleLowerCase();
     const imageSize = file.size;
     const isLegalType = supportImgExt.toLocaleLowerCase().includes(imageType);
     const isLegalSize = imageSize > 0 && imageSize < supportMaxSize * 1024 * 1024;
@@ -131,29 +129,43 @@ const InteractionBox = (props) => {
     return true;
   };
 
-  const onImgChange = async (e) => {
-    const files = e.target.files;
-    if (!beforeUpload(files)) {
-      uploadRef.current.value = '';
-      return; // 图片上传前校验
-    }
+  const onImgChange = async (files) => {
+    // 图片上传前校验
+    if (!beforeUpload(files)) return;
 
-    toastInstance = Toast.loading({
-      content: '图片发送中...',
-      duration: 0,
+    const { envConfig } = props.site;
+    const file = files[0];
+    const tempFilePath = file.path;
+    const token = locals.get(constants.ACCESS_TOKEN_NAME);
+    Taro.showLoading({
+      title: '图片发送中...',
+      mask: true
     });
-    const formData = new FormData();
-    formData.append('file', files[0]);
-    formData.append('type', 1);
-    const ret = await createAttachment(formData);
-    const { code, data } = ret;
-    if (code === 0) {
-      await submit({ imageUrl: data.url });
-    } else {
-      Toast.error({ content: ret.msg });
-    }
-    uploadRef.current.value = '';
-  }
+    Taro.uploadFile({
+      url: `${envConfig.COMMON_BASE_URL}/apiv3/attachments`,
+      filePath: tempFilePath,
+      name: 'file',
+      header: {
+        'Content-Type': 'multipart/form-data',
+        'authorization': `Bearer ${token}`
+      },
+      formData: {
+        'type': 1
+      },
+      success(res) {
+        if (res.statusCode === 200) {
+          const data = JSON.parse(res.data).Data;
+          submit({ imageUrl: data.url });
+        } else {
+          Taro.hideLoading();
+          Toast.error({ content: ret.msg });
+        }
+      },
+      fail(res) {
+        console.log(res);
+      }
+    });
+  };
 
   const insertEmoji = (emoji) => {
     const text = typingValue.slice(0, cursorPosition) + emoji.code + typingValue.slice(cursorPosition);
@@ -181,7 +193,7 @@ const InteractionBox = (props) => {
               <Icon name="SmilingFaceOutlined" size={20} color={'var(--color-text-secondary)'} onClick={() => {setShowEmoji(!showEmoji)}} />
             </View>
             <View className={styles.pictureUpload}>
-              <Icon name="PictureOutlinedBig" size={20} color={'var(--color-text-secondary)'} />
+              <Icon name="PictureOutlinedBig" size={20} color={'var(--color-text-secondary)'} onClick={chooseImage} />
             </View>
           </View>
         </View>

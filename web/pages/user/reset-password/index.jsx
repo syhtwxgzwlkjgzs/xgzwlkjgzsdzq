@@ -1,6 +1,7 @@
 import React from 'react';
 import ResetPasswordH5Page from '@layout/user/h5/reset-password';
 import { inject } from 'mobx-react';
+import ViewAdapter from '@components/view-adapter';
 
 import HOCLoginMode from '@middleware/HOCLoginMode';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
@@ -8,7 +9,11 @@ import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 @inject('site')
 class ResetPassword extends React.Component {
   render() {
-    return <ResetPasswordH5Page />;
+    return <ViewAdapter
+              h5={<ResetPasswordH5Page/>}
+              pc={<ResetPasswordH5Page/>}
+              title={`找回密码 - ${this.props.site?.siteName}`}
+            />;
   }
 }
 

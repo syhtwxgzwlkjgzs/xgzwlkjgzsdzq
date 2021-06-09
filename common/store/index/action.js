@@ -427,19 +427,15 @@ class IndexAction extends IndexStore {
    @action
    async getRecommends({ categoryIds = [] } = {}) {
     this.updateRecommendsStatus('loading');
-    try {
-      const result = await readRecommends({ params: { categoryIds } })
-      if (result.code === 0 && result.data) {
-        this.setRecommends(result.data);
-        this.updateRecommendsStatus('none');
-        return this.recommends;
-      } else {
-        return Promise.reject(result?.msg || '加载失败');
-      }
-    } catch(err) {
-      console.err(err);
+    
+    const result = await readRecommends({ params: { categoryIds } })
+    if (result.code === 0 && result.data) {
+      this.setRecommends(result.data);
+      this.updateRecommendsStatus('none');
+      return this.recommends;
+    } else {
       this.updateRecommendsStatus('error');
-      return Promise.reject(err?.msg || '加载失败');
+      return Promise.reject(result?.msg || '加载失败');
     }
    }
 

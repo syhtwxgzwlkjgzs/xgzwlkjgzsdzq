@@ -21,10 +21,14 @@
 
   .header {
     padding: $padding-4n 0;
+    display: flex;
   }
 
-  .brWrapper {
-    margin-top: $margin-4n;
+  .headerIcon {
+    width: 30px;
+    color: $primary-color;
+    display: flex;
+    justify-content: flex-end;
   }
 
   .content {
@@ -88,4 +92,8 @@
 
 .wrapper {
   overflow: hidden;
+}
+
+.brWrapper {
+  margin-top: $margin-4n;
 }

@@ -16,7 +16,8 @@ class Index extends React.Component {
     this.state = {
       windowSize: null,
       loading: true,
-      isError: false
+      isError: false,
+      errorText: '加载失败'
     };
   }
 
