@@ -249,6 +249,7 @@ class index extends Component {
               </Text>
             </View>
             <View>
+              {/* FIXME: 验证码在发送失败时，无法再次发送 */}
               <VerifyCode
                 key={initTimeValue}
                 initTimeValue={initTimeValue}
