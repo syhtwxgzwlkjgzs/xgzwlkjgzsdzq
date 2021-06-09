@@ -1,88 +1,8 @@
 @import '../vars.scss';
 
-// .dialogBox {
-//   display: flex;
-//   flex-direction: column;
-//   height: 90vh;
-//   overflow-y: auto;
-// }
-
-// .msgTime {
-//   @include text-font($color: $text-color-secondary);
-//   display: flex;
-//   justify-content: center;
-//   padding-top: $im-gap-btw-icon-and-msg;
-//   padding-bottom: $im-gap-btw-icon-and-msg;
-// }
-
-// .persona {
-//   display: flex;
-//   margin: $padding-4n 0;
-// }
-
-// .profileIcon {
-//   display: flex;
-//   flex-shrink: 0;
-//   justify-content: center;
-//   align-items: center;
-//   border-radius: 50%;
-//   color: blue;
-//   width: $im-profile-icon-size;
-//   height: $im-profile-icon-size;
-// }
-
-// .msgContent {
-//   display: flex;
-//   position: relative;
-//   align-items: center;
-//   padding: $im-gap-btw-icon-and-msg;
-//   overflow-wrap: anywhere;
-//   border-radius: $border-radius-small;
-
-//   &:before {
-//     content: '';
-//     border: 8px solid;
-//     border-color: transparent;
-//     position: absolute;
-//     top: 10px;
-//   }
-// }
-
-// .myself {
-//   flex-direction: row-reverse;
-//   .msgContent {
-//     @include text-font;
-//     margin-left: $im-msg-space-aside;
-//     margin-right: $im-gap-btw-icon-and-msg;
-//     background-color: $primary-color;
-//     &:before {
-//       border-left-color: $primary-color;
-//       right: -13px;
-//     }
-//   }
-// }
-
-// .itself {
-//   flex-direction: row;
-//   .msgContent {
-//     @include text-font($color: $text-color-primary);
-//     margin-right: $im-msg-space-aside;
-//     margin-left: $im-gap-btw-icon-and-msg;
-//     background-color: $white;
-//     &:before {
-//       border-right-color: $white;
-//       left: -13px;
-//     }
-//   }
-// }
-
-
-
-
 .dialogBox {
   display: flex;
   flex-direction: column;
-  // height: calc(100vh - 93px);
   overflow-y: auto;
   position: absolute;
   top: 0;
@@ -94,15 +14,7 @@
 
 }
 
-// .dialogBox-emoji {
-//   display: flex;
-//   flex-direction: column;
-//   height: calc(100vh - 314px);
-//   overflow-y: auto;
-// }
-
 .box__inner {
-  // padding: 0 $padding-4n;
 
   .itself {
     .msgContent {
@@ -115,7 +27,6 @@
 }
 
 .msgTime {
-  // @include text-font($color: $text-color-secondary);
   display: flex;
   justify-content: center;
   margin: rem(8) 0;
@@ -139,7 +50,6 @@
   border-radius: 50%;
   width: $im-profile-icon-size;
   height: $im-profile-icon-size;
-  // background-color: $primary-color;
 }
 
 .msgImgContent {
@@ -175,8 +85,17 @@
   }
 }
 
+.msgImage {
+  border-radius: rem($border-radius-small);
+}
+
 .myself {
   flex-direction: row-reverse;
+  .msgImage {
+    margin-left: $im-msg-space-aside;
+    margin-right: $im-gap-btw-icon-and-msg;
+  }
+
   .msgContent {
     @include text-font;
     margin-left: $im-msg-space-aside;
@@ -191,6 +110,11 @@
 
 .itself {
   flex-direction: row;
+  .msgImage {
+    margin-right: $im-msg-space-aside;
+    margin-left: $im-gap-btw-icon-and-msg;
+  }
+
   .msgContent {
     @include text-font($color: $text-color-primary);
     margin-right: $im-msg-space-aside;
