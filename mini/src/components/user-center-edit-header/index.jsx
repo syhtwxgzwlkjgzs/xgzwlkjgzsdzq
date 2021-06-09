@@ -101,7 +101,6 @@ export default class index extends Component {
           //   canvasWidth: height,
           //   canvasHeight: width,
           // });
-          // canvasContext.translate(height / 2, width / 2);
           // //顺时针旋转90度
           // canvasContext.rotate((90 * Math.PI) / 180);
           // canvasContext.drawImage(img, -width / 2, -height / 2, width, height);
@@ -123,8 +122,8 @@ export default class index extends Component {
             canvasId: 'photoCanvas',
             width: canvasWidth,
             height: canvasHeight,
-            destWidth: 1200,
-            destHeight: 800,
+            destWidth: canvasWidth,
+            destHeight: canvasHeight,
             x: 0,
             y: 0,
             success: (res) => {
