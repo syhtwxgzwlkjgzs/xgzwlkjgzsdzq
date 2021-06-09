@@ -11,7 +11,7 @@
 */
 export default function fuzzyCalcContentLength(content, lengthInLine = 50) {
     content = '' + content;
-    if (!content || content === '') return;
+    if (!content || content === '') return 0;
 
     const EMOJ_SIZE = 1.5;
     const IMG_SIZE = lengthInLine * 4;
