@@ -9,6 +9,8 @@ import Router from '@discuzq/sdk/dist/router';
 import { View, Text } from '@tarojs/components';
 import throttle from '@common/utils/thottle.js';
 import classNames from 'classnames';
+import { toTCaptcha } from '@common/utils/to-tcaptcha';
+
 @inject('site')
 @inject('user')
 @inject('payBox')

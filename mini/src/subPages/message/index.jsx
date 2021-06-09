@@ -3,7 +3,8 @@ import { inject, observer } from 'mobx-react';
 import Page from '@components/page';
 import Message from '@layout/message';
 import { getCurrentInstance } from '@tarojs/taro';
-import Taro from '@tarojs/taro'
+import Taro from '@tarojs/taro';
+import setTitle from '@common/utils/setTitle';
 
  /**
    * 消息页面当前显示的消息模块
@@ -21,7 +22,7 @@ const Index = inject('message')(observer(({ message }) => {
   const { router } = getCurrentInstance();
 
  // 参数过滤
-  const params = (({ page, subPage, dialogId, username }) => {
+  const params = (({ page, subPage, dialogId, username, nickname }) => {
     if (!['index', 'thread', 'financial', 'account', 'chat'].includes(page)) {
       page = 'index';
     }
@@ -30,13 +31,30 @@ const Index = inject('message')(observer(({ message }) => {
       subPage = '';
     }
 
-    return { page, subPage, dialogId, username };
+    return { page, subPage, dialogId, username, nickname };
   })(router.params);
 
-  // 更新未读消息
   useEffect(() => {
-    message.readUnreadCount();
     Taro.hideHomeButton();
+
+    const { page, nickname } = params;
+    switch (page) {
+      case 'index':
+        setTitle('我的私信');
+        break;
+      case 'thread':
+        setTitle('帖子通知');
+        break;
+      case 'financial':
+        setTitle('财务通知');
+        break;
+      case 'account':
+        setTitle('账号消息');
+        break;
+      case 'chat':
+        setTitle(nickname ? `与 ${nickname} 的对话` : '私信对话');
+        break;
+    }
   });
 
   console.log('params :>> ', params);

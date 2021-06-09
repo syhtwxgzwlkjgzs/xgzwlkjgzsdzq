@@ -101,7 +101,6 @@ export default class index extends Component {
           //   canvasWidth: height,
           //   canvasHeight: width,
           // });
-          // canvasContext.translate(height / 2, width / 2);
           // //顺时针旋转90度
           // canvasContext.rotate((90 * Math.PI) / 180);
           // canvasContext.drawImage(img, -width / 2, -height / 2, width, height);
@@ -123,8 +122,8 @@ export default class index extends Component {
             canvasId: 'photoCanvas',
             width: canvasWidth,
             height: canvasHeight,
-            destWidth: 1200,
-            destHeight: 800,
+            destWidth: canvasWidth,
+            destHeight: canvasHeight,
             x: 0,
             y: 0,
             success: (res) => {
@@ -159,10 +158,10 @@ export default class index extends Component {
   uploadAvatarImpl = async (fileList) => {
     try {
       const token = locals.get(constants.ACCESS_TOKEN_NAME);
-      const file = await this.getCanvasImg(fileList[0]);
+      // const file = await this.getCanvasImg(fileList[0]);
       const uploadRes = await Taro.uploadFile({
         url: `${this.config.COMMON_BASE_URL}/apiv3/users/avatar`,
-        filePath: file.tempFilePath,
+        filePath: fileList[0].path,
         header: {
           'Content-Type': 'multipart/form-data',
           authorization: `Bearer ${token}`,
@@ -218,10 +217,10 @@ export default class index extends Component {
   uploadBackgroundImpl = async (fileList) => {
     try {
       const token = locals.get(constants.ACCESS_TOKEN_NAME);
-      const file = await this.getCanvasImg(fileList[0]);
+      // const file = await this.getCanvasImg(fileList[0]);
       const uploadRes = await Taro.uploadFile({
         url: `${this.config.COMMON_BASE_URL}/apiv3/users/background`,
-        filePath: file.tempFilePath,
+        filePath: fileList[0].path,
         header: {
           'Content-Type': 'multipart/form-data',
           authorization: `Bearer ${token}`,
@@ -362,6 +361,7 @@ export default class index extends Component {
             type="33"
             canvasId={'photoCanvas'}
             style={{
+              visibility: 'hidden',
               position: 'fixed',
               top: 0,
               zIndex: -10000,
