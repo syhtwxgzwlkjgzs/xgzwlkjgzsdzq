@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import '@discuzq/design/dist/styles/index.scss';
-import { Spin } from '@discuzq/design';
+import { Spin, Toast } from '@discuzq/design';
 import ThreadContent from '@components/thread';
 import layout from './index.module.scss';
 import NoData from '@components/no-data';
@@ -16,11 +16,37 @@ import PopularContents from '../../../../search/h5/components/popular-contents';
 @inject('invite')
 @observer
 class PartnerInviteHot extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      isLoading: true,
+      errText: '暂无数据'
+    }
+  }
+  async componentDidMount() {
+    const { forum, search } = this.props;
+    try {
+      const threadList = await search.getThreadList();
+      forum.setThreadsPageData(threadList);
+      this.setState({isLoading: false})
+    } catch (e) {
+      this.setState({
+        isLoading: false,
+        errText: e?.Message || e
+      })
+      Toast.error({
+        content: e?.Message || e,
+        hasMask: false,
+        duration: 1000,
+      });
+    }
+  }
 
   render() {
     const { site, forum } = this.props;
     const { platform } = site;
-    const { threadsPageData = [], isLoading } = forum;
+    const { isLoading, errText } = this.state;
+    const { threadsPageData = [] } = forum;
     if (platform === 'h5') {
       return (
         <div className={layout.hot}>
@@ -59,7 +85,7 @@ class PartnerInviteHot extends React.Component {
         }
         {
           !isLoading && !threadsPageData?.length
-            ? <NoData />
+            ? <NoData text={errText}/>
             : <></>
         }
         {
