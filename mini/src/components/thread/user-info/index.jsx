@@ -35,6 +35,8 @@ export default function UserInfo(props) {
 
   const isPc = props.platform === 'pc';
 
+  const { onClick = () => {} } = props
+
   return (
     <View className={classNames(styles.contianer, !props.hideInfoPopip && styles.cursor)}>
       <Avatar
@@ -44,7 +46,7 @@ export default function UserInfo(props) {
         circle={true}
         image={props.avatar}
         name={props.name || ''}
-        onClick={() => props.onClick()}
+        onClick={onClick}
       ></Avatar>
 
       <View className={styles.right}>

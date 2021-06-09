@@ -131,6 +131,12 @@ class Index extends React.Component {
       }
     }
 
+    onUser = (e) => {
+      e && e.stopPropagation();
+      const { user = {} } = this.props.data || {};
+      Router.push({url: `/subPages/user/index?id=${user?.userId}`});
+    }
+
     render() {
       const { data, className = '', site = {}, showBottomStyle = true } = this.props;
       const { platform = 'pc' } = site;
@@ -170,6 +176,7 @@ class Index extends React.Component {
                 isReward={isReward}
                 userId={user?.userId}
                 platform={platform}
+                onClick={this.onUser}
               />
           </View>
 
