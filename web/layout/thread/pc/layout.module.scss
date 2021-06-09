@@ -8,61 +8,8 @@
   flex-direction: column;
 }
 
-.header {
-  width: 100%;
-  background: var(--color-white);
-}
-
-.body {
-  padding-top: rem(20);
-  width: 100%;
-  height: 100vh;
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  overflow-y: scroll;
-
-  .bodyLeft {
-    width: rem(750);
-    margin-right: rem(20);
-    // 修复不能触发触底更新的问题
-    min-height: 101%;
-  }
-
-  .bodyRigth {
-    position: sticky;
-    top: rem(-330);
-    width: rem(330);
-
-    .authorInfo {
-      width: 100%;
-      max-height: rem(306);
-      background: var(--color-white);
-      margin-bottom: rem(20);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: var(--border-radius-small);
-    }
-
-    .qrcode {
-      margin-top: rem(20);
-    }
-
-    .recommend {
-      width: 100%;
-      background: var(--color-white);
-      border-radius: var(--border-radius-small);
-    }
-
-    .copyright {
-      margin-top: rem(20);
-      width: 100%;
-    }
-  }
-  .positionSticky {
-    top: rem(-292);
-  }
+.positionSticky {
+  top: rem(-319) !important;
 }
 
 .bottom {
@@ -95,4 +42,30 @@
   .user {
     margin-bottom: rem(16);
   }
+}
+
+.authorInfo {
+  width: 100%;
+  max-height: rem(306);
+  background: var(--color-white);
+  margin-bottom: rem(20);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-small);
+}
+
+.qrcode {
+  margin-top: rem(20);
+}
+
+.recommend {
+  width: 100%;
+  background: var(--color-white);
+  border-radius: var(--border-radius-small);
+}
+
+.copyright {
+  margin-top: rem(20);
+  width: 100%;
 }

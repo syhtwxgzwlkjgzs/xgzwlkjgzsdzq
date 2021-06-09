@@ -25,10 +25,6 @@ export default [
         pid: '102',
       },
       {
-        name: '问答',
-        pid: '105',
-      },
-      {
         name: '商品',
         pid: '104',
       },
