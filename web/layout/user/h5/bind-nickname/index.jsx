@@ -31,13 +31,13 @@ class BindNicknameH5Page extends React.Component {
         duration: 1000,
         onClose: () => {
           const { router, site } = this.props;
-          const { needToCompleteExtraInfo: isNeedToCompleteExtraInfo } = router.query;
-          // 扩展信息的判断跳转
-          const needToCompleteExtraInfo = this.props.commonLogin.needToCompleteExtraInfo || isNeedToCompleteExtraInfo;
-          if (isExtFieldsOpen(site) && needToCompleteExtraInfo) {
-            this.props.router.push('/user/supplementary');
-            return;
-          }
+          // const { needToCompleteExtraInfo: isNeedToCompleteExtraInfo } = router.query;
+          // // 扩展信息的判断跳转
+          // const needToCompleteExtraInfo = this.props.commonLogin.needToCompleteExtraInfo || isNeedToCompleteExtraInfo;
+          // if (isExtFieldsOpen(site) && needToCompleteExtraInfo) {
+          //   this.props.router.push('/user/supplementary');
+          //   return;
+          // }
           window.location.href = '/';
         },
       });

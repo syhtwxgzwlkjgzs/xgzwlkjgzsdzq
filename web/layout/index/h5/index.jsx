@@ -128,6 +128,8 @@ class IndexH5Page extends React.Component {
 
     dispatch('click-filter', newFilter);
 
+    this.props.index.setFilter(newFilter);
+
     this.setState({
       filter: newFilter,
       currentIndex: id,
@@ -142,6 +144,8 @@ class IndexH5Page extends React.Component {
 
     const newFilter = { ...this.state.filter, categoryids: requestCategoryids, types, essence, sequence };
     dispatch('click-filter', newFilter);
+    
+    this.props.index.setFilter(newFilter);
 
     const newCurrentIndex = this.resetCurrentIndex(categoryids[0]);
     this.setState({
