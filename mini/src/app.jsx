@@ -7,6 +7,16 @@ import { View } from '@tarojs/components';
 import Taro from '@tarojs/taro'
 import clearLoginStatus from '@common/utils/clear-login-status';
 import setTitle from '@common/utils/setTitle';
+import {
+  JUMP_TO_404,
+  INVALID_TOKEN,
+  JUMP_TO_LOGIN,
+  JUMP_TO_REGISTER,
+  JUMP_TO_AUDIT,
+  JUMP_TO_HOME_INDEX,
+  SITE_CLOSED,
+  JUMP_TO_PAY_SITE
+} from '@common/constants/site';
 import './app.scss';
 
 class App extends Component {
@@ -108,15 +118,33 @@ class App extends Component {
     switch (result.code) {
       case 0:
         break;
-      case -3005: site.setCloseSiteConfig(result.data);// 关闭站点
+      case SITE_CLOSED: site.setCloseSiteConfig(result.data);// 关闭站点
         Router.redirect({
           url: '/subPages/close/index'
         });
         return false;
-      case -4002:// token无效
+      case INVALID_TOKEN:// token无效
         clearLoginStatus();
         this.initSiteData(); // 重新获取数据
         return false;
+      case JUMP_TO_404:// 资源不存在
+        Router.redirect({ url: '/subPages/404/index' });
+        break;
+      case JUMP_TO_LOGIN:// 到登录页
+        Router.redirect({ url: '/subPages/user/wx-auth/index' });
+        break;
+      case JUMP_TO_REGISTER:// 到注册页
+        Router.redirect({ url: '/subPages/user/wx-auth/index' });
+        break;
+      case JUMP_TO_AUDIT:// 到审核页
+        Router.redirect({ url: '/subPages/user/status/index?statusCode=2' });
+        break;
+      case JUMP_TO_HOME_INDEX:// 到首页
+        Router.redirect({ url: '/pages/index/index' });
+        break;
+      case JUMP_TO_PAY_SITE:// 到付费加入页面
+        Router.redirect({ url: '/subPages/forum/partner-invite/index' });
+        break;
       default: Router.redirect({url: '/subPages/500/index'});
         break;
     }

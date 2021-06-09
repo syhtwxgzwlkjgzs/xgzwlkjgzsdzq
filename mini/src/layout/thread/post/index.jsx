@@ -406,8 +406,10 @@ class Index extends Component {
     const { threadId } = this.state;
     const { threadPost, site } = this.props;
     const { postData, redpacketTotalAmount } = threadPost;
-    if (!isDraft && !postData.contentText) {
-      this.postToast('请填写您要发布的内容');
+    const { images, video, files, audio } = postData;
+    if (!(postData.contentText || video.id || audio.id || Object.values(images).length
+      || Object.values(files).length)) {
+      this.postToast({ content: '请至少填写您要发布的内容或者上传图片、附件、视频、语音' });
       return;
     }
     if (!this.checkAttachPrice()) {
