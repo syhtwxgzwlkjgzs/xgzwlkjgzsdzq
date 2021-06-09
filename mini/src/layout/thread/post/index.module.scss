@@ -41,6 +41,10 @@ page {
         // padding-right: 20px;
         text-align: center;
       }
+      .topBar-title-inner {
+        max-width: 190px;
+        @include text-ellipsis;
+      }
 
       :global {
         .dzq-icon {

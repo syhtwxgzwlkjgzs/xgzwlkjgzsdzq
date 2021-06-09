@@ -644,7 +644,7 @@ class Index extends Component {
           <View className={styles.topBar} style={navStyle}>
             <Icon name="RightOutlined" onClick={() => this.handlePageJump(false)} />
             <View className={styles['topBar-title']}>
-              { headTitle ?  `发布 - ${headTitle}` : '发布' }
+              <View className={styles['topBar-title-inner']}>{ headTitle ?  `发布 - ${headTitle}` : '发布' }</View>
             </View>
           </View>
 
