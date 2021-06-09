@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Taro, { getCurrentInstance, navigateTo } from '@tarojs/taro';
+import Taro, { getCurrentInstance, navigateTo, redirectTo } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import Button from '@discuzq/design/dist/components/button/index';
@@ -112,10 +112,10 @@ class Index extends Component {
       if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
         if (isExtFieldsOpen(this.props.site)) {
           this.props.commonLogin.needToCompleteExtraInfo = true;
-          navigateTo({ url: '/subPages/user/supplementary/index' });
+          redirectTo({ url: '/subPages/user/supplementary/index' });
           return;
         }
-        navigateTo({ url: '/pages/index/index' });
+        redirectTo({ url: '/pages/index/index' });
         return;
       }
       // 跳转状态页

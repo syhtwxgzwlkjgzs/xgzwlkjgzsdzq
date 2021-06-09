@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getCurrentInstance, navigateTo } from '@tarojs/taro';
+import { getCurrentInstance, navigateTo, redirectTo } from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import Input from '@discuzq/design/dist/components/input/index';
@@ -41,10 +41,10 @@ class Index extends Component {
       if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
         if (isExtFieldsOpen(this.props.site)) {
           this.props.commonLogin.needToCompleteExtraInfo = true;
-          navigateTo({ url: '/subPages/user/supplementary/index' });
+          redirectTo({ url: '/subPages/user/supplementary/index' });
           return;
         }
-        navigateTo({ url: '/pages/index/index' });
+        redirectTo({ url: '/pages/index/index' });
         return;
       }
 
