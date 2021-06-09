@@ -68,9 +68,9 @@ class index extends Component {
 
   // 点击粉丝列表
   goToFansList = () => {
-    const { otherId } = getCurrentInstance().router.params;
-    if (otherId) {
-      Router.push({ url: `/subPages/my/fans/index?isOtherPerson=${this.props.isOtherPerson}&otherId=${otherId}` });
+    const { id } = getCurrentInstance().router.params;
+    if (id) {
+      Router.push({ url: `/subPages/my/fans/index?isOtherPerson=${this.props.isOtherPerson}&otherId=${id}` });
     } else {
       Router.push({ url: `/subPages/my/fans/index?isOtherPerson=${this.props.isOtherPerson}` });
     }
@@ -78,9 +78,9 @@ class index extends Component {
 
   // 点击关注列表
   goToFollowsList = () => {
-    const { otherId } = getCurrentInstance().router.params;
-    if (otherId) {
-      Router.push({ url: `/subPages/my/follows/index?isOtherPerson=${this.props.isOtherPerson}&otherId=${otherId}` });
+    const { id } = getCurrentInstance().router.params;
+    if (id) {
+      Router.push({ url: `/subPages/my/follows/index?isOtherPerson=${this.props.isOtherPerson}&otherId=${id}` });
     } else {
       Router.push({ url: `/subPages/my/follows/index?isOtherPerson=${this.props.isOtherPerson}` });
     }
