@@ -433,6 +433,8 @@ class IndexAction extends IndexStore {
         this.setRecommends(result.data);
         this.updateRecommendsStatus('none');
         return this.recommends;
+      } else {
+        return Promise.reject(result?.msg || '加载失败');
       }
     } catch(err) {
       console.err(err);
