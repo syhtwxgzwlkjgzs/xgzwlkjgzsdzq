@@ -19,7 +19,7 @@ const Index = (props) => {
     id,
   } = props;
   const onContainerClick = ({ id }) => {
-    Router.push({ url: `/users/${id}` });
+    Router.push({ url: `/user/${id}` });
   };
 
   const dialogElement =  (

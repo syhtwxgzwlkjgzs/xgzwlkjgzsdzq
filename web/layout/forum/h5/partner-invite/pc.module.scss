@@ -90,7 +90,6 @@
   }
   .pc_bottom_tips {
     display: flex;
-    height: 20px;
     justify-content: center;
     align-items: center;
     padding-top: $padding-4n;
@@ -98,6 +97,7 @@
       width: 20px;
       height: 20px;
       border-radius: $border-radius-circle;
+      flex-shrink: 0;
     }
     .pc_bottom_text {
       font-weight: 600;
