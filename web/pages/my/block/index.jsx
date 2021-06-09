@@ -3,6 +3,7 @@ import { inject, observer, Observer, useStore } from 'mobx-react';
 import IndexH5Page from '@layout/my/block/h5';
 import IndexPCPage from '@layout/my/block/pc';
 import { Toast } from '@discuzq/design';
+import ViewAdapter from '@components/view-adapter';
 
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
@@ -12,13 +13,14 @@ import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 class Index extends React.Component {
   render() {
     const { site } = this.props;
-    const { platform } = site;
 
-    if (platform === 'pc') {
-      return <IndexPCPage dispatch={this.dispatch} />;
-    }
-
-    return <IndexH5Page/>;
+    return (
+      <ViewAdapter
+        h5={<IndexH5Page />}
+        pc={<IndexPCPage dispatch={this.dispatch} />}
+        title={`我的屏蔽 - ${this.props.site?.siteName}`}
+      />
+    );
   }
 }
 
