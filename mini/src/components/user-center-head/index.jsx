@@ -25,9 +25,9 @@ class index extends Component {
 
   // 点击屏蔽
   handleChangeShield = (isDeny) => {
-    const { query = {} } = this.props.router;
+    const { id } = getCurrentInstance().router.params;
     if (isDeny) {
-      this.props.user.undenyUser(query.otherId);
+      this.props.user.undenyUser(id);
       this.props.user.setTargetUserNotBeDenied();
       Toast.success({
         content: '解除屏蔽成功',
@@ -35,7 +35,7 @@ class index extends Component {
         duration: 1000,
       });
     } else {
-      this.props.user.denyUser(query.otherId);
+      this.props.user.denyUser(id);
       this.props.user.setTargetUserDenied();
       Toast.success({
         content: '屏蔽成功',
@@ -47,14 +47,14 @@ class index extends Component {
 
   // 点击关注
   handleChangeAttention = async (follow) => {
-    const { query = {} } = this.props.router;
-    if (query.otherId) {
+    const { id } = getCurrentInstance().router.params;
+    if (id) {
       if (follow !== 0) {
-        await this.props.user.cancelFollow({ id: query.otherId, type: 1 });
-        await this.props.user.getTargetUserInfo(query.otherId);
+        await this.props.user.cancelFollow({ id: id, type: 1 });
+        await this.props.user.getTargetUserInfo(id);
       } else {
-        await this.props.user.postFollow(query.otherId);
-        await this.props.user.getTargetUserInfo(query.otherId);
+        await this.props.user.postFollow(id);
+        await this.props.user.getTargetUserInfo(id);
       }
     }
   };

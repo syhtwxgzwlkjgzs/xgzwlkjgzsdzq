@@ -7,7 +7,9 @@ import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
 import UnreadRedDot from '@components/unread-red-dot';
 
+@inject('user')
 @inject('message')
+@observer
 class UserCenterAction extends React.Component {
   // 点击我的消息
   handleMyMessage = () => {
@@ -138,7 +140,7 @@ class UserCenterAction extends React.Component {
             </View>
           </View>
 
-          <View className={styles.userCenterActionItemContainer}>
+          <View className={styles.userCenterActionItemContainer} style={{ visibility: !this.props.user.isAdmini && 'hidden' }}>
             <View onClick={this.handleMyInvite} className={styles.userCenterActionItem}>
               <View className={styles.userCenterActionItemIcon}>
                 <Badge>

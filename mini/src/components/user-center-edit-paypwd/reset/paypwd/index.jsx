@@ -29,6 +29,18 @@ export default class index extends Component {
     this.props.payBox.newPayPwdRepeat = e.target.value
   }
 
+  componentDidUpdate = async (prevProps) => {
+    if (this.props.ticket && this.props.randstr) {
+      if (!prevProps.ticket || !prevProps.randstr) {
+        try {
+          this.getVerifyCode({});
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    }
+  };
+
   // 点击确认 ---> 清空对应密码状态
   handleSubmit = throttle(() => {
     if (this.getDisabledWithButton()) return
