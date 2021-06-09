@@ -10,8 +10,8 @@ module.exports = {
       // https://github.com/terser/terser#minify-options
       warnings: false,
       compress: {
-        drop_debugger: true,
-        drop_console: true,
+        drop_debugger: false,
+        drop_console: false,
       },
       sourceMap: false,
       cache: true,

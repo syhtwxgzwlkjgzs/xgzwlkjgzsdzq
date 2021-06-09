@@ -8,15 +8,6 @@ class CaptchaInput extends Component {
   validateTel = (value) => {
     return (/^[1][3-9]\d{9}$/.test(value))
   }
-
-  componentDidMount() {
-    document.addEventListener('keydown', this.handleKeyDown);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleKeyDown);
-  }
-
   // 点击显示数字键盘
   handleClickPwdItem = () => {
     this.props.handleKeyBoardVisible && this.props.handleKeyBoardVisible()

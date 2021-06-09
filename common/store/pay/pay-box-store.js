@@ -538,7 +538,7 @@ class PayBoxStore {
 
     throw {
       Code: forgetPayPwdRes.code,
-      Msg: forgetPayPwdRes.message,
+      Msg: forgetPayPwdRes.msg,
     };
   }
 

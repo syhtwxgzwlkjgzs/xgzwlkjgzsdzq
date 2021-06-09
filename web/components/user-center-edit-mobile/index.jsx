@@ -213,7 +213,7 @@ class index extends Component {
   render() {
     const { currentStep, list = [], isBlur, bindMobile, initTimeValue, isKeyBoardVisible } = this.state;
     const { mobile } = this.props?.user;
-    const value_pass_check = currentStep === 'second' ? this.validateTel(bindMobile) : true;
+    const valuePassCheck = currentStep === 'second' ? this.validateTel(bindMobile) : true;
     return (
       <div id={styles.editMobileContent}>
         <Header />
@@ -233,7 +233,7 @@ class index extends Component {
               )
             }
             <div>
-              <VerifyCode initTimeValue={this.state.initTimeValue} value_pass_check={value_pass_check} key={currentStep} text={'发送验证码'} getVerifyCode={this.getVerifyCode} />
+              <VerifyCode initTimeValue={this.state.initTimeValue} valuePassCheck={valuePassCheck} key={currentStep} text={'发送验证码'} getVerifyCode={this.getVerifyCode} />
             </div>
           </div>
           <div className={styles.bindCode}>
