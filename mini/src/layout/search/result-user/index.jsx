@@ -45,7 +45,7 @@ class SearchResultUserH5Page extends React.Component {
     });
   };
 
-  onUserClick = ({ userId } = {}) => {
+  onUserClick = (userId) => {
     Taro.navigateTo({url: `/subPages/user/index?id=${userId}`});
   };
 
@@ -70,6 +70,7 @@ class SearchResultUserH5Page extends React.Component {
               label={item.groupName}
               onClick={this.onUserClick}
               className={styles.userItem}
+              userId={item.userId}
             />
           ))
         }

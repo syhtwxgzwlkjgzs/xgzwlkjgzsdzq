@@ -70,7 +70,10 @@ class Index extends Component {
   };
 
   filterTag(html) {
-    return html?.replace(/<(\/)?([beprt]|br|div)[^>]*>|[\r\n]/gi, '');
+    return html?.replace(/<(\/)?([beprt]|br|div)[^>]*>|[\r\n]/gi, '')
+      .replace(/<img[^>]+>/gi, $1 => {
+        return $1.includes('qq-emotion') ? $1 : "[图片]";
+      });
   }
 
   // parse content
@@ -187,7 +190,7 @@ class Index extends Component {
                 <View
                   className={classNames(styles['content-html'], {
                     [styles['single-line']]: ['chat'].includes(type),
-                    [styles['multiple-line']]: ['thread', 'account'].includes(type),
+                    [styles['multiple-line']]: ['account'].includes(type),
                   })}
                   dangerouslySetInnerHTML={{ __html: this.parseHTML() }}
                 />

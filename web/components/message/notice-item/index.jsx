@@ -82,7 +82,10 @@ class Index extends Component {
   };
 
   filterTag(html) {
-    return html?.replace(/<(\/)?([beprt]|br|div)[^>]*>|[\r\n]/gi, '');
+    return html?.replace(/<(\/)?([beprt]|br|div)[^>]*>|[\r\n]/gi, '')
+      .replace(/<img[^>]+>/gi, $1 => {
+        return $1.includes('qq-emotion') ? $1 : "[图片]";
+      });
   }
 
   // parse content 对于需要显示title作为内容的消息，在对应组件内做预处理后统一传入content属性
@@ -215,7 +218,7 @@ class Index extends Component {
                 <p
                   className={classNames(styles['content-html'], {
                     [styles['single-line']]: ['chat'].includes(type),
-                    [styles['multiple-line']]: ['thread', 'account'].includes(type),
+                    [styles['multiple-line']]: ['account'].includes(type),
                   })}
                   style={isPC ? { paddingRight: '20px' } : {}}
                   dangerouslySetInnerHTML={{ __html: this.parseHTML() }}
