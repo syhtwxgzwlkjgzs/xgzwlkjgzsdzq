@@ -82,10 +82,13 @@ class MiniAuth extends React.Component {
       };
     } catch (error) {
       // 注册信息补充
-      const { site } = this.props;
-      if (isExtFieldsOpen(site) && error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
-        this.props.commonLogin.needToCompleteExtraInfo = true;
-        redirectTo({ url: '/subPages/user/supplementary/index' });
+      if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+        if (isExtFieldsOpen(this.props.site)) {
+          this.props.commonLogin.needToCompleteExtraInfo = true;
+          redirectTo({ url: '/subPages/user/supplementary/index' });
+          return;
+        }
+        redirectTo({ url: '/pages/index/index' });
         return;
       }
       // 跳转状态页

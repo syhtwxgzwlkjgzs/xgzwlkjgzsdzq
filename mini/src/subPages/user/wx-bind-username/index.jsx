@@ -9,8 +9,9 @@ import Avatar from '@discuzq/design/dist/components/avatar/index';
 // import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Page from '@components/page';
 import { get } from '@common/utils/get';
-import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
+import { BANNED_USER, REVIEWING, REVIEW_REJECT, isExtFieldsOpen } from '@common/store/login/util';
 import layout from './index.module.scss';
+import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 
 // const MemoToastProvider = React.memo(ToastProvider)
 
@@ -36,6 +37,17 @@ class Index extends Component {
         }
       });
     } catch (e) {
+      // 注册信息补充
+      if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+        if (isExtFieldsOpen(this.props.site)) {
+          this.props.commonLogin.needToCompleteExtraInfo = true;
+          navigateTo({ url: '/subPages/user/supplementary/index' });
+          return;
+        }
+        navigateTo({ url: '/pages/index/index' });
+        return;
+      }
+
       if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
         this.props.commonLogin.setStatusMessage(e.Code, e.Message);
         navigateTo({
