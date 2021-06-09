@@ -696,7 +696,7 @@ class PostPage extends React.Component {
     );
 
     return (
-      <ViewAdapter h5={h5} pc={pc} title="发帖" />
+      <ViewAdapter h5={h5} pc={pc} title="发布" />
     );
   }
 }
