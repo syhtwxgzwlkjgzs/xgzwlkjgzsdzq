@@ -675,25 +675,25 @@ class Index extends Component {
 
             <View className={styles['plugin']}>
 
-              <GeneralUpload type={operationType} audioUpload={(file) => { this.yundianboUpload('audio', file) }} />
+              <GeneralUpload type={operationType} audioUpload={(file) => { this.yundianboUpload('audio', file) }}>
+                {video.thumbUrl && (
+                  <Units
+                    type='video'
+                    deleteShow
+                    src={video.thumbUrl}
+                    onDelete={() => setPostData({ video: {} })}
+                    onVideoLoaded={() => {
+                      Taro.pageScrollTo({
+                        scrollTop: 3000,
+                        // selector: '#thread-post-video',
+                        complete: (a,b,c) => {console.log(a,b,c)}
+                      });
+                    }}
+                  />
+                )}
+              </GeneralUpload>
 
               {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => setPostData({ product: {} })} />}
-
-              {video.thumbUrl && (
-                <Units
-                  type='video'
-                  deleteShow
-                  src={video.thumbUrl}
-                  onDelete={() => setPostData({ video: {} })}
-                  onVideoLoaded={() => {
-                    Taro.pageScrollTo({
-                      scrollTop: 3000,
-                      // selector: '#thread-post-video',
-                      complete: (a,b,c) => {console.log(a,b,c)}
-                    });
-                  }}
-                />
-              )}
 
             </View>
             </View>

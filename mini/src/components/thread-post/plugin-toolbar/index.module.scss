@@ -36,10 +36,6 @@
     }
   }
 
-  .icon-color {
-    color: $icon-color;
-  }
-
   .plugin-icon-container {
     background: $white;
     z-index: 10;
@@ -65,4 +61,8 @@
       align-items: center;
     }
   }
+}
+
+.icon-color {
+  color: $icon-color;
 }
