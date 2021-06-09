@@ -1,6 +1,7 @@
 import React from 'react';
 import LoginPhoneH5Page from '@layout/user/h5/phone-login';
 import { inject } from 'mobx-react';
+import ViewAdapter from '@components/view-adapter';
 
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import HOCWithNoLogin from '@middleware/HOCWithNoLogin';
@@ -9,9 +10,11 @@ import HOCLoginMode from '@middleware/HOCLoginMode';
 @inject('site')
 class LoginPhone extends React.Component {
   render() {
-    const { site } = this.props;
-    const { platform } = site;
-    return <LoginPhoneH5Page />;
+    return <ViewAdapter
+              h5={<LoginPhoneH5Page/>}
+              pc={<LoginPhoneH5Page/>}
+              title={`手机号登录 - ${this.props.site?.siteName}`}
+            />;
   }
 }
 

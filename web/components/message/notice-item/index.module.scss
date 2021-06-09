@@ -107,6 +107,11 @@
       line-height: rem(20);
       cursor: pointer;
 
+      .content-html{
+        overflow: hidden;
+        word-break: break-all;
+      }
+
       :global {
         .qq-emotion {
           width: 20px;
@@ -206,7 +211,7 @@
   .multiple-line {
     @include lamp-clamp(3);
   }
-  
+
   .unset-cursor {
     cursor: unset !important;
   }

@@ -215,10 +215,10 @@ class ThreadPostAction extends ThreadPostStore {
         body: { imageIds },
       };
     }
-    if (video.id) {
+    if (video.id || video.threadVideoId) {
       contentIndexes[THREAD_TYPE.video] = {
         tomId: THREAD_TYPE.video,
-        body: { videoId: video.id },
+        body: { videoId: video.id || video.threadVideoId || '' },
       };
     }
     if (docIds.length > 0) {
