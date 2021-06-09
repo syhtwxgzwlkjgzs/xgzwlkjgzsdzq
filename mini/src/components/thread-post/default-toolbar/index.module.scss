@@ -13,6 +13,9 @@
   .plug-icon {
     margin-right: 24px;
     color: $icon-color;
+    &.active {
+      color: $icon-color-active;
+    }
   }
 
   Text {
