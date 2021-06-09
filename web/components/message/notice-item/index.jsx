@@ -128,7 +128,7 @@ class Index extends Component {
       Router.push({ url: `/thread/${item.threadId}` });
     }
     if (type === 'chat') {
-      Router.push({ url: `/message?page=chat&dialogId=${item.dialogId}&username=${item.username}` });
+      Router.push({ url: `/message?page=chat&dialogId=${item.dialogId}&nickname=${item.username}` });
     }
   };
 
