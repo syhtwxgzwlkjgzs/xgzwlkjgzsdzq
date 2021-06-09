@@ -17,7 +17,9 @@ import {
   JUMP_TO_AUDIT,
   JUMP_TO_HOME_INDEX,
   SITE_CLOSED,
-  JUMP_TO_PAY_SITE
+  JUMP_TO_PAY_SITE,
+  SITE_NO_INSTALL,
+  JUMP_TO_SUPPLEMENTARY
 } from '@common/constants/site';
 
 let globalToast = null;
@@ -155,6 +157,28 @@ http.interceptors.response.use((res) => {
         url = '/forum/partner-invite';
       } else {
         url = '/subPages/forum/partner-invite/index'
+      }
+      Router.replace({
+        url
+      });
+      break;
+    }
+    case SITE_NO_INSTALL: {
+      if (process.env.DISCUZ_ENV === 'web') {
+        url = '/no-install';
+      } else {
+        url = '/subPages/no-install/index'
+      }
+      Router.replace({
+        url
+      });
+      break;
+    }
+    case JUMP_TO_SUPPLEMENTARY: {
+      if (process.env.DISCUZ_ENV === 'web') {
+        url = '/user/supplementary';
+      } else {
+        url = '/subPages/user/supplementary/index';
       }
       Router.replace({
         url

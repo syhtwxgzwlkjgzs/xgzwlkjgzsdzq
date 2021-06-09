@@ -8,7 +8,7 @@ import Router from '@discuzq/sdk/dist/router';
 import Copyright from '@components/copyright';
 
 @observer
-class PCCloseSite extends React.Component {
+class PC500Page extends React.Component {
   constructor(props) {
     super(props);
     this.goBackClickHandle = this.goBackClickHandle.bind(this);
@@ -34,4 +34,4 @@ class PCCloseSite extends React.Component {
 }
 
 
-export default PCCloseSite;
+export default PC500Page;
