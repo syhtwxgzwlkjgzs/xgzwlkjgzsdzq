@@ -25,9 +25,9 @@ class index extends Component {
 
   // 点击屏蔽
   handleChangeShield = (isDeny) => {
-    const { otherId } = getCurrentInstance().router.params;
+    const { id } = getCurrentInstance().router.params;
     if (isDeny) {
-      this.props.user.undenyUser(otherId);
+      this.props.user.undenyUser(id);
       this.props.user.setTargetUserNotBeDenied();
       Toast.success({
         content: '解除屏蔽成功',
@@ -35,7 +35,7 @@ class index extends Component {
         duration: 1000,
       });
     } else {
-      this.props.user.denyUser(otherId);
+      this.props.user.denyUser(id);
       this.props.user.setTargetUserDenied();
       Toast.success({
         content: '屏蔽成功',
@@ -47,14 +47,14 @@ class index extends Component {
 
   // 点击关注
   handleChangeAttention = async (follow) => {
-    const { otherId } = getCurrentInstance().router.params;
-    if (otherId) {
+    const { id } = getCurrentInstance().router.params;
+    if (id) {
       if (follow !== 0) {
-        await this.props.user.cancelFollow({ id: otherId, type: 1 });
-        await this.props.user.getTargetUserInfo(otherId);
+        await this.props.user.cancelFollow({ id: id, type: 1 });
+        await this.props.user.getTargetUserInfo(id);
       } else {
-        await this.props.user.postFollow(otherId);
-        await this.props.user.getTargetUserInfo(otherId);
+        await this.props.user.postFollow(id);
+        await this.props.user.getTargetUserInfo(id);
       }
     }
   };
@@ -68,9 +68,9 @@ class index extends Component {
 
   // 点击粉丝列表
   goToFansList = () => {
-    const { otherId } = getCurrentInstance().router.params;
-    if (otherId) {
-      Router.push({ url: `/subPages/my/fans/index?isOtherPerson=${this.props.isOtherPerson}&otherId=${otherId}` });
+    const { id } = getCurrentInstance().router.params;
+    if (id) {
+      Router.push({ url: `/subPages/my/fans/index?isOtherPerson=${this.props.isOtherPerson}&otherId=${id}` });
     } else {
       Router.push({ url: `/subPages/my/fans/index?isOtherPerson=${this.props.isOtherPerson}` });
     }
@@ -78,9 +78,9 @@ class index extends Component {
 
   // 点击关注列表
   goToFollowsList = () => {
-    const { otherId } = getCurrentInstance().router.params;
-    if (otherId) {
-      Router.push({ url: `/subPages/my/follows/index?isOtherPerson=${this.props.isOtherPerson}&otherId=${otherId}` });
+    const { id } = getCurrentInstance().router.params;
+    if (id) {
+      Router.push({ url: `/subPages/my/follows/index?isOtherPerson=${this.props.isOtherPerson}&otherId=${id}` });
     } else {
       Router.push({ url: `/subPages/my/follows/index?isOtherPerson=${this.props.isOtherPerson}` });
     }
