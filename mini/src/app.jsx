@@ -15,7 +15,8 @@ import {
   JUMP_TO_AUDIT,
   JUMP_TO_HOME_INDEX,
   SITE_CLOSED,
-  JUMP_TO_PAY_SITE
+  JUMP_TO_PAY_SITE,
+  JUMP_TO_SUPPLEMENTARY
 } from '@common/constants/site';
 import './app.scss';
 
@@ -144,6 +145,9 @@ class App extends Component {
         break;
       case JUMP_TO_PAY_SITE:// 到付费加入页面
         Router.redirect({ url: '/subPages/forum/partner-invite/index' });
+        break;
+      case JUMP_TO_SUPPLEMENTARY:// 跳转到扩展字段页
+        Router.redirect({ url: '/subPages/user/supplementary/index' });
         break;
       default: Router.redirect({url: '/subPages/500/index'});
         break;

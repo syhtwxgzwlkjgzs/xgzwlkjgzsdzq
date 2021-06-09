@@ -1,6 +1,7 @@
 import React from 'react';
 import BindPhoneH5Page from '@layout/user/h5/bind-phone';
 import { inject } from 'mobx-react';
+import ViewAdapter from '@components/view-adapter';
 
 import HOCLoginMode from '@middleware/HOCLoginMode';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
@@ -8,7 +9,11 @@ import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 @inject('site')
 class BindPhone extends React.Component {
   render() {
-    return <BindPhoneH5Page />;
+    return <ViewAdapter
+              h5={<BindPhoneH5Page />}
+              pc={<BindPhoneH5Page />}
+              title={`绑定手机号 - ${this.props.site?.siteName}`}
+            />;
   }
 }
 

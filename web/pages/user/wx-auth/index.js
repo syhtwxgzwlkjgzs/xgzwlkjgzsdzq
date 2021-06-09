@@ -5,6 +5,7 @@ import { h5WechatCodeLogin } from '@server';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import HOCLoginMode from '@middleware/HOCLoginMode';
 import { get } from '@common/utils/get';
+import ViewAdapter from '@components/view-adapter';
 import setAccessToken from '../../../../common/utils/set-access-token';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus } from '@common/store/login/util';
 const NEED_BIND_OR_REGISTER_USER = -7016;
@@ -84,7 +85,11 @@ class WeixinAuth extends React.Component {
 
 
   render() {
-    return <></>;
+    return <ViewAdapter
+              h5={<></>}
+              pc={<></>}
+              title={`登录 - ${this.props.site?.siteName}`}
+            />;
   }
 }
 
