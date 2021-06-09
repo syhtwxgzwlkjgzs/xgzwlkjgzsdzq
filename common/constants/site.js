@@ -26,6 +26,7 @@ export const INVALID_TOKEN =  -4002;// token无效
 export const JUMP_TO_404 = -4004; // 资源不存在
 export const NEED_BIND_WEIXIN_FLAG = -8000; // 需要绑定微信
 export const NEED_BIND_PHONE_FLAG = -8001; // 需要绑定手机
+export const SITE_NO_INSTALL = -10001; // 站点未安装
 
 // web端站点加入路由白名单
 export const WEB_SITE_JOIN_WHITE_LIST = [

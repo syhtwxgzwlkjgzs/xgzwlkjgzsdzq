@@ -161,6 +161,17 @@ http.interceptors.response.use((res) => {
       });
       break;
     }
+    case SITE_NO_INSTALL: {
+      if (process.env.DISCUZ_ENV === 'web') {
+        url = '/no-install';
+      } else {
+        url = '/subPages/no-install/index'
+      }
+      Router.replace({
+        url
+      });
+      break;
+    }
     default:  // 200 状态码
       if (status === 200) {
         return Promise.resolve({

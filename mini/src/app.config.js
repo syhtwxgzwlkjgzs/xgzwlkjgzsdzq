@@ -13,6 +13,7 @@ const config = {
       pages: [
         '404/index',
         '500/index',
+        'no-install/index',
         'close/index',
         'create-card/index',
         'join/index',
