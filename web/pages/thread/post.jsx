@@ -340,8 +340,9 @@ class PostPage extends React.Component {
   }
 
   checkFileType = (file, supportType) => {
-    const { type } = file;
-    const prefix = (type || '')?.toLowerCase()?.split('/')[1];
+    const { name } = file;
+    const arr = (name || '')?.toLowerCase()?.split('.');
+    const prefix = arr[arr.length - 1];
     if (supportType.indexOf(prefix) === -1) return false;
     return true;
   };
@@ -373,8 +374,9 @@ class PostPage extends React.Component {
         if (!isLegalSize) isAllLegalSize = false;
       }
     }
+    const supportExt = type === THREAD_TYPE.image ? supportImgExt : supportFileExt;
     const name = type === THREAD_TYPE.file ? '附件' : '图片';
-    !isAllLegalType && Toast.info({ content: `仅支持${supportImgExt}类型的${name}` });
+    !isAllLegalType && Toast.info({ content: `仅支持${supportExt}类型的${name}` });
     !isAllLegalSize && Toast.info({ content: `大小在0到${supportMaxSize}MB之间` });
     if (type === THREAD_TYPE.file) this.fileList = [...cloneList];
     if (type === THREAD_TYPE.image) this.imageList = [...cloneList];
