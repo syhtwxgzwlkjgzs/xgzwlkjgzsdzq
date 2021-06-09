@@ -11,7 +11,7 @@ import replaceStringInRegex from '@common/utils/replace-string-in-regex';
 */
 export default function fuzzyCalcContentLength(content, lengthInLine = 50) {
     content = '' + content;
-    if (!content || content === '') return;
+    if (!content || content === '') return 0;
 
     let _content = content;
 
@@ -31,6 +31,8 @@ export default function fuzzyCalcContentLength(content, lengthInLine = 50) {
 
     // 替换所有标签
     newContent = replaceStringInRegex(newContent, "tags", '');
+
+    if(!newContent || newContent === '') return 0;
 
     const countReturns = (newContent.match(/\n/g) || []).length; // 匹配回车符
     let totalCount = newContent.length +

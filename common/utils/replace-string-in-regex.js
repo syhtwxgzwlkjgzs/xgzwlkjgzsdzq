@@ -1,9 +1,11 @@
 export default function replaceStringInRegex(text, type, newSubstr) {
 
+  if(!text) return text;
   if (typeof text !== "string" ||
       typeof type !== "string" ||
       typeof newSubstr !== "string") {
-    throw "变量类型错误。";
+    console.error("变量类型错误。");
+    return text;
   }
 
   let newText = text;
