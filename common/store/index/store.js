@@ -17,7 +17,6 @@ class IndexStore {
   @computed get categoriesNames () {
     const categoriesNoAll = (this.categories || []).filter(item => item.name !== '全部');
     const nameArr = [];
-    console.log(categoriesNoAll);
     categoriesNoAll.forEach((item) => {
       nameArr.push({
         pid: item.pid,
