@@ -510,12 +510,13 @@ class PostPage extends React.Component {
     //   return;
     // }
     if (isDraft) {
-      const { contentText } = postData;
-      if (contentText === '') {
-        return Toast.info({ content: '内容不能为空' });
-      } else {
-        this.setPostData({ draft: 1 });
-      }
+      // const { contentText } = postData;
+      // if (contentText === '') {
+      //   return Toast.info({ content: '内容不能为空' });
+      // } else {
+      //   this.setPostData({ draft: 1 });
+      // }
+      this.setPostData({ draft: 1 });
     } else {
       this.setPostData({ draft: 0 });
     }
@@ -603,9 +604,10 @@ class PostPage extends React.Component {
         this.props.router.replace(`/thread/${data.threadId}`);
       } else {
         const { jumpLink } = this.state;
-        jumpLink ? Router.push({ url: jumpLink }) : Router.back();
-
-      };
+        if (!this.props.site.isPC) {
+          jumpLink ? Router.push({ url: jumpLink }) : Router.back();
+        }
+      }
       return true;
     }
     Toast.error({ content: msg });
