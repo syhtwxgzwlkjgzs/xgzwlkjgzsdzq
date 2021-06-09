@@ -4,6 +4,8 @@ import IndexPCPage from '@layout/500/pc';
 import IndexH5Page from '@layout/500/h5';
 import getPlatform from '@common/utils/get-platform';
 import isServer from '@common/utils/is-server';
+import ViewAdapter from '@components/view-adapter';
+
 @inject('site')
 @observer
 class Custom500 extends React.Component {
@@ -16,16 +18,11 @@ class Custom500 extends React.Component {
     this.props.site.setPlatform(getPlatform(window.navigator.userAgent));
   }
   render() {
-    const { platform } = this.props.site;
-    if ( platform === 'static' ) return null;
-
-    if (platform === 'pc') {
-      return (
-        <IndexPCPage/>
-      );
-    }
-    return <IndexH5Page/>;
-
+    return <ViewAdapter
+      h5={<IndexH5Page />}
+      pc={<IndexPCPage />}
+      title='服务器错误'
+    />;
   }
 }
 

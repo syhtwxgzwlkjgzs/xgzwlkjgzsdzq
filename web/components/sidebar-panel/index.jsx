@@ -35,7 +35,7 @@ const WrapperContent = (props) => {
 
   const pcStyle = useMemo(() => {
     if (platform === 'pc') {
-      const width = type === 'small' ? styles.small : styles.normal;
+      const width = type === 'small' ? styles.small : type === 'large' ? styles.large : styles.normal;
       return `${styles.containerPC} ${width}`;
     }
     return styles.containerH5;
@@ -67,7 +67,7 @@ const PlaneContent = (props) => {
 
   const pcStyle = useMemo(() => {
     if (platform === 'pc') {
-      const width = type === 'small' ? styles.small : styles.normal;
+      const width = type === 'small' ? styles.small : type === 'large' ? styles.large : styles.normal;
       return `${styles.containerPC} ${width}`;
     }
     return styles.containerH5;
