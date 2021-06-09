@@ -80,8 +80,8 @@ class Index extends React.Component {
         {
           recommendsStatus === 'none' && recommends?.filter((_, index) => index < filterCount).map((item, index) => {
             let titleString = item?.title || '';
-            titleString = titleString?.replaceAll(/<img[\s]+[^<>]*class=([^<>]+qq\-emotion)(?:\"|\')[^<>]*>/g, '[表情]');
-            titleString = titleString?.replaceAll(/<img[\s]+[^<>]*>|<img[\s]+[^<>]*/g, "[图片]");
+            titleString = titleString?.replace(/<img[\s]+[^<>]*class=([^<>]+qq\-emotion)(?:\"|\')[^<>]*>/g, '[表情]');
+            titleString = titleString?.replace(/<img[\s]+[^<>]*>|<img[\s]+[^<>]*/g, "[图片]");
             return (
               <div key={index} className={style.recommendBox} onClick={() => {this.recommendDetails(item)}}>
                 <div className={style.recommendTitle}>
