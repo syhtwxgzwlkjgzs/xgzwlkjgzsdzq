@@ -41,12 +41,13 @@ const Index = ({
   const downloader = new Downloader();
   const [downloading, setDownloading] =
         useState(Array.from({length: attachments.length}, () => false));
-  const [errorMsg, setErrorMsg] = useState("");
-  const [successMsg, setSuccessMsg] = useState("");
 
   const onDownLoad = (item, index) => {
     // 下载中
-    if(downloading?.length && downloading[index]) return;
+    if(downloading?.length && downloading[index]) {
+      Toast.info({content: "下载中，请稍后"});
+      return;
+    }
     if(!item || !threadId) return;
 
     if (!isPay) {
@@ -69,16 +70,10 @@ const Index = ({
           Taro.openDocument({
             filePath: res.tempFilePath,
             success: function (res) {
-              setSuccessMsg("下载成功");
-              setTimeout(() => {
-                setSuccessMsg("");
-              }, 3000);
+              Toast.info({content: "下载成功"});
             },
             fail: function (error) {
-              setErrorMsg("小程序暂不支持下载此类文件\n请点击“链接”获取下载链接");
-              setTimeout(() => {
-                setErrorMsg("");
-              }, 3000);
+              Toast.info({ content: "小程序暂不支持下载此类文件，请点击“链接”复制下载链接" });
               console.error(error.errMsg)
             },
             complete: function () {
@@ -86,23 +81,20 @@ const Index = ({
           })
         },
         fail: function (error) {
-          setErrorMsg(error.errMsg);
-          setTimeout(() => {
-            setErrorMsg("");
-          }, 3000);
+          if(error?.errMsg.indexOf("domain list") !== -1) {
+            Toast.info({ content: "下载链接不在域名列表中" });
+          } else if(error?.errMsg.indexOf("invalid url") !== -1) {
+            Toast.info({ content: "下载链接无效" });
+          } else {
+            Toast.info({ content: error.errMsg });
+          }
           console.error(error.errMsg)
         },
         complete: function () {
-          setTimeout(() => {
-            setErrorMsg("");
-            setSuccessMsg("");
-          }, 3000);
           downloading[index] = false;
           setDownloading([...downloading]);
         }
       })
-
-
     } else {
       onPay();
     }
@@ -123,19 +115,14 @@ const Index = ({
               })
             }
           })
-        } else {
-          setErrorMsg(res?.msg);
+        } else if(res) {
+          Toast.info({ content: res.msg });
           console.error(res);
         }
       }).catch((error) => {
-        setErrorMsg(error.errMsg);
+        Toast.info({ content: error.errMsg });
         console.error(error);
         return;
-      }).finally(() => {
-        setTimeout(() => {
-          setErrorMsg("");
-          setSuccessMsg("");
-        }, 3000);
       });
 
     } else {
@@ -157,15 +144,6 @@ const Index = ({
     }
     return 'DOCOutlined';
   };
-
-  useEffect(() => {
-    if(errorMsg !== '' || successMsg !== '') {
-      setTimeout(() => {
-        setErrorMsg("");
-        setSuccessMsg("");
-      }, 3000);
-    }
-  }, [errorMsg])
 
   const Normal = ({ item, index, type }) => {
     const iconName = handleIcon(type);
@@ -206,18 +184,6 @@ const Index = ({
 
   return (
     <View>
-        { errorMsg !== "" && 
-          <View className={[styles.msgWrapper, styles.errorMsgWrapper]}>
-            <Icon className={styles.tipsIcon} size={20} name={'WrongOutlined'}></Icon>
-            <Text className={styles.errorMessage}>{errorMsg}</Text>
-          </View>
-        }
-        { successMsg !== "" && 
-          <View className={[styles.msgWrapper, styles.successMsgWrapper]}>
-            <Icon className={styles.tipsIcon} size={20} name={'CheckOutlined'}></Icon>
-            <Text className={styles.successMessage}>{successMsg}</Text>
-          </View>
-        }
         {
           attachments.map((item, index) => {
             // 获取文件类型
