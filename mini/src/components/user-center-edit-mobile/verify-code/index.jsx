@@ -3,6 +3,7 @@ import Button from '@discuzq/design/dist/components/button/index';
 import styles from './index.module.scss';
 import { View } from '@tarojs/components';
 
+// TODO: 验证码组件实现的有问题，需要重写
 export default class VerificationCode extends React.Component {
   constructor(props) {
     super(props);
@@ -34,6 +35,9 @@ export default class VerificationCode extends React.Component {
 
   setTimeChecker = () => {
     const { initTimeValue } = this.state;
+    if (this.interval !== null) {
+      clearInterval(this.interval);
+    }
     this.interval = setInterval(() => {
       const { initTime } = this.state;
       this.setState({
@@ -41,14 +45,14 @@ export default class VerificationCode extends React.Component {
         initTimeText: initTime - 1,
         buttonDisabled: true,
       });
-      if (initTime === 0) {
+      if (initTime <= 0) {
         this.setState({
           initTime: initTimeValue,
           initTimeText: '重新获取',
           buttonDisabled: false,
           initTimeValue: null
         });
-        if (this.interval != null) {
+        if (this.interval !== null) {
           clearInterval(this.interval);
         }
       }

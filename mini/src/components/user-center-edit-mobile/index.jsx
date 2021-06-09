@@ -224,6 +224,7 @@ class index extends Component {
           this.setState({
             initTimeValue: res.interval,
           });
+          this.props.clearCaptchaData();
           if (calback && typeof calback === 'function') calback();
         })
         .catch((err) => {
@@ -235,6 +236,7 @@ class index extends Component {
           this.setState({
             bindMobile: null,
           });
+          this.props.clearCaptchaData();
           if (calback && typeof calback === 'function') calback(err);
         });
     }
