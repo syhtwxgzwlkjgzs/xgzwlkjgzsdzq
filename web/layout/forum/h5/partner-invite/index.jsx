@@ -8,7 +8,7 @@ import { Button, Toast, Avatar, Spin } from '@discuzq/design';
 import { get } from '@common/utils/get';
 import PopularContents from '../../../search/h5/components/popular-contents';
 import SiteInfo from './site-info';
-import { inviteDetail } from '@server';
+import { readUser } from '@server';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import PayBox from '@components/payBox';
 import { simpleRequest } from '@common/utils/simple-request';
@@ -58,16 +58,17 @@ class PartnerInviteH5Page extends React.Component {
       const threadList = await search.getThreadList();
       forum.setThreadsPageData(threadList);
 
-      const inviteResp = await inviteDetail({
+      const inviteResp = await readUser({
         params: {
-          code: inviteCode,
+          pid: inviteCode.length === 32 ? 1 : inviteCode,
         },
       });
-      const nickname = get(inviteResp, 'data.user.nickname', '');
-      const avatar = get(inviteResp, 'data.user.avatar', '');
+
+      const nickname = get(inviteResp, 'data.nickname', '');
+      const avatar = get(inviteResp, 'data.avatarUrl', '');
 
       this.setState({
-        invitorName: nickname,
+        invitorName: inviteCode.length === 32 ? '站长' : nickname,
         invitorAvatar: avatar,
       });
 
