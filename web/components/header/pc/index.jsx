@@ -12,6 +12,7 @@ import UnreadRedDot from '@components/unread-red-dot';
 @inject('site')
 @inject('user')
 @inject('message')
+@inject('forum')
 @observer
 class Header extends React.Component {
   timeoutId = null;
@@ -38,10 +39,15 @@ class Header extends React.Component {
     }, 20000);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { message: { readUnreadCount } } = this.props;
     readUnreadCount();
     this.updateUnreadMessage();
+    try {
+      await this.props.forum.setOtherPermissions();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   // 卸载时去除定时器
@@ -173,8 +179,8 @@ class Header extends React.Component {
   }
 
   render() {
-    const { site, user, message: { totalUnread,  } } = this.props;
-
+    const { site, user, message: { totalUnread,  }, forum } = this.props;
+    const { canViewThreads } = forum;
     return (
       <div className={styles.header}>
         <div className={styles.headerFixedBox}>
@@ -216,16 +222,20 @@ class Header extends React.Component {
                   </UnreadRedDot>
                   <p className={styles.iconText}>消息</p>
                 </div>
-                <div className={styles.iconItem} onClick={() => this.handleRouter('/search')}>
-                  <Icon
-                    onClick={() => {
-                      this.iconClickHandle('home');
-                    }}
-                    name="FindOutlined"
-                    size={17}
-                  />
-                  <p className={styles.iconText}>发现</p>
-                </div>
+                {
+                  canViewThreads ?
+                  <div className={styles.iconItem} onClick={() => this.handleRouter('/search')}>
+                    <Icon
+                      onClick={() => {
+                        this.iconClickHandle('home');
+                      }}
+                      name="FindOutlined"
+                      size={17}
+                    />
+                    <p className={styles.iconText}>发现</p>
+                  </div>
+                 : <></>
+                }
               </div>
               <div className={styles.border}></div>
               {this.renderUserInfo()}

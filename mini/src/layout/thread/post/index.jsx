@@ -193,6 +193,7 @@ class Index extends Component {
 
   // 点击发帖插件时回调，如上传图片、视频、附件或艾特、话题等
   handlePluginClick(item) {
+    console.log(`item`, item)
     const { postData } = this.props.threadPost;
     // 匹配附件、图片、语音上传
     this.setState({
@@ -570,7 +571,8 @@ class Index extends Component {
       this.setState({ isFirstFocus: false });
     }
     this.setState({
-      showEmoji: false
+      showEmoji: false,
+      operationType: 0,
     });
   }
 
@@ -647,28 +649,29 @@ class Index extends Component {
           {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
           <View className={styles['content']} style={contentStyle}>
             <View id="thread-post-content">
-            <Title
-              value={postData.title}
-              show={isShowTitle}
-              onChange={this.onTitleChange}
-              onBlur={this.hideKeyboard}
-              onFocus={() => {
-                this.setState({
-                  showEmoji: false
-                });
-              }}
-            />
-            <Content
-              value={postData.contentText}
-              maxLength={maxLength}
-              onChange={this.onContentChange}
-              onFocus={this.onContentFocus}
-              onBlur={(e) => {
-                console.log('set', e.detail.cursor);
-                setCursorPosition(e.detail.cursor);
-                this.hideKeyboard();
-              }}
-            />
+              <Title
+                value={postData.title}
+                show={isShowTitle}
+                onChange={this.onTitleChange}
+                onBlur={this.hideKeyboard}
+                onFocus={() => {
+                  this.setState({
+                    showEmoji: false,
+                    operationType: 0,
+                  });
+                }}
+              />
+              <Content
+                value={postData.contentText}
+                maxLength={maxLength}
+                onChange={this.onContentChange}
+                onFocus={this.onContentFocus}
+                onBlur={(e) => {
+                  console.log('set', e.detail.cursor);
+                  setCursorPosition(e.detail.cursor);
+                  this.hideKeyboard();
+                }}
+              />
 
             <View className={styles['plugin']}>
 
@@ -770,7 +773,14 @@ class Index extends Component {
               onCategoryClick={() => {
                 this.setState({
                   showClassifyPopup: true,
-                  showEmoji: false
+                  showEmoji: false,
+                  operationType: 0
+                });
+              }}
+              onSetplugShow={() => {
+                showEmoji && this.setState({
+                  showEmoji: false,
+                  operationType: 0
                 });
               }}
             />
@@ -778,7 +788,6 @@ class Index extends Component {
               operationType={operationType}
               permissions={permissions}
               onPluginClick={(item) => {
-                console.log(item);
                 this.handlePluginClick(item);
               }}
               onSubmit={() => this.handleSubmit()}
@@ -788,7 +797,8 @@ class Index extends Component {
               show={bottomHeight === 0 && showEmoji}
               onHide={() => {
                 this.setState({
-                  showEmoji: false
+                  showEmoji: false,
+                  operationType: 0
                 });
               }}
               onClick={(emoji) => {

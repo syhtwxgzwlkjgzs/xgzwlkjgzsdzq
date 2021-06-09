@@ -12,7 +12,7 @@ import { Units } from '@components/common';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 
 const Index = inject('user', 'threadPost')(observer((props) => {
-  const { threadPost, clickCb, onCategoryClick, user, operationType } = props;
+  const { threadPost, clickCb, onCategoryClick, onSetplugShow, user, operationType } = props;
 
   // 控制插件icon的显示/隐藏
   const [plugShow, setplugShow] = useState(false);
@@ -28,6 +28,20 @@ const Index = inject('user', 'threadPost')(observer((props) => {
     },
     [threadPost.categorySelected],
   )
+
+  const getIconCls = (item) => {
+    const cls = styles['plug-icon'];
+    const activeCls = `${styles['plug-icon']} ${styles.active}`;
+    if (item.type === operationType && item.type !== THREAD_TYPE.anonymity) return activeCls;
+    const { postData } = threadPost;
+    if (item.type === THREAD_TYPE.reward && postData?.rewardQa?.value) return activeCls;
+    if (item.type === THREAD_TYPE.goods && postData?.product?.id) return activeCls;
+    if (item.type === THREAD_TYPE.voice && postData?.audio?.mediaUrl) return activeCls;
+    if (item.type === THREAD_TYPE.video && postData?.video?.thumbUrl) return activeCls;
+    if (item.type === THREAD_TYPE.image && Object.keys(postData?.images || []).length > 0) return activeCls;
+    if (item.type === THREAD_TYPE.anonymity && postData?.anonymous) return activeCls;
+    return cls;
+  };
 
   // 插件icon元素
   const { threadExtendPermissions: tep } = user;
@@ -47,15 +61,14 @@ const Index = inject('user', 'threadPost')(observer((props) => {
       return (
         <Icon
           key={index}
-          className={styles['plug-icon']}
+          className={getIconCls(item)}
           onClick={() => {
             setplugShow(false);
-            // setCurrentplug(item);
             clickCb(item);
           }}
           name={item.name}
-          color={((item.type === operationType && item.type !== THREAD_TYPE.anonymity)
-            || (threadPost.postData.anonymous && item.type === THREAD_TYPE.anonymity)) && item.active}
+          // color={((item.type === operationType && item.type !== THREAD_TYPE.anonymity)
+          //   || (threadPost.postData.anonymous && item.type === THREAD_TYPE.anonymity)) && item.active}
           size='20'
         />
       );
@@ -66,12 +79,16 @@ const Index = inject('user', 'threadPost')(observer((props) => {
         <View className={styles['plugin-icon']}>
           {plugs}
         </View>
-        <View className={styles['switcher']} onClick={() => {setplugShow(false);}}>
+
+        <View className={styles['switcher']} onClick={() => {
+          setplugShow(false);
+          onSetplugShow();
+        }}>
           <Icon name="MoreBOutlined" size='20' />
         </View>
       </View>
     );
-  }, [tep, currentplug, operationType, threadPost.postData.anonymous])
+  }, [tep, currentplug, operationType, threadPost.postData])
 
   useEffect(() => {
     if (!operationType) {
@@ -100,10 +117,13 @@ const Index = inject('user', 'threadPost')(observer((props) => {
   return (
     <View className={styles['container']}>
       <View className={styles['category']}>
-        { plugShow ? plug : category }
+        {plugShow ? plug : category}
       </View>
-      <View onClick={() => {setplugShow(!plugShow);}}>
-        { (!plugShow) && (<Icon className={styles['icon-color']} name={currentplug.name || canInsertplugsin[0]?.name} size='20' />) }
+      <View onClick={() => {
+        setplugShow(!plugShow);
+        onSetplugShow();
+      }}>
+        {(!plugShow) && (<Icon className={styles['icon-color']} name={currentplug.name || canInsertplugsin[0]?.name} size='20' />)}
         <Icon name="MoreBOutlined" size='20' />
       </View>
     </View>
