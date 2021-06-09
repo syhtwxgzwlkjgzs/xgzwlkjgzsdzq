@@ -169,12 +169,12 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
             <Row className={`${styles.wrapper} ${styles.childrenWrapper}`} gutter={10}>
               {
                 subData.map((item, index) => (
-                  <Col span={3}>
+                  <Col span={ item.name.length < 6 ? 3 : item.name.length === 6 ? 4 : 5 }>
                     <Text
                       className={`${firstChildren === item.pid ? styles.childrenActive : ''} ${styles.childrenSpan}`}
                       key={`${index}-${index}`}
                       onClick={() => onClickSecond(item.pid, type)}>
-                        {item.name}
+                        {item.name.length > 6 ? item.name.substr(0, 6) : item.name}
                     </Text>
                   </Col>
                 ))
