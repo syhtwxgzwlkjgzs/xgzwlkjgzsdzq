@@ -11,35 +11,35 @@
 */
 export default function fuzzyCalcContentLength(content, lengthInLine = 50) {
     content = '' + content;
-    if (!content || content === '') return 0;
+    if (!content || content === '') return;
 
     const EMOJ_SIZE = 1.5;
     const IMG_SIZE = lengthInLine * 4;
-    const countImgs = (content?.match(/<img/g) || []).length;
-    const countEmojs = (content?.match(/qq-emotion/g) || []).length;
+    const countImgs = (content.match(/<img/g) || []).length;
+    const countEmojs = (content.match(/qq-emotion/g) || []).length;
 
     // 替换表情标签
-    let newContent = content?.replaceAll(/<img[\s]+[^<>]*class=([^<>]+qq\-emotion)(?:\"|\')[^<>]*>/g, '');
+    let newContent = content.replace(/<img[\s]+[^<>]*class=([^<>]+qq\-emotion)(?:\"|\')[^<>]*>/g, '');
     // 替换图片标签
-    newContent = newContent?.replaceAll(/<img[\s]+[^<>]*>|<img[\s]+[^<>]*/g, '');
+    newContent = newContent.replace(/<img[\s]+[^<>]*>|<img[\s]+[^<>]*/g, '');
     // <br>换成'\n'
-    newContent = newContent?.replaceAll(/<br[^<>]*>/g, '\n');
+    newContent = newContent.replace(/<br[^<>]*>/g, '\n');
     // 小程序<view class="dzq-br">换成'\n'
-    newContent = newContent?.replaceAll(/<view[\s]+class=([^\/]+dzq\-br)(?:\"|\')[^\/]*<\/view>/g, '\n');
+    newContent = newContent.replace(/<view[\s]+class=([^\/]+dzq\-br)(?:\"|\')[^\/]*<\/view>/g, '\n');
     // 替换所有标签
-    newContent = newContent?.replaceAll(/<[^<>]*>|<\/[^<>]*>/g, '');
+    newContent = newContent.replace(/<[^<>]*>|<\/[^<>]*>/g, '');
 
-    const countReturns = (newContent?.match(/\n/g) || []).length; // 匹配回车符
-    let totalCount = newContent?.length +
+    const countReturns = (newContent.match(/\n/g) || []).length; // 匹配回车符
+    let totalCount = newContent.length +
         EMOJ_SIZE * countEmojs + // 表情大小
         IMG_SIZE * (countImgs - countEmojs > 0 ? countImgs - countEmojs : 0); // 加上图片大小
 
     for(let i = 0; i < countReturns; i++) {
-        if(newContent?.indexOf('\n') > 0) {
-            const restInLine = lengthInLine - newContent?.indexOf('\n') > 0 ? // 防止长文章最后一个字是回车
-                                lengthInLine - newContent?.indexOf('\n') : 0;
+        if(newContent.indexOf('\n') > 0) {
+            const restInLine = lengthInLine - newContent.indexOf('\n') > 0 ? // 防止长文章最后一个字是回车
+                                lengthInLine - newContent.indexOf('\n') : 0;
             totalCount += restInLine;
-            newContent = newContent?.replace(newContent?.indexOf('\n'), '');
+            newContent = newContent.replace(newContent.indexOf('\n'), '');
         }
     }
     return parseInt(totalCount);
