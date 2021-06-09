@@ -59,7 +59,7 @@ class ForumStore {
     const total = get(res, 'totalCount', 0);
     const totalPage = get(res, 'totalPage', 0);
     const currentPage = get(res, 'currentPage', 0);
-    this.usersPageData = this.usersPageData ? this.usersPageData?.concat(data) : data;
+    this.usersPageData = data;
     this.userTotal = total;
     this.userPage = currentPage;
     this.isNoMore = currentPage >= totalPage;
