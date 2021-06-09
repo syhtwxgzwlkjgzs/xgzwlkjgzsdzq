@@ -170,6 +170,7 @@ class Index extends Component {
           {/* 详情 */}
           <div
             className={classNames(styles.detail, {
+              [styles['detail-pc']]: isPC,
               [styles['detail-chat']]: type === 'chat',
               [styles['detail-thread']]: type === 'thread',
               [styles['detail-financial']]: type === 'financial',
@@ -224,6 +225,18 @@ class Index extends Component {
                   dangerouslySetInnerHTML={{ __html: this.parseHTML() }}
                 />
               )}
+              {/* PC删除按钮 */}
+              {isPC && (
+                <div
+                  className={styles.delete}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onBtnClick(item);
+                  }}
+                >
+                  <Icon className={styles.icon} name="DeleteOutlined" size={14} />
+                </div>
+              )}
             </div>
 
             {/* 底部 */}
@@ -232,18 +245,7 @@ class Index extends Component {
             )}
           </div>
         </div>
-        {/* PC删除 */}
-        {isPC && (
-          <div
-            className={styles.delete}
-            onClick={(e) => {
-              e.stopPropagation();
-              onBtnClick(item);
-            }}
-          >
-            <Icon className={styles.icon} name="DeleteOutlined" size={14} />
-          </div>
-        )}
+
       </div>
     );
   }
