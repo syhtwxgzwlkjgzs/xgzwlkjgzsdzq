@@ -40,6 +40,12 @@ class PartnerInviteH5Page extends React.Component {
   async componentDidMount() {
     try {
       const { forum, search, invite } = this.props;
+
+      // 获取url上的inviteCode
+      const { params } = getCurrentInstance().router;
+      const { inviteCode } = params;
+      if (inviteCode) invite.setInviteCode(inviteCode);
+
       const usersList = await simpleRequest('readUsersList', {
         params: {
           filter: {
@@ -48,13 +54,6 @@ class PartnerInviteH5Page extends React.Component {
         },
       });
       const threadList = await search.getThreadList();
-
-      // 获取url上的inviteCode
-      const { params } = getCurrentInstance().router;
-      const { inviteCode } = params;
-
-      if (inviteCode) invite.setInviteCode(inviteCode);
-
       const inviteResp = await inviteDetail({
         params: {
           code: inviteCode,
