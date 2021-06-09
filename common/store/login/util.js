@@ -61,7 +61,6 @@ const checkCompleteUserInfo = (resp) => {
   setAccessToken({
     accessToken,
   });
-
   if (isMissRequireInfo && isMissNickname) {
     throw COMMON_LOGIN_STORE_ERRORS.NEED_ALL_INFO;
   }
