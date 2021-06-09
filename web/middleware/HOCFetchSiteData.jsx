@@ -19,7 +19,8 @@ import {
   JUMP_TO_AUDIT,
   JUMP_TO_HOME_INDEX,
   SITE_CLOSED,
-  JUMP_TO_PAY_SITE
+  JUMP_TO_PAY_SITE,
+  JUMP_TO_SUPPLEMENTARY
 } from '@common/constants/site';
 
 // 获取全站数据
@@ -190,6 +191,9 @@ export default function HOCFetchSiteData(Component) {
           break;
         case JUMP_TO_AUDIT:// 到审核页
           Router.redirect({ url: '/user/status?statusCode=2' });
+          break;
+        case JUMP_TO_SUPPLEMENTARY:// 跳转到扩展字段页
+          Router.redirect({ url: '/user/supplementary' });
           break;
         case JUMP_TO_HOME_INDEX:// 到首页
           Router.redirect({ url: '/' });

@@ -11,7 +11,6 @@ import SiteInfo from './site-info';
 import { readUser } from '@server';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import PayBox from '@components/payBox';
-import { simpleRequest } from '@common/utils/simple-request';
 import { numberFormat } from '@common/utils/number-format';
 import { getSiteUpdateTime } from '@common/utils/get-site-uptade-time';
 import PartnerInviteWrap from './partner-invite-wrap';
@@ -37,26 +36,10 @@ class PartnerInviteH5Page extends React.Component {
     };
   }
   async componentDidMount() {
+    const { forum, router, invite } = this.props;
     try {
-      const { forum, router, search, invite, site } = this.props;
-      const { platform } = site;
-      const perPage = platform === 'pc' ? 5 : 20;
-
       const inviteCode = invite.getInviteCode(router);
       if (inviteCode) invite.setInviteCode(inviteCode);
-
-      const usersList = await simpleRequest('readUsersList', {
-        params: {
-          perPage,
-          filter: {
-            hot: 1,
-          },
-        },
-      });
-      forum.setUsersPageData(usersList);
-
-      const threadList = await search.getThreadList();
-      forum.setThreadsPageData(threadList);
 
       const inviteResp = await readUser({
         params: {
@@ -146,9 +129,11 @@ class PartnerInviteH5Page extends React.Component {
                     <span className={layout.site_status_label}>更新</span>
                     <span
                       className={layout.site_status_item}
-                      title={(updataTime && getSiteUpdateTime(updataTime)) || '--'}
+                      // title={(updataTime && getSiteUpdateTime(updataTime)) || '--'}
                     >
-                      {(updataTime && getSiteUpdateTime(updataTime)) || '--'}
+                      {/* TODO：和产品确认，暂时写死 */}
+                      刚刚
+                      {/* {(updataTime && getSiteUpdateTime(updataTime)) || '--'} */}
                     </span>
                 </div>
                 <div className={layout.site_status_list}>
@@ -182,7 +167,7 @@ class PartnerInviteH5Page extends React.Component {
                     image={ invitorAvatar }/>
                   <span className={layout.pc_bottom_text}>
                     <span>{ invitorName } 邀请您加入站点</span>
-                    {siteMode === 'pay' ? <span>，可获得返现 ¥{((10 - siteMasterScale) * sitePrice / 10).toFixed(2)}</span> : ''}
+                    {/* {siteMode === 'pay' ? <span>，可获得返现 ¥{((10 - siteMasterScale) * sitePrice / 10).toFixed(2)}</span> : ''} */}
                   </span>
               </div>
               : <></>
@@ -264,7 +249,7 @@ class PartnerInviteH5Page extends React.Component {
                             image={ invitorAvatar }/>
                           <span className={layout.bottom_tips_text}>
                             <span>{ invitorName } 邀请您加入站点</span>
-                            {siteMode === 'pay' ? <span>，可获得返现 ¥{((10 - siteMasterScale) * sitePrice / 10).toFixed(2)}</span> : ''}
+                            {/* {siteMode === 'pay' ? <span>，可获得返现 ¥{((10 - siteMasterScale) * sitePrice / 10).toFixed(2)}</span> : ''} */}
                           </span>
                           <span className={layout.bottom_tips_arrows}></span>
                       </div>
