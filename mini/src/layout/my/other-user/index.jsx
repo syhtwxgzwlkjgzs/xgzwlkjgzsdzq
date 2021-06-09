@@ -10,6 +10,7 @@ import Router from '@discuzq/sdk/dist/router';
 import { View, Text } from '@tarojs/components';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
 import SectionTitle from '@components/section-title'
+import BottomView from '@components/list/BottomView'
 
 @inject('site')
 @inject('user')
@@ -69,11 +70,7 @@ class H5OthersPage extends React.Component {
         noMore={targetUserThreadsTotalPage < targetUserThreadsPage}
       >
         <View className={styles.mobileLayout}>
-          {this.state.fetchUserInfoLoading && (
-            <View className={styles.loadingSpin}>
-              <Spin type="spinner">加载中...</Spin>
-            </View>
-          )}
+          {this.state.fetchUserInfoLoading && <BottomView isBox loadingText='加载中...' />}
           {!this.state.fetchUserInfoLoading && (
             <>
               <UserCenterHeaderImage isOtherPerson={true} />

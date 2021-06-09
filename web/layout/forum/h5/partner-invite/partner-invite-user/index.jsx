@@ -3,7 +3,8 @@ import { inject, observer } from 'mobx-react';
 import '@discuzq/design/dist/styles/index.scss';
 import SectionTitle from '@components/section-title';
 import NoData from '@components/no-data';
-import { Spin } from '@discuzq/design';
+import { simpleRequest } from '@common/utils/simple-request';
+import { Spin, Toast } from '@discuzq/design';
 import ActiveUsers from '../../../../search/h5/components/active-users';
 import ActiveUsersMore from '../../../../search/pc/components/active-users-more';
 import layout from './index.module.scss';
@@ -16,10 +17,41 @@ import layout from './index.module.scss';
 @inject('invite')
 @observer
 class PartnerInviteUser extends React.Component {
+  constructor (props) {
+    super(props);
+    this.state = {
+      isLoading: true
+    }
+  }
+  async componentDidMount() {
+    const { forum, site } = this.props;
+    const { platform } = site;
+    try {
+      const perPage = platform === 'pc' ? 5 : 20;
+
+      const usersList = await simpleRequest('readUsersList', {
+        params: {
+          perPage,
+          filter: {
+            hot: 1,
+          },
+        },
+      });
+      forum.setUsersPageData(usersList);
+      this.setState({isLoading: false})
+    } catch (e) {
+      Toast.error({
+        content: e?.Message || e,
+        hasMask: false,
+        duration: 1000,
+      });
+    }
+  }
   render() {
     const { site, forum } = this.props;
     const { platform } = site;
-    const { usersPageData = [], threadsPageData = [], isLoading } = forum;
+    const { isLoading } = this.state;
+    const { usersPageData = [], threadsPageData = [] } = forum;
     if (platform === 'h5') {
       return (
         <div className={layout.users}>
@@ -30,7 +62,7 @@ class PartnerInviteUser extends React.Component {
               : <></>
           }
           {
-            !isLoading && !threadsPageData?.length
+            !isLoading && !usersPageData?.length
               ? <NoData />
               : <></>
           }
@@ -53,7 +85,7 @@ class PartnerInviteUser extends React.Component {
             : <></>
         }
         {
-          !isLoading && !threadsPageData?.length
+          !isLoading && !usersPageData?.length
             ? <NoData />
             : <></>
         }

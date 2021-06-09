@@ -27,7 +27,7 @@ class Index extends React.Component {
           </View>}
     
         {pageData?.map((item, index) => (
-          <ThreadContent key={index} data={item} />
+          <ThreadContent isShowIcon key={index} data={item} />
         ))}
       </BaseLayout>
     );
