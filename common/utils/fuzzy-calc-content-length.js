@@ -1,4 +1,4 @@
-
+import replaceStringInRegex from '@common/utils/replace-string-in-regex';
 //
 /**
  * 计算帖子内容的疮毒，用于是否激活“查看更多”
@@ -21,15 +21,16 @@ export default function fuzzyCalcContentLength(content, lengthInLine = 50) {
     const countEmojs = (_content?.match(/qq-emotion/g) || []).length;
 
     // 替换表情标签
-    let newContent = _content?.replace(/<img[\s]+[^<>]*class=([^<>]+qq\-emotion)(?:\"|\')[^<>]*>/g, '');
+    let newContent = replaceStringInRegex(_content, "emoj", '');
+
     // 替换图片标签
-    newContent = newContent?.replace(/<img[\s]+[^<>]*>|<img[\s]+[^<>]*/g, '');
-    // <br>换成'\n'
-    newContent = newContent?.replace(/<br[^<>]*>/g, '\n');
-    // 小程序<view class="dzq-br">换成'\n'
-    newContent = newContent?.replace(/<view[\s]+class=([^\/]+dzq\-br)(?:\"|\')[^\/]*<\/view>/g, '\n');
+    newContent = replaceStringInRegex(newContent, "img", '');
+
+    // 回车换成'\n'
+    newContent = replaceStringInRegex(newContent, "break", '\n');
+
     // 替换所有标签
-    newContent = newContent?.replace(/<[^<>]*>|<\/[^<>]*>/g, '');
+    newContent = replaceStringInRegex(newContent, "tags", '');
 
     const countReturns = (newContent.match(/\n/g) || []).length; // 匹配回车符
     let totalCount = newContent.length +
