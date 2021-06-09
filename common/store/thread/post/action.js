@@ -195,6 +195,8 @@ class ThreadPostAction extends ThreadPostStore {
       video: {},
       images: {},
       files: {},
+      orderInfo: {},
+      isDraft: false,
     };
     this.setCategorySelected();
   }
@@ -204,7 +206,7 @@ class ThreadPostAction extends ThreadPostStore {
    */
   @action
   gettContentIndexes() {
-    const { images, video, files, product, audio, redpacket, rewardQa, orderSn, draft } = this.postData;
+    const { images, video, files, product, audio, redpacket, rewardQa, orderInfo = {} } = this.postData;
     const imageIds = Object.values(images).map(item => item.id);
     const docIds = Object.values(files).map(item => item.id);
     const contentIndexes = {};
@@ -239,19 +241,17 @@ class ThreadPostAction extends ThreadPostStore {
         body: { audioId: audio.id },
       };
     }
-
-    const draftData = draft ? 1 : 0;
-    if (redpacket.price && !redpacket.id) {
+    if (redpacket.price && !orderInfo.status) {
       contentIndexes[THREAD_TYPE.redPacket] = {
         tomId: THREAD_TYPE.redPacket,
-        body: { orderSn, ...redpacket, draft: draftData },
+        body: { orderSn: orderInfo.orderSn, ...redpacket, draft: 1 },
       };
     }
 
-    if (rewardQa.value && !rewardQa.id) {
+    if (rewardQa.value && !orderInfo.status) {
       contentIndexes[THREAD_TYPE.reward] = {
         tomId: THREAD_TYPE.reward,
-        body: { expiredAt: rewardQa.times, price: rewardQa.value, type: 0, orderSn, draft: draftData },
+        body: { expiredAt: rewardQa.times, price: rewardQa.value, type: 0, orderSn: orderInfo.orderSn, draft: 1 },
       };
     }
     return contentIndexes;
@@ -262,7 +262,8 @@ class ThreadPostAction extends ThreadPostStore {
    */
   @action
   getCreateThreadParams(isUpdate) {
-    const { title, categoryId, contentText, position, price, attachmentPrice, freeWords } = this.postData;
+    const { title, categoryId, contentText, position, price,
+      attachmentPrice, freeWords, redpacket, rewardQa } = this.postData;
     const params = {
       title, categoryId, content: {
         text: emojiFormatForCommit(contentText).replace(/\n/g, '<br />')
@@ -284,6 +285,12 @@ class ThreadPostAction extends ThreadPostStore {
     params.freeWords = freeWords || 0;
     params.attachmentPrice = attachmentPrice || 0;
     if (this.postData.draft) params.draft = this.postData.draft;
+    if (redpacket.price) {
+      params.draft = 1;
+    }
+    if (rewardQa.value) {
+      params.draft = 1;
+    }
     if (this.postData.anonymous) params.anonymous = this.postData.anonymous;
     const contentIndexes = this.gettContentIndexes();
     if (Object.keys(contentIndexes).length > 0) params.content.indexes = contentIndexes;
@@ -292,7 +299,7 @@ class ThreadPostAction extends ThreadPostStore {
 
   @action
   formatThreadDetailToPostData(detail) {
-    const { title, categoryId, content, freewords = 0, isDraft, isAnonymous } = detail || {};
+    const { title, categoryId, content, freewords = 0, isDraft, isAnonymous, orderInfo = {} } = detail || {};
     const price = Number(detail.price);
     const attachmentPrice = Number(detail.attachmentPrice);
     let position = {};
@@ -357,6 +364,7 @@ class ThreadPostAction extends ThreadPostStore {
       freeWords: freewords,
       isDraft,
       anonymous,
+      orderInfo,
     });
   }
 

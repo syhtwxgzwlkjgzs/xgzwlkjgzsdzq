@@ -15,6 +15,7 @@ import { toTCaptcha } from '@common/utils/to-tcaptcha'
 import PayBox from '@components/payBox/index';
 import { ORDER_TRADE_TYPE } from '@common/constants/payBoxStoreConstants';
 
+@inject('payBox')
 @inject('index')
 @inject('site')
 @inject('user')
@@ -39,6 +40,7 @@ class Index extends Component {
       showDraftOption: false, // 显示草稿选项弹框
       bottomHeight: 0,
       isFirstFocus: true, // textarea首次聚焦(处理调用键盘弹起API首次返回数据不准确的情况)
+      data: {},
     }
     this.timer = null;
     this.ticket = ''; // 腾讯云验证码返回票据
@@ -138,10 +140,12 @@ class Index extends Component {
       ret.data.content.text = realText;
       threadPost.formatThreadDetailToPostData(ret.data);
       const { postData: { redpacket, rewardQa } } = this.props.threadPost
+        // 非草稿状态下且有红包或者悬赏的帖子不支持再次编辑红包或者悬赏
+        const canEditRedpacketAndReward = isDraft || (!isDraft && !(rewardQa.money > 0 || redpacket.money > 0));
         this.setState({
           postType: isDraft ? 'isDraft' : 'isEdit',
-          canEditRedpacket: isDraft || !(redpacket.money > 0),
-          canEditReward: isDraft || !(rewardQa.money > 0),
+          canEditRedpacket: canEditRedpacketAndReward,
+          canEditReward: canEditRedpacketAndReward,
         });
       // isDraft && this.openSaveDraft(); // 现阶段，自动保存功能关闭
     } else {
@@ -450,7 +454,8 @@ class Index extends Component {
 
     const amount = rewardAmount + redAmount;
     const options = { amount };
-    if (!isDraft && amount) {
+    if (!isDraft && amount && (!threadId
+      || (threadId && (!rewardQa.orderSn || !redpacket.orderSn)))) {
       let type = ORDER_TRADE_TYPE.RED_PACKET;
       let title = '支付红包';
       if (redAmount) {
@@ -470,12 +475,18 @@ class Index extends Component {
       await new Promise((resolve) => {
         PayBox.createPayBox({
           data: { ...options, title, type },
-          success: async (orderInfo) => {
+          orderCreated: async (orderInfo) => {
             const { orderSn } = orderInfo;
-            setPostData({ orderSn });
+            setPostData({ orderInfo });
+            if (orderSn) this.props.payBox.hide();
             setTimeout(() => {
               resolve();
-            }, 1200)
+            }, 500)
+          },
+          success: async () => {
+            this.setIndexPageData();
+            if (this.state.threadId)
+              Taro.redirectTo({ url: `/subPages/thread/index?id=${this.state.threadId}` });
           },
         });
       });
@@ -492,26 +503,28 @@ class Index extends Component {
     } else {
       ret = await threadPost.createThread();
     }
+
     // 7 处理请求数据
     const { code, data, msg } = ret;
     if (code === 0) {
       if (!threadId) {
-        this.setState({ threadId: data.threadId }); // 新帖首次保存草稿后，获取id
+        this.setState({ threadId: data.threadId, data }); // 新帖首次保存草稿后，获取id
       }
+      setPostData({ threadId: data.threadId });
+
       // 非草稿，跳转主题详情页
       Taro.hideLoading();
+
+      // 未支付的订单
+      if (threadPost.postData.orderInfo.orderSn
+        && !threadPost.postData.orderInfo.status
+        && !threadPost.postData.draft) {
+        this.props.payBox.show();
+        return;
+      }
+
       if (!isDraft) {
-        // 更新帖子到首页列表
-        if (threadId) {
-          this.props.index.updateAssignThreadAllData(threadId, data);
-        // 添加帖子到首页数据
-        } else {
-          const { categoryId = '' } = data
-          // 首页如果是全部或者是当前分类，则执行数据添加操作
-          if (this.props.index.isNeedAddThread(categoryId)) {
-            this.props.index.addThread(data);
-          }
-        }
+        this.setIndexPageData();
         this.postToast('发布成功', 'success');
         Taro.redirectTo({ url: `/subPages/thread/index?id=${data.threadId}` });
       }
@@ -523,6 +536,21 @@ class Index extends Component {
     }
 
   }
+
+  setIndexPageData = () => {
+    const { threadId, data } = this.state;
+    // 更新帖子到首页列表
+    if (this.state.threadId) {
+      this.props.index.updateAssignThreadAllData(threadId, data);
+      // 添加帖子到首页数据
+    } else {
+      const { categoryId = '' } = data;
+      // 首页如果是全部或者是当前分类，则执行数据添加操作
+      if (this.props.index.isNeedAddThread(categoryId)) {
+        this.props.index.addThread(data);
+      }
+    }
+  };
 
   // 处理用户主动点击保存草稿
   handleSaveDraft = async () => {

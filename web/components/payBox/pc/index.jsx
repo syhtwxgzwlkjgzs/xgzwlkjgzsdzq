@@ -13,9 +13,9 @@ class PayBoxPc extends React.Component {
   onClose = () => {
     this.props.payBox.visible = false;
     // FIXME: 延时回调的修复
-    setTimeout(() => {
-      this.props.payBox.clear();
-    }, 500);
+    // setTimeout(() => {
+    //   this.props.payBox.clear();
+    // }, 500);
   };
 
   render() {
