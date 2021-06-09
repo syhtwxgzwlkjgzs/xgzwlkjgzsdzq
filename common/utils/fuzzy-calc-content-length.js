@@ -1,7 +1,7 @@
 import replaceStringInRegex from '@common/utils/replace-string-in-regex';
 //
 /**
- * 计算帖子内容的疮毒，用于是否激活“查看更多”
+ * 计算帖子内容的长度，用于是否激活“查看更多”
  * 逻辑：
  * 1. lengthInLine代表一行能有多少字
  * 2. Emoj是用<img ... class="qq-emotion" .../> 表示的，算作1.5个字
