@@ -67,6 +67,7 @@ class Index extends React.Component {
           this.props.index.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
           this.props.search.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
           this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
+          this.props.user.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
         }
         this.setState({isSendingLike: false});
       });
@@ -130,6 +131,12 @@ class Index extends React.Component {
       }
     }
 
+    onUser = (e) => {
+      e && e.stopPropagation();
+      const { user = {} } = this.props.data || {};
+      Router.push({url: `/subPages/user/index?id=${user?.userId}`});
+    }
+
     render() {
       const { data, className = '', site = {}, showBottomStyle = true } = this.props;
       const { platform = 'pc' } = site;
@@ -169,6 +176,7 @@ class Index extends React.Component {
                 isReward={isReward}
                 userId={user?.userId}
                 platform={platform}
+                onClick={this.onUser}
               />
           </View>
 

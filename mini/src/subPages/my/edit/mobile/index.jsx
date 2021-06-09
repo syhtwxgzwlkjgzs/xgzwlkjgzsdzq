@@ -1,11 +1,11 @@
 import React from 'react';
 import UserCenterEditMobile from '../../../../components/user-center-edit-mobile/index';
-import { View } from '@tarojs/components';
+import Page from '@components/page';
 
 export default function index() {
   return (
-    <View>
+    <Page>
       <UserCenterEditMobile />
-    </View>
+    </Page>
   )
 }

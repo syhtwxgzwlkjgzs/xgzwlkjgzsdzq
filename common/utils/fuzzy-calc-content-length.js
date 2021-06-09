@@ -18,9 +18,16 @@ export default function fuzzyCalcContentLength(content, lengthInLine = 50) {
     const countImgs = (content.match(/<img/g) || []).length;
     const countEmojs = (content.match(/qq-emotion/g) || []).length;
 
-    // 检查表情，表情暂时计算为3个字符
-    let newContent = content.replace(/<img.*?class="(.*?)(qq-emotion)(.*?)".*?\/?>/g,"[图片]") 
-    newContent = newContent.replace(/<[^>]*>|<\/[^>]*>/gm,"");
+    // 替换表情标签
+    let newContent = content.replace(/<img[\s]+[^<>]*class=([^<>]+qq\-emotion)(?:\"|\')[^<>]*>/g, '');
+    // 替换图片标签
+    newContent = newContent.replace(/<img[\s]+[^<>]*>|<img[\s]+[^<>]*/g, '');
+    // <br>换成'\n'
+    newContent = newContent.replace(/<br[^<>]*>/g, '\n');
+    // 小程序<view class="dzq-br">换成'\n'
+    newContent = newContent.replace(/<view[\s]+class=([^\/]+dzq\-br)(?:\"|\')[^\/]*<\/view>/g, '\n');
+    // 替换所有标签
+    newContent = newContent.replace(/<[^<>]*>|<\/[^<>]*>/g, '');
 
     const countReturns = (newContent.match(/\n/g) || []).length; // 匹配回车符
     let totalCount = newContent.length +

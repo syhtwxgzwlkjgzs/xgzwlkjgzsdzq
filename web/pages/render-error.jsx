@@ -4,6 +4,8 @@ import IndexPCPage from '@layout/render-error/pc';
 import IndexH5Page from '@layout/render-error/h5';
 import getPlatform from '@common/utils/get-platform';
 import isServer from '@common/utils/is-server';
+import ViewAdapter from '@components/view-adapter';
+
 @inject('site')
 @observer
 class CustomError extends React.Component {
@@ -16,16 +18,11 @@ class CustomError extends React.Component {
     this.props.site.setPlatform(getPlatform(window.navigator.userAgent));
   }
   render() {
-    const { platform } = this.props.site;
-    if ( platform === 'static' ) return null;
-
-    if (platform === 'pc') {
-      return (
-        <IndexPCPage/>
-      );
-    }
-    return <IndexH5Page/>;
-
+    return <ViewAdapter
+      h5={<IndexH5Page />}
+      pc={<IndexPCPage />}
+      title='客户端错误'
+    />;
   }
 }
 

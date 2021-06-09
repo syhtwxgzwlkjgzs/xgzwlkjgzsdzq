@@ -13,6 +13,8 @@ import UserCenterEditMobile from '../../user-center-edit-mobile-pc';
 import UserCenterEditPaypwd from '../../user-center-edit-paypwd-pc';
 import WechatRebindDialog from '../../user-center/rebind-wechat';
 import Copyright from '@components/copyright';
+import { getClientHeight } from '@common/utils/get-client-height';
+import isServer from '@common/utils/is-server';
 
 @inject('site')
 @inject('user')
@@ -332,11 +334,15 @@ class index extends Component {
 
   render() {
     const { editorConfig } = this.state;
+    let pcEditHeight = 'auto'// 减去60头部的高度
+    if (!isServer()) {
+      pcEditHeight = getClientHeight() - 60 
+    }
     return (
       <div className={styles.pcEditBox}>
         <Header className={styles.pcEditHeaser} />
         <div className={styles.pcEditContent}>
-          <div className={styles.pcEdit}>
+          <div className={styles.pcEdit} style={{height: pcEditHeight}}>
             {/* 头部 */}
             <div>
               <UserCenterEditHeader />

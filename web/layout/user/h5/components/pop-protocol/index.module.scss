@@ -20,11 +20,13 @@
 }
 .item_content {
   font-weight: normal;
-  font-size: $font-size-base;
-  line-height: $font-line-height-base;
-  text-align: left;
+  font-size: $font-size-middle;
+  line-height: $font-line-height-middle;
   color: $text-color-primary;
   margin-bottom: $margin-6n;
+  pre {
+    white-space: pre-wrap;
+  }
 }
 .bottom {
   width: 100%;

@@ -12,22 +12,24 @@
   overflow-y: auto;
   text-align: left;
   .title {
-    padding: $padding-2n 0 $padding-4n 0;
     text-align: center;
     font-weight: 600;
-    font-size: $font-size-middle;
-    line-height: $font-line-height-large;
+    font-size: $font-size-large;
     color: $text-color-primary;
+    padding-bottom: rem(32);
   }
   .item_title {
     font-weight: 700;
   }
   .item_content {
     font-weight: normal;
-    font-size: $font-size-base;
-    line-height: $font-line-height-base;
+    font-size: $font-size-middle;
+    line-height: $font-line-height-middle;
     color: $text-color-primary;
     margin-bottom: $margin-6n;
+    pre {
+      white-space: pre-wrap;
+    }
   }
   .bottom {
     width: 100%;
@@ -48,5 +50,4 @@
       cursor: pointer;
     }
   }
-
 }

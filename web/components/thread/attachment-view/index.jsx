@@ -1,7 +1,11 @@
 import React from 'react';
-import styles from './index.module.scss';
-import { Icon } from '@discuzq/design';
+import { inject, observer } from 'mobx-react';
+import goToLoginPage from '@common/utils/go-to-login-page';
+import { Icon, Toast } from '@discuzq/design';
 import { extensionList, isPromise, noop } from '../utils';
+import { copyToClipboard } from '@common/utils/copyToClipboard';
+
+import styles from './index.module.scss';
 
 /**
  * 附件
@@ -9,7 +13,16 @@ import { extensionList, isPromise, noop } from '../utils';
  * @prop {Boolean} isHidden 是否隐藏删除按钮
  */
 
-const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noop, onPay = noop }) => {
+const Index = ({
+  attachments = [],
+  isHidden = true,
+  isPay = false,
+  onClick = noop,
+  onPay = noop,
+  threadId = null,
+  thread = null,
+  user = null,
+}) => {
   // 处理文件大小的显示
   const handleFileSize = (fileSize) => {
     if (fileSize > 1000000) {
@@ -23,18 +36,50 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
   };
 
   const onDownLoad = (item) => {
-    if(!item?.url) return;
-    const url = item.url;
+    if(!item || !threadId) return;
+
+    // 对没有登录的先登录
+    if (!user?.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+
     if (!isPay) {
-      window.open(url);
+      let toastInstance = Toast.loading({
+        duration: 0,
+      });
+
+      const attachmentId = item.id;
+      thread.fetchThreadAttachmentUrl(threadId, attachmentId).then((res) => {
+
+        if(res?.code === 0 && res?.data) {
+          const { url } = res.data;
+          if(url) window.open(url);
+          Toast.info({ content: '下载成功' });
+        } else {
+          Toast.info({ content: res?.msg });
+        }
+      }).catch((error) => {
+        Toast.info({ content: '获取下载链接失败' });
+        console.error(error);
+        return;
+      }).finally(() => {
+        toastInstance?.destroy();
+      });
     } else {
       onPay();
     }
   };
 
-  const onPreviewer = (url) => {
+  const onLinkShare = (item) => {
     if (!isPay) {
-      window.open(url);
+      if(!item?.url) return;
+      copyToClipboard(item.url);
+      Toast.success({
+        content: '链接复制成功',
+        duration: 1000,
+      });
     } else {
       onPay();
     }
@@ -69,8 +114,10 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
           </div>
 
           <div className={styles.right}>
-            {/* <span className={styles.span} onClick={() => onPreviewer(item.url)}>浏览</span> */}
-            <span className={styles.span} onClick={() => onDownLoad(item)}>下载</span>
+            <span className={styles.span} onClick={() => onLinkShare(item)}>链接</span>
+            <div className={styles.label}>
+              <span className={styles.span} onClick={() => onDownLoad(item)}>下载</span>
+            </div>
           </div>
         </div>
       </div>
@@ -109,4 +156,4 @@ const Index = ({ attachments = [], isHidden = true, isPay = false, onClick = noo
   );
 };
 
-export default React.memo(Index);
+export default inject('thread', 'user')(observer(Index));

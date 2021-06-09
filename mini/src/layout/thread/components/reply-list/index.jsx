@@ -50,8 +50,8 @@ export default class ReplyList extends React.Component {
 
   handleClick(e, node) {
     e && e.stopPropagation();
-    const {url, isExternaLink } = handleLink(node)
-    if(isExternaLink) return
+    const { url, isExternaLink } = handleLink(node);
+    if (isExternaLink) return;
 
     if (url) {
       Router.push({ url });
@@ -76,7 +76,7 @@ export default class ReplyList extends React.Component {
         <View className={styles.replyListContent}>
           <View className={styles.replyListContentText}>
             <View className={styles.replyListName}>
-              {this.props.data?.user?.nickname || this.props.data?.user?.userName || '未知用户'}
+              {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
             </View>
             <View className={styles.replyListText}>
               {/* 二级回复用户 */}
@@ -116,9 +116,9 @@ export default class ReplyList extends React.Component {
             </View>
           </View>
 
-          {this.props?.data?.user && (
-            <View className={styles.replyListFooter}>
-              <View className={styles.replyTime}>{diffDate(this.props.data.createdAt)}</View>
+          <View className={styles.replyListFooter}>
+            <View className={styles.replyTime}>{diffDate(this.props.data.createdAt)}</View>
+            {this.props?.data?.user && (
               <View className={styles.extraBottom}>
                 <View className={this.props?.data?.isLiked ? styles.replyLike : styles.replyLiked}>
                   <Text onClick={debounce(() => this.likeClick(canLike), 500)}>
@@ -143,8 +143,8 @@ export default class ReplyList extends React.Component {
                   )}
                 </View>*/}
               </View>
-            </View>
-          )}
+            )}
+          </View>
         </View>
       </View>
     );

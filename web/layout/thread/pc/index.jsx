@@ -644,23 +644,13 @@ class ThreadPCPage extends React.Component {
     Router.push({ url: `/message?page=chat&username=${username}` });
   }
 
-  // 点击用户头像
-  onPersonalPage() {
-/*    if (!this.props.user.isLogin()) {
-      Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/user/login' });
-      return;
-    }*/
-    const { id } = this.props.thread?.authorInfo;
-    if (!id) return;
-    Router.push({ url: `/user/${id}` });
-  }
-
   render() {
     const { thread: threadStore } = this.props;
     const { isReady, isCommentReady, isNoMore, totalCount, isCommentListError, isAuthorInfoError } = threadStore;
     // 是否作者自己
     const isSelf = this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === threadStore?.threadData?.userId;
+    // 是否匿名
+    const isAnonymous = threadStore?.threadData?.isAnonymous;
 
     return (
       <div className={layout.container}>
@@ -714,19 +704,20 @@ class ThreadPCPage extends React.Component {
 
           {/* 右边信息 */}
           <div className={`${layout.bodyRigth} ${isSelf ? layout.positionSticky : ''}`}>
-            <div className={layout.authorInfo}>
-              {threadStore?.authorInfo ? (
-                <AuthorInfo
-                  user={threadStore.authorInfo}
-                  onFollowClick={() => this.onFollowClick()}
-                  onPrivateLetter={() => this.onPrivateLetter()}
-                  isShowBtn={!isSelf}
-                  onPersonalPage={() => this.onPersonalPage()}
-                ></AuthorInfo>
-              ) : (
-                <LoadingTips type="init" isError={isAuthorInfoError}></LoadingTips>
-              )}
-            </div>
+            {!isAnonymous && (
+              <div className={layout.authorInfo}>
+                {threadStore?.authorInfo ? (
+                  <AuthorInfo
+                    user={threadStore.authorInfo}
+                    onFollowClick={() => this.onFollowClick()}
+                    onPrivateLetter={() => this.onPrivateLetter()}
+                    isShowBtn={!isSelf}
+                  ></AuthorInfo>
+                ) : (
+                  <LoadingTips type="init" isError={isAuthorInfoError}></LoadingTips>
+                )}
+              </div>
+            )}
             <div className={layout.recommend}>
               <Recommend></Recommend>
             </div>

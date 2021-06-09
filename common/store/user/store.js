@@ -236,6 +236,11 @@ class UserStore {
     return get(this.userInfo, 'hasPassword');
   }
 
+  // 判断当前用户是否管理员
+  @computed get isAdmini() {
+    return get(this.userInfo, 'group.pid') === 1;
+  }
+
 
   // 发帖扩展的权限
   @computed get threadExtendPermissions() {

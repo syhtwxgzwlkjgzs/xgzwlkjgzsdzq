@@ -33,6 +33,8 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
       } else {
         categoryIds = []
       }
+    } else {
+      categoryIds = [categoryIds[1]]
     }
 
     onNavigationClick({ categoryIds, sequence })
@@ -108,7 +110,7 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
         categories?.length ?
           <CategoriesContent />
           :
-          <BottomView isBox isError={isError} errorText={errorText} noMore={false} loadingText='正在加载' />
+          <BottomView isBox isError={isError} errorText='暂无数据' noMore={false} loadingText='正在加载' />
       }
     </Card>
   );
