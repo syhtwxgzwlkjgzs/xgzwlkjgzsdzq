@@ -9,10 +9,13 @@ import Header from '@components/header';
 import { get } from '@common/utils/get';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
 import PcBodyWrap from '../components/pc-body-wrap';
+import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
+import { isExtFieldsOpen } from '@common/store/login/util';
 
 @inject('site')
 @inject('user')
 @inject('h5QrCode')
+@inject('commonLogin')
 @observer
 class WeixinBindQrCodePage extends React.Component {
   async componentDidMount() {
@@ -51,18 +54,28 @@ class WeixinBindQrCodePage extends React.Component {
         const uid = get(res, 'data.uid');
         this.props.user.updateUserInfo(uid);
         // FIXME: 使用 window 跳转用来解决，获取 forum 在登录前后不同的问题，后续需要修改 store 完成
+        console.log('binded');
         window.location.href = '/';
         clearInterval(this.timer);
       } catch (e) {
-        if (this.props.h5QrCode.countDown) {
-          this.props.h5QrCode.countDown = this.props.h5QrCode.countDown - 3;
+        const { site, h5QrCode, commonLogin, router } = this.props;
+        if (h5QrCode.countDown) {
+          h5QrCode.countDown = h5QrCode.countDown - 3;
         } else {
           clearInterval(this.timer);
         }
+        if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+          if (isExtFieldsOpen(site)) {
+            commonLogin.needToCompleteExtraInfo = true;
+            router.push('/user/supplementary');
+            return;
+          }
+          return window.location.href = '/';
+        }
         // 跳转状态页
         if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
-          this.props.commonLogin.setStatusMessage(e.Code, e.Message);
-          this.props.router.push(`/user/status?statusCode=${e.Code}&statusMsg=${e.Message}`);
+          commonLogin.setStatusMessage(e.Code, e.Message);
+          router.push(`/user/status?statusCode=${e.Code}&statusMsg=${e.Message}`);
         }
       }
     }, 3000);

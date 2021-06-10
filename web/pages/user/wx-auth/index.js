@@ -5,8 +5,11 @@ import { h5WechatCodeLogin } from '@server';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import HOCLoginMode from '@middleware/HOCLoginMode';
 import { get } from '@common/utils/get';
+import ViewAdapter from '@components/view-adapter';
 import setAccessToken from '../../../../common/utils/set-access-token';
-import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus } from '@common/store/login/util';
+import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus, isExtFieldsOpen } from '@common/store/login/util';
+import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
+
 const NEED_BIND_OR_REGISTER_USER = -7016;
 @inject('site')
 @inject('user')
@@ -63,6 +66,16 @@ class WeixinAuth extends React.Component {
         Message: res.msg,
       };
     } catch (error) {
+      // 跳转补充信息页
+      if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+        if (isExtFieldsOpen(this.props.site)) {
+          this.props.commonLogin.needToCompleteExtraInfo = true;
+          this.props.router.push('/user/supplementary');
+          return;
+        }
+        return window.location.href = '/';
+      }
+
       // 跳转状态页
       if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
         this.props.commonLogin.setStatusMessage(error.Code, error.Message);
@@ -84,7 +97,11 @@ class WeixinAuth extends React.Component {
 
 
   render() {
-    return <></>;
+    return <ViewAdapter
+              h5={<></>}
+              pc={<></>}
+              title={`登录 - ${this.props.site?.siteName}`}
+            />;
   }
 }
 

@@ -31,10 +31,9 @@
     margin-left: 16px;
     margin-right: 8px;
     color: $icon-color;
-  }
-
-  .icon-color {
-    color: $icon-color;
+    &.active {
+      color: $icon-color-active;
+    }
   }
 
   .plugin-icon-container {
@@ -62,4 +61,8 @@
       align-items: center;
     }
   }
+}
+
+.icon-color {
+  color: $icon-color;
 }

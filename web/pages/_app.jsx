@@ -12,6 +12,7 @@ import sentry from '@common/utils/sentry';
 import '../styles/index.scss';
 import CustomHead from '@components/custom-head';
 import Head from 'next/head';
+import monitor from '@common/utils/monitor';
 
 
 if (!isServer()) {
@@ -44,6 +45,13 @@ class DzqApp extends App {
   }
 
   componentDidMount() {
+    if ( window.performance ) {
+      monitor.call('reportTime', {
+        eventName: 'fist-render',
+        duration: Date.now() - performance.timing.navigationStart
+      });
+    }
+    
     window.addEventListener('resize', this.updateSize);
     csrRouterRedirect();
     this.listenRouterChangeAndClean();
@@ -58,7 +66,9 @@ class DzqApp extends App {
 
   // 出错捕获
   componentDidCatch(error, info) {
-    Router.replace({ url: '/render-error' });
+    console.error(error);
+    console.error(info);
+    // Router.replace({ url: '/render-error' });
   }
 
   updateSize() {

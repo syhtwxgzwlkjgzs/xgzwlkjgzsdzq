@@ -61,11 +61,17 @@ class SearchResultPage extends React.Component {
     });
   };
 
-  onUserClick = data => console.log('user click', data);
+  onUserClick = (userId) => {
+    Taro.navigateTo({url: `/subPages/user/index?id=${userId}`});
+  };
 
   onTopicClick = data => console.log('topic click', data);
 
-  onPostClick = data => console.log('post click', data);
+  // 跳转话题详情
+  onTopicClick = data => {
+    const { topicId = '' } = data
+    Taro.navigateTo({url: `/subPages/topic/topic-detail/index?id=${topicId}`})
+  };
 
   render() {
     const { keyword } = this.state;

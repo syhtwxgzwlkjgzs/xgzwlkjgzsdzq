@@ -8,9 +8,8 @@ import CommentInput from './components/comment-input/index';
 import LoadingTips from '@components/thread-detail-pc/loading-tips';
 import { Icon, Toast, Popup } from '@discuzq/design';
 import UserInfo from '@components/thread/user-info';
-import Header from '@components/header';
-import NoMore from './components/no-more';
 import RewardPopup from './components/reward-popup';
+import BaseLayout from '@components/base-layout';
 
 import layout from './layout.module.scss';
 
@@ -18,7 +17,6 @@ import ReportPopup from './components/report-popup';
 import ShowTop from './components/show-top';
 import DeletePopup from '@components/thread-detail-pc/delete-popup';
 
-import throttle from '@common/utils/thottle';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import Copyright from '@components/copyright';
 import threadPay from '@common/pay-bussiness/thread-pay';
@@ -49,7 +47,8 @@ class ThreadPCPage extends React.Component {
       showRewardPopup: false, // 打赏弹窗
       isCommentLoading: false, // 列表loading
       setTop: false, // 置顶
-      inputValue: '', // 评论内容
+      inputValue: '', // 评论内容,
+      isBaseLayoutReady: false,
     };
 
     this.likedLoading = false;
@@ -75,26 +74,52 @@ class ThreadPCPage extends React.Component {
 
   // 滚动事件
   handleOnScroll() {
-    // 加载评论列表
-    const scrollDistance = this.threadBodyRef?.current?.scrollTop;
-    const offsetHeight = this.threadBodyRef?.current?.offsetHeight;
-    const scrollHeight = this.threadBodyRef?.current?.scrollHeight;
-    const { isCommentReady, isNoMore } = this.props.thread;
-    // 记录当前的滚动位置
-    this.props.thread.setScrollDistance(scrollDistance);
-    if (
-      scrollDistance + offsetHeight >= scrollHeight - 20 &&
-      !this.state.isCommentLoading &&
-      isCommentReady &&
-      !isNoMore
-    ) {
-      this.page = this.page + 1;
-      this.loadCommentList();
+    // const threadBodyRef = this.threadBodyRef?.current?.listRef?.current?.listWrapper;
+
+    // if (threadBodyRef && threadBodyRef.current) {
+    //   // 加载评论列表
+    //   const scrollDistance = threadBodyRef?.current?.scrollTop;
+    //   const offsetHeight = threadBodyRef?.current?.offsetHeight;
+    //   const scrollHeight = threadBodyRef?.current?.scrollHeight;
+    //   const { isCommentReady, isNoMore } = this.props.thread;
+    //   // 记录当前的滚动位置
+    //   this.props.thread.setScrollDistance(scrollDistance);
+    //   if (
+    //     scrollDistance + offsetHeight >= scrollHeight - 20 &&
+    //     !this.state.isCommentLoading &&
+    //     isCommentReady &&
+    //     !isNoMore
+    //   ) {
+    this.page = this.page + 1;
+    return this.loadCommentList();
+    // }
+    // }
+  }
+
+  // baselayout componentDidMount 事件
+  onBaseLayoutReady() {
+    this.setState({
+      isBaseLayoutReady: true,
+    });
+  }
+
+  componentDidUpdate() {
+    if (this.state.isBaseLayoutReady) {
+      const threadBodyRef = this.threadBodyRef?.current?.listRef?.current?.listWrapper;
+      threadBodyRef && this.scrollToPostion(threadBodyRef);
+      this.setState({
+        isBaseLayoutReady: false,
+      });
     }
   }
 
-  // 使用了H5页面的页面加载跳转逻辑
-  componentDidMount() {
+  componentWillUnmount() {
+    // 清空数据
+    // this.props?.thread && this.props.thread.reset();
+  }
+
+  // 滚动到指定位置
+  scrollToPostion(scrollBodyRef) {
     // 当内容加载完成后，获取评论区所在的位置
     this.position = this.commentDataRef?.current?.offsetTop - 50;
 
@@ -102,25 +127,13 @@ class ThreadPCPage extends React.Component {
     if (this.props?.thread?.isPositionToComment) {
       // TODO:需要监听帖子内容加载完成事件
       setTimeout(() => {
-        this.threadBodyRef.current.scrollTo(0, this.position);
+        scrollBodyRef?.current?.scrollTo(0, this.position);
       }, 1000);
       return;
     }
 
     // 滚动到记录的指定位置
-    this.threadBodyRef.current.scrollTo(0, this.props.thread.scrollDistance);
-  }
-
-  componentDidUpdate() {
-    // 当内容加载完成后，获取评论区所在的位置
-    if (this.props.thread.isReady) {
-      this.position = this.commentDataRef?.current?.offsetTop - 50;
-    }
-  }
-
-  componentWillUnmount() {
-    // 清空数据
-    // this.props?.thread && this.props.thread.reset();
+    // scrollBodyRef?.current?.scrollTo(0, this.props.thread.scrollDistance);
   }
 
   // 加载评论列表
@@ -639,92 +652,111 @@ class ThreadPCPage extends React.Component {
       return;
     }
 
-    const { username } = this.props.thread?.authorInfo;
+    const { username, nickname } = this.props.thread?.authorInfo;
     if (!username) return;
-    Router.push({ url: `/message?page=chat&username=${username}` });
+    Router.push({ url: `/message?page=chat&username=${username}&nickname=${nickname}` });
+  }
+
+  renderContent() {
+    const { thread: threadStore } = this.props;
+    const { isReady, isCommentReady, isNoMore, totalCount, isCommentListError } = threadStore;
+    return (
+      <div className={layout.bodyLeft}>
+        {/* 帖子内容 */}
+        {isReady ? (
+          <RenderThreadContent
+            store={threadStore}
+            onOperClick={(type) => this.onOperClick(type)}
+            onLikeClick={() => this.onLikeClick()}
+            onCollectionClick={() => this.onCollectionClick()}
+            onShareClick={() => this.onShareClick()}
+            onRewardClick={() => this.onRewardClick()}
+            onTagClick={() => this.onTagClick()}
+            onPayClick={() => this.onPayClick()}
+          ></RenderThreadContent>
+        ) : (
+          <LoadingTips type="init"></LoadingTips>
+        )}
+
+        {/* 回复详情内容 */}
+        <div className={`${layout.bottom}`} ref={this.commentDataRef}>
+          {isCommentReady ? (
+            <Fragment>
+              <RenderCommentList
+                router={this.props.router}
+                sort={(flag) => this.onSortChange(flag)}
+                onEditClick={(comment) => this.onEditClick(comment)}
+                onPublishClick={(value, imageList) => this.onPublishClick(value, imageList)}
+                onReportClick={(comment) => this.onReportClick(comment)}
+              ></RenderCommentList>
+              {/* {this.state.isCommentLoading && <LoadingTips></LoadingTips>} */}
+            </Fragment>
+          ) : (
+            <LoadingTips isError={isCommentListError} type="init"></LoadingTips>
+          )}
+        </div>
+        {/* {isNoMore && <NoMore empty={totalCount === 0}></NoMore>} */}
+      </div>
+    );
+  }
+
+  renderRight() {
+    const { thread: threadStore } = this.props;
+    const { isAuthorInfoError } = threadStore;
+    // 是否作者自己
+    const isSelf = this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === threadStore?.threadData?.userId;
+    // 是否匿名
+    const isAnonymous = threadStore?.threadData?.isAnonymous;
+
+    return (
+      <div className={`${layout.bodyRigth} ${isSelf ? layout.positionSticky : ''}`}>
+        {!isAnonymous && (
+          <div className={layout.authorInfo}>
+            {threadStore?.authorInfo ? (
+              <AuthorInfo
+                user={threadStore.authorInfo}
+                onFollowClick={() => this.onFollowClick()}
+                onPrivateLetter={() => this.onPrivateLetter()}
+                isShowBtn={!isSelf}
+              ></AuthorInfo>
+            ) : (
+              <LoadingTips type="init" isError={isAuthorInfoError}></LoadingTips>
+            )}
+          </div>
+        )}
+        <div className={layout.recommend}>
+          <Recommend></Recommend>
+        </div>
+        <div className={layout.qrcode}>
+          <QcCode></QcCode>
+        </div>
+        <div className={layout.copyright}>
+          <Copyright></Copyright>
+        </div>
+      </div>
+    );
   }
 
   render() {
-    const { thread: threadStore } = this.props;
-    const { isReady, isCommentReady, isNoMore, totalCount, isCommentListError, isAuthorInfoError } = threadStore;
-    // 是否作者自己
-    const isSelf = this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === threadStore?.threadData?.userId;
+    const { isCommentReady, isNoMore } = this.props.thread;
 
     return (
-      <div className={layout.container}>
+      <div>
         <ShowTop showContent={this.props.thread?.threadData?.isStick} setTop={this.state.setTop}></ShowTop>
-        <div className={layout.header}>
-          <Header></Header>
-        </div>
 
-        <div
-          className={layout.body}
+        <BaseLayout
+          onRefresh={() => this.handleOnScroll()}
+          noMore={isNoMore}
           ref={this.threadBodyRef}
-          onScrollCapture={() => throttle(this.handleOnScroll(), 500)}
+          showRefresh={false}
+          right={this.renderRight()}
+          pageName="detail"
+          isShowLayoutRefresh={isCommentReady}
+          ready={() => this.onBaseLayoutReady()}
+          rightClassName={layout.positionSticky}
         >
-          {/* 左边内容和评论 */}
-          <div className={layout.bodyLeft}>
-            {/* 帖子内容 */}
-            {isReady ? (
-              <RenderThreadContent
-                store={threadStore}
-                onOperClick={(type) => this.onOperClick(type)}
-                onLikeClick={() => this.onLikeClick()}
-                onCollectionClick={() => this.onCollectionClick()}
-                onShareClick={() => this.onShareClick()}
-                onRewardClick={() => this.onRewardClick()}
-                onTagClick={() => this.onTagClick()}
-                onPayClick={() => this.onPayClick()}
-              ></RenderThreadContent>
-            ) : (
-              <LoadingTips type="init"></LoadingTips>
-            )}
-
-            {/* 回复详情内容 */}
-            <div className={`${layout.bottom}`} ref={this.commentDataRef}>
-              {isCommentReady ? (
-                <Fragment>
-                  <RenderCommentList
-                    router={this.props.router}
-                    sort={(flag) => this.onSortChange(flag)}
-                    onEditClick={(comment) => this.onEditClick(comment)}
-                    onPublishClick={(value, imageList) => this.onPublishClick(value, imageList)}
-                    onReportClick={(comment) => this.onReportClick(comment)}
-                  ></RenderCommentList>
-                  {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
-                </Fragment>
-              ) : (
-                <LoadingTips isError={isCommentListError} type="init"></LoadingTips>
-              )}
-            </div>
-            {isNoMore && <NoMore empty={totalCount === 0}></NoMore>}
-          </div>
-
-          {/* 右边信息 */}
-          <div className={`${layout.bodyRigth} ${isSelf ? layout.positionSticky : ''}`}>
-            <div className={layout.authorInfo}>
-              {threadStore?.authorInfo ? (
-                <AuthorInfo
-                  user={threadStore.authorInfo}
-                  onFollowClick={() => this.onFollowClick()}
-                  onPrivateLetter={() => this.onPrivateLetter()}
-                  isShowBtn={!isSelf}
-                ></AuthorInfo>
-              ) : (
-                <LoadingTips type="init" isError={isAuthorInfoError}></LoadingTips>
-              )}
-            </div>
-            <div className={layout.recommend}>
-              <Recommend></Recommend>
-            </div>
-            <div className={layout.qrcode}>
-              <QcCode></QcCode>
-            </div>
-            <div className={layout.copyright}>
-              <Copyright></Copyright>
-            </div>
-          </div>
-        </div>
+          {this.renderContent()}
+        </BaseLayout>
 
         {/* 编辑弹窗 */}
         <Popup position="center" visible={this.state.showCommentInput} onClose={() => this.onClose()}>

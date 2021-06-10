@@ -217,10 +217,10 @@ class ThreadPostAction extends ThreadPostStore {
         body: { imageIds },
       };
     }
-    if (video.id) {
+    if (video.id || video.threadVideoId) {
       contentIndexes[THREAD_TYPE.video] = {
         tomId: THREAD_TYPE.video,
-        body: { videoId: video.id },
+        body: { videoId: video.id || video.threadVideoId || '' },
       };
     }
     if (docIds.length > 0) {
@@ -235,10 +235,10 @@ class ThreadPostAction extends ThreadPostStore {
         body: { ...product },
       };
     }
-    if (audio.id) {
+    if (audio.id || audio.threadVideoId) {
       contentIndexes[THREAD_TYPE.voice] = {
         tomId: THREAD_TYPE.voice,
-        body: { audioId: audio.id },
+        body: { audioId: audio.id || audio.threadVideoId || '' },
       };
     }
     if (redpacket.price && !orderInfo.status) {
@@ -328,11 +328,17 @@ class ThreadPostAction extends ThreadPostStore {
           files[item.id] = { ...item, type: item.fileType, name: item.fileName };
         });
       }
-      if (tomId === THREAD_TYPE.voice) audio = contentindexes[index].body || {};
+      if (tomId === THREAD_TYPE.voice) {
+        audio = contentindexes[index].body || {};
+        const audioId = audio.id || audio.threadVideoId;
+        audio.id = audioId;
+      }
       if (tomId === THREAD_TYPE.goods) product = contentindexes[index].body;
       if (tomId === THREAD_TYPE.video) {
         video = contentindexes[index].body || {};
         video.thumbUrl = video.mediaUrl;
+        const videoId = video.id || video.threadVideoId;
+        video.id = videoId;
       }
       if (tomId === THREAD_TYPE.redPacket) {
         const price = contentindexes[index]?.body?.money;

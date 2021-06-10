@@ -467,7 +467,10 @@ class UserAction extends SiteStore {
 
     if (updateUserInfoRes.code === 0) {
       this.userInfo.signature = this.editSignature;
-      this.userInfo.nickname = this.editNickName;
+      // 用户名不能为空
+      if (this.editNickName) {
+        this.userInfo.nickname = this.editNickName;
+      }
       return updateUserInfoRes.data;
     }
 

@@ -4,6 +4,7 @@ import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
 import { observer, inject } from 'mobx-react';
 import UnreadRedDot from '@components/unread-red-dot';
+@inject('user')
 @inject('message')
 @observer
 class UserCenterAction extends React.Component {
@@ -55,7 +56,7 @@ class UserCenterAction extends React.Component {
     const { message } = this.props;
     const { totalUnread } = message;
     return (
-      <div className={styles.userCenterAction}>
+      <div className={`${styles.userCenterAction} ${this.props.user.isAdmini && styles.userCenterColumnStyle}`}>
         <div className={styles.userCenterActionItem}>
           <div onClick={this.handleMyMessage} className={styles.userCenterActionItemIcon}>
             <div className={styles.userMessage}>
@@ -115,13 +116,16 @@ class UserCenterAction extends React.Component {
           </div>
           <div className={styles.userCenterActionItemDesc}>站点信息</div>
         </div>
-
-        <div onClick={this.handleMyInvite} className={styles.userCenterActionItem}>
-          <div className={styles.userCenterActionItemIcon}>
-            <Icon name={'NotbookOutlined'} size={20} />
-          </div>
-          <div className={styles.userCenterActionItemDesc}>推广邀请</div>
-        </div>
+        {
+          !this.props.user.isAdmini && (
+            <div onClick={this.handleMyInvite} className={styles.userCenterActionItem}>
+              <div className={styles.userCenterActionItemIcon}>
+                <Icon name={'NotbookOutlined'} size={20} />
+              </div>
+              <div className={styles.userCenterActionItemDesc}>推广邀请</div>
+            </div>
+          )
+        }
       </div>
     );
   }

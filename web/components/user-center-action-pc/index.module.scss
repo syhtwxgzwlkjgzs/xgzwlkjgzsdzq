@@ -1,5 +1,8 @@
 @import '@common/styles/index.scss';
 
+.userCenterColumnStyle {
+    justify-content: space-between;
+}
 .userCenterAction {
     display: flex;
     padding: rem(24);

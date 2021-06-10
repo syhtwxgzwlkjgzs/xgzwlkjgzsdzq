@@ -11,6 +11,7 @@ import styles from './index.module.scss';
 @observer
 class PayBoxPc extends React.Component {
   onClose = () => {
+    if (!this.props.payBox.visible) return;
     this.props.payBox.visible = false;
     // FIXME: 延时回调的修复
     // setTimeout(() => {

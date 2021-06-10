@@ -7,6 +7,17 @@ class MyDocument extends Document {
     return { ...initialProps };
   }
 
+  createMonitor() {
+    if (process.env.NODE_ENV === 'production' ) {
+      return (
+        <React.Fragment>
+          <script src="https://cdn-go.cn/aegis/aegis-sdk/latest/aegis.min.js?_bid=3977"></script>
+        </React.Fragment>
+      );
+    }
+    return null;
+  }
+
   render() {
     return (
       <Html lang="cn">
@@ -25,13 +36,17 @@ class MyDocument extends Document {
                 window.addEventListener('resize', remCalc);
               }, 0);
           ` }} />
-          {/* <!--腾讯地图定位组件--> */}
+          {/* <!--腾讯地图定位组件--> */} 
           <script async src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
+          {this.createMonitor()}
         </Head>
         <body>
           <Main />
           <NextScript/>
         </body>
+        
+
+    
         <script dangerouslySetInnerHTML={{__html: `
             // 微信设置字体最大，布局乱的补丁
             function is_weixn() {

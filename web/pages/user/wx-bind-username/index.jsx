@@ -1,6 +1,7 @@
 import React from 'react';
 import WXBindUsernameH5Page from '@layout/user/h5/wx-bind-username';
 import { inject } from 'mobx-react';
+import ViewAdapter from '@components/view-adapter';
 
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import HOCLoginMode from '@middleware/HOCLoginMode';
@@ -8,9 +9,11 @@ import HOCLoginMode from '@middleware/HOCLoginMode';
 @inject('site')
 class WXBindUsername extends React.Component {
   render() {
-    const { site } = this.props;
-    const { platform } = site;
-    return platform === 'h5' ? <WXBindUsernameH5Page /> : <></>;
+    return <ViewAdapter
+              h5={<WXBindUsernameH5Page/>}
+              pc={<></>}
+              title={`微信绑定用户名 - ${this.props.site?.siteName}`}
+            />;
   }
 }
 

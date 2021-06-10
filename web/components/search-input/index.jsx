@@ -59,7 +59,7 @@ const SearchInput = ({
       </div>
       {
         isShowCancel && (
-          <div className={styles.cancel} onClick={clearInput}>
+          <div className={styles.cancel} onClick={onCancel}>
             取消
           </div>
         )

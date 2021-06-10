@@ -31,23 +31,15 @@ const DialogBox = (props) => {
 
   useEffect(() => {
     if (showEmoji) {
-      scrollEnd();
+      setTimeout(scrollEnd, 0);
     }
   }, [showEmoji]);
 
   const scrollEnd = () => {
     Taro.pageScrollTo({
-      scrollTop: 0,
-      duration: 300,
-      success: (a,b,c) => {
-        console.log(a,b,c);
-      }
+      scrollTop: 30000,
+      duration: 0
     });
-
-
-    // if (dialogBoxRef.current) {
-    //   dialogBoxRef.current.scrollTop = dialogBoxRef?.current?.scrollHeight;
-    // }
   };
 
   // 每5秒轮询一次
@@ -82,7 +74,7 @@ const DialogBox = (props) => {
   }, [dialogMsgList]);
 
   return (
-    <View className={styles.dialogBox} style={{ bottom: showEmoji ? '385px' : '52px' }} ref={dialogBoxRef}>
+    <View className={styles.dialogBox} style={{ paddingBottom: showEmoji ? '395px' : '52px' }} ref={dialogBoxRef}>
       <View className={styles.box__inner}>
         {messagesHistory.map(({ timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl }, idx) => (
           <React.Fragment key={idx}>
@@ -92,22 +84,19 @@ const DialogBox = (props) => {
                 <Avatar image={userAvatar || '/favicon.ico'} circle={true} />
               </View>
               {imageUrl ? (
-                <View className={`${styles.msgContent} ${styles.msgImgContent}`}>
-                  {imageUrl && (
-                    <Image
-                      mode='widthFix'
-                      style='width: 200px;'
-                      src={imageUrl}
-                      onClick={() => {
-                        Taro.previewImage({
-                          current: imageUrl,
-                          urls: previewImageUrls
-                        });
-                      }}
-                      onLoad={scrollEnd}
-                    />
-                  )}
-                </View>
+                <Image
+                  className={styles.msgImage}
+                  mode='widthFix'
+                  style='width: 200px;'
+                  src={imageUrl}
+                  onClick={() => {
+                    Taro.previewImage({
+                      current: imageUrl,
+                      urls: previewImageUrls
+                    });
+                  }}
+                  onLoad={scrollEnd}
+                />
               ) : (
                 <View className={styles.msgContent} dangerouslySetInnerHTML={{
                   __html: text,

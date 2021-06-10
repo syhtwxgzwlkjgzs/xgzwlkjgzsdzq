@@ -19,7 +19,7 @@ class SiteInfo extends Component {
       <div className={`${layout.site} ${platform === 'pc' && layout.pc_site}`}>
         <SectionTitle titleStyle={platform === 'pc' ? { padding: '24px 0' } : {}} isShowMore={false} icon={{ color: '#2469F6', name: 'IntroduceOutlined' }} title="站点介绍" onShowMore={this.redirectToSearchResultUser} />
         <div className={layout.site_introduce}>
-          {siteIntroduction}
+          {siteIntroduction || '暂无介绍'}
         </div>
         {
           platform === 'h5'
@@ -27,7 +27,9 @@ class SiteInfo extends Component {
               <div className={layout.site_status}>
                 <div className={layout.site_status_list}>
                     <span className={layout.site_status_label}>更新</span>
-                    <span className={layout.site_status_item}>{updataTime && getSiteUpdateTime(updataTime)}</span>
+                    {/* TODO：和产品确认，暂时写死 */}
+                    {/* <span className={layout.site_status_item}>{(updataTime && getSiteUpdateTime(updataTime)) || '--'}</span> */}
+                    <span className={layout.site_status_item}>刚刚</span>
                 </div>
                 <div className={layout.site_status_list}>
                     <span className={layout.site_status_label}>成员</span>

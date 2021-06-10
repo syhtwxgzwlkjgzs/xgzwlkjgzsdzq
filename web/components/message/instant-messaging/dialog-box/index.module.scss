@@ -12,7 +12,7 @@
   }
 
   .box__inner {
-    height: 100%;
+    // height: 100%;
     padding: $padding-2n;
 
     .itself {
@@ -40,7 +40,7 @@
   overflow-y: auto;
 }
 
-.box__inner {
+.h5DialogBox .box__inner, .h5DialogBox-emoji .box__inner {
   padding: 0 $padding-4n;
 
   .itself {
@@ -114,8 +114,16 @@
   }
 }
 
+.msgImage {
+  border-radius: rem($border-radius-small);
+}
+
 .myself {
   flex-direction: row-reverse;
+  .msgImage {
+    margin-left: $im-msg-space-aside;
+    margin-right: $im-gap-btw-icon-and-msg;
+  }
   .msgContent {
     @include text-font;
     margin-left: $im-msg-space-aside;
@@ -130,6 +138,10 @@
 
 .itself {
   flex-direction: row;
+  .msgImage {
+    margin-right: $im-msg-space-aside;
+    margin-left: $im-gap-btw-icon-and-msg;
+  }
   .msgContent {
     @include text-font($color: $text-color-primary);
     margin-right: $im-msg-space-aside;

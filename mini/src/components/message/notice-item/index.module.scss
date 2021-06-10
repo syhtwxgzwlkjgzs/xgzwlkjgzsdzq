@@ -53,7 +53,6 @@
         }
       }
     }
-
   }
 
   .detail {
@@ -95,15 +94,26 @@
       color: $text-color-secondary;
       line-height: 20px;
 
+      .content-html {
+        overflow: hidden;
+        word-break: break-all;
+      }
+
       :global {
         .qq-emotion {
           width: 20px;
           height: 20px;
-          vertical-align: top;
+          vertical-align: text-top;
+          display: inline-block !important;
         }
 
-        a {
-          color: $primary-color;
+        .dzq-richText--mini {
+          overflow: hidden;
+          word-break: break-all;
+
+          .dzq-a {
+            display: inline;
+          }
         }
       }
     }
@@ -157,10 +167,16 @@
         line-height: 24px;
         background: $body-bg-color;
         border-radius: 0 0 5px 5px;
-        .content-html {
-          .tip {
-            color: $primary-color;
-            padding-right: $padding-5;
+
+        .tip {
+          color: $primary-color;
+          padding-right: $padding-5;
+          display: inline;
+        }
+
+        :global {
+          .dzq-richText--mini {
+            @include lamp-clamp(3);
           }
         }
       }
