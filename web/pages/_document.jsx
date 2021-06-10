@@ -8,23 +8,10 @@ class MyDocument extends Document {
   }
 
   createMonitor() {
-    if ( process.env.NODE_ENV === 'production' ) {
+    if (process.env.NODE_ENV === 'production' ) {
       return (
         <React.Fragment>
           <script src="https://cdn-go.cn/aegis/aegis-sdk/latest/aegis.min.js?_bid=3977"></script>
-          <script dangerouslySetInnerHTML={{__html: `
-              var serverId = window.localStorage.getItem('serverId');
-              if ( !serverId ) {
-                serverId = new Date().getTime() + Math.floor(Math.random() * 100);
-                window.localStorage.setItem('serverId', serverId);
-              }
-              window.aegis = new Aegis({
-                id: 'KqnrSUjzgfvqboCluu', // 项目ID，即上报key
-                uin: serverId, // 用户唯一 ID（可选）
-                reportApiSpeed: true, // 接口测速
-                reportAssetSpeed: true // 静态资源测速
-              })
-          `}}/>
         </React.Fragment>
       );
     }
