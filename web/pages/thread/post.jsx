@@ -141,13 +141,12 @@ class PostPage extends React.Component {
       if (ret.code === 0) {
         threadPost.formatThreadDetailToPostData(ret.data);
         // 设置主题状态、是否能操作红包和悬赏
-        const { postData: { isDraft, redpacket, rewardQa } } = this.props.threadPost;
-        // 非草稿状态下且有红包或者悬赏的帖子不支持再次编辑红包或者悬赏
-        const canEditRedpacketAndReward = isDraft || (!isDraft && !(rewardQa.money > 0 || redpacket.money > 0));
+        const { postData, isThreadPaid } = this.props.threadPost;
+        const { isDraft } = postData;
         this.setState({
           postType: isDraft ? 'isDraft' : 'isEdit',
-          canEditRedpacket: canEditRedpacketAndReward,
-          canEditReward: canEditRedpacketAndReward,
+          canEditRedpacket: !isThreadPaid,
+          canEditReward: !isThreadPaid,
         });
       } else {
         Toast.error({ content: ret.msg });
@@ -480,6 +479,7 @@ class PostPage extends React.Component {
 
   // 发布提交
   handleSubmit = async (isDraft) => {
+    if (!isDraft) this.setPostData({ draft: 0 });
     const { postData } = this.props.threadPost;
     if (!this.props.user.threadExtendPermissions.createThread) {
       Toast.info({ content: '您没有发帖权限' });
@@ -531,21 +531,17 @@ class PostPage extends React.Component {
       }
     }
 
-    const threadId = this.props.router.query?.id || '';
-
     // 支付流程
-    const { rewardQa, orderInfo, redpacket } = threadPost.postData;
+    const { rewardQa } = threadPost.postData;
     const { redpacketTotalAmount } = threadPost;
     // 如果是编辑的悬赏帖子，则不用再次支付
-    const rewardAmount = (threadId && orderInfo.status) ? 0 : plus(rewardQa.value, 0);
+    const rewardAmount = threadPost.isThreadPaid ? 0 : plus(rewardQa.value, 0);
     // 如果是编辑的红包帖子，则不用再次支付
-    const redAmount = (threadId && orderInfo.status) ? 0 : plus(redpacketTotalAmount, 0);
+    const redAmount = threadPost.isThreadPaid ? 0 : plus(redpacketTotalAmount, 0);
     const amount = plus(rewardAmount, redAmount);
     const data = { amount };
     // 保存草稿操作不执行支付流程
-    console.log(threadId);
-    if (!isDraft && amount > 0 && (!threadId
-      || (threadId && (!rewardQa.orderSn || !redpacket.orderSn)))) {
+    if (!isDraft && amount > 0) {
       let type = ORDER_TRADE_TYPE.RED_PACKET;
       let title = '支付红包';
       if (redAmount > 0) {
@@ -582,10 +578,9 @@ class PostPage extends React.Component {
 
   async createThread(isDraft) {
     const { threadPost, thread } = this.props;
-    const threadId = this.props.router.query.id || '';
     let ret = {};
     this.toastInstance = Toast.loading({ content: '发布中...' });
-    if (threadId) ret = await threadPost.updateThread(threadId);
+    if (threadPost.postData.threadId) ret = await threadPost.updateThread(threadPost.postData.threadId);
     else ret = await threadPost.createThread();
     const { code, data, msg } = ret;
     if (code === 0) {

@@ -140,13 +140,12 @@ class Index extends Component {
         .replace(/<span.*?>(.*?)<\/span>/g, `$1`);
       ret.data.content.text = realText;
       threadPost.formatThreadDetailToPostData(ret.data);
-      const { postData: { redpacket, rewardQa } } = this.props.threadPost
-        // 非草稿状态下且有红包或者悬赏的帖子不支持再次编辑红包或者悬赏
-        const canEditRedpacketAndReward = isDraft || (!isDraft && !(rewardQa.money > 0 || redpacket.money > 0));
+      const { isThreadPaid } = this.props.threadPost
+
         this.setState({
           postType: isDraft ? 'isDraft' : 'isEdit',
-          canEditRedpacket: canEditRedpacketAndReward,
-          canEditReward: canEditRedpacketAndReward,
+          canEditRedpacket: !isThreadPaid,
+          canEditReward: !isThreadPaid,
         });
       // isDraft && this.openSaveDraft(); // 现阶段，自动保存功能关闭
     } else {
@@ -453,9 +452,9 @@ class Index extends Component {
     const { rewardQa, redpacket } = postData;
 
     // 如果是编辑的悬赏帖子，则不用再次支付
-    const rewardAmount = (threadId && rewardQa.id) ? 0 : (Number(rewardQa.value) || 0);
+    const rewardAmount = threadPost.isThreadPaid ? 0 : (Number(rewardQa.value) || 0);
     // 如果是编辑的红包帖子，则不用再次支付
-    const redAmount = (threadId && redpacket.id) ? 0 : (Number(redpacketTotalAmount) || 0);
+    const redAmount = threadPost.isThreadPaid ? 0 : (Number(redpacketTotalAmount) || 0);
 
     const amount = rewardAmount + redAmount;
     const options = { amount };
@@ -521,7 +520,7 @@ class Index extends Component {
       Taro.hideLoading();
 
       // 未支付的订单
-      if (threadPost.postData.orderInfo.orderSn
+      if (isDraft && threadPost.postData.orderInfo.orderSn
         && !threadPost.postData.orderInfo.status
         && !threadPost.postData.draft) {
         this.props.payBox.show();

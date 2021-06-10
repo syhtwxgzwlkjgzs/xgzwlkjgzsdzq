@@ -4,6 +4,7 @@ import { readEmoji, readFollow, readProcutAnalysis, readTopics, createThread, up
 import { LOADING_TOTAL_TYPE, THREAD_TYPE } from '@common/constants/thread-post';
 import { emojiFromEditFormat, emojiFormatForCommit } from '@common/utils/emoji-regexp';
 import { formatDate } from '@common/utils/format-date';
+import { initPostData } from './common';
 
 class ThreadPostAction extends ThreadPostStore {
   /**
@@ -178,26 +179,7 @@ class ThreadPostAction extends ThreadPostStore {
   // 重置发帖数据
   @action.bound
   resetPostData() {
-    this.postData = {
-      title: '',
-      categoryId: 0,
-      anonymous: 0,
-      draft: 0,
-      price: 0,
-      attachmentPrice: 0,
-      freeWords: 1,
-      position: {},
-      contentText: '',
-      audio: {},
-      rewardQa: {},
-      product: {},
-      redpacket: {},
-      video: {},
-      images: {},
-      files: {},
-      orderInfo: {},
-      isDraft: false,
-    };
+    this.postData = { ...initPostData };
     this.setCategorySelected();
   }
 
@@ -241,17 +223,18 @@ class ThreadPostAction extends ThreadPostStore {
         body: { audioId: audio.id || audio.threadVideoId || '' },
       };
     }
+    const draft = this.isThreadPaid ? 0 : 1;
     if (redpacket.price && !orderInfo.status) {
       contentIndexes[THREAD_TYPE.redPacket] = {
         tomId: THREAD_TYPE.redPacket,
-        body: { orderSn: orderInfo.orderSn, ...redpacket, draft: 1 },
+        body: { orderSn: orderInfo.orderSn, ...redpacket, draft },
       };
     }
 
     if (rewardQa.value && !orderInfo.status) {
       contentIndexes[THREAD_TYPE.reward] = {
         tomId: THREAD_TYPE.reward,
-        body: { expiredAt: rewardQa.times, price: rewardQa.value, type: 0, orderSn: orderInfo.orderSn, draft: 1 },
+        body: { expiredAt: rewardQa.times, price: rewardQa.value, type: 0, orderSn: orderInfo.orderSn, draft },
       };
     }
     return contentIndexes;
@@ -284,11 +267,11 @@ class ThreadPostAction extends ThreadPostStore {
     params.price = price || 0;
     params.freeWords = freeWords || 0;
     params.attachmentPrice = attachmentPrice || 0;
-    if (this.postData.draft) params.draft = this.postData.draft;
-    if (redpacket.price) {
+    params.draft = this.postData.draft;
+    if (redpacket.price && !this.isThreadPaid) {
       params.draft = 1;
     }
-    if (rewardQa.value) {
+    if (rewardQa.value && !this.isThreadPaid) {
       params.draft = 1;
     }
     if (this.postData.anonymous) params.anonymous = this.postData.anonymous;
@@ -299,7 +282,7 @@ class ThreadPostAction extends ThreadPostStore {
 
   @action
   formatThreadDetailToPostData(detail) {
-    const { title, categoryId, content, freewords = 0, isDraft, isAnonymous, orderInfo = {} } = detail || {};
+    const { title, categoryId, content, freewords = 0, isDraft, isAnonymous, orderInfo = {}, threadId } = detail || {};
     const price = Number(detail.price);
     const attachmentPrice = Number(detail.attachmentPrice);
     let position = {};
@@ -345,11 +328,17 @@ class ThreadPostAction extends ThreadPostStore {
         redpacket = { ...(contentindexes[index]?.body || {}), price };
       }
       // expiredAt: rewardQa.times, price: rewardQa.value, type: 0
-      if (tomId === THREAD_TYPE.reward) rewardQa = {
-        ...(contentindexes[index].body || {}),
-        times: formatDate(contentindexes[index].body.expiredAt?.replace(/-/g, '/'), 'yyyy/MM/dd hh:mm'),
-        value: contentindexes[index].body.money || '',
-      };
+      if (tomId === THREAD_TYPE.reward) {
+        const times = contentindexes[index].body.expiredAt
+          ? formatDate(contentindexes[index].body.expiredAt?.replace(/-/g, '/'), 'yyyy/MM/dd hh:mm')
+          : formatDate(new Date().getTime() + (25 * 3600 * 1000), 'yyyy/MM/dd hh:mm');
+        const value = contentindexes[index].body.money || '';
+        rewardQa = {
+          ...(contentindexes[index].body || {}),
+          times,
+          value,
+        };
+      }
     });
     const anonymous = isAnonymous ? 1 : 0;
     this.setPostData({
@@ -371,6 +360,7 @@ class ThreadPostAction extends ThreadPostStore {
       isDraft,
       anonymous,
       orderInfo,
+      threadId,
     });
   }
 
