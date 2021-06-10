@@ -93,12 +93,12 @@ export default class index extends Component {
             <Text className={styles.setTtile}>设置新密码</Text>
             <View className={styles.labelInfo}>
               <View className={styles.labelValue}>
-                <Input className={styles.input} value={newPayPwd} onChange={this.handleChangeNewPwd} mode="password" placeholder="请输入新密码" type="number" maxLength={6} />
+                <Input className={styles.input} value={newPayPwd} onChange={this.handleChangeNewPwd} mode="password" placeholder="请输入新密码" type="number" maxLength={6} trim />
               </View>
             </View>
             <View className={styles.labelInfo}>
               <View className={styles.labelValue}>
-                <Input className={styles.input} type="number" maxLength={6} value={newPayPwdRepeat} onChange={this.handleChangeRepeatPwd} mode="password" placeholder="请重复输入新密码" />
+                <Input className={styles.input} type="number" maxLength={6} value={newPayPwdRepeat} onChange={this.handleChangeRepeatPwd} mode="password" placeholder="请重复输入新密码" trim />
               </View>
             </View>
           </View>
