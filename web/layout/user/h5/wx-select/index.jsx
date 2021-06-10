@@ -25,7 +25,7 @@ class WXSelectH5Page extends React.Component {
       <div className={layout.container}>
         <HomeHeader hideInfo mode='login'/>
         <div className={layout.content}>
-          <div className={layout.title}>绑定微信号</div>
+          <div className={layout.title}>微信绑定</div>
           <div className={layout.tips}>
             <div className={layout.tips_user}>
               hi，
