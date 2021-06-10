@@ -49,6 +49,7 @@ export default class UserLoginStore {
         setAccessToken({
           accessToken,
         });
+        return loginResp;
       }
 
       if (loginResp.code === 0) {

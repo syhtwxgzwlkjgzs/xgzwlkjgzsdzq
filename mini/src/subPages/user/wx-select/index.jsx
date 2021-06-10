@@ -9,10 +9,10 @@ import Icon from '@discuzq/design/dist/components/icon/index';
 import Page from '@components/page';
 import { usernameAutoBind } from '@server';
 import setAccessToken from '@common/utils/set-access-token';
-import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus } from '@common/store/login/util';
+import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus, isExtFieldsOpen } from '@common/store/login/util';
 import { get } from '@common/utils/get';
 import layout from './index.module.scss';
-
+import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 
 const NEED_BIND_PHONE_FLAG = -8001;
 @inject('site')
@@ -74,8 +74,21 @@ class WXSelect extends Component {
         Message: res.msg,
       };
     } catch (error) {
+      // 注册信息补充
+      if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+        if (isExtFieldsOpen(this.props.site)) {
+          this.props.commonLogin.needToCompleteExtraInfo = true;
+          redirectTo({ url: '/subPages/user/supplementary/index' });
+          return;
+        }
+        redirectTo({ url: '/pages/index/index' });
+        return;
+      }
+
       // 跳转状态页
       if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
+        const uid = get(error, 'uid', '');
+        uid && this.props.user.updateUserInfo(uid);
         this.props.commonLogin.setStatusMessage(error.Code, error.Message);
         navigateTo({
           url: `/subPages/user/status/index?statusCode=${error.Code}&statusMsg=${error.Message}`
