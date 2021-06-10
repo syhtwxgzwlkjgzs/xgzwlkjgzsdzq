@@ -9,6 +9,7 @@ import FilterView from './components/filter-view';
 import BaseLayout from '@components/base-layout';
 import initJSSdk from '@common/utils/initJSSdk.js';
 import wxAuthorization from '../../user/h5/wx-authorization';
+import VList from './list';
 
 @inject('site')
 @inject('user')
@@ -33,10 +34,8 @@ class IndexH5Page extends React.Component {
 
   async componentDidMount() {
     try {
-      this.handleWeiXinShare()
-    } catch (error) {
-      
-    }
+      this.handleWeiXinShare();
+    } catch (error) {}
 
     const { filter = {} } = this.props.index;
 
@@ -61,16 +60,19 @@ class IndexH5Page extends React.Component {
     const imgUrl = site.webConfig.setSite.siteLogo;
     const link = site.webConfig.setSite.siteUrl;
     console.log({
-      title, desc, imgUrl,
+      title,
+      desc,
+      imgUrl,
     });
-    wx.ready(() => {   // 需在用户可能点击分享按钮前就先调用
+    wx.ready(() => {
+      // 需在用户可能点击分享按钮前就先调用
       wx.updateAppMessageShareData({
         title, // 分享标题
         desc, // 分享描述
         link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
         imgUrl, // 分享图标
       });
-    
+
       wx.updateTimelineShareData({
         title, // 分享标题
         link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
@@ -79,7 +81,7 @@ class IndexH5Page extends React.Component {
 
       console.log(111);
     });
-  }
+  };
 
   checkIsOpenDefaultTab() {
     return this.props.site.checkSiteIsOpenDefautlThreadListData();
@@ -107,7 +109,7 @@ class IndexH5Page extends React.Component {
     const { filter } = this.state;
     const requestFilter = Object.assign({}, filter);
     dispatch('click-filter', requestFilter);
-  }
+  };
 
   onClickTab = (id = '') => {
     const { dispatch = () => {} } = this.props;
@@ -116,7 +118,7 @@ class IndexH5Page extends React.Component {
 
     // 若选中的一级标签，存在二级标签，则将一级id和所有二级id全都传给后台
     let newCategoryIds = [currentIndex];
-    const tmp = categories.filter(item => item.pid === currentIndex);
+    const tmp = categories.filter((item) => item.pid === currentIndex);
     if (tmp.length && tmp[0]?.children?.length) {
       newCategoryIds = [currentIndex];
       tmp[0]?.children?.forEach((item) => {
@@ -144,7 +146,7 @@ class IndexH5Page extends React.Component {
 
     const newFilter = { ...this.state.filter, categoryids: requestCategoryids, types, essence, sequence };
     dispatch('click-filter', newFilter);
-    
+
     this.props.index.setFilter(newFilter);
 
     const newCurrentIndex = this.resetCurrentIndex(categoryids[0]);
@@ -166,7 +168,7 @@ class IndexH5Page extends React.Component {
       const { categories = [] } = this.props.index;
       categories.forEach((item) => {
         if (item.children?.length) {
-          const tmp = item.children.filter(children => children.pid === newId);
+          const tmp = item.children.filter((children) => children.pid === newId);
           // TODO H5首页暂时不显示二级标题
           if (tmp.length) {
             newCurrentIndex = item.pid;
@@ -175,7 +177,7 @@ class IndexH5Page extends React.Component {
       });
     }
     return newCurrentIndex;
-  }
+  };
 
   // 上拉加载更多
   onRefresh = () => {
@@ -194,7 +196,7 @@ class IndexH5Page extends React.Component {
     } else if (fixedTab && scrollTop < height) {
       this.setState({ fixedTab: false });
     }
-  }
+  };
 
   // 后台接口的分类数据不会包含「全部」，此处前端手动添加
   handleCategories = () => {
@@ -223,25 +225,25 @@ class IndexH5Page extends React.Component {
       <>
         {categories?.length > 0 && (
           <>
-          <div ref={this.listRef} className={`${styles.homeContent} ${fixedTab && styles.fixed}`}>
-            <Tabs
-              className={styles.tabsBox}
-              scrollable
-              type="primary"
-              onActive={this.onClickTab}
-              activeId={currentIndex}
-              tabBarExtraContent={
-                <div onClick={this.searchClick} className={styles.tabIcon}>
-                  <Icon name="SecondaryMenuOutlined" className={styles.buttonIcon} size={16} />
-                </div>
-              }
-            >
-              {newCategories?.map((item, index) => (
-                <Tabs.TabPanel key={index} id={item.pid} label={item.name} />
-              ))}
-            </Tabs>
-          </div>
-          {fixedTab &&  <div className={styles.tabPlaceholder}></div>}
+            <div ref={this.listRef} className={`${styles.homeContent} ${fixedTab && styles.fixed}`}>
+              <Tabs
+                className={styles.tabsBox}
+                scrollable
+                type="primary"
+                onActive={this.onClickTab}
+                activeId={currentIndex}
+                tabBarExtraContent={
+                  <div onClick={this.searchClick} className={styles.tabIcon}>
+                    <Icon name="SecondaryMenuOutlined" className={styles.buttonIcon} size={16} />
+                  </div>
+                }
+              >
+                {newCategories?.map((item, index) => (
+                  <Tabs.TabPanel key={index} id={item.pid} label={item.name} />
+                ))}
+              </Tabs>
+            </div>
+            {fixedTab && <div className={styles.tabPlaceholder}></div>}
           </>
         )}
       </>
@@ -277,7 +279,7 @@ class IndexH5Page extends React.Component {
     const newCategories = this.handleCategories();
 
     return (
-      <BaseLayout
+      <div
         showHeader={false}
         showTabBar
         onRefresh={this.onRefresh}
@@ -285,28 +287,30 @@ class IndexH5Page extends React.Component {
         isFinished={isFinished}
         onScroll={this.handleScroll}
         quickScroll={true}
-        curr='home'
-        pageName='home'
+        curr="home"
+        pageName="home"
         preload={1000}
         onClickTabBar={this.onClickTabBar}
         requestError={this.props.isError}
         errorText={this.props.errorText}
       >
-        <HomeHeader ref={this.headerRef}/>
+        <HomeHeader ref={this.headerRef} />
 
         {this.renderTabs()}
 
-        {this.renderHeaderContent()}
+        {/* {this.renderHeaderContent()} */}
 
-        {pageData?.length > 0
-          && pageData.map((item, index) => (
+        <VList list={pageData}></VList>
+
+        {/* {pageData?.length > 0 &&
+          pageData.map((item, index) => (
             <ThreadContent
               key={index}
               showBottomStyle={index !== pageData.length - 1}
               data={item}
               className={styles.listItem}
             />
-          ))}
+          ))} */}
 
         <FilterView
           data={newCategories}
@@ -315,7 +319,7 @@ class IndexH5Page extends React.Component {
           visible={this.state.visible}
           onSubmit={this.onClickFilter}
         />
-      </BaseLayout>
+      </div>
     );
   }
 }
