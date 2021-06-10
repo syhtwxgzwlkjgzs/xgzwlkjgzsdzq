@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import { View, Input } from '@tarojs/components';
-import { debounce } from '@common/utils/throttle-debounce.js';
+import { debounce, throttle } from '@common/utils/throttle-debounce.js';
 
 import styles from './index.module.scss';
+import { useEffect } from 'react';
 
 /**
  * 搜索输入框
@@ -23,12 +24,14 @@ const SearchInput = ({
   searchWhileTyping = false,
   searchWhileTypingStartsAt = 0,
 }) => {
-  // const [value, setValue] = React.useState(defaultValue);
+  const [value, setValue] = React.useState(defaultValue);
   const [isShow, setIsShow] = React.useState(false);
   const [timeoutID, setTimeoutID] = React.useState(null);
+  const inputRef = useRef(null);
+
   const inputChange = (e) => {
     const val = e.target.value;
-    // setValue(val);
+    setValue(val);
     if (val.length > 0) {
       if(!isShow) setIsShow(true)
     }
@@ -43,19 +46,24 @@ const SearchInput = ({
     }
   }
   const clearInput = () => {
+    if(inputRef.current.props) {
+      inputRef.current.props.value = '';
+    }
+    setValue('');
     setIsShow(false)
   }
-  const inputClick = (e) => {
-    // TODO: 加节流
+
+  const inputClick = throttle((e) => {
     const val = e.target.value || "";
     onSearch(val)
-  }
+  }, 300);
+
   return (
     <View className={`${styles.container} ${!isShowBottom && styles.hiddenBottom}`}>
       <View className={styles.inputWrapper}>
         <Icon className={styles.inputWrapperIcon} name="SearchOutlined" size={16} />
         <Input
-          // value={value}
+          value={debounce(() => value, 0)}
           placeholder='请输入想要搜索的内容...'
           onEnter={e => inputClick(e)}
           onInput={e => inputChange(e)}
@@ -63,6 +71,7 @@ const SearchInput = ({
           confirmType='search'
           onConfirm={e => inputClick(e)}
           placeholderClass={styles.placeholder}
+          ref={inputRef}
         />
         {
           isShow && (
