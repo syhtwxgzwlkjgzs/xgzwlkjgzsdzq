@@ -48,12 +48,13 @@ export default class index extends Component {
                 onChange={this.handleChangeNewUserName}
                 placeholder="请输入新用户名"
                 maxLength={30}
+                trim
               />
             </div>
           </div>
         </div>
         <div className={styles.bottom}>
-          <Button full onClick={this.handleSubmit} type={'primary'} className={styles.btn}>
+          <Button disabled={!editUserName} full onClick={this.handleSubmit} type={'primary'} className={styles.btn}>
             提交
           </Button>
         </div>

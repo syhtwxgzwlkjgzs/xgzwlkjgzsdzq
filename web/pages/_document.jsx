@@ -7,6 +7,30 @@ class MyDocument extends Document {
     return { ...initialProps };
   }
 
+  createMonitor() {
+    if ( process.env.NODE_ENV === 'production' ) {
+      return (
+        <React.Fragment>
+          <script src="https://cdn-go.cn/aegis/aegis-sdk/latest/aegis.min.js?_bid=3977"></script>
+          <script dangerouslySetInnerHTML={{__html: `
+              var serverId = window.localStorage.getItem('serverId');
+              if ( !serverId ) {
+                serverId = new Date().getTime() + Math.floor(Math.random() * 100);
+                window.localStorage.setItem('serverId', serverId);
+              }
+              window.aegis = new Aegis({
+                id: 'KqnrSUjzgfvqboCluu', // 项目ID，即上报key
+                uin: serverId, // 用户唯一 ID（可选）
+                reportApiSpeed: true, // 接口测速
+                reportAssetSpeed: true // 静态资源测速
+              })
+          `}}/>
+        </React.Fragment>
+      );
+    }
+    return null;
+  }
+
   render() {
     return (
       <Html lang="cn">
@@ -25,13 +49,17 @@ class MyDocument extends Document {
                 window.addEventListener('resize', remCalc);
               }, 0);
           ` }} />
-          {/* <!--腾讯地图定位组件--> */}
+          {/* <!--腾讯地图定位组件--> */} 
           <script async src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
+          {this.createMonitor()}
         </Head>
         <body>
           <Main />
           <NextScript/>
         </body>
+        
+
+    
         <script dangerouslySetInnerHTML={{__html: `
             // 微信设置字体最大，布局乱的补丁
             function is_weixn() {

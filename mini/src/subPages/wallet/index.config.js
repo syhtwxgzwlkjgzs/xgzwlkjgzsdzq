@@ -1,3 +1,3 @@
 export default {
-  navigationBarBackgroundColor: '#2469f6',
+  navigationBarBackgroundColor: '#2469f6'
 };
