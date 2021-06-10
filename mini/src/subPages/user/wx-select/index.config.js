@@ -1,3 +1,3 @@
 export default {
-  navigationBarTitleText: '落地页',
+  navigationBarTitleText: '微信绑定',
 };
