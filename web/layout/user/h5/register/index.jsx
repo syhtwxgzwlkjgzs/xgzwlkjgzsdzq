@@ -89,6 +89,7 @@ class RegisterH5Page extends React.Component {
       Toast.error({
         content: e.Message,
         hasMask: false,
+        duration: 3000,
       });
     }
   };
