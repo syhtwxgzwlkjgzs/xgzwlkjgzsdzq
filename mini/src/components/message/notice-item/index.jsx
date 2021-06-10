@@ -109,7 +109,7 @@ class Index extends Component {
       url = `/subPages/thread/index?id=${item.threadId}`
     }
     if (type === 'chat') {
-      url = `/subPages/message/index?page=chat&dialogId=${item.dialogId}&nickname=${item.username}`;
+      url = `/subPages/message/index?page=chat&dialogId=${item.dialogId}&nickname=${item.nickname}`;
     }
 
     url && Taro.navigateTo({ url });
@@ -142,10 +142,10 @@ class Index extends Component {
               {avatarUrl
                 ? <Avatar image={avatarUrl} circle={true} />
                 : <Avatar
-                  text={item.username}
+                  text={item.nickname}
                   circle={true}
                   style={{
-                    backgroundColor: `#${this.getBackgroundColor(item.username)}`
+                    backgroundColor: `#${this.getBackgroundColor(item.nickname)}`
                   }}
                 />
               }
@@ -168,7 +168,7 @@ class Index extends Component {
                 })}
                 onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
               >
-                {item.username || this.filterTag(item.title)}
+                {item.nickname || this.filterTag(item.title)}
               </View>
               {['chat', 'thread'].includes(type) &&
                 <View className={styles.time}>{diffDate(item.createdAt)}</View>

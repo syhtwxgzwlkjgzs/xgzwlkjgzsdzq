@@ -114,6 +114,7 @@ class Index extends React.Component {
         avatar: item.userAvatar,
         userId: item.userId,
         username: item.username,
+        nickname: item.nickname,
       })
     });
 
