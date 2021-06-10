@@ -141,7 +141,14 @@ class Index extends Component {
       ret.data.content.text = realText;
       threadPost.formatThreadDetailToPostData(ret.data);
       const { isThreadPaid } = this.props.threadPost
-
+      if (isThreadPaid) {
+        this.postToast('已经支付的帖子不支持编辑');
+        const timer = setTimeout(() => {
+          clearTimeout(timer);
+          Taro.redirectTo({ url: `/subPages/thread/index?id=${id}` });
+        }, 1000);
+        return;
+      }
         this.setState({
           postType: isDraft ? 'isDraft' : 'isEdit',
           canEditRedpacket: !isThreadPaid,
@@ -417,7 +424,7 @@ class Index extends Component {
     const { images, video, files, audio } = postData;
     if (!(postData.contentText || video.id || audio.id || Object.values(images).length
       || Object.values(files).length)) {
-      this.postToast({ content: '请至少填写您要发布的内容或者上传图片、附件、视频、语音' });
+      this.postToast('请至少填写您要发布的内容或者上传图片、附件、视频、语音');
       return;
     }
     if (!this.checkAttachPrice()) {

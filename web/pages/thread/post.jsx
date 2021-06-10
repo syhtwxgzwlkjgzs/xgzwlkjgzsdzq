@@ -127,6 +127,10 @@ class PostPage extends React.Component {
     if (!user.permissions) user.updateUserInfo();
   }
 
+  postToast = (content) => {
+    Toast.info({ content, duration: 2000, hasMask: true });
+  };
+
   async fetchDetail() {
     const { thread, threadPost } = this.props;
     // 如果是编辑操作，需要获取链接中的帖子id，通过帖子id获取帖子详情信息
@@ -143,6 +147,14 @@ class PostPage extends React.Component {
         // 设置主题状态、是否能操作红包和悬赏
         const { postData, isThreadPaid } = this.props.threadPost;
         const { isDraft } = postData;
+        if (isThreadPaid) {
+          Toast.info({ content: '已经支付的帖子不支持编辑', duration: 1000, hasMask: true });
+          const timer = setTimeout(() => {
+            clearTimeout(timer);
+            this.props.router.replace(`/thread/${id}`);
+          }, 1000);
+          return;
+        }
         this.setState({
           postType: isDraft ? 'isDraft' : 'isEdit',
           canEditRedpacket: !isThreadPaid,
@@ -314,7 +326,7 @@ class PostPage extends React.Component {
     const { postData } = this.props.threadPost;
 
     if (item.type === THREAD_TYPE.redPacket && !this.state.canEditRedpacket) {
-      Toast.info({ content: '红包内容不能编辑' });
+      this.postToast('红包内容不能编辑');
       return false;
     }
 
@@ -325,7 +337,7 @@ class PostPage extends React.Component {
     if (child && child.id) {
       const content = '帖子付费和附件付费不能同时设置';
       if (postData.price && child.id === '附件付费') {
-        Toast.error({ content });
+        this.postToast(content);
         return false;
       }
       if (postData.attachmentPrice && child.id === '帖子付费') {
@@ -483,32 +495,33 @@ class PostPage extends React.Component {
     const { postData } = this.props.threadPost;
     if (!this.props.user.threadExtendPermissions.createThread) {
       Toast.info({ content: '您没有发帖权限' });
+      this.postToast('您没有发帖权限');
       return;
     }
     if (!this.isAudioUploadDone) {
-      Toast.info({ content: '请等待语音上传完成再发布' });
+      this.postToast('请等待语音上传完成再发布');
       return;
     }
     if (!this.isVideoUploadDone) {
-      Toast.info({ content: '请等待视频上传完成再发布' });
+      this.postToast('请等待视频上传完成再发布');
       return;
     }
     if (this.imageList.length > 0) {
-      Toast.info({ content: '请等待图片上传完成再发布' });
+      this.postToast('请等待图片上传完成再发布');
       return;
     }
     if (this.fileList.length > 0) {
-      Toast.info({ content: '请等待文件上传完成再发布' });
+      this.postToast('请等待文件上传完成再发布');
       return;
     }
     const { images, video, files, audio } = postData;
     if (!(postData.contentText || video.id || audio.id || Object.values(images).length
       || Object.values(files).length)) {
-      Toast.info({ content: '请至少填写您要发布的内容或者上传图片、附件、视频、语音' });
+      this.postToast('请至少填写您要发布的内容或者上传图片、附件、视频、语音');
       return;
     }
     if (!this.checkAttachPrice()) {
-      Toast.info({ content: '请先上传附件、图片、视频或者语音' });
+      this.postToast('请先上传附件、图片、视频或者语音');
       return;
     }
     // if (!isDraft && this.state.count > MAX_COUNT) {
@@ -579,7 +592,7 @@ class PostPage extends React.Component {
   async createThread(isDraft) {
     const { threadPost, thread } = this.props;
     let ret = {};
-    this.toastInstance = Toast.loading({ content: '发布中...' });
+    this.toastInstance = Toast.loading({ content: '发布中...', hasMask: true });
     if (threadPost.postData.threadId) ret = await threadPost.updateThread(threadPost.postData.threadId);
     else ret = await threadPost.createThread();
     const { code, data, msg } = ret;
