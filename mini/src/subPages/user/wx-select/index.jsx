@@ -76,6 +76,8 @@ class WXSelect extends Component {
     } catch (error) {
       // 跳转状态页
       if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
+        const uid = get(error, 'uid', '');
+        uid && this.props.user.updateUserInfo(uid);
         this.props.commonLogin.setStatusMessage(error.Code, error.Message);
         navigateTo({
           url: `/subPages/user/status/index?statusCode=${error.Code}&statusMsg=${error.Message}`

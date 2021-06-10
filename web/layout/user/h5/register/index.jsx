@@ -81,6 +81,8 @@ class RegisterH5Page extends React.Component {
       }
 
       if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
+        const uid = get(e, 'uid', '');
+        uid && this.props.user.updateUserInfo(uid);
         this.props.commonLogin.setStatusMessage(e.Code, e.Message);
         this.props.router.push(`/user/status?statusCode=${e.Code}&statusMsg=${e.Message}`);
         return;
@@ -89,6 +91,7 @@ class RegisterH5Page extends React.Component {
       Toast.error({
         content: e.Message,
         hasMask: false,
+        duration: 3000,
       });
     }
   };

@@ -25,7 +25,7 @@ class WXSelectH5Page extends React.Component {
       <div className={layout.container}>
         <HomeHeader hideInfo mode='login'/>
         <div className={layout.content}>
-          <div className={layout.title}>绑定微信号</div>
+          <div className={layout.title}>微信绑定</div>
           <div className={layout.tips}>
             <div className={layout.tips_user}>
               hi，
@@ -92,6 +92,8 @@ class WXSelectH5Page extends React.Component {
 
                 // 跳转状态页
                 if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
+                  const uid = get(error, 'uid', '');
+                  uid && this.props.user.updateUserInfo(uid);
                   this.props.commonLogin.setStatusMessage(error.Code, error.Message);
                   this.props.router.push(`/user/status?statusCode=${error.Code}&statusMsg=${error.Message}`);
                   return;

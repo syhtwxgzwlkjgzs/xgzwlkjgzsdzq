@@ -11,7 +11,8 @@
   // bottom: 52px;
   // padding: 0 $padding-4n 68px $padding-4n;
   padding-bottom: 68px;
-
+  // margin-bottom: constant(safe-area-inset-bottom);  ///兼容 IOS<11.2/
+  // margin-bottom: env(safe-area-inset-bottom);
 }
 
 .box__inner {
