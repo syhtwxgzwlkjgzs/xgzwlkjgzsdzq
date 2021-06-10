@@ -1,10 +1,18 @@
 @import '@common/styles/index.scss';
-@import '@common/styles/_variable.scss';
 
 .verifyCodeBtn {
   height: 36px;
-  font-size: $font-size-primary;
+  .btn {
+    width: 94px;
+    height: 36px;
+    font-size: $font-size-primary;
+    padding: 0;
+    line-height: 36px;
+    box-sizing: border-box;
+  }
 }
 .verifyCodeDisabled {
-  color: var(--color-disabled);
+  .btn {
+    color: var(--color-disabled);
+  }
 }

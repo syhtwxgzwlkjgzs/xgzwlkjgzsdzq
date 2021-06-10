@@ -40,6 +40,7 @@ class SearchResultPostH5Page extends React.Component {
 
   render() {
     const { pageData, currentPage, totalPage } = this.props.search.threads || {};
+    const { threadsError } = this.props.search || {}
 
     return (
       <BaseLayout
@@ -57,6 +58,8 @@ class SearchResultPostH5Page extends React.Component {
           noData={!pageData?.length}
           icon={{ type: 3, name: 'HotOutlined' }}
           mold='plane'
+          isError={threadsError.isError}
+          errorText={threadsError.errorText}
         >
           {
             pageData?.map((item, index) => (

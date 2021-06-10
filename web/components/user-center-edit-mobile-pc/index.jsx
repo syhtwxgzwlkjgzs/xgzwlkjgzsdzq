@@ -250,7 +250,7 @@ class index extends Component {
                   )
                 }
                 <div className={`${styles.labelValue} ${styles.verifyCodeBtn}`}>
-                  <VerifyCode className={styles.btnColor} btnType={true} initTimeValue={this.state.initTimeValue} value_pass_check={valuePassCheck} key={currentStep} text={currentStep === 'first' ? '发送验证码' : '获取验证码'} getVerifyCode={this.getVerifyCode} />
+                  <VerifyCode className={styles.btnColor} btnType={true} initTimeValue={this.state.initTimeValue} valuePassCheck={valuePassCheck} key={currentStep} text={currentStep === 'first' ? '发送验证码' : '获取验证码'} getVerifyCode={this.getVerifyCode} />
                 </div>
               </div>
             </div>

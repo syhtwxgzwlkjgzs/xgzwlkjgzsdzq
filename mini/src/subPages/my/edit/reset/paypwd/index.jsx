@@ -7,5 +7,5 @@ export default function index() {
     <Page>
       <UserCenterEditResetPayPwd />
     </Page>
-  )
+  );
 }
