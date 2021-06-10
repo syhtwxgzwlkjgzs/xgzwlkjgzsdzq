@@ -12,7 +12,7 @@
   }
 
   .box__inner {
-    height: 100%;
+    // height: 100%;
     padding: $padding-2n;
 
     .itself {
@@ -40,7 +40,7 @@
   overflow-y: auto;
 }
 
-.box__inner {
+.h5DialogBox .box__inner, .h5DialogBox-emoji .box__inner {
   padding: 0 $padding-4n;
 
   .itself {

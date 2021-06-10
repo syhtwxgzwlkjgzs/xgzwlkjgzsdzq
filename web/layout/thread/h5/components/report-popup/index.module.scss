@@ -48,6 +48,22 @@
   }
 }
 
+.textarea {
+  :global {
+    .dzq-textarea {
+      width: 100%;
+    }
+    .dzq-textarea__inner {
+      background: $text-bg-color2;
+      padding: $padding-2n $padding-3n;
+      height: 80px !important;
+      resize: none;
+      font-size: $font-size-base;
+      -webkit-appearance: none; // ios下去除上面阴影
+    }
+  }
+}
+
 .input {
   margin-top: rem($margin-2n);
   width: 100%;

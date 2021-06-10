@@ -6,8 +6,6 @@ import MyH5Page from '@layout/my/h5';
 import MyPCPage from '@layout/my/pc';
 import ViewAdapter from '@components/view-adapter';
 import clearLoginStatus from '@common/utils/clear-login-status';
-import { Button } from '@discuzq/design';
-import Router from '@discuzq/sdk/dist/router';
 
 @inject('site')
 @observer
@@ -16,7 +14,7 @@ class MyCenter extends React.Component {
     clearLoginStatus();
     window.location.replace('/');
   };
-  
+
   render() {
     return <ViewAdapter 
       h5={<MyH5Page />}
