@@ -140,7 +140,7 @@ class UserCenterAction extends React.Component {
             </View>
           </View>
 
-          <View className={styles.userCenterActionItemContainer} style={{ visibility: !this.props.user.isAdmini && 'hidden' }}>
+          <View className={styles.userCenterActionItemContainer} style={{ visibility: this.props.user.isAdmini && 'hidden' }}>
             <View onClick={this.handleMyInvite} className={styles.userCenterActionItem}>
               <View className={styles.userCenterActionItemIcon}>
                 <Badge>
