@@ -16,6 +16,7 @@ const Index = inject('user', 'threadPost')(observer(({
   onPluginClick,
   onSubmit,
   operationType,
+  style,
 }) => {
   const [currentTool, setCurrentTool] = useState("");
 
@@ -63,7 +64,7 @@ const Index = inject('user', 'threadPost')(observer(({
   }, [tep, currentTool, operationType, threadPost.postData])
 
   return (
-    <View className={styles['container']}>
+    <View className={styles['container']} style={style}>
       <View>{plug}</View>
       <Text onClick={() => {
         onSubmit();
