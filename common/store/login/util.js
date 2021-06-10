@@ -85,7 +85,12 @@ const checkUserStatus = (resp) => {
     let { code } = resp;
 
     const status = get(resp, 'data.userStatus', 0);
+    const uid = get(resp, 'data.uid', '');
     if (code === 0 && status ===  REVIEWING) {
+      const accessToken = get(resp, 'data.accessToken', '');
+      setAccessToken({
+        accessToken,
+      });
       code = status;
     }
 
@@ -94,6 +99,7 @@ const checkUserStatus = (resp) => {
       throw {
         Code: code,
         Message: rejectReason,
+        uid
       };
     }
   }

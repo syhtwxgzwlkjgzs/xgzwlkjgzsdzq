@@ -7,6 +7,7 @@ import layout from './index.module.scss';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
 import clearLoginStatus from '@common/utils/clear-login-status';
+import { get } from '@common/utils/get';
 import PcBodyWrap from '../components/pc-body-wrap';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT, isExtFieldsOpen } from '@common/store/login/util';
 
@@ -44,6 +45,8 @@ class BindNicknameH5Page extends React.Component {
     } catch (e) {
       // 跳转状态页
       if ([BANNED_USER, REVIEWING, REVIEW_REJECT].includes(e.Code)) {
+        const uid = get(e, 'uid', '');
+        uid && this.props.user.updateUserInfo(uid);
         this.props.commonLogin.setStatusMessage(e.Code, e.Message);
         this.props.router.push(`/user/status?statusCode=${e.Code}&statusMsg=${e.Message}`);
         return;

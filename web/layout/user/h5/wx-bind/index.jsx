@@ -114,6 +114,8 @@ class WeixinBindH5Page extends React.Component {
       this.props.h5QrCode.isBtn = false;
       // 跳转状态页
       if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
+        const uid = get(error, 'uid', '');
+        uid && this.props.user.updateUserInfo(uid);
         this.props.commonLogin.setStatusMessage(error.Code, error.Message);
         this.props.router.push(`/user/status?statusCode=${error.Code}&statusMsg=${error.Message}`);
         return;

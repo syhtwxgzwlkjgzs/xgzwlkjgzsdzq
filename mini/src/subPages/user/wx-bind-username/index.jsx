@@ -37,6 +37,8 @@ class Index extends Component {
       });
     } catch (e) {
       if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
+        const uid = get(e, 'uid', '');
+        uid && this.props.user.updateUserInfo(uid);
         this.props.commonLogin.setStatusMessage(e.Code, e.Message);
         navigateTo({
           url: `/subPages/user/status/index?statusCode=${e.Code}&statusMsg=${e.Message}`
