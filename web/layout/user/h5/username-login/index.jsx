@@ -32,13 +32,14 @@ class UsernameH5Login extends React.Component {
   };
 
   loginErrorHandler = async (e) => {
-    const { site } = this.props;
     // 跳转补充信息页
-    // if (isExtFieldsOpen(site) && e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
-    //   this.props.commonLogin.needToCompleteExtraInfo = true;
-    //   this.props.router.push('/user/supplementary');
-    //   return;
-    // }
+    if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+      if (isExtFieldsOpen(this.props.site)) {
+        this.props.commonLogin.needToCompleteExtraInfo = true;
+        return this.props.router.push('/user/supplementary');
+      }
+      return window.location.href = '/';
+    }
 
     // 微信绑定
     if (e.Code === NEED_BIND_WEIXIN_FLAG) {
@@ -76,6 +77,8 @@ class UsernameH5Login extends React.Component {
 
     // 跳转状态页
     if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
+      const uid = get(e, 'uid', '');
+      uid && this.props.user.updateUserInfo(uid);
       this.props.commonLogin.setStatusMessage(e.Code, e.Message);
       this.props.router.push(`/user/status?statusCode=${e.Code}&statusMsg=${e.Message}`);
       return;

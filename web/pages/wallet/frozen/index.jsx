@@ -1,12 +1,21 @@
 import React from 'react';
 import { withRouter } from 'next/router';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import Frozen from '@layout/wallet/frozen';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
+import ViewAdapter from '@components/view-adapter';
 
+@inject('site')
+@observer
 class FrozenPage extends React.Component {
   render() {
-    return <Frozen />;
+    return (
+      <ViewAdapter 
+        pc={null}
+        h5={<Frozen />}
+        title={`冻结金额 - ${this.props.site?.siteName}`}
+      />
+    )
   }
 }
 

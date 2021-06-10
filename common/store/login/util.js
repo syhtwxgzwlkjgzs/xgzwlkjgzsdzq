@@ -24,7 +24,7 @@ export const BANNED_USER = -4009; // 禁用
 export const REVIEWING = 2; // 审核
 export const REVIEW_REJECT = -4007; // 审核拒绝
 
-let captcha = null;
+const captcha = null;
 
 const throwFormattedError = (error) => {
   if (error.code) {
@@ -61,7 +61,6 @@ const checkCompleteUserInfo = (resp) => {
   setAccessToken({
     accessToken,
   });
-
   if (isMissRequireInfo && isMissNickname) {
     throw COMMON_LOGIN_STORE_ERRORS.NEED_ALL_INFO;
   }
@@ -70,9 +69,9 @@ const checkCompleteUserInfo = (resp) => {
     throw COMMON_LOGIN_STORE_ERRORS.NEED_BIND_USERNAME;
   }
 
-  // if (isMissRequireInfo) {
-  //   throw COMMON_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO;
-  // }
+  if (isMissRequireInfo) {
+    throw COMMON_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO;
+  }
 };
 
 /**
@@ -85,7 +84,12 @@ const checkUserStatus = (resp) => {
     let { code } = resp;
 
     const status = get(resp, 'data.userStatus', 0);
+    const uid = get(resp, 'data.uid', '');
     if (code === 0 && status ===  REVIEWING) {
+      const accessToken = get(resp, 'data.accessToken', '');
+      setAccessToken({
+        accessToken,
+      });
       code = status;
     }
 
@@ -94,6 +98,7 @@ const checkUserStatus = (resp) => {
       throw {
         Code: code,
         Message: rejectReason,
+        uid
       };
     }
   }

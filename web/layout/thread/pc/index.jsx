@@ -652,9 +652,9 @@ class ThreadPCPage extends React.Component {
       return;
     }
 
-    const { username } = this.props.thread?.authorInfo;
+    const { username, nickname } = this.props.thread?.authorInfo;
     if (!username) return;
-    Router.push({ url: `/message?page=chat&username=${username}` });
+    Router.push({ url: `/message?page=chat&username=${username}&nickname=${nickname}` });
   }
 
   renderContent() {

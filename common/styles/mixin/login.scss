@@ -326,6 +326,9 @@
     }
   }
   :global(.dzq-icon-EyeOutlined) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     top: 17px;
     z-index: $zindex-tooltip;
     color: $disabled-color2 !important;
@@ -334,6 +337,9 @@
     }
   }
   :global(.dzq-input__icon){
+    display: flex;
+    align-items: center;
+    justify-content: center;
     top: 17px;
     z-index: $zindex-tooltip;
     font-size: $font-size-middle !important;

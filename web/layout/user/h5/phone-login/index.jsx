@@ -55,7 +55,6 @@ class LoginPhoneH5Page extends React.Component {
         },
       });
     } catch (e) {
-      console.log(e);
       if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_USERNAME.Code) {
         this.props.commonLogin.needToSetNickname = true;
         this.props.router.push('/user/bind-nickname');
@@ -64,11 +63,14 @@ class LoginPhoneH5Page extends React.Component {
 
       const { site } = this.props;
       // 跳转补充信息页
-      // if (isExtFieldsOpen(site) && e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
-      //   this.props.commonLogin.needToCompleteExtraInfo = true;
-      //   this.props.router.push('/user/supplementary');
-      //   return;
-      // }
+      if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+        if (isExtFieldsOpen(site)) {
+          this.props.commonLogin.needToCompleteExtraInfo = true;
+          this.props.router.push('/user/supplementary');
+          return;
+        }
+        return window.location.href = '/';
+      }
 
       if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_ALL_INFO.Code) {
         this.props.commonLogin.needToSetNickname = true;
@@ -107,6 +109,8 @@ class LoginPhoneH5Page extends React.Component {
 
       // 跳转状态页
       if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
+        const uid = get(e, 'uid', '');
+        uid && this.props.user.updateUserInfo(uid);
         this.props.commonLogin.setStatusMessage(e.Code, e.Message);
         this.props.router.push(`/user/status?statusCode=${e.Code}&statusMsg=${e.Message}`);
         return;

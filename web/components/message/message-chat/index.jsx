@@ -5,13 +5,13 @@ import styles from './index.module.scss';
 import Header from '@components/header';
 import InstantMessaging from '../instant-messaging';
 
-const Index = ({ dialogId, site, message, user, username }) => {
+const Index = ({ dialogId, site, message, user, username, nickname }) => {
   const { isPC } = site;
 
   const messageHeader = (
     <div className={styles['pc-header']}>
       <div className={styles['pc-header__inner']}>
-        {username}
+        {nickname}
       </div>
     </div>
   );
@@ -19,7 +19,7 @@ const Index = ({ dialogId, site, message, user, username }) => {
   return (
     <div className={styles.wrapper}>
       {isPC ? messageHeader : <Header />}
-      <InstantMessaging dialogId={dialogId} username={username} />
+      <InstantMessaging dialogId={dialogId} username={username} nickname={nickname} />
     </div>
   );
 };

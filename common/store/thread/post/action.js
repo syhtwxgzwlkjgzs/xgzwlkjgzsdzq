@@ -284,7 +284,7 @@ class ThreadPostAction extends ThreadPostStore {
     params.freeWords = freeWords || 0;
     params.attachmentPrice = attachmentPrice || 0;
     if (this.postData.draft) params.draft = this.postData.draft;
-    if (this.postData.anonymous) params.anonymous = this.postData.anonymous;
+    params.anonymous = this.postData.anonymous;
     const contentIndexes = this.gettContentIndexes();
     if (Object.keys(contentIndexes).length > 0) params.content.indexes = contentIndexes;
     return params;
