@@ -8,6 +8,7 @@ import { diffDate } from '@common/utils/diff-date';
 import styles from './index.module.scss';
 
 import { Icon, Button } from '@discuzq/design';
+import { time } from '@discuzq/sdk/dist';
 
 const STATUS_MAP = {
   1: '待审核',
@@ -36,7 +37,7 @@ class IncomeList extends React.Component {
         </div>
         <div className={styles.footer}>
           <div className={styles.time}>
-            {tradeTime ? diffDate(tradeTime) : ''}
+            {tradeTime ? time.formatDate(tradeTime, 'YYYY-MM-DD HH:mm') : ''}
           </div>
           <div className={styles[`withdrawalStatus${cashStatus}`]}>
             {STATUS_MAP[cashStatus]}

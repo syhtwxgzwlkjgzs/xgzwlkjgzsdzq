@@ -58,7 +58,9 @@ class DzqApp extends App {
 
   // 出错捕获
   componentDidCatch(error, info) {
-    Router.replace({ url: '/render-error' });
+    console.error(error);
+    console.error(info);
+    // Router.replace({ url: '/render-error' });
   }
 
   updateSize() {

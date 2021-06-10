@@ -1,13 +1,13 @@
 /* eslint-disable no-param-reassign */
-import React, { useEffect } from 'react';
-import { inject, observer } from 'mobx-react';
+import React, { useState, useEffect, useMemo } from 'react';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import HOCWithLogin from '@middleware/HOCWithLogin';
 import H5Page from '@layout/message/h5';
 import PCPage from '@layout/message/pc';
 import { useRouter } from 'next/router';
+import ViewAdapter from '@components/view-adapter';
 
-const Index = inject('site')(observer(({ site }) => {
+const Index = () => {
   /**
    * 消息页面当前显示的消息模块
    *
@@ -21,7 +21,7 @@ const Index = inject('site')(observer(({ site }) => {
    */
   const router = useRouter();
   // 参数过滤
-  const params = (({ page, subPage, dialogId, username }) => {
+  const params = (({ page, subPage, dialogId, username, nickname }) => {
     if (!['index', 'thread', 'financial', 'account', 'chat'].includes(page)) {
       page = 'index';
     }
@@ -30,15 +30,41 @@ const Index = inject('site')(observer(({ site }) => {
       subPage = '';
     }
 
-    return { page, subPage, dialogId, username };
+    return { page, subPage, dialogId, username, nickname };
   })(router.query);
 
-  const { isPC } = site;
-  if (isPC) {
-    return <PCPage {...params} />;
-  }
-  return <H5Page {...params} />;
-}));
+
+  const [title, setTitle] = useState('');
+
+  useEffect(() => {
+    const { page, nickname } = params;
+    switch (page) {
+      case 'index':
+        setTitle('我的私信');
+        break;
+      case 'thread':
+        setTitle('帖子通知');
+        break;
+      case 'financial':
+        setTitle('财务通知');
+        break;
+      case 'account':
+        setTitle('账号消息');
+        break;
+      case 'chat':
+        setTitle(nickname ? `与 ${nickname} 的对话` : '私信对话');
+        break;
+    }
+  });
+
+  return (
+    <ViewAdapter
+      h5={ <H5Page {...params} /> }
+      pc={ <PCPage {...params} /> }
+      title={title}
+    />
+  );
+};
 
 
 export default HOCFetchSiteData(HOCWithLogin(Index));

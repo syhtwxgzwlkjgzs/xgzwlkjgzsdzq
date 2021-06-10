@@ -12,10 +12,11 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
   const [visible, setVisible] = useState(false);
   const [defaultImg, setDefaultImg] = useState('');
   const [smallSty, setSmallSty] = useState(null);
+  const ImagePreviewerRef = React.useRef(null);
 
   const smallImg = useRef(null);
 
-  const imagePreviewers = useMemo(() => imgData.map(item => item.url), [imgData]);
+  const imagePreviewers = useMemo(() => imgData.map((item) => item.url), [imgData]);
 
   useEffect(() => {
     if (imgData.length < 3) {
@@ -36,6 +37,12 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
   //     }
   // }, [imgData])
 
+  useEffect(() => {
+    if (visible && ImagePreviewerRef && ImagePreviewerRef.current) {
+      ImagePreviewerRef.current.show();
+    }
+  }, [visible]);
+
   const onClick = (id) => {
     if (isPay) {
       onPay();
@@ -43,9 +50,7 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
       imgData.forEach((item) => {
         if (item.id === id) {
           setDefaultImg(item.url);
-          setTimeout(() => {
-            setVisible(true);
-          }, 10);
+          setVisible(true);
         }
       });
     }
@@ -114,14 +119,16 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
   return (
     <div className={`${platform === 'h5' ? styles.container : styles.containerPC}`}>
       {ImageView}
-      <ImagePreviewer
-        visible={visible}
-        onClose={() => {
-          setVisible(false);
-        }}
-        imgUrls={imagePreviewers}
-        currentUrl={defaultImg}
-      />
+      {visible && (
+        <ImagePreviewer
+          ref={ImagePreviewerRef}
+          onClose={() => {
+            setVisible(false);
+          }}
+          imgUrls={imagePreviewers}
+          currentUrl={defaultImg}
+        />
+      )}
     </div>
   );
 };

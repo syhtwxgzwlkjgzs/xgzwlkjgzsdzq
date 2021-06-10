@@ -14,6 +14,7 @@ import VodUploader from 'vod-wx-sdk-v2';
 import { toTCaptcha } from '@common/utils/to-tcaptcha'
 import PayBox from '@components/payBox/index';
 import { ORDER_TRADE_TYPE } from '@common/constants/payBoxStoreConstants';
+import { get } from '@common/utils/get';
 
 @inject('index')
 @inject('site')
@@ -193,6 +194,7 @@ class Index extends Component {
 
   // 点击发帖插件时回调，如上传图片、视频、附件或艾特、话题等
   handlePluginClick(item) {
+    console.log(`item`, item)
     const { postData } = this.props.threadPost;
     // 匹配附件、图片、语音上传
     this.setState({
@@ -277,7 +279,7 @@ class Index extends Component {
   // 执行上传视频
   handleVideoUpload = () => {
     const { postData } = this.props.threadPost;
-    if (postData.video?.id) {
+    if (postData.video?.id || postData.video?.threadVideoId) {
       this.postToast('只能上传一个视频');
       return;
     }
@@ -406,8 +408,10 @@ class Index extends Component {
     const { threadId } = this.state;
     const { threadPost, site } = this.props;
     const { postData, redpacketTotalAmount } = threadPost;
-    if (!isDraft && !postData.contentText) {
-      this.postToast('请填写您要发布的内容');
+    const { images, video, files, audio } = postData;
+    if (!(postData.contentText || video.id || audio.id || Object.values(images).length
+      || Object.values(files).length)) {
+      this.postToast({ content: '请至少填写您要发布的内容或者上传图片、附件、视频、语音' });
       return;
     }
     if (!this.checkAttachPrice()) {
@@ -568,7 +572,8 @@ class Index extends Component {
       this.setState({ isFirstFocus: false });
     }
     this.setState({
-      showEmoji: false
+      showEmoji: false,
+      operationType: 0,
     });
   }
 
@@ -630,7 +635,8 @@ class Index extends Component {
     const contentStyle = {
       marginTop: navInfo.statusBarHeight > 30 ? `${navInfo.navHeight / 2}px` : '0px',
     }
-
+    const { site } = this.props;
+    const headTitle = get(site, 'webConfig.setSite.siteName', '');
     return (
       <>
         <View className={styles['container']}>
@@ -638,57 +644,58 @@ class Index extends Component {
           <View className={styles.topBar} style={navStyle}>
             <Icon name="RightOutlined" onClick={() => this.handlePageJump(false)} />
             <View className={styles['topBar-title']}>
-              发帖
+              <View className={styles['topBar-title-inner']}>{ headTitle ?  `发布 - ${headTitle}` : '发布' }</View>
             </View>
           </View>
 
           {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
           <View className={styles['content']} style={contentStyle}>
             <View id="thread-post-content">
-            <Title
-              value={postData.title}
-              show={isShowTitle}
-              onChange={this.onTitleChange}
-              onBlur={this.hideKeyboard}
-              onFocus={() => {
-                this.setState({
-                  showEmoji: false
-                });
-              }}
-            />
-            <Content
-              value={postData.contentText}
-              maxLength={maxLength}
-              onChange={this.onContentChange}
-              onFocus={this.onContentFocus}
-              onBlur={(e) => {
-                console.log('set', e.detail.cursor);
-                setCursorPosition(e.detail.cursor);
-                this.hideKeyboard();
-              }}
-            />
+              <Title
+                value={postData.title}
+                show={isShowTitle}
+                onChange={this.onTitleChange}
+                onBlur={this.hideKeyboard}
+                onFocus={() => {
+                  this.setState({
+                    showEmoji: false,
+                    operationType: 0,
+                  });
+                }}
+              />
+              <Content
+                value={postData.contentText}
+                maxLength={maxLength}
+                onChange={this.onContentChange}
+                onFocus={this.onContentFocus}
+                onBlur={(e) => {
+                  console.log('set', e.detail.cursor);
+                  setCursorPosition(e.detail.cursor);
+                  this.hideKeyboard();
+                }}
+              />
 
             <View className={styles['plugin']}>
 
-              <GeneralUpload type={operationType} audioUpload={(file) => { this.yundianboUpload('audio', file) }} />
+              <GeneralUpload type={operationType} audioUpload={(file) => { this.yundianboUpload('audio', file) }}>
+                {video.thumbUrl && (
+                  <Units
+                    type='video'
+                    deleteShow
+                    src={video.thumbUrl}
+                    onDelete={() => setPostData({ video: {} })}
+                    onVideoLoaded={() => {
+                      Taro.pageScrollTo({
+                        scrollTop: 3000,
+                        // selector: '#thread-post-video',
+                        complete: (a,b,c) => {console.log(a,b,c)}
+                      });
+                    }}
+                  />
+                )}
+              </GeneralUpload>
 
               {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => setPostData({ product: {} })} />}
-
-              {video.thumbUrl && (
-                <Units
-                  type='video'
-                  deleteShow
-                  src={video.thumbUrl}
-                  onDelete={() => setPostData({ video: {} })}
-                  onVideoLoaded={() => {
-                    Taro.pageScrollTo({
-                      scrollTop: 3000,
-                      // selector: '#thread-post-video',
-                      complete: (a,b,c) => {console.log(a,b,c)}
-                    });
-                  }}
-                />
-              )}
 
             </View>
             </View>
@@ -768,7 +775,14 @@ class Index extends Component {
               onCategoryClick={() => {
                 this.setState({
                   showClassifyPopup: true,
-                  showEmoji: false
+                  showEmoji: false,
+                  operationType: 0
+                });
+              }}
+              onSetplugShow={() => {
+                showEmoji && this.setState({
+                  showEmoji: false,
+                  operationType: 0
                 });
               }}
             />
@@ -776,7 +790,6 @@ class Index extends Component {
               operationType={operationType}
               permissions={permissions}
               onPluginClick={(item) => {
-                console.log(item);
                 this.handlePluginClick(item);
               }}
               onSubmit={() => this.handleSubmit()}
@@ -786,7 +799,8 @@ class Index extends Component {
               show={bottomHeight === 0 && showEmoji}
               onHide={() => {
                 this.setState({
-                  showEmoji: false
+                  showEmoji: false,
+                  operationType: 0
                 });
               }}
               onClick={(emoji) => {

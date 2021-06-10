@@ -19,6 +19,13 @@ const InputPop = (props) => {
   };
 
   const onSubmitClick = async () => {
+    console.log('value', value, value.length);
+    if (value.length > 450) {
+      Toast.error({
+        content: '举报内容不能大于450个字符',
+      });
+      return;
+    }
     if (typeof onOkClick === 'function') {
       try {
         const success = await onOkClick(value);

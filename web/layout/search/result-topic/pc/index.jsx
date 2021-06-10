@@ -63,6 +63,8 @@ class SearchResultTopicPCPage extends React.Component {
   render() {
     const { pageData, currentPage, totalPage } = this.props.search.topics || {};
 
+    const { topicsError } = this.props.search || {};
+
     return (
       <BaseLayout
         noMore={currentPage >= totalPage} 
@@ -79,6 +81,8 @@ class SearchResultTopicPCPage extends React.Component {
           noData={!pageData?.length}
           isLoading={!pageData}
           icon={{ type: 1, name: 'StrongSharpOutlined' }}
+          isError={topicsError.isError}
+          errorText={topicsError.errorText}
         >
           <div className={styles.topic}>
             {pageData?.map((item, index) => (

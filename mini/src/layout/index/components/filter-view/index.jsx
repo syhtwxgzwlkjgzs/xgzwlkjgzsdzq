@@ -13,7 +13,7 @@ import { ScrollView } from '@tarojs/components';
 
 const { Col, Row } = Flex;
 
-const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel = noop, router }) => {
+const Index = ({ permissions = {}, visible, data: tmpData = [], current, onSubmit = noop, onCancel = noop, router }) => {
   const [first, setFirst] = useState('all');
   const [firstChildren, setFirstChildren] = useState();
   const [second, setSecond] = useState('');
@@ -25,8 +25,24 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
   const data = useMemo(() => {
     const newData = filterData;
     newData[0].data = tmpData;
+
+    const defautlFilter = newData[1];
+    const newDefaultFiler = [];
+    for ( let i = 0; i < defautlFilter.data.length; i++ ) {
+      if ( permissions[defautlFilter.data[i].pid] !== undefined && permissions[defautlFilter.data[i].pid] !== null ) {
+        if ( !permissions[defautlFilter.data[i].pid] ) {
+          continue;
+        }
+      }
+      // 红包特殊处理
+      if ( !permissions['redpacket'] && defautlFilter.data[i].pid === '106' ) {
+        continue;
+      }
+      newDefaultFiler.push(defautlFilter.data[i]);
+    }
+    newData[1].data = newDefaultFiler;
     return newData;
-  }, [tmpData]);
+  }, [permissions, tmpData]);
 
   useEffect(() => {
     const { categoryids = [], types, essence } = current || {};
@@ -169,12 +185,12 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
             <Row className={`${styles.wrapper} ${styles.childrenWrapper}`} gutter={10}>
               {
                 subData.map((item, index) => (
-                  <Col span={3}>
+                  <Col span={ item.name.length < 6 ? 3 : item.name.length === 6 ? 4 : 5 }>
                     <Text
                       className={`${firstChildren === item.pid ? styles.childrenActive : ''} ${styles.childrenSpan}`}
                       key={`${index}-${index}`}
                       onClick={() => onClickSecond(item.pid, type)}>
-                        {item.name}
+                        {item.name.length > 6 ? item.name.substr(0, 6) : item.name}
                     </Text>
                   </Col>
                 ))

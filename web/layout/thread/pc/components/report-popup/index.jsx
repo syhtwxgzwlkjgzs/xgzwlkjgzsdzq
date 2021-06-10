@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Icon, Popup, Button, Textarea, Radio } from '@discuzq/design';
+import { Icon, Popup, Button, Textarea, Radio, Toast } from '@discuzq/design';
 import styles from './index.module.scss';
 
 const InputPop = (props) => {
@@ -19,6 +19,12 @@ const InputPop = (props) => {
   };
 
   const onSubmitClick = async () => {
+    if (res.length > 450) {
+      Toast.error({
+        content: '举报内容不能大于450个字符',
+      });
+      return;
+    }
     if (typeof onOkClick === 'function') {
       try {
         const success = await onOkClick(res);

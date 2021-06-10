@@ -71,6 +71,7 @@ const List = forwardRef(({
       currentScrollTop,
       isLoading,
       resetList,
+      listWrapper,
     }),
   );
 

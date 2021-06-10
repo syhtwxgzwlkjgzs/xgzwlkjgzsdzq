@@ -104,7 +104,6 @@ class WalletH5Page extends React.Component {
 
   // 加载更多
   loadMore = () => {
-    console.log('触发啦');
     switch (this.state.tabsType) {
       case 'income':
         this.fetchIncomeDetail();
@@ -344,7 +343,6 @@ class WalletH5Page extends React.Component {
     const incomeData = this.listRenderDataFilter(incomeDetail) || [];
     const expandData = this.listRenderDataFilter(expandDetail) || [];
     const cashData = this.listRenderDataFilter(cashDetail) || [];
-    console.log(this.state.page, this.state.totalPage, this.state.page > this.state.totalPage);
     return (
       <Page>
         <View className={layout.container}>
