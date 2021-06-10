@@ -26,6 +26,7 @@ class IndexH5Page extends React.Component {
       isFinished: true,
       fixedTab: false,
       navBarHeight: 64,
+      headerHeight: 182,
     };
     this.tabsRef = createRef();
     this.headerRef = createRef(null);
