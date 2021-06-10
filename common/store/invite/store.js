@@ -1,7 +1,6 @@
 import { observable, computed, action } from 'mobx';
 import { simpleRequest } from '@common/utils/simple-request';
 import { get } from '@common/utils/get';
-import isWeiXin from '../../utils/is-weixin';
 export default class InviteStore {
   @observable inviteData = { };
   @observable inviteUsersList = null;

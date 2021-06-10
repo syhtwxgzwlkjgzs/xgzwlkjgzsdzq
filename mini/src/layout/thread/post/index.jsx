@@ -39,11 +39,11 @@ class Index extends Component {
       showPaidOption: false, // 显示付费选项弹框
       showDraftOption: false, // 显示草稿选项弹框
       bottomHeight: 0,
-      isFirstFocus: true, // textarea首次聚焦(处理调用键盘弹起API首次返回数据不准确的情况)
     }
     this.timer = null;
     this.ticket = ''; // 腾讯云验证码返回票据
     this.randstr = ''; // 腾讯云验证码返回随机字符串
+    this.contentRef = React.createRef(null);
   }
 
   componentWillMount() { }
@@ -316,6 +316,7 @@ class Index extends Component {
         } else {
           Taro.showToast({
             title: '上传失败',
+            icon: 'none',
             duration: 2000
           });
         }
@@ -354,6 +355,7 @@ class Index extends Component {
         } else {
           Taro.showToast({
             title: res.msg,
+            icon: 'none',
             duration: 2000
           });
         }
@@ -363,6 +365,7 @@ class Index extends Component {
       error: function (result) {
         Taro.showToast({
           title: '上传失败',
+          icon: 'none',
           duration: 2000
         });
         console.log('error');
@@ -567,10 +570,16 @@ class Index extends Component {
   }
 
   // 处理textarea聚焦
-  onContentFocus = () => {
-    if (this.state.isFirstFocus) {
-      this.setState({ isFirstFocus: false });
-    }
+  // onContentFocus = () => {
+  //   this.setState({
+  //     showEmoji: false,
+  //     operationType: 0,
+  //   });
+  // }
+
+  // 点击空白区域自动聚焦文本框
+  handleContentFocus = () => {
+    this.contentRef && this.contentRef.current.focus();
     this.setState({
       showEmoji: false,
       operationType: 0,
@@ -635,6 +644,8 @@ class Index extends Component {
     const contentStyle = {
       marginTop: navInfo.statusBarHeight > 30 ? `${navInfo.navHeight / 2}px` : '0px',
     }
+    let defaultToolbarStyle = {}
+    if (showEmoji || bottomHeight) defaultToolbarStyle = { paddingBottom: '0px', height: '45px' };
     const { site } = this.props;
     const headTitle = get(site, 'webConfig.setSite.siteName', '');
     return (
@@ -649,7 +660,7 @@ class Index extends Component {
           </View>
 
           {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
-          <View className={styles['content']} style={contentStyle}>
+          <View className={styles['content']} style={contentStyle} onClick={this.handleContentFocus}>
             <View id="thread-post-content">
               <Title
                 value={postData.title}
@@ -664,10 +675,11 @@ class Index extends Component {
                 }}
               />
               <Content
+                ref={this.contentRef}
                 value={postData.contentText}
                 maxLength={maxLength}
                 onChange={this.onContentChange}
-                onFocus={this.onContentFocus}
+                // onFocus={this.onContentFocus}
                 onBlur={(e) => {
                   console.log('set', e.detail.cursor);
                   setCursorPosition(e.detail.cursor);
@@ -675,7 +687,7 @@ class Index extends Component {
                 }}
               />
 
-            <View className={styles['plugin']}>
+            <View className={styles['plugin']} onClick={e => e.stopPropagation()}>
 
               <GeneralUpload type={operationType} audioUpload={(file) => { this.yundianboUpload('audio', file) }}>
                 {video.thumbUrl && (
@@ -787,6 +799,7 @@ class Index extends Component {
               }}
             />
             <DefaultToolbar
+              style={defaultToolbarStyle}
               operationType={operationType}
               permissions={permissions}
               onPluginClick={(item) => {

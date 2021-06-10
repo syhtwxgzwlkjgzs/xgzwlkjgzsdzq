@@ -112,35 +112,35 @@ class SupplementaryH5Page extends React.Component {
           }
           <div className={layout.content}>
             {values?.map(field => this.createComponent(field))}
-            <Button className={layout.button} type='primary' onClick={() => {
+            <Button className={layout.button} type='primary' onClick={ () => {
               try {
                 const data = this.processData(values);
                 setSignInFields({ data: { data } })
-                  .then(() => {
+                  .then(async () => {
                     Toast.success({
                       content: '提交成功',
-                      duration: 2000,
+                      duration: 1000,
+
                     });
-                    setTimeout(() => {
-                      const { statusCode, statusMsg, needToBindPhone,
-                        needToBindWechat, nickName, sessionToken } = this.props.commonLogin;
+                    const id = this.props.user?.id;
+                    await this.props.user.updateUserInfo(id);
+                    const { statusCode, statusMsg, needToBindPhone,
+                      needToBindWechat, nickName, sessionToken } = this.props.commonLogin;
 
-                      if (needToBindPhone) {
-                        return this.props.router.push(`/user/bind-phone?sessionToken=${sessionToken}`);
-                      }
+                    if (needToBindPhone) {
+                      return this.props.router.push(`/user/bind-phone?sessionToken=${sessionToken}`);
+                    }
 
-                      if (needToBindWechat === true) {
-                        return this.props.router.push(`/user/wx-bind-qrcode?sessionToken=${sessionToken}&loginType=${platform}&nickname=${nickName}`);
-                      }
-                      if (statusMsg && statusCode) {
-                        return this.props.router.push(`/user/status?statusCode=${statusCode}&statusMsg=${statusMsg}`);
-                      }
-                      window.location.href = '/';
-                    }, 1000);
+                    if (needToBindWechat === true) {
+                      return this.props.router.push(`/user/wx-bind-qrcode?sessionToken=${sessionToken}&loginType=${platform}&nickname=${nickName}`);
+                    }
+                    if (statusMsg && statusCode) {
+                      return this.props.router.push(`/user/status?statusCode=${statusCode}&statusMsg=${statusMsg}`);
+                    }
+                    window.location.href = '/';
                   });
               } catch (e) {
                 // todo 优化错误处理
-                console.log(e);
                 Toast.error({
                   content: e.message || e,
                   duration: 2000,

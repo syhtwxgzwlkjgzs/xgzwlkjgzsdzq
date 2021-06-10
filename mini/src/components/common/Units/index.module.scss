@@ -183,10 +183,14 @@
   border-radius: 5px;
   background: $text-bg-color2;
   color: $text-color-regular;
-  padding: 4px;
-  margin: 8px 16px 8px 0;
+  padding: 4px 8px;
+  margin: 8px 8px 8px 0;
   font-size: var(--font-size-label);
   width: fit-content;
+
+  .tag-text {
+    @include text-ellipsis();
+  }
 
   .remove {
     margin-left: 8px;
