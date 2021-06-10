@@ -10,7 +10,7 @@ import Router from '@discuzq/sdk/dist/router';
 import styles from './index.module.scss';
 
 const InteractionBox = (props) => {
-  const { onSubmit, dialogBoxRef, platform, dialogId, threadPost, showEmoji, setShowEmoji, username } = props;
+  const { onSubmit, dialogBoxRef, platform, dialogId, threadPost, showEmoji, setShowEmoji, username, nickname } = props;
   const { readDialogMsgList, dialogMsgList, createDialogMsg, createDialog, readDialogIdByUsername } = props.message;
 
   const [lastTimestamp, setLastTimestamp] = useState(0);
@@ -37,7 +37,7 @@ const InteractionBox = (props) => {
   //   }
   // };
   const replaceRouteWidthDialogId = (dialogId) => {
-    Router.replace({ url: `/message?page=chat&username=${username}&dialogId=${dialogId}` });
+    Router.replace({ url: `/message?page=chat&nickname=${nickname}&dialogId=${dialogId}` });
   };
 
 

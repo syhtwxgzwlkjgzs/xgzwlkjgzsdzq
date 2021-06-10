@@ -4,13 +4,13 @@
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 52px;
-  padding: 0 $padding-4n $padding-4n $padding-4n;
-
+  // position: absolute;
+  // top: 0;
+  // left: 0;
+  // right: 0;
+  // bottom: 52px;
+  // padding: 0 $padding-4n 68px $padding-4n;
+  padding-bottom: 68px;
 
 }
 

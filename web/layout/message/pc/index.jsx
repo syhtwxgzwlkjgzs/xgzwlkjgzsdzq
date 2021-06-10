@@ -13,7 +13,7 @@ import Stepper from '../../search/pc/components/stepper';
 import { sidebarData as sidebarDataOriginal } from '@common/constants/message';
 import UserCenterFollowsPc from '@components/user-center/follows-pc';
 
-const Index = ({ page, subPage, dialogId, username, message, user }) => {
+const Index = ({ page, subPage, dialogId, username, message, user, nickname }) => {
   const router = useRouter();
 
   const { threadUnread, financialUnread, accountUnread } = message;
@@ -42,7 +42,7 @@ const Index = ({ page, subPage, dialogId, username, message, user }) => {
       case 'financial':
         return <MessageFinancial />;
       case 'chat':
-        return <MessageChat dialogId={dialogId} username={username} />;
+        return <MessageChat dialogId={dialogId} username={username} nickname={nickname} />;
     }
   }, [page, subPage, dialogId, username]);
 

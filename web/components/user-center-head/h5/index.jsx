@@ -92,8 +92,8 @@ class index extends Component {
 
   // 点击发送私信
   handleMessage = () => {
-    const { username } = this.props.user.targetUser;
-    Router.replace({ url: `/message?page=chat&username=${username}` });
+    const { username, nickname } = this.props.user.targetUser;
+    Router.replace({ url: `/message?page=chat&username=${username}&nickname=${nickname}` });
   };
 
   gotoLikeList = () => {
