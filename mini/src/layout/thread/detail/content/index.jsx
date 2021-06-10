@@ -261,6 +261,7 @@ const RenderThreadContent = inject('user')(
               {/* 打赏 */}
               {isBeReward && (
                 <Icon
+                  onClick={onRewardClick}
                   className={classnames(styles.payIcon, isRewarded && styles.actived)}
                   name="HeartOutlined"
                   size={20}
