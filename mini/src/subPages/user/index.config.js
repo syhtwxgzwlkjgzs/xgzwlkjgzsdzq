@@ -1,5 +1,5 @@
 export default {
     navigationBarTitleText: '他人主页',
-    navitationStyle: 'custom',
+    navigationStyle: 'custom',
     enableShareAppMessage: true
 }
