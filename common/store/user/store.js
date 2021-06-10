@@ -85,6 +85,10 @@ class UserStore {
   @observable userShieldTotalPage = 1; // 总页数
   @observable userShieldTotalCount = 0; // 总条数
 
+
+  @computed get userStatus() {
+    return get(this.userInfo, 'status');
+  }
   // 是否能使用钱包支付
   @computed get canWalletPay() {
     return get(this.userInfo, 'canWalletPay');

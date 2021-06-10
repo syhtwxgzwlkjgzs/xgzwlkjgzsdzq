@@ -3,13 +3,23 @@ import UserCenterEditFindPayPwd from '../../../../components/user-center-edit-pa
 import HOCUserInfo from '@middleware/HOCUserInfo';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import HOCTencentCaptcha from '@middleware/HOCTencentCaptcha';
+import ViewAdapter from '@components/view-adapter';
+import { inject, observer } from 'mobx-react';
 
-function index(props) {
-  return (
-    <div>
-      <UserCenterEditFindPayPwd {...props} />
-    </div>
-  )
+@inject('site')
+@observer
+class FindPayPwdPage extends React.Component {
+  render() {
+    return <ViewAdapter 
+    h5={(
+      <div>
+        <UserCenterEditFindPayPwd {...this.props}  />
+      </div>
+    )}
+    pc={null}
+    title={`找回支付密码 - ${this.props.site?.siteName}`}
+  />
+  }
 }
 
-export default HOCFetchSiteData(HOCUserInfo(HOCTencentCaptcha(index)));
+export default HOCFetchSiteData(HOCUserInfo(HOCTencentCaptcha(FindPayPwdPage)));
