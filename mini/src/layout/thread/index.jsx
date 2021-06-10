@@ -37,6 +37,7 @@ import { debounce } from '@common/utils/throttle-debounce';
 @inject('index')
 @inject('topic')
 @inject('search')
+@inject('payBox')
 @observer
 class ThreadH5Page extends React.Component {
   constructor(props) {
@@ -133,6 +134,7 @@ class ThreadH5Page extends React.Component {
   componentWillUnmount() {
     // 清空数据
     this.props?.thread && this.props.thread.reset();
+    this.props?.payBox?.hide();
   }
 
   // 点击信息icon
