@@ -635,6 +635,8 @@ class Index extends Component {
     const contentStyle = {
       marginTop: navInfo.statusBarHeight > 30 ? `${navInfo.navHeight / 2}px` : '0px',
     }
+    let defaultToolbarStyle = {}
+    if (showEmoji || bottomHeight) defaultToolbarStyle = { paddingBottom: '0px', height: '45px' };
     const { site } = this.props;
     const headTitle = get(site, 'webConfig.setSite.siteName', '');
     return (
@@ -787,6 +789,7 @@ class Index extends Component {
               }}
             />
             <DefaultToolbar
+              style={defaultToolbarStyle}
               operationType={operationType}
               permissions={permissions}
               onPluginClick={(item) => {
