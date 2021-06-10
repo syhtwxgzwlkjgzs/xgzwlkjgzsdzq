@@ -16,8 +16,8 @@
   :global {
     .dzq-textarea__inner {
       background: $text-bg-color2;
-      padding: $padding-2n $padding-3n;
-      height: 80px !important;
+      padding: 0 $padding-3n;
+      min-height: 64px !important;
       resize: none;
       font-size: $font-size-base;
       -webkit-appearance: none; // ios下去除上面阴影
@@ -28,7 +28,6 @@
     }
     .dzq-textarea {
       border: none;
-      margin-bottom: 1px;
     }
   }
 }
@@ -46,6 +45,9 @@
     width: 100%;
     height: 80px;
     overflow: hidden;
+    padding: $padding-2n 0;
+    background: $text-bg-color2;
+    border-radius: $border-radius-small;
   }
 }
 

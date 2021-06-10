@@ -213,6 +213,7 @@ const InputPop = (props) => {
               forwardedRef={textareaRef}
               fixed={true}
               adjustPosition={false}
+              autoHeight={true}
             ></Textarea>
           </ScrollView>
 
