@@ -102,7 +102,7 @@ class index extends Component {
   // 点击我的点赞
   handleMyLike = () => {
     Router.push({ url: '/subPages/my/like/index' });
-  }
+  };
 
   // 渲染关注状态
   renderFollowedStatus = (follow) => {
@@ -163,39 +163,46 @@ class index extends Component {
         </View>
         {/* 下 */}
         <View className={styles.userBtn}>
-          {
-            this.props.isOtherPerson ? (
-              <>
-                <Button onClick={() => { this.handleChangeAttention(user.follow) }} type="primary" className={user.follow === 2 && styles.userFriendsBtn}>
+          {this.props.isOtherPerson ? (
+            <>
+              <Button
+                onClick={() => {
+                  this.handleChangeAttention(user.follow);
+                }}
+                type="primary"
+                className={`${styles.btn} ${user.follow === 2 && styles.userFriendsBtn} ${
+                  user.follow === 1 && styles.userFollowedBtn
+                }`}
+                full
+              >
                 <View className={styles.actionButtonContentWrapper}>
-                  <Icon name={this.renderFollowedStatus(user.follow).icon} />
+                  <Icon name={this.renderFollowedStatus(user.follow).icon} size={16} />
                   <Text className={styles.userBtnText}>{this.renderFollowedStatus(user.follow).text}</Text>
-                  </View>
-                </Button>
-                <Button onClick={this.handleMessage}>
+                </View>
+              </Button>
+              <Button full className={styles.btn} onClick={this.handleMessage}>
                 <View className={styles.actionButtonContentWrapper}>
-                  <Icon name="NewsOutlined" />
+                  <Icon name="NewsOutlined" size={16} />
                   <Text className={styles.userBtnText}>发私信</Text>
-                  </View>
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button onClick={this.goToMyEditInfo} type="primary">
-                  <View className={styles.actionButtonContentWrapper}>
-                    <Icon name="CompileOutlined" />
-                    <Text className={styles.userBtnText}>编辑资料</Text>
-                  </View>
-                </Button>
-                <Button onClick={this.logout}>
-                  <View className={styles.actionButtonContentWrapper}>
-                    <Icon name="PoweroffOutlined" />
-                    <Text className={styles.userBtnText}>退出登录</Text>
-                  </View>
-                </Button>
-              </>
-            )
-          }
+                </View>
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button full className={styles.btn} onClick={this.goToMyEditInfo} type="primary">
+                <View className={styles.actionButtonContentWrapper}>
+                  <Icon name="CompileOutlined" size={16} />
+                  <Text className={styles.userBtnText}>编辑资料</Text>
+                </View>
+              </Button>
+              <Button full className={styles.btn} onClick={this.logout}>
+                <View className={styles.actionButtonContentWrapper}>
+                  <Icon name="PoweroffOutlined" size={16} />
+                  <Text className={styles.userBtnText}>退出登录</Text>
+                </View>
+              </Button>
+            </>
+          )}
         </View>
         {/* 右上角屏蔽按钮 */}
         {this.props.isOtherPerson && (
