@@ -25,7 +25,7 @@ class IncomeList extends React.Component {
         </View>
         {/* // FIXME:这里的结构有问题 怪怪的 所以只能用数组长度取消底部边框线 */}
         <View className={styles.time} style={{ borderBottom: itemKey === dataLength - 1 && 0 }}>
-          {diffDate(time.formatDate(this.props.incomeVal.createdAt, 'YYYY-MM-DD'))}
+          {time.formatDate(this.props.incomeVal.createdAt, 'YYYY-MM-DD HH:mm')}
         </View>
       </View>
     );

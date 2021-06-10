@@ -1,10 +1,13 @@
 import React from 'react';
 import { withRouter } from 'next/router';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import Withdrawal from '@layout/wallet/withdrawal';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import { readWalletUser } from '@server';
+import ViewAdapter from '@components/view-adapter';
 
+@inject('site')
+@observer
 class WalletPage extends React.Component {
   constructor(props) {
     super(props);
@@ -25,8 +28,13 @@ class WalletPage extends React.Component {
   }
 
   render() {
-    return <Withdrawal walletData={this.state.walletData} />;
-  }
+    return  (
+      <ViewAdapter 
+        pc={null}
+        h5={<Withdrawal walletData={this.state.walletData} />}
+        title={`提现 - ${this.props.site?.siteName}`}
+      />)
+    }
 }
 
 // eslint-disable-next-line new-cap

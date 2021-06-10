@@ -2,6 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { View, Text } from '@tarojs/components';
 import { diffDate } from '@common/utils/diff-date';
+import { time } from '@discuzq/sdk/dist/index';
 import styles from './index.module.scss';
 
 
@@ -31,7 +32,7 @@ class IncomeList extends React.Component {
           <View className={styles.money}>{cashApplyAmount}</View>
         </View>
         <View className={styles.footer}>
-          <View className={styles.time}>{tradeTime ? diffDate(tradeTime) : ''}</View>
+          <View className={styles.time}>{tradeTime ? time.formatDate(tradeTime,  'YYYY-MM-DD HH:mm') : ''}</View>
           <View className={styles[`withdrawalStatus${cashStatus}`]}>{STATUS_MAP[cashStatus]}</View>
         </View>
         {/* // FIXME:这里的结构有问题 怪怪的 所以只能用数组长度取消底部边框线 */}

@@ -71,7 +71,7 @@ class FrozenAmount extends React.Component {
               <div>{value.amount}</div>
             </div>
             <div className={styles.lower}>
-              <div>{diffDate(time.formatDate(value.createdAt, 'YYYY-MM-DD'))}</div>
+              <div>{time.formatDate(value.createdAt, 'YYYY-MM-DD HH:mm')}</div>
               <div>
                 ID: <span>{value.id}</span>
               </div>

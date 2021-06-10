@@ -35,7 +35,7 @@ class IncomeList extends React.Component {
         </View>
         {/* // FIXME:这里的结构有问题 怪怪的 所以只能用数组长度取消底部边框线 */}
         <View className={styles.footer} style={{ borderBottom: itemKey === dataLength - 1 && 0 }}>
-          <View className={styles.time}>{diffDate(time.formatDate(this.props.payVal.createdAt, 'YYYY-MM-DD'))}</View>
+          <View className={styles.time}>{time.formatDate(this.props.payVal.createdAt, 'YYYY-MM-DD HH:mm')}</View>
           <View className={`${this.props.payVal.status ? styles.payStatusTrue : styles.payStatusFalse}`}>
             {PAY_STATUS_MAP[this.props.payVal.status]}
           </View>

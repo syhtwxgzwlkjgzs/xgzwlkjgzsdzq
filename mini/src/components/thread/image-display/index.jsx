@@ -14,6 +14,7 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
     const [visible, setVisible] = useState(false);
     const [defaultImg, setDefaultImg] = useState('');
     const [smallSty, setSmallSty] = useState(null);
+  const ImagePreviewerRef = React.useRef(null);
 
     const smallImg = useRef(null);
 
@@ -38,20 +39,24 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
     //     }
     // }, [imgData])
 
-    const onClick = (id) => {
-      if (isPay) {
-        onPay();
-      } else {
-        imgData.forEach((item) => {
-          if (item.id === id) {
-            setDefaultImg(item.url);
-            setTimeout(() => {
-              setVisible(true);
-            }, 10);
-          }
-        });
-      }
-    };
+  useEffect(() => {
+    if (visible && ImagePreviewerRef && ImagePreviewerRef.current) {
+      ImagePreviewerRef.current.show();
+    }
+  }, [visible]);
+
+  const onClick = (id) => {
+    if (isPay) {
+      onPay();
+    } else {
+      imgData.forEach((item) => {
+        if (item.id === id) {
+          setDefaultImg(item.url);
+          setVisible(true);
+        }
+      });
+    }
+  };
 
     const onClickMore = (e) => {
       e.stopPropagation();
@@ -113,17 +118,19 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
       return null;
     }, [imgData]);
 
-    return (
-      <View className={`${platform === 'h5' ? styles.container : styles.containerPC}`}>
-        {ImageView}
+  return (
+    <View className={`${platform === 'h5' ? styles.container : styles.containerPC}`}>
+      {ImageView}
+      {visible && (
         <ImagePreviewer
-          visible={visible}
+          ref={ImagePreviewerRef}
           onComplete={() => {
             setVisible(false);
           }}
           imgUrls={imagePreviewers}
           currentUrl={defaultImg}
         />
+      )}
       </View>
     );
   };

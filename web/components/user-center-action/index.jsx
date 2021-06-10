@@ -4,7 +4,7 @@ import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
 import { observer, inject } from 'mobx-react';
 import UnreadRedDot from '@components/unread-red-dot';
-
+@inject('user')
 @inject('message')
 @observer
 class UserCenterAction extends React.Component {
@@ -125,7 +125,7 @@ class UserCenterAction extends React.Component {
             </div>
           </div>
 
-          <div className={styles.userCenterActionItemContainer}>
+          <div className={styles.userCenterActionItemContainer} style={{ visibility: this.props.user.isAdmini && 'hidden' }}>
             <div onClick={this.handleMyInvite} className={styles.userCenterActionItem}>
               <div className={styles.userCenterActionItemIcon}>
                 <Icon name={'NotbookOutlined'} color={'#4F5A70'} size={20} />

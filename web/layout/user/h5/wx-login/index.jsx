@@ -103,12 +103,15 @@ class WXLoginH5Page extends React.Component {
           clearInterval(this.timer);
         }
         const { site } = this.props;
-        // // 跳转补充信息页
-        // if (isExtFieldsOpen(site) && e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
-        //   this.props.commonLogin.needToCompleteExtraInfo = true;
-        //   this.props.router.push('/user/supplementary');
-        //   return;
-        // }
+        // 跳转补充信息页
+        if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+          if (isExtFieldsOpen(site)) {
+            this.props.commonLogin.needToCompleteExtraInfo = true;
+            this.props.router.push('/user/supplementary');
+            return;
+          }
+          return window.location.href = '/';
+        }
         // 跳转状态页
         if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
           const uid = get(e, 'uid', '');
