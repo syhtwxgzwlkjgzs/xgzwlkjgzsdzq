@@ -168,13 +168,13 @@ class index extends Component {
               <>
                 <Button onClick={() => { this.handleChangeAttention(user.follow) }} type="primary" className={user.follow === 2 && styles.userFriendsBtn}>
                 <View className={styles.actionButtonContentWrapper}>
-                  <Icon name={this.renderFollowedStatus(user.follow).icon} />
+                  <Icon name={this.renderFollowedStatus(user.follow).icon} size={16} />
                   <Text className={styles.userBtnText}>{this.renderFollowedStatus(user.follow).text}</Text>
                   </View>
                 </Button>
                 <Button onClick={this.handleMessage}>
                 <View className={styles.actionButtonContentWrapper}>
-                  <Icon name="NewsOutlined" />
+                  <Icon name="NewsOutlined" size={16} />
                   <Text className={styles.userBtnText}>发私信</Text>
                   </View>
                 </Button>
@@ -183,13 +183,13 @@ class index extends Component {
               <>
                 <Button onClick={this.goToMyEditInfo} type="primary">
                   <View className={styles.actionButtonContentWrapper}>
-                    <Icon name="CompileOutlined" />
+                    <Icon name="CompileOutlined" size={16} />
                     <Text className={styles.userBtnText}>编辑资料</Text>
                   </View>
                 </Button>
                 <Button onClick={this.logout}>
                   <View className={styles.actionButtonContentWrapper}>
-                    <Icon name="PoweroffOutlined" />
+                    <Icon name="PoweroffOutlined" size={16} />
                     <Text className={styles.userBtnText}>退出登录</Text>
                   </View>
                 </Button>
