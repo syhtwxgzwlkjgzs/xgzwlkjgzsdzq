@@ -23,9 +23,10 @@ class MessageAction extends MessageStore {
     if (code === 0) {
       const { unreadNotifications, typeUnreadNotifications } = data;
       const { threadrewardedexpired = 0, receiveredpacket = 0, related = 0, replied = 0, system = 0, withdrawal = 0, liked = 0, rewarded = 0, threadrewarded = 0 } = typeUnreadNotifications;
-      this.totalUnread = unreadNotifications;
+      // threadrewardedexpired，悬赏过期消息不在消息中心展示，未读总数需要减去此类型消息的未读数
+      this.totalUnread = unreadNotifications - threadrewardedexpired;
       this.threadUnread = system;
-      this.financialUnread = threadrewardedexpired + receiveredpacket + withdrawal + rewarded + threadrewarded;
+      this.financialUnread = receiveredpacket + withdrawal + rewarded + threadrewarded;
       this.accountUnread = related + replied + liked;
       this.atUnread = related;
       this.replyUnread = replied;
@@ -105,7 +106,8 @@ class MessageAction extends MessageStore {
   // 获取财务消息
   @action.bound
   async readFinancialMsgList(page = 1) {
-    const ret = await readMsgList(this.assemblyParams(page, 'rewarded,threadrewardedexpired,threadrewarded,receiveredpacket,withdrawal'));
+    // threadrewardedexpired 悬赏过期，产品经理说不展示
+    const ret = await readMsgList(this.assemblyParams(page, 'rewarded,threadrewarded,receiveredpacket,withdrawal'));
     this.setMsgList(page, 'financialMsgList', ret);
   }
 
