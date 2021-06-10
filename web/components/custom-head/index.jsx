@@ -33,10 +33,22 @@ class CustomHead extends React.Component {
     return renderKeywords;
   }
 
+  formatDescription() {
+    const { site, description } = this.props;
+    const base = get(site, 'webConfig.setSite.siteIntroduction', '欢迎您');
+    let renderDescription = base;
+    if ( description && description !== '' ) {
+      renderDescription = description;
+    }
+    return renderDescription;
+  }
+
+
   render() {
     return (
       <Head>
         <meta name="keywords" content={this.formatKeywords()} />
+        <meta name="description" content={this.formatDescription()} />
         <title>{this.formatTitle()}</title>
       </Head>
     );
