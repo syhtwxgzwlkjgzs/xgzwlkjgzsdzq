@@ -52,7 +52,7 @@ class IndexH5Page extends React.Component {
         Taro.createSelectorQuery()
         .select(`#${headerId}`)
         .boundingClientRect((rect) => {
-          headerHeight = rect.height - navBarHeight || 182;
+          headerHeight = rect?.height - navBarHeight || 182;
         }).exec();
       }
       this.setState({ headerHeight });
