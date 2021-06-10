@@ -23,17 +23,17 @@ const SearchInput = ({
   searchWhileTyping = false,
   searchWhileTypingStartsAt = 0,
 }) => {
-  const [value, setValue] = React.useState(defaultValue);
+  // const [value, setValue] = React.useState(defaultValue);
   const [isShow, setIsShow] = React.useState(false);
   const [timeoutID, setTimeoutID] = React.useState(null);
   const inputChange = (e) => {
     const val = e.target.value;
-    setValue(val);
+    // setValue(val);
     if (val.length > 0) {
-      setIsShow(true)
+      if(!isShow) setIsShow(true)
     }
     if(searchWhileTyping && val.length >= searchWhileTypingStartsAt) {
-      if(timeoutID !== null) {
+      if(timeoutID !== null) { // 做一个防抖Debounce
         clearTimeout(timeoutID);
         setTimeoutID(null);
       }
@@ -43,24 +43,25 @@ const SearchInput = ({
     }
   }
   const clearInput = () => {
-    setValue('');
     setIsShow(false)
   }
-  const inputClick = () => {
-    onSearch(value)
+  const inputClick = (e) => {
+    // TODO: 加节流
+    const val = e.target.value || "";
+    onSearch(val)
   }
   return (
     <View className={`${styles.container} ${!isShowBottom && styles.hiddenBottom}`}>
       <View className={styles.inputWrapper}>
         <Icon className={styles.inputWrapperIcon} name="SearchOutlined" size={16} />
         <Input
-          value={value}
+          // value={value}
           placeholder='请输入想要搜索的内容...'
-          onEnter={inputClick}
+          onEnter={e => inputClick(e)}
           onInput={e => inputChange(e)}
           className={styles.input}
           confirmType='search'
-          onConfirm={inputClick}
+          onConfirm={e => inputClick(e)}
           placeholderClass={styles.placeholder}
         />
         {

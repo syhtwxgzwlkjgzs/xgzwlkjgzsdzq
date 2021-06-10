@@ -33,7 +33,7 @@ const SearchInput = ({
       setIsShow(true)
     }
     if(searchWhileTyping && val.length >= searchWhileTypingStartsAt) {
-      if(timeoutID !== null) {
+      if(timeoutID !== null) { // 做一个防抖Debounce
         clearTimeout(timeoutID);
         setTimeoutID(null);
       }
