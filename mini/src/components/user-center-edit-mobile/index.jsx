@@ -283,6 +283,8 @@ class index extends Component {
                   onBlur={this.handleInputBlur}
                   onFocus={this.handleInputFocus}
                   value={bindMobile}
+                  type="number"
+                  trim
                 />
               </View>
             )}
