@@ -84,6 +84,7 @@
       font-weight: 600;
       color: $text-color-primary;
       margin-right: rem($margin-2n);
+      height: rem(28);
       @include text-ellipsis();
     }
     .groupName {
@@ -104,6 +105,8 @@
       align-items: center;
       justify-content: center;
       border-radius: rem(5);
+      padding: 0;
+      line-height: rem(42);
     }
     .btn:nth-child(2) {
       margin-left: rem($margin-2n);
@@ -116,9 +119,6 @@
       align-items: center;
       .userBtnText {
         margin-left: rem($margin-2n);
-        display: block;
-        height: rem(22);
-        line-height: rem($font-line-height-small);
       }
     }
   }
