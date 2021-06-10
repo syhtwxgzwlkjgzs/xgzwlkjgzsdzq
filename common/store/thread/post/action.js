@@ -321,11 +321,17 @@ class ThreadPostAction extends ThreadPostStore {
           files[item.id] = { ...item, type: item.fileType, name: item.fileName };
         });
       }
-      if (tomId === THREAD_TYPE.voice) audio = contentindexes[index].body || {};
+      if (tomId === THREAD_TYPE.voice) {
+        audio = contentindexes[index].body || {};
+        const audioId = audio.id || audio.threadVideoId;
+        audio.id = audioId;
+      }
       if (tomId === THREAD_TYPE.goods) product = contentindexes[index].body;
       if (tomId === THREAD_TYPE.video) {
         video = contentindexes[index].body || {};
         video.thumbUrl = video.mediaUrl;
+        const videoId = video.id || video.threadVideoId;
+        video.id = videoId;
       }
       if (tomId === THREAD_TYPE.redPacket) {
         const price = contentindexes[index]?.body?.money;

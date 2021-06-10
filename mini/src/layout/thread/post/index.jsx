@@ -279,7 +279,7 @@ class Index extends Component {
   // 执行上传视频
   handleVideoUpload = () => {
     const { postData } = this.props.threadPost;
-    if (postData.video?.id) {
+    if (postData.video?.id || postData.video?.threadVideoId) {
       this.postToast('只能上传一个视频');
       return;
     }
