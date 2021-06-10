@@ -74,6 +74,8 @@ class WeixinBindQrCodePage extends React.Component {
         }
         // 跳转状态页
         if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
+          const uid = get(e, 'uid', '');
+          uid && this.props.user.updateUserInfo(uid);
           commonLogin.setStatusMessage(e.Code, e.Message);
           router.push(`/user/status?statusCode=${e.Code}&statusMsg=${e.Message}`);
         }

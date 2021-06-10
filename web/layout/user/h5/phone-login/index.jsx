@@ -109,6 +109,8 @@ class LoginPhoneH5Page extends React.Component {
 
       // 跳转状态页
       if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
+        const uid = get(e, 'uid', '');
+        uid && this.props.user.updateUserInfo(uid);
         this.props.commonLogin.setStatusMessage(e.Code, e.Message);
         this.props.router.push(`/user/status?statusCode=${e.Code}&statusMsg=${e.Message}`);
         return;
