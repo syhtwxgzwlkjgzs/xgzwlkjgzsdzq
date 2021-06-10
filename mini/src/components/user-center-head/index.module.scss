@@ -37,6 +37,11 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      .userBtnText {
+        display: block;
+        height: 22px;
+        line-height: $font-line-height-small;
+      }
     }
 
     .text{
