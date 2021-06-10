@@ -288,7 +288,7 @@ class Index extends Component {
         this.yundianboUpload('video', file);
       },
       fail: (res) => {
-        this.postToast(res.errMsg);
+        // this.postToast(res.errMsg);
       }
     });
   }

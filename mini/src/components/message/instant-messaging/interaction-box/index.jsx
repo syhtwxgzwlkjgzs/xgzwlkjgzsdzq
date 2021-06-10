@@ -24,6 +24,8 @@ const InteractionBox = (props) => {
 
   const [isSubmiting, setIsSubmiting] = useState(false);
 
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+
   // const checkToShowCurrentMsgTime = (curTimestamp) => {
   //   const DISPLAY_GAP_IN_MINS = 3;
   //   const diff = new Date(curTimestamp).getMinutes() - new Date(lastTimestamp).getMinutes();
@@ -48,6 +50,12 @@ const InteractionBox = (props) => {
     if (!threadPost.emojis.length) {
       threadPost.fetchEmoji();
     }
+
+    // 监听键盘高度变化
+    Taro.onKeyboardHeightChange(res => {
+      setKeyboardHeight(res?.height || 0);
+    });
+
     return () => {
       Taro.hideLoading();
     };
@@ -174,8 +182,8 @@ const InteractionBox = (props) => {
   };
 
   return (
-    <>
-      <View className={styles.interactionBox} style={{ bottom: showEmoji ? '343px' : 0 }}>
+    <View className={styles.interactionBox} style={{ bottom: (keyboardHeight && !showEmoji) ? `14px` : '' }}>
+      <View className={styles.operationBox}>
         <View className={styles.inputWrapper}>
           <Input
             value={typingValue}
@@ -206,7 +214,7 @@ const InteractionBox = (props) => {
       <View className={styles['emoji-container']}>
         <Emoji show={showEmoji} onClick={insertEmoji} />
       </View>
-    </>
+    </View>
   );
 };
 

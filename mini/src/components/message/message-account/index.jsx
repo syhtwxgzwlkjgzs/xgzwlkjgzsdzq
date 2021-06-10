@@ -45,6 +45,7 @@ const Index = ({ message, subPage }) => {
         avatar: item.userAvatar,
         userId: item.userId,
         username: item.username,
+        nickname: item.nickname,
       })
     });
 
