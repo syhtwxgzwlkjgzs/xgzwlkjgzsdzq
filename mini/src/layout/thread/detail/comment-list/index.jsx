@@ -281,6 +281,16 @@ class RenderCommentList extends React.Component {
     this.setState({ showAboptPopup: true });
   }
 
+  avatarClick(data) {
+    const { userId } = data;
+    if(!userId) return;
+    Taro.navigateTo({url: `/subPages/user/index?id=${userId}`});
+  }
+
+  replyAvatarClick(reply, comment, floor) {
+    this.props.replyAvatarClick(reply, comment, floor);
+  }
+
   // 悬赏弹框确定
   async onAboptOk(data) {
     if (data > 0) {
@@ -327,14 +337,14 @@ class RenderCommentList extends React.Component {
     });
   }
 
-  //删除回复
+  // 删除回复
   async replyDeleteComment() {
     if (!this.replyData.id) return;
 
     const params = {}
     if (this.replyData && this.commentData) {
-      params.replyData = this.replyData;//本条回复信息
-      params.commentData = this.commentData;//回复对应的评论信息
+      params.replyData = this.replyData;// 本条回复信息
+      params.commentData = this.commentData;// 回复对应的评论信息
     }
     const { success, msg } = await this.props.comment.deleteReplyComment(params, this.props.thread);
     this.setState({
@@ -380,9 +390,11 @@ class RenderCommentList extends React.Component {
                 data={val}
                 key={val.id}
                 likeClick={() => this.likeClick(val)}
+                avatarClick={() => this.avatarClick(val)}
                 replyClick={() => this.replyClick(val)}
                 deleteClick={() => this.deleteClick(val)}
                 editClick={() => this.editClick(val)}
+                replyAvatarClick={(reply,floor) =>this.replyAvatarClick(reply,val,floor)}
                 replyLikeClick={(reploy) => this.replyLikeClick(reploy, val)}
                 replyReplyClick={(reploy) => this.replyReplyClick(reploy, val)}
                 replyDeleteClick={(reply) => this.replyDeleteClick(reply, val)}
@@ -419,7 +431,7 @@ class RenderCommentList extends React.Component {
           onClose={() => this.setState({ showReplyDeletePopup: false })}
           onBtnClick={() => this.replyDeleteComment()}
         />
-        
+
         {/* 采纳弹层 */}
         {parseContent?.REWARD?.money && (
           <AboptPopup

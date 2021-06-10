@@ -29,6 +29,7 @@ import RenderThreadContent from './detail/content';
 import RenderCommentList from './detail/comment-list';
 import classNames from 'classnames';
 import { debounce } from '@common/utils/throttle-debounce';
+import styles from "./post/index.module.scss";
 
 @inject('site')
 @inject('user')
@@ -37,6 +38,7 @@ import { debounce } from '@common/utils/throttle-debounce';
 @inject('index')
 @inject('topic')
 @inject('search')
+@inject('threadPost')
 @observer
 class ThreadH5Page extends React.Component {
   constructor(props) {
@@ -617,6 +619,19 @@ class ThreadH5Page extends React.Component {
     });
   }
 
+  replyAvatarClick(reply, comment, floor) {
+    if (floor === 2) {
+      const { userId } = reply;
+      if(!userId) return;
+      Taro.navigateTo({url: `/subPages/user/index?id=${userId}`});
+    }
+    if (floor === 3) {
+      const { commentUserId } = reply;
+      if(!commentUserId) return;
+      Taro.navigateTo({url: `/subPages/user/index?id=${commentUserId}`});
+    }
+  }
+
   // 弹出框关闭
   onClose() {
     this.setState({
@@ -723,7 +738,6 @@ class ThreadH5Page extends React.Component {
     const fun = {
       moreClick: this.onMoreClick,
     };
-
     // 更多弹窗权限
     const morePermissions = {
       canEdit: threadStore?.threadData?.ability?.canEdit,
@@ -798,6 +812,7 @@ class ThreadH5Page extends React.Component {
                       onEditClick={(comment) => this.onEditClick(comment)}
                       replyReplyClick={(reply, comment) => this.replyReplyClick(reply, comment)}
                       replyClick={(comment) => this.replyClick(comment)}
+                      replyAvatarClick={(comment, reply, floor) =>this.replyAvatarClick(comment, reply, floor)}
                     ></RenderCommentList>
                     {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
                     {isNoMore && (
