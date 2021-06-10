@@ -6,6 +6,7 @@ import Button from '@discuzq/design/dist/components/button/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 // import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Page from '@components/page';
+import { get } from '@common/utils/get';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus, isExtFieldsOpen } from '@common/store/login/util';
 import layout from './index.module.scss';
 import { getParamCode, getUserProfile } from '../common/utils';
@@ -55,6 +56,8 @@ class WXBind extends Component {
 
       // 跳转状态页
       if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
+        const uid = get(error, 'uid', '');
+        uid && this.props.user.updateUserInfo(uid);
         this.props.commonLogin.setStatusMessage(error.Code, error.Message);
         navigateTo({
           url: `/subPages/user/status/index?statusCode=${error.Code}&statusMsg=${error.Message}`

@@ -79,7 +79,7 @@ export class MessageIndex extends Component {
         content: dialogMessage?.imageUrl ? '[图片]' : dialogMessage?.messageTextHtml,
         avatar: chatPerson?.avatar,
         userId: chatPerson?.id,
-        username: chatPerson?.nickname,
+        nickname: chatPerson?.nickname,
         unreadCount: dialogMessage?.unreadCount,
       });
     });

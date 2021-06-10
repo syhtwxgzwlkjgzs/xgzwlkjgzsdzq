@@ -128,7 +128,7 @@ class Index extends Component {
       Router.push({ url: `/thread/${item.threadId}` });
     }
     if (type === 'chat') {
-      Router.push({ url: `/message?page=chat&dialogId=${item.dialogId}&nickname=${item.username}` });
+      Router.push({ url: `/message?page=chat&dialogId=${item.dialogId}&nickname=${item.nickname}` });
     }
   };
 
@@ -156,10 +156,10 @@ class Index extends Component {
                   <Avatar image={avatarUrl} circle={true} />
                 ) : (
                   <Avatar
-                    text={item.username}
+                    text={item.nickname}
                     circle={true}
                     style={{
-                      backgroundColor: `#${this.getBackgroundColor(item.username)}`,
+                      backgroundColor: `#${this.getBackgroundColor(item.nickname)}`,
                     }}
                   />
                 )
@@ -187,8 +187,8 @@ class Index extends Component {
                 })}
                 onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
               >
-                {/* 仅帖子通知没有username，使用title代替显示 */}
-                {item.username || this.filterTag(item.title)}
+                {/* 仅帖子通知没有nickname，使用title代替显示 */}
+                {item.nickname || this.filterTag(item.title)}
               </div>
               {['chat', 'thread'].includes(type) && (
                 <div className={styles.time}>{diffDate(item.createdAt)}</div>

@@ -195,7 +195,7 @@ class index extends Component {
       })
       .catch((err) => {
         Toast.error({
-          content: err.Message || '获取验证码失败',
+          content: err.Msg || '获取验证码失败',
           hasMask: false,
           duration: 1000,
         });

@@ -18,9 +18,7 @@ const DialogBox = (props) => {
   const timeoutId = useRef();
   useEffect(() => {
     document.addEventListener('focusin', () => {
-      setTimeout(() => {
-        scrollEnd();
-      }, 100);
+      setTimeout(scrollEnd, 0);
     });
     return () => clearTimeout(timeoutId.current);
   }, []);
@@ -34,7 +32,7 @@ const DialogBox = (props) => {
 
   useEffect(() => {
     if (showEmoji) {
-      scrollEnd();
+      setTimeout(scrollEnd, 0);
     }
   }, [showEmoji]);
 
