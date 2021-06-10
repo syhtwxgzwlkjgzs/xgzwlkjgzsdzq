@@ -11,13 +11,13 @@
  * @prop {function} onFocus 聚焦事件
  * @prop {function} onBlur 失焦事件
  */
-import React, { memo } from 'react';
+import React, { memo, forwardRef } from 'react';
 import { View, Textarea } from '@tarojs/components';
 import styles from './index.module.scss';
 
 import PropTypes from 'prop-types';
 
-const Index = ({
+const Index = forwardRef(({
   value,
   rows,
   placeholder,
@@ -28,11 +28,13 @@ const Index = ({
   onChange,
   onFocus,
   onBlur,
-}) => {
+}, ref) => {
+
   return (
     <View className={styles.container}>
       <View className={styles['container-inner']}>
         <Textarea
+          ref={ref}
           className={value ? styles['textarea-editing'] : styles.textarea}
           placeholderClass={styles['textarea-placeholder']}
           value={value}
@@ -51,7 +53,7 @@ const Index = ({
       </View>
     </View>
   );
-};
+});
 
 Index.propTypes = {
   value: PropTypes.string,
