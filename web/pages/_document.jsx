@@ -51,6 +51,7 @@ class MyDocument extends Document {
           ` }} />
           {/* <!--腾讯地图定位组件--> */} 
           <script async src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
+          {this.createMonitor()}
         </Head>
         <body>
           <Main />
