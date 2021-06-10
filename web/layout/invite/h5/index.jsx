@@ -8,6 +8,7 @@ import { copyToClipboard } from '@common/utils/copyToClipboard';
 import layout from './index.module.scss';
 import { numberFormat } from '@common/utils/number-format';
 import BaseLayout from '@components/base-layout';
+import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 
 @inject('site')
 @inject('user')
@@ -26,9 +27,9 @@ class InviteH5Page extends React.Component {
 
   createInviteLink = async () => {
     try {
-      const { invite } = this.props;
-      await this.props.invite.createInviteLink();
-      copyToClipboard(`${window.location.origin}/forum/partner-invite?inviteCode=${invite.inviteCode}`);
+      const { site: { setSite: { siteTitle } = {} } = {}, user } = this.props;
+      // copyToClipboard(`${window.location.origin}/forum/partner-invite?inviteCode=${user.id}`);
+      h5Share({ title: `邀请您加入${siteTitle || ''}`, path: `/forum/partner-invite?inviteCode=${user.id}` });
       Toast.success({
         content: '创建邀请链接成功',
         duration: 1000,

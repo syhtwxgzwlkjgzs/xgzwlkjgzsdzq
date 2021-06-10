@@ -47,12 +47,4 @@ export default class InviteStore {
     const listData = get(res, 'pageData.inviteUsersList', null);
     this.inviteUsersList = page === 1 ? listData : this.inviteUsersList?.concat(listData);
   }
-
-  @action
-  async createInviteLink() {
-    const res = await simpleRequest('createInviteLink', {
-
-    });
-    this.inviteCode = res.code;
-  }
 }
