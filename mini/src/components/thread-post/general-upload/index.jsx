@@ -14,7 +14,7 @@ import locals from '@common/utils/local-bridge';
 import constants from '@common/constants';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 
-export default inject('threadPost', 'site')(observer(({ type, threadPost, site, audioUpload }) => {
+export default inject('threadPost', 'site')(observer(({ type, threadPost, site, audioUpload, children }) => {
   const { postData, setPostData } = threadPost;
   const { webConfig, envConfig } = site;
   const localData = JSON.parse(JSON.stringify(postData));
@@ -182,10 +182,11 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
 
   return (
     <>
-      {atta}
       {img}
+      {children}
       {audioRecord}
       {audioPlayer}
+      {atta}
     </>
   );
 }));

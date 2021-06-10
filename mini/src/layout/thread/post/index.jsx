@@ -14,6 +14,7 @@ import VodUploader from 'vod-wx-sdk-v2';
 import { toTCaptcha } from '@common/utils/to-tcaptcha'
 import PayBox from '@components/payBox/index';
 import { ORDER_TRADE_TYPE } from '@common/constants/payBoxStoreConstants';
+import { get } from '@common/utils/get';
 
 @inject('index')
 @inject('site')
@@ -278,7 +279,7 @@ class Index extends Component {
   // 执行上传视频
   handleVideoUpload = () => {
     const { postData } = this.props.threadPost;
-    if (postData.video?.id) {
+    if (postData.video?.id || postData.video?.threadVideoId) {
       this.postToast('只能上传一个视频');
       return;
     }
@@ -634,7 +635,10 @@ class Index extends Component {
     const contentStyle = {
       marginTop: navInfo.statusBarHeight > 30 ? `${navInfo.navHeight / 2}px` : '0px',
     }
-
+    let defaultToolbarStyle = {}
+    if (showEmoji || bottomHeight) defaultToolbarStyle = { paddingBottom: '0px', height: '45px' };
+    const { site } = this.props;
+    const headTitle = get(site, 'webConfig.setSite.siteName', '');
     return (
       <>
         <View className={styles['container']}>
@@ -642,7 +646,7 @@ class Index extends Component {
           <View className={styles.topBar} style={navStyle}>
             <Icon name="RightOutlined" onClick={() => this.handlePageJump(false)} />
             <View className={styles['topBar-title']}>
-              发帖
+              <View className={styles['topBar-title-inner']}>{ headTitle ?  `发布 - ${headTitle}` : '发布' }</View>
             </View>
           </View>
 
@@ -675,25 +679,25 @@ class Index extends Component {
 
             <View className={styles['plugin']}>
 
-              <GeneralUpload type={operationType} audioUpload={(file) => { this.yundianboUpload('audio', file) }} />
+              <GeneralUpload type={operationType} audioUpload={(file) => { this.yundianboUpload('audio', file) }}>
+                {video.thumbUrl && (
+                  <Units
+                    type='video'
+                    deleteShow
+                    src={video.thumbUrl}
+                    onDelete={() => setPostData({ video: {} })}
+                    onVideoLoaded={() => {
+                      Taro.pageScrollTo({
+                        scrollTop: 3000,
+                        // selector: '#thread-post-video',
+                        complete: (a,b,c) => {console.log(a,b,c)}
+                      });
+                    }}
+                  />
+                )}
+              </GeneralUpload>
 
               {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => setPostData({ product: {} })} />}
-
-              {video.thumbUrl && (
-                <Units
-                  type='video'
-                  deleteShow
-                  src={video.thumbUrl}
-                  onDelete={() => setPostData({ video: {} })}
-                  onVideoLoaded={() => {
-                    Taro.pageScrollTo({
-                      scrollTop: 3000,
-                      // selector: '#thread-post-video',
-                      complete: (a,b,c) => {console.log(a,b,c)}
-                    });
-                  }}
-                />
-              )}
 
             </View>
             </View>
@@ -785,6 +789,7 @@ class Index extends Component {
               }}
             />
             <DefaultToolbar
+              style={defaultToolbarStyle}
               operationType={operationType}
               permissions={permissions}
               onPluginClick={(item) => {

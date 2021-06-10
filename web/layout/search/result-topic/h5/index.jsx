@@ -51,13 +51,15 @@ class SearchResultTopicH5Page extends React.Component {
 
   render() {
     const { keyword } = this.state;
-    const { topics } = this.props.search;
+    const { topics, topicsError } = this.props.search;
     const { pageData = [], currentPage, totalPage } = topics || { pageData: [] };
 
     return (
         <BaseLayout
           onRefresh={this.fetchMoreData}
           noMore={currentPage >= totalPage}
+          requestError={topicsError.isError}
+          errorText={topicsError.errorText}
         >
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} searchWhileTyping/>
           <div className={styles.wrapper}>

@@ -85,7 +85,7 @@ class SearchResultUserPcPage extends React.Component {
 
   render() {
     // const { keyword } = this.state;
-    const { users } = this.props.search;
+    const { users, usersError } = this.props.search;
     const { pageData, currentPage, totalPage } = users || {};
     const userId = this.props.user?.userInfo?.id
 
@@ -105,6 +105,8 @@ class SearchResultUserPcPage extends React.Component {
           isLoading={!pageData}
           noData={!pageData?.length}
           icon={{ type: 2, name: 'MemberOutlined' }}
+          isError={usersError.isError}
+          errorText={usersError.errorText}
         >
           <ActiveUsersMore data={pageData} onFollow={this.onFollow} onItemClick={this.onUserClick} userId={userId} />
         </SidebarPanel>

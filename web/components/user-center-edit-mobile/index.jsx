@@ -228,7 +228,7 @@ class index extends Component {
                 </div>
               ) : (
                 <div className={styles.labelInput}>
-                  <Input placeholder="请输入新手机号" onChange={this.handleInputChange} focus={true} onBlur={this.handleInputBlur} onFocus={this.handleInputFocus} value={bindMobile} />
+                  <Input trim placeholder="请输入新手机号" onChange={this.handleInputChange} focus={true} onBlur={this.handleInputBlur} onFocus={this.handleInputFocus} value={bindMobile} />
                 </div>
               )
             }

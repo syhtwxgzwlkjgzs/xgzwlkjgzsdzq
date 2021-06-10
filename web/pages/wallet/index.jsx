@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'next/router';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import ViewAdapter from '@components/view-adapter';
 import WalletH5Page from '@layout/wallet/h5';
 import WalletPCPage from '@layout/wallet/pc';
@@ -9,6 +9,7 @@ import { readWalletUser } from '@server';
 
 @inject('wallet')
 @inject('site')
+@observer
 class WalletPage extends React.Component {
   static async getInitialProps(ctx) {
     try {
