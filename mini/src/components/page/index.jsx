@@ -22,7 +22,7 @@ export default class Page extends React.Component {
 
   constructor(props) {
     super(props);
-    const { noWithLogin, withLogin, user } = this.props;
+    const { noWithLogin, withLogin, noWithPaid, user } = this.props;
     // 是否必须登录
     if (withLogin && !user.isLogin()) {
       Router.redirect({
@@ -36,6 +36,14 @@ export default class Page extends React.Component {
         url: '/pages/index/index',
       });
     }
+
+    // 访问加入站点页时，是否已付费。已付费直接跳转首页
+    if (noWithPaid && user.paid) {
+      Router.redirect({
+        url: 'pages/index/index',
+      });
+    }
+
     this.state = {
       isRender: this.isPass(),
     };

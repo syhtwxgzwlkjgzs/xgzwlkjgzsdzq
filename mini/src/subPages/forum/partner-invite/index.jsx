@@ -6,7 +6,7 @@ import Page from '@components/page';
 class ParnerInvite extends React.Component {
   render() {
     return (
-      <Page>
+      <Page noWithPaid>
         <ParnerInviteH5Page />
       </Page>
     );
