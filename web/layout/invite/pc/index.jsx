@@ -137,7 +137,6 @@ class InvitePCPage extends React.Component {
                         <Avatar
                           className={layout.user_value_avatar}
                           image={item.avatar}
-                          size='small'
                           text={item?.nickname?.substring(0, 1)}
                         />
                         <div className={layout.user_value_name} title={item.nickname}>{item.nickname || '匿名'}</div>
