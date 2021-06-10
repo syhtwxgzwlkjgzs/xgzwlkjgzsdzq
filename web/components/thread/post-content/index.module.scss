@@ -76,7 +76,7 @@
     font-weight: normal;
     font-size: rem($font-size-primary);
     line-height: rem($font-line-height-primary);
-    color: var(--color-primary);
+    color: $primary-color;
     .icon {
       margin-left: rem(9);
       transform: rotateZ(90deg);

@@ -9,13 +9,8 @@
   display: flex;
   justify-content: space-between;
   font-weight: normal;
-<<<<<<< Updated upstream
   padding-bottom: 6px;
-  color: var(--color-text-primary);
-=======
-  padding-bottom: $padding-4n;
   color: $text-color-primary;
->>>>>>> Stashed changes
   .text {
     font-family: 'PingFangSC-Regular';
     font-size: $font-size-primary;
@@ -59,12 +54,7 @@
   font-weight: normal;
   font-size: $font-size-label;
   text-align: left;
-<<<<<<< Updated upstream
-  color: var(--color-text-secondary);
-  padding: $padding-2n 0 22px;
-=======
   color: $text-color-secondary;
-  padding: $padding-4n 0;
->>>>>>> Stashed changes
-  border-bottom: var(--border-border);
+  padding: $padding-2n 0 22px;
+  border-bottom: $border-solid-1;
 }

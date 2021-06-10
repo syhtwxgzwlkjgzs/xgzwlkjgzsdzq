@@ -23,7 +23,7 @@
   .percentage {
     display: flex;
     flex-direction: column;
-    border-bottom: var(--border-border);
+    border-bottom: $border-solid-1;
     .text {
       font-weight: normal;
       font-size: rem($font-size-primary);

@@ -6,7 +6,7 @@
   box-sizing: border-box;
 
   .header {
-    font-weight: var(--font-weight-regular);
+    font-weight: $font-weight-regular;
     line-height: rem($font-line-height-primary);
     text-align: left;
     font-size: rem(18);
@@ -32,7 +32,7 @@
           width: rem(200);
           @include text-ellipsis();
           color: $text-color-primary;
-          font-weight: var(--font-weight-regular);
+          font-weight: $font-weight-regular;
           padding: rem($padding-1n) 0;
         }
         .dynamic {
@@ -59,7 +59,7 @@
         .number {
           height: rem(28);
           line-height: rem(28);
-          font-weight: var(--font-weight-regular);
+          font-weight: $font-weight-regular;
           font-size: rem($font-size-large);
           text-align: center;
           color: $text-color-primary;

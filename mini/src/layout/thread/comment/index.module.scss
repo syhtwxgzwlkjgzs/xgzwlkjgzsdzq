@@ -18,7 +18,7 @@
           line-height: 50px;
         }
         .showMoneyNum {
-          font-weight: var(--font-weight-regular);
+          font-weight: $font-weight-regular;
           font-size: var($font-size-label);
           line-height: 50px;
           text-align: left;

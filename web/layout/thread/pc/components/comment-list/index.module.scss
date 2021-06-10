@@ -28,7 +28,7 @@
           padding-top: rem($padding-2n);
           padding-left: rem($padding-3n);
           padding-right: rem($padding-3n);
-          font-weight: var(--font-weight-regular);
+          font-weight: $font-weight-regular;
           font-size: rem($font-size-primary);
           line-height: rem(20);
           text-align: left;
@@ -114,7 +114,7 @@
           }
         }
         .moreReply {
-          font-weight: var(--font-weight-regular);
+          font-weight: $font-weight-regular;
           font-size: rem($font-size-primary);
           text-align: left;
           color: $text-color-primary;

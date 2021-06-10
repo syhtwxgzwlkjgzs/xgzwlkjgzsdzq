@@ -67,7 +67,7 @@
 .title {
   color: $text-color-primary;
   line-height: 21px;
-  font-weight: var(--font-weight-regular);
+  font-weight: $font-weight-regular;
   font-size: rem($font-size-middle);
   word-break: break-all;
 }

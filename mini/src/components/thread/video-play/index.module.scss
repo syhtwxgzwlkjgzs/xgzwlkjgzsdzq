@@ -42,7 +42,7 @@
 }
 
 .alertWarn {
-  background: var(--color-warn9);
+  background: $warn-color9;
   .tipsIcon {
     color: $warn-color;
   }
@@ -53,7 +53,7 @@
 }
 
 .alertError {
-  background: var(--color-error9);
+  background: $warn-color9;
   .tipsIcon {
     color: $error-color;
   }

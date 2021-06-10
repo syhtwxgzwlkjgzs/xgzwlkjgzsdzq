@@ -11,7 +11,7 @@
     border-bottom: $border-solid-1;
     .tips {
       width: 100%;
-      font-weight: var(--font-weight-regular);
+      font-weight: $font-weight-regular;
       font-size: rem($font-size-middle);
       line-height: rem($font-line-height-small);
       text-align: center;

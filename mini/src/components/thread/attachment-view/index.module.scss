@@ -120,7 +120,7 @@
 }
 
 .successMsgWrapper {
-  background-color: var(--color-success9);
+  background-color: $success-color9;
   .tipsIcon {
     color: $success-color;
   }

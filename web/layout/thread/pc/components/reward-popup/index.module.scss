@@ -46,7 +46,7 @@
   .headerLeft {
     flex: 1;
     font-size: rem($font-size-middle);
-    font-weight: var(--font-weight-regular);
+    font-weight: $font-weight-regular;
     line-height: rem(64);
     text-align: center;
   }
