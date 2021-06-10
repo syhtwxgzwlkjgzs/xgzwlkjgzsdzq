@@ -110,7 +110,7 @@ const Index = inject('user', 'threadPost')(observer((props) => {
         className={styles['icon']}
       />
       <Text className={styles['text']}>分类</Text>
-      <Units type='tag' tagContent={content() || '选择分类(必选)'} onTagClick={() => {}} />
+      <Units type='tag' style={{margin: '0', maxWidth: '200px'}} tagContent={content() || '选择分类(必选)'} onTagClick={() => {}} />
     </View>
   );
 
