@@ -10,6 +10,9 @@ class IndexStore {
 
   @observable drafts = null;
 
+  // 是否出现推荐选项
+  @observable needDefault = false
+
   @computed get categoriesNoAll() {
     return (this.categories || []).filter(item => item.name !== '全部');
   }

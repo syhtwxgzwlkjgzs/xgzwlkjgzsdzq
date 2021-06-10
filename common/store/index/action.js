@@ -3,7 +3,7 @@ import IndexStore from './store';
 import { readCategories, readStickList, readThreadList, updatePosts, createThreadShare, readRecommends } from '@server';
 import typeofFn from '@common/utils/typeof';
 import threadReducer from '../thread/reducer';
-import { getCategoryName, getActiveId } from './handleCategory'
+import { getCategoryName, getActiveId, getCategories } from '@common/utils/handleCategory'
 
 class IndexAction extends IndexStore {
   constructor(props) {
@@ -18,12 +18,30 @@ class IndexAction extends IndexStore {
     return getCategoryName(categories, categoryids)
   }
 
-  // 获取被点击分类的name
-  @computed get categoryId() {
+  // 获取被点击一级分类的name
+  @computed get activeCategoryId() {
     const categories = this.categories || [];
     const { categoryids } = this.filter
+    
+    const [id, cid] = getActiveId(categories, categoryids)
+    return id
+  }
 
-    return getActiveId(categories, categoryids)
+  // 获取被点击二级分类的name
+  @computed get activeChildCategoryId() {
+    const categories = this.categories || [];
+    const { categoryids } = this.filter
+    
+    const [id, cid] = getActiveId(categories, categoryids)
+    return cid
+  }
+
+  // 获取当前分类数据
+  @computed get currentCategories() {
+    const categories = this.categories || [];
+    const needDefault = this.needDefault
+
+    return getCategories(categories, needDefault)
   }
 
   /**
@@ -56,6 +74,11 @@ class IndexAction extends IndexStore {
   @action
   setHasOnScrollToLower(data) {
     this.hasOnScrollToLower = data
+  }
+
+  @action.bound
+  setNeedDefault(data) {
+    this.needDefault = data
   }
 
 /**
