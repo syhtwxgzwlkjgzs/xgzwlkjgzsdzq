@@ -50,11 +50,23 @@ class index extends Component {
     const { id } = getCurrentInstance().router.params;
     if (id) {
       if (follow !== 0) {
-        await this.props.user.cancelFollow({ id: id, type: 1 });
-        await this.props.user.getTargetUserInfo(id);
+          const cancelRes = await this.props.user.cancelFollow({ id: id, type: 1 });
+          if (!cancelRes.success) {
+            Toast.error({
+              content: cancelRes.msg || '取消关注失败',
+              duration: 2000
+            })
+          }
+          await this.props.user.getTargetUserInfo(id);
       } else {
-        await this.props.user.postFollow(id);
-        await this.props.user.getTargetUserInfo(id);
+          const followRes = await this.props.user.postFollow(id);
+          if (!followRes.success) {
+            Toast.error({
+              content: followRes.msg || '关注失败',
+              duration: 2000
+            })
+          }
+          await this.props.user.getTargetUserInfo(id);
       }
     }
   };
