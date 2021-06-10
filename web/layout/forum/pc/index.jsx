@@ -4,7 +4,7 @@ import { withRouter } from 'next/router';
 import { Icon, Avatar, ScrollView } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import layout from './index.module.scss';
-import BaseLayout from '@components/base-layout';
+import BaseLayout from '@components/user-center-base-laout-pc';
 import Copyright from '@components/copyright';
 import TrendingTopic from '@layout/search/pc/components/trending-topics';
 import SidebarPanel from '@components/sidebar-panel';
@@ -59,6 +59,8 @@ class ForumPCPage extends React.Component {
       </>
   );
 
+  contentHeader = () => <div className={layout.content_header}></div>;
+
   render() {
     const {
       site,
@@ -82,6 +84,7 @@ class ForumPCPage extends React.Component {
     return (
       <BaseLayout
         right={ this.renderRight }
+        contentHeader={this.contentHeader}
       >
         <div className={layout.container}>
           {/* 头部 start */}

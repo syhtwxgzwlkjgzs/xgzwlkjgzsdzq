@@ -116,7 +116,7 @@ import { View, Text } from '@tarojs/components'
   };
 
   const onUserClick = (userId = '') => {
-    Router.push({url: `/user/${userId}`});
+    Router.push({url: `/subPages/user/index?id=${userId}`});
   };
 
   const onClose = () => {
@@ -198,8 +198,7 @@ import { View, Text } from '@tarojs/components'
                           platform={platform}
                           onClick={onUserClick}
                           type={item.type}
-                          needPadding={true}
-                          needBottomLine={false}
+                          className={styles.userItem}
                         />
                     ))
                   }

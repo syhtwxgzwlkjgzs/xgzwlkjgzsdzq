@@ -7,16 +7,25 @@ import { View, Text } from '@tarojs/components';
 @observer
 class UserCenterHeaderImage extends React.Component {
   render() {
+    const userImageStyle = {}
     let backgroundUrl = this.props.user?.backgroundUrl;
+    
     if (this.props.isOtherPerson) {
       backgroundUrl = this.props.user.targetUserBackgroundUrl;
     }
+
+    if (backgroundUrl) {
+      Object.assign(userImageStyle, {
+        backgroundImage: `url(${backgroundUrl})`
+      })
+    }
+
     return (
       <View
         className={styles.box}
-        style={{ backgroundImage: `url(${backgroundUrl})` || 'url(\'/dzq-img/my-default-header-img.jpg\')' }}
+        style={userImageStyle}
         {...this.props}
-      ></View>
+      />
     );
   }
 }

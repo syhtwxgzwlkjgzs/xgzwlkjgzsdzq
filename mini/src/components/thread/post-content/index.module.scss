@@ -50,11 +50,9 @@
       overflow: hidden;
     }
 
-    // :global(.dzq-richText--mini) {
-    //   display: flex;
-    //   align-items: center;
-    // }
-
+    :global(.dzq-richText--mini .dzq-p) {
+      margin-bottom: 0;
+    }
     // :global(.dzq-p) {
     //   display: flex;
     //   align-items: center;

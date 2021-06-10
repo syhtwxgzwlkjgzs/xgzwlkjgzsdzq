@@ -14,6 +14,7 @@ import { minus } from '@common/utils/calculate';
 import classnames from 'classnames';
 import UserInfo from '@components/thread/user-info';
 import styles from './index.module.scss';
+import { debounce } from '@common/utils/throttle-debounce';
 
 // 帖子内容
 const RenderThreadContent = inject('user')(
@@ -89,7 +90,7 @@ const RenderThreadContent = inject('user')(
 
     const onClickUser = (e) => {
       typeof props.onClickUser === 'function' && props.onClickUser(e);
-    }
+    };
 
     return (
       <div className={`${styles.container}`}>
@@ -143,7 +144,7 @@ const RenderThreadContent = inject('user')(
           {!canFreeViewPost && isAttachmentPay && !isSelf && !isPayed && (
             <div style={{ textAlign: 'center' }} onClick={onContentClick}>
               <Button className={styles.payButton} type="primary">
-                <Icon className={styles.payIcon} name="GoldCoinOutlined" size={20}></Icon>
+                <Icon className={styles.payIcon} name="GoldCoinOutlined" size={16}></Icon>
                 <p>支付{attachmentPrice}元查看附件内容</p>
               </Button>
             </div>
@@ -224,7 +225,7 @@ const RenderThreadContent = inject('user')(
           {!canFreeViewPost && isThreadPay && !isSelf && !isPayed && (
             <div style={{ textAlign: 'center' }} onClick={onContentClick}>
               <Button className={styles.payButton} type="primary">
-                <Icon className={styles.payIcon} name="GoldCoinOutlined" size={20}></Icon>
+                <Icon className={styles.payIcon} name="GoldCoinOutlined" size={16}></Icon>
                 支付{threadPrice}元查看剩余内容
               </Button>
             </div>
@@ -255,6 +256,7 @@ const RenderThreadContent = inject('user')(
               {/* 打赏 */}
               {isBeReward && (
                 <Icon
+                  onClick={() => !isSelf && onRewardClick()}
                   className={classnames(styles.payIcon, isRewarded && styles.actived)}
                   name="HeartOutlined"
                   size={20}
@@ -263,7 +265,7 @@ const RenderThreadContent = inject('user')(
               {/* 点赞 */}
               <div
                 className={classnames(styles.liked, threadStore?.threadData?.isLike && styles.actived)}
-                onClick={onLikeClick}
+                onClick={debounce(onLikeClick, 500)}
               >
                 <Icon name="LikeOutlined" size={20}></Icon>
                 {threadStore?.threadData?.likeReward?.likePayCount > 0 && (

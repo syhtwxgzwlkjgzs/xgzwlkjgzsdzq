@@ -2,14 +2,43 @@ import React from 'react';
 import { inject } from 'mobx-react';
 import { Popup } from '@discuzq/design';
 import layout from './index.module.scss';
-import * as protocolType from '../../constants/protocol';
+
+const PROTOCAL = {
+  PRIVACY: 'privacy',
+  REGISTER: 'register'
+}
 
 @inject('commonLogin')
+@inject('site')
 class PopProtocol extends React.Component {
+  getProtocalData(type) {
+    const { site } = this.props;
+    const { webConfig: { agreement } } = site;
+    const { privacy, privacyContent, register, registerContent } = agreement;
+
+    let title = '';
+    let content = '';
+
+    if (type === PROTOCAL.PRIVACY) {
+      title = '隐私协议';
+      content = privacy ? privacyContent : '';
+    } else if (type === PROTOCAL.REGISTER) {
+      title = '注册协议';
+      content = register ? registerContent : ''
+    }
+
+    return {
+      title,
+      content
+    };
+  }
+
+
   render() {
     const { protocolVisible, protocolStatus } = this.props;
     const { commonLogin } = this.props;
-    const protocolData = protocolType[protocolStatus];
+    const protocolData = this.getProtocalData(protocolStatus);
+
     return (
       <Popup
         position="bottom"
@@ -20,23 +49,11 @@ class PopProtocol extends React.Component {
           <div className={layout.title}>
             {protocolData.title}
           </div>
-          {
-            protocolData?.content?.map((item, index) =>  (
-              <div key={index}>
-                <div className={layout.item_title}>
-                  {item.title}
-                </div>
-                {
-                  item?.content?.map((text, textIndex) => (
-                    <div key={textIndex} className={layout.item_content}>
-                      {text}
-                    </div>
-                  ))
-                }
-              </div>
-            )
-            )
-          }
+          <div className={layout.item_content}>
+            <pre>
+              {protocolData.content}
+            </pre>
+          </div>
           <div className={layout.bottom} onClick={() => commonLogin.setProtocolVisible(false)}>
             <div className={layout.bottom_content}>
               关闭

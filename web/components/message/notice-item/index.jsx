@@ -82,20 +82,26 @@ class Index extends Component {
   };
 
   filterTag(html) {
-    return html?.replace(/<(\/)?([beprt]|br|div)[^>]*>|[\r\n]/gi, '');
+    return html?.replace(/<(\/)?([beprt]|br|div)[^>]*>|[\r\n]/gi, '')
+      .replace(/<img[^>]+>/gi, $1 => {
+        return $1.includes('qq-emotion') ? $1 : "[图片]";
+      });
   }
 
   // parse content 对于需要显示title作为内容的消息，在对应组件内做预处理后统一传入content属性
   parseHTML = () => {
     const { type, item } = this.props;
-    let _content = typeof item.content === 'string' ? item.content : '';
+    let _content = (typeof item.content === 'string' && item.content !== 'undefined') ? item.content : '';
 
     if (type === 'account') {
       const tip = `<span class=\"${styles.tip}\">${this.getAccountTips(item)}</span>`;
       _content = tip + _content;
     }
 
-    return xss(s9e.parse(this.filterTag(_content)));
+    let t = xss(s9e.parse(this.filterTag(_content)));
+    t = (typeof t === 'string') ? t : '';
+
+    return t;
   };
 
   // 跳转用户中心
@@ -122,7 +128,7 @@ class Index extends Component {
       Router.push({ url: `/thread/${item.threadId}` });
     }
     if (type === 'chat') {
-      Router.push({ url: `/message?page=chat&dialogId=${item.dialogId}&username=${item.username}` });
+      Router.push({ url: `/message?page=chat&dialogId=${item.dialogId}&nickname=${item.username}` });
     }
   };
 
@@ -136,7 +142,12 @@ class Index extends Component {
         {/* 默认block */}
         <div className={isPC ? styles['block-pc'] : styles.block}>
           {/* 头像 */}
-          <div className={styles.avatar} onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}>
+          <div
+            className={classNames(styles.avatar, {
+              [styles['unset-cursor']]: type === 'thread'
+            })}
+            onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
+          >
 
             {/* 未读消息红点 */}
             <UnreadRedDot type='avatar' unreadCount={item.unreadCount}>
@@ -159,6 +170,7 @@ class Index extends Component {
           {/* 详情 */}
           <div
             className={classNames(styles.detail, {
+              [styles['detail-pc']]: isPC,
               [styles['detail-chat']]: type === 'chat',
               [styles['detail-thread']]: type === 'thread',
               [styles['detail-financial']]: type === 'financial',
@@ -171,6 +183,7 @@ class Index extends Component {
               <div
                 className={classNames(styles.name, {
                   [styles['single-line']]: true,
+                  [styles['unset-cursor']]: type === 'thread'
                 })}
                 onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
               >
@@ -206,11 +219,23 @@ class Index extends Component {
                 <p
                   className={classNames(styles['content-html'], {
                     [styles['single-line']]: ['chat'].includes(type),
-                    [styles['multiple-line']]: ['thread', 'account'].includes(type),
+                    [styles['multiple-line']]: ['account'].includes(type),
                   })}
                   style={isPC ? { paddingRight: '20px' } : {}}
                   dangerouslySetInnerHTML={{ __html: this.parseHTML() }}
                 />
+              )}
+              {/* PC删除按钮 */}
+              {isPC && (
+                <div
+                  className={styles.delete}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onBtnClick(item);
+                  }}
+                >
+                  <Icon className={styles.icon} name="DeleteOutlined" size={14} />
+                </div>
               )}
             </div>
 
@@ -220,18 +245,7 @@ class Index extends Component {
             )}
           </div>
         </div>
-        {/* PC删除 */}
-        {isPC && (
-          <div
-            className={styles.delete}
-            onClick={(e) => {
-              e.stopPropagation();
-              onBtnClick(item);
-            }}
-          >
-            <Icon className={styles.icon} name="DeleteOutlined" size={14} />
-          </div>
-        )}
+
       </div>
     );
   }

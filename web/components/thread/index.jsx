@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'next/router';
-import { Button, Toast } from '@discuzq/design';
+import { Icon, Toast } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import BottomEvent from './bottom-event';
 import UserInfo from './user-info';
@@ -172,8 +172,15 @@ class Index extends React.Component {
       }
     }
 
+    onClickHeaderIcon = (e) => {
+      e && e.stopPropagation();
+
+      const { onClickIcon = noop } = this.props;
+      onClickIcon(e)
+    }
+
     render() {
-      const { data, className = '', site = {}, showBottomStyle = true ,  collect = '' } = this.props;
+      const { data, className = '', site = {}, showBottomStyle = true ,  collect = '', isShowIcon = false } = this.props;
       const { platform = 'pc' } = site;
 
       if (!data) {
@@ -197,7 +204,7 @@ class Index extends React.Component {
 
       return (
         <div className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`}>
-          <div className={styles.header} onClick={this.onClick}>
+          <div className={styles.header}>
               <UserInfo
                 name={user.nickname || ''}
                 avatar={user.avatar || ''}
@@ -214,6 +221,7 @@ class Index extends React.Component {
                 collect={collect}
                 onClick={this.onClickUser}
               />
+              {isShowIcon && <div className={styles.headerIcon} onClick={this.onClickHeaderIcon}><Icon name='CollectOutlinedBig' size={20}></Icon></div>}
           </div>
 
           <ThreadCenterView data={data} onClick={this.onClick} onPay={this.onPay} platform={platform} />

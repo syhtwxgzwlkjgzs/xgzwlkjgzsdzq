@@ -19,16 +19,7 @@
     height: 38px;
     margin-right: 12px;
     box-sizing: border-box;
-    // .img {
-    //   display: inline-block;
-    //   width: 38);
-    //   height: 38);
-    //   border-radius: 19);
-    //   line-height: 38);
-    //   text-align: center;
-    //   font-size: 20);
-    //   background: $body-bg-color;
-    // }
+
     .icon {
       display: flex;
       justify-content: center;
@@ -76,6 +67,9 @@
     .label {
       margin-right: 7px;
     }
+    .rightIcon {
+      margin-right: 3px;
+    }
   }
   .button {
     height: 25px;
@@ -88,38 +82,4 @@
   }
 }
 
-.h5Padding {
-  padding: rem($padding-2n) $padding-4n;
-}
 
-.bottomLine {
-  &:after {
-    content: ' ';
-    position: absolute;
-    right: rem(16);
-    left: rem(16);
-    height: 1px;
-    bottom: 0;
-    background-color: rgba(238, 238, 238, 0.75);
-  }
-}
-
-// .sidebarPadding {
-//   padding-left: $padding-4n;
-//   padding-right: $padding-4n;
-
-//   &:after {
-//     content: ' ';
-//     position: absolute;
-//     right: rem(16);
-//     left: rem(16);
-//     height: 1px;
-//     bottom: 0;
-//     background-color: rgba(238, 238, 238, 0.75);
-//   }
-// }
-
-// .horizontalPadding {
-//   padding-left: $padding-4n;
-//   padding-right: $padding-4n;
-// }

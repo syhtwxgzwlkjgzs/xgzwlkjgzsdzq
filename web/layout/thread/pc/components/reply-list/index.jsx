@@ -9,6 +9,7 @@ import CommentInput from '../comment-input/index';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import ImageDisplay from '@components/thread/image-display';
+import { debounce } from '@common/utils/throttle-debounce';
 
 @observer
 export default class ReplyList extends React.Component {
@@ -66,17 +67,20 @@ export default class ReplyList extends React.Component {
       <div className={styles.replyList}>
         <div className={styles.replyListAvatar} onClick={this.props.avatarClick('2')}>
           <Avatar
-            image={this.props.data.user.avatar}
-            name={this.props.data.user.nickname || this.props.data.user.userName || ''}
+            image={this.props?.data?.user?.avatar}
+            name={this.props?.data?.user?.nickname || this.props?.data?.user?.userName || ''}
             circle={true}
-            userId={this.props.data.user.id}
+            userId={this.props?.data?.user?.id}
             isShowUserInfo={true}
             size="small"
           ></Avatar>
         </div>
+
         <div className={styles.replyListContent}>
           <div className={styles.replyListContentText}>
-            <div className={styles.replyListName}>{this.props.data.user.nickname || this.props.data.user.userName}</div>
+            <div className={styles.replyListName}>
+              {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
+            </div>
             <div className={styles.replyListText}>
               {this.props.data.commentUserId && this.props.data?.commentUser ? (
                 <div className={styles.commentUser}>
@@ -113,35 +117,38 @@ export default class ReplyList extends React.Component {
               )}
             </div>
           </div>
+          
           <div className={styles.replyListFooter}>
             <div className={styles.replyTime}>{diffDate(this.props.data.createdAt)}</div>
 
             {/* 操作按钮 */}
-            <div className={styles.extraBottom}>
-              <div
-                className={classnames(styles.commentLike, this.props?.data?.isLiked && styles.active)}
-                onClick={() => this.likeClick(canLike)}
-              >
-                <Icon className={styles.icon} name="LikeOutlined"></Icon>
-                赞&nbsp;{this.props?.data?.likeCount > 0 ? this.props.data.likeCount : ''}
-              </div>
-              <div
-                className={classnames(
-                  styles.commentReply,
-                  this.props.isShowInput && this.state.isShowInput && styles.active,
-                )}
-                onClick={() => this.replyClick()}
-              >
-                <Icon className={styles.icon} name="MessageOutlined"></Icon>
-                <span>回复</span>
-              </div>
-              {canDelete && (
+            {this.props.data?.user && (
+              <div className={styles.extraBottom}>
+                <div
+                  className={classnames(styles.commentLike, this.props?.data?.isLiked && styles.active)}
+                  onClick={debounce(() => this.likeClick(canLike), 500)}
+                >
+                  <Icon className={styles.icon} name="LikeOutlined"></Icon>
+                  赞&nbsp;{this.props?.data?.likeCount > 0 ? this.props.data.likeCount : ''}
+                </div>
+                <div
+                  className={classnames(
+                    styles.commentReply,
+                    this.props.isShowInput && this.state.isShowInput && styles.active,
+                  )}
+                  onClick={() => this.replyClick()}
+                >
+                  <Icon className={styles.icon} name="MessageOutlined"></Icon>
+                  <span>回复</span>
+                </div>
+                {canDelete && (
                   <div className={styles.replyDelete} onClick={() => this.deleteClick()}>
                     <Icon className={styles.icon} name="DeleteOutlined"></Icon>
                     <span>删除</span>
                   </div>
-              )}
-            </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* 回复输入框 */}

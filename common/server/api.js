@@ -5,15 +5,26 @@ import { apiIns } from '@discuzq/sdk/dist/api';
 import typeofFn from '@common/utils/typeof';
 import setAuthorization from '@common/utils/set-authorization';
 import setUserAgent from '@common/utils/set-user-agent';
-import { ENV_CONFIG } from '@common/constants/site';
 import isServer from '@common/utils/is-server';
 import Toast from '@discuzq/design/dist/components/toast';
 import Router from '@discuzq/sdk/dist/router';
 import { handleError } from '@discuzq/sdk/dist/api/utils/handle-error';
+import {
+  ENV_CONFIG,
+  JUMP_TO_404,
+  JUMP_TO_LOGIN,
+  JUMP_TO_REGISTER,
+  JUMP_TO_AUDIT,
+  JUMP_TO_HOME_INDEX,
+  SITE_CLOSED,
+  JUMP_TO_PAY_SITE,
+  SITE_NO_INSTALL,
+  JUMP_TO_SUPPLEMENTARY
+} from '@common/constants/site';
 
 let globalToast = null;
 const api = apiIns({
-  baseURL: ENV_CONFIG.COMMOM_BASE_URL && ENV_CONFIG.COMMOM_BASE_URL !== '' ? ENV_CONFIG.COMMOM_BASE_URL : isServer() ? '' : window.location.origin,
+  baseURL: ENV_CONFIG.COMMON_BASE_URL && ENV_CONFIG.COMMON_BASE_URL !== '' ? ENV_CONFIG.COMMON_BASE_URL : isServer() ? '' : window.location.origin,
   timeout: isServer() ? 2000 : 0,
   // 200 到 504 状态码全都进入成功的回调中
   validateStatus(status) {
@@ -73,14 +84,117 @@ http.interceptors.response.use((res) => {
   // if (data.Code === -4002) {
   //   Router.redirect({url: '/user/login'});
   // }
-  // 200 状态码
-  if (status === 200) {
-    return Promise.resolve({
-      code: data.Code,
-      data: reasetData(data.Data),
-      msg: data.Message,
-    });
+  let url = null;
+  switch (data.Code) {
+    case JUMP_TO_404: {
+      if (process.env.DISCUZ_ENV === 'web') {
+        url = '/404';
+      } else {
+        url = '/subPages/404/index'
+      }
+      Router.replace({
+        url
+      });
+      break;
+    }
+    case JUMP_TO_LOGIN: {
+      if (process.env.DISCUZ_ENV === 'web') {
+        url = '/user/login';
+      } else {
+        url = '/subPages/user/wx-auth/index'
+      }
+      Router.replace({
+        url
+      });
+      break;
+    }
+    case JUMP_TO_REGISTER: {
+      if (process.env.DISCUZ_ENV === 'web') {
+        url = '/user/register';
+      } else {
+        url = '/subPages/user/wx-auth/index'
+      }
+      Router.replace({
+        url
+      });
+      break;
+    }
+    case JUMP_TO_AUDIT: {
+      if (process.env.DISCUZ_ENV === 'web') {
+        url = '/user/status?statusCode=2';
+      } else {
+        url = '/subPages/user/status/index?statusCode=2'
+      }
+      Router.replace({
+        url
+      });
+      break;
+    }
+    case JUMP_TO_HOME_INDEX: {
+      if (process.env.DISCUZ_ENV === 'web') {
+        url = '/';
+      } else {
+        url = '/pages/index/index'
+      }
+      Router.replace({
+        url
+      });
+      break;
+    }
+    case SITE_CLOSED: {
+      if (process.env.DISCUZ_ENV === 'web') {
+        url = '/close';
+      } else {
+        url = '/subPages/close/index'
+      }
+      Router.replace({
+        url
+      });
+      break;
+    }
+    case JUMP_TO_PAY_SITE: {
+      if (process.env.DISCUZ_ENV === 'web') {
+        url = '/forum/partner-invite';
+      } else {
+        url = '/subPages/forum/partner-invite/index'
+      }
+      Router.replace({
+        url
+      });
+      break;
+    }
+    case SITE_NO_INSTALL: {
+      if (process.env.DISCUZ_ENV === 'web') {
+        url = '/no-install';
+      } else {
+        url = '/subPages/no-install/index'
+      }
+      Router.replace({
+        url
+      });
+      break;
+    }
+    case JUMP_TO_SUPPLEMENTARY: {
+      if (process.env.DISCUZ_ENV === 'web') {
+        url = '/user/supplementary';
+      } else {
+        url = '/subPages/user/supplementary/index';
+      }
+      Router.replace({
+        url
+      });
+      break;
+    }
+    default:  // 200 状态码
+      if (status === 200) {
+        return Promise.resolve({
+          code: data.Code,
+          data: reasetData(data.Data),
+          msg: data.Message,
+        });
+      }
   }
+
   return Promise.resolve({
     code: status,
     data: null,

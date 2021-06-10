@@ -21,7 +21,16 @@
 
 .header {
   padding: rem($padding-4n) 0;
+  display: flex;
 }
+
+.headerIcon {
+  width: 30px;
+  color: $primary-color;
+  display: flex;
+  justify-content: flex-end;
+}
+
 .content {
   position: relative;
   >* {

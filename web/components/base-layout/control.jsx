@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
 import { inject, observer } from 'mobx-react';
 import { noop } from '@components/thread/utils';
 import { throttle } from '@common/utils/throttle-debounce.js';
@@ -22,7 +22,7 @@ import PCBaseLayout from './pc';
       </BaseLayout>
 */
 
-const BaseLayoutControl = (props) => {
+const BaseLayoutControl = forwardRef((props, ref) => {
   const {
     site,
     baselayout = {},
@@ -31,14 +31,24 @@ const BaseLayoutControl = (props) => {
     hasListChild = true,
     jumpTo = -1,
     pageName = '',
+    ready = noop,
     ...others
   } = props;
 
   const [listRef, setListRef] = useState(null);
-  const [baseLayoutWhiteList, setBaseLayoutWhiteList] = useState(['home', 'search']);
-  const [videoList, setVideoList] = useState([]);
-  const [playingIdx, setPlayingIdx] = useState(0);
+  const [baseLayoutWhiteList, setBaseLayoutWhiteList] = useState(['home', 'search', 'detail']);
   const layoutRef = useRef(null);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      listRef
+    }),
+  );
+
+  useEffect(() => {
+    ready();
+  }, []);
 
   useEffect(() => {
     if (hasListChild) setListRef(layoutRef?.current.listRef);
@@ -107,6 +117,6 @@ const BaseLayoutControl = (props) => {
   }
 
   return <H5BaseLayout onScroll={handleScroll} pageName={pageName} platform={site.platform} {...others} ref={layoutRef} />;
-};
+});
 
 export default inject('site', 'baselayout')(observer(BaseLayoutControl));

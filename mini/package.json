@@ -11,10 +11,11 @@
   "scripts": {
     "dev": "taro build --type weapp --watch",
     "build": "taro build --type weapp",
+    "postbuild": "npm run dist",
     "lint:fix": "eslint --ext .js,.ts,.tsx,.jsx ./ --max-warnings 0 --fix",
     "lintcss:fix": "stylelint src/**/*.{scss}",
     "dev:weapp": "cross-env NODE_ENV=development dzq dev -p mini --type weapp",
-    "build:weapp": "cross-env NODE_ENV=production dzq build -p mini --type weapp",
+    "build:weapp": "cross-env NODE_ENV=production dzq build -p mini --type weapp && npm run dist",
     "dist": "node handleDist.js"
   },
   "browserslist": [
@@ -26,8 +27,8 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "7.7.7",
-    "@discuzq/design": "^1.0.3",
-    "@discuzq/sdk": "^1.0.3",
+    "@discuzq/design": "1.0.6",
+    "@discuzq/sdk": "1.0.6",
     "@tarojs/components": "3.2.2",
     "@tarojs/react": "3.2.2",
     "@tarojs/runtime": "3.2.2",
@@ -43,7 +44,7 @@
     "@babel/core": "7.8.0",
     "@commitlint/cli": "12.0.1",
     "@commitlint/config-conventional": "12.0.1",
-    "@discuzq/cli": "^1.0.3",
+    "@discuzq/cli": "1.0.6",
     "@tarojs/cli": "3.2.2",
     "@tarojs/mini-runner": "3.2.2",
     "@tarojs/webpack-runner": "3.2.2",
@@ -69,7 +70,7 @@
     "stylelint-config-standard": "21.0.0",
     "stylelint-prettier": "1.2.0",
     "webpack": "4.46.0",
-    "webpack-bundle-analyzer": "^4.4.2"
+    "webpack-bundle-analyzer": "4.4.2"
   },
   "config": {
     "commitizen": {

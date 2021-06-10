@@ -6,7 +6,6 @@
   display: flex;
   flex-wrap: nowrap;
   justify-content: flex-start;
-  position: relative;
   -webkit-tap-highlight-color: transparent;
 
   /*内容展示区*/
@@ -101,11 +100,17 @@
     }
 
     .middle {
+      position: relative;
       padding-top: $margin-1n;
       font-size: $font-size-primary;
       color: $text-color-secondary;
       line-height: rem(20);
       cursor: pointer;
+
+      .content-html{
+        overflow: hidden;
+        word-break: break-all;
+      }
 
       :global {
         .qq-emotion {
@@ -135,12 +140,18 @@
     /*私信详情*/
     &.detail-chat {
       margin-left: $margin-2n;
+      .middle {
+        .content-html {
+          max-width: 320px;
+        }
+      }
     }
     /*帖子详情*/
     &.detail-thread {
       margin-left: $margin-2n;
       .middle {
         line-height: rem(22);
+        cursor: unset;
       }
     }
     /*财务详情*/
@@ -179,23 +190,32 @@
     }
   }
 
-  /*pc 删除按钮*/
-  .delete {
-    visibility: hidden;
-    position: absolute;
-    bottom: rem(16);
-    right: rem(24);
-    width: rem(20);
-    height: rem(20);
-    text-align: right;
-    cursor: pointer;
-    .icon {
-      color: $text-color-secondary;
+  /* pc */
+  .detail-pc {
+    .delete {
+      visibility: hidden;
+      position: absolute;
+      right: 0;
+      bottom: 50%;
+      transform: translateY(50%);
+      width: rem(20);
+      height: rem(20);
+      text-align: right;
+      cursor: pointer;
+      z-index: 9;
+      .icon {
+        color: $text-color-secondary;
+      }
+    }
+
+    &.detail-account .delete{
+      bottom: 0;
+      transform: translateY(26px);
     }
   }
 
   &:hover .delete {
-    visibility: visible;
+    visibility: visible !important;
   }
 
   .single-line {
@@ -204,5 +224,9 @@
 
   .multiple-line {
     @include lamp-clamp(3);
+  }
+
+  .unset-cursor {
+    cursor: unset !important;
   }
 }

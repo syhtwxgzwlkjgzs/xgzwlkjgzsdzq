@@ -1,11 +1,11 @@
-import { View } from '@tarojs/components';
+import Page from '@components/page';
 import React from 'react';
 import UserCenterEditInfo from '@components/user-center-edit-info';
 
 export default function index() {
   return (
-    <View>
+    <Page>
       <UserCenterEditInfo />
-    </View>
+    </Page>
   )
 }

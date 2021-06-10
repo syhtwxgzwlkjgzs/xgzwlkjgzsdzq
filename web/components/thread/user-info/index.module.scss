@@ -4,6 +4,7 @@
   position: relative;
   display: flex;
   font-family: 'PingFangSC-Semibold';
+  flex: 1;
 }
 
 .cursor {
@@ -91,6 +92,10 @@
   margin-right: rem($margin-2n);
   display: flex;
   align-items: center;
+
+  :global(.dzq-icon) {
+    cursor: initial;
+  }
 
   span {
     margin-left: rem($margin-1n);

@@ -28,11 +28,16 @@ $font-size-large: 20px;
 $font-size-label: $font-size-small;
 $font-size-primary: $font-size-base;
 
+$font-line-height-xs: 18px;
 $font-line-height-small: 22px;
 $font-line-height-base: 24px;
 $font-line-height-middle: 26px;
 $font-line-height-large: 30px;
 $font-line-height-primary: $font-line-height-base;
+
+$font-weight-light: 400;
+$font-weight-regular: 600;
+$font-weight-bold: 800;
 
 // ------ Colors 颜色 ------------
 $primary-color: var(--color-primary) !default;
@@ -40,11 +45,15 @@ $info-color: var(--color-info) !default;
 $success-color: var(--color-success) !default;
 $warn-color: var(--color-warn) !default;
 $error-color: var(--color-error) !default;
+
 $primary-color3: var(--color-primary3);
 $primary-color6: var(--color-primary6);
 $primary-color10: var(--color-primary10);
 $disabled-color: var(--color-disabled);
 $disabled-color2: var(--color-disabled2);
+
+$warn-color9: var(--color-warn9);
+$success-color9: var(--color-success9);
 
 $primary-disabled-color: var(--color-primary5);
 
@@ -83,6 +92,8 @@ $border-color-hover: $text-color-placeholder;
 // ---- border shadow color ----
 $border-shadow-color: var(--shadow-color);
 $border-shadow-color2: var(--shadow-color2);
+
+$border-shadow-color-8: 0 0 8px 0 var(--shadow-color2);
 
 // ---- mask color ----
 $mask-bg-color: var(--mask-background-color);
@@ -139,6 +150,7 @@ $padding-5n: $padding-base * 5;
 $padding-6n: $padding-base * 6;
 $padding-5: 5px;
 $padding-10: 10px;
+$padding-14: 14px;
 
 $margin-base: 4px;
 $margin-1n: $margin-base;

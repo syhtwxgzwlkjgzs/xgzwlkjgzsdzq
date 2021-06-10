@@ -45,8 +45,8 @@ class SearchResultUserH5Page extends React.Component {
     });
   };
 
-  onUserClick = ({ userId } = {}) => {
-    Taro.navigateTo({url: `/my/others?isOtherPerson=true&otherId=${userId}`});
+  onUserClick = (userId) => {
+    Taro.navigateTo({url: `/subPages/user/index?id=${userId}`});
   };
 
   render() {
@@ -60,7 +60,7 @@ class SearchResultUserH5Page extends React.Component {
         noMore={currentPage >= totalPage}
         showHeader={false}
       >
-        <SearchInput onSearch={this.onSearch} onCancel={this.onSearch} defaultValue={keyword} />
+        <SearchInput onSearch={this.onSearch} onCancel={this.onSearch} defaultValue={keyword} searchWhileTyping/>
         {
           pageData?.map((item, index) => (
             <UserItem
@@ -69,8 +69,8 @@ class SearchResultUserH5Page extends React.Component {
               imgSrc={item.avatar}
               label={item.groupName}
               onClick={this.onUserClick}
-              needPadding={true}
-              needBottomLine={true}
+              className={styles.userItem}
+              userId={item.userId}
             />
           ))
         }

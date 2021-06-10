@@ -6,6 +6,7 @@ import { inject, observer } from 'mobx-react';
 import BottomView from '@components/list/BottomView';
 import isServer from '@common/utils/is-server';
 import { debounce } from '@common/utils/throttle-debounce';
+import replaceStringInRegex from '@common/utils/replace-string-in-regex';
 
 @inject('index')
 @observer
@@ -75,13 +76,13 @@ class Index extends React.Component {
       }}>
         <div className={style.recommendContent}>推荐内容</div>
         { (recommendsStatus === 'loading' || recommendsStatus === 'error') && (
-            <BottomView isBox isError={isError} isLoading={recommendsStatus === 'loading'} errorText={errorText} noMore={false} loadingText='正在加载' /> 
+            <BottomView isBox isError={isError} errorText={errorText} noMore={false} loadingText='正在加载' /> 
         )}
         {
           recommendsStatus === 'none' && recommends?.filter((_, index) => index < filterCount).map((item, index) => {
-            let titleString = item.title;
-            titleString = titleString.replaceAll(/<img[\s]+[^<>]*class=([^<>]+qq\-emotion)(?:\"|\')[^<>]*>/g, '[表情]');
-            titleString = titleString.replaceAll(/<img[\s]+[^<>]*>|<img[\s]+[^<>]*/g, "[图片]");
+            let titleString = item?.title || '';
+            titleString = replaceStringInRegex(titleString, "emoj", '[表情]');
+            titleString = replaceStringInRegex(titleString, "img", '[图片]');
             return (
               <div key={index} className={style.recommendBox} onClick={() => {this.recommendDetails(item)}}>
                 <div className={style.recommendTitle}>

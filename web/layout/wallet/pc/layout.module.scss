@@ -16,6 +16,7 @@
 
   .title {
     padding-left: rem($padding-2n);
+    font-size: rem($font-size-middle);
   }
 }
 
@@ -160,14 +161,16 @@
     .react-datepicker {
       // 整个盒子
       display: flex;
-      height: 252px;
+      width: rem(304);
+      height: rem(252);
       font-size: $font-size-middle;
       border-radius: $border-radius-small;
       overflow: hidden;
-
+      border: none;
+      box-shadow: 0 0 rem(8) $border-shadow-color;
       &__header,
       &-time__header {
-        padding-top: 16px;
+        padding-top: rem($padding-4n);
         font-size: $font-size-middle;
         border-radius: 0;
         border: $border-solid-1;
@@ -190,7 +193,8 @@
 
       &__time-container,
       &__month-text {
-        width: 90px !important;
+        width: 33.3% !important;
+        font-size: rem($font-size-primary);
       }
 
       &__time-list {
@@ -231,15 +235,79 @@
         margin: $margin-4n;
       }
     }
+    .react-datepicker__month-container {
+      width: rem(304);
+    }
+    .react-datepicker__month-wrapper {
+      display: flex;
+      align-items: center;
+    }
+
+    .react-datepicker__header {
+      height: rem(54);
+      box-sizing: border-box;
+      padding-top: 0;
+      line-height: rem(54);
+      font-weight: normal;
+      color: $text-color-primary;
+      font-size: rem($font-size-middle);
+      &::before {
+        content: "<";
+        display: block;
+        height: rem(12);
+        width: rem(12);
+        position: absolute;
+        left: rem(24);
+        color: $text-color-secondary;
+      }
+      &::after {
+        content: ">";
+        display: block;
+        height: rem(12);
+        width: rem(12);
+        position: absolute;
+        right: rem(24);
+        top: 0;
+        color: $text-color-secondary;
+      }
+    }
+
+    .react-datepicker__navigation--previous {
+      border-color: transparent !important;
+      left: rem(16);
+      top: rem(16);
+      &:hover {
+        border-color: transparent;
+      }
+      &:focus {
+        border-color: transparent;
+      }
+    }
+
+    .react-datepicker__navigation--next {
+      border-color: transparent !important;
+      right: rem(16);
+      top: rem(16);
+      &:hover {
+        border-color: transparent;
+      }
+      &:focus {
+        border-color: transparent;
+      }
+    }
+
+    .react-datepicker__header:not(.react-datepicker__header--has-time-select) {
+      border-top-right-radius: 0;
+    }
 
     .react-datepicker__day-name,
     .react-datepicker__day,
     .react-datepicker__time-name {
-      width: 24px !important;
-      height: 24px !important;
-      line-height: 24px !important;
-      margin-left: 10px !important;
-      margin-bottom: 8px !important;
+      width: rem(24) !important;
+      height: rem(24) !important;
+      line-height: rem($font-line-height-primary) !important;
+      margin-left: rem(10) !important;
+      margin-bottom: rem(8) !important;
     }
 
     .react-datepicker__day:hover,
@@ -258,13 +326,13 @@
     }
 
     .react-datepicker__time-list-item {
-      height: 20px;
+      height: rem(20);
       display: flex;
       align-items: center;
     }
 
     .react-datepicker__time-list-item--selected {
-      height: 20px;
+      height: rem(20);
       background-color: $primary-color !important;
     }
 

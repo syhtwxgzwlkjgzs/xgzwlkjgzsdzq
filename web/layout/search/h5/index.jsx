@@ -57,9 +57,8 @@ class SearchH5Page extends React.Component {
     dispatch('refresh', {});
   }
 
-
   render() {
-    const { indexTopics, indexUsers, indexThreads } = this.props.search;
+    const { indexTopics, indexUsers, indexThreads, indexTopicsError, indexUsersError, indexThreadsError } = this.props.search;
     const { pageData: topicsPageData } = indexTopics || {};
     const { pageData: usersPageData } = indexUsers || {};
     const { pageData: threadsPageData } = indexThreads || {};
@@ -72,7 +71,7 @@ class SearchH5Page extends React.Component {
         onClickTabBar={this.onClickTabBar}
         pageName="search"
       >
-        <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} isShowBottom={false} />
+        <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} isShowBottom={false}/>
         <SidebarPanel
           icon={{ type: 1, name: 'StrongSharpOutlined' }} 
           title="潮流话题" 
@@ -80,6 +79,8 @@ class SearchH5Page extends React.Component {
           isLoading={!topicsPageData}
           noData={!topicsPageData?.length}
           platform='h5'
+          isError={indexTopicsError.isError}
+          errorText={indexTopicsError.errorText}
         >
           {
             topicsPageData?.length && <TrendingTopics data={topicsPageData} onItemClick={this.onTopicClick} />
@@ -93,6 +94,8 @@ class SearchH5Page extends React.Component {
           isLoading={!usersPageData}
           noData={!usersPageData?.length}
           platform='h5'
+          isError={indexUsersError.isError}
+          errorText={indexUsersError.errorText}
         >
           {
             usersPageData?.length && <ActiveUsers data={usersPageData} onItemClick={this.onUserClick} />
@@ -106,6 +109,8 @@ class SearchH5Page extends React.Component {
           isLoading={!threadsPageData}
           noData={!threadsPageData?.length}
           platform='h5'
+          isError={indexThreadsError.isError}
+          errorText={indexThreadsError.errorText}
         >
           {
             threadsPageData?.length && <PopularContents data={threadsPageData} />

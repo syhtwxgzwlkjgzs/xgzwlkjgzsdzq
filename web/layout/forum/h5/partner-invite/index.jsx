@@ -8,10 +8,9 @@ import { Button, Toast, Avatar, Spin } from '@discuzq/design';
 import { get } from '@common/utils/get';
 import PopularContents from '../../../search/h5/components/popular-contents';
 import SiteInfo from './site-info';
-import { inviteDetail } from '@server';
+import { readUser } from '@server';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import PayBox from '@components/payBox';
-import { simpleRequest } from '@common/utils/simple-request';
 import { numberFormat } from '@common/utils/number-format';
 import { getSiteUpdateTime } from '@common/utils/get-site-uptade-time';
 import PartnerInviteWrap from './partner-invite-wrap';
@@ -37,37 +36,22 @@ class PartnerInviteH5Page extends React.Component {
     };
   }
   async componentDidMount() {
+    const { forum, router, invite } = this.props;
     try {
-      const { forum, router, search, invite, site } = this.props;
-      const { platform } = site;
-      const perPage = platform === 'pc' ? 5 : 20;
-
       const inviteCode = invite.getInviteCode(router);
       if (inviteCode) invite.setInviteCode(inviteCode);
 
-      const usersList = await simpleRequest('readUsersList', {
+      const inviteResp = await readUser({
         params: {
-          perPage,
-          filter: {
-            hot: 1,
-          },
+          pid: inviteCode.length === 32 ? 1 : inviteCode,
         },
       });
-      forum.setUsersPageData(usersList);
 
-      const threadList = await search.getThreadList();
-      forum.setThreadsPageData(threadList);
-
-      const inviteResp = await inviteDetail({
-        params: {
-          code: inviteCode,
-        },
-      });
-      const nickname = get(inviteResp, 'data.user.nickname', '');
-      const avatar = get(inviteResp, 'data.user.avatar', '');
+      const nickname = get(inviteResp, 'data.nickname', '');
+      const avatar = get(inviteResp, 'data.avatarUrl', '');
 
       this.setState({
-        invitorName: nickname,
+        invitorName: inviteCode.length === 32 ? '站长' : nickname,
         invitorAvatar: avatar,
       });
 
@@ -112,7 +96,7 @@ class PartnerInviteH5Page extends React.Component {
   // 右侧 - 潮流话题 粉丝 版权信息
   renderRight = () => {
     const { inviteData } = this.props.invite;
-    const { site: { platform, webConfig }, forum } = this.props;
+    const { site: { platform, webConfig = {} }, forum } = this.props;
     const { invitorName, invitorAvatar } = this.state;
     const { setSite: { siteMode, sitePrice, siteMasterScale, siteExpire } = {} } = webConfig;
     const { updataTime } = forum;
@@ -145,9 +129,11 @@ class PartnerInviteH5Page extends React.Component {
                     <span className={layout.site_status_label}>更新</span>
                     <span
                       className={layout.site_status_item}
-                      title={(updataTime && getSiteUpdateTime(updataTime)) || '--'}
+                      // title={(updataTime && getSiteUpdateTime(updataTime)) || '--'}
                     >
-                      {(updataTime && getSiteUpdateTime(updataTime)) || '--'}
+                      {/* TODO：和产品确认，暂时写死 */}
+                      刚刚
+                      {/* {(updataTime && getSiteUpdateTime(updataTime)) || '--'} */}
                     </span>
                 </div>
                 <div className={layout.site_status_list}>
@@ -181,7 +167,7 @@ class PartnerInviteH5Page extends React.Component {
                     image={ invitorAvatar }/>
                   <span className={layout.pc_bottom_text}>
                     <span>{ invitorName } 邀请您加入站点</span>
-                    {siteMode === 'pay' ? <span>，可获得返现 ¥{((10 - siteMasterScale) * sitePrice / 10).toFixed(2)}</span> : ''}
+                    {/* {siteMode === 'pay' ? <span>，可获得返现 ¥{((10 - siteMasterScale) * sitePrice / 10).toFixed(2)}</span> : ''} */}
                   </span>
               </div>
               : <></>
@@ -194,8 +180,41 @@ class PartnerInviteH5Page extends React.Component {
     );
   }
 
+  contentHeader = () => {
+    const { site: { platform, webConfig = {} } } = this.props;
+    if (platform === 'h5') {
+      return <></>;
+    }
+    const siteAuthor = get(webConfig, 'setSite.siteAuthor.username', '');
+    const siteInstall = get(webConfig, 'setSite.siteInstall', '');
+    // 兼容ios
+    const [siteTimer] = siteInstall.split(' ');
+    const startDate = Date.parse(siteTimer);
+    const endDate = Date.parse(new Date());
+    const createDays = numberFormat(parseInt(Math.abs(startDate  -  endDate) / 1000 / 60 / 60 / 24, 10));
+    return (
+      <div className={pclayout.content_header}>
+        <img
+            className={pclayout.logo}
+            mode="aspectFit"
+            src='/dzq-img/join-banner-bg.png'
+        />
+        <ul className={pclayout.joinInfo}>
+            <li className={pclayout.item}>
+              <span className={pclayout.text}>站长</span>
+              <span className={pclayout.content}>{siteAuthor || '--'}</span>
+            </li>
+            <li className={pclayout.item}>
+              <span className={pclayout.text}>已创建</span>
+              <span className={pclayout.content}>{createDays || 0}天</span>
+            </li>
+          </ul>
+      </div>
+    );
+  };
+
   render() {
-    const { site: { platform, webConfig }, forum: { updataTime } } = this.props;
+    const { site: { platform, webConfig = {} }, forum: { updataTime } } = this.props;
     const { inviteCode } = this.props.router.query;
     const { setSite: { siteMode, siteExpire, sitePrice, siteMasterScale } = {} } = webConfig;
     const { invitorName, invitorAvatar } = this.state;
@@ -203,7 +222,7 @@ class PartnerInviteH5Page extends React.Component {
     // 内容数
     const countThreads = get(webConfig, 'other.countThreads', '');
     return (
-      <PartnerInviteWrap renderRight={this.renderRight}>
+      <PartnerInviteWrap renderRight={this.renderRight} contentHeader={this.contentHeader}>
         <div className={layout.content}>
           {/* 站点信息 start */}
           <SiteInfo threadTotal={countThreads} updataTime={ updataTime }/>
@@ -230,7 +249,7 @@ class PartnerInviteH5Page extends React.Component {
                             image={ invitorAvatar }/>
                           <span className={layout.bottom_tips_text}>
                             <span>{ invitorName } 邀请您加入站点</span>
-                            {siteMode === 'pay' ? <span>，可获得返现 ¥{((10 - siteMasterScale) * sitePrice / 10).toFixed(2)}</span> : ''}
+                            {/* {siteMode === 'pay' ? <span>，可获得返现 ¥{((10 - siteMasterScale) * sitePrice / 10).toFixed(2)}</span> : ''} */}
                           </span>
                           <span className={layout.bottom_tips_arrows}></span>
                       </div>
