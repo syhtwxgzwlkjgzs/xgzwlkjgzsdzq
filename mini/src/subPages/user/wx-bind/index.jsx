@@ -7,9 +7,10 @@ import Toast from '@discuzq/design/dist/components/toast/index';
 // import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Page from '@components/page';
 import { get } from '@common/utils/get';
-import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus } from '@common/store/login/util';
+import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus, isExtFieldsOpen } from '@common/store/login/util';
 import layout from './index.module.scss';
-import { getParamCode, getUserProfile } from '../common/utils'
+import { getParamCode, getUserProfile } from '../common/utils';
+import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 
 // const MemoToastProvider = React.memo(ToastProvider);
 
@@ -42,6 +43,17 @@ class WXBind extends Component {
         Message: res.msg,
       };
     } catch (error) {
+      // 注册信息补充
+      if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+        if (isExtFieldsOpen(this.props.site)) {
+          this.props.commonLogin.needToCompleteExtraInfo = true;
+          redirectTo({ url: '/subPages/user/supplementary/index' });
+          return;
+        }
+        redirectTo({ url: '/pages/index/index' });
+        return;
+      }
+
       // 跳转状态页
       if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
         const uid = get(error, 'uid', '');

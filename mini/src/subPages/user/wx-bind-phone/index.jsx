@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Taro, { getCurrentInstance, navigateTo } from '@tarojs/taro';
+import Taro, { getCurrentInstance, navigateTo, redirectTo } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import Button from '@discuzq/design/dist/components/button/index';
@@ -9,10 +9,11 @@ import Avatar from '@discuzq/design/dist/components/avatar/index';
 import { toTCaptcha } from '@common/utils/to-tcaptcha'
 // import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Page from '@components/page';
-import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
+import { BANNED_USER, REVIEWING, REVIEW_REJECT, isExtFieldsOpen } from '@common/store/login/util';
 import { get } from '@common/utils/get';
 import PhoneInput from '@components/login/phone-input'
 import layout from './index.module.scss';
+import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 
 // const MemoToastProvider = React.memo(ToastProvider)
 
@@ -107,6 +108,16 @@ class Index extends Component {
         }
       });
     } catch (error) {
+      // 注册信息补充
+      if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+        if (isExtFieldsOpen(this.props.site)) {
+          this.props.commonLogin.needToCompleteExtraInfo = true;
+          redirectTo({ url: '/subPages/user/supplementary/index' });
+          return;
+        }
+        redirectTo({ url: '/pages/index/index' });
+        return;
+      }
       // 跳转状态页
       if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
         const uid = get(error, 'uid', '');

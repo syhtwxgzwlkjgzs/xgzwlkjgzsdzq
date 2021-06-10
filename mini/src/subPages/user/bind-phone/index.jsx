@@ -6,11 +6,12 @@ import Toast from '@discuzq/design/dist/components/toast/index';
 import Input from '@discuzq/design/dist/components/input/index';
 import { View, Text } from '@tarojs/components';
 import Page from '@components/page';
-import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
+import { BANNED_USER, REVIEWING, REVIEW_REJECT, isExtFieldsOpen } from '@common/store/login/util';
 import { toTCaptcha } from '@common/utils/to-tcaptcha'
 import PhoneInput from '@components/login/phone-input'
 import { get } from '@common/utils/get';
 import layout from './index.module.scss';
+import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 
 
 @inject('site')
@@ -105,6 +106,17 @@ class BindPhoneH5Page extends React.Component {
         }
       });
     } catch (e) {
+      // 注册信息补充
+      if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+        if (isExtFieldsOpen(this.props.site)) {
+          this.props.commonLogin.needToCompleteExtraInfo = true;
+          redirectTo({ url: '/subPages/user/supplementary/index' });
+          return;
+        }
+        redirectTo({ url: '/pages/index/index' });
+        return;
+      }
+
       // 跳转状态页
       if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
         const uid = get(e, 'uid', '');
