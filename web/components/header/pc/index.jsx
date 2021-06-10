@@ -180,7 +180,7 @@ class Header extends React.Component {
 
   render() {
     const { site, user, message: { totalUnread,  }, forum } = this.props;
-    const { canViewThreads } = forum;
+    const { otherPermissions } = forum || {};
     return (
       <div className={styles.header}>
         <div className={styles.headerFixedBox}>
@@ -223,7 +223,7 @@ class Header extends React.Component {
                   <p className={styles.iconText}>消息</p>
                 </div>
                 {
-                  canViewThreads ?
+                  !otherPermissions?.canViewThreads ? <></> :
                   <div className={styles.iconItem} onClick={() => this.handleRouter('/search')}>
                     <Icon
                       onClick={() => {
@@ -234,7 +234,6 @@ class Header extends React.Component {
                     />
                     <p className={styles.iconText}>发现</p>
                   </div>
-                 : <></>
                 }
               </div>
               <div className={styles.border}></div>
