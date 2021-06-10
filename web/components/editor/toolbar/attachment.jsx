@@ -94,6 +94,7 @@ function AttachmentToolbar(props) {
           toastInstance?.destroy();
         },
         onError: (err) => {
+          onUploadComplete(null, file, item.type);
           Toast.error({ content: err.message });
         },
       });
