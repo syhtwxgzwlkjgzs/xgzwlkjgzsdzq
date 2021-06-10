@@ -38,9 +38,9 @@ export default class Page extends React.Component {
     }
 
     // 访问加入站点页时，是否已付费。已付费直接跳转首页
-    if (noWithPaid && user.paid) {
+    if (noWithPaid && user.isLogin() && user.isPaid()) {
       Router.redirect({
-        url: 'pages/index/index',
+        url: '/pages/index/index',
       });
     }
 
