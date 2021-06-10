@@ -17,7 +17,8 @@ import styles from './index.module.scss';
 * @prop {boolean} isShowLayoutRefresh 是否显示自定义加载视图
 * @prop {boolean} requestError 是否接口请求报错
 * @prop {string} errorText 报错文案
-* @example
+* @prop {string} rightClassName 右侧class
+* @example.home-right
 *     <BaseLayout
         left={<div>左边</div>}
         right={<div>右边</div>}
@@ -30,7 +31,7 @@ const baseLayoutWhiteList = ['home', 'search'];
 
 const BaseLayout = forwardRef((props, ref) => {
     // UI设置相关 left-children-right 对应三列布局
-    const { header = null, left = null, children = null, right = null, footer = null, rightClass = '' } = props
+    const { header = null, left = null, children = null, right = null, footer = null, rightClassName = '' } = props
 
     // List组件相关，参考List组件props注释
     const { noMore = false, onRefresh, onScroll = noop, immediateCheck = false } = props
@@ -108,7 +109,7 @@ const BaseLayout = forwardRef((props, ref) => {
 
             {
               (pageName === 'home' || right) && (
-                <div className={`${styles.right} ${(pageName === "home") ? styles["home-right"] : ""}`}>
+                <div className={`${styles.right} ${rightClassName} ${(pageName === "home") ? styles["home-right"] : ""}`}>
                   {typeof(right) === 'function' ? right({ ...props }) : right}
                 </div>
               )

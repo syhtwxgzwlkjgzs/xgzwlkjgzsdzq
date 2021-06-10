@@ -31,11 +31,12 @@ const BaseLayoutControl = forwardRef((props, ref) => {
     hasListChild = true,
     jumpTo = -1,
     pageName = '',
+    ready = noop,
     ...others
   } = props;
 
   const [listRef, setListRef] = useState(null);
-  const [baseLayoutWhiteList, setBaseLayoutWhiteList] = useState(['home', 'search']);
+  const [baseLayoutWhiteList, setBaseLayoutWhiteList] = useState(['home', 'search', 'detail']);
   const layoutRef = useRef(null);
 
   useImperativeHandle(
@@ -44,6 +45,10 @@ const BaseLayoutControl = forwardRef((props, ref) => {
       listRef
     }),
   );
+
+  useEffect(() => {
+    ready();
+  }, []);
 
   useEffect(() => {
     if (hasListChild) setListRef(layoutRef?.current.listRef);

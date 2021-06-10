@@ -40,12 +40,11 @@ class PartnerInviteH5Page extends React.Component {
   async componentDidMount() {
     try {
       const { forum, search, invite } = this.props;
-
       // 获取url上的inviteCode
       const { params } = getCurrentInstance().router;
       const { inviteCode } = params;
       if (inviteCode) invite.setInviteCode(inviteCode);
-
+      
       const usersList = await simpleRequest('readUsersList', {
         params: {
           filter: {
@@ -53,7 +52,11 @@ class PartnerInviteH5Page extends React.Component {
           },
         },
       });
-      const threadList = await search.getThreadList();
+      const threadList = await search.getThreadList({
+        params: {
+          pay: 1,
+        },
+      });
       const inviteResp = await inviteDetail({
         params: {
           code: inviteCode,
@@ -186,11 +189,7 @@ class PartnerInviteH5Page extends React.Component {
                 />
                 <View className={layout.bottom_tips_text}>
                   <View>{invitorName} 邀请您加入站点</View>
-                  {siteMode === 'pay' ? (
-                    <View>，可获得返现 ¥{(((10 - siteMasterScale) * sitePrice) / 10).toFixed(2)}</View>
-                  ) : (
-                    ''
-                  )}
+                  {/* {siteMode === 'pay' ? (<View>，可获得返现 ¥{(((10 - siteMasterScale) * sitePrice) / 10).toFixed(2)}</View>) : ('')} */}
                 </View>
                 <View className={layout.bottom_tips_arrows}></View>
               </View>

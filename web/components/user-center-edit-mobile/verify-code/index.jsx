@@ -70,18 +70,18 @@ export default class VerificationCode extends React.Component {
     )
   }
   render() {
-    const { value_pass_check, btnType, className } = this.props
+    const { valuePassCheck, btnType, className } = this.props
     const { buttonDisabled } = this.state
     return (
       <div
         className={classNames(styles.verifyCodeBtn, {
-          [styles.verifyCodeBgColor]: !(buttonDisabled || !value_pass_check),
+          [styles.verifyCodeBgColor]: !(buttonDisabled || !valuePassCheck),
         })}
       >
         <Button
           className={`${styles.btn} ${className}`}
           type={btnType ? 'text' : !buttonDisabled ? 'primary' : 'text'}
-          disabled={buttonDisabled || !value_pass_check}
+          disabled={buttonDisabled || !valuePassCheck}
           onClick={this.buttonClickAction.bind(this)}
         >
           {this.state.initTimeText}
@@ -92,7 +92,7 @@ export default class VerificationCode extends React.Component {
 }
 VerificationCode.defaultProps = {
   getVerifyCode: function () { },
-  value_pass_check: true, //校验是否可以点击
+  valuePassCheck: true, //校验是否可以点击
   initTimeValue: 60, // 默认倒计时间
 }
 VerificationCode.propTypes = {}

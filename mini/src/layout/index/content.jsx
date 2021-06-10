@@ -251,12 +251,12 @@ class IndexH5Page extends React.Component {
   );
 
   render() {
-    const { index } = this.props;
+    const { index, user } = this.props;
     const { filter, isFinished } = this.state;
     const { threads = {}, categories = [] } = index;
     const { currentPage, totalPage, pageData } = threads || {};
     const newCategories = this.handleCategories(categories);
-
+    console.log(user.threadExtendPermissions);
     return (
       <BaseLayout
         showHeader={false}
@@ -293,6 +293,7 @@ class IndexH5Page extends React.Component {
           onCancel={this.onClose}
           visible={this.state.visible}
           onSubmit={this.onClickFilter}
+          permissions={user.threadExtendPermissions}
         />
       </BaseLayout>
     );

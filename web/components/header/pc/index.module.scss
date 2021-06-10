@@ -126,6 +126,8 @@
             font-size: rem($font-size-primary);
             max-width: rem(200);
             @include text-ellipsis();
+            height: rem(20);
+            line-height: rem(20);
           }
           .userBtn{
             margin-right: rem(16);

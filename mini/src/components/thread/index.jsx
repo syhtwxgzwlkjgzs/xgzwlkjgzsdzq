@@ -1,17 +1,16 @@
 import React from 'react';
 import Router from '@discuzq/sdk/dist/router';
 import Toast from '@discuzq/design/dist/components/toast';
-import Button from '@discuzq/design/dist/components/button';
+import Icon from '@discuzq/design/dist/components/icon';
 import { inject, observer } from 'mobx-react';
 import BottomEvent from './bottom-event';
 import UserInfo from './user-info';
 import NoData from '../no-data';
 import styles from './index.module.scss';
-import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import threadPay from '@common/pay-bussiness/thread-pay';
 import ThreadCenterView from './ThreadCenterView';
-import { debounce } from './utils'
+import { debounce, noop } from './utils'
 import { View, Text } from '@tarojs/components'
 
 @inject('site')
@@ -131,8 +130,21 @@ class Index extends React.Component {
       }
     }
 
+    onUser = (e) => {
+      e && e.stopPropagation();
+      const { user = {} } = this.props.data || {};
+      Router.push({url: `/subPages/user/index?id=${user?.userId}`});
+    }
+
+    onClickHeaderIcon = (e) => {
+      e && e.stopPropagation();
+
+      const { onClickIcon = noop } = this.props;
+      onClickIcon(e)
+    }
+
     render() {
-      const { data, className = '', site = {}, showBottomStyle = true } = this.props;
+      const { data, className = '', site = {}, showBottomStyle = true, isShowIcon = false } = this.props;
       const { platform = 'pc' } = site;
 
       if (!data) {
@@ -170,7 +182,9 @@ class Index extends React.Component {
                 isReward={isReward}
                 userId={user?.userId}
                 platform={platform}
+                onClick={this.onUser}
               />
+              {isShowIcon && <View className={styles.headerIcon} onClick={this.onClickHeaderIcon}><Icon name='CollectOutlinedBig' size={20}></Icon></View>}
           </View>
 
           <ThreadCenterView data={data} onClick={this.onClick} onPay={this.onPay} platform={platform} />

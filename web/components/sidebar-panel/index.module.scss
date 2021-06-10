@@ -58,6 +58,14 @@
   }
 }
 
+.large {
+  max-width: 100%;
+  padding: 0 rem($padding-6n);
+  .header {
+    height: rem(70);
+  }
+}
+
 .bottomView {
   height: rem(40);
   background-color: $white;

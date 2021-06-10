@@ -27,7 +27,7 @@ class IncomeList extends React.Component {
                 <div className={styles.money}>+{this.props.incomeVal.amount}</div>
             </div>
             {/* // FIXME:这里的结构有问题 怪怪的 所以只能用数组长度取消底部边框线 */}
-            <div className={styles.time} style={{borderBottom: itemKey === dataLength - 1 && 0}}>{diffDate(time.formatDate(this.props.incomeVal.createdAt, 'YYYY-MM-DD'))}</div>
+            <div className={styles.time} style={{borderBottom: itemKey === dataLength - 1 && 0}}>{time.formatDate(this.props.incomeVal.createdAt, 'YYYY-MM-DD HH:mm')}</div>
         </div>
     );
   }

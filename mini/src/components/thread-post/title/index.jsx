@@ -15,7 +15,10 @@ import PropTypes from 'prop-types';
 
 const Index = ({ value, show, placeholder, onChange, onBlur, onFocus }) => {
   return (
-    <View className={`${styles.container} ${show ? '' : styles['is-display']}`}>
+    <View
+      className={`${styles.container} ${show ? '' : styles['is-display']}`}
+      onClick={e => e.stopPropagation()}
+    >
       <Input
         value={value}
         mode='text'

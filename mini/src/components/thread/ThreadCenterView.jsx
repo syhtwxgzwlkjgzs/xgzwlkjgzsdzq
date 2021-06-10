@@ -65,13 +65,13 @@ const Index = (props) => {
               />
             </BrWrapper>
           )}
-          {imageData?.length !== 0 && (
+          {imageData?.length ? (
             <BrWrapper>
               <ImageDisplay platform="h5" imgData={imageData} isPay={needPay} onPay={onPay} onClickMore={onClick} />
             </BrWrapper>
-          )}
+          ) : null}
           {audioData && <BrWrapper><AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} /></BrWrapper>}
-          {fileData?.length !== 0 && <BrWrapper><AttachmentView threadId={threadId} attachments={fileData} onPay={onPay} isPay={needPay} /></BrWrapper>}
+          {fileData?.length ? <BrWrapper><AttachmentView threadId={threadId} attachments={fileData} onPay={onPay} isPay={needPay} /></BrWrapper> : null}
           {goodsData && (
             <BrWrapper>
               <ProductItem

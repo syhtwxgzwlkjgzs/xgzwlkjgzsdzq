@@ -114,8 +114,16 @@
   }
 }
 
+.msgImage {
+  border-radius: rem($border-radius-small);
+}
+
 .myself {
   flex-direction: row-reverse;
+  .msgImage {
+    margin-left: $im-msg-space-aside;
+    margin-right: $im-gap-btw-icon-and-msg;
+  }
   .msgContent {
     @include text-font;
     margin-left: $im-msg-space-aside;
@@ -130,6 +138,10 @@
 
 .itself {
   flex-direction: row;
+  .msgImage {
+    margin-right: $im-msg-space-aside;
+    margin-left: $im-gap-btw-icon-and-msg;
+  }
   .msgContent {
     @include text-font($color: $text-color-primary);
     margin-right: $im-msg-space-aside;

@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx';
 import { get } from '@common/utils/get';
-import { groupPermissionList } from '../../server';
+import { groupPermissionList, getForum } from '../../server';
 
 class ForumStore {
   constructor() {}
@@ -15,6 +15,7 @@ class ForumStore {
   @observable updataTime = null;
   @observable myGroup = null;
   @observable myPermissons = null;
+  @observable otherPermissions = null;
 
   @action
   setUserPage(page) {
@@ -29,6 +30,16 @@ class ForumStore {
   @action
   setIsLoading(is) {
     this.isLoading = is;
+  }
+
+  @action
+  async setOtherPermissions() {
+    try {
+      const resp = await getForum();
+      this.otherPermissions = get(resp, 'data.other', {});
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   @action
@@ -48,7 +59,7 @@ class ForumStore {
     const total = get(res, 'totalCount', 0);
     const totalPage = get(res, 'totalPage', 0);
     const currentPage = get(res, 'currentPage', 0);
-    this.usersPageData = this.usersPageData ? this.usersPageData?.concat(data) : data;
+    this.usersPageData = data;
     this.userTotal = total;
     this.userPage = currentPage;
     this.isNoMore = currentPage >= totalPage;

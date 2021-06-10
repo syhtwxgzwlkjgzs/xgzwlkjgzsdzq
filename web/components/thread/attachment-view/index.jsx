@@ -1,6 +1,5 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import goToLoginPage from '@common/utils/go-to-login-page';
 import { Icon, Toast } from '@discuzq/design';
 import { extensionList, isPromise, noop } from '../utils';
 import { copyToClipboard } from '@common/utils/copyToClipboard';
@@ -37,13 +36,6 @@ const Index = ({
 
   const onDownLoad = (item) => {
     if(!item || !threadId) return;
-
-    // 对没有登录的先登录
-    if (!user?.isLogin()) {
-      Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/user/login' });
-      return;
-    }
 
     if (!isPay) {
       let toastInstance = Toast.loading({
