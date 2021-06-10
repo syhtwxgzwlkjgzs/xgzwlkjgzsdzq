@@ -20,13 +20,13 @@ class InstantMessaging extends React.Component {
   }
 
   render() {
-    const { messagesHistory = [], onSubmit, site, dialogId, username } = this.props;
+    const { messagesHistory = [], onSubmit, site, dialogId, username, nickname } = this.props;
     const { showEmoji } = this.state;
     const { platform } = site;
     return (
       <div className={platform === 'h5' ? styles.h5Page : styles.pcPage}>
-        <DialogBox platform={platform} dialogId={dialogId} showEmoji={showEmoji} />
-        <InteractionBox username={username} platform={platform} dialogId={dialogId} showEmoji={showEmoji} setShowEmoji={(show) => {
+        <DialogBox nickname={nickname} platform={platform} dialogId={dialogId} showEmoji={showEmoji} />
+        <InteractionBox nickname={nickname} username={username} platform={platform} dialogId={dialogId} showEmoji={showEmoji} setShowEmoji={(show) => {
           this.setState({
             showEmoji: show,
           });

@@ -175,7 +175,7 @@ const InteractionBox = (props) => {
 
   return (
     <>
-      <View className={styles.interactionBox} style={{ bottom: showEmoji ? '333px' : 0 }}>
+      <View className={styles.interactionBox} style={{ bottom: showEmoji ? '343px' : 0 }}>
         <View className={styles.inputWrapper}>
           <Input
             value={typingValue}
