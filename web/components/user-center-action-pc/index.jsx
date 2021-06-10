@@ -56,7 +56,7 @@ class UserCenterAction extends React.Component {
     const { message } = this.props;
     const { totalUnread } = message;
     return (
-      <div className={`${styles.userCenterAction} ${!this.props.user.isAdmini && styles.userCenterColumnStyle}`}>
+      <div className={`${styles.userCenterAction} ${this.props.user.isAdmini && styles.userCenterColumnStyle}`}>
         <div className={styles.userCenterActionItem}>
           <div onClick={this.handleMyMessage} className={styles.userCenterActionItemIcon}>
             <div className={styles.userMessage}>
@@ -117,7 +117,7 @@ class UserCenterAction extends React.Component {
           <div className={styles.userCenterActionItemDesc}>站点信息</div>
         </div>
         {
-          this.props.user.isAdmini && (
+          !this.props.user.isAdmini && (
             <div onClick={this.handleMyInvite} className={styles.userCenterActionItem}>
               <div className={styles.userCenterActionItemIcon}>
                 <Icon name={'NotbookOutlined'} size={20} />
