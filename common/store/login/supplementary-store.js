@@ -1,5 +1,4 @@
 import { observable, action } from 'mobx';
-import { smsBind, smsSend } from '@server';
 
 export const SUPPLEMENTARY_STORE_ERRORS = {
   NO_NAME_ERROR: {
