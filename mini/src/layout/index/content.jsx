@@ -27,7 +27,7 @@ class IndexH5Page extends React.Component {
       fixedTab: false,
       navBarHeight: 64,
     };
-    this.listRef = createRef();
+    this.tabsRef = createRef();
     this.headerRef = createRef(null);
     this.renderItem = this.renderItem.bind(this);
   }
@@ -43,7 +43,18 @@ class IndexH5Page extends React.Component {
     try {
       const res = Taro.getSystemInfoSync()
       const height = res?.statusBarHeight || 20
-      navBarHeight = 44 + height
+      navBarHeight = 44 + height;
+
+      const headerId = this.headerRef?.current?.domRef?.current?.uid;
+      let headerHeight = 182 - navBarHeight || 0;
+      if(headerId) { // 获取Header的高度
+        Taro.createSelectorQuery()
+        .select(`#${headerId}`)
+        .boundingClientRect((rect) => {
+          headerHeight = rect.height - navBarHeight || 0;
+        }).exec();
+      }
+      this.setState({ headerHeight });
     } catch (e) {
       // Do something when catch error
     }
@@ -156,13 +167,16 @@ class IndexH5Page extends React.Component {
 
   handleScroll = (e) => {
       const { scrollTop = 0 } = e?.detail || {};
-      const { height = 121 } = this.headerRef.current?.state || {};
+      const { headerHeight = 182 } = this.state;
+
       const { fixedTab } = this.state;
-      
+      const PLACEHOLDER_HEIGHT = 58;
+
       // 只需要滚到临界点触发setState，而不是每一次滚动都触发
-      if(!fixedTab && scrollTop >= height) {
+      if(!fixedTab && scrollTop >= headerHeight + PLACEHOLDER_HEIGHT) {
         this.setState({ fixedTab: true })
-      } else if(fixedTab && scrollTop < height) {
+
+      } else if(fixedTab && scrollTop < headerHeight + PLACEHOLDER_HEIGHT) {
         this.setState({ fixedTab: false })
       }
     }
@@ -195,7 +209,7 @@ class IndexH5Page extends React.Component {
         {categories?.length > 0 && (
           <>
           <View 
-            ref={this.listRef}
+            ref={this.tabsRef}
             className={`${styles.homeContent} ${fixedTab && styles.fixed}`}
             style={{top: `${navBarHeight}px`}}
           >
@@ -216,9 +230,9 @@ class IndexH5Page extends React.Component {
               ))}
             </Tabs>
           </View>
+          <NavBar title={site?.webConfig?.setSite?.siteName || ''} isShow={fixedTab} />
           {fixedTab &&  (
             <>
-             <NavBar title={site?.webConfig?.setSite?.siteName || ''} isShow={fixedTab} />
              <View className={styles.tabPlaceholder}></View>
             </>
           )}
