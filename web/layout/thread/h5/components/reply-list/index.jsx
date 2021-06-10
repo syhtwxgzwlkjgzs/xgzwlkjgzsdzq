@@ -71,14 +71,14 @@ export default class ReplyList extends React.Component {
                   <div className={styles.replyedAvatar} onClick={() => {this.avatarClick(3)}}>
                     <Avatar
                       className={styles.avatar}
-                      image={this.props.data.replyUser.avatar}
-                      name={this.props.data.replyUser.nickname || this.props.data.replyUser.userName || ''}
+                      image={this.props.data.commentUser.avatar}
+                      name={this.props.data.commentUser.nickname || this.props.data.replyUser.userName || ''}
                       circle={true}
                       size="small"
                     ></Avatar>
                   </div>
                   <span className={styles.replyedUserName} onClick={() => {this.avatarClick(3)}}>
-                    {this.props.data.replyUser.nickname || this.props.data.replyUser.userName}
+                    {this.props.data.commentUser.nickname || this.props.data.commentUser.userName}
                   </span>
                 </div>
               ) : (

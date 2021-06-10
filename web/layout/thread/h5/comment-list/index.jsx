@@ -358,8 +358,14 @@ class RenderCommentList extends React.Component {
   }
 
   avatarClick(data) {
-    const { userId = {} } = data || {};
+    const { userId } = data;
+    if(!userId) return;
     this.props.router.push(`/user/${userId}`);
+  }
+
+  replyAvatarClick(reply, comment, floor) {
+    console.log(3);
+    typeof this.props.replyAvatarClick === 'function' && this.props.replyAvatarClick(reply, comment, floor);
   }
 
   render() {
@@ -390,11 +396,11 @@ class RenderCommentList extends React.Component {
                 data={val}
                 key={val.id}
                 likeClick={debounce(() => this.likeClick(val), 500)}
-                lickClick={debounce(() => this.likeClick(val), 1000)}
                 avatarClick={() => this.avatarClick(val)}
                 replyClick={() => this.replyClick(val)}
                 deleteClick={() => this.deleteClick(val)}
                 editClick={() => this.editClick(val)}
+                replyAvatarClick={(reply,floor) =>this.replyAvatarClick(reply,val,floor)}
                 replyLikeClick={debounce((reply) => this.replyLikeClick(reply, val), 500)}
                 replyReplyClick={(reply) => this.replyReplyClick(reply, val)}
                 replyDeleteClick={(reply) => this.replyDeleteClick(reply, val)}
