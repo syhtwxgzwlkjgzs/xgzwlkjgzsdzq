@@ -1,7 +1,6 @@
 import { observable, computed, action } from 'mobx';
 import { simpleRequest } from '@common/utils/simple-request';
 import { get } from '@common/utils/get';
-import isWeiXin from '../../utils/is-weixin';
 export default class InviteStore {
   @observable inviteData = { };
   @observable inviteUsersList = null;
@@ -46,13 +45,5 @@ export default class InviteStore {
     this.inviteLoading = false;
     const listData = get(res, 'pageData.inviteUsersList', null);
     this.inviteUsersList = page === 1 ? listData : this.inviteUsersList?.concat(listData);
-  }
-
-  @action
-  async createInviteLink() {
-    const res = await simpleRequest('createInviteLink', {
-
-    });
-    this.inviteCode = res.code;
   }
 }
