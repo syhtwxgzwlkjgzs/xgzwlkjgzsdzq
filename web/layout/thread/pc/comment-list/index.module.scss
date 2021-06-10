@@ -48,7 +48,7 @@
   background: $white;
 
   .commentItems {
-    border-bottom: var(--border-border);
+    border-bottom: $border-solid-1;
 
     &:last-child {
       border-bottom: none;

@@ -27,7 +27,7 @@
 .footer {
     display: flex;
     justify-content: space-between;
-    border-bottom: var(--border-border);
+    border-bottom: $border-solid-1;
     font-family: 'PingFangSC-Regular';
     font-weight: normal;
     font-size: rem($font-size-label);

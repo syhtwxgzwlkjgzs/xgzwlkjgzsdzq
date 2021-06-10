@@ -57,7 +57,7 @@
         width: 100%;
         height: rem(36);
         border-radius: rem($border-radius-small);
-        background: var(--background-color-text2);
+        background: $text-bg-color2;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -102,7 +102,7 @@
             left: rem(-16);
             height: 1px;
             top: 0;
-            background-color: var(--border-line-color);
+            background-color: $border-color;
         }
     }
 }

@@ -96,7 +96,7 @@
     width: 100%;
     // height: rem(114);
     margin-bottom: rem($margin-4n);
-    border: var(--border-border);
+    border: $border-solid-1;
     border-radius: rem($border-radius-small);
   }
 }

@@ -57,7 +57,7 @@
   padding-right: rem($padding-4n);
   box-sizing: border-box;
   background: $white;
-  border-top: var(--border-border);
+  border-top: $border-solid-1;
   display: flex;
   align-items: center;
   justify-content: space-between;

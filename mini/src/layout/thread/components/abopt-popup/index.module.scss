@@ -7,7 +7,7 @@
 
 .main {
   padding: $padding-4n $padding-4n 0;
-  border-bottom: var(--border-border);
+  border-bottom: $border-solid-1;
 }
 
 .header {
@@ -23,7 +23,7 @@
   .percentage {
     display: flex;
     flex-direction: column;
-    border-bottom: var(--border-border);
+    border-bottom: $border-solid-1;
     .text {
       font-weight: normal;
       font-size: $font-size-primary;

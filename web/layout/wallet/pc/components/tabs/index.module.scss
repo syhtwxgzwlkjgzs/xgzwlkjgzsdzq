@@ -14,29 +14,29 @@
   height: rem(14);
   font-size: rem(4);
   border-radius: 50%;
-  border: solid rem(2) var(--border-line-color);
+  border: solid rem(2) $border-color;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--color-white);
+  background: $white;
   .spot {
     width: rem(4);
     height: rem(4);
     border-radius: 50%;
-    background: var(--color-white);
+    background: $white;
   }
 }
 .selectedCircle {
-  border: solid rem(2) var(--color-primary);
+  border: solid rem(2) $primary-color;
   .selectedSpot {
-    background: var(--color-primary);
+    background: $primary-color;
   }
 }
 
 .line {
   width: rem(2);
   height: rem(116);
-  background: var(--border-line-color);
+  background: $border-color;
 }
 
 .detailed {
@@ -64,11 +64,11 @@
       font-size: rem($font-size-primary);
       line-height: 24px;
       text-align: left;
-      color: var(--color-text-primary);
+      color: $text-color-primary;
       padding-left: rem($padding-2n);
     }
     .textColor {
-      color: var(--color-primary);
+      color: $primary-color;
     }
   }
 }

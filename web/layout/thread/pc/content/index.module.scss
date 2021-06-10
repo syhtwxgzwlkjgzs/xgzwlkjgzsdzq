@@ -283,14 +283,14 @@
     }
   }
   .categoryRed {
-    color: var(--color-error);
+    color: $error-color;
     border: rem(1) solid $error-color;
     &::after {
       background-color: $error-color;
     }
   }
   .categoryReward {
-    color: var(--color-warn);
+    color: $warn-color;
     border: rem(1) solid $warn-color;
     &::after {
       background-color: $warn-color;

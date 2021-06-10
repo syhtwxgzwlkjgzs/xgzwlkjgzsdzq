@@ -73,7 +73,7 @@
 }
 
 .footer {
-    background-color: var(--color-white);
+    background-color: $white;
     text-align: center;
     height: 120px;
 
@@ -104,7 +104,7 @@
             left: -16px;
             height: 1px;
             top: 0;
-            background-color: var(--border-line-color);
+            background-color: $border-color;
         }
     }
 }

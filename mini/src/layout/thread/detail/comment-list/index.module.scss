@@ -9,7 +9,7 @@
   display: flex;
   justify-content: space-between;
   background: $white;
-  border-bottom: var(--border-border);
+  border-bottom: $border-solid-1;
   flex: 0 0 54px;
 
   .number {
@@ -40,6 +40,6 @@
   background: $white;
 
   .commentItems {
-    border-bottom: var(--border-border);
+    border-bottom: $border-solid-1;
   }
 }

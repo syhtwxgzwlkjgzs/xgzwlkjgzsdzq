@@ -2,7 +2,7 @@
 
 .container {
   background: $white;
-  border: var(--border-border);
+  border: $border-solid-1;
   border-radius: rem($border-radius-small);
 }
 
@@ -50,7 +50,7 @@
   justify-content: space-between;
   height: rem(52);
   padding: 0 rem(16);
-  border-top: var(--border-border);
+  border-top: $border-solid-1;
   position: relative;
 
   .linkBtn {

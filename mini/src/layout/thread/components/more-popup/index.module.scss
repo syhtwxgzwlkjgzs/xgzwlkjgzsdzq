@@ -27,7 +27,7 @@
         text-align: center;
         line-height: 40px;
         background: $white;
-        border-radius: var(--border-radius-small);
+        border-radius: $border-radius-small;
         color: $text-color-regular;
 
         > View {

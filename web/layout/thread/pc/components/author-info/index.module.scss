@@ -12,7 +12,7 @@
     font-size: rem(18);
     color: $text-color-primary;
     padding-bottom: rem($padding-4n);
-    border-bottom: var(--border-border);
+    border-bottom: $border-solid-1;
   }
 
   .info {
@@ -73,7 +73,7 @@
     display: flex;
     justify-content: center;
     padding-top: rem($padding-6n);
-    border-top: var(--border-border);
+    border-top: $border-solid-1;
 
     .follow {
       width: rem(114);
