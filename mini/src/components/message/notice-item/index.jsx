@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import Avatar from '@discuzq/design/dist/components/avatar/index';
+import RichText from '@discuzq/design/dist/components/rich-text/index';
 import UnreadRedDot from '@components/unread-red-dot';
 import { inject, observer } from 'mobx-react';
 import classNames from 'classnames';
@@ -12,6 +13,7 @@ import styles from './index.module.scss';
 
 import stringToColor from '@common/utils/string-to-color';
 import { diffDate } from '@common/utils/diff-date';
+import { handleLink } from '@components/thread/utils';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import PropTypes from 'prop-types';
@@ -101,13 +103,24 @@ class Index extends Component {
 
   // 跳转主题详情or私信
   toDetailOrChat = (e, item) => {
-    if (e.target.nodeName === 'A') return;
+    let url = "";
     const { type } = this.props;
     if (type === 'financial' || type === 'account') {
-      Taro.navigateTo({ url: `/subPages/thread/index?id=${item.id}` })
+      url = `/subPages/thread/index?id=${item.threadId}`
     }
     if (type === 'chat') {
-      Taro.navigateTo({ url: `/subPages/message/index?page=chat&dialogId=${item.dialogId}&nickname=${item.username}` });
+      url = `/subPages/message/index?page=chat&dialogId=${item.dialogId}&nickname=${item.username}`;
+    }
+
+    url && Taro.navigateTo({ url });
+  }
+
+  handleContentClick = (e, node) => {
+    const { url } = handleLink(node)
+
+    if (url) {
+      e && e.stopPropagation();
+      Taro.navigateTo({ url })
     }
   }
 
@@ -185,15 +198,16 @@ class Index extends Component {
                   "中{this.getFinancialTips(item)}
                 </View>
               }
-              {/* 私信、帖子、账户 */}
-              {['chat', 'thread', 'account'].includes(type) &&
+              {/* 私信 */}
+              {type === 'chat' &&
                 <View
-                  className={classNames(styles['content-html'], {
-                    [styles['single-line']]: ['chat'].includes(type),
-                    [styles['multiple-line']]: ['account'].includes(type),
-                  })}
+                  className={classNames(styles['content-html'], styles['single-line'])}
                   dangerouslySetInnerHTML={{ __html: this.parseHTML() }}
                 />
+              }
+              {/* 帖子、账户 */}
+              {['thread', 'account'].includes(type) &&
+                <RichText content={this.parseHTML()} onClick={this.handleContentClick} />
               }
             </View>
 
