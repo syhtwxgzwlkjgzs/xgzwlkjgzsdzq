@@ -107,12 +107,13 @@
     padding: $padding-4n;
     padding-bottom: 0;
     background-color: $white;
+    border-radius: $border-radius-big;
   }
   .invite_list_title{
     font-size: $font-size-middle;
     vertical-align: middle;
     height: rem(24);
-    margin-bottom: $margin-2n;
+    margin-bottom: $margin-4n;
   }
   .invite_list_titleIcon{
     line-height: $font-line-height-base;
@@ -175,7 +176,7 @@
   .invite_list_itemName{
     @include inviteListName;
     box-sizing: border-box;
-    margin-right: $margin-2n;
+    padding-right: $padding-2n;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -202,7 +203,7 @@
   .invite_list_itemMoney{
     @include inviteListMoney;
     box-sizing: border-box;
-    margin-right: $margin-2n;
+    padding-right: $padding-2n;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;

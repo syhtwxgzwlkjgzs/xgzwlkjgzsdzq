@@ -36,9 +36,6 @@ export default class Page extends React.Component {
         url: '/pages/index/index',
       });
     }
-    this.state = {
-      isRender: this.isPass(),
-    };
   }
 
   // 检查是否满足渲染条件
@@ -51,6 +48,15 @@ export default class Page extends React.Component {
         Router.redirect({ url: '/subPages/close/index' });
         return false;
       }
+
+      // 访问加入站点页时，是否已付费。已付费直接跳转首页
+      if (path === '/subPages/forum/partner-invite/index' && site?.webConfig?.setSite?.siteMode === 'pay' && user.isLogin() && user.paid) {
+        Router.redirect({
+          url: '/pages/index/index',
+        });
+        return false;
+      }
+
       // 付费加入
       if (
         path !== '/subPages/forum/partner-invite/index' &&
@@ -105,7 +111,7 @@ export default class Page extends React.Component {
 
   render() {
     const { site, disabledToast } = this.props;
-    const { isRender } = this.state;
+    const isRender = this.isPass()
     if (!isRender) return null;
     return (
       <View className={`${styles['dzq-page']} dzq-theme-${site.theme}`}>
