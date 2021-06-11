@@ -58,7 +58,7 @@ class MessageAction extends MessageStore {
     const { code, data = {} } = ret;
     if (code === 0) {
       // 更新未读消息数量
-      this.readUnreadCount();
+      if (key !== 'dialogMsgList') this.readUnreadCount();
 
       const { pageData: list = [] } = data;
       const listData = (({ totalPage = 0, totalCount = 0 }) => ({ list, totalPage, totalCount, currentPage }))(data);
