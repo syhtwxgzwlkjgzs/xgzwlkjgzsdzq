@@ -111,6 +111,10 @@ class index extends Component {
 
   // 点击我的点赞
   handleMyLike = () => {
+    const { id } = getCurrentInstance().router.params;
+    if (id) {
+      return;
+    }
     Router.push({ url: '/subPages/my/like/index' });
   };
 
