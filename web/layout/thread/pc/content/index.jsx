@@ -197,8 +197,8 @@ export default inject('user')(
               <VideoPlay
                 url={parseContent.VIDEO.mediaUrl}
                 coverUrl={parseContent.VIDEO.coverUrl}
-                width={400}
-                height={200}
+                v_width={parseContent.VIDEO.width || null}
+                v_height={parseContent.VIDEO.height || null}
                 status={parseContent.VIDEO.status}
               />
             )}

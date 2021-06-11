@@ -26,10 +26,13 @@ const Index = ({
   status = 0,
   onPay = noop,
   baselayout = {},
+  v_width = null,
+  v_height = null
 }) => {
   let player = null;
   const ref = useRef();
   const [width, setWidth] = useState(null);
+  const [height, setHeight] = useState(null);
 
   const onReady = (ins) => {
     player = ins;
@@ -56,11 +59,44 @@ const Index = ({
 
   useEffect(() => {
     const rect = ref.current.getBoundingClientRect();
-    setWidth(rect?.width || 343);
+    const w = rect?.width || 343;
+
+    // 竖版视频
+    if ( v_width && v_height && v_width < v_height ) {
+      const viewHeight = window.innerHeight;
+      let calc_height = v_height;
+      let calc_width = v_width;
+      let height;
+      let width;
+      // 当前视频的高度大于可视区高度的70%，那么将视频高度缩减到可视区域的70%
+      if ( viewHeight / v_height > 0.7 ) {
+        calc_height = (viewHeight * 0.7).toFixed(2);
+        calc_width = (v_width * (calc_height / v_height).toFixed(2)).toFixed(2);
+        height = calc_height;
+        width = calc_width;
+      } else {
+        const parentWidth = (w * 0.75).toFixed(2);
+        width = (calc_height / calc_width).toFixed(2);
+        height = (parentWidth * percent).toFixed(2);
+      }
+      setWidth(width);
+      setHeight(height);
+    } else {
+      setWidth(w);
+      let height;
+      if (v_width && v_height) {
+        const percent = (v_width / v_height).toFixed(2);
+        height = (w / percent).toFixed(2); 
+      } else {
+        height = (9 * (w) / 16).toFixed(2) || '224';
+      }
+      setHeight(height);
+    }
+    
   }, []);
 
   return (
-    <div id="common-video-play" className={styles.container} ref={ref}>
+    <div id="common-video-play" className={styles.container} style={{width: `${width}px`, height: `${height}px`}} ref={ref}>
       {
         width && (
           <Video
@@ -69,7 +105,7 @@ const Index = ({
             onPlay={onPlay}
             src={url}
             width={width}
-            height={9 * (width) / 16 || '224'}
+            height={height}
             poster={coverUrl}
             duration={time}
           />
