@@ -125,7 +125,7 @@ class UserCenterAction extends React.Component {
             </div>
           </div>
 
-          <div className={styles.userCenterActionItemContainer} style={{ visibility: !this.props.user.isAdmini && 'hidden' }}>
+          <div className={styles.userCenterActionItemContainer} style={{ visibility: this.props.user.isAdmini && 'hidden' }}>
             <div onClick={this.handleMyInvite} className={styles.userCenterActionItem}>
               <div className={styles.userCenterActionItemIcon}>
                 <Icon name={'NotbookOutlined'} color={'#4F5A70'} size={20} />

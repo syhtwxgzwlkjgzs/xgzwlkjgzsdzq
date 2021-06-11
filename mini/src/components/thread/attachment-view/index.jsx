@@ -1,4 +1,4 @@
-import React, { useState, useEffect }from 'react';
+import React, { useState }from 'react';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import Icon from '@discuzq/design/dist/components/icon/index';
@@ -8,6 +8,9 @@ import { extensionList, isPromise, noop } from '../utils';
 import { View, Text } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import Downloader from './downloader';
+
+import { throttle } from '@common/utils/throttle-debounce.js';
+
 
 
 /**
@@ -38,19 +41,49 @@ const Index = ({
     return `${fileSize} B`;
   };
 
-  const downloader = new Downloader();
+  const fetchDownloadUrl = (threadId, attachmentId, callback) => {
+    if(!threadId || !attachmentId) return;
+
+    // TODO: toastInstance 返回的是boolean
+    // let toastInstance = Toast.loading({
+    //   duration: 0,
+    // });
+
+    thread.fetchThreadAttachmentUrl(threadId, attachmentId).then((res) => {
+      if(res?.code === 0 && res?.data) {
+        const { url } = res.data;
+        if(!url) {
+          Toast.info({ content: '获取下载链接失败' });
+        }
+
+        callback(url);
+      } else {
+        Toast.info({ content: res?.msg });
+      }
+    }).catch((error) => {
+      Toast.info({ content: '获取下载链接失败' });
+      console.error(error);
+      return;
+    }).finally(() => {
+      // toastInstance?.destroy();
+    });
+  }
+
   const [downloading, setDownloading] =
         useState(Array.from({length: attachments.length}, () => false));
 
   const onDownLoad = (item, index) => {
-    // 下载中
-    if(downloading?.length && downloading[index]) {
-      Toast.info({content: "下载中，请稍后"});
-      return;
-    }
-    if(!item || !threadId) return;
 
     if (!isPay) {
+
+      // 下载中
+      if(downloading?.length && downloading[index]) {
+        Toast.info({content: "下载中，请稍后"});
+        return;
+      }
+
+      if(!item || !threadId) return;
+
       downloading[index] = true;
       setDownloading([...downloading]);
 
@@ -92,6 +125,7 @@ const Index = ({
           setDownloading([...downloading]);
         }
       })
+
     } else {
       onPay();
     }
@@ -99,27 +133,19 @@ const Index = ({
 
   const onLinkShare = (item, index) => {
     if (!isPay) {
+      if(!item || !threadId) return;
+
       const attachmentId = item.id;
-      thread.fetchThreadAttachmentUrl(threadId, attachmentId).then((res) => {
-        if(res?.code === 0 && res?.data) {
-          const { url } = res.data;
-          Taro.setClipboardData({
-            data: url,
-            success: function (res) {
-              Taro.getClipboardData({
-                success: function (res) {
-                }
-              })
-            }
-          })
-        } else if(res) {
-          Toast.info({ content: res.msg });
-          console.error(res);
-        }
-      }).catch((error) => {
-        Toast.info({ content: error.errMsg });
-        console.error(error);
-        return;
+      fetchDownloadUrl(threadId, attachmentId, (url) => {
+        Taro.setClipboardData({
+          data: url,
+          success: function (res) {
+            Taro.getClipboardData({
+              success: function (res) {
+              }
+            })
+          }
+        })
       });
 
     } else {
@@ -156,11 +182,11 @@ const Index = ({
           </View>
 
           <View className={styles.right}>
-            <Text onClick={() => onLinkShare(item, index)}>链接</Text>
+            <Text onClick={throttle(() => onLinkShare(item), 1000)}>链接</Text>
             <View className={styles.label}>
               { downloading[index] ?
                 <Spin className={styles.spinner} type="spinner" /> :
-                <Text onClick={() => onDownLoad(item, index)}>下载</Text>
+                <Text onClick={throttle(() => onDownLoad(item, index), 1000)}>下载</Text>
               }
             </View>
           </View>

@@ -9,6 +9,8 @@ import { get } from '@common/utils/get';
 import setAccessToken from '../../../../../common/utils/set-access-token';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus } from '@common/store/login/util';
 import { usernameAutoBind } from '@server';
+import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
+import { isExtFieldsOpen } from '@common/store/login/util';
 
 @inject('site')
 @inject('user')
@@ -23,7 +25,7 @@ class WXSelectH5Page extends React.Component {
       <div className={layout.container}>
         <HomeHeader hideInfo mode='login'/>
         <div className={layout.content}>
-          <div className={layout.title}>绑定微信号</div>
+          <div className={layout.title}>微信绑定</div>
           <div className={layout.tips}>
             <div className={layout.tips_user}>
               hi，
@@ -78,8 +80,20 @@ class WXSelectH5Page extends React.Component {
                   Message: res.msg,
                 };
               } catch (error) {
+                // 跳转补充信息页
+                if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+                  if (isExtFieldsOpen(this.props.site)) {
+                    this.props.commonLogin.needToCompleteExtraInfo = true;
+                    this.props.router.push('/user/supplementary');
+                    return;
+                  }
+                  return window.location.href = '/';
+                }
+
                 // 跳转状态页
                 if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
+                  const uid = get(error, 'uid', '');
+                  uid && this.props.user.updateUserInfo(uid);
                   this.props.commonLogin.setStatusMessage(error.Code, error.Message);
                   this.props.router.push(`/user/status?statusCode=${error.Code}&statusMsg=${error.Message}`);
                   return;

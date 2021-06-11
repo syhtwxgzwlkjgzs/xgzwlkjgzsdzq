@@ -150,7 +150,7 @@ class IndexPCPage extends React.Component {
 
   // 左侧 -- 分类
   renderLeft = (countThreads = 0) => {
-    const { currentCategories, activeCategoryId, activeChildCategoryId } = this.props.index;
+    const { currentCategories, activeCategoryId, activeChildCategoryId, categoryError } = this.props.index;
 
     return (
       <div className={styles.indexLeft}>
@@ -161,8 +161,8 @@ class IndexPCPage extends React.Component {
             defaultSecondIndex={activeChildCategoryId}
             totalThreads={countThreads} 
             onNavigationClick={this.onNavigationClick} 
-            isError={this.props.categoryError}
-            errorText={this.props.categoryErrorText}
+            isError={categoryError.isError}
+            errorText={categoryError.errorText}
           />
         </div>
       </div>
@@ -217,6 +217,7 @@ class IndexPCPage extends React.Component {
     const { index, site } = this.props;
     const { countThreads = 0 } = site?.webConfig?.other || {};
     const { currentPage, totalPage } = index.threads || {};
+    const { threadError } = index
 
     return (
       <BaseLayout
@@ -229,8 +230,8 @@ class IndexPCPage extends React.Component {
         left={ this.renderLeft(countThreads) }
         right={ this.renderRight() }
         pageName='home'
-        requestError={this.props.isError}
-        errorText={this.props.errorText}
+        requestError={threadError.isError}
+        errorText={threadError.errorText}
       >
         {this.renderContent(index)}
       </BaseLayout>

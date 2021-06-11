@@ -55,24 +55,19 @@ class Index extends React.Component {
     errorText: '加载失败'
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const { index } = this.props
     const { essence = 0, sequence = 0, attention = 0, sort = 1 } = index.filter;
 
     let newTypes = handleString2Arr(index.filter, 'types');
-
     let categoryIds = handleString2Arr(index.filter, 'categoryids');
     
     this.props.index.getReadCategories();
     this.props.index.getRreadStickList();
-    try {
-      await this.props.index.getReadThreadList({
-        sequence, 
-        filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort } 
-      });
-    } catch (error) {
-      this.setState({ isError: true, errorText: error })
-    }
+    this.props.index.getReadThreadList({
+      sequence, 
+      filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort } 
+    });
   }
 
 
@@ -88,11 +83,7 @@ class Index extends React.Component {
 
     if (type === 'click-filter') { // 点击tab
       this.page = 1;
-      try {
-        await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
-      } catch (error) {
-        this.setState({ isError: true, errorText: error })
-      }
+      await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
     } else if (type === 'moreData') {
       this.page += 1;
       return await index.getReadThreadList({
@@ -114,7 +105,7 @@ class Index extends React.Component {
   render() {
     return (
       <Page>
-        <IndexPage dispatch={this.dispatch} isError={this.state.isError} errorText={this.state.errorText} />
+        <IndexPage dispatch={this.dispatch} />
       </Page>
     );
   }

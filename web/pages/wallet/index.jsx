@@ -1,6 +1,7 @@
 import React from 'react';
 import { withRouter } from 'next/router';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
+import ViewAdapter from '@components/view-adapter';
 import WalletH5Page from '@layout/wallet/h5';
 import WalletPCPage from '@layout/wallet/pc';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
@@ -8,6 +9,7 @@ import { readWalletUser } from '@server';
 
 @inject('wallet')
 @inject('site')
+@observer
 class WalletPage extends React.Component {
   static async getInitialProps(ctx) {
     try {
@@ -38,10 +40,12 @@ class WalletPage extends React.Component {
 
   render() {
     const { site, wallet } = this.props;
-    const { platform } = site;
     const { walletInfo } = wallet;
-    return platform === 'h5'
-      ? <WalletH5Page walletData={walletInfo} /> : <WalletPCPage walletData={walletInfo} />;
+    return <ViewAdapter 
+      h5={<WalletH5Page walletData={walletInfo} />}
+      pc={<WalletPCPage walletData={walletInfo} />} 
+      title={`我的钱包 - ${this.props.site?.siteName}`}
+    />
   }
 }
 

@@ -7,6 +7,7 @@ import layout from './index.module.scss';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
 import clearLoginStatus from '@common/utils/clear-login-status';
+import { get } from '@common/utils/get';
 import PcBodyWrap from '../components/pc-body-wrap';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT, isExtFieldsOpen } from '@common/store/login/util';
 
@@ -30,20 +31,41 @@ class BindNicknameH5Page extends React.Component {
         hasMask: false,
         duration: 1000,
         onClose: () => {
-          const { router, site } = this.props;
-          // const { needToCompleteExtraInfo: isNeedToCompleteExtraInfo } = router.query;
-          // // 扩展信息的判断跳转
-          // const needToCompleteExtraInfo = this.props.commonLogin.needToCompleteExtraInfo || isNeedToCompleteExtraInfo;
-          // if (isExtFieldsOpen(site) && needToCompleteExtraInfo) {
-          //   this.props.router.push('/user/supplementary');
-          //   return;
-          // }
+          const { router, site, platform } = this.props;
+          const { needToCompleteExtraInfo: isNeedToCompleteExtraInfo } = router.query;
+          // 扩展信息的判断跳转
+          const needToCompleteExtraInfo = this.props.commonLogin.needToCompleteExtraInfo || isNeedToCompleteExtraInfo;
+          // 跳转补充信息页
+          if (needToCompleteExtraInfo) {
+            if (isExtFieldsOpen(site)) {
+              this.props.commonLogin.needToCompleteExtraInfo = true;
+              this.props.router.push('/user/supplementary');
+              return;
+            }
+            return window.location.href = '/';
+          }
+
+          const { statusCode, statusMsg, needToBindPhone,
+            needToBindWechat, nickName, sessionToken } = this.props.commonLogin;
+
+          if (needToBindPhone) {
+            return this.props.router.push(`/user/bind-phone?sessionToken=${sessionToken}`);
+          }
+
+          if (needToBindWechat === true) {
+            return this.props.router.push(`/user/wx-bind-qrcode?sessionToken=${sessionToken}&loginType=${platform}&nickname=${nickName}`);
+          }
+          if (statusMsg && statusCode) {
+            return this.props.router.push(`/user/status?statusCode=${statusCode}&statusMsg=${statusMsg}`);
+          }
           window.location.href = '/';
         },
       });
     } catch (e) {
       // 跳转状态页
       if ([BANNED_USER, REVIEWING, REVIEW_REJECT].includes(e.Code)) {
+        const uid = get(e, 'uid', '');
+        uid && this.props.user.updateUserInfo(uid);
         this.props.commonLogin.setStatusMessage(e.Code, e.Message);
         this.props.router.push(`/user/status?statusCode=${e.Code}&statusMsg=${e.Message}`);
         return;

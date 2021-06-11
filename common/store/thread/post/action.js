@@ -284,7 +284,7 @@ class ThreadPostAction extends ThreadPostStore {
     params.freeWords = freeWords || 0;
     params.attachmentPrice = attachmentPrice || 0;
     if (this.postData.draft) params.draft = this.postData.draft;
-    if (this.postData.anonymous) params.anonymous = this.postData.anonymous;
+    params.anonymous = this.postData.anonymous;
     const contentIndexes = this.gettContentIndexes();
     if (Object.keys(contentIndexes).length > 0) params.content.indexes = contentIndexes;
     return params;
@@ -321,11 +321,17 @@ class ThreadPostAction extends ThreadPostStore {
           files[item.id] = { ...item, type: item.fileType, name: item.fileName };
         });
       }
-      if (tomId === THREAD_TYPE.voice) audio = contentindexes[index].body || {};
+      if (tomId === THREAD_TYPE.voice) {
+        audio = contentindexes[index].body || {};
+        const audioId = audio.id || audio.threadVideoId;
+        audio.id = audioId;
+      }
       if (tomId === THREAD_TYPE.goods) product = contentindexes[index].body;
       if (tomId === THREAD_TYPE.video) {
         video = contentindexes[index].body || {};
         video.thumbUrl = video.mediaUrl;
+        const videoId = video.id || video.threadVideoId;
+        video.id = videoId;
       }
       if (tomId === THREAD_TYPE.redPacket) {
         const price = contentindexes[index]?.body?.money;

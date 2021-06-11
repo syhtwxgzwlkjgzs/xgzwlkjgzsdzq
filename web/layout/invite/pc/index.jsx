@@ -11,11 +11,13 @@ import UserCenterFriendPc from '@components/user-center/friend-pc';
 import { numberFormat } from '@common/utils/number-format';
 import Copyright from '@components/copyright';
 import { copyToClipboard } from '@common/utils/copyToClipboard';
+import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 
 @inject('site')
 @inject('forum')
 @inject('search')
 @inject('invite')
+@inject('user')
 @observer
 class InvitePCPage extends React.Component {
   containerRef = React.createRef(null);
@@ -51,16 +53,16 @@ class InvitePCPage extends React.Component {
 
   createInviteLink = async () => {
     try {
-      const { invite } = this.props;
-      await this.props.invite.createInviteLink();
-      copyToClipboard(`${window.location.origin}/forum/partner-invite?inviteCode=${invite.inviteCode}`);
+      const { site: { setSite: { siteTitle } = {} } = {}, user } = this.props;
+      // copyToClipboard(`${window.location.origin}/forum/partner-invite?inviteCode=${user.id}`);
+      h5Share({ title: `邀请您加入${siteTitle || ''}`, path: `/forum/partner-invite?inviteCode=${user.id}` });
       Toast.success({
         content: '创建邀请链接成功',
         duration: 1000,
       });
     } catch (e) {
       Toast.error({
-        content: e.Message,
+        content: e.Message || e,
       });
     }
   }
@@ -137,7 +139,6 @@ class InvitePCPage extends React.Component {
                         <Avatar
                           className={layout.user_value_avatar}
                           image={item.avatar}
-                          size='small'
                           text={item?.nickname?.substring(0, 1)}
                         />
                         <div className={layout.user_value_name} title={item.nickname}>{item.nickname || '匿名'}</div>

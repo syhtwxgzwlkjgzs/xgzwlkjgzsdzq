@@ -5,6 +5,7 @@ import IndexPCPage from '@layout/my/collect/pc';
 import { readThreadList } from '@server';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import isServer from '@common/utils/is-server';
+import ViewAdapter from '@components/view-adapter';
 
 @inject('site')
 @inject('index')
@@ -123,27 +124,23 @@ class Index extends React.Component {
     const { platform } = site;
     const { firstLoading } = this.state;
 
-    if (platform === 'pc') {
-      return (
-        <IndexPCPage
-          page={this.state.page}
-          totalPage={this.state.totalPage}
-          totalCount={this.state.totalCount}
-          firstLoading={firstLoading}
-          dispatch={this.dispatch}
-        />
-      );
-    }
-
-    return (
-      <IndexH5Page
+    return <ViewAdapter 
+      h5={<IndexH5Page
         firstLoading={firstLoading}
         page={this.state.page}
         totalPage={this.state.totalPage}
         totalCount={this.state.totalCount}
         dispatch={this.dispatch}
-      />
-    );
+      />}
+      pc={<IndexPCPage
+        page={this.state.page}
+        totalPage={this.state.totalPage}
+        totalCount={this.state.totalCount}
+        firstLoading={firstLoading}
+        dispatch={this.dispatch}
+      />} 
+      title={`我的收藏 - ${this.props.site?.siteName}`}
+    />
   }
 }
 

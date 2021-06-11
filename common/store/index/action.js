@@ -81,6 +81,18 @@ class IndexAction extends IndexStore {
     this.needDefault = data
   }
 
+  @action
+  resetErrorInfo() {
+    this.threadError = {
+      isError: false,
+      errorText: ''
+    }
+    this.categoryError = {
+      isError: false,
+      errorText: ''
+    }
+  }
+
 /**
  * 详情页点击标签、置顶跳转首页操作
  * @param {array} categoryIds 分类Ids
@@ -91,6 +103,8 @@ class IndexAction extends IndexStore {
     if (categoryIds?.length) {
       this.threads = null;
       this.sticks = null;
+      this.resetErrorInfo()
+
       this.setFilter({ categoryids: categoryIds })
     } else {
       const { categoryids = [], sequence = 0 } = this.filter
@@ -123,6 +137,7 @@ class IndexAction extends IndexStore {
   async screenData({ filter = {}, sequence = 0, perPage = 10, page = 1 } = {}) {
     this.threads = null;
     this.sticks = null;
+    this.resetErrorInfo()
 
     this.getRreadStickList(filter.categoryids);
     this.getReadThreadList({ filter, sequence, perPage, page });
@@ -174,9 +189,14 @@ class IndexAction extends IndexStore {
         }
       }
       return result.data;
-    }
+    } else {
+      this.threadError = {
+        isError: true,
+        errorText: result?.msg || ''
+      }
 
-    return Promise.reject(result?.msg || '');
+      return Promise.reject(result?.msg || '');
+    }
   }
 
   /**
@@ -190,9 +210,14 @@ class IndexAction extends IndexStore {
       const data = [...result.data];
       this.setCategories(data);
       return this.categories;
+    } else {
+      this.categoryError = {
+        isError: true,
+        errorText: result?.msg || '加载失败'
+      }
+
+      return Promise.reject(result?.msg || '加载失败');
     }
-    
-    return Promise.reject(result?.msg || '加载失败');
   }
 
   /**

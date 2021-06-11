@@ -92,6 +92,16 @@ class SiteStore {
   @computed get isOpenQcloudVod() {
     return get(this.webConfig, 'qcloud.qcloudVod', false);
   }
+
+  // 是否开启了微信支付
+  @computed get isWechatPayOpen() {
+    return get(this.webConfig, 'paycenter.wxpayClose', false);
+  }
+
+  // IOS 微信支付是否允许
+  @computed get isIOSWechatPayOpen() {
+    return get(this.webConfig, 'paycenter.wxpayIos', false);
+  }
 }
 
 export default SiteStore;
