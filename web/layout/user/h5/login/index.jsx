@@ -19,7 +19,6 @@ class Login extends React.Component {
   componentDidMount() {
     const { site, invite, router } = this.props;
 
-    clearLoginStatus(); // 清除登录态
     if (site.wechatEnv !== 'none') {
       if (isWeiXin()) {
         let inviteCode = invite.getInviteCode(router);
