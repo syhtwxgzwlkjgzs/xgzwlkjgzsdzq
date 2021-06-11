@@ -62,7 +62,7 @@ class MiniAuth extends React.Component {
         setAccessToken({
           accessToken,
         });
-        this.props.user.updateUserInfo(uid);
+        await this.props.user.updateUserInfo(uid);
         redirectTo({
           url: `/pages/index/index`
         });
