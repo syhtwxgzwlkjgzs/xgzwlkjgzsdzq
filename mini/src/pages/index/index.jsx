@@ -4,7 +4,6 @@ import Page from '@components/page';
 import withShare from '@common/utils/withShare/withShare'
 import { inject, observer } from 'mobx-react'
 import { handleString2Arr } from '@common/utils/handleCategory';
-import { View } from '@tarojs/components';
 
 @inject('site')
 @inject('search')
