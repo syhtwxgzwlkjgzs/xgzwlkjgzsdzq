@@ -190,6 +190,7 @@ const CommentInput = inject('site')((props) => {
         <Textarea
           className={`${styles.input} ${height === 'label' ? styles.heightLabel : styles.heightMiddle}`}
           rows={5}
+          maxLength={5000}
           showLimit={true}
           value={value}
           onChange={(e) => setValue(e.target.value)}

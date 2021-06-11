@@ -15,7 +15,7 @@ import styles from './index.module.scss';
 import ImageUpload from '../image-upload';
 
 const InputPop = (props) => {
-  const { visible, onSubmit, initValue, onClose, inputText = '写评论...', site } = props;
+  const { visible, onSubmit, onClose, initValue, inputText = '写评论...', site, checkUser = [] } = props;
 
   const textareaRef = createRef();
   const [value, setValue] = useState('');
@@ -36,12 +36,12 @@ const InputPop = (props) => {
   };
 
   useEffect(() => {
-    setValue(initValue || '');
-  }, [initValue]);
+    setValue(initValue);
+  }, [initValue])
 
   // 监听键盘的高度
   Taro.onKeyboardHeightChange(res => {
-    setBottomHeight(res?.height || 0 );
+    setBottomHeight(res?.height || 0);
   })
 
   // 点击发布
@@ -57,6 +57,7 @@ const InputPop = (props) => {
           setShowPicture(false);
           setShowEmojis(false);
           setImageList([]);
+          this.props.thread.setCheckUser([]);
         }
       } catch (error) {
         console.log(error);
@@ -89,7 +90,10 @@ const InputPop = (props) => {
   };
 
   const onAtIconClick = () => {
-    setShowAt(!showAt);
+    // setShowAt(!showAt);
+    Taro.navigateTo({
+      url: '/subPages/thread/selectAt/index?type=thread',
+    });
     setShowEmojis(false);
     setShowPicture(false);
   };
@@ -112,15 +116,23 @@ const InputPop = (props) => {
   };
 
   // 完成@人员选择
-  const onAtListChange = (atList) => {
+  // const onAtListChange = (atList) => {
+  //   // 在光标位置插入
+  //   const atListStr = atList.map((atUser) => ` @${atUser} `).join('');
+  //   const insertPosition = cursorPos || 0;
+  //   const newValue = value.substr(0, insertPosition) + (atListStr || '') + value.substr(insertPosition);
+  //   setValue(newValue);
+
+  //   setShowEmojis(false);
+  // };
+  useEffect(() => {
     // 在光标位置插入
-    const atListStr = atList.map((atUser) => ` @${atUser} `).join('');
+    const atListStr = checkUser.map((atUser) => ` @${atUser} `).join('');
     const insertPosition = cursorPos || 0;
     const newValue = value.substr(0, insertPosition) + (atListStr || '') + value.substr(insertPosition);
     setValue(newValue);
 
-    setShowEmojis(false);
-  };
+  }, [checkUser]);
 
   const handleUploadChange = async (list) => {
     setImageList(list);
@@ -269,12 +281,12 @@ const InputPop = (props) => {
           </View>
         )}
       </Popup>
-
+      {/* 
       {showAt && (
         <View className={styles.atSelect}>
           <AtSelect visible={showAt} stateLess={true} getAtList={onAtListChange} onCancel={onAtIconClick} />
         </View>
-      )}
+      )} */}
 
     </View>
   );
