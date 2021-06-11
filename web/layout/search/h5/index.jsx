@@ -6,7 +6,7 @@ import TrendingTopics from './components/trending-topics';
 import ActiveUsers from './components/active-users';
 import PopularContents from './components/popular-contents';
 import BaseLayout from '@components/base-layout';
-import '@discuzq/design/dist/styles/index.scss';
+// import '@discuzq/design/dist/styles/index.scss';
 import SidebarPanel from '@components/sidebar-panel';
 
 @inject('site')

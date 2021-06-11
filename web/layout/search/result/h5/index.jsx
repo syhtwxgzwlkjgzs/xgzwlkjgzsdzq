@@ -1,12 +1,17 @@
+/** 
+ * 页面用于渲染 http://localhost:9527/search/result?keyword=
+ * 
+ * */ 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import BaseLayout from '@components/base-layout';
 import SearchInput from '@components/search-input';
+import SidebarPanel from '@components/sidebar-panel';
+
 import SearchPosts from './components/search-posts';
 import SearchTopics from './components/search-topics';
 import SearchUsers from './components/search-users';
-import SidebarPanel from '@components/sidebar-panel';
 
 import styles from './index.module.scss';
 
@@ -68,7 +73,7 @@ class SearchResultH5Page extends React.Component {
 
   render() {
     const { keyword } = this.state;
-    const { searchTopics, searchUsers, searchThreads } = this.props.search;
+    const { searchTopics, searchUsers, searchThreads, searchTopicsError, searchUsersError, searchThreadsError } = this.props.search;
     const { pageData: topicsPageData } = searchTopics || {};
     const { pageData: usersPageData } = searchUsers || {};
     const { pageData: threadsPageData } = searchThreads || {};
@@ -83,6 +88,9 @@ class SearchResultH5Page extends React.Component {
           isLoading={!usersPageData}
           noData={!usersPageData?.length}
           platform='h5'
+          isError={searchUsersError.isError}
+          errorText={searchUsersError.errorText}
+          titleStyle={{ border: "none" }}
         >
           {
             usersPageData?.length && <SearchUsers data={usersPageData} onItemClick={this.onUserClick} />
@@ -96,6 +104,9 @@ class SearchResultH5Page extends React.Component {
           noData={!threadsPageData?.length}
           platform='h5'
           className={threadsPageData?.length && styles.bottom}
+          isError={searchThreadsError.isError}
+          errorText={searchThreadsError.errorText}
+          titleStyle={{ border: "none" }}
         >
           {
             threadsPageData?.length &&<SearchPosts data={threadsPageData.filter((_, index) => index < 3)} onItemClick={this.onPostClick} />
@@ -108,6 +119,9 @@ class SearchResultH5Page extends React.Component {
           isLoading={!topicsPageData}
           noData={!topicsPageData?.length}
           platform='h5'
+          isError={searchTopicsError.isError}
+          errorText={searchTopicsError.errorText}
+          titleStyle={{ border: "none" }}
         >
           {
             topicsPageData?.length && <SearchTopics data={topicsPageData} onItemClick={this.onTopicClick} />

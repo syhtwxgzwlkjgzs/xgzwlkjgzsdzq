@@ -21,16 +21,17 @@ const ClassifyPopup = (props) => {
   // state
   const [parent, setParent] = useState({}); // 父类
   const [child, setChild] = useState({}); // 子类
-  const [subcategory, setSubCategory] = useState([]); // 子类列表
+  const [subCategory, setSubCategory] = useState([]); // 子类列表
 
   const handleParentClick = (item) => { // 父类点击
     if (item.pid === parent.pid) return;
     setParent(item);
     setChild({});
     if (item?.children?.length > 0) {
-      setChildrenList(item?.children?.slice());
+      setChildrenList(item?.children?.slice(), item);
       return;
     }
+    setSubCategory([]);
     setPostData({ categoryId: item.pid });
     setCategorySelected({ parent: item, child: {} });
     onHide();
@@ -43,10 +44,12 @@ const ClassifyPopup = (props) => {
     onHide();
   };
 
-  const setChildrenList = (list) => { // 设置子类列表
+  const setChildrenList = (list, item) => { // 设置子类列表
     if (typeofFn.isArray(list) && list.length > 0) {
       setSubCategory(list);
       setChild(list[0]);
+      setPostData({ categoryId: list[0].pid });
+      setCategorySelected({ parent: item, child: list[0] });
     } else {
       setSubCategory([]);
       setChild({});
@@ -66,7 +69,7 @@ const ClassifyPopup = (props) => {
     const { parent: storeParent, child: storeChild } = categorySelected;
     if (storeParent.pid && storeParent.pid !== parent.pid) {
       setParent(storeParent);
-      setChildrenList(storeParent?.children?.slice());
+      // setChildrenList(storeParent?.children?.slice(), storeParent);
     }
     if (storeChild.pid && storeChild.pid !== child.pid) {
       setChild(storeChild);
@@ -96,9 +99,9 @@ const ClassifyPopup = (props) => {
         ))}
       </View>
       {/* 子类 */}
-      {subcategory.length > 0 && (
+      {subCategory.length > 0 && (
         <View className={`${styles.content} ${styles['content-child']}`}>
-          {(subcategory || []).map(item => (
+          {(subCategory || []).map(item => (
             item.canCreateThread
               ? <Button
                 key={item.pid}

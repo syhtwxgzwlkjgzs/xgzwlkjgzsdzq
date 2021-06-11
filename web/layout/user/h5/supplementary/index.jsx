@@ -16,6 +16,7 @@ import { InputType, CreateFunctions } from './components';
 @inject('user')
 @inject('thread')
 @inject('supplementary')
+@inject('commonLogin')
 @observer
 class SupplementaryH5Page extends React.Component {
   async componentDidMount() {
@@ -121,7 +122,19 @@ class SupplementaryH5Page extends React.Component {
                       duration: 2000,
                     });
                     setTimeout(() => {
-                      // todo 跳转逻辑
+                      const { statusCode, statusMsg, needToBindPhone,
+                        needToBindWechat, nickName, sessionToken } = this.props.commonLogin;
+
+                      if (needToBindPhone) {
+                        return this.props.router.push(`/user/bind-phone?sessionToken=${sessionToken}`);
+                      }
+
+                      if (needToBindWechat === true) {
+                        return this.props.router.push(`/user/wx-bind-qrcode?sessionToken=${sessionToken}&loginType=${platform}&nickname=${nickName}`);
+                      }
+                      if (statusMsg && statusCode) {
+                        return this.props.router.push(`/user/status?statusCode=${statusCode}&statusMsg=${statusMsg}`);
+                      }
                       window.location.href = '/';
                     }, 1000);
                   });

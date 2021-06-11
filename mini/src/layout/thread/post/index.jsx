@@ -14,6 +14,7 @@ import VodUploader from 'vod-wx-sdk-v2';
 import { toTCaptcha } from '@common/utils/to-tcaptcha'
 import PayBox from '@components/payBox/index';
 import { ORDER_TRADE_TYPE } from '@common/constants/payBoxStoreConstants';
+import { get } from '@common/utils/get';
 
 @inject('index')
 @inject('site')
@@ -27,6 +28,8 @@ class Index extends Component {
     this.state = {
       threadId: '', // 主题id
       postType: 'isFirst', // 发布状态 isFirst-首次，isEdit-再编辑，isDraft-草稿
+      canEditRedpacket: true, // 可编辑红包
+      canEditReward: true, // 可编辑悬赏
       isShowTitle: true, // 默认显示标题
       maxLength: 5000, // 文本输入最大长度
       showClassifyPopup: false, // 切换分类弹框show
@@ -135,7 +138,12 @@ class Index extends Component {
         .replace(/<span.*?>(.*?)<\/span>/g, `$1`);
       ret.data.content.text = realText;
       threadPost.formatThreadDetailToPostData(ret.data);
-      this.setState({ postType: isDraft ? 'isDraft' : 'isEdit' });
+      const { postData: { redpacket, rewardQa } } = this.props.threadPost
+        this.setState({
+          postType: isDraft ? 'isDraft' : 'isEdit',
+          canEditRedpacket: isDraft || !(redpacket.money > 0),
+          canEditReward: isDraft || !(rewardQa.money > 0),
+        });
       // isDraft && this.openSaveDraft(); // 现阶段，自动保存功能关闭
     } else {
       // 请求失败，弹出错误消息
@@ -186,7 +194,7 @@ class Index extends Component {
 
   // 点击发帖插件时回调，如上传图片、视频、附件或艾特、话题等
   handlePluginClick(item) {
-    const { postType } = this.state;
+    console.log(`item`, item)
     const { postData } = this.props.threadPost;
     // 匹配附件、图片、语音上传
     this.setState({
@@ -207,7 +215,7 @@ class Index extends Component {
     switch (item.type) {
       // 根据类型分发具体操作
       case THREAD_TYPE.reward:
-        if (postType === 'isEdit') {
+        if (!this.state.canEditReward) {
           return this.postToast('再编辑时不可操作悬赏');
         }
         nextRoute = '/subPages/thread/selectReward/index';
@@ -218,7 +226,7 @@ class Index extends Component {
         this.resetOperationType();
         break;
       case THREAD_TYPE.redPacket:
-        if (postType === 'isEdit') {
+        if (!this.state.canEditRedpacket) {
           return this.postToast('再编辑时不可操作红包');
         }
         nextRoute = '/subPages/thread/selectRedpacket/index';
@@ -400,8 +408,10 @@ class Index extends Component {
     const { threadId } = this.state;
     const { threadPost, site } = this.props;
     const { postData, redpacketTotalAmount } = threadPost;
-    if (!isDraft && !postData.contentText) {
-      this.postToast('请填写您要发布的内容');
+    const { images, video, files, audio } = postData;
+    if (!(postData.contentText || video.id || audio.id || Object.values(images).length
+      || Object.values(files).length)) {
+      this.postToast({ content: '请至少填写您要发布的内容或者上传图片、附件、视频、语音' });
       return;
     }
     if (!this.checkAttachPrice()) {
@@ -562,7 +572,8 @@ class Index extends Component {
       this.setState({ isFirstFocus: false });
     }
     this.setState({
-      showEmoji: false
+      showEmoji: false,
+      operationType: 0,
     });
   }
 
@@ -605,8 +616,8 @@ class Index extends Component {
   render() {
     const { permissions } = this.props.user;
     const { categories } = this.props.index;
-    const { postData, setPostData, setCursorPosition, navInfo } = this.props.threadPost;
-    const { rewardQa, redpacket, video, product, position } = postData;
+    const { postData, setPostData, setCursorPosition, navInfo, cursorPosition } = this.props.threadPost;
+    const { rewardQa, redpacket, video, product, position, contentText = '' } = postData;
     const {
       isShowTitle,
       maxLength,
@@ -624,7 +635,8 @@ class Index extends Component {
     const contentStyle = {
       marginTop: navInfo.statusBarHeight > 30 ? `${navInfo.navHeight / 2}px` : '0px',
     }
-
+    const { site } = this.props;
+    const headTitle = get(site, 'webConfig.setSite.siteName', '');
     return (
       <>
         <View className={styles['container']}>
@@ -632,57 +644,58 @@ class Index extends Component {
           <View className={styles.topBar} style={navStyle}>
             <Icon name="RightOutlined" onClick={() => this.handlePageJump(false)} />
             <View className={styles['topBar-title']}>
-              发帖
+              <View className={styles['topBar-title-inner']}>{ headTitle ?  `发布 - ${headTitle}` : '发布' }</View>
             </View>
           </View>
 
           {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
           <View className={styles['content']} style={contentStyle}>
             <View id="thread-post-content">
-            <Title
-              value={postData.title}
-              show={isShowTitle}
-              onChange={this.onTitleChange}
-              onBlur={this.hideKeyboard}
-              onFocus={() => {
-                this.setState({
-                  showEmoji: false
-                });
-              }}
-            />
-            <Content
-              value={postData.contentText}
-              maxLength={maxLength}
-              onChange={this.onContentChange}
-              onFocus={this.onContentFocus}
-              onBlur={(e) => {
-                console.log('set', e.detail.cursor);
-                setCursorPosition(e.detail.cursor);
-                this.hideKeyboard();
-              }}
-            />
+              <Title
+                value={postData.title}
+                show={isShowTitle}
+                onChange={this.onTitleChange}
+                onBlur={this.hideKeyboard}
+                onFocus={() => {
+                  this.setState({
+                    showEmoji: false,
+                    operationType: 0,
+                  });
+                }}
+              />
+              <Content
+                value={postData.contentText}
+                maxLength={maxLength}
+                onChange={this.onContentChange}
+                onFocus={this.onContentFocus}
+                onBlur={(e) => {
+                  console.log('set', e.detail.cursor);
+                  setCursorPosition(e.detail.cursor);
+                  this.hideKeyboard();
+                }}
+              />
 
             <View className={styles['plugin']}>
 
-              <GeneralUpload type={operationType} audioUpload={(file) => { this.yundianboUpload('audio', file) }} />
+              <GeneralUpload type={operationType} audioUpload={(file) => { this.yundianboUpload('audio', file) }}>
+                {video.thumbUrl && (
+                  <Units
+                    type='video'
+                    deleteShow
+                    src={video.thumbUrl}
+                    onDelete={() => setPostData({ video: {} })}
+                    onVideoLoaded={() => {
+                      Taro.pageScrollTo({
+                        scrollTop: 3000,
+                        // selector: '#thread-post-video',
+                        complete: (a,b,c) => {console.log(a,b,c)}
+                      });
+                    }}
+                  />
+                )}
+              </GeneralUpload>
 
               {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => setPostData({ product: {} })} />}
-
-              {video.thumbUrl && (
-                <Units
-                  type='video'
-                  deleteShow
-                  src={video.thumbUrl}
-                  onDelete={() => setPostData({ video: {} })}
-                  onVideoLoaded={() => {
-                    Taro.pageScrollTo({
-                      scrollTop: 3000,
-                      // selector: '#thread-post-video',
-                      complete: (a,b,c) => {console.log(a,b,c)}
-                    });
-                  }}
-                />
-              )}
 
             </View>
             </View>
@@ -728,7 +741,7 @@ class Index extends Component {
                     style={{ marginTop: 0, paddingRight: '8px' }}
                     tagContent={this.redpacketContent()}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.redPacket })}
-                    isCloseShow={this.state.postType !== 'isEdit'}
+                    isCloseShow={this.state.canEditRedpacket}
                     onTagRemoveClick={() => { setPostData({ redpacket: {} }) }}
                   />
                 }
@@ -739,7 +752,7 @@ class Index extends Component {
                     style={{ marginTop: 0, paddingRight: '8px' }}
                     tagContent={`悬赏金额${(rewardQa.value).toFixed(2)}元\\结束时间 ${rewardQa.times}`}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
-                    isCloseShow={this.state.postType !== 'isEdit'}
+                    isCloseShow={this.state.canEditReward}
                     onTagRemoveClick={() => { setPostData({ rewardQa: {} }) }}
                   />
                 }
@@ -762,7 +775,14 @@ class Index extends Component {
               onCategoryClick={() => {
                 this.setState({
                   showClassifyPopup: true,
-                  showEmoji: false
+                  showEmoji: false,
+                  operationType: 0
+                });
+              }}
+              onSetplugShow={() => {
+                showEmoji && this.setState({
+                  showEmoji: false,
+                  operationType: 0
                 });
               }}
             />
@@ -770,18 +790,26 @@ class Index extends Component {
               operationType={operationType}
               permissions={permissions}
               onPluginClick={(item) => {
-                console.log(item);
                 this.handlePluginClick(item);
               }}
               onSubmit={() => this.handleSubmit()}
             />
             {/* 通过键盘改变的高度一起来控制表情的显示和隐藏，直接通过 showEmoji 来进行数据的改变，渲染慢 */}
-            <Emoji show={bottomHeight === 0 && showEmoji} onHide={() => {
-              this.setState({
-                showEmoji: false
-              });
-            }} />
-
+            <Emoji
+              show={bottomHeight === 0 && showEmoji}
+              onHide={() => {
+                this.setState({
+                  showEmoji: false,
+                  operationType: 0
+                });
+              }}
+              onClick={(emoji) => {
+                setPostData({
+                  contentText: contentText.slice(0, cursorPosition) + emoji.code + contentText.slice(cursorPosition)
+                });
+                setCursorPosition(cursorPosition + emoji.code.length);
+              }}
+            />
           </View>
         </View>
 

@@ -25,15 +25,21 @@ const SearchInput = ({
 }) => {
   const [value, setValue] = React.useState(defaultValue);
   const [isShow, setIsShow] = React.useState(false);
+  const [timeoutID, setTimeoutID] = React.useState(null);
   const inputChange = (e) => {
-    setValue(e.target.value);
-    if (e.target.value.length > 0) {
+    const val = e.target.value;
+    setValue(val);
+    if (val.length > 0) {
       setIsShow(true)
     }
-    if(searchWhileTyping && e.target.value.length >= searchWhileTypingStartsAt) {
-      debounce(() => {
-        onSearch(e.target.value);
-      }, 800)();
+    if(searchWhileTyping && val.length >= searchWhileTypingStartsAt) {
+      if(timeoutID !== null) { // 做一个防抖Debounce
+        clearTimeout(timeoutID);
+        setTimeoutID(null);
+      }
+      setTimeoutID(setTimeout(() => {
+        onSearch(val);
+      }, searchWhileTyping ? 1000 : 0));
     }
   }
   const clearInput = () => {
@@ -59,7 +65,7 @@ const SearchInput = ({
       </div>
       {
         isShowCancel && (
-          <div className={styles.cancel} onClick={clearInput}>
+          <div className={styles.cancel} onClick={onCancel}>
             取消
           </div>
         )

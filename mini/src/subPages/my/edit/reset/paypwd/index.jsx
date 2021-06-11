@@ -1,11 +1,11 @@
 import React from 'react';
 import UserCenterEditResetPayPwd from '../../../../../components/user-center-edit-paypwd/reset/paypwd/index';
-import { View } from '@tarojs/components';
+import Page from '@components/page';
 
 export default function index() {
   return (
-    <View>
+    <Page>
       <UserCenterEditResetPayPwd />
-    </View>
-  )
+    </Page>
+  );
 }

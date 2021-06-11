@@ -3,9 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { View, Text } from '@tarojs/components';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Button from '@discuzq/design/dist/components/button/index';
-import Toast from '@discuzq/design/dist/components/toast/index';
-import { parseContentData } from '../../utils';
-import ImageDisplay from '@components/thread/image-content';
+import ImageDisplay from '@components/thread/image-display';
 import AudioPlay from '@components/thread/audio-play';
 import PostContent from '@components/thread/post-content';
 import ProductItem from '@components/thread/product-item';
@@ -16,8 +14,9 @@ import AttachmentView from '@components/thread/attachment-view';
 import { minus } from '@common/utils/calculate';
 import classnames from 'classnames';
 import UserInfo from '@components/thread/user-info';
+import { setClipboardData } from '@tarojs/taro';
+import { parseContentData } from '../../utils';
 import styles from './index.module.scss';
-import { setClipboardData, hideToast } from '@tarojs/taro';
 
 // 帖子内容
 const RenderThreadContent = inject('user')(
@@ -150,14 +149,14 @@ const RenderThreadContent = inject('user')(
           {!canFreeViewPost && isAttachmentPay && !isSelf && !isPayed && (
             <View style={{ textAlign: 'center' }} onClick={onContentClick}>
               <Button className={styles.payButton} type="primary">
-                <Icon className={styles.payIcon} name="GoldCoinOutlined" size={20}></Icon>
+                <Icon className={styles.payIcon} name="GoldCoinOutlined" size={16}></Icon>
                 <View>支付{attachmentPrice}元查看附件内容</View>
               </Button>
             </View>
           )}
 
           {/* 图片 */}
-          {parseContent.IMAGE && <ImageDisplay imgData={parseContent.IMAGE} />}
+          {parseContent.IMAGE && <ImageDisplay platform="h5" imgData={parseContent.IMAGE} />}
 
           {/* 视频 */}
           {parseContent.VIDEO && (
@@ -231,7 +230,7 @@ const RenderThreadContent = inject('user')(
           {!canFreeViewPost && isThreadPay && !isSelf && !isPayed && (
             <View style={{ textAlign: 'center' }} onClick={onContentClick}>
               <Button className={styles.payButton} type="primary">
-                <Icon className={styles.payIcon} name="GoldCoinOutlined" size={20}></Icon>
+                <Icon className={styles.payIcon} name="GoldCoinOutlined" size={16}></Icon>
                 支付{threadPrice}元查看剩余内容
               </Button>
             </View>

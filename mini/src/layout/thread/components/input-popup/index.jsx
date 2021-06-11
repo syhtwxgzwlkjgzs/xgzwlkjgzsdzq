@@ -1,5 +1,6 @@
 import React, { useEffect, useState, createRef, Fragment } from 'react';
-import { View } from '@tarojs/components';
+import { View, ScrollView } from '@tarojs/components';
+import Taro from '@tarojs/taro';
 import Popup from '@discuzq/design/dist/components/popup/index';
 import Textarea from '@discuzq/design/dist/components/textarea/index';
 import Divider from '@discuzq/design/dist/components/divider/index';
@@ -26,6 +27,7 @@ const InputPop = (props) => {
   const [showPicture, setShowPicture] = useState(false);
   const [imageList, setImageList] = useState([]);
   const [imageUploading, setImageUploading] = useState(false);
+  const [bottomHeight, setBottomHeight] = useState(0);
 
   // 输入框光标位置
   const [cursorPos, setCursorPos] = useState(0);
@@ -36,6 +38,11 @@ const InputPop = (props) => {
   useEffect(() => {
     setValue(initValue || '');
   }, [initValue]);
+
+  // 监听键盘的高度
+  Taro.onKeyboardHeightChange(res => {
+    setBottomHeight(res?.height || 0 );
+  })
 
   // 点击发布
   const onSubmitClick = async () => {
@@ -48,6 +55,7 @@ const InputPop = (props) => {
         if (success) {
           setValue('');
           setShowPicture(false);
+          setShowEmojis(false);
           setImageList([]);
         }
       } catch (error) {
@@ -184,6 +192,7 @@ const InputPop = (props) => {
       <Popup position="bottom" visible={visible} onClose={onCancel} customScroll={true}>
         <View className={styles.container}>
           <View className={styles.main}>
+          <ScrollView scrollY className={styles.valueScroll}>
             <Textarea
               className={styles.input}
               maxLength={5000}
@@ -203,9 +212,9 @@ const InputPop = (props) => {
               placeholderClass={styles.placeholder}
               forwardedRef={textareaRef}
               fixed={true}
-              adjustPosition={true}
-              cursorSpacing={200}
+              adjustPosition={false}
             ></Textarea>
+          </ScrollView>
 
             {showPicture && (
               <Fragment>
@@ -252,6 +261,7 @@ const InputPop = (props) => {
             </View>
           </View>
         </View>
+        <View style={{ transform: 'translateY(0)', height: `${bottomHeight}px` }}></View>
         {showEmojis && (
           <View className={styles.emojis}>
             <Emoji show={showEmojis} emojis={emojis} onClick={onEmojiClick} />

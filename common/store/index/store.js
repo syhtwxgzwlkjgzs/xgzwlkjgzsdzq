@@ -10,6 +10,9 @@ class IndexStore {
 
   @observable drafts = null;
 
+  // 是否出现推荐选项
+  @observable needDefault = false
+
   @computed get categoriesNoAll() {
     return (this.categories || []).filter(item => item.name !== '全部');
   }
@@ -17,7 +20,6 @@ class IndexStore {
   @computed get categoriesNames () {
     const categoriesNoAll = (this.categories || []).filter(item => item.name !== '全部');
     const nameArr = [];
-    console.log(categoriesNoAll);
     categoriesNoAll.forEach((item) => {
       nameArr.push({
         pid: item.pid,

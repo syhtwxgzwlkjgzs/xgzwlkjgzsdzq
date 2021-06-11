@@ -72,7 +72,7 @@ class SearchAction extends SearchStore {
    * 发现模块 - 重置搜索结果页数据
    */
    @action
-   resetIndexData() {
+   resetSearchData() {
      this.searchTopicsError = { isError: false, errorText: '' }
      this.searchUsersError = { isError: false, errorText: '' }
      this.searchThreadsError = { isError: false, errorText: '' }
@@ -112,43 +112,46 @@ class SearchAction extends SearchStore {
     if ( !hasTopics ) {
       readTopicsList({ params: { filter: topicFilter, perPage: newPerPage, page: 1 } })
         .then((res) => {
-          const { code, data } = res;
-          type === 0 ? this.setIndexTopics(code === 0 ? data : {}) : this.setSearchTopics(code === 0 ? data : {});
-        })
-        .catch((err) => {
-          if (type === 0) {
-            this.indexTopicsError = { isError: true, errorText: err?.msg || '加载失败' }
-          } else {
-            this.searchTopicsError = { isError: true, errorText: err?.msg || '加载失败' }
+          const { code, data, msg } = res;
+          if (code !== 0) {
+            if (type === 0) {
+              this.indexTopicsError = { isError: true, errorText: msg || '加载失败' }
+            } else {
+              this.searchTopicsError = { isError: true, errorText: msg || '加载失败' }
+            }
           }
+          
+          type === 0 ? this.setIndexTopics(code === 0 ? data : {}) : this.setSearchTopics(code === 0 ? data : {});
         })
     }
     if ( !hasUsers ) {
       readUsersList({ params: { filter: { hot: 1, nickname: search }, perPage: newPerPage, page: 1 } })
         .then((res) => {
-          const { code, data } = res;
-          type === 0 ? this.setIndexUsers(code === 0 ? data : {}) : this.setSearchUsers(code === 0 ? data : {});
-        })
-        .catch((err) => {
-          if (type === 0) {
-            this.indexUsersError = { isError: true, errorText: err?.msg || '加载失败' }
-          } else {
-            this.searchUsersError = { isError: true, errorText: err?.msg || '加载失败' }
+          const { code, data, msg } = res;
+          if (code !== 0) {
+            if (type === 0) {
+              this.indexUsersError = { isError: true, errorText: msg || '加载失败' }
+            } else {
+              this.searchUsersError = { isError: true, errorText: msg || '加载失败' }
+            }
           }
+
+          type === 0 ? this.setIndexUsers(code === 0 ? data : {}) : this.setSearchUsers(code === 0 ? data : {});
         })
     }
     if ( !hasThreads ) {
       readThreadList({ params: { filter: { sort: '3', search }, perPage: newPerPage, page: 1 } })
         .then((res) => {
-          const { code, data } = res;
-          type === 0 ? this.setIndexThreads(code === 0 ? data : {}) : this.setSearchThreads(code === 0 ? data : {});
-        })
-        .catch((err) => {
-          if (type === 0) {
-            this.indexThreadsError = { isError: true, errorText: err?.msg || '加载失败' }
-          } else {
-            this.searchThreadsError = { isError: true, errorText: err?.msg || '加载失败' }
+          const { code, data, msg } = res;
+          if (code !== 0) {
+            if (type === 0) {
+              this.indexThreadsError = { isError: true, errorText: msg || '加载失败' }
+            } else {
+              this.searchThreadsError = { isError: true, errorText: msg || '加载失败' }
+            }
           }
+
+          type === 0 ? this.setIndexThreads(code === 0 ? data : {}) : this.setSearchThreads(code === 0 ? data : {});
         })
     }
   };
@@ -175,9 +178,9 @@ class SearchAction extends SearchStore {
         this.setTopics(result.data);
       }
       return result.data;
+    } else {
+      this.topicsError = { isError: true, errorText: result?.msg || '加载失败' }
     }
-
-    return Promise.reject(result?.msg || '');
   };
 
   /**
@@ -199,9 +202,9 @@ class SearchAction extends SearchStore {
         this.setUsers(data);
       }
       return result;
+    } else {
+      this.usersError = { isError: true, errorText: result?.msg || '加载失败' }
     }
-
-    return Promise.reject(result?.msg || '');
   };
 
   /**
@@ -210,8 +213,8 @@ class SearchAction extends SearchStore {
  * @returns {object} 处理结果
  */
  @action
-  async getThreadList({ search = '', perPage = 10, page = 1 } = {}) {
-    const result = await readThreadList({ params: { sequence: '0', filter: { sort: '3', search }, perPage, page } });
+  async getThreadList({ search = '', perPage = 10, page = 1, params = {} } = {}) {
+    const result = await readThreadList({ params: { sequence: '0', filter: { sort: '3', search }, perPage, page, ...params } });
 
     if (result.code === 0 && result.data) {
       if (this.threads && result.data.pageData && page !== 1) {
@@ -224,9 +227,9 @@ class SearchAction extends SearchStore {
         this.setThreads(result.data);
       }
       return result.data;
+    } else {
+      this.threadsError = { isError: true, errorText: result?.msg || '加载失败' }
     }
-    
-    return Promise.reject(result?.msg || '');
   };
 
 /**

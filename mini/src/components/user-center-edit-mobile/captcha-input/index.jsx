@@ -1,23 +1,21 @@
 import React, { Component } from 'react';
 import styles from './index.module.scss';
 import { View, Text } from '@tarojs/components';
+import Icon from '@discuzq/design/dist/components/icon/index';
 
 class CaptchaInput extends Component {
-
-  constructor(props) {
-    super(props)
-  }
 
   validateTel = (value) => {
     return (/^[1][3-9]\d{9}$/.test(value))
   }
-
-  componentDidMount() {
-    document.addEventListener('keydown', this.handleKeyDown);
+  // 点击显示数字键盘
+  handleClickPwdItem = () => {
+    this.props.handleKeyBoardVisible && this.props.handleKeyBoardVisible()
   }
 
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleKeyDown);
+  // 点击取消
+  handleCancel = () => {
+    this.props.handleKeyBoardVisible && this.props.handleKeyBoardVisible()
   }
 
   // 匹配输入的数字
@@ -72,9 +70,9 @@ class CaptchaInput extends Component {
 
   // 监听键盘事件
   handleKeyDown = (e) => {
-    const { is_blur, current_step } = this.props
+    const { isBlur, currentStep } = this.props
     // 只有当input失去焦点的时候才能进行更新
-    if (current_step === 'second' && !is_blur) return
+    if (currentStep === 'second' && !isBlur) return
     if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) {
       // 表示输入数字
       let set_num = this.toMarryNumber(e.keyCode);
@@ -88,6 +86,26 @@ class CaptchaInput extends Component {
       // 其他非数字情况
     }
   };
+
+  keyboardClickHander = (e) => {
+    e && e.stopPropagation()
+    const key = e.target.dataset?.key;
+    if (key == null) {
+      return null;
+    }
+    const { list = [] } = this.props;
+
+    if (key === '-1') {
+      if (list.length === 0) {
+        this.handleCancel()
+      } else {
+        this.props.updatePwd && this.props.updatePwd('', 'delete');
+      }
+
+    } else if (list.length < 6) {
+      this.props.updatePwd && this.props.updatePwd(key, 'add');
+    }
+  }
 
   renderPwdItem() {
     const { list = [] } = this.props;
@@ -111,10 +129,66 @@ class CaptchaInput extends Component {
     return nodeList;
   }
 
-  render() {
+  // 渲染键盘
+  renderKeyBoard = () => {
     return (
-      <View className={styles.payList}>
-       {this.renderPwdItem()}
+      <View className={styles.keyboard} onClick={this.keyboardClickHander}>
+        <View className={styles.line}>
+          <View data-key="1" className={styles.column}>
+            1
+          </View>
+          <View data-key="2" className={styles.column}>
+            2
+          </View>
+          <View data-key="3" className={styles.column}>
+            3
+          </View>
+        </View>
+        <View className={styles.line}>
+          <View data-key="4" className={styles.column}>
+            4
+          </View>
+          <View data-key="5" className={styles.column}>
+            5
+          </View>
+          <View data-key="6" className={styles.column}>
+            6
+          </View>
+        </View>
+        <View className={styles.line}>
+          <View data-key="7" className={styles.column}>
+            7
+          </View>
+          <View data-key="8" className={styles.column}>
+            8
+          </View>
+          <View data-key="9" className={styles.column}>
+            9
+          </View>
+        </View>
+        <View className={styles.line}>
+          <View className={`${styles.column} ${styles.special}`}></View>
+          <View data-key="0" className={styles.column}>
+            0
+          </View>
+          <View data-key="-1" className={`${styles.column} ${styles.special}`}>
+            <Icon name="BackspaceOutlined" size={16} />
+          </View>
+        </View>
+      </View>
+    )
+  }
+
+  render() {
+    const { isKeyBoardVisible } = this.props
+    return (
+      <View className={styles.payList} onClick={this.handleClickPwdItem}>
+        {this.renderPwdItem()}
+        {
+          isKeyBoardVisible && (
+            this.renderKeyBoard()
+          )
+        }
       </View>
     )
   }

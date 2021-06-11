@@ -37,7 +37,7 @@ class SearchResultTopicH5Page extends React.Component {
 
   // event
   onCancel = () => {
-    this.props.router.back();
+    Taro.navigateBack()
   };
 
   onSearch = (keyword) => {
@@ -55,7 +55,7 @@ class SearchResultTopicH5Page extends React.Component {
 
   render() {
     const { keyword } = this.state;
-    const { topics } = this.props.search;
+    const { topics, topicsError } = this.props.search;
     const { pageData = [], currentPage, totalPage } = topics || { pageData: [] };
 
     return (
@@ -63,8 +63,10 @@ class SearchResultTopicH5Page extends React.Component {
           onRefresh={this.fetchMoreData}
           noMore={currentPage >= totalPage}
           showHeader={false}
+          requestError={topicsError.isError}
+          errorText={topicsError.errorText}
         >
-          <SearchInput onSearch={this.onSearch} onCancel={this.onSearch} defaultValue={keyword} searchWhileTyping/>
+          <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} searchWhileTyping/>
           <View className={styles.wrapper}>
             {
               pageData?.map((item, index) => (

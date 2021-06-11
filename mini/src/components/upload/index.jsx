@@ -60,9 +60,9 @@ function DzqUpload(props) {
     return new Promise((resolve, reject) => {
       const tempFilePath = file.path || file.tempFilePath;
       const token = locals.get(constants.ACCESS_TOKEN_NAME);
-      const { COMMOM_BASE_URL = '' } = props?.site?.envConfig;
+      const { COMMON_BASE_URL = '' } = props?.site?.envConfig;
       const uploadTask = Taro.uploadFile({
-        url: `${COMMOM_BASE_URL}/apiv3/attachments`,
+        url: `${COMMON_BASE_URL}/apiv3/attachments`,
         filePath: tempFilePath,
         name: 'file',
         header: {

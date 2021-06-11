@@ -25,9 +25,9 @@ class index extends Component {
 
   // 点击屏蔽
   handleChangeShield = (isDeny) => {
-    const { query = {} } = this.props.router;
+    const { id } = getCurrentInstance().router.params;
     if (isDeny) {
-      this.props.user.undenyUser(query.otherId);
+      this.props.user.undenyUser(id);
       this.props.user.setTargetUserNotBeDenied();
       Toast.success({
         content: '解除屏蔽成功',
@@ -35,7 +35,7 @@ class index extends Component {
         duration: 1000,
       });
     } else {
-      this.props.user.denyUser(query.otherId);
+      this.props.user.denyUser(id);
       this.props.user.setTargetUserDenied();
       Toast.success({
         content: '屏蔽成功',
@@ -47,14 +47,14 @@ class index extends Component {
 
   // 点击关注
   handleChangeAttention = async (follow) => {
-    const { query = {} } = this.props.router;
-    if (query.otherId) {
+    const { id } = getCurrentInstance().router.params;
+    if (id) {
       if (follow !== 0) {
-        await this.props.user.cancelFollow({ id: query.otherId, type: 1 });
-        await this.props.user.getTargetUserInfo(query.otherId);
+        await this.props.user.cancelFollow({ id: id, type: 1 });
+        await this.props.user.getTargetUserInfo(id);
       } else {
-        await this.props.user.postFollow(query.otherId);
-        await this.props.user.getTargetUserInfo(query.otherId);
+        await this.props.user.postFollow(id);
+        await this.props.user.getTargetUserInfo(id);
       }
     }
   };
@@ -68,9 +68,9 @@ class index extends Component {
 
   // 点击粉丝列表
   goToFansList = () => {
-    const { otherId } = getCurrentInstance().router.params;
-    if (otherId) {
-      Router.push({ url: `/subPages/my/fans/index?isOtherPerson=${this.props.isOtherPerson}&otherId=${otherId}` });
+    const { id } = getCurrentInstance().router.params;
+    if (id) {
+      Router.push({ url: `/subPages/my/fans/index?isOtherPerson=${this.props.isOtherPerson}&otherId=${id}` });
     } else {
       Router.push({ url: `/subPages/my/fans/index?isOtherPerson=${this.props.isOtherPerson}` });
     }
@@ -78,9 +78,9 @@ class index extends Component {
 
   // 点击关注列表
   goToFollowsList = () => {
-    const { otherId } = getCurrentInstance().router.params;
-    if (otherId) {
-      Router.push({ url: `/subPages/my/follows/index?isOtherPerson=${this.props.isOtherPerson}&otherId=${otherId}` });
+    const { id } = getCurrentInstance().router.params;
+    if (id) {
+      Router.push({ url: `/subPages/my/follows/index?isOtherPerson=${this.props.isOtherPerson}&otherId=${id}` });
     } else {
       Router.push({ url: `/subPages/my/follows/index?isOtherPerson=${this.props.isOtherPerson}` });
     }
@@ -94,7 +94,7 @@ class index extends Component {
   // 点击发送私信
   handleMessage = () => {
     const { username } = this.props.user.targetUser;
-    Router.push({ url: `/message?page=chat&username=${username}` });
+    Router.push({ url: `/subPages/message/index?page=chat&username=${username}` });
   };
 
   // 点击我的点赞
@@ -138,15 +138,15 @@ class index extends Component {
           {/* 粉丝|关注|点赞 */}
           <View className={styles.userMessageList}>
             <View onClick={this.goToFansList} className={styles.userMessageListItem}>
-              <Text>粉丝</Text>
+              <Text className={styles.useText}>粉丝</Text>
               <Text>{user.fansCount || 0}</Text>
             </View>
             <View onClick={this.goToFollowsList} className={styles.userMessageListItem}>
-              <Text>关注</Text>
+              <Text className={styles.useText}>关注</Text>
               <Text>{user.followCount || 0}</Text>
             </View>
             <View onClick={this.handleMyLike} className={styles.userMessageListItem}>
-              <Text>点赞</Text>
+              <Text className={styles.useText}>点赞</Text>
               <Text>{user.likedCount || 0}</Text>
             </View>
           </View>
@@ -154,8 +154,8 @@ class index extends Component {
         {/* 中 用户昵称和他所在的用户组名称 */}
         <View>
           <View className={styles.userNameOrTeam}>
-            <Text>{user.username}</Text>
-            <Text>{user.group?.groupName}</Text>
+            <Text className={styles.userNickname}>{user.nickname}</Text>
+            <Text className={styles.groupName}>{user.group?.groupName}</Text>
           </View>
           <Text className={styles.text}>{user.signature || '这个人很懒，什么也没留下~'}</Text>
         </View>

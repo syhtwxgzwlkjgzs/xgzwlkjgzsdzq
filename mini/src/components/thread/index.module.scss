@@ -15,18 +15,24 @@
     font-weight: bold;
     line-height: 22px;
     color: var(--color-text-primary);
-    margin-bottom: $margin-4n;
     width: 100%;
+    margin-bottom: $margin-4n;
   }
 
   .header {
     padding: $padding-4n 0;
+    display: flex;
   }
+
+  .headerIcon {
+    width: 30px;
+    color: $primary-color;
+    display: flex;
+    justify-content: flex-end;
+  }
+
   .content {
     position: relative;
-    >view {
-      margin-top: $margin-4n;
-    }
 
     .cover {
       position: absolute;
@@ -86,4 +92,8 @@
 
 .wrapper {
   overflow: hidden;
+}
+
+.brWrapper {
+  margin-top: $margin-4n;
 }

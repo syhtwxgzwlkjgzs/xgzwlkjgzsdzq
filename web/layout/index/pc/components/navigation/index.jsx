@@ -6,36 +6,27 @@ import isServer from '../../../../../../common/utils/is-server';
 // import LoadingBox from '@components/loading-box';
 import BottomView from '@components/list/BottomView';
 
-const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, defaultFisrtIndex = -1, defaultSecondIndex = -1, isError = false, errorText }) => {
+const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, defaultFisrtIndex = 'all', defaultSecondIndex = 'all', isError = false, errorText }) => {
   const [fistIndex, setFistIndex] = useState(defaultFisrtIndex);
   const [secondIndex, setSecondIndex] = useState(defaultSecondIndex);
 
+  useEffect(() => {
+    setFistIndex(defaultFisrtIndex)
+    setSecondIndex(defaultSecondIndex)
+  }, [defaultFisrtIndex, defaultSecondIndex])
+
   const onClick = (subIndex, index) => {
     let categoryIds = subIndex.split('/')
-    let sequence = 0;
-
-    // 若是点击已选中的项，则不处理「更新：暂时不需要处理这里」
-    // if (fistIndex === categoryIds[0]) {
-    //   if (categoryIds[1] === '-1') {
-    //     return
-    //   } else {
-    //     if (secondIndex === categoryIds[1]) {
-    //       return
-    //     }
-    //   }
-    // }
-
+    
     setFistIndex(categoryIds[0]);
     setSecondIndex(categoryIds[1]);
-    if (categoryIds[1] === '-1') {
-      if (categoryIds[0] !== '-1') { // 全部
-        categoryIds = [categoryIds[0]]
-      } else {
-        categoryIds = []
-      }
+    if (categoryIds[1] === 'all') {
+      categoryIds = [categoryIds[0]]
+    } else {
+      categoryIds = [categoryIds[1]]
     }
 
-    onNavigationClick({ categoryIds, sequence })
+    onNavigationClick({ categoryIds })
   }
   const debounce = (fn, wait) => {
     let timer = null;
@@ -92,7 +83,7 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
             ))}
           </Menu.SubMenu>
         ) : (
-          <Menu.Item index={`${item.pid}/-1`} key={index} onClick={onClick}>{renderMenuTitle(item)}</Menu.Item>
+          <Menu.Item index={`${item.pid}/all`} key={index} onClick={onClick}>{renderMenuTitle(item)}</Menu.Item>
         )))
       }
     </Menu>
@@ -108,7 +99,7 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
         categories?.length ?
           <CategoriesContent />
           :
-          <BottomView isBox isError={isError} errorText={errorText} noMore={false} loadingText='正在加载' />
+          <BottomView isBox isError={isError} errorText='暂无数据' noMore={false} loadingText='正在加载' />
       }
     </Card>
   );

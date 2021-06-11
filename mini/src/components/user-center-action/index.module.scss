@@ -14,7 +14,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-width: 80px;
+            min-width: 60px;
             cursor: pointer;
 
             & + .userCenterActionItem {
@@ -30,6 +30,8 @@
             .userCenterActionItemDesc {
                 margin-top: $margin-2n;
                 color: $text-color-regular;
+                font-size: $font-size-label;
+                line-height: 17px;
             }
         }
     }

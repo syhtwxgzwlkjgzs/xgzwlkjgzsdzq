@@ -35,17 +35,25 @@ $font-line-height-middle: 26px;
 $font-line-height-large: 30px;
 $font-line-height-primary: $font-line-height-base;
 
+$font-weight-light: 400;
+$font-weight-regular: 600;
+$font-weight-bold: 800;
+
 // ------ Colors 颜色 ------------
 $primary-color: var(--color-primary) !default;
 $info-color: var(--color-info) !default;
 $success-color: var(--color-success) !default;
 $warn-color: var(--color-warn) !default;
 $error-color: var(--color-error) !default;
+
 $primary-color3: var(--color-primary3);
 $primary-color6: var(--color-primary6);
 $primary-color10: var(--color-primary10);
 $disabled-color: var(--color-disabled);
 $disabled-color2: var(--color-disabled2);
+
+$warn-color9: var(--color-warn9);
+$success-color9: var(--color-success9);
 
 $primary-disabled-color: var(--color-primary5);
 

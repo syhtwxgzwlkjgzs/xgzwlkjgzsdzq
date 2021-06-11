@@ -14,7 +14,7 @@ import locals from '@common/utils/local-bridge';
 import constants from '@common/constants';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 
-export default inject('threadPost', 'site')(observer(({ type, threadPost, site, audioUpload }) => {
+export default inject('threadPost', 'site')(observer(({ type, threadPost, site, audioUpload, children }) => {
   const { postData, setPostData } = threadPost;
   const { webConfig, envConfig } = site;
   const localData = JSON.parse(JSON.stringify(postData));
@@ -68,7 +68,7 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
       const tempFilePath = file.path || file.tempFilePath;
       const token = locals.get(constants.ACCESS_TOKEN_NAME);
       Taro.uploadFile({
-        url: `${envConfig.COMMOM_BASE_URL}/apiv3/attachments`,
+        url: `${envConfig.COMMON_BASE_URL}/apiv3/attachments`,
         filePath: tempFilePath,
         name: 'file',
         header: {
@@ -182,10 +182,11 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
 
   return (
     <>
-      {atta}
       {img}
+      {children}
       {audioRecord}
       {audioPlayer}
+      {atta}
     </>
   );
 }));

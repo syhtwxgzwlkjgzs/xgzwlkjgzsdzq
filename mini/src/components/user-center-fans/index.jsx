@@ -1,6 +1,7 @@
 import React from 'react';
 import Spin from '@discuzq/design/dist/components/spin/index';
 import { View } from '@tarojs/components';
+import List from '@components/list';
 import { createFollow, deleteFollow, getUserFans } from '@server';
 import { get } from '@common/utils/get';
 import deepClone from '@common/utils/deep-clone';
@@ -47,6 +48,7 @@ class UserCenterFans extends React.Component {
     this.state = {
       loading: true,
       fans: {},
+      height: '100vh',
     };
   }
 
@@ -220,17 +222,8 @@ class UserCenterFans extends React.Component {
 
   // 加载更多函数
   loadMore = async () => {
-    const scrollDom = this.containerRef.current;
-    if (scrollDom.clientHeight + scrollDom.scrollTop === scrollDom.scrollHeight) {
-      if (!this.checkLoadCondition()) return;
-      this.setState({
-        loading: true,
-      });
-      await this.fetchFans();
-      this.setState({
-        loading: false,
-      });
-    }
+    await this.fetchFans();
+    return;
   };
 
   // 判断关注状态
@@ -250,41 +243,37 @@ class UserCenterFans extends React.Component {
     const isNoData = followerAdapter(this.props.dataSource || this.state.fans).length === 0 && !this.state.loading;
 
     return (
-      <View
-        className={`${this.props.className} ${styles.userCenterFriends}`}
-        ref={this.containerRef}
-        style={{
-          height: '100%',
-          overflow: 'scroll',
-          ...this.props.styles,
-        }}
-      >
-        {followerAdapter(this.props.dataSource || this.state.fans).map((user, index) => {
-          if (index + 1 > this.props.limit) return null;
-          return (
-            <View key={user.id}>
-              <UserCenterFriends
-                id={user.id}
-                type={this.judgeFollowsStatus(user)}
-                imgUrl={user.avatar}
-                withHeaderUserInfo={this.props.isPc}
-                onContainerClick={this.props.onContainerClick}
-                userName={user.userName}
-                userGroup={user.groupName}
-                followHandler={this.followUser}
-                itemStyle={this.props.itemStyle}
-                unFollowHandler={this.unFollowUser}
-              />
-              {this.props.splitElement}
-            </View>
-          );
-        })}
-        {isNoData && <NoData />}
-        {this.state.loading && (
-          <View className={classnames(styles.loadMoreContainer, this.props.loadingElementClass)}>
-            <Spin type={'spinner'}>加载中 ...</Spin>
+      <View>
+        <List
+          onRefresh={this.loadMore}
+          noMore={this.totalPage < this.page}
+          hasOnScrollToLower={true}
+          height={this.state.height}
+          className={styles.userCenterFriends}
+        >
+          <View className={styles.fansBody}>
+            {followerAdapter(this.props.dataSource || this.state.fans).map((user, index) => {
+              if (index + 1 > this.props.limit) return null;
+              return (
+                <View key={user.id}>
+                  <UserCenterFriends
+                    id={user.id}
+                    type={this.judgeFollowsStatus(user)}
+                    imgUrl={user.avatar}
+                    withHeaderUserInfo={this.props.isPc}
+                    onContainerClick={this.props.onContainerClick}
+                    userName={user.userName}
+                    userGroup={user.groupName}
+                    followHandler={this.followUser}
+                    itemStyle={this.props.itemStyle}
+                    unFollowHandler={this.unFollowUser}
+                  />
+                  {this.props.splitElement}
+                </View>
+              );
+            })}
           </View>
-        )}
+        </List>
       </View>
     );
   }

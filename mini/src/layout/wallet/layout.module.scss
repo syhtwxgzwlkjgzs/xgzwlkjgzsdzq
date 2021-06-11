@@ -19,7 +19,8 @@
 
 .scroll {
   width: 100%;
-  height: calc(100vh - 58px);
+  height: calc(100vh - 58px - constant(safe-area-inset-bottom));
+  height: calc(100vh - 58px - env(safe-area-inset-bottom));
   overflow-y: scroll;
   flex: 1 0 auto;
   background: var(--comment-content-bg-color);
@@ -110,11 +111,6 @@
   color: $error-color;
 }
 
-.list {
-  margin-bottom: constant(safe-area-inset-bottom); ///兼容 IOS<11.2/
-  margin-bottom: env(safe-area-inset-bottom); ///兼容 IOS>11.2/
-}
-
 .footer {
   width: 100%;
   // height: rem(69);
@@ -123,8 +119,8 @@
   background: var(--color-white);
   position: fixed;
   bottom: 0;
-  margin-bottom: constant(safe-area-inset-bottom); ///兼容 IOS<11.2/
-  margin-bottom: env(safe-area-inset-bottom); ///兼容 IOS>11.2/
+  padding-bottom: constant(safe-area-inset-bottom); ///兼容 IOS<11.2/
+  padding-bottom: env(safe-area-inset-bottom); ///兼容 IOS>11.2/
 
   .button {
     width: 100%;

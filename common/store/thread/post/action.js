@@ -208,28 +208,37 @@ class ThreadPostAction extends ThreadPostStore {
     const imageIds = Object.values(images).map(item => item.id);
     const docIds = Object.values(files).map(item => item.id);
     const contentIndexes = {};
-    contentIndexes[THREAD_TYPE.image] = {
-      tomId: THREAD_TYPE.image,
-      body: { imageIds },
-    };
-    contentIndexes[THREAD_TYPE.video] = {
-      tomId: THREAD_TYPE.video,
-      body: { videoId: video.id || '' },
-    };
-    contentIndexes[THREAD_TYPE.file] = {
-      tomId: THREAD_TYPE.file,
-      body: { docIds },
-    };
+    // 和后端商量之后，还是如果没有数据的插件不传给后端
+    if (imageIds.length > 0) {
+      contentIndexes[THREAD_TYPE.image] = {
+        tomId: THREAD_TYPE.image,
+        body: { imageIds },
+      };
+    }
+    if (video.id || video.threadVideoId) {
+      contentIndexes[THREAD_TYPE.video] = {
+        tomId: THREAD_TYPE.video,
+        body: { videoId: video.id || video.threadVideoId || '' },
+      };
+    }
+    if (docIds.length > 0) {
+      contentIndexes[THREAD_TYPE.file] = {
+        tomId: THREAD_TYPE.file,
+        body: { docIds },
+      };
+    }
     if (product.id) {
       contentIndexes[THREAD_TYPE.goods] = {
         tomId: THREAD_TYPE.goods,
         body: { ...product },
       };
     }
-    contentIndexes[THREAD_TYPE.voice] = {
-      tomId: THREAD_TYPE.voice,
-      body: { audioId: audio.id || '' },
-    };
+    if (audio.id || audio.threadVideoId) {
+      contentIndexes[THREAD_TYPE.voice] = {
+        tomId: THREAD_TYPE.voice,
+        body: { audioId: audio.id || audio.threadVideoId || '' },
+      };
+    }
 
     const draftData = draft ? 1 : 0;
     if (redpacket.price && !redpacket.id) {

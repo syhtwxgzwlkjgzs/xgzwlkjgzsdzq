@@ -7,7 +7,11 @@ import Toast from '@discuzq/design/dist/components/toast/index';
 import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
 import { View, Text } from '@tarojs/components';
+import throttle from '@common/utils/thottle.js';
+import classNames from 'classnames';
+import { toTCaptcha } from '@common/utils/to-tcaptcha';
 
+@inject('site')
 @inject('user')
 @inject('payBox')
 @observer
@@ -15,86 +19,94 @@ class index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      payPassword: null, // 支付密码
-      oldPayPwd: null, // 旧密码
+      isSubmit: false,
     };
   }
 
-  initState = () => {
-    this.setState({
-      payPassword: null,
-      oldPayPwd: null,
-    });
-    this.props.payBox.password = null;
-  };
-
   componentDidMount() {
-    this.initState();
+    this.props.payBox.clearPayPassword();
   }
 
-  componentWillUnmount() {
-    this.initState();
-  }
-
-  // 点击去到下一步
-  goToResetPayPwd = () => {
-    const { oldPayPwd } = this.state;
-    this.props.payBox.oldPayPwd = oldPayPwd;
+  // 点击去到下一步 ---> 清空旧密码oldPayPwd状态
+  goToResetPayPwd = throttle(() => {
+    if (this.getDisabledWithButton()) return;
     this.props.payBox
       .getPayPwdResetToken()
-      .then((res) => {
-        console.log(res);
-        Router.push({ url: `reset/paypwd/index` });
+      .then(() => {
+        Taro.navigateTo({ url: '/subPages/my/edit/reset/paypwd/index' });
+        this.props.payBox.oldPayPwd = null;
       })
       .catch((err) => {
         Toast.error({
-          content: '密码错误',
+          content: err.Msg || '密码错误',
           hasMask: false,
           duration: 1000,
         });
+        this.props.payBox.oldPayPwd = null;
       });
-  };
+  }, 300);
 
   // 点击忘记密码
   handleGoToFindPayPwd = () => {
-    Router.push({ url: `/pages/my/edit/find/paypwd/index` });
+    if (!this.props.user.mobile) {
+      Toast.error({
+        content: '需要首先绑定手机号才能进行此操作',
+        duration: 2000
+      });
+      return;
+    }
+    Taro.navigateTo({ url: '/subPages/my/edit/find/paypwd/index?ref=payBox' });
   };
 
-  // 初次设置密码
+  // 初次设置密码 password
   handleSetPwd = (e) => {
-    this.setState({
-      payPassword: e.target.value.replace(/\D/g, ''),
-    });
+    const securityCode = e.target.value.match(/^[0-9]*$/);
+    if (!securityCode) return;
+    this.props.payBox.password = securityCode[0];
   };
 
-  // 点击修改旧密码
+  // 点击修改旧密码 oldPayPwd
   handleChangeOldPwd = (e) => {
-    this.setState({
-      oldPayPwd: e.target.value.replace(/\D/g, ''),
-    });
+    const securityCode = e.target.value.match(/^[0-9]*$/);
+    if (!securityCode) return;
+    this.props.payBox.oldPayPwd = securityCode[0];
   };
 
-  // 点击提交
-  handleSubmit = async () => {
-    const { payPassword } = this.state;
+  // 点击提交 ----> 设置密码password成功 ---> 清空 password状态
+  handleSubmit = throttle(async () => {
+    const { isSubmit } = this.state;
+    if (isSubmit || this.getDisabledWithButton()) return;
+    this.setState({
+      isSubmit: true,
+    });
     const { id } = this.props.user;
-    this.props.payBox.password = payPassword;
     this.props.payBox
       .setPayPassword(id)
-      .then((res) => {
+      .then(async (res) => {
         Toast.success({
           content: '设置密码成功',
           hasMask: false,
           duration: 1000,
         });
         const { type } = getCurrentInstance().router.params;
+        const { id } = this.props?.user;
         if (type === 'paybox') {
           const { id } = this.props?.user;
-          this.props.user.updateUserInfo(id);
-          this.props.payBox.visible = true;
+          try {
+            await this.props.user.updateUserInfo(id);
+            this.props.payBox.visible = true;
+            this.props.payBox.password = null;
+            await this.props.payBox.getWalletInfo(id);
+          } catch (error) {
+            Toast.error({
+              content: '获取用户钱包信息失败',
+              duration: 1000,
+            });
+          }
         }
-        Taro.navigateBack({ delta: 1 });
-        this.initState();
+        Taro.navigateBack({ url: '/subPages/my/edit/index' });
+        this.props.user.userInfo.canWalletPay = true;
+        this.props.payBox.password = null;
       })
       .catch((err) => {
         Toast.error({
@@ -102,24 +114,41 @@ class index extends Component {
           hasMask: false,
           duration: 1000,
         });
-        this.initState();
+        this.props.payBox.password = null;
       });
-  };
+  }, 500);
+
+  /**
+   * 获取按钮禁用状态
+   * @returns true 表示禁用 false表示不禁用
+   */
+  getDisabledWithButton = () => {
+    const payPassword = this.props.payBox?.password;
+    const oldPayPwd = this.props.payBox?.oldPayPwd;
+    let disabled = false;
+    if (this.props.user?.canWalletPay) {
+      disabled = !oldPayPwd || oldPayPwd.length !== 6;
+    } else {
+      disabled = !payPassword || payPassword.length !== 6;
+    }
+    return disabled;
+  }
 
   // 如果没有设置支付密码 显示设置支付密码
   renderSetPayPwd = () => {
-    const { payPassword } = this.state;
     return (
       <View className={styles.content}>
         <Text className={styles.setTtile}>设置支付密码</Text>
         <View className={styles.paypwdInput}>
           <Input
+            className={styles.input}
             miniType="number"
             maxLength={6}
-            value={payPassword}
+            value={this.props.payBox?.password}
             onChange={this.handleSetPwd}
             placeholder="请设置您的支付密码"
             mode="password"
+            trim
           />
         </View>
       </View>
@@ -128,51 +157,62 @@ class index extends Component {
 
   // 渲染已经设置了支付密码内容
   renderCanPayPwd = () => {
-    const { oldPayPwd } = this.state;
     return (
       <View className={styles.content}>
         <Text className={styles.setTtile}>修改密码</Text>
         <View className={styles.labelInfo}>
           <View className={styles.labelValue}>
             <Input
+              className={styles.input}
               miniType="number"
-              value={oldPayPwd}
+              maxLength={6}
+              value={this.props.payBox?.oldPayPwd}
               mode="password"
               placeholder="请输入旧密码"
               onChange={this.handleChangeOldPwd}
+              trim
             />
           </View>
-          <View onClick={this.handleGoToFindPayPwd} className={styles.tips}>
-            忘记旧密码？
-          </View>
+          {
+            this.props.site?.isSmsOpen && (
+              <View onClick={this.handleGoToFindPayPwd} className={styles.tips}>
+                忘记旧密码？
+              </View>
+            )
+          }
         </View>
       </View>
     );
   };
 
   render() {
-    const { payPassword, oldPayPwd } = this.state;
     return (
-      <View>
-        {this.props.user?.canWalletPay ? this.renderCanPayPwd() : this.renderSetPayPwd()}
-        <View className={styles.bottom}>
-          {this.props.user?.canWalletPay ? (
-            <Button full disabled={!oldPayPwd} onClick={this.goToResetPayPwd} type="primary" className={styles.btn}>
-              下一步
-            </Button>
-          ) : (
-            <Button
-              full
-              disabled={!payPassword || payPassword.length !== 6}
-              onClick={this.handleSubmit}
-              type="primary"
-              className={styles.btn}
-            >
-              提交
-            </Button>
-          )}
+        <View id={styles.setPayPwdContent}>
+          {this.props.user?.canWalletPay ? this.renderCanPayPwd() : this.renderSetPayPwd()}
+          <View className={classNames(styles.bottom, {
+            [styles.bgBtnColor]: !this.getDisabledWithButton()
+          })}>
+            {this.props.user?.canWalletPay ? (
+              <Button full
+                disabled={this.getDisabledWithButton()}
+                onClick={this.goToResetPayPwd}
+                type={'primary'}
+                className={styles.btn}>
+                下一步
+              </Button>
+            ) : (
+              <Button
+                full
+                disabled={this.getDisabledWithButton()}
+                onClick={this.handleSubmit}
+                type={'primary'}
+                className={styles.btn}
+              >
+                提交
+              </Button>
+            )}
+          </View>
         </View>
-      </View>
     );
   }
 }

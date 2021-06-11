@@ -453,10 +453,9 @@ class PayBoxStore {
 
       return this.payPwdResetToken;
     }
-
     throw {
       Code: getTokenRes.code,
-      Msg: getTokenRes.message,
+      Msg: getTokenRes.msg,
     };
   }
 
@@ -479,7 +478,7 @@ class PayBoxStore {
 
     throw {
       Code: resetPayPwdRes.code,
-      Msg: resetPayPwdRes.message,
+      Msg: resetPayPwdRes.msg,
     };
   }
 
@@ -539,7 +538,7 @@ class PayBoxStore {
 
     throw {
       Code: forgetPayPwdRes.code,
-      Msg: forgetPayPwdRes.message,
+      Msg: forgetPayPwdRes.msg,
     };
   }
 

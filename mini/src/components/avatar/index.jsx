@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import Avatar from '@discuzq/design/dist/components/avatar/index';
+import { View } from '@tarojs/components'
 
 export default function avatar(props) {
   const { image = '', name = '匿', onClick = () => {}, className = '', circle = true, size = 'primary' } = props;
@@ -10,10 +11,16 @@ export default function avatar(props) {
   }, [name]);
 
   if (image && image !== '') {
-    return (<Avatar className={className} circle={circle} image={image} size={size} onClick={onClick}></Avatar>);
+    return (
+      <View onClick={onClick}>
+        <Avatar className={className} circle={circle} image={image} size={size}></Avatar>
+      </View>
+    );
   }
 
   return (
-    <Avatar className={className} circle={circle} text={userName} size={size} onClick={onClick}></Avatar>
+    <View onClick={onClick}>
+      <Avatar className={className} circle={circle} text={userName} size={size}></Avatar>
+    </View>
   );
 }

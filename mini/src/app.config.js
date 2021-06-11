@@ -13,6 +13,7 @@ const config = {
       pages: [
         '404/index',
         '500/index',
+        'no-install/index',
         'close/index',
         'create-card/index',
         'join/index',
@@ -41,6 +42,7 @@ const config = {
         'user/wx-auth/index',
         'user/wx-authorization/index',
         'user/supplementary/index',
+        'user/reset-password/index',
         'wallet/index',
         'wallet/frozen/index',
         'wallet/withdrawal/index',
@@ -56,6 +58,7 @@ const config = {
         'my/edit/paypwd/index',
         'my/edit/reset/paypwd/index',
         'my/edit/find/paypwd/index',
+        'my/edit/username/index',
         'my/fans/index',
         'my/follows/index',
         'my/block/index',

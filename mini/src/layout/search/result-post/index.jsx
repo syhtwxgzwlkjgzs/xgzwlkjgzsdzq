@@ -50,7 +50,7 @@ class SearchResultPostH5Page extends React.Component {
 
   render() {
     const { keyword } = this.state;
-    const { threads } = this.props.search;
+    const { threads, threadsError } = this.props.search;
     const { pageData, currentPage, totalPage } = threads || { pageData: [] };
 
     return (
@@ -58,6 +58,8 @@ class SearchResultPostH5Page extends React.Component {
           onRefresh={this.fetchMoreData}
           noMore={currentPage >= totalPage}
           showHeader={false}
+          requestError={threadsError.isError}
+          errorText={threadsError.errorText}
       >
         <View className={styles.topBox}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} isShowBottom={false} searchWhileTyping/>

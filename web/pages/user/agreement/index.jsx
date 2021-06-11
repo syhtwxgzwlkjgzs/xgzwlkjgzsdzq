@@ -1,15 +1,29 @@
 import React from 'react';
 import AgreementPage from '@layout/user/h5/agreement';
 import { inject } from 'mobx-react';
+import ViewAdapter from '@components/view-adapter';
 
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
 @inject('site')
 class Agreement extends React.Component {
   render() {
-    const { site } = this.props;
-    const { platform } = site;
-    return platform === 'h5' ? <></> : <AgreementPage />;
+    const { router, site } = this.props;
+    const { type } = router.query;
+    let pageType = '';
+    switch (type) {
+      case 'register':
+        pageType = '注册协议'
+        break;
+      case 'privacy':
+        pageType = '隐私协议'
+        break;
+    }
+    return <ViewAdapter
+              h5={<></>}
+              pc={<AgreementPage/>}
+              title={`${pageType} - ${site?.siteName}`}
+            />;
   }
 }
 
