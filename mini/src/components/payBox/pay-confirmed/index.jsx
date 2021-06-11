@@ -10,6 +10,8 @@ import Toast from '@discuzq/design/dist/components/toast/index';
 import { View, Text } from '@tarojs/components';
 import { PAY_MENT_MAP, PAYWAY_MAP, STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants.js';
 import { listenWXJsBridgeAndExecCallback, onBridgeReady, wxValidator, mode } from '../../../../../common/store/pay/weixin-miniprogram-backend.js';
+
+@inject('site')
 @inject('user')
 @inject('payBox')
 @observer
@@ -24,12 +26,16 @@ export default class PayBox extends React.Component {
         paymentType: 'wallet',
       },
     ];
-    payConfig.unshift({
-      name: '微信支付',
-      icon: 'WechatPaymentOutlined',
-      color: '#09bb07',
-      paymentType: 'weixin',
-    });
+
+    // 判断是否微信支付开启
+    if (this.props.site.isWechatPayOpen) {
+      payConfig.unshift({
+        name: '微信支付',
+        icon: 'WechatPaymentOutlined',
+        color: '#09bb07',
+        paymentType: 'weixin',
+      });
+    }
 
     this.state = {
       payConfig,
