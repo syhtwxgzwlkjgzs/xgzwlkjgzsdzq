@@ -177,7 +177,7 @@ class UserCenterFollows extends React.Component {
       };
     }
     Toast.error({
-      content: res.msg || '取消注失败',
+      content: res.msg || '取消关注失败',
       hasMask: false,
       duration: 2000,
     });

@@ -98,7 +98,7 @@ class index extends Component {
           duration: 2000,
         });
         setTimeout(() => {
-          Taro.navigateTo({ url: '/subPages/my/edit/index' });
+          Taro.redirectTo({ url: '/subPages/my/edit/index' });
           this.initState();
         }, 200);
       })

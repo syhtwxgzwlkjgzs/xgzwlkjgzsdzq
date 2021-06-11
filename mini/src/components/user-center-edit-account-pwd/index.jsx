@@ -84,7 +84,7 @@ class index extends Component {
             duration: 2000,
           });
           setTimeout(() => {
-            Taro.navigateTo({ url: '/subPages/my/edit/index' });
+            Taro.redirectTo({ url: '/subPages/my/edit/index' });
             this.props.user.clearUserAccountPassword();
           }, 200);
         })
@@ -105,7 +105,7 @@ class index extends Component {
             hasMask: false,
             duration: 1000,
           });
-          Taro.navigateTo({ url: '/subPages/my/edit/index' });
+          Taro.redirectTo({ url: '/subPages/my/edit/index' });
           this.props.user.userInfo.hasPassword = true;
           this.props.user.clearUserAccountPassword();
         })

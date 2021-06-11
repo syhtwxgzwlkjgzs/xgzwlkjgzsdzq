@@ -108,7 +108,7 @@ class index extends Component {
         }
         // 防止跳转过快
         setTimeout(() => {
-          Taro.navigateTo({ url: '/subPages/my/edit/index' });
+          Taro.redirectTo({ url: '/subPages/my/edit/index' });
           this.props.user.userInfo.canWalletPay = true;
           this.props.payBox.password = null;
         }, 200);
