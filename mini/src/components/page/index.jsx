@@ -94,7 +94,7 @@ export default class Page extends React.Component {
     const currRouter = routerList[routerList.length - 1];
     if ( currRouter ) {
       const path = currRouter.route;
-      if ( path === 'subPages/404/index' || path === 'subPages/505/index' ) {
+      if ( path === 'pages/index/index' || path === 'subPages/404/index' || path === 'subPages/500/index' ) {
         return children;
       }
     }

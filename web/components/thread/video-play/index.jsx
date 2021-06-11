@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import { Video, Icon } from '@discuzq/design';
 import { noop } from '../utils';
+import calcVideoSize from '@common/utils/calc-video-size';
 
 /**
  * 视频
@@ -59,39 +60,14 @@ const Index = ({
 
   useEffect(() => {
     const rect = ref.current.getBoundingClientRect();
-    const w = rect?.width || 343;
-
-    // 竖版视频
-    if ( v_width && v_height && v_width < v_height ) {
-      const viewHeight = window.innerHeight;
-      let calc_height = v_height;
-      let calc_width = v_width;
-      let height;
-      let width;
-      // 当前视频的高度大于可视区高度的70%，那么将视频高度缩减到可视区域的70%
-      if ( viewHeight / v_height > 0.7 ) {
-        calc_height = (viewHeight * 0.7).toFixed(2);
-        calc_width = (v_width * (calc_height / v_height).toFixed(2)).toFixed(2);
-        height = calc_height;
-        width = calc_width;
-      } else {
-        const parentWidth = (w * 0.75).toFixed(2);
-        width = (calc_height / calc_width).toFixed(2);
-        height = (parentWidth * percent).toFixed(2);
-      }
-      setWidth(width);
-      setHeight(height);
-    } else {
-      setWidth(w);
-      let height;
-      if (v_width && v_height) {
-        const percent = (v_width / v_height).toFixed(2);
-        height = (w / percent).toFixed(2); 
-      } else {
-        height = (9 * (w) / 16).toFixed(2) || '224';
-      }
-      setHeight(height);
-    }
+    const { width, height } = calcVideoSize({
+      parentWidth: rect?.width || 343,
+      v_width,
+      v_height,
+      viewHeight: window.innerHeight
+    });
+    setWidth(width);
+    setHeight(height);
     
   }, []);
 
