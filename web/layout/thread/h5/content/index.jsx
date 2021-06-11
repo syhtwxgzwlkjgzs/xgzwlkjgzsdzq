@@ -166,7 +166,7 @@ const RenderThreadContent = inject('user')(
           {/* 音频 */}
           {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
           {/* 附件 */}
-          {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
+          {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} threadId={threadStore?.threadData?.threadId} />}
           {/* 商品 */}
           {parseContent.GOODS && (
             <div>

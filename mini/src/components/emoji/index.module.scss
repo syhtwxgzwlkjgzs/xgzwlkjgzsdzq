@@ -50,7 +50,7 @@
   position: static !important;
   display: flex;
   flex-flow: wrap;
-  padding-left: $padding-10;
+  padding: $padding-10 0 $padding-10 $padding-10;
   width: 100%;
   min-height: 200px;
   height: 100%;

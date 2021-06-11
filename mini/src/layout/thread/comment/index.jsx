@@ -48,6 +48,12 @@ class CommentH5Page extends React.Component {
     this.reportContent = ['广告垃圾', '违规内容', '恶意灌水', '重复发帖'];
     this.inputText = '其他理由...';
   }
+
+  componentWillUnmount() {
+    // 清空@ren数据
+    this.props.thread.setCheckUser([]);
+  }
+
   // 点击更多
   onMoreClick() {
     console.log('点击了更多');
@@ -417,6 +423,7 @@ class CommentH5Page extends React.Component {
             onClose={() => this.setState({ showCommentInput: false })}
             onSubmit={(value, imageList) => this.createReply(value, imageList)}
             site={this.props.site}
+            checkUser={this.props?.thread?.checkUser || []}
           ></InputPopup>
 
           {/* 更多弹层 */}
