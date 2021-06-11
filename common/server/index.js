@@ -14,7 +14,7 @@ export { default as readCommentList } from './thread/readCommentList';
 export { default as readReplyList } from './thread/readReplyList';
 export { default as createPosts } from './thread/createPosts';
 export { default as updateComment } from './thread/updateComment';
-export { default as updateSingleReply } from './thread/updateSingleReply'
+export { default as updateSingleReply } from './thread/updateSingleReply';
 export { default as readCommentDetail } from './thread/readCommentDetail';
 export { default as operateThread } from './thread/operateThread';
 export { default as shareThread } from './thread/shareThread';
@@ -59,6 +59,7 @@ export { default as createThread } from './thread-post/create-thread';
 export { default as readYundianboSignature } from './thread-post/read-yundianbo-signature';
 export { default as setNickname } from './login/setNickname';
 export { default as transitionSmsBind } from './transitionSmsBind';
+export { default as getMiniCode } from './login/getMiniCode';
 
 // 支付
 export { default as createOrders } from './pay/createOrders';

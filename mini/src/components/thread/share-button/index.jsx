@@ -37,18 +37,18 @@ const index = ({setShow, tipData, index}) => {
     return (
         <View className={styles.contain}>
             <View className={styles.choice}>
-                {/* <View className={styles.fabulous} onClick={CreateCard}>
+                <View className={styles.fabulous} onClick={CreateCard}>
                     <View className={styles.fabulousIcon}>
-                        <Icon name='PictureOutlinedBig' className={styles.icon} size={24}>
+                        <Icon name='PictureOutlinedBig' className={styles.icon} size={25}>
                         </Icon>
                     </View>
                     <Text className={styles.fabulousPost}>
                         生成海报
                     </Text>
-                </View> */}
-                <Button className={styles.fabulous} openType='share' plain='true' data-shareData={shareData}>
+                </View>
+                <Button className={styles.fabulous} openType='share' plain='true' data-shareData={shareData} onClick={handleClick}>
                     <View className={styles.fabulousIcon}>
-                        <Icon name='WeChatOutlined' className={styles.icon} size={24}>
+                        <Icon name='WeChatOutlined' className={styles.icon} size={26}>
                         </Icon>
                     </View>
                     <Text className={styles.fabulousPost}>
@@ -56,7 +56,6 @@ const index = ({setShow, tipData, index}) => {
                     </Text>
                 </Button>
             </View>
-            <View className={styles.space}></View>
             <View className={styles.bottom} onClick={handleClick}>
                 <Text>
                     取消

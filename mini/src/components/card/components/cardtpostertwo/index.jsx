@@ -16,64 +16,62 @@ export default class Simple extends React.Component {
       // TaroCanvasDrawer 组件状态
       canvasStatus: null,
       rssConfig: {
-        width: 750,
-        height: `${750 + obj.contentHeight * 24 + 48}`,
-        backgroundColor: '#ffffff',
+        width: 700,
+        height: 1082 - obj.contentHeight,
+        backgroundColor: '#fff',
         debug: false,
         blocks: [
-          {
-            x: 20,
-            y: 20,
-            width: 710,
-            height: 758,
-            paddingLeft: 0,
-            paddingRight: 0,
-            borderWidth: 0,
-            // borderColor: '#ccc',
-            backgroundColor: '#EFF3F5',
-            borderRadius: 0,
-          },
-          {
-            x: 25,
-            y: 25,
-            width: 700,
-            height: 748,
-            paddingLeft: 0,
-            paddingRight: 0,
-            borderWidth: 0,
-            // borderColor: '#ccc',
-            backgroundColor: '#fff',
-            borderRadius: 12,
-          },
           // 分组
           {
-            x: 75,
-            y: `${obj.contentHeight * 24 + 448}`,
-            width: `${obj.groupLength * 24 + 20}`,
+            x: 40,
+            y: 757 - obj.contentHeight,
+            width: obj.marglength,
             height: 44,
-            backgroundColor: '#EFF3F5',
-            // backgroundColor: '#f00'
+            backgroundColor: '#F7F7F7',
+            borderRadius: 6
+          },
+          // 二维码和文字部分
+          {
+            backgroundColor: '#F9FAFC',
+            width: 700,
+            height: 200,
+            y: 882 - obj.contentHeight,
+            x: 0
           }
         ],
         images: [
           // 头像
             {   
                 url: obj.avatarUrl,
-                x: 75,
-                y: 75,
+                x: 40,
+                y: 40,
                 width: 80,
                 height: 80,
                 borderRadius: 80,
-                borderColor: '#000000',
+                borderColor: '#000',
                 zIndex: 10,
+            },
+          // 二维码登录
+            {
+              url: obj.codeUrl,
+              x: 40,
+              y: 912 - obj.contentHeight,
+              height: 140,
+              width: 140,
+              borderRadius: 20,
+              zIndex: 10
             }
         ],
         texts: [
           // 介绍
             {
                 text: `${obj.username}  推荐`,
-                x: 170,
-                y: 75,
+                color: '#000000',
+                x: 140,
+                y: 41,
+                width: 500,
+                height: 27,
+                lineHeight:31,
                 fontSize: 28,
                 fontWeight: 'bold',
                 textAlign: 'left',
@@ -82,50 +80,89 @@ export default class Simple extends React.Component {
             },
             {
               text: `${obj.threadUser}在${obj.group}中发表的内容`,
-              x: 170,
-              y: 131,
-              width: 530,
+              color: '#333',
+              x: 140,
+              y: 88,
+              width: 500,
+              height: 27,
               fontSize: 24,
-              fontWeight: 400,
+              lineNum: 1,
               textAlign: 'left',
               zIndex:10,
               baseLine: 'top'
             },
             // 标题
             {
-                text: `${obj.title}`,
-                x: 75,
-                y: 200,
-                width:600,
-                fontSize: 28,
-                fontWeight: 'bold',
-                textAlign: 'left',
-                zIndex: 10,
-                baseLine: 'top', 
+              text: obj.title,
+              color: '#303133',
+              width: 453,
+              height: 339,
+              y: 159,
+              x: 40,
+              fontSize: 30,
+              fontWeight: 'bold',
+              lineNum: 1,
+              lineHeight: 33,
+              textAlign: 'left',
+              zIndex:10,
+              baseLine: 'top'
             },
             // 内容
             {
               text: `${obj.content}`,
-              x: 75,
-              y: 248,
-              width: 600,
+              x: 40,
+              y: 240,
+              width: 620,
+              height: 520 - obj.contentHeight,
               fontSize: 28,
-              lineHeight: 38,
+              lineHeight: 46,
               textAlign: 'left',
               zIndex: 10,
-              lineNum: 2,
+              lineNum: 12,
+              color: '#333333',
               baseLine: 'top'
             },
             // 分组内容
             {
               text: `${obj.group}`,
-              //  lineHeight: 50,
-              x: 85,
-              y: obj.contentHeight * 24 + 458,
+              color: '#777',
+              x: 60,
+              y: 769 - obj.contentHeight,
               fontSize: 24,
               zIndex: 20,
+              lineHeight: 24,
+              lineNum: 1,
               textAlign: 'left',
               baseLine: 'top',
+            },
+            // 二维码描述
+            {
+              text: '点击右二维码查看详情',
+              color: '#333',
+              width: 560,
+              height: 31,
+              y: 942 - obj.contentHeight,
+              x: 210,
+              lineHeight: 31,
+              fontSize: 28,
+              fontWeight: 'bold',
+              textAlign: 'left',
+              zIndex:10,
+            },
+            // 站点名称
+            {
+              text: '来自Discuz！Q',
+              color: '#AAAAAA',
+              width:450,
+              height: 27,
+              y: 989 - obj.contentHeight,
+              x: 210,
+              fontSize: 24,
+              lineNum: 1,
+              lineHeight: 26.64,
+              textAlign: 'left',
+              baseLine: 'top',
+              zIndex: 10,
             }
         ], 
       }
@@ -140,13 +177,6 @@ export default class Simple extends React.Component {
       title: '绘制中...'
     })
   }
-  // 调用绘画 => canvasStatus 置为true、同时设置config
-  // canvasDrawFunc = (config = this.state.rssConfig) => {
-  //   this.setState({
-  //     canvasStatus: true,
-  //     config,
-  //   })
-  // }
 
   // 绘制成功回调函数 （必须实现）=> 接收绘制结果、重置 TaroCanvasDrawer 状态
   onCreateSuccess = (result) => {
@@ -170,11 +200,6 @@ export default class Simple extends React.Component {
       Taro.showToast({ icon: 'none', title: errMsg || '出现错误' });
       console.log(errMsg);
     }
-    // 预览
-    // Taro.previewImage({
-    //   current: tempFilePath,
-    //   urls: [tempFilePath]
-    // })
   }
 
   // 绘制失败回调函数 （必须实现）=> 接收绘制错误信息、重置 TaroCanvasDrawer 状态
@@ -187,7 +212,12 @@ export default class Simple extends React.Component {
     })
     console.log(error);
   }
-
+  preView = () => {
+    Taro.previewImage({
+      current: this.state.shareImage,
+      urls: [this.state.shareImage]
+    })
+  }
   render(){
     return (
       <View className={styles.painter}>
@@ -197,6 +227,8 @@ export default class Simple extends React.Component {
               className={styles.centImage}
               src={this.state.shareImage}
               mode='widthFix'
+              lazy-load
+              onClick={this.preView}
             />
           </View>
           {
