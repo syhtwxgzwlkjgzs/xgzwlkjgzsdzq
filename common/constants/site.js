@@ -67,6 +67,7 @@ export const MINI_SITE_JOIN_WHITE_LIST = [
   '/subPages/user/supplementary/index', // 补充信息
   '/subPages/my/index', // 个人中心
   '/subPages/forum/partner-invite/index', // 站点加入
+  '/subPages/my/edit/paypwd/index', // 设置支付密码
 ];
 
 export const PERMISSION_PLATE = [
