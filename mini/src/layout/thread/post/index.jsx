@@ -579,7 +579,10 @@ class Index extends Component {
 
   // 点击空白区域自动聚焦文本框
   handleContentFocus = () => {
-    this.contentRef && this.contentRef.current.focus();
+    if (this.contentRef && this.state.bottomHeight === 0) {
+      this.contentRef.current.focus();
+    }
+
     this.setState({
       showEmoji: false,
       operationType: 0,
