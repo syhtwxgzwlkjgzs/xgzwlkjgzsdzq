@@ -7,7 +7,8 @@
   top: 0;
   right: 0;
   left: 0;
-  z-index: 100;
+  z-index: $zindex-backtotop;
+  transition: transform 0.2s ease-out;
   .statusBar {
     width: 100%;
   }

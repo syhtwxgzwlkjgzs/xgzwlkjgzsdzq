@@ -5,9 +5,9 @@
   position: fixed;
 
   bottom: 0;
-  // bottom: constant(safe-area-inset-bottom);  ///兼容 IOS<11.2/
-  // bottom: env(safe-area-inset-bottom);
-
+  padding-bottom: constant(safe-area-inset-bottom);  ///兼容 IOS<11.2/
+  padding-bottom: env(safe-area-inset-bottom);
+  background: $white;
   left: 0;
 
 }

@@ -10,6 +10,9 @@ class IndexStore {
 
   @observable drafts = null;
 
+  // 是否出现推荐选项
+  @observable needDefault = false
+
   @computed get categoriesNoAll() {
     return (this.categories || []).filter(item => item.name !== '全部');
   }
@@ -31,8 +34,6 @@ class IndexStore {
     });
     return nameArr;
   }
-  @observable recommends = null;
-  @observable recommendsStatus = 'none'
 
   @observable filter = {
     categoryids: ['all'], // 这里的逻辑如果更改，记得需要更改下面的计算属性：isCurrentAllCategory
@@ -55,6 +56,21 @@ class IndexStore {
 
   // 小程序scroll-view被scroll-view嵌套，子元素不能使用同名属性来触发事件
   @observable hasOnScrollToLower = true; // 值为false时，第一层嵌套onScrollToLower被设置为null用于执行下一层onScrollToLower
+
+  // 首页帖子报错信息
+  @observable threadError = {
+    isError: false,
+    errorText: '加载失败'
+  };
+
+  // 首页分类报错信息
+  @observable categoryError = {
+    isError: false,
+    errorText: '加载失败'
+  };
+
+  @observable recommends = null;
+  @observable recommendsStatus = 'none'
 }
 
 export default IndexStore;

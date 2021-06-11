@@ -25,6 +25,14 @@
   border-radius: $border-radius-small;
 }
 
+.containerPlane {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  max-width: 750px;
+  padding: 0 $padding-6n;
+  background-color: var(--color-white);
+}
+
 .bottom {
   margin-bottom: 10px;
 }
@@ -49,4 +57,18 @@
   }
 }
 
+.large {
+  max-width: 100%;
+  padding: 0 $padding-6n;
+  .header {
+    height: 70px;
+  }
+}
+
+.bottomView {
+  height: 40px;
+  background-color: $white;
+  // border-bottom-left-radius: $border-radius-small;
+  // border-bottom-right-radius: $border-radius-small;
+}
 

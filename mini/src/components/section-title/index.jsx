@@ -15,8 +15,8 @@ import styles from './index.module.scss';
  * @prop {string} moreText 查看更多的文字
  * @prop {boolean} rightText 右侧描述文字
  */
-const Index = ({ icon = {}, title, leftNum, onShowMore, isShowMore = true, rightText, bigSize = false, moreText = '更多' }) => (
-  <View className={bigSize ? styles.wrapper : styles.container}>
+const Index = ({ icon = {}, title, leftNum, onShowMore, isShowMore = true, rightText, bigSize = false, moreText = '更多', titleStyle = {} }) => (
+  <View className={bigSize ? styles.wrapper : styles.container} style={titleStyle}>
     <View className={styles.left}>
       <Icon className={styles[`icon${icon.type}`]} name={icon.name} size={16} color={icon.color}/>
       <View className={`${styles.title} ${JSON.stringify(icon) === '{}' ? styles.noMargin : ''}`}>{title}</View>

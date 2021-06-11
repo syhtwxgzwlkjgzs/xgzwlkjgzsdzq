@@ -16,6 +16,11 @@
 
 .threadHeader {
     padding: 0 $padding-4n;
+    background-color: $white;
+}
+
+.threadBackgroundColor {
+  background: var(--comment-content-bg-color);
 }
 
 .dividerContainer {

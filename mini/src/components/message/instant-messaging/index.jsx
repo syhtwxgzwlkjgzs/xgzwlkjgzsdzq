@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from '@tarojs/components';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
-
+import Taro from '@tarojs/taro';
 import DialogBox from './dialog-box';
 import InteractionBox from './interaction-box';
 
@@ -15,10 +15,19 @@ class InstantMessaging extends React.Component {
   state = {
     showEmoji: false,
     dialogId: '',
+    keyboardHeight: 0,
+    inputBottom: 15, // 键盘弹起时输入框有一个向下的偏移量，要适配，单位px
   };
 
   componentDidMount() {
     this.updateDialogId(this.props.dialogId);
+
+    // 监听键盘高度变化
+    Taro.onKeyboardHeightChange(res => {
+      this.setState({
+        keyboardHeight: res?.height || 0,
+      });
+    });
   }
 
   componentWillUnmount() {
@@ -33,13 +42,15 @@ class InstantMessaging extends React.Component {
 
   render() {
     const { username } = this.props;
-    const { showEmoji, dialogId } = this.state;
+    const { showEmoji, dialogId, keyboardHeight, inputBottom } = this.state;
 
     return (
       <View className={styles.container}>
-        <DialogBox dialogId={dialogId} showEmoji={showEmoji} />
+        <DialogBox dialogId={dialogId} showEmoji={showEmoji} keyboardHeight={keyboardHeight} inputBottom={inputBottom} />
         <InteractionBox
           username={username}
+          keyboardHeight={keyboardHeight}
+          inputBottom={inputBottom}
           showEmoji={showEmoji}
           dialogId={dialogId}
           showEmoji={showEmoji}

@@ -6,8 +6,8 @@ import Divider from '@discuzq/design/dist/components/divider/index';
 import UserCenterHeaderImage from '@components/user-center-header-images';
 import UserCenterHead from '@components/user-center-head';
 import UserCenterAction from '@components/user-center-action';
-import UserCenterThreads from '@components/user-center-threads';
-import BaseLayout from '@components/base-layout';
+import Thread from '@components/thread';
+import BaseLayout from '@components/base-layout'
 import UserCenterPost from '../../components/user-center-post';
 import SectionTitle from '@components/section-title';
 import { getCurrentInstance, eventCenter } from '@tarojs/taro';
@@ -93,22 +93,12 @@ export default class index extends Component {
             <UserCenterPost />
           </View>
 
-          <View className={styles.unit}>
-            {/* <View className={styles.threadUnit}>
-              <View className={styles.threadTitle}>主题</View>
-              <View className={styles.threadCount}>{userThreadsTotalCount}个主题</View>
-            </View>
-
-            <View className={styles.dividerContainer}>
-              <Divider className={styles.divider} />
-            </View> */}
+          <View className={`${styles.unit} ${styles.threadBackgroundColor}`}>
             <View className={styles.threadHeader}>
               <SectionTitle title="主题" isShowMore={false} leftNum={`${userThreadsTotalCount}个主题`} />
             </View>
-
-            <View className={styles.threadItemContainer}>
-              {!isLoading && formattedUserThreads?.length > 0 && <UserCenterThreads data={formattedUserThreads} />}
-            </View>
+        
+            {!isLoading && formattedUserThreads?.map((item, index) => <Thread data={item} key={index} />)}
           </View>
         </View>
       </BaseLayout>
