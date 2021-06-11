@@ -48,7 +48,7 @@ class index extends Component {
 
   // 点击关注
   handleChangeAttention = async (follow) => {
-    const { id } = getCurrentInstance().router.params;
+    const id = this.props.router.query?.id;
     if (id) {
       if (follow !== 0) {
         try {
