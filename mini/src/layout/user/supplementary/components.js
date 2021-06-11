@@ -32,10 +32,11 @@ export function CreateInput(field, layout) {
     <View className={layout.item} key={name}>
       <View className={layout.input}>
         <View className={layout.label}>
-          {required && <View className={layout.required}>* </View>}
+          {requiredSign(required, layout.required)}
           {name}
         </View>
         <Input
+          trim
           className={layout.input_value}
           value={field.value}
           placeholder={fieldsDesc}
@@ -54,11 +55,11 @@ export function CreateTextArea(field, layout) {
     <View className={layout.item} key={name}>
       <View className={layout.textarea}>
         <View className={layout.label}>
-          {required && <View className={layout.required}>* </View>}
+          {requiredSign(required, layout.required)}
           {name}
         </View>
         <Input.Textarea
-          showLimit={true}
+          showLimit
           maxLength={30}
           className={layout.textarea_item}
           value={field.value}
@@ -80,7 +81,7 @@ export function CreateRadioGroup(field, layout) {
     <View className={layout.item} key={name}>
       <View className={layout.checkbox}>
         <View className={layout.label}>
-          {required && <View className={layout.required}>* </View>}
+          {requiredSign(required, layout.required)}
           {name}
         </View>
         <Radio.Group
@@ -107,7 +108,7 @@ export function CreateCheckBoxGroup(field, layout) {
     <View className={layout.item} key={name}>
       <View className={layout.checkbox}>
         <View className={layout.label}>
-          {required && <View className={layout.required}>* </View>}
+          {requiredSign(required, layout.required)}
           {name}
         </View>
         <Checkbox.Group
@@ -128,15 +129,15 @@ export function CreateCheckBoxGroup(field, layout) {
 }
 
 const getAttachment = (ret) => {
-  if (ret.code !== 0) {
-    Toast.error({ content: `${ret.msg} 上传失败` });
-    return false;
-  }
-  const {
-    data: { file_path, attachment, id, uuid },
-  } = ret;
+  {
+    if (ret.code !== 0) {
+      Toast.error({ content: `${ret.msg} 上传失败` });
+      return false;
+    }
+    const { data: { url, id } } = ret;
 
-  return { url: `${file_path}${attachment}`, id, uuid };
+    return { url, id };
+  }
 };
 
 export function CreatePhotoUploader(field, layout) {
@@ -145,7 +146,7 @@ export function CreatePhotoUploader(field, layout) {
     <View className={layout.item} key={name}>
       <View className={layout.imgUpload}>
         <View className={layout.label}>
-          {required && <View className={layout.required}>* </View>}
+          {requiredSign(required, layout.required)}
           {name}
         </View>
         <Upload
@@ -170,7 +171,7 @@ export function CreateFileUploader(field, layout) {
     <View className={layout.item} key={name}>
       <View className={layout.attachmentsUpload}>
         <View className={layout['attachmentsUpload-left']}>
-          {required && <View className={layout.required}>* </View>}
+          {requiredSign(required, layout.required)}
           {name}
         </View>
         <View className={layout['attachmentsUpload-right']}>
@@ -198,4 +199,8 @@ export function CreateFileUploader(field, layout) {
       </View>
     </View>
   );
+}
+
+function requiredSign(isRequired, className) {
+  return isRequired ? <view className={className}>* </view> : '';
 }
