@@ -38,7 +38,7 @@ class Index extends Component {
       });
     } catch (e) {
       // 注册信息补充
-      if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+      if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
         if (isExtFieldsOpen(this.props.site)) {
           this.props.commonLogin.needToCompleteExtraInfo = true;
           redirectTo({ url: '/subPages/user/supplementary/index' });
