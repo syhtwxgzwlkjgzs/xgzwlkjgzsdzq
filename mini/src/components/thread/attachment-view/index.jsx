@@ -55,10 +55,7 @@ const Index = ({
       setDownloading([...downloading]);
 
       if(!item?.url) {
-        setErrorMsg("获取下载链接失败");
-        setTimeout(() => {
-          setErrorMsg("");
-        }, 3000);
+        Toast.info({content: "获取下载链接失败"});
         downloading[index] = false;
         setDownloading([...downloading]);
         return;

@@ -90,6 +90,7 @@ class SearchResultH5Page extends React.Component {
           platform='h5'
           isError={searchUsersError.isError}
           errorText={searchUsersError.errorText}
+          titleStyle={{ border: "none" }}
         >
           {
             usersPageData?.length && <SearchUsers data={usersPageData} onItemClick={this.onUserClick} />
@@ -105,6 +106,7 @@ class SearchResultH5Page extends React.Component {
           className={threadsPageData?.length && styles.bottom}
           isError={searchThreadsError.isError}
           errorText={searchThreadsError.errorText}
+          titleStyle={{ border: "none" }}
         >
           {
             threadsPageData?.length &&<SearchPosts data={threadsPageData.filter((_, index) => index < 3)} onItemClick={this.onPostClick} />
@@ -119,6 +121,7 @@ class SearchResultH5Page extends React.Component {
           platform='h5'
           isError={searchTopicsError.isError}
           errorText={searchTopicsError.errorText}
+          titleStyle={{ border: "none" }}
         >
           {
             topicsPageData?.length && <SearchTopics data={topicsPageData} onItemClick={this.onTopicClick} />
