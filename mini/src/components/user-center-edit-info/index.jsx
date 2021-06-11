@@ -72,7 +72,7 @@ class index extends Component {
           duration: 1000,
         });
         setTimeout(() => {
-          Taro.navigateTo({ url: '/subPages/my/index' });
+          Taro.navigateBack({ url: '/subPages/my/index' });
         }, 200)
       })
       .catch((error) => {
@@ -82,14 +82,14 @@ class index extends Component {
           duration: 1000,
         });
         setTimeout(() => {
-          Taro.navigateTo({ url: '/subPages/my/index' });
+          Taro.navigateBack({ url: '/subPages/my/index' });
         }, 200)
       });
   }, 300);
 
   handleGoToEditMobile = () => {
     if (!this.user.mobile) {
-      Taro.navigateTo({ url: '/subPages/user/bind-phone/index' });
+      Taro.navigateTo({ url: '/subPages/user/bind-phone/index?from=userCenter' });
       return;
     }
     Taro.navigateTo({ url: '/subPages/my/edit/mobile/index' });

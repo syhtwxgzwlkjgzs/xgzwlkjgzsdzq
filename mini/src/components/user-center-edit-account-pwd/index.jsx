@@ -11,6 +11,7 @@ import { View, Text } from '@tarojs/components';
 import throttle from '@common/utils/thottle.js';
 import { trimLR } from '@common/utils/get-trimly.js';
 import classNames from 'classnames';
+
 @inject('site')
 @inject('user')
 @observer
@@ -207,6 +208,9 @@ class index extends Component {
             trim
           />
         </View>
+      </View>
+      <View onClick={this.handleResetPwd} className={styles.tips}>
+        忘记旧密码？
       </View>
     </>
   );

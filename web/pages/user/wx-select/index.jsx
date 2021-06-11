@@ -13,7 +13,7 @@ class WXSelect extends React.Component {
     return <ViewAdapter
               h5={<WXSelectH5Page/>}
               pc={<></>}
-              title={`选择 - ${this.props.site?.siteName}`}
+              title={`微信绑定 - ${this.props.site?.siteName}`}
             />;
   }
 }

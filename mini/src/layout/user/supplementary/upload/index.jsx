@@ -17,7 +17,7 @@ import { THREAD_TYPE } from '@common/constants/thread-post';
 // 待重构提取公用
 export default inject('site')(
   observer(({ type, attachList, onUpload, onDelete, site, config = {}, audioUpload }) => {
-    const { webConfig } = site;
+    const { webConfig, envConfig } = site;
 
     typeof onUpload !== 'function' && (onUpload = () => {});
     typeof onDelete !== 'function' && (onDelete = () => {});
@@ -93,7 +93,7 @@ export default inject('site')(
         const tempFilePath = file.path || file.tempFilePath;
         const token = locals.get(constants.ACCESS_TOKEN_NAME);
         Taro.uploadFile({
-          url: `https://discuzv3-dev.dnspod.dev//apiv3/attachments`,
+          url: `${envConfig.COMMON_BASE_URL}/apiv3/attachments`,
           filePath: tempFilePath,
           name: 'file',
           header: {

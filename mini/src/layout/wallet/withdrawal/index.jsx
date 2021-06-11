@@ -77,24 +77,24 @@ class Withdrawal extends React.Component {
       .createWalletCash({
         money: this.state.withdrawalAmount,
       })
-      .then((res) => {
+      .then(() => {
         Toast.success({
-          content: res.Msg || '申请提现成功',
+          content: '申请提现成功',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
+        Taro.navigateBack();
         this.initState();
       })
       .catch((err) => {
         if (err.Code) {
           Toast.error({
             content: err.Msg || '申请提现失败，请重试',
-            duration: 1000,
+            duration: 2000,
           });
         }
         this.initState();
       });
-    // this.setState({ visible: !this.state.visible });
   };
 
   render() {
@@ -127,7 +127,9 @@ class Withdrawal extends React.Component {
             })}
           >
             <Button type={'primary'} className={styles.button} onClick={this.moneyToWeixin} disabled={btnDisabled}>
-              提现到微信钱包
+              <View className={styles.buttonContent}>
+                提现到微信钱包
+              </View>
             </Button>
           </View>
         </View>

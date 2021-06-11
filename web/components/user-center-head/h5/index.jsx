@@ -48,44 +48,42 @@ class index extends Component {
 
   // 点击关注
   handleChangeAttention = async (follow) => {
-    const id = this.props.router.query?.id;
+    const { id } = getCurrentInstance().router.params;
     if (id) {
       if (follow !== 0) {
-        this.props.user
-          .cancelFollow({ id: id, type: 1 })
-          .then((res) => {
-            Toast.success({
-              content: res.msg || '操作成功',
-              hasMask: false,
-              duration: 1000,
-            });
-            this.props.user.getTargetUserInfo(id);
-          })
-          .catch((err) => {
+        try {
+          const cancelRes = await this.props.user.cancelFollow({ id: id, type: 1 });
+          if (!cancelRes.success) {
             Toast.error({
-              content: err.msg || '取消关注失败',
-              hasMask: false,
+              content: cancelRes.msg || '取消关注失败',
               duration: 2000,
             });
+          }
+          await this.props.user.getTargetUserInfo(id);
+        } catch (error) {
+          console.error(error);
+          Toast.error({
+            content: '网络错误',
+            duration: 2000,
           });
+        }
       } else {
-        this.props.user
-          .postFollow({ id: id })
-          .then((res) => {
-            Toast.success({
-              content: res.msg || '操作成功',
-              hasMask: false,
-              duration: 1000,
-            });
-            this.props.user.getTargetUserInfo(id);
-          })
-          .catch((err) => {
+        try {
+          const followRes = await this.props.user.postFollow(id);
+          if (!followRes.success) {
             Toast.error({
-              content: err.msg || '关注失败',
-              hasMask: false,
+              content: followRes.msg || '关注失败',
               duration: 2000,
             });
+          }
+          await this.props.user.getTargetUserInfo(id);
+        } catch (error) {
+          console.error(error);
+          Toast.error({
+            content: '网络错误',
+            duration: 2000,
           });
+        }
       }
     }
   };
@@ -122,8 +120,8 @@ class index extends Component {
 
   // 点击发送私信
   handleMessage = () => {
-    const { username } = this.props.user.targetUser;
-    Router.replace({ url: `/message?page=chat&username=${username}` });
+    const { username, nickname } = this.props.user.targetUser;
+    Router.replace({ url: `/message?page=chat&username=${username}&nickname=${nickname}` });
   };
 
   gotoLikeList = () => {

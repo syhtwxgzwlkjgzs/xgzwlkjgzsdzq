@@ -184,22 +184,22 @@ export default function HOCFetchSiteData(Component) {
           Router.redirect({ url: '/404' });
           break;
         case JUMP_TO_LOGIN:// 到登录页
-          Router.redirect({ url: '/user/login' });
+          Router.push({ url: '/user/login' });
           break;
         case JUMP_TO_REGISTER:// 到注册页
-          Router.redirect({ url: '/user/register' });
+          Router.push({ url: '/user/register' });
           break;
         case JUMP_TO_AUDIT:// 到审核页
-          Router.redirect({ url: '/user/status?statusCode=2' });
+          Router.push({ url: '/user/status?statusCode=2' });
           break;
         case JUMP_TO_SUPPLEMENTARY:// 跳转到扩展字段页
-          Router.redirect({ url: '/user/supplementary' });
+          Router.push({ url: '/user/supplementary' });
           break;
         case JUMP_TO_HOME_INDEX:// 到首页
           Router.redirect({ url: '/' });
           break;
         case JUMP_TO_PAY_SITE:// 到付费加入页面
-          Router.redirect({ url: '/forum/partner-invite' });
+          Router.push({ url: '/forum/partner-invite' });
           break;
         default: Router.redirect({ url: '/500' });
           break;

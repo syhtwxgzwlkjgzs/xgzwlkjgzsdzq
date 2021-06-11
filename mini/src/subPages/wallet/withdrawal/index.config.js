@@ -1,3 +1,5 @@
 export default {
-  navigationBarBackgroundColor: '#2469f6',
+  navigationBarTitleText: '提现',
+  navigationBarBackgroundColor: '#ffffff',
+  navigationStyle: 'custom',
 };
