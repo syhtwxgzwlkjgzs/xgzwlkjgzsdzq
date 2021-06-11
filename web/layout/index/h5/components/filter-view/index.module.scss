@@ -106,18 +106,17 @@
 .footer {
   background-color: var(--color-white);
   text-align: center;
-  height: rem(132);
+  height: rem(122);
   .button {
     width: rem(290);
     height: rem(42);
-    margin-bottom: rem(24);
+    margin: $padding-2n 0;
     font-size: rem($font-size-middle);
     display: inline-block;
-    margin-top: rem($padding-3n);
   }
   .footerBtn {
     position: relative;
-    height: rem(53);
+    // height: rem(53);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -131,6 +130,9 @@
       height: 1px;
       top: 0;
       background-color: var(--border-line-color);
+    }
+    .footerBtnText {
+      padding: rem($padding-4n) 0;
     }
   }
 }
