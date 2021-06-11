@@ -112,7 +112,7 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
                   key={index} 
                   index={index} 
                   title={title(item.label)} 
-                  style={{ padding: '3px 2%', height: '55px' }}
+                  style={{ padding: '3px 10px', height: '55px' }}
                 >
                   {
                     item.children.map((secondItem, secondIndex) => {
@@ -130,7 +130,7 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
                   }
                 </Menu.SubMenu>
             ) : (
-                <Menu.Item onClick={onClick} key={index} index={`${index}`} style={index === 0 ? {padding: '0 2% 0 0'} : { padding: '0 2%' }}>
+                <Menu.Item onClick={onClick} key={index} index={`${index}`} style={index === 0 ? {padding: '0 10px 0 0'} : { padding: '0 10px' }}>
                   <div className={styles.label}>
                     { item.label }
                     { item.isActive && <div className={styles.line}></div> }

@@ -3,6 +3,12 @@ import { View, Input} from '@tarojs/components';
 import layout from './index.module.scss';
 
 class CaptchaInput extends React.Component {
+  static defaultProps = {
+    captcha: '',  // 验证码
+    setCaptcha: () => {}, // 设置验证码
+    isFocus: false, // 是否获取焦点
+    setIsFocus: () => {}  // 设置焦点
+  }
   constructor(props) {
     super(props);
     this.state = {
