@@ -132,22 +132,22 @@ class App extends Component {
         Router.redirect({ url: '/subPages/404/index' });
         break;
       case JUMP_TO_LOGIN:// 到登录页
-        Router.redirect({ url: '/subPages/user/wx-auth/index' });
+        Router.push({ url: '/subPages/user/wx-auth/index' });
         break;
       case JUMP_TO_REGISTER:// 到注册页
-        Router.redirect({ url: '/subPages/user/wx-auth/index' });
+        Router.push({ url: '/subPages/user/wx-auth/index' });
         break;
       case JUMP_TO_AUDIT:// 到审核页
-        Router.redirect({ url: '/subPages/user/status/index?statusCode=2' });
+        Router.push({ url: '/subPages/user/status/index?statusCode=2' });
         break;
       case JUMP_TO_HOME_INDEX:// 到首页
         Router.redirect({ url: '/pages/index/index' });
         break;
       case JUMP_TO_PAY_SITE:// 到付费加入页面
-        Router.redirect({ url: '/subPages/forum/partner-invite/index' });
+        Router.push({ url: '/subPages/forum/partner-invite/index' });
         break;
       case JUMP_TO_SUPPLEMENTARY:// 跳转到扩展字段页
-        Router.redirect({ url: '/subPages/user/supplementary/index' });
+        Router.push({ url: '/subPages/user/supplementary/index' });
         break;
       default: Router.redirect({url: '/subPages/500/index'});
         break;

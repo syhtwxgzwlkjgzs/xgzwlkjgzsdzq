@@ -276,12 +276,15 @@ class index extends Component {
             ) : (
               <View className={styles.labelInput}>
                 <Input
+                  trim
                   placeholder="请输入新手机号"
                   onChange={this.handleInputChange}
                   focus={true}
                   onBlur={this.handleInputBlur}
                   onFocus={this.handleInputFocus}
                   value={bindMobile}
+                  type="number"
+                  trim
                 />
               </View>
             )}

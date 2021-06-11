@@ -86,7 +86,7 @@ function avatar(props) {
   }, [userInfo]);
 
   const messagingHandler = useCallback(() => {
-    
+
     // 对没有登录的先登录
     if (!myself.isLogin()) {
       Toast.info({ content: '请先登录!' });
@@ -94,16 +94,16 @@ function avatar(props) {
       return;
     }
 
-    const username = userInfo.username;
+    const { username, nickname } = userInfo;
     if(username) {
-      props.router.push(`/message?page=chat&username=${username}`);
+      props.router.push(`/message?page=chat&username=${username}&nickname=${nickname}`);
     } else {
       console.error("用户名错误");
     }
   })
 
   const blockingHandler = useCallback(async () => {
-    
+
     // 对没有登录的先登录
     if (!myself.isLogin()) {
       Toast.info({ content: '请先登录!' });
@@ -213,7 +213,7 @@ function avatar(props) {
                 type='primary' ghost>
                   <Icon className={styles.icon} name="NewsOutlined" size={12}/>发私信
               </Button>
-              <Button 
+              <Button
                 onClick={blocking ? () => {} : blockingHandler}
                 loading={blocking}
                 className={`${styles.btn} ${styles.blocked}`}

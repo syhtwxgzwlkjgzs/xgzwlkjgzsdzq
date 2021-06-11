@@ -103,7 +103,7 @@ http.interceptors.response.use((res) => {
       } else {
         url = '/subPages/user/wx-auth/index'
       }
-      Router.replace({
+      Router.push({
         url
       });
       break;
@@ -114,7 +114,7 @@ http.interceptors.response.use((res) => {
       } else {
         url = '/subPages/user/wx-auth/index'
       }
-      Router.replace({
+      Router.push({
         url
       });
       break;
@@ -125,7 +125,7 @@ http.interceptors.response.use((res) => {
       } else {
         url = '/subPages/user/status/index?statusCode=2'
       }
-      Router.replace({
+      Router.push({
         url
       });
       break;
@@ -158,7 +158,7 @@ http.interceptors.response.use((res) => {
       } else {
         url = '/subPages/forum/partner-invite/index'
       }
-      Router.replace({
+      Router.push({
         url
       });
       break;
@@ -180,7 +180,7 @@ http.interceptors.response.use((res) => {
       } else {
         url = '/subPages/user/supplementary/index';
       }
-      Router.replace({
+      Router.push({
         url
       });
       break;

@@ -2,6 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/my/like/h5';
 import IndexPCPage from '@layout/my/like/pc';
+import ViewAdapter from '@components/view-adapter';
 import { readThreadList, readTopicsList } from '@server';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import isServer from '@common/utils/is-server';
@@ -93,7 +94,7 @@ class Index extends React.Component {
   clearStoreThreads = () => {
     const { index } = this.props;
     index.setThreads(null);
-  }
+  };
 
   listenRouterChangeAndClean() {
     // FIXME: 此种写法不好
@@ -131,17 +132,19 @@ class Index extends React.Component {
     const { platform } = site;
     const { firstLoading } = this.state;
 
-    if (platform === 'pc') {
-      return <IndexPCPage firstLoading={firstLoading} dispatch={this.dispatch} />;
-    }
-
     return (
-      <IndexH5Page
-        firstLoading={firstLoading}
-        page={this.state.page}
-        totalPage={this.state.totalPage}
-        totalCount={this.state.totalCount}
-        dispatch={this.dispatch}
+      <ViewAdapter
+        h5={
+          <IndexH5Page
+            firstLoading={firstLoading}
+            page={this.state.page}
+            totalPage={this.state.totalPage}
+            totalCount={this.state.totalCount}
+            dispatch={this.dispatch}
+          />
+        }
+        pc={<IndexPCPage firstLoading={firstLoading} dispatch={this.dispatch} />}
+        title={`我的点赞 - ${this.props.site?.siteName}`}
       />
     );
   }

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import H5UserCenterEditInfo from './h5/index';
 import PcUserCenterEditInfo from './pc/index';
+import ViewAdapter from '@components/view-adapter';
 
 @inject('site')
 @inject('user')
@@ -15,23 +16,13 @@ class index extends Component {
   }
 
   render() {
-    const { site } = this.props;
-    const { platform } = site;
-
-    return (
-      <div>
-        {
-          platform === 'h5' && (
-            <H5UserCenterEditInfo />
-          )
-        }
-        {
-          platform === 'pc' && (
-            <PcUserCenterEditInfo />
-          )
-        }
-      </div>
-    );
+    return  (
+      <ViewAdapter 
+        h5={<H5UserCenterEditInfo />}
+        pc={<PcUserCenterEditInfo />}
+        title={`编辑资料 - ${this.props.site?.siteName}`}
+      />
+    )
   }
 }
 
