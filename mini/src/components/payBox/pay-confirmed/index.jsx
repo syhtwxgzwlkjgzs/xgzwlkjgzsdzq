@@ -9,7 +9,13 @@ import Spin from '@discuzq/design/dist/components/spin/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import { View, Text } from '@tarojs/components';
 import { PAY_MENT_MAP, PAYWAY_MAP, STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants.js';
-import { listenWXJsBridgeAndExecCallback, onBridgeReady, wxValidator, mode } from '../../../../../common/store/pay/weixin-miniprogram-backend.js';
+import {
+  listenWXJsBridgeAndExecCallback,
+  onBridgeReady,
+  wxValidator,
+  mode,
+} from '../../../../../common/store/pay/weixin-miniprogram-backend.js';
+import throttle from '@common/utils/thottle.js';
 
 @inject('site')
 @inject('user')
@@ -39,18 +45,18 @@ export default class PayBox extends React.Component {
 
     this.state = {
       payConfig,
-      paymentType: null
+      paymentType: null,
     };
     this.goSetPayPwa = this.goSetPayPwa.bind(this);
   }
 
   initState = () => {
     this.setState({
-      paymentType: null
-    })
-    this.props.payBox.payWay = PAYWAY_MAP.WALLET
-    this.props.payBox.password = null
-  }
+      paymentType: null,
+    });
+    this.props.payBox.payWay = PAYWAY_MAP.WALLET;
+    this.props.payBox.password = null;
+  };
 
   // 转换金额小数
   transMoneyToFixed = (num) => {
@@ -60,7 +66,7 @@ export default class PayBox extends React.Component {
   async componentDidMount() {
     const { id } = this.props?.user;
     try {
-      this.initState()
+      this.initState();
       await this.props.payBox.getWalletInfo(id);
     } catch (error) {
       Toast.error({
@@ -86,16 +92,13 @@ export default class PayBox extends React.Component {
     }
     return (
       <>
-        {
-          this.props.payBox?.walletAvaAmount ? (
-            <Text className={styles.subText}>钱包余额：￥{this.props.payBox?.walletAvaAmount}</Text>
-          ) : (
-            <Spin type="spinner" size={14}></Spin>
-          )
-        }
+        {this.props.payBox?.walletAvaAmount ? (
+          <Text className={styles.subText}>钱包余额：￥{this.props.payBox?.walletAvaAmount}</Text>
+        ) : (
+          <Spin type="spinner" size={14}></Spin>
+        )}
       </>
-    )
-
+    );
   }
 
   goSetPayPwa() {
@@ -107,11 +110,11 @@ export default class PayBox extends React.Component {
    * 选择支付方式
    */
   handleChangePaymentType = (value) => {
-    this.props.payBox.payWay = value
+    this.props.payBox.payWay = value;
   };
 
   // 点击确认支付
-  handlePayConfirmed = async () => {
+  handlePayConfirmed = throttle(async () => {
     if (this.props.payBox.payWay === PAYWAY_MAP.WALLET) {
       const { options = {} } = this.props.payBox;
       const { amount = 0 } = options;
@@ -135,14 +138,14 @@ export default class PayBox extends React.Component {
         });
       }
     }
-  };
+  }, 300);
 
   // 点击取消
   handleCancel = () => {
     // 回到上一步
-    this.props.payBox.step = STEP_MAP.SURE
-    this.props.payBox.payWay = null
-  }
+    this.props.payBox.step = STEP_MAP.SURE;
+    this.props.payBox.payWay = null;
+  };
 
   render() {
     const { options = {} } = this.props.payBox;
@@ -176,7 +179,10 @@ export default class PayBox extends React.Component {
                   </View>
                   <View className={styles.right}>
                     {item.paymentType === PAYWAY_MAP.WALLET && this.walletPaySubText()}
-                    {(item.paymentType === PAYWAY_MAP.WX || (canWalletPay && Number(this.props.payBox?.walletAvaAmount) >= Number(options.amount))) && <Radio name={item.paymentType} />}
+                    {(item.paymentType === PAYWAY_MAP.WX ||
+                      (canWalletPay && Number(this.props.payBox?.walletAvaAmount) >= Number(options.amount))) && (
+                      <Radio name={item.paymentType} />
+                    )}
                   </View>
                 </View>
               );

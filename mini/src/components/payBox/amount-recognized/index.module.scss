@@ -1,5 +1,4 @@
 @import '@common/styles/index.scss';
-@import '@common/styles/mixin/index.scss';
 
 // 外部容器
 .amountWrapper {
@@ -18,11 +17,11 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  .btnBox{
+  .btnBox {
     margin-top: rem($margin-2n);
     box-sizing: border-box;
-    padding-bottom: constant(safe-area-inset-bottom);  ///兼容 IOS<11.2/
-    padding-bottom: env(safe-area-inset-bottom);  ///兼容 IOS>11.2/
+    padding-bottom: constant(safe-area-inset-bottom); ///兼容 IOS<11.2/
+    padding-bottom: env(safe-area-inset-bottom); ///兼容 IOS>11.2/
     &::before {
       content: '';
       display: block;
@@ -34,7 +33,7 @@
       margin: 0 rem(-$margin-4n);
     }
 
-    .btn{
+    .btn {
       height: 42px;
       font-size: $font-size-middle;
       border-radius: 5px;
@@ -70,7 +69,6 @@
     align-items: center;
     line-height: var(--font-line-height-primary);
     margin: $margin-2n 0;
-    display: inline-block;
     font-size: $font-size-primary;
     color: $text-color-primary;
   }
@@ -78,7 +76,7 @@
     margin: $margin-2n 0;
   }
   // 交易类型label提示
-  .acExplainLabel{
+  .acExplainLabel {
     color: var(--color-text-regular);
     margin-right: $margin-4n;
     flex-shrink: 0;
