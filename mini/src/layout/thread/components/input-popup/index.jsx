@@ -15,7 +15,7 @@ import styles from './index.module.scss';
 import ImageUpload from '../image-upload';
 
 const InputPop = (props) => {
-  const { visible, onSubmit, onClose, inputText = '写评论...', site, checkUser = [] } = props;
+  const { visible, onSubmit, onClose, initValue, inputText = '写评论...', site, checkUser = [] } = props;
 
   const textareaRef = createRef();
   const [value, setValue] = useState('');
@@ -35,10 +35,9 @@ const InputPop = (props) => {
     setCursorPos(e.target.cursor || 0);
   };
 
-  // 每次唤出弹框将内容清空
   useEffect(() => {
-    visible && setValue('');
-  }, [visible])
+    setValue(initValue);
+  }, [initValue])
 
   // 监听键盘的高度
   Taro.onKeyboardHeightChange(res => {
