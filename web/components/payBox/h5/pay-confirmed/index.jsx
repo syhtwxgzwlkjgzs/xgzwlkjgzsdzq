@@ -13,6 +13,7 @@ import {
 } from '../../../../../common/store/pay/weixin-h5-backend';
 import throttle from '@common/utils/thottle.js';
 
+@inject('site')
 @inject('user')
 @inject('payBox')
 @observer
@@ -27,12 +28,16 @@ export default class PayBox extends React.Component {
         paymentType: 'wallet',
       },
     ];
-    payConfig.unshift({
-      name: '微信支付',
-      icon: 'WechatPaymentOutlined',
-      color: '#09bb07',
-      paymentType: 'weixin',
-    });
+
+    // 判断是否微信支付开启
+    if (this.props.site.isWechatPayOpen) {
+      payConfig.unshift({
+        name: '微信支付',
+        icon: 'WechatPaymentOutlined',
+        color: '#09bb07',
+        paymentType: 'weixin',
+      });
+    }
 
     this.state = {
       payConfig,
@@ -76,16 +81,13 @@ export default class PayBox extends React.Component {
     }
     return (
       <>
-        {
-          this.props.payBox?.walletAvaAmount ? (
-            <p className={styles.subText}>钱包余额：￥{this.props.payBox?.walletAvaAmount}</p>
-          ) : (
-            <Spin type="spinner" size={14}></Spin>
-          )
-        }
+        {this.props.payBox?.walletAvaAmount ? (
+          <p className={styles.subText}>钱包余额：￥{this.props.payBox?.walletAvaAmount}</p>
+        ) : (
+          <Spin type="spinner" size={14}></Spin>
+        )}
       </>
-    )
-
+    );
   }
 
   goSetPayPwa() {
@@ -185,8 +187,8 @@ export default class PayBox extends React.Component {
                     {item.paymentType === PAYWAY_MAP.WALLET && this.walletPaySubText()}
                     {(item.paymentType === PAYWAY_MAP.WX ||
                       (canWalletPay && Number(this.props.payBox?.walletAvaAmount) >= Number(options.amount))) && (
-                        <Radio name={item.paymentType} />
-                      )}
+                      <Radio name={item.paymentType} />
+                    )}
                   </div>
                 </div>
               );
