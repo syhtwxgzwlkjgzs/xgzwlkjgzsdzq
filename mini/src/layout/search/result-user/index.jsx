@@ -62,7 +62,7 @@ class SearchResultUserH5Page extends React.Component {
         requestError={usersError.isError}
         errorText={usersError.errorText}
       >
-        <SearchInput onSearch={this.onSearch} onCancel={this.onSearch} defaultValue={keyword} searchWhileTyping/>
+        <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} searchWhileTyping/>
         {
           pageData?.map((item, index) => (
             <UserItem

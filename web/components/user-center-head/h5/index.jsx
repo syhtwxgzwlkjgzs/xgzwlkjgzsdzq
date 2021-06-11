@@ -168,26 +168,36 @@ class index extends Component {
                   this.handleChangeAttention(user.follow);
                 }}
                 type="primary"
-                className={`${styles.btn} ${user.follow === 2 && styles.userFriendsBtn} ${user.follow === 1 && styles.userFollowedBtn}`}
+                className={`${styles.btn} ${user.follow === 2 && styles.userFriendsBtn} ${
+                  user.follow === 1 && styles.userFollowedBtn
+                }`}
                 full
               >
-                <Icon name={this.renderFollowedStatus(user.follow).icon} />
-                <span className={styles.userBtnText}>{this.renderFollowedStatus(user.follow).text}</span>
+                <div className={styles.actionButtonContentWrapper}>
+                  <Icon name={this.renderFollowedStatus(user.follow).icon} size={16} />
+                  <span className={styles.userBtnText}>{this.renderFollowedStatus(user.follow).text}</span>
+                </div>
               </Button>
               <Button full className={styles.btn} onClick={this.handleMessage}>
-                <Icon name="NewsOutlined" />
-                <span className={styles.userBtnText}>发私信</span>
+                <div className={styles.actionButtonContentWrapper}>
+                  <Icon name="NewsOutlined" size={16} />
+                  <span className={styles.userBtnText}>发私信</span>
+                </div>
               </Button>
             </>
           ) : (
             <>
               <Button full className={styles.btn} onClick={this.goToMyEditInfo} type="primary">
-                <Icon name="CompileOutlined" />
-                <span className={styles.userBtnText}>编辑资料</span>
+                <div className={styles.actionButtonContentWrapper}>
+                  <Icon name="CompileOutlined" size={16} />
+                  <span className={styles.userBtnText}>编辑资料</span>
+                </div>
               </Button>
               <Button full className={styles.btn} onClick={this.logout}>
-                <Icon name="PoweroffOutlined" />
-                <span className={styles.userBtnText}>退出登录</span>
+                <div className={styles.actionButtonContentWrapper}>
+                  <Icon name="PoweroffOutlined" size={16} />
+                  <span className={styles.userBtnText}>退出登录</span>
+                </div>
               </Button>
             </>
           )}

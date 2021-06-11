@@ -58,7 +58,8 @@ function AttachmentToolbar(props) {
   function handleAttachClick(e, item) {
     let action = item.type;
     let actionItem = item;
-    if (currentAction === item.type && currentAction !== THREAD_TYPE.anonymity) {
+    const actionCurrent = props.currentSelectedToolbar;
+    if (actionCurrent === item.type && actionCurrent !== THREAD_TYPE.anonymity) {
       action = '';
       actionItem = { type: '' };
     }

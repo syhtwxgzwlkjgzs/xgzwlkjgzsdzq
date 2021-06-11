@@ -31,7 +31,7 @@ const Index = forwardRef(({
 }, ref) => {
 
   return (
-    <View className={styles.container}>
+      <View className={styles.container} onClick={e => e.stopPropagation()}>
       <View className={styles['container-inner']}>
         <Textarea
           ref={ref}
@@ -40,7 +40,7 @@ const Index = forwardRef(({
           value={value}
           disabled={disabled}
           placeholder={placeholder}
-          maxLength={maxLength}
+          maxlength={maxLength}
           autoHeight={true}
           showConfirmBar={false}
           onFocus={onFocus}

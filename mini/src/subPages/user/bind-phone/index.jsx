@@ -1,16 +1,17 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import Taro, { getCurrentInstance, navigateTo, redirectTo } from '@tarojs/taro';
+import Taro, { getCurrentInstance, navigateTo, redirectTo, navigateBack } from '@tarojs/taro';
 import Button from '@discuzq/design/dist/components/button/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import Input from '@discuzq/design/dist/components/input/index';
 import { View, Text } from '@tarojs/components';
 import Page from '@components/page';
-import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
+import { BANNED_USER, REVIEWING, REVIEW_REJECT, isExtFieldsOpen } from '@common/store/login/util';
 import { toTCaptcha } from '@common/utils/to-tcaptcha'
 import PhoneInput from '@components/login/phone-input'
 import { get } from '@common/utils/get';
 import layout from './index.module.scss';
+import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 
 
 @inject('site')
@@ -90,7 +91,7 @@ class BindPhoneH5Page extends React.Component {
 
   handleBindButtonClick = async () => {
     try {
-      const { sessionToken } = getCurrentInstance().router.params;
+      const { sessionToken, from = '' } = getCurrentInstance().router.params;
       const resp = await this.props.mobileBind.bind(sessionToken);
       const uid = get(resp, 'uid', '');
       this.props.user.updateUserInfo(uid);
@@ -99,14 +100,31 @@ class BindPhoneH5Page extends React.Component {
         hasMask: false,
         duration: 1000,
         onClose: () => {
+          if (from === 'userCenter') {
+            navigateBack();
+            return;
+          }
           redirectTo({
             url: `/pages/index/index`
           });
         }
       });
     } catch (e) {
+      // 注册信息补充
+      if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+        if (isExtFieldsOpen(this.props.site)) {
+          this.props.commonLogin.needToCompleteExtraInfo = true;
+          redirectTo({ url: '/subPages/user/supplementary/index' });
+          return;
+        }
+        redirectTo({ url: '/pages/index/index' });
+        return;
+      }
+
       // 跳转状态页
       if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
+        const uid = get(e, 'uid', '');
+        uid && this.props.user.updateUserInfo(uid);
         this.props.commonLogin.setStatusMessage(e.Code, e.Message);
         navigateTo({
           url: `/subPages/user/status/index?statusCode=${e.Code}&statusMsg=${e.Message}`
@@ -133,6 +151,7 @@ class BindPhoneH5Page extends React.Component {
 
   render() {
     const { mobileBind } = this.props;
+    const { from = '' } = getCurrentInstance().router.params;
     return (
       <Page>
         <View className={layout.container}>
@@ -153,15 +172,20 @@ class BindPhoneH5Page extends React.Component {
             />
             {/* 输入框 end */}
             <Button className={layout.button} type="primary" onClick={this.handleBindButtonClick}>
-              下一步
+              {from === 'userCenter' ? '绑定' : '下一步'}
             </Button>
-            <View className={layout.functionalRegion}>
-              <Text className={layout.clickBtn} onClick={() => {
-                redirectTo({
-                  url: `/pages/index/index`
-                });
-              }} >跳过</Text>
-            </View>
+            {
+              from !== 'userCenter'
+              && (
+                <View className={layout.functionalRegion}>
+                  <Text className={layout.clickBtn} onClick={() => {
+                    redirectTo({
+                      url: `/pages/index/index`
+                    });
+                  }} >跳过</Text>
+                </View>
+              )
+            }
           </View>
         </View>
       </Page>

@@ -5,6 +5,7 @@ import layout from './index.module.scss';
 import { Input, Button, Toast, Avatar } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
+import { get } from '@common/utils/get';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT, isExtFieldsOpen } from '@common/store/login/util';
 import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 
@@ -17,7 +18,9 @@ import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-stor
 class WXBindUsernameH5page extends React.Component {
   handleLoginButtonClick = async () => {
     try {
-      await this.props.userLogin.login();
+      const res = await this.props.userLogin.login();
+      const uid = get(res, 'data.uid');
+      this.props.user.updateUserInfo(uid);
       Toast.success({
         content: '登录成功',
         hasMask: false,
@@ -39,6 +42,8 @@ class WXBindUsernameH5page extends React.Component {
       }
 
       if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
+        const uid = get(e, 'uid', '');
+        uid && this.props.user.updateUserInfo(uid);
         this.props.commonLogin.setStatusMessage(e.Code, e.Message);
         this.props.router.push(`/user/status?statusCode=${e.Code}&statusMsg=${e.Message}`);
         return;

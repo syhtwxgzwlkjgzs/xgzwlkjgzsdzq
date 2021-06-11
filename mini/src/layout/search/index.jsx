@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import SearchInput from '@components/search-input';
 import TrendingTopics from './components/trending-topics';
 import ActiveUsers from './components/active-users';
-import PopularContents from './components/popular-contents';
+import ThreadContent from '@components/thread';
 import BaseLayout from '@components/base-layout';
 import '@discuzq/design/dist/styles/index.scss';
 import SidebarPanel from '@components/sidebar-panel';
@@ -92,9 +92,10 @@ class SearchH5Page extends React.Component {
           platform='h5'
           isError={indexThreadsError.isError}
           errorText={indexThreadsError.errorText}
+          mold='plane'
         >
           {
-            threadsPageData?.length && <PopularContents data={threadsPageData} />
+            threadsPageData?.map((item, index) => <ThreadContent data={item} key={index} />)
           }
         </SidebarPanel>
       </BaseLayout>

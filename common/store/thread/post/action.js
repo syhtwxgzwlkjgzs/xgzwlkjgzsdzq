@@ -274,7 +274,7 @@ class ThreadPostAction extends ThreadPostStore {
     if (rewardQa.value && !this.isThreadPaid) {
       params.draft = 1;
     }
-    if (this.postData.anonymous) params.anonymous = this.postData.anonymous;
+    params.anonymous = this.postData.anonymous;
     const contentIndexes = this.gettContentIndexes();
     if (Object.keys(contentIndexes).length > 0) params.content.indexes = contentIndexes;
     return params;

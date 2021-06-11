@@ -131,7 +131,7 @@ class Index extends React.Component {
               </div>
           )})
         }
-        {recommendsStatus === 'none' && <div className={style.recommendSwitch}>
+        {(recommendsStatus === 'none'|| recommendsStatus === 'error') && <div className={style.recommendSwitch}>
           <div className={style.switchBox} onClick={this.changeBatch}>
             <Icon name="RenovateOutlined" className={style.switchIcon} size={14}/>换一批
           </div>

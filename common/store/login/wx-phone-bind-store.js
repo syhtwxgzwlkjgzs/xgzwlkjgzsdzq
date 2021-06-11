@@ -2,7 +2,7 @@ import { observable, action, computed } from 'mobx';
 import { smsSend, transitionSmsBind } from '@server';
 import { get } from '../../utils/get';
 import setAccessToken from '../../utils/set-access-token';
-import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
+import { checkUserStatus } from '@common/store/login/util';
 
 export const WX_PHONE_BIND_STORE_ERROR = {
   MOBILE_VERIFY_ERROR: {
@@ -163,22 +163,6 @@ export default class wxPhoneBindStore {
       }
     }
 
-    /**
-     * 检查用户是否处于审核状态，用来跳转状态页面
-     * @param {*} smsLoginResp
-     */
-    checkUserStatus = (smsLoginResp) => {
-      const rejectReason = get(smsLoginResp, 'data.rejectReason', '');
-      const status = get(smsLoginResp, 'data.userStatus', 0);
-      if (status ===  REVIEWING) {
-        throw {
-          Code: status,
-          Message: rejectReason,
-        };
-      }
-      return;
-    }
-
     @action
     loginAndBind = async (sessionToken) => {
       this.beforeLoginVerify();
@@ -194,6 +178,7 @@ export default class wxPhoneBindStore {
           },
         });
 
+        checkUserStatus(smsLoginResp);
         if (smsLoginResp.code === 0) {
           const accessToken = get(smsLoginResp, 'data.accessToken', '');
           // 种下 access_token
@@ -202,16 +187,8 @@ export default class wxPhoneBindStore {
           });
 
           this.checkCompleteUserInfo(smsLoginResp);
-          this.checkUserStatus(smsLoginResp);
 
           return smsLoginResp.data;
-        }
-
-        if (smsLoginResp.code === BANNED_USER || smsLoginResp.code === REVIEW_REJECT) {
-          throw {
-            Code: smsLoginResp.code,
-            Message: get(smsLoginResp, 'data.rejectReason', ''),
-          };
         }
 
         throw {

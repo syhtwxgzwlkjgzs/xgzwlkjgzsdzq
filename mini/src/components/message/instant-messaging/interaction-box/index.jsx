@@ -13,7 +13,7 @@ import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
 
 const InteractionBox = (props) => {
-  const { dialogId, threadPost, showEmoji, setShowEmoji, username, updateDialogId } = props;
+  const { dialogId, threadPost, showEmoji, setShowEmoji, username, updateDialogId, keyboardHeight, inputBottom } = props;
   const { readDialogMsgList, dialogMsgList, createDialogMsg, createDialog, readDialogIdByUsername } = props.message;
 
   // const [dialogId, setDialogId] = useState(propsDialogId);
@@ -48,6 +48,7 @@ const InteractionBox = (props) => {
     if (!threadPost.emojis.length) {
       threadPost.fetchEmoji();
     }
+
     return () => {
       Taro.hideLoading();
     };
@@ -174,8 +175,14 @@ const InteractionBox = (props) => {
   };
 
   return (
-    <>
-      <View className={styles.interactionBox} style={{ bottom: showEmoji ? '343px' : 0 }}>
+    <View
+      id='operation-box'
+      className={styles.interactionBox}
+      style={{
+        bottom: (keyboardHeight && !showEmoji) ? `${inputBottom}px` : 0,
+        // paddingBottom: keyboardHeight ? 0 : '',
+       }}>
+      <View className={styles.operationBox}>
         <View className={styles.inputWrapper}>
           <Input
             value={typingValue}
@@ -206,7 +213,7 @@ const InteractionBox = (props) => {
       <View className={styles['emoji-container']}>
         <Emoji show={showEmoji} onClick={insertEmoji} />
       </View>
-    </>
+    </View>
   );
 };
 

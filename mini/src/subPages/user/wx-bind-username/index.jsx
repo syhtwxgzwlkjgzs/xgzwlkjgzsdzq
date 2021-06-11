@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getCurrentInstance, navigateTo } from '@tarojs/taro';
+import { getCurrentInstance, navigateTo, redirectTo } from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import Input from '@discuzq/design/dist/components/input/index';
@@ -9,8 +9,9 @@ import Avatar from '@discuzq/design/dist/components/avatar/index';
 // import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Page from '@components/page';
 import { get } from '@common/utils/get';
-import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
+import { BANNED_USER, REVIEWING, REVIEW_REJECT, isExtFieldsOpen } from '@common/store/login/util';
 import layout from './index.module.scss';
+import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 
 // const MemoToastProvider = React.memo(ToastProvider)
 
@@ -36,7 +37,20 @@ class Index extends Component {
         }
       });
     } catch (e) {
+      // 注册信息补充
+      if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+        if (isExtFieldsOpen(this.props.site)) {
+          this.props.commonLogin.needToCompleteExtraInfo = true;
+          redirectTo({ url: '/subPages/user/supplementary/index' });
+          return;
+        }
+        redirectTo({ url: '/pages/index/index' });
+        return;
+      }
+
       if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
+        const uid = get(e, 'uid', '');
+        uid && this.props.user.updateUserInfo(uid);
         this.props.commonLogin.setStatusMessage(e.Code, e.Message);
         navigateTo({
           url: `/subPages/user/status/index?statusCode=${e.Code}&statusMsg=${e.Message}`
