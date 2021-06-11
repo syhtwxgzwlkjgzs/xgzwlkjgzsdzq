@@ -80,7 +80,6 @@ class PostPage extends React.Component {
     const { fetchEmoji, emojis } = this.props.threadPost;
     if (emojis.length === 0) fetchEmoji();
     this.fetchDetail();
-    console.log('----post page-----');
     // }
   }
 
