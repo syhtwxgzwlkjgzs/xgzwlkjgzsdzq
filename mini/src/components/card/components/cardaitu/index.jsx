@@ -177,6 +177,18 @@ export default class Simple extends React.Component {
       }
     }
 }
+// static getDerivedStateFromProps(nextProps, prevState) {
+//   const {heightdefill} = nextProps;
+//   console.log(nextProps.heightdefill,prevState)
+//   // 当传入的type发生变化的时候，更新state
+//   if (heightdefill !== prevState.type) {
+//       return {
+//           rssConfig: nextProps.heightdefill
+//       };
+//   }
+//   // 否则，对于state不进行任何操作
+//   return null;
+// }
 
   componentDidMount() {
     this.setState({
