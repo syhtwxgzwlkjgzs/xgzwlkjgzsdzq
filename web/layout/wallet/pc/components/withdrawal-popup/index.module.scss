@@ -6,7 +6,7 @@
   height: rem(316);
   margin: 0 auto;
   border-radius: rem(5);
-  background: var(--color-white);
+  background: $white;
   padding: rem($padding-6n);
 }
 
@@ -20,7 +20,7 @@
     font-weight: 600;
     font-size: rem($font-size-middle);
     text-align: left;
-    color: var(--color-text-primary);
+    color: $text-color-primary;
     padding-left: rem($padding-4n);
   }
 }
@@ -44,7 +44,7 @@
     font-weight: 600;
     font-size: 30px;
     text-align: left;
-    color: var(--color-text-primary);
+    color: $text-color-primary;
   }
 }
 

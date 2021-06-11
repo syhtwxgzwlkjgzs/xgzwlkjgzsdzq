@@ -2,7 +2,7 @@
 
 .container {
     padding: $padding-4n $padding-4n 0;
-    background: var(--color-white);
+    background: $white;
 }
 
 .content {
@@ -14,14 +14,14 @@
         font-family: 'PingFang SC';
         font-size: $font-size-primary;
         text-align: left;
-        color: var(--color-text-primary);
+        color: $text-color-primary;
         line-height: 16px;
     }
     .money {
         font-family: 'PingFangSC-Semibold';
         font-size: $font-size-middle;
         text-align: left;
-        color: var(--color-error);
+        color: $error-color;
     }
 }
 
@@ -30,7 +30,7 @@
     font-weight: normal;
     font-size: $font-size-label;
     text-align: left;
-    color: var(--color-text-secondary);
+    color: $text-color-secondary;
     padding-bottom: $padding-4n;
-    border-bottom: solid 1px var(--border-line-color);
+    border-bottom: solid 1px $border-color;
 }

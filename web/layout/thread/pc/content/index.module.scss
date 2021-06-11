@@ -2,14 +2,14 @@
 
 .container {
   width: 100%;
-  background: var(--color-white);
+  background: $white;
   padding: rem($padding-6n) rem($padding-6n) rem($padding-4n) rem($padding-6n);
-  border-radius: var(--border-radius-small);
+  border-radius: $border-radius-small;
   box-sizing: border-box;
 }
 
 .header {
-  background: var(--color-white);
+  background: $white;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -51,12 +51,12 @@
 
   .text {
     margin-left: rem($margin-2n);
-    color: var(--color-text-secondary);
+    color: $text-color-secondary;
   }
 
   .icon {
     font-size: rem(14);
-    color: var(--color-text-secondary);
+    color: $text-color-secondary;
   }
 }
 
@@ -65,9 +65,9 @@
 }
 
 .title {
-  color: var(--color-text-primary);
+  color: $text-color-primary;
   line-height: 21px;
-  font-weight: var(--font-weight-regular);
+  font-weight: $font-weight-regular;
   font-size: rem($font-size-middle);
   word-break: break-all;
 }
@@ -131,13 +131,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: var(--color-text-secondary);
+  color: $text-color-secondary;
   font-size: rem($font-size-primary);
 }
 
 .share {
   font-size: rem($font-size-label);
-  color: var(--color-text-secondary);
+  color: $text-color-secondary;
   height: rem(17);
   line-height: rem(17);
 }
@@ -190,8 +190,8 @@
 
 .examine {
   padding: rem($padding-2n) 0;
-  background: var(--color-error);
-  color: var(--color-white);
+  background: $error-color;
+  color: $white;
   text-align: center;
   font-size: rem(14);
 }
@@ -208,14 +208,14 @@
     justify-content: space-between;
     font-size: rem($font-size-primary);
     cursor: pointer;
-    color: var(--color-text-secondary);
+    color: $text-color-secondary;
 
     span {
       margin-left: rem($margin-2n);
     }
 
     &.active {
-      color: var(--color-primary) !important;
+      color: $primary-color !important;
     }
   }
 }
@@ -236,16 +236,16 @@
   margin-top: rem(20);
   line-height: rem(20);
   font-size: rem($font-size-primary);
-  color: var(--color-text-primary);
+  color: $primary-color;
 }
 .rewardNumber {
-  color: var(--color-error);
+  color: $error-color;
 }
 
 .rewardTime {
   margin-top: rem(4);
   font-size: rem($font-size-label);
-  color: var(--color-text-secondary);
+  color: $text-color-secondary;
 }
 
 .browseCategory {
@@ -269,31 +269,31 @@
     }
   }
   .categoryText {
-    color: var(--color-success);
-    border: rem(1) solid var(--color-success);
+    color: $success-color;
+    border: rem(1) solid $success-color;
     &::after {
-      background-color: var(--color-success);
+      background-color: $success-color;
     }
   }
   .categoryEssence {
-    color: var(--color-orange);
-    border: rem(1) solid var(--color-orange);
+    color: $tag-text-color1;
+    border: rem(1) solid $tag-text-color1;
     &::after {
-      background-color: var(--color-orange);
+      background-color: $tag-text-color1;
     }
   }
   .categoryRed {
-    color: var(--color-error);
-    border: rem(1) solid var(--color-error);
+    color: $error-color;
+    border: rem(1) solid $error-color;
     &::after {
-      background-color: var(--color-error);
+      background-color: $error-color;
     }
   }
   .categoryReward {
-    color: var(--color-warn);
-    border: rem(1) solid var(--color-warn);
+    color: $warn-color;
+    border: rem(1) solid $warn-color;
     &::after {
-      background-color: var(--color-warn);
+      background-color: $warn-color;
     }
   }
 }

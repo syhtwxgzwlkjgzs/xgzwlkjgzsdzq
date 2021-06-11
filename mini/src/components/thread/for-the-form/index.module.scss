@@ -53,7 +53,7 @@
       overflow: hidden;
       &__header,
       &-time__header {
-        padding-top: 16px;
+        padding-top: $padding-4n;
         font-size: $font-size-middle;
         border-radius: 0;
         border: $border-solid-1;
@@ -183,7 +183,7 @@
 
 
 .pc {
-  z-index: var(--zindex-dialog) !important;
+  z-index: $zindex-dialog !important;
 
   .rewards {
     position: static;

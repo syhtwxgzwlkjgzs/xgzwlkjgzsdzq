@@ -3,11 +3,11 @@
 .container {
   text-align: center;
   padding: rem($padding-6n) 0;
-  border-radius: var(--border-radius-small);
+  border-radius: $border-radius-small;
 }
 
 .initContainer {
-  background: var(--color-white);
+  background: $white;
 }
 
 .init {

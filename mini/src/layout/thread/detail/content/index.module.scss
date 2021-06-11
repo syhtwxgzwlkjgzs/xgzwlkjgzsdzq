@@ -1,12 +1,12 @@
 @import '@common/styles/index.scss';
 
 .container {
-  background: var(--color-white);
+  background: $white;
   padding: $padding-4n;
 }
 
 .header {
-  background: var(--color-white);
+  background: $white;
   display: flex;
   justify-content: space-between;
 }
@@ -18,7 +18,7 @@
 .more {
   line-height: 20px;
   padding-left: $padding-2n;
-  color: var(--color-text-secondary);
+  color: $text-color-secondary;
 }
 
 .essence {
@@ -34,7 +34,7 @@
 }
 
 .title {
-  color: var(--color-text-primary);
+  color: $text-color-primary;
   line-height: 21px;
   font-weight: bold;
   font-size: $font-size-middle;
@@ -95,7 +95,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: var(--color-text-secondary);
+  color: $text-color-secondary;
   font-size: $font-size-primary;
   height: 24px;
 }
@@ -118,7 +118,7 @@
 
 .tag {
   display: inline-block;
-  color: var(--color-text-regular);
+  color: $text-color-regular;
   background: #f0f1f3; // TODO:token
   font-size: $font-size-label;
   padding: 6.5px $padding-1n;
@@ -141,7 +141,7 @@
 }
 
 .actived {
-  color: var(--color-primary);
+  color: $primary-color;
 }
 
 .likeReward {
@@ -150,8 +150,8 @@
 
 .examine {
   padding: $padding-2n 0;
-  background: var(--color-error);
-  color: var(--color-white);
+  background: $error-color;
+  color: $white;
   text-align: center;
   font-size: $font-size-base;
 }
@@ -168,17 +168,17 @@
   .rewardMoney {
     line-height: 20px;
     font-size: $font-size-primary;
-    color: var(--color-text-primary);
+    color: $text-color-primary;
   }
   .rewardNumber {
     line-height: 17px;
-    color: var(--color-error);
+    color: $error-color;
   }
 
   .rewardTime {
     margin-top: $margin-1n;
     font-size: $font-size-label;
-    color: var(--color-text-secondary);
+    color: $text-color-secondary;
     text-align: center;
   }
 }
