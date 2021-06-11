@@ -134,6 +134,11 @@ class UserCenterFollows extends React.Component {
   followUser = async ({ id: userId }) => {
     const res = await createFollow({ data: { toUserId: userId } });
     if (res.code === 0 && res.data) {
+      Toast.success({
+        content: '操作成功',
+        hasMask: false,
+        duration: 1000,
+      });
       this.setFansBeFollowed({
         id: userId,
         isMutual: res.data.isMutual,
@@ -144,6 +149,11 @@ class UserCenterFollows extends React.Component {
         success: true,
       };
     }
+    Toast.error({
+      content: res.msg || '关注失败',
+      hasMask: false,
+      duration: 2000,
+    });
     return {
       msg: res.msg,
       data: null,
@@ -154,6 +164,11 @@ class UserCenterFollows extends React.Component {
   unFollowUser = async ({ id }) => {
     const res = await deleteFollow({ data: { id, type: 1 } });
     if (res.code === 0 && res.data) {
+      Toast.success({
+        content: '操作成功',
+        hasMask: false,
+        duration: 1000,
+      });
       this.setFansBeUnFollowed(id);
       return {
         msg: '操作成功',
@@ -161,6 +176,11 @@ class UserCenterFollows extends React.Component {
         success: true,
       };
     }
+    Toast.error({
+      content: res.msg || '取消注失败',
+      hasMask: false,
+      duration: 2000,
+    });
     return {
       msg: res.msg,
       data: null,

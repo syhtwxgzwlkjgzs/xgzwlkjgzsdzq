@@ -95,10 +95,12 @@ class index extends Component {
         Toast.success({
           content: '重置密码成功',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
-        Taro.navigateTo({ url: '/subPages/my/edit/index' });
-        this.initState();
+        setTimeout(() => {
+          Taro.navigateTo({ url: '/subPages/my/edit/index' });
+          this.initState();
+        }, 200);
       })
       .catch((err) => {
         Toast.error({

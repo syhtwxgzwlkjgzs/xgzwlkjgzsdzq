@@ -111,10 +111,10 @@ class index extends Component {
           Toast.success({
             content: '绑定成功',
             hasMask: false,
-            duration: 1000,
+            duration: 2000,
           });
-          Taro.navigateTo({ url: '/subPages/my/index' });
           setTimeout(() => {
+            Taro.navigateTo({ url: '/subPages/my/index' });
             this.initState();
           }, 1000);
         })

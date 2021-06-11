@@ -50,11 +50,41 @@ class index extends Component {
     const { id } = getCurrentInstance().router.params;
     if (id) {
       if (follow !== 0) {
-        await this.props.user.cancelFollow({ id: id, type: 1 });
-        await this.props.user.getTargetUserInfo(id);
+        this.props.user
+          .cancelFollow({ id: id, type: 1 })
+          .then((res) => {
+            Toast.success({
+              content: res.msg || '操作成功',
+              hasMask: false,
+              duration: 1000,
+            });
+            this.props.user.getTargetUserInfo(id);
+          })
+          .catch((err) => {
+            Toast.error({
+              content: err.msg || '取消关注失败',
+              hasMask: false,
+              duration: 2000,
+            });
+          });
       } else {
-        await this.props.user.postFollow(id);
-        await this.props.user.getTargetUserInfo(id);
+        this.props.user
+          .postFollow({ id: id })
+          .then((res) => {
+            Toast.success({
+              content: res.msg || '操作成功',
+              hasMask: false,
+              duration: 1000,
+            });
+            this.props.user.getTargetUserInfo(id);
+          })
+          .catch((err) => {
+            Toast.error({
+              content: err.msg || '关注失败',
+              hasMask: false,
+              duration: 2000,
+            });
+          });
       }
     }
   };

@@ -9,7 +9,6 @@ import deepClone from '@common/utils/deep-clone';
 import NoData from '@components/no-data';
 import { inject, observer } from 'mobx-react';
 
-
 @inject('user')
 @observer
 class UserCenterFollows extends React.Component {
@@ -151,6 +150,11 @@ class UserCenterFollows extends React.Component {
   followUser = async ({ id: userId }) => {
     const res = await createFollow({ data: { toUserId: userId } });
     if (res.code === 0 && res.data) {
+      Toast.success({
+        content: '操作成功',
+        hasMask: false,
+        duration: 1000,
+      });
       this.setFansBeFollowed({
         id: userId,
         isMutual: res.data.isMutual,
@@ -161,11 +165,11 @@ class UserCenterFollows extends React.Component {
         success: true,
       };
     }
-
     Toast.error({
-      content: res.msg,
-      duration: 1000
-    })
+      content: res.msg || '关注失败',
+      hasMask: false,
+      duration: 2000,
+    });
 
     return {
       msg: res.msg,
@@ -177,6 +181,11 @@ class UserCenterFollows extends React.Component {
   unFollowUser = async ({ id }) => {
     const res = await deleteFollow({ data: { id, type: 1 } });
     if (res.code === 0 && res.data) {
+      Toast.success({
+        content: '操作成功',
+        hasMask: false,
+        duration: 1000,
+      });
       this.setFansBeUnFollowed(id);
       return {
         msg: '操作成功',
@@ -186,9 +195,10 @@ class UserCenterFollows extends React.Component {
     }
 
     Toast.error({
-      content: res.msg,
-      duration: 1000
-    })
+      content: res.msg || '取消关注失败',
+      hasMask: false,
+      duration: 2000,
+    });
 
     return {
       msg: res.msg,
