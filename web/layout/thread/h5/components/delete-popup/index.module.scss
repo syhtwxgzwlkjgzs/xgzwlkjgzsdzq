@@ -3,15 +3,15 @@
 .container {
   width: rem(245);
   height: rem(125);
-  border-radius: var(--border-radius-small);
-  background: var(--color-white);
+  border-radius: $border-radius-small;
+  background: $white;
   margin: 0 auto;
   .deleteTips {
-    color: var(--color-text-primary);
-    border-bottom: var(--border-border);
+    color: $text-color-primary;
+    border-bottom: $border-solid-1;
     .tips {
       width: 100%;
-      font-weight: var(--font-weight-regular);
+      font-weight: $font-weight-regular;
       font-size: rem($font-size-middle);
       line-height: rem($font-line-height-small);
       text-align: center;
@@ -32,11 +32,11 @@
     text-align: center;
     .close {
       width: 50%;
-      border-right: var(--border-border);
+      border-right: $border-solid-1;
     }
     .ok {
       width: 50%;
-      color: var(--color-primary);
+      color: $primary-color;
     }
   }
 }

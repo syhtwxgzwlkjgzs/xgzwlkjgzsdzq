@@ -1,7 +1,7 @@
 @import '@common/styles/index.scss';
 
 .container {
-  background: var(--color-white);
+  background: $-white;
   text-align: center;
   padding: rem($padding-4n) 0;
 }

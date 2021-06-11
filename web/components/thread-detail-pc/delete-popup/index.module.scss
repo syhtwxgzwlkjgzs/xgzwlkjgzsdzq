@@ -1,15 +1,15 @@
 @import '@common/styles/index.scss';
 
 .container {
-  padding: rem(24);
+  padding: rem($padding-6n);
   width: rem(364);
   border-radius: rem(5);
-  background: var(--color-white);
+  background: $white;
   margin: 0 auto;
   box-sizing: border-box;
 
   .deleteTips {
-    color: var(--color-text-primary);
+    color: $text-color-primary;
     .tips {
       width: 100%;
       font-weight: 600;

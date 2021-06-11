@@ -3,21 +3,21 @@
 .setTop {
   width: 100%;
   height: 44px;
-  background: var(--color-success9);
+  background: $success-color9;
   position: absolute;
   text-align: center;
   line-height: 44px;
   color: $success-color;
   display: none;
-  z-index: var(--zindex-popup);
-  
+  z-index: $zindex-popup;
+
   .setTopIcon {
     display: inline-block;
     width: 20px;
     height: 20px;
     border-radius: $border-radius-circle;
     line-height: 20px;
-    color: var(--color-white);
+    color: $white;
     background: $success-color;
     margin-right: $margin-2n;
 

@@ -18,9 +18,9 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        color: var(--color-white);
+        color: $white;
         text-align: center;
-        background: var(--color-primary);
+        background: $primary-color;
         .moneyTitle {
             font-family: 'PingFangSC-Regular';
             font-weight: normal;
@@ -41,7 +41,7 @@
         width: rem(343);
         height: rem(168);
         border-radius: rem($border-radius-small);
-        background: var(--color-white);
+        background: $white;
         margin-top: rem(-34);
     }
 }

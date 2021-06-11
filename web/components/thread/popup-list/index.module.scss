@@ -70,7 +70,7 @@ $tabs-list-min-height: 70vh;
       border-radius: $border-radius-small;
       width: 8px;
     }
-  
+
     &:hover {
       // 整个滚动条
       &::-webkit-scrollbar {
@@ -78,12 +78,12 @@ $tabs-list-min-height: 70vh;
         border-radius: $border-radius-small;
       }
     }
-  
+
     // 滚动条轨道
     &::-webkit-scrollbar-track {
       opacity: 1;
     }
-  
+
     // 滚动条上的滚动滑块
     &::-webkit-scrollbar-thumb {
       background: $border-shadow-color;
@@ -99,19 +99,19 @@ $tabs-list-min-height: 70vh;
     &::-webkit-scrollbar {
       display: none;
     }
-  
+
     &:hover {
       // 整个滚动条
       &::-webkit-scrollbar {
         display: none;
       }
     }
-  
+
     // 滚动条轨道
     &::-webkit-scrollbar-track {
       display: none;
     }
-  
+
     // 滚动条上的滚动滑块
     &::-webkit-scrollbar-thumb {
       display: none;
@@ -156,11 +156,11 @@ $tabs-list-min-height: 70vh;
 .spinnerPC {
   height: rem($tabs-list-min-height);
   width: 100%;
-  color: var(--color-text-placeholder);
+  color: $text-color-placeholder;
 }
 
 .spinner {
   height: 70vh;
   width: 100%;
-  color: var(--color-text-placeholder);
+  color: $text-color-placeholder;
 }

@@ -17,13 +17,13 @@
         font-weight: bold;
         line-height: rem(20);
         text-align: left;
-        color: var(--color-text-primary);
+        color: $text-color-primary;
       }
       .replyListText {
         margin-top: rem($margin-1n);
         font-size: rem($font-size-middle);
         text-align: left;
-        color: var(--color-text-primary);
+        color: $text-color-primary;
         width: 100%;
         word-break: break-all;
         line-height: $font-line-height-middle;
@@ -73,7 +73,7 @@
             margin-right: rem($margin-2n);
             line-height: rem(18);
             text-align: left;
-            color: var(--color-primary);
+            color: $primary-color;
           }
           .replyedAvatar {
             display: inline-block;
@@ -96,7 +96,7 @@
       font-size: rem($font-size-primary);
       line-height: rem(16.8);
       text-align: left;
-      color: var(--color-text-secondary);
+      color: $text-color-secondary;
       padding-top: rem($padding-2n);
       .replyTime {
         // flex: 1;
@@ -107,7 +107,7 @@
       }
       .replyLike {
         // flex: 1;
-        color: var(--color-primary);
+        color: $primary-color;
       }
       .replyReply {
         // flex: 1;

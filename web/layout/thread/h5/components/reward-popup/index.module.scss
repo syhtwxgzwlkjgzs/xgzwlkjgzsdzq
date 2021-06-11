@@ -28,7 +28,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  background: var(--color-white);
+  background: $white;
   border-radius: rem($border-radius-big) rem($border-radius-big) 0 0;
   overflow: hidden;
   padding: rem($padding-4n);
