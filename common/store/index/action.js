@@ -3,6 +3,7 @@ import IndexStore from './store';
 import { readCategories, readStickList, readThreadList, updatePosts, createThreadShare, readRecommends } from '@server';
 import typeofFn from '@common/utils/typeof';
 import threadReducer from '../thread/reducer';
+import { getCategoryName, getActiveId, getCategories } from '@common/utils/handleCategory'
 
 class IndexAction extends IndexStore {
   constructor(props) {
@@ -13,50 +14,34 @@ class IndexAction extends IndexStore {
   @computed get categoryName() {
     const categories = this.categories || [];
     const { categoryids } = this.filter
+
+    return getCategoryName(categories, categoryids)
+  }
+
+  // 获取被点击一级分类的name
+  @computed get activeCategoryId() {
+    const categories = this.categories || [];
+    const { categoryids } = this.filter
     
-    if (categories?.length) {
-      const id = categoryids[0]
-      if (id !== 'all' && id !== 'default') {
-        let name = ''
-        categories.forEach(item => {
-          if (`${item.pid}` === `${id}`) {
-            name = item.name
-          } else {
-            if (item.children?.length) {
-              
-              item.children.forEach(children => {
-                if (`${children.pid}` === `${id}`) {
-                  name = children.name
-                }
-              })
-            }
-          }
-        })
-        return name
-      }
-    }
-    return ''
+    const [id, cid] = getActiveId(categories, categoryids)
+    return id
   }
 
-  resetCategoryids(categoryids) {
-    return categoryids === 'all' || categoryids === 'default' ? '' : categoryids;
+  // 获取被点击二级分类的name
+  @computed get activeChildCategoryId() {
+    const categories = this.categories || [];
+    const { categoryids } = this.filter
+    
+    const [id, cid] = getActiveId(categories, categoryids)
+    return cid
   }
 
-  resetCurrentIndex = (id) => {
-    let newCurrentIndex = id;
-    const newId = this.resetCategoryids(id);
-    if (newId) {
-      const categories = this.categories || [];
-      categories.forEach((item) => {
-        if (item.children?.length) {
-          const tmp = item.children.filter(children => children.pid === newId);
-          if (tmp.length) {
-            newCurrentIndex = item.pid;
-          }
-        }
-      });
-    }
-    return newCurrentIndex;
+  // 获取当前分类数据
+  @computed get currentCategories() {
+    const categories = this.categories || [];
+    const needDefault = this.needDefault
+
+    return getCategories(categories, needDefault)
   }
 
   /**
@@ -89,6 +74,11 @@ class IndexAction extends IndexStore {
   @action
   setHasOnScrollToLower(data) {
     this.hasOnScrollToLower = data
+  }
+
+  @action.bound
+  setNeedDefault(data) {
+    this.needDefault = data
   }
 
 /**
