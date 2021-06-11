@@ -364,7 +364,6 @@ class RenderCommentList extends React.Component {
   }
 
   replyAvatarClick(reply, comment, floor) {
-    console.log(3);
     typeof this.props.replyAvatarClick === 'function' && this.props.replyAvatarClick(reply, comment, floor);
   }
 

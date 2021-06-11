@@ -30,6 +30,7 @@ import RenderCommentList from './detail/comment-list';
 import classNames from 'classnames';
 import { debounce } from '@common/utils/throttle-debounce';
 import styles from "./post/index.module.scss";
+import Router from '@discuzq/sdk/dist/router';
 
 @inject('site')
 @inject('user')
@@ -624,12 +625,12 @@ class ThreadH5Page extends React.Component {
     if (floor === 2) {
       const { userId } = reply;
       if(!userId) return;
-      Taro.navigateTo({url: `/subPages/user/index?id=${userId}`});
+      Router.push({url: `/subPages/user/index?id=${userId}`});
     }
     if (floor === 3) {
       const { commentUserId } = reply;
       if(!commentUserId) return;
-      Taro.navigateTo({url: `/subPages/user/index?id=${commentUserId}`});
+      Router.push({url: `/subPages/user/index?id=${commentUserId}`});
     }
   }
 

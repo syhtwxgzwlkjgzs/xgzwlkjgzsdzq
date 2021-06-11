@@ -11,6 +11,7 @@ import { parseContentData } from '../../utils';
 import InputPopup from '../../components/input-popup';
 import DeletePopup from '../../components/delete-popup';
 import goToLoginPage from '@common/utils/go-to-login-page';
+import Router from '@discuzq/sdk/dist/router';
 
 // 评论列表
 @inject('thread')
@@ -284,7 +285,7 @@ class RenderCommentList extends React.Component {
   avatarClick(data) {
     const { userId } = data;
     if(!userId) return;
-    Taro.navigateTo({url: `/subPages/user/index?id=${userId}`});
+    Router.push({url: `/subPages/user/index?id=${userId}`});
   }
 
   replyAvatarClick(reply, comment, floor) {

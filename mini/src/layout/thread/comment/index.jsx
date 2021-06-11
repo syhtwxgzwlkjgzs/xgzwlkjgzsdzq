@@ -143,24 +143,22 @@ class CommentH5Page extends React.Component {
   }
 
   replyAvatarClick(reply,commentData,floor) {
-    console.log(reply,commentData);
-    console.log(floor);
     if (floor === 2) {
       const { userId } = reply;
       if(!userId) return;
-      Taro.navigateTo({url: `/subPages/user/index?id=${userId}`});
+      Router.push({url: `/subPages/user/index?id=${userId}`});
     }
     if (floor === 3) {
       const { commentUserId } = reply;
       if(!commentUserId) return;
-      Taro.navigateTo({url: `/subPages/user/index?id=${commentUserId}`});
+      Router.push({url: `/subPages/user/index?id=${commentUserId}`});
     }
   }
 
   avatarClick(commentData) {
     const { userId } = commentData;
     if(!userId) return;
-    Taro.navigateTo({url: `/subPages/user/index?id=${userId}`});
+    Router.push({url: `/subPages/user/index?id=${userId}`});
   }
 
   // 点击评论的赞

@@ -15,7 +15,6 @@ import { debounce } from '@common/utils/throttle-debounce';
 @observer
 class CommentList extends React.Component {
   constructor(props) {
-    console.log(props);
     super(props);
     this.state = {
       isHideEdit: this.props.isHideEdit, // 隐藏评论编辑删除
@@ -40,7 +39,6 @@ class CommentList extends React.Component {
 
   // 点击头像
   avatarClick() {
-    console.log(2)
     typeof this.props?.avatarClick === 'function' && this.props.avatarClick();
   }
 
