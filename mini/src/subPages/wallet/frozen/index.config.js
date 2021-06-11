@@ -1,4 +1,4 @@
 export default {
-  navigationBarTitleText: '提现',
+  navigationBarTitleText: '冻结金额',
   navigationBarBackgroundColor: '#2469f6',
 };
