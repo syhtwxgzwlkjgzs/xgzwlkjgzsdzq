@@ -2,8 +2,7 @@
 @import '@common/styles/_variable.scss';
 @import '@common/styles/mixin/index.scss';
 
-
-.keyboard{
+.keyboard {
   width: 100%;
   position: fixed;
   left: 0;
@@ -11,10 +10,10 @@
   z-index: $zindex-toast;
   background-color: var(--color-white);
   @include ios-safe-area-inset-bottom;
-  .line{
+  .line {
     display: flex;
     align-items: center;
-    .column{
+    .column {
       box-sizing: border-box;
       flex: 1;
       font-size: rem($font-size-large);
@@ -26,7 +25,7 @@
       border-right: none;
       line-height: rem(50);
     }
-    .special{
+    .special {
       box-sizing: border-box;
       flex: 1;
       font-size: rem($font-size-middle);
@@ -48,6 +47,7 @@
       top: 36%;
       box-sizing: border-box;
       border-radius: $border-radius-small;
+      padding: rem($padding-4n) rem($padding-4n) 0 rem($padding-4n);
     }
 
     .dzq-checkbox-wrap {
