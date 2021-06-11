@@ -601,9 +601,18 @@ class ThreadH5Page extends React.Component {
       moreClick: this.onMoreClick,
     };
 
+    const isDraft = threadStore?.threadData?.isDraft;
+    // 是否红包帖
+    const isRedPack = threadStore?.threadData?.displayTag?.isRedPack;
+    // 是否悬赏帖
+    const isReward = threadStore?.threadData?.displayTag?.isReward;
+
     // 更多弹窗权限
     const morePermissions = {
-      canEdit: threadStore?.threadData?.ability?.canEdit,
+      // （不是草稿 && 有编辑权限 && 不是红包帖 && 不是悬赏帖） || （是草稿 && 有编辑权限）
+      canEdit:
+        (!isDraft && threadStore?.threadData?.ability?.canEdit && !isRedPack && !isReward)
+        || (isDraft && threadStore?.threadData?.ability?.canEdit),
       canDelete: threadStore?.threadData?.ability?.canDelete,
       canEssence: threadStore?.threadData?.ability?.canEssence,
       canStick: threadStore?.threadData?.ability?.canStick,

@@ -1,12 +1,12 @@
 @import '@common/styles/index.scss';
 
 .container {
-  background: var(--color-white);
+  background: $white;
   padding: rem($padding-4n);
 }
 
 .header {
-  background: var(--color-white);
+  background: $white;
   display: flex;
   justify-content: space-between;
 }
@@ -18,7 +18,7 @@
 .more {
   line-height: rem(20);
   padding-left: rem($padding-2n);
-  color: var(--color-text-secondary);
+  color: $text-color-secondary;
 }
 
 .essence {
@@ -34,7 +34,7 @@
 }
 
 .title {
-  color: var(--color-text-primary);
+  color: $text-color-primary;
   line-height: 21px;
   font-weight: bold;
   font-size: rem($font-size-middle);
@@ -94,7 +94,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: var(--color-text-secondary);
+  color: $text-color-secondary;
   font-size: rem($font-size-primary);
   height: rem(24);
 }
@@ -117,7 +117,7 @@
 
 .tag {
   display: inline-block;
-  color: var(--color-text-regular);
+  color: $text-color-regular;
   background: #f0f1f3; // TODO:token
   font-size: rem($font-size-label);
   padding: rem(6.5) rem($padding-1n);
@@ -140,7 +140,7 @@
 }
 
 .actived {
-  color: var(--color-primary);
+  color: $primary-color;
 }
 
 .likeReward {
@@ -149,8 +149,8 @@
 
 .examine {
   padding: rem(8) 0;
-  background: var(--color-error);
-  color: var(--color-white);
+  background: $error-color;
+  color: $white;
   text-align: center;
   font-size: rem(14);
 }
@@ -166,19 +166,19 @@
   .rewardMoney {
     line-height: rem(20);
     font-size: rem($font-size-primary);
-    color: var(--color-text-primary);
+    color: $text-color-primary;
     text-align: center;
   }
   .rewardNumber {
     line-height: rem(17);
-    color: var(--color-error);
+    color: $error-color;
     text-align: center;
   }
 
   .rewardTime {
     margin-top: rem($margin-1n);
     font-size: rem($font-size-label);
-    color: var(--color-text-secondary);
+    color: $text-color-secondary;
     text-align: center;
   }
 }

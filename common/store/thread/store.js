@@ -9,6 +9,7 @@ class ThreadStore {
   @observable totalCount = 0; // 评论列表总条数
   @observable authorInfo = null; // 作者信息
   @observable isPositionToComment = false; // 是否定位到评论位置
+  @observable checkUser = null; // @ren数据
 
   @observable isCommentListError = false;
   @observable isAuthorInfoError = false;

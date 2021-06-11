@@ -3,7 +3,7 @@
 .inputClick {
   :global {
     .dzq-input.is-disabled .dzq-input__inner {
-      background-color: var(--comment-box-bg-color);
+      background-color: $body-bg-color;
       -webkit-appearance: none; // ios下去除上面阴影
     }
   }
@@ -18,7 +18,7 @@
   position: relative;
 
   // TODO:暂未提供token
-  color: var(--color-text-secondary);
+  color: $text-color-secondary;
 
   :first-child {
     margin-left: 0;
@@ -30,8 +30,8 @@
   height: rem(16);
   font-size: rem(12);
   text-align: center;
-  color: var(--color-white);
-  background: var(--color-error);
+  color: $white;
+  background: $error-color;
   border-radius: rem(8);
   padding: 0 rem(6);
   box-sizing: border-box;

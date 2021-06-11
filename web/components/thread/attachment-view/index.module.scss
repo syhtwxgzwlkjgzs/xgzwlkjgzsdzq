@@ -32,7 +32,7 @@
       align-items: center;
     }
   }
-  
+
   .span {
     cursor: pointer;
   }
@@ -51,16 +51,16 @@
     flex: 1;
   }
   .size {
-    color: var(--color-text-regular);
+    color: $text-color-regular;
     font-size: rem($font-size-label);
     line-height: rem(17);
   }
   .containerIcon {
-    color: var(--color-success);
+    color: $success-color;
     font-size: rem(20);
   }
   .content {
-    color: var(--color-text-primary);
+    color: $text-color-primary;
     font-size: rem($font-size-primary);
     display: block;
     overflow: hidden;
@@ -87,7 +87,10 @@
     max-width: 70%;
   }
 }
+<<<<<<< HEAD
 
 .spinner {
   width: 22px;
 }
+=======
+>>>>>>> feature/detail

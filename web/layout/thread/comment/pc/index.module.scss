@@ -10,7 +10,7 @@
 
 .header {
   width: 100%;
-  background: var(--color-white);
+  background: $white;
 }
 
 .body {
@@ -26,7 +26,7 @@
     padding: rem($padding-6n) rem($padding-6n) rem($padding-2n) rem($padding-6n);
     width: rem(750);
     margin-right: rem(20);
-    background: var(--color-white);
+    background: $white;
     box-sizing: border-box;
     border-radius: rem($border-radius-small);
 
@@ -39,7 +39,7 @@
 
     .back,.delete {
       font-size: rem($font-size-primary);
-      color: var(--color-text-secondary);
+      color: $text-color-secondary;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -73,13 +73,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--color-white);
+      background: $white;
       margin-bottom: rem(20);
       border-radius: rem($border-radius-small);
     }
     .recommend {
       width: 100%;
-      background: var(--color-white);
+      background: $white;
       border-radius: rem($border-radius-small);
       overflow: hidden;
     }

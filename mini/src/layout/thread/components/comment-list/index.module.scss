@@ -14,7 +14,7 @@
       .revise {
         font-size: $font-size-primary;
         text-align: left;
-        color: var(--color-text-secondary);
+        color: $text-color-secondary;
       }
 
       .headerRigth {
@@ -25,22 +25,22 @@
         .showMoneyNum {
           font-size: $font-size-label;
           text-align: left;
-          color: var(--color-text-primary);
+          color: $text-color-primary;
           margin-left: $margin-2n;
           .moneyNumber {
-            color: var(--color-error);
+            color: $error-color;
           }
         }
         .more {
           margin-top: $margin-2n;
           font-size: $font-size-label;
           text-align: left;
-          color: var(--color-text-primary);
+          color: $text-color-primary;
           margin-left: $margin-6n;
           .moreIcon {
             margin-top: 1px;
             line-height: 20px;
-            color: var(--color-text-secondary);
+            color: $text-color-secondary;
           }
         }
       }
@@ -64,7 +64,7 @@
           font-size: $font-size-primary;
           line-height: 20px;
           text-align: left;
-          color: var(--color-text-primary);
+          color: $text-color-primary;
         }
         .commentListText {
           margin-top: $margin-1n;
@@ -72,7 +72,7 @@
           line-height: $font-line-height-base;
           text-align: left;
           word-break: break-all;
-          color: var(--color-text-primary);
+          color: $text-color-primary;
 
           :global {
             .qq-emotion {
@@ -110,7 +110,7 @@
           font-size: rem($font-size-primary);
           line-height: 16.8px;
           text-align: left;
-          color: var(--color-text-secondary);
+          color: $text-color-secondary;
           padding-top: rem($padding-2n);
           .commentTime {
             // flex: 1;
@@ -121,7 +121,7 @@
           }
           .commentLike {
             // flex: 1;
-            color: var(--color-primary);
+            color: $primary-color;
           }
           .commentReply {
             // flex: 1;
@@ -139,7 +139,7 @@
           font-size: $font-size-primary;
           line-height: $font-line-height-middle;
           text-align: left;
-          color: var(--color-text-primary);
+          color: $text-color-primary;
           padding-top: $padding-4n;
         }
       }

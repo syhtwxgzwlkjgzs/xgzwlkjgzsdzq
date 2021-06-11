@@ -7,7 +7,7 @@
   flex-direction: column;
   justify-content: space-between;
   margin: 0 auto;
-  background: var(--color-white);
+  background: $white;
   border-radius: rem($border-radius-big);
   overflow: hidden;
   padding: rem(24);
@@ -22,7 +22,7 @@
   .headerLeft {
     flex: 1;
     font-size: rem($font-size-middle);
-    font-weight: var(--font-weight-regular);
+    font-weight: $font-weight-regular;
     text-align: center;
   }
   .headerIcon {
@@ -37,11 +37,11 @@
 .body {
   color: $text-color-regular;
   font-size: rem($font-size-base);
-  
+
   .radioGroup {
     display: flex;
     flex-wrap: wrap;
-    border-bottom: solid rem(1) var(--border-line-color);
+    border-bottom: solid rem(1) $border-color;
     padding-top: rem($padding-4n);
     .reportTitle {
       display: flex;
@@ -71,7 +71,7 @@
       white-space: nowrap;
     }
     .reportIcon {
-      color: $text-color-secondary
+      color: $text-color-secondary;
     }
   }
 }
@@ -87,7 +87,7 @@
         padding: rem($padding-3n) rem($padding-4n);
 
         &::placeholder {
-          color: $text-color-placeholder
+          color: $text-color-placeholder;
         }
       }
     }
@@ -96,7 +96,7 @@
     width: 100%;
     // height: rem(114);
     margin-bottom: rem($margin-4n);
-    border: var(--border-border);
+    border: $border-solid-1;
     border-radius: rem($border-radius-small);
   }
 }
