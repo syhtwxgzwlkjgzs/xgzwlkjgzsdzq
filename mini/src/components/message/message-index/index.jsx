@@ -23,7 +23,7 @@ const Index = ({ message, user }) => {
     return [
       {
         iconName: 'RemindOutlined',
-        title: '帖子通知',
+        title: '账号消息',
         link: '/subPages/message/index?page=thread',
         totalCount: threadUnread || 0,
       },
@@ -35,7 +35,7 @@ const Index = ({ message, user }) => {
       },
       {
         iconName: 'LeaveWordOutlined',
-        title: '账号消息',
+        title: '帖子通知',
         link: '/subPages/message/index?page=account',
         totalCount: accountUnread || 0,
       },
