@@ -72,7 +72,7 @@ class index extends Component {
           duration: 1000,
         });
         setTimeout(() => {
-          Taro.navigateBack({ url: '/subPages/my/index' });
+          Taro.redirectTo({ url: '/subPages/my/index' });
         }, 200)
       })
       .catch((error) => {
@@ -82,7 +82,7 @@ class index extends Component {
           duration: 1000,
         });
         setTimeout(() => {
-          Taro.navigateBack({ url: '/subPages/my/index' });
+          Taro.redirectTo({ url: '/subPages/my/index' });
         }, 200)
       });
   }, 300);

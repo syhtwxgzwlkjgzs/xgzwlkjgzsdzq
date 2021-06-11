@@ -104,7 +104,7 @@ class index extends Component {
             });
           }
         }
-        Taro.navigateBack({ url: '/subPages/my/edit/index' });
+        Taro.redirectTo({ url: '/subPages/my/edit/index' });
         this.props.user.userInfo.canWalletPay = true;
         this.props.payBox.password = null;
       })
