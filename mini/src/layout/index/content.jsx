@@ -33,7 +33,17 @@ class IndexH5Page extends React.Component {
     this.headerRef = createRef(null);
   }
 
+  setNavigationBarStyle = () => {
+    Taro.setNavigationBarColor({
+      frontColor: '#ffffff',
+      backgroundColor: '#ff0000'
+    })
+  }
+
   componentDidMount() {
+
+    this.setNavigationBarStyle();
+
     let navBarHeight = 64
     try {
       const res = Taro.getSystemInfoSync()
