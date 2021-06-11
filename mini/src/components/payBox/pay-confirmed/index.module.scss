@@ -1,21 +1,21 @@
 @import '@common/styles/index.scss';
 
-.payBox{
+.payBox {
   background: var(--color-white);
   padding: rem($padding-6n) rem($padding-4n) rem($padding-4n) rem($padding-4n);
   min-height: 337px;
   box-sizing: border-box;
-  
+
   .moneyUnit {
     font-size: $font-size-large;
   }
-  .title{
+  .title {
     text-align: center;
     font-size: 30px;
     font-weight: 600;
   }
 
-  .list{
+  .list {
     margin-top: $margin-2n;
     :global {
       .dzq-checkbox-wrap {
@@ -30,69 +30,68 @@
         }
       }
     }
-    .listItem{
+    .listItem {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: $padding-4n 0;
+      &:first-child {
+        border-bottom: 1px solid $paybox-border-line-color;
+      }
+      .left {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        padding: $padding-4n 0;
-        &:first-child {
-          border-bottom: 1px solid $paybox-border-line-color;
+        justify-content: flex-start;
+        flex-shrink: 0;
+        .icon {
+          margin-right: $margin-2n;
         }
-        .left{
-          display: flex;
-          align-items: center;
-          justify-content: flex-start;
-          flex-shrink: 0;
-          .icon{
-            margin-right: $margin-2n;
-          }
-          .text{
-            font-size: $font-size-primary;
-            color: var(--color-text-primary)
-          }
+        .text {
+          font-size: $font-size-primary;
+          color: var(--color-text-primary);
         }
-        .right{
-          display: flex;
-          align-items: center;
-          justify-content: flex-end;
-          flex: 1;
-          word-break: break-all;
-          .subText{
-            font-size: $font-size-label;
-            color: var(--color-text-secondary);
-            margin-right: $margin-4n;
-          }
-          :global {
-            .dzq-checkbox--radio {
+      }
+      .right {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        flex: 1;
+        word-break: break-all;
+        .subText {
+          font-size: $font-size-label;
+          color: var(--color-text-secondary);
+          margin-right: $margin-4n;
+        }
+        :global {
+          .dzq-checkbox--radio {
+            border-radius: var(--border-radius-small);
+            &::after {
               border-radius: var(--border-radius-small);
-              &::after {
-                border-radius: var(--border-radius-small);
-              }
-            }
-            .dzq-icon {
-              font-size: 10px !important;
             }
           }
+          .dzq-icon {
+            font-size: 10px !important;
+          }
         }
+      }
     }
   }
-  .tips{
+  .tips {
     padding: $padding-2n 0;
     text-align: center;
     font-size: $font-size-primary;
     color: var(--color-text-secondary);
   }
 
-  .btnBox{
-    margin-top: rem($margin-2n);
+  .btnBox {
     box-sizing: border-box;
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
     padding: $padding-2n $padding-4n $padding-10;
-    padding-bottom: constant(safe-area-inset-bottom);  ///兼容 IOS<11.2/
-    padding-bottom: env(safe-area-inset-bottom);  ///兼容 IOS>11.2/
+    padding-bottom: calc(16px + constant(safe-area-inset-bottom)); ///兼容 IOS<11.2/
+    padding-bottom: calc(16px + env(safe-area-inset-bottom)); ///兼容 IOS>11.2/
     &::before {
       content: '';
       display: block;
@@ -104,7 +103,7 @@
       margin: 0 rem(-$margin-4n);
     }
 
-    .btn{
+    .btn {
       height: 42px;
       font-size: $font-size-middle;
       border-radius: 5px;
@@ -112,6 +111,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      line-height: 42px;
     }
   }
 }
@@ -128,4 +128,3 @@
   color: $text-color-secondary;
   cursor: pointer;
 }
-
