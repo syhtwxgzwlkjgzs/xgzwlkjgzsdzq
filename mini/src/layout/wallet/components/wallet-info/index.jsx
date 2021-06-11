@@ -2,7 +2,6 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
-import walletBackground from '../../../../../../web/public/dzq-img/walletbackground.png';
 
 @observer
 class WalletInfo extends React.Component {
@@ -19,9 +18,6 @@ class WalletInfo extends React.Component {
     return (
       <View
         className={styles.container}
-        style={{
-          backgroundImage: walletBackground,
-        }}
       >
         <View className={styles.totalAmount}>
           <View className={styles.moneyTitle}>当前总金额</View>
