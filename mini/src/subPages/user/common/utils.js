@@ -29,7 +29,7 @@ export const getUserProfile = (callback, isShowLoading = true) => new Promise((r
     desc: "账号绑定微信",
     success: async (res) => {
       if(isShowLoading) {
-        Taro.showLoading({ title: '登陆中', mask: true });
+        Taro.showLoading({ title: '微信登录中', mask: true });
       }
       if(res.errMsg === 'getUserProfile:ok'){
         await callback(res);
