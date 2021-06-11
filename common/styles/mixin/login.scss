@@ -331,10 +331,6 @@
     justify-content: center;
     top: 17px;
     z-index: $zindex-tooltip;
-    color: $disabled-color2 !important;
-    &:hover {
-      color: $primary-color !important;
-    }
   }
   :global(.dzq-input__icon){
     display: flex;
@@ -343,9 +339,5 @@
     top: 17px;
     z-index: $zindex-tooltip;
     font-size: $font-size-middle !important;
-    color: $disabled-color2 !important;
-    &:hover {
-      color: $primary-color !important;
-    }
   }
 }

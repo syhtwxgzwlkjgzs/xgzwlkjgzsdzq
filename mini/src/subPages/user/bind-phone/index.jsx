@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import Taro, { getCurrentInstance, navigateTo, redirectTo } from '@tarojs/taro';
+import Taro, { getCurrentInstance, navigateTo, redirectTo, navigateBack } from '@tarojs/taro';
 import Button from '@discuzq/design/dist/components/button/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import Input from '@discuzq/design/dist/components/input/index';
@@ -91,7 +91,7 @@ class BindPhoneH5Page extends React.Component {
 
   handleBindButtonClick = async () => {
     try {
-      const { sessionToken } = getCurrentInstance().router.params;
+      const { sessionToken, from = '' } = getCurrentInstance().router.params;
       const resp = await this.props.mobileBind.bind(sessionToken);
       const uid = get(resp, 'uid', '');
       this.props.user.updateUserInfo(uid);
@@ -100,6 +100,10 @@ class BindPhoneH5Page extends React.Component {
         hasMask: false,
         duration: 1000,
         onClose: () => {
+          if (from === 'userCenter') {
+            navigateBack();
+            return;
+          }
           redirectTo({
             url: `/pages/index/index`
           });
@@ -107,7 +111,7 @@ class BindPhoneH5Page extends React.Component {
       });
     } catch (e) {
       // 注册信息补充
-      if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+      if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
         if (isExtFieldsOpen(this.props.site)) {
           this.props.commonLogin.needToCompleteExtraInfo = true;
           redirectTo({ url: '/subPages/user/supplementary/index' });
@@ -147,6 +151,7 @@ class BindPhoneH5Page extends React.Component {
 
   render() {
     const { mobileBind } = this.props;
+    const { from = '' } = getCurrentInstance().router.params;
     return (
       <Page>
         <View className={layout.container}>
@@ -167,15 +172,20 @@ class BindPhoneH5Page extends React.Component {
             />
             {/* 输入框 end */}
             <Button className={layout.button} type="primary" onClick={this.handleBindButtonClick}>
-              下一步
+              {from === 'userCenter' ? '绑定' : '下一步'}
             </Button>
-            <View className={layout.functionalRegion}>
-              <Text className={layout.clickBtn} onClick={() => {
-                redirectTo({
-                  url: `/pages/index/index`
-                });
-              }} >跳过</Text>
-            </View>
+            {
+              from !== 'userCenter'
+              && (
+                <View className={layout.functionalRegion}>
+                  <Text className={layout.clickBtn} onClick={() => {
+                    redirectTo({
+                      url: `/pages/index/index`
+                    });
+                  }} >跳过</Text>
+                </View>
+              )
+            }
           </View>
         </View>
       </Page>

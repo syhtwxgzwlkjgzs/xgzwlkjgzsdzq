@@ -178,6 +178,7 @@ class Index extends Component {
 
   // 处理文本框内容
   onContentChange = (contentText, maxLength) => {
+    console.log(contentText);
     const { setPostData } = this.props.threadPost;
     setPostData({ contentText });
     this.toHideTitle();
@@ -579,7 +580,10 @@ class Index extends Component {
 
   // 点击空白区域自动聚焦文本框
   handleContentFocus = () => {
-    this.contentRef && this.contentRef.current.focus();
+    if (this.contentRef && this.state.bottomHeight === 0) {
+      this.contentRef.current.focus();
+    }
+
     this.setState({
       showEmoji: false,
       operationType: 0,

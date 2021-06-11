@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { inject } from 'mobx-react';
 import DDialog from '@components/dialog';
-import { Popup } from '@discuzq/design';
+import { Popup, Icon } from '@discuzq/design';
 
 import styles from './index.module.scss';
 
@@ -40,7 +40,18 @@ class MapDialog extends React.Component {
         position="center"
         visible={true}
       >
-        <iframe src={this.props.mapUrl} frameBorder="0" scrolling="no" />
+        <div className={styles.header}>
+          你在哪里？
+          <Icon
+            className={styles['header-close']}
+            name="CloseOutlined"
+            size={12}
+            onClick={this.props.onClose}
+          />
+        </div>
+        <div className={styles['iframe-box']}>
+          <iframe src={this.props.mapUrl} frameBorder="0" scrolling="no" />
+        </div>
       </Popup>
     );
   }

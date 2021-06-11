@@ -6,6 +6,8 @@ import DZQUpload from '@components/upload';
 import ImageUpload from '../../../../components/thread-post/image-upload';
 import FileUpload from '../../../../components/thread-post/file-upload';
 import { toJS, set } from 'mobx';
+import h5layout from './index.module.scss';
+import pclayout from './pc.module.scss';
 
 
 export const InputType = {
@@ -26,16 +28,18 @@ export const CreateFunctions = {
   [InputType.FILE]: CreateFileUploader,
 };
 
+
 export function CreateInput(field, layout) {
   const { fieldsDesc, name, required } = field;
   return (
     <div className={layout.item} key={name}>
       <div className={layout.input}>
         <div className={layout.label}>
-          {required && <span className={layout.required}>* </span>}
+          {requiredSign(required, layout.required)}
           {name}
         </div>
         <Input
+          trim
           className={layout.input_value}
           value={field.value}
           placeholder={fieldsDesc}
@@ -54,9 +58,10 @@ export function CreateTextArea(field, layout) {
     <div className={layout.item} key={name}>
       <div className={layout.textarea}>
         <div className={layout.label}>
-          {required && <span className={layout.required}>* </span>}{name}
+          {requiredSign(required, layout.required)}{name}
         </div>
         <Input.Textarea
+          trim
           autoHeight={true}
           showLimit={true}
           maxLength={30}
@@ -80,7 +85,7 @@ export function CreateRadioGroup(field, layout) {
     <div className={layout.item} key={name}>
       <div className={layout.checkbox}>
         <div className={layout.label}>
-          {required && <span className={layout.required}>* </span>}{name}
+          {requiredSign(required, layout.required)}{name}
         </div>
         <Radio.Group
           value={field.value}
@@ -102,7 +107,7 @@ export function CreateCheckBoxGroup(field, layout) {
     <div className={layout.item} key={name}>
       <div className={layout.checkbox}>
         <div className={layout.label}>
-          {required && <span className={layout.required}>* </span>}{name}
+          {requiredSign(required, layout.required)}{name}
         </div>
         <Checkbox.Group value={field.value} onChange={(checked) => {
           field.value = checked;
@@ -121,7 +126,7 @@ const getAttachment = (ret) => {
   }
   const { data: { url, id } } = ret;
 
-  return { url, id};
+  return { url, id };
 };
 
 export function CreatePhotoUploader(field, layout) {
@@ -131,7 +136,8 @@ export function CreatePhotoUploader(field, layout) {
     <div className={layout.item} key={name}>
       <div className={layout.imgUpload}>
         <div className={layout.label}>
-          {required && <span className={layout.required}>* </span>}{name}
+          {requiredSign(required, layout.required)}
+          {name}
         </div>
         <ImageUpload
           listType='card'
@@ -165,7 +171,7 @@ export function CreateFileUploader(field, layout) {
     <div className={layout.item} key={name}>
       <div className={layout.attachmentsUpload}>
         <span className={layout['attachmentsUpload-left']}>
-          {required && <span className={layout.required}>* </span>}
+          {requiredSign(required, layout.required)}
           {name}
         </span>
         <FileUpload
@@ -195,4 +201,8 @@ export function CreateFileUploader(field, layout) {
       </div>
     </div>
   );
+}
+
+function requiredSign(isRequired, className) {
+  return isRequired ? <span className={className}>* </span> : '';
 }

@@ -255,6 +255,11 @@ class UserAction extends SiteStore {
     return !!this.userInfo && !!this.userInfo.id;
   }
 
+  @action
+  isPaid() {
+    return !!this.userInfo && !!this.userInfo.paid
+  }
+
   // 获取指定用户信息
   @action
   async getAssignUserInfo(userId) {

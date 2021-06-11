@@ -63,8 +63,8 @@ class SearchResultPostH5Page extends React.Component {
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} isShowBottom={false} searchWhileTyping/>
         </div>
         {
-          pageData?.map((item, index) => (
-            <ThreadContent key={index} data={item} />
+          pageData?.map((item, index, arr) => (
+            <ThreadContent showBottomStyle={index !== arr.length - 1} key={index} data={item} />
           ))
         }
       </BaseLayout>

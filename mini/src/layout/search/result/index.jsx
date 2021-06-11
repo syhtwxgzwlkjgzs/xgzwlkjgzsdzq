@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 
 import SearchInput from '@components/search-input';
 import BaseLayout from '@components/base-layout';
-import SearchPosts from './components/search-posts';
+import ThreadContent from '@components/thread';
 import SearchTopics from './components/search-topics';
 import SearchUsers from './components/search-users';
 import SidebarPanel from '@components/sidebar-panel';
@@ -93,6 +93,7 @@ class SearchResultPage extends React.Component {
           platform='h5'
           isError={searchUsersError.isError}
           errorText={searchUsersError.errorText}
+          titleStyle={{ border: "none" }}
         >
           {
             usersPageData?.length && <SearchUsers data={usersPageData} onItemClick={this.onUserClick} />
@@ -108,9 +109,11 @@ class SearchResultPage extends React.Component {
           className={threadsPageData?.length && styles.bottom}
           isError={searchThreadsError.isError}
           errorText={searchThreadsError.errorText}
+          titleStyle={{ border: "none" }}
+          mold='plane'
         >
           {
-            threadsPageData?.length &&<SearchPosts data={threadsPageData.filter((_, index) => index < 3)} onItemClick={this.onPostClick} />
+            threadsPageData?.filter((_, index) => index < 3).map((item, index) => <ThreadContent data={item} key={index} />)
           }
         </SidebarPanel>
 
@@ -122,6 +125,7 @@ class SearchResultPage extends React.Component {
           platform='h5'
           isError={searchTopicsError.isError}
           errorText={searchTopicsError.errorText}
+          titleStyle={{ border: "none" }}
         >
           {
             topicsPageData?.length && <SearchTopics data={topicsPageData} onItemClick={this.onTopicClick} />

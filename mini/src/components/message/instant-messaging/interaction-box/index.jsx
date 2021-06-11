@@ -13,7 +13,7 @@ import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
 
 const InteractionBox = (props) => {
-  const { dialogId, threadPost, showEmoji, setShowEmoji, username, updateDialogId } = props;
+  const { dialogId, threadPost, showEmoji, setShowEmoji, username, updateDialogId, keyboardHeight, inputBottom } = props;
   const { readDialogMsgList, dialogMsgList, createDialogMsg, createDialog, readDialogIdByUsername } = props.message;
 
   // const [dialogId, setDialogId] = useState(propsDialogId);
@@ -23,8 +23,6 @@ const InteractionBox = (props) => {
   // const [showEmoji, setShowEmoji] = useState(false);
 
   const [isSubmiting, setIsSubmiting] = useState(false);
-
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   // const checkToShowCurrentMsgTime = (curTimestamp) => {
   //   const DISPLAY_GAP_IN_MINS = 3;
@@ -50,11 +48,6 @@ const InteractionBox = (props) => {
     if (!threadPost.emojis.length) {
       threadPost.fetchEmoji();
     }
-
-    // 监听键盘高度变化
-    Taro.onKeyboardHeightChange(res => {
-      setKeyboardHeight(res?.height || 0);
-    });
 
     return () => {
       Taro.hideLoading();
@@ -182,7 +175,13 @@ const InteractionBox = (props) => {
   };
 
   return (
-    <View className={styles.interactionBox} style={{ bottom: (keyboardHeight && !showEmoji) ? `14px` : '' }}>
+    <View
+      id='operation-box'
+      className={styles.interactionBox}
+      style={{
+        bottom: (keyboardHeight && !showEmoji) ? `${inputBottom}px` : 0,
+        // paddingBottom: keyboardHeight ? 0 : '',
+       }}>
       <View className={styles.operationBox}>
         <View className={styles.inputWrapper}>
           <Input
