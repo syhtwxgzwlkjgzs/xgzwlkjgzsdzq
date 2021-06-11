@@ -5,6 +5,7 @@ import { inject, observer } from 'mobx-react';
 import { PAYWAY_MAP, STEP_MAP, PAY_MENT_MAP } from '../../../../../common/constants/payBoxStoreConstants';
 import throttle from '@common/utils/thottle.js';
 
+@inject('site')
 @inject('user')
 @inject('payBox')
 @observer
@@ -408,9 +409,13 @@ export default class index extends Component {
           <div>
             <div className={styles.payTab_top}>
               <Radio.Group value={this.props.payBox.payWay} onChange={this.handleChangePaymentType}>
-                <Radio name={'weixin'} className={`${styles.payTab} `}>
-                  微信支付
-                </Radio>
+                {
+                  this.props.site.isWechatPayOpen && (
+                    <Radio name={'weixin'} className={`${styles.payTab} `}>
+                      微信支付
+                    </Radio>
+                  )
+                }
                 <Radio name={'wallet'} className={`${styles.payTab}`}>
                   钱包支付
                 </Radio>

@@ -256,7 +256,6 @@ class IndexH5Page extends React.Component {
     const { threads = {}, categories = [] } = index;
     const { currentPage, totalPage, pageData } = threads || {};
     const newCategories = this.handleCategories(categories);
-    console.log(user.threadExtendPermissions);
     return (
       <BaseLayout
         showHeader={false}

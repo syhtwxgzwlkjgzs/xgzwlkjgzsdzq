@@ -19,7 +19,7 @@ export class MessageIndex extends Component {
       items: [
         {
           iconName: 'RemindOutlined',
-          title: '帖子通知',
+          title: '账号消息',
           link: '/message/?page=thread',
           unreadCount: 0,
         },
@@ -31,7 +31,7 @@ export class MessageIndex extends Component {
         },
         {
           iconName: 'LeaveWordOutlined',
-          title: '账号消息',
+          title: '帖子通知',
           link: '/message/?page=account',
           unreadCount: 0,
         },

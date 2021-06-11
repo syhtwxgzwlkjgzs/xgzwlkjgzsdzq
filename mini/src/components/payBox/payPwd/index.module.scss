@@ -12,6 +12,7 @@
       top: 36%;
       box-sizing: border-box;
       border-radius: $border-radius-small;
+      padding: $padding-4n $padding-4n 0 $padding-4n;
     }
 
     .dzq-checkbox-wrap {
@@ -32,7 +33,7 @@
   }
 }
 
-.keyboard{
+.keyboard {
   width: 100%;
   position: fixed;
   left: 0;
@@ -40,12 +41,12 @@
   z-index: $zindex-toast;
   background-color: var(--color-white);
   // @include ios-safe-area-inset-bottom;
-  .line{
+  .line {
     display: flex;
     align-items: center;
-    .column{
+    .column {
       box-sizing: border-box;
-      flex:1;
+      flex: 1;
       font-size: $font-size-large;
       color: var(--color-text-primary);
       height: 50px;
@@ -55,9 +56,9 @@
       border-right: none;
       line-height: 50px;
     }
-    .special{
+    .special {
       box-sizing: border-box;
-      flex:1;
+      flex: 1;
       font-size: $font-size-middle;
       color: var(--color-text-primary);
       height: 50px;
@@ -71,22 +72,22 @@
   }
 }
 
-.title{
+.title {
   color: var(--color-text-primary);
   font-size: 20px;
   padding: 16px;
   margin-top: 16px;
 }
 
-.payList{
+.payList {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  .payListItem{
+  .payListItem {
     &:first-child {
       border-radius: 5px 0 0 5px;
     }
-  
+
     &:last-child {
       border-radius: 0 5px 5px 0;
     }
@@ -183,13 +184,10 @@
 
 .forgetPasswordContainer {
   width: 100%;
-  margin-top: $margin-4n;
+  margin: $margin-4n $margin-4n $margin-6n 0;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  font-size: $font-size-small;
-  margin-bottom: $margin-2n;
-  text {
-    color: $text-color-regular;
-  }
+  color: $text-color-regular;
+  font-size: rem($font-size-small);
 }
