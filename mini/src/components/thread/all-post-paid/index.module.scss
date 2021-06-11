@@ -20,7 +20,7 @@
       .dzq-slider__progress__button {
         width: 10px;
         height: 10px;
-        border: 7px solid var(--color-primary);
+        border: 7px solid $primary-color;
       }
       .dzq-slider__progress {
         height: 24px;
@@ -41,7 +41,7 @@
   min-height: 100vh;
   /* mobile viewport bug fix */
   min-height: -webkit-fill-available;
-  background-color: var(--color-white);
+  background-color: $white;
   z-index: $zindex-popup;
   .line-box {
     display: flex;

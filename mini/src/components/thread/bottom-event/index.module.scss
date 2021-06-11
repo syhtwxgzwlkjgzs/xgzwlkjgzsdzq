@@ -3,7 +3,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 16px 0 8px;
+  margin: $margin-4n 0 $margin-2n;
 }
 .userImg {
   @include cursor-on-pc;
@@ -62,10 +62,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: $font-size-primary ;
+    font-size: $font-size-primary;
   }
   .fabulousPost {
-    margin-left: 8px;
+    margin-left: $margin-2n;
     font-size: $font-size-primary;
     color: $text-color-secondary;
     height: 35px;
@@ -73,9 +73,9 @@
     align-items: center;
   }
   .fabulousCancel {
-    margin-left: 8px;
+    margin-left: $margin-2n;
     font-size: $font-size-primary;
-    color: var(--color-primary);
+    color: $primary-color;
     height: 35px;
     display: flex;
     align-items: center;
@@ -88,7 +88,7 @@
   }
   .icon {
     color: $text-color-secondary;
-    
+
     &.likedColor {
       color: $primary-color;
     }

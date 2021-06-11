@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Taro from '@tarojs/taro';
+import Taro, { getCurrentInstance } from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import Input from '@discuzq/design/dist/components/input/index';
 import Avatar from '@discuzq/design/dist/components/avatar/index';
@@ -15,6 +15,7 @@ import stringToColor from '@common/utils/string-to-color';
 
 @inject('threadPost')
 @inject('search')
+@inject('thread')
 @observer
 class AtSelect extends Component {
   constructor(props) {
@@ -104,6 +105,15 @@ class AtSelect extends Component {
     const { checkUser } = this.state;
     // 未选@人，不操作
     if (checkUser.length === 0) return;
+
+    //判断是否为详情页进入的
+    const data = getCurrentInstance().router.params;
+    if (data?.type === 'thread') {
+      this.props.thread.setCheckUser(checkUser);
+      // 返回详情页
+      this.handleCancel();
+      return;
+    }
 
     // 外部选择事件
     if (typeof this.props.getAtList === 'function') {

@@ -147,14 +147,15 @@ class WalletH5Page extends React.Component {
 
   // 点击确定后对时间选择的弹框的操作
   handleMoneyTime = (time) => {
-    const gapTime = new Date(time).getTime() - new Date().getTime();
+    // 获得的time是当前时间的一天后
+    const gapTime = new Date(time).getTime() - new Date().getTime() - 24 * 60 * 60 * 1000;
     if (gapTime < 0) {
       this.setState({ consumptionTime: time }, () => {
         this.initStateAndFetch();
       });
       this.setState({ consumptionTimeshow: false });
     } else {
-      Toast.warning({ content: '时间要小于当前时间' });
+      Toast.warning({ content: '时间要小于等于当前时间' });
       return;
     }
   };

@@ -37,6 +37,7 @@ import { debounce } from '@common/utils/throttle-debounce';
 @inject('index')
 @inject('topic')
 @inject('search')
+@inject('payBox')
 @observer
 class ThreadH5Page extends React.Component {
   constructor(props) {
@@ -133,6 +134,10 @@ class ThreadH5Page extends React.Component {
   componentWillUnmount() {
     // 清空数据
     this.props?.thread && this.props.thread.reset();
+    // 关闭付费弹窗盒子
+    this.props?.payBox?.hide();
+    // 清空@ren数据
+    this.props.thread.setCheckUser([]);
   }
 
   // 点击信息icon
@@ -723,10 +728,19 @@ class ThreadH5Page extends React.Component {
     const fun = {
       moreClick: this.onMoreClick,
     };
+    
+    const isDraft = threadStore?.threadData?.isDraft;
+    // 是否红包帖
+    const isRedPack = threadStore?.threadData?.displayTag?.isRedPack;
+    // 是否悬赏帖
+    const isReward = threadStore?.threadData?.displayTag?.isReward;
 
     // 更多弹窗权限
     const morePermissions = {
-      canEdit: threadStore?.threadData?.ability?.canEdit,
+      // （不是草稿 && 有编辑权限 && 不是红包帖 && 不是悬赏帖） || （是草稿 && 有编辑权限）
+      canEdit:
+        (!isDraft && threadStore?.threadData?.ability?.canEdit && !isRedPack && !isReward)
+        || (isDraft && threadStore?.threadData?.ability?.canEdit),
       canDelete: threadStore?.threadData?.ability?.canDelete,
       canEssence: threadStore?.threadData?.ability?.canEssence,
       canStick: threadStore?.threadData?.ability?.canStick,
@@ -872,6 +886,7 @@ class ThreadH5Page extends React.Component {
               initValue={this.state.inputValue}
               onSubmit={(value, imgList) => this.publishClick(value, imgList)}
               site={this.props.site}
+              checkUser={this.props?.thread?.checkUser || []}
             ></InputPopup>
 
             {/* 更多弹层 */}

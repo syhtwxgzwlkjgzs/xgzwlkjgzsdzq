@@ -266,6 +266,8 @@ class RenderCommentList extends React.Component {
       Taro.navigateTo({
         url: `/subPages/thread/comment/index?id=${data.id}&threadId=${this.props.thread?.threadData?.id}`,
       });
+      // 清空@ren数据
+      this.props.thread.setCheckUser([]);
     }
   }
 

@@ -7,7 +7,7 @@ import { get } from '@common/utils/get';
 import deepClone from '@common/utils/deep-clone';
 import NoData from '@components/no-data';
 import classnames from 'classnames';
-
+import Toast from '@discuzq/design/dist/components/toast/index';
 import UserCenterFriends from '../user-center-friends';
 import styles from './index.module.scss';
 import { followerAdapter } from './adapter';
@@ -135,6 +135,11 @@ class UserCenterFans extends React.Component {
   followUser = async ({ id: userId }) => {
     const res = await createFollow({ data: { toUserId: userId } });
     if (res.code === 0 && res.data) {
+      Toast.success({
+        content: '操作成功',
+        hasMask: false,
+        duration: 1000,
+      });
       this.setFansBeFollowed({
         id: userId,
         isMutual: res.data.isMutual,
@@ -145,6 +150,11 @@ class UserCenterFans extends React.Component {
         success: true,
       };
     }
+    Toast.error({
+      content: res.msg || '关注失败',
+      hasMask: false,
+      duration: 2000,
+    });
     return {
       msg: res.msg,
       data: null,
@@ -155,6 +165,11 @@ class UserCenterFans extends React.Component {
   unFollowUser = async ({ id }) => {
     const res = await deleteFollow({ data: { id, type: 1 } });
     if (res.code === 0 && res.data) {
+      Toast.success({
+        content: '操作成功',
+        hasMask: false,
+        duration: 1000,
+      });
       this.setFansBeUnFollowed(id);
       return {
         msg: '操作成功',
@@ -162,6 +177,11 @@ class UserCenterFans extends React.Component {
         success: true,
       };
     }
+    Toast.error({
+      content: res.msg || '取消关注失败',
+      hasMask: false,
+      duration: 2000,
+    });
     return {
       msg: res.msg,
       data: null,

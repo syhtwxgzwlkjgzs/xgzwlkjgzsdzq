@@ -67,7 +67,7 @@
   .fabulousCancel {
     margin-left: rem(8);
     font-size: rem($font-size-primary);
-    color: var(--color-primary);
+    color: $primary-color;
   }
   :global{
     .like, .share{
@@ -77,7 +77,7 @@
   }
   .icon {
     color: $text-color-secondary;
-    
+
     &.likedColor {
       color: $primary-color;
     }
