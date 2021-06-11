@@ -1,12 +1,17 @@
+/** 
+ * 页面用于渲染 http://localhost:9527/search/result?keyword=
+ * 
+ * */ 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import BaseLayout from '@components/base-layout';
 import SearchInput from '@components/search-input';
+import SidebarPanel from '@components/sidebar-panel';
+
 import SearchPosts from './components/search-posts';
 import SearchTopics from './components/search-topics';
 import SearchUsers from './components/search-users';
-import SidebarPanel from '@components/sidebar-panel';
 
 import styles from './index.module.scss';
 
