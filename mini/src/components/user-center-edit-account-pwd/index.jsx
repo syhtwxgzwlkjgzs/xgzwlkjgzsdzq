@@ -209,9 +209,11 @@ class index extends Component {
           />
         </View>
       </View>
-      <View onClick={this.handleResetPwd} className={styles.tips}>
-        忘记旧密码？
-      </View>
+      {this.props.site?.isSmsOpen && (
+        <View onClick={this.handleResetPwd} className={styles.tips}>
+          忘记旧密码？
+        </View>
+      )}
     </>
   );
 
@@ -221,11 +223,6 @@ class index extends Component {
         <View className={styles.content}>
           {this.props.user?.hasPassword ? this.renderHasPassword() : this.renderHasNoPassword()}
         </View>
-        {this.props.site?.isSmsOpen && this.props.user?.hasPassword && (
-          <View onClick={this.handleResetPwd} className={styles.tips}>
-            忘记旧密码？
-          </View>
-        )}
         <View
           className={classNames(styles.bottom, {
             [styles.bgBtnColor]: !this.getDisabledWithButton(),
