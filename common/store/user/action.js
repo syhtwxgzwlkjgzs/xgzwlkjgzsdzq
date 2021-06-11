@@ -828,6 +828,25 @@ class UserAction extends SiteStore {
   }
 
   /**
+   * 支付成功后，更新帖子列表指定帖子状态
+   * @param {number} threadId 帖子id
+   * @param {object}  obj 更新数据
+   * @returns
+   */
+   @action
+   updatePayThreadInfo(threadId, obj) {
+     const targetThreads = this.findAssignThread(threadId);
+     if (!targetThreads || targetThreads.length === 0) return;
+
+     targetThreads.forEach(targetThread => {
+      const { index, key, data, store } = targetThread;
+      if (store[key] && store[key][index]) {
+        store[key][index] = obj;
+      }
+     })
+   }
+
+  /**
     * 更新帖子列表指定帖子状态
     * @param {number} threadId 帖子id
     * @param {object}  obj 更新数据

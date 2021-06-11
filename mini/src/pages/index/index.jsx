@@ -61,6 +61,9 @@ class Index extends React.Component {
 
     let newTypes = handleString2Arr(index.filter, 'types');
     let categoryIds = handleString2Arr(index.filter, 'categoryids');
+
+    // 重置错误信息
+    this.props.index.resetErrorInfo()
     
     this.props.index.getReadCategories();
     this.props.index.getRreadStickList();
