@@ -134,7 +134,10 @@ class ThreadH5Page extends React.Component {
   componentWillUnmount() {
     // 清空数据
     this.props?.thread && this.props.thread.reset();
+    // 关闭付费弹窗盒子
     this.props?.payBox?.hide();
+    // 清空@ren数据
+    this.props.thread.setCheckUser([]);
   }
 
   // 点击信息icon
@@ -883,6 +886,7 @@ class ThreadH5Page extends React.Component {
               initValue={this.state.inputValue}
               onSubmit={(value, imgList) => this.publishClick(value, imgList)}
               site={this.props.site}
+              checkUser={this.props?.thread?.checkUser || []}
             ></InputPopup>
 
             {/* 更多弹层 */}
