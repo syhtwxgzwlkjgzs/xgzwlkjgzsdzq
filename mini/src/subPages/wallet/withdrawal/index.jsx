@@ -27,9 +27,7 @@ class WalletPage extends React.Component {
   render() {
     return (
       <Page>
-        {/* <ToastProvider> */}
-          <Withdrawal walletData={this.state.walletData} />
-        {/* </ToastProvider> */}
+        <Withdrawal walletData={this.state.walletData} />
       </Page>
     );
   }

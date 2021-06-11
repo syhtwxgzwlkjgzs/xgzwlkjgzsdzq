@@ -89,7 +89,7 @@ class index extends Component {
 
   handleGoToEditMobile = () => {
     if (!this.user.mobile) {
-      Taro.navigateTo({ url: '/subPages/user/bind-phone/index' });
+      Taro.navigateTo({ url: '/subPages/user/bind-phone/index?from=userCenter' });
       return;
     }
     Taro.navigateTo({ url: '/subPages/my/edit/mobile/index' });
