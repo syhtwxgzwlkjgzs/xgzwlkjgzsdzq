@@ -30,6 +30,7 @@ class InviteH5Page extends React.Component {
     const { inviteData, inviteCode } = this.props.invite;
     const shareData = {
       path: `/subPages/forum/partner-invite/index?inviteCode=${inviteCode}`,
+      title: `邀请您加入 ${this.props.site?.webConfig?.setSite?.siteName}`,
     };
 
     return (
