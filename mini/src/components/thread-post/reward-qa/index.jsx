@@ -125,6 +125,7 @@ class RewardQa extends Component {
             <Input
               value={money}
               mode="number"
+              type="digit"
               placeholder="金额"
               maxLength={10}
               onChange={e => this.onMoneyChang(e.target.value)}
