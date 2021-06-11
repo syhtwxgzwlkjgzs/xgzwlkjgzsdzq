@@ -178,6 +178,7 @@ class Index extends Component {
 
   // 处理文本框内容
   onContentChange = (contentText, maxLength) => {
+    console.log(contentText);
     const { setPostData } = this.props.threadPost;
     setPostData({ contentText });
     this.toHideTitle();
@@ -817,7 +818,6 @@ class Index extends Component {
                 });
               }}
               onClick={(emoji) => {
-                debugger;
                 setPostData({
                   contentText: contentText.slice(0, cursorPosition) + emoji.code + contentText.slice(cursorPosition)
                 });
