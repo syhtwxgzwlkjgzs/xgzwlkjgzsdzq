@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 
 import SearchInput from '@components/search-input';
 import BaseLayout from '@components/base-layout';
-import SearchPosts from './components/search-posts';
+import ThreadContent from '@components/thread';
 import SearchTopics from './components/search-topics';
 import SearchUsers from './components/search-users';
 import SidebarPanel from '@components/sidebar-panel';
@@ -110,9 +110,10 @@ class SearchResultPage extends React.Component {
           isError={searchThreadsError.isError}
           errorText={searchThreadsError.errorText}
           titleStyle={{ border: "none" }}
+          mold='plane'
         >
           {
-            threadsPageData?.length &&<SearchPosts data={threadsPageData.filter((_, index) => index < 3)} onItemClick={this.onPostClick} />
+            threadsPageData?.filter((_, index) => index < 3).map((item, index) => <ThreadContent data={item} key={index} />)
           }
         </SidebarPanel>
 
