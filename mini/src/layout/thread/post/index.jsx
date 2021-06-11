@@ -817,6 +817,7 @@ class Index extends Component {
                 });
               }}
               onClick={(emoji) => {
+                debugger;
                 setPostData({
                   contentText: contentText.slice(0, cursorPosition) + emoji.code + contentText.slice(cursorPosition)
                 });
