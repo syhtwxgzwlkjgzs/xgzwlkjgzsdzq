@@ -23,7 +23,7 @@ const Index = ({
     className=''
 }) => {
     return (
-        <div className={`${className} ${isBox ? styles.bottomViewBox : ''}`}>
+        <div className={`${styles.bottomView} ${className} ${isBox ? styles.bottomViewBox : ''}`}>
             {!isError ? (
                 loadingView || <RefreshView noMore={noMore} loadText={loadingText} noMoreText={noMoreText} />
             ) : (

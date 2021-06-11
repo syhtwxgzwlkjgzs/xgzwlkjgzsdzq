@@ -33,6 +33,7 @@ const List = forwardRef(({
   requestError = false,
   errorText='加载失败',
   platform="",
+  showLoadingInCenter = false
 }, ref) => {
   const listWrapper = useRef(null);
   const currentScrollTop = useRef(0);
@@ -161,7 +162,7 @@ const List = forwardRef(({
   return (
     <div className={`${styles.container} ${className}`} style={{ height }}>
       <div
-        className={`${styles.wrapper} ${wrapperClass} ${platform !== 'pc' ? styles.hideScrollBar : ""}`}
+        className={`${styles.wrapper} ${wrapperClass} ${platform !== 'pc' ? styles.hideScrollBar : ""} ${showLoadingInCenter ? styles.wrapperH5Center : ''}`}
         ref={listWrapper}
         onScroll={onTouchMove}
       >
