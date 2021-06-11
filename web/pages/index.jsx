@@ -15,8 +15,6 @@ import ViewAdapter from '@components/view-adapter';
 class Index extends React.Component {
 
   state = {
-    isError: false,
-    errorText: '',
     categoryError: false,
     categoryErrorText: '',
   }
@@ -51,7 +49,7 @@ class Index extends React.Component {
     serverIndex && serverIndex.threads && index.setThreads(serverIndex.threads);
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const { index } = this.props;
     const { essence = 0, sequence = 0, attention = 0, sort = 1 } = index.filter;
 
@@ -65,11 +63,7 @@ class Index extends React.Component {
     const hasThreadsData = !!index.threads;
 
     if (!hasCategoriesData) {
-      try {
-        await this.props.index.getReadCategories();
-      } catch (error) {
-        this.setState({ categoryError: true, categoryErrorText: error })
-      }
+      this.props.index.getReadCategories();
     }
 
     if (!hasSticksData) {
@@ -77,14 +71,10 @@ class Index extends React.Component {
     }
    
     if (!hasThreadsData) {
-      try {
-        await this.props.index.getReadThreadList({
-          sequence, 
-          filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort } 
-        });
-      } catch (error) {
-        this.setState({ isError: true, errorText: error })
-      }
+      this.props.index.getReadThreadList({
+        sequence, 
+        filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort } 
+      });
     } else {
       // 如果store中有值，则需要获取之前的分页数
       this.page = index.threads.currentPage || 1
@@ -102,11 +92,8 @@ class Index extends React.Component {
 
     if (type === 'click-filter') { // 点击tab
       this.page = 1;
-      try {
-        await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
-      } catch (error) {
-        this.setState({ isError: true, errorText: error })
-      }
+      await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
+  
       this.props.baselayout.setJumpingToTop();
     } else if (type === 'moreData') {
       this.page += 1;
@@ -129,8 +116,8 @@ class Index extends React.Component {
   render() {
     const { categoryName = '' } = this.props.index || {}
     return <ViewAdapter
-            h5={<IndexH5Page dispatch={this.dispatch} isError={this.state.isError} errorText={this.state.errorText} />}
-            pc={<IndexPCPage dispatch={this.dispatch} {...this.state} />}
+            h5={<IndexH5Page dispatch={this.dispatch} />}
+            pc={<IndexPCPage dispatch={this.dispatch} />}
             title={categoryName}
           />;
   }

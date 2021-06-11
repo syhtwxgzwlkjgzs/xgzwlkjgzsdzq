@@ -165,7 +165,7 @@ class IndexH5Page extends React.Component {
   render() {
     const { index, user } = this.props;
     const { isFinished } = this.state;
-    const { threads = {}, currentCategories, filter } = index;
+    const { threads = {}, currentCategories, filter, threadError } = index;
     const { currentPage, totalPage, pageData } = threads || {};
 
     return (
@@ -179,8 +179,8 @@ class IndexH5Page extends React.Component {
         curr='home'
         pageName='home'
         preload={1000}
-        requestError={this.props.isError}
-        errorText={this.props.errorText}
+        requestError={threadError.isError}
+        errorText={threadError.errorText}
       >
         <HomeHeader ref={this.headerRef} />
 
