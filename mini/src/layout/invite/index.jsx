@@ -18,7 +18,6 @@ class InviteH5Page extends React.Component {
   async componentDidMount() {
     try {
       await this.props.invite.getInviteUsersList();
-      await this.props.invite.createInviteLink();
     } catch (e) {
       Toast.error({
         content: e.Message,
@@ -27,11 +26,14 @@ class InviteH5Page extends React.Component {
   }
 
   render() {
-    const { inviteData, inviteCode } = this.props.invite;
+    const inviteCode = this.props.user?.userInfo?.id;
+    const siteName = this.props.site?.webConfig?.setSite?.siteName || '';
     const shareData = {
       path: `/subPages/forum/partner-invite/index?inviteCode=${inviteCode}`,
-      title: `邀请您加入 ${this.props.site?.webConfig?.setSite?.siteName}`,
+      title: `邀请您加入 ${siteName}`,
     };
+    
+    const { inviteData } = this.props.invite;
 
     return (
       <>
