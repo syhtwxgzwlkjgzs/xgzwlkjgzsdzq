@@ -127,7 +127,9 @@ class Withdrawal extends React.Component {
             })}
           >
             <Button type={'primary'} className={styles.button} onClick={this.moneyToWeixin} disabled={btnDisabled}>
-              提现到微信钱包
+              <View className={styles.buttonContent}>
+                提现到微信钱包
+              </View>
             </Button>
           </View>
         </View>

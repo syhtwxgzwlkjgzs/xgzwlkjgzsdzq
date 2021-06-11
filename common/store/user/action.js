@@ -343,6 +343,12 @@ class UserAction extends SiteStore {
         },
       },
     });
+    if (userThreadList.code !== 0) {
+      throw {
+        Code: userThreadList.code,
+        Msg: userThreadList.msg || '获取用户主题列表失败'
+      }
+    }
     const pageData = get(userThreadList, 'data.pageData', []);
     const totalPage = get(userThreadList, 'data.totalPage', 1);
     this.userThreadsTotalPage = totalPage;
