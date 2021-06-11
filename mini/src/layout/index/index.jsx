@@ -2,9 +2,8 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexPageContent from './content';
 import { View } from '@tarojs/components';
-// import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
+import { handleString2Arr } from '@common/utils/handleCategory';
 
-// const MemoToastProvider = React.memo(ToastProvider)
 
 @inject('site')
 @inject('index')
@@ -23,9 +22,9 @@ class Index extends React.Component {
     const { index } = this.props
     const { essence = 0, sequence = 0, attention = 0, sort = 1 } = index.filter;
 
-    let newTypes = this.handleString2Arr(index.filter, 'types');
+    let newTypes = handleString2Arr(index.filter, 'types');
 
-    let categoryIds = this.handleString2Arr(index.filter, 'categoryids');
+    let categoryIds = handleString2Arr(index.filter, 'categoryids');
     
     this.props.index.getReadCategories();
     this.props.index.getRreadStickList();
@@ -39,32 +38,16 @@ class Index extends React.Component {
     }
   }
 
-  // 将字符串转成数组，且过滤掉不必要的参数
-  handleString2Arr = (dic, key) => {
-    if (!dic || !dic[key]) {
-      return
-    }
 
-    const target = dic[key]
-    let arr = [];
-    if (target) {
-      if (!(target instanceof Array)) {
-        arr = [target];
-      } else {
-        arr = target;
-      }
-    }
-
-    return arr?.filter(item => item !== 'all' && item !== 'default' && item !== '') || []
-  }
 
   dispatch = async (type, data = {}) => {
     const { index } = this.props;
-    const { essence, sequence, attention, sort, page } = data;
+    const newData = {...index.filter, ...data}
+    const { essence, sequence, attention, sort, page } = newData;
 
-    let newTypes = this.handleString2Arr(data, 'types');
+    let newTypes = handleString2Arr(newData, 'types');
 
-    let categoryIds = this.handleString2Arr(data, 'categoryids');
+    let categoryIds = handleString2Arr(newData, 'categoryids');
 
     if (type === 'click-filter') { // 点击tab
       this.page = 1;
@@ -94,9 +77,7 @@ class Index extends React.Component {
   render() {
     return (
       <View>
-        {/* <MemoToastProvider> */}
-          <IndexPageContent dispatch={this.dispatch} isError={this.state.isError} errorText={this.state.errorText} />
-        {/* </MemoToastProvider> */}
+        <IndexPageContent dispatch={this.dispatch} isError={this.state.isError} errorText={this.state.errorText} />
       </View>
     );
   }
