@@ -11,8 +11,6 @@ import HomeHeader from '@components/home-header';
 import { InputType, CreateFunctions } from './components';
 import Router from '@discuzq/sdk/dist/router';
 
-const EMPTY_STR_REG = /\s+/
-
 @inject('site')
 @inject('user')
 @inject('thread')
@@ -53,23 +51,17 @@ class SupplementaryH5Page extends React.Component {
   processData = () => {
     const { fields, values } = this.props.supplementary;
     return values.map((v, index) => {
-      if (v.required === 1) {
-        if (v.value.length === 0) {
-          throw new Error(`${v.name}字段未填写`);
-        }
-        // input、textarea不能为纯空字符串
-        if ([InputType.INPUT, InputType.TEXTAREA].includes(v.type) && EMPTY_STR_REG.test(v.value)) { 
-          throw new Error(`${v.name}字段不能为空`);
-        }
-      } 
-      
+      if (v.value.length === 0
+        || (v.value.trim && v.value.trim().length === 0)) {
+        throw new Error(`${v.name}未填写`);
+      }
       let fieldsExt;
       let options;
       if (v.value.length) {
         switch (v.type) {
           case InputType.INPUT:
           case InputType.TEXTAREA:
-            fieldsExt = v.value;
+            fieldsExt = v.value?.trim();
             break;
           case InputType.FILE:
           case InputType.PHOTO:

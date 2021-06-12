@@ -36,7 +36,7 @@ export function CreateInput(field, layout) {
           {name}
         </View>
         <Input
-          trim
+          maxLength={100}
           className={layout.input_value}
           value={field.value}
           placeholder={fieldsDesc}
@@ -60,7 +60,7 @@ export function CreateTextArea(field, layout) {
         </View>
         <Input.Textarea
           showLimit
-          maxLength={30}
+          maxLength={100}
           className={layout.textarea_item}
           value={field.value}
           placeholder={fieldsDesc}
