@@ -42,6 +42,7 @@ export default class Page extends React.Component {
   isPass() {
     const { site, user } = this.props;
     const path = getCurrentInstance().router.path;
+
     if (site && site.webConfig) {
       // 关闭站点
       if (path !== '/subPage/close/index' && site.closeSiteConfig) {
