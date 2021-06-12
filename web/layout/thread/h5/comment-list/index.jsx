@@ -63,7 +63,6 @@ class RenderCommentList extends React.Component {
 
   // 点击评论的赞
   async likeClick(data) {
-    console.log('1111');
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
       goToLoginPage({ url: '/user/login' });
