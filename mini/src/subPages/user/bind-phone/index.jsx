@@ -84,7 +84,7 @@ class BindPhoneH5Page extends React.Component {
       Toast.error({
         content: e.Message,
         hasMask: false,
-        duration: 1000,
+        duration: 2000,
       });
     }
   }
@@ -98,7 +98,7 @@ class BindPhoneH5Page extends React.Component {
       Toast.success({
         content: '登录成功',
         hasMask: false,
-        duration: 1000,
+        duration: 2000,
         onClose: () => {
           if (from === 'userCenter') {
             navigateBack();
@@ -134,7 +134,7 @@ class BindPhoneH5Page extends React.Component {
       Toast.error({
         content: e.Message,
         hasMask: false,
-        duration: 1000,
+        duration: 2000,
       });
     }
   }
