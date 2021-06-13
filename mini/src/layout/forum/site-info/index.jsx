@@ -29,7 +29,8 @@ class SiteInfo extends Component {
           <View className={layout.site_status_list}>
             <View className={layout.site_status_label}>更新</View>
             <View className={layout.site_status_item}>
-              {updataTime && getSiteUpdateTime(updataTime)} {updataTime}
+              {/* {updataTime && getSiteUpdateTime(updataTime)} {updataTime} */}
+              刚刚
             </View>
           </View>
           <View className={layout.site_status_list}>
