@@ -24,6 +24,8 @@ const InteractionBox = (props) => {
 
   const [isSubmiting, setIsSubmiting] = useState(false);
 
+  const [focus, setFocus] = useState(false);
+
   // const checkToShowCurrentMsgTime = (curTimestamp) => {
   //   const DISPLAY_GAP_IN_MINS = 3;
   //   const diff = new Date(curTimestamp).getMinutes() - new Date(lastTimestamp).getMinutes();
@@ -172,6 +174,12 @@ const InteractionBox = (props) => {
     const text = typingValue.slice(0, cursorPosition) + emoji.code + typingValue.slice(cursorPosition);
     setTypingValue(text);
     setCursorPosition(cursorPosition + emoji.code.length);
+    setTimeout(() => {
+      setFocus(false);
+      setTimeout(() => {
+        setFocus(true);
+      }, 0);
+    }, 0);
   };
 
   return (
@@ -185,6 +193,8 @@ const InteractionBox = (props) => {
       <View className={styles.operationBox}>
         <View className={styles.inputWrapper}>
           <Input
+            focus={focus}
+            cursor={cursorPosition}
             value={typingValue}
             placeholder=" 请输入内容"
             onChange={(e) => {
