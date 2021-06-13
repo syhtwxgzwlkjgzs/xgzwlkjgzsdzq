@@ -31,16 +31,26 @@ export default inject('user')(
     // 是否合法
     const isApproved = (threadStore?.threadData?.isApproved || 0) === 1;
 
+    // 是否草稿
+    const isDraft = threadStore?.threadData?.isDraft;
+
     // 是否免费帖
     const isFree = threadStore?.threadData?.payType === 0;
+    // 是否红包帖
+    const isRedPack = threadStore?.threadData?.displayTag?.isRedPack;
+    // 是否悬赏帖
+    const isReward = threadStore?.threadData?.displayTag?.isReward;
 
     // 是否加精
     const isEssence = threadStore?.threadData?.displayTag?.isEssence || false;
     // 是否置顶
     const isStick = threadStore?.threadData?.isStick;
 
-    // 更多弹窗权限
-    const canEdit = threadStore?.threadData?.ability?.canEdit;
+    /* 更多弹窗权限 */
+    // （不是草稿 && 有编辑权限 && 不是红包帖 && 不是悬赏帖） || （是草稿 && 有编辑权限）
+    const canEdit =
+      (!isDraft && threadStore?.threadData?.ability?.canEdit && !isRedPack && !isReward)
+      || (isDraft && threadStore?.threadData?.ability?.canEdit);
     const canDelete = threadStore?.threadData?.ability?.canDelete;
     const canEssence = threadStore?.threadData?.ability?.canEssence;
     const canStick = threadStore?.threadData?.ability?.canStick;
@@ -55,11 +65,6 @@ export default inject('user')(
     const isPayed = threadStore?.threadData?.paid === true;
     // 是否作者自己
     const isSelf = props.user?.userInfo?.id && props.user?.userInfo?.id === threadStore?.threadData?.userId;
-
-    // 是否红包帖
-    const isRedPack = threadStore?.threadData?.displayTag?.isRedPack;
-    // 是否悬赏帖
-    const isReward = threadStore?.threadData?.displayTag?.isReward;
 
     // 是否打赏帖
     const isBeReward = isFree && threadStore?.threadData?.ability.canBeReward && !isRedPack && !isReward;
@@ -192,8 +197,8 @@ export default inject('user')(
               <VideoPlay
                 url={parseContent.VIDEO.mediaUrl}
                 coverUrl={parseContent.VIDEO.coverUrl}
-                width={400}
-                height={200}
+                v_width={parseContent.VIDEO.width || null}
+                v_height={parseContent.VIDEO.height || null}
                 status={parseContent.VIDEO.status}
               />
             )}
@@ -202,7 +207,7 @@ export default inject('user')(
             {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
 
             {/* 附件 */}
-            {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
+            {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} threadId={threadStore?.threadData?.threadId} />}
 
             {/* 商品 */}
             {parseContent.GOODS && (

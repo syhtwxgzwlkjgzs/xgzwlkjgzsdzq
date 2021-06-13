@@ -5,6 +5,7 @@ import {readForum, readUser, readPermissions} from '@server';
 import Router from '@discuzq/sdk/dist/router';
 import { View } from '@tarojs/components';
 import Taro from '@tarojs/taro'
+import Toast from '@discuzq/design/dist/components/toast';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import setTitle from '@common/utils/setTitle';
 import {
@@ -149,7 +150,12 @@ class App extends Component {
       case JUMP_TO_SUPPLEMENTARY:// 跳转到扩展字段页
         Router.push({ url: '/subPages/user/supplementary/index' });
         break;
-      default: Router.redirect({url: '/subPages/500/index'});
+      default: 
+        Router.redirect({url: '/subPages/500/index'});
+        clearLoginStatus();
+        Toast.error({
+          content: result.msg || '未知错误'
+        })
         break;
     }
     return true;

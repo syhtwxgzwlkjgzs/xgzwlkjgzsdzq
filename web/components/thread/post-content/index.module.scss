@@ -13,7 +13,7 @@
       display: inline-block;
       line-height: rem($font-line-height-middle);
       font-size: rem($font-size-middle) !important;
-      color: var( --color-text-primary);
+      color: $text-color-primary;
       // margin-top: rem($padding-1n);
       word-break: break-all;
       p,
@@ -33,7 +33,7 @@
         }
       }
 
-      
+
       :global(.qq-emotion) {
         height: rem(30);
         width: rem(30);
@@ -45,7 +45,7 @@
       overflow: hidden;
     }
   }
-  
+
   .hideCover {
     position: relative;
     overflow: hidden;
@@ -76,7 +76,7 @@
     font-weight: normal;
     font-size: rem($font-size-primary);
     line-height: rem($font-line-height-primary);
-    color: var(--color-primary);
+    color: $primary-color;
     .icon {
       margin-left: rem(9);
       transform: rotateZ(90deg);
@@ -91,7 +91,7 @@
       font-size: rem($font-size-primary);
       line-height: rem($font-line-height-primary);
       text-align: left;
-      color: var(--color-primary);;
+      color: $primary-color;
     }
     .payButton {
       margin-top: rem($padding-4n);
@@ -101,7 +101,7 @@
       margin-right: rem($padding-2n);
       width: rem(13.93);
       height: rem(16.62);
-      background-color: var(--color-white);
+      background-color: $white;
     }
   }
 }

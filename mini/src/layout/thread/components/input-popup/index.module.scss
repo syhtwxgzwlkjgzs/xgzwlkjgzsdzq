@@ -6,7 +6,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  background: var(--color-white);
+  background: $white;
   border-radius: $border-radius-big $border-radius-big 0 0;
   overflow: hidden;
   padding: $padding-4n;
@@ -16,8 +16,8 @@
   :global {
     .dzq-textarea__inner {
       background: $text-bg-color2;
-      padding: $padding-2n $padding-3n;
-      height: 80px !important;
+      padding: 0 $padding-3n;
+      min-height: 64px !important;
       resize: none;
       font-size: $font-size-base;
       -webkit-appearance: none; // ios下去除上面阴影
@@ -28,7 +28,6 @@
     }
     .dzq-textarea {
       border: none;
-      margin-bottom: 1px;
     }
   }
 }
@@ -38,7 +37,7 @@
 }
 
 .main {
-  background: var(--color-white);
+  background: $white;
   width: 100%;
   position: relative;
 
@@ -46,6 +45,9 @@
     width: 100%;
     height: 80px;
     overflow: hidden;
+    padding: $padding-2n 0;
+    background: $text-bg-color2;
+    border-radius: $border-radius-small;
   }
 }
 
@@ -111,9 +113,10 @@
   z-index: $zindex-dialog;
   overflow-y: scroll;
   background: $white;
+  border-top: $border-solid-1;
   padding-bottom: constant(safe-area-inset-bottom); ///兼容 IOS<11.2/
   padding-bottom: env(safe-area-inset-bottom); ///兼容 IOS>11.2/
-  
+
   :global {
     .dzq-toolbar-emoji {
       border-radius: 0;

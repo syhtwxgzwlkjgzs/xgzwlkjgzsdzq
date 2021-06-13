@@ -74,7 +74,7 @@ const InteractionBox = (props) => {
       setIsSubmiting(false);
       toastInstance?.destroy();
       if (ret.code === 0) {
-        setTypingValue('');
+        if (!data.imageUrl) setTypingValue('');
         readDialogMsgList(dialogId);
       } else {
         Toast.error({ content: ret.msg });
@@ -89,7 +89,7 @@ const InteractionBox = (props) => {
       });
       setIsSubmiting(false);
       if (ret.code === 0) {
-        setTypingValue('');
+        if (!data.imageUrl) setTypingValue('');
         replaceRouteWidthDialogId(ret.data.dialogId);
       } else {
         Toast.error({ content: ret.msg });

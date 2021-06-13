@@ -39,7 +39,7 @@ export function CreateInput(field, layout) {
           {name}
         </div>
         <Input
-          trim
+          maxLength={100}
           className={layout.input_value}
           value={field.value}
           placeholder={fieldsDesc}
@@ -64,7 +64,7 @@ export function CreateTextArea(field, layout) {
           trim
           autoHeight={true}
           showLimit={true}
-          maxLength={30}
+          maxLength={100}
           className={layout.textarea_item}
           value={field.value}
           placeholder={fieldsDesc}

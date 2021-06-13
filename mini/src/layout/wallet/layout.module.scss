@@ -52,7 +52,7 @@
 
   .tabs {
     width: 100%;
-    border-bottom: var(--border-border);
+    border-bottom: $border-solid-1;
 
     .tagbox {
       display: flex;
@@ -131,8 +131,8 @@
     justify-content: center;
     height: rem(42);
     border-radius: rem($border-radius-small);
-    color: var(--color-white);
-    background: var(--color-primary);
+    color: $white;
+    background: $primary-color;
     font-family: 'PingFang SC';
     font-weight: normal;
     font-size: rem($font-size-middle);

@@ -11,9 +11,9 @@
 }
 
 .totalAmount {
-  color: var(--color-white);
+  color: $white;
   text-align: left;
-  background: var(--color-primary);
+  background: $primary-color;
 
   .moneyTitle {
     font-family: 'PingFangSC-Regular';

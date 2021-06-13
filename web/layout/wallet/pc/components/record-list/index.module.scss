@@ -59,7 +59,7 @@
   font-size: rem($font-size-primary);
   text-align: left;
   line-height: rem(36);
-  border-bottom: var(--border-border);
+  border-bottom: $border-solid-1;
 
   .left {
     width: 40%;
@@ -83,7 +83,7 @@
       font-family: 'PingFang SC';
       width: 33%;
       font-weight: normal;
-      color: var(--color-text-primary);
+      color: $text-color-primary;
     }
     .status {
       font-family: 'PingFang SC';
@@ -96,13 +96,13 @@
       font-family: 'PingFang SC';
       font-weight: 600;
       font-size: rem($font-size-middle);
-      color: var(--color-error);
+      color: $error-color;
     }
     .time {
       width: 33%;
       font-family: 'PingFangSC-Regular';
       font-weight: normal;
-      color: var(--color-text-secondary);
+      color: $text-color-secondary;
     }
     .payWidth {
       width: 25%;
@@ -135,7 +135,7 @@
       font-size: rem($font-size-primary);
       text-align: left;
       line-height: rem(36);
-      border-bottom: var(--border-border);
+      border-bottom: $border-solid-1;
     }
     .listColumn {
       overflow: hidden;

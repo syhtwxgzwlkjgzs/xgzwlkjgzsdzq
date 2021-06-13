@@ -47,7 +47,7 @@ class ForumH5Page extends React.Component {
     const { site, forum } = this.props;
     const { usersPageData = [], isNoMore } = forum;
     // 站点介绍
-    const siteIntroduction = get(site, 'webConfig.setSite.siteIntroduction', '');
+    const siteIntroduction = get(site, 'webConfig.setSite.siteIntroduction', '暂无介绍');
     // 创建时间
     const siteInstall = get(site, 'webConfig.setSite.siteInstall', '');
     // 站点模式

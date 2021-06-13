@@ -1,7 +1,7 @@
 @import '@common/styles/index.scss';
 
 .containerH5 {
-    background: var(--color-primary);
+    background: $primary-color;
     padding: rem($padding-4n);
 }
 .containerPC {
@@ -21,7 +21,7 @@
     .avatar {
         width: rem(120);
         height: rem(120);
-        border: solid rem(3) var(--color-white);
+        border: solid rem(3) $white;
         box-sizing: border-box;
     }
     .name {
@@ -29,7 +29,7 @@
         font-weight: normal;
         font-size: rem($font-size-middle);
         text-align: left;
-        color: var(--color-white);
+        color: $white;
         height: rem(22);
         line-height: rem($font-line-height-small);
         margin: rem($margin-2n) 0 rem($margin-6n);
@@ -40,7 +40,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: var(--color-white);
+    color: $white;
     text-align: center;
     margin-bottom: rem($margin-4n);
     .moneyTitle {

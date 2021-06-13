@@ -2,7 +2,7 @@
 
 .container {
     padding: rem($padding-4n) rem($padding-4n) 0;
-    background: var(--color-white);
+    background: $white;
     font-size: $font-size-middle;
 }
 
@@ -11,7 +11,7 @@
     justify-content: space-between;
     font-weight: normal;
     padding-bottom: rem($padding-4n);
-    color: var(--color-text-primary);
+    color: $text-color-primary;
     .text {
         font-family: 'PingFangSC-Regular';
         font-size: rem($font-size-primary);
@@ -34,19 +34,19 @@
     font-size: rem($font-size-label);
     .time {
         text-align: left;
-        color: var(--color-text-secondary);
+        color: $text-color-secondary;
     }
     .withdrawalStatus1 {
-        color: var(--color-primary);
+        color: $primary-color;
     }
     .withdrawalStatus2 {
         color: $text-color-regular;
     }
     .withdrawalStatus3 {
-        color: var(--color-error);
+        color: $error-color;
     }
     .withdrawalStatus4 {
-        color: var(--color-success);
+        color: $success-color;
     }
 }
 
@@ -55,7 +55,7 @@
     font-weight: normal;
     font-size: rem($font-size-label);
     text-align: left;
-    color: var(--color-text-secondary);
+    color: $text-color-secondary;
     padding: rem($padding-4n) 0;
-    border-bottom: var(--border-border);
+    border-bottom: $border-solid-1;
 }
