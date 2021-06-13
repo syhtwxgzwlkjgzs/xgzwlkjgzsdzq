@@ -52,7 +52,8 @@ const Index = () => {
         setTitle('账号消息');
         break;
       case 'chat':
-        setTitle(nickname ? `与 ${nickname} 的对话` : '私信对话');
+        const name = nickname.substr(0, 6);
+        setTitle(nickname ? `与 ${nickname.length > 6 ? `${name}...` : name} 的对话` : '私信对话');
         break;
     }
   });

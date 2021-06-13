@@ -504,23 +504,29 @@ class Index extends Component {
       if (!threadId) {
         this.setState({ threadId: data.threadId }); // 新帖首次保存草稿后，获取id
       }
+
+      // 草稿发布，清空草稿箱缓存数据
+      if (isDraft) {
+        this.props.index.setDrafts({ totalCount: 0, pageData: [] });
+      }
+
       // 非草稿，跳转主题详情页
       Taro.hideLoading();
-      if (!isDraft) {
-        // 更新帖子到首页列表
-        if (threadId) {
-          this.props.index.updateAssignThreadAllData(threadId, data);
-        // 添加帖子到首页数据
-        } else {
-          const { categoryId = '' } = data
-          // 首页如果是全部或者是当前分类，则执行数据添加操作
-          if (this.props.index.isNeedAddThread(categoryId)) {
-            this.props.index.addThread(data);
-          }
+      // if (!isDraft) {
+      // 更新帖子到首页列表
+      if (threadId && !isDraft) {
+        this.props.index.updateAssignThreadAllData(threadId, data);
+      // 添加帖子到首页数据
+      } else {
+        const { categoryId = '' } = data
+        // 首页如果是全部或者是当前分类，则执行数据添加操作
+        if (this.props.index.isNeedAddThread(categoryId)) {
+          this.props.index.addThread(data);
         }
-        this.postToast('发布成功', 'success');
-        Taro.redirectTo({ url: `/subPages/thread/index?id=${data.threadId}` });
       }
+      this.postToast('发布成功', 'success');
+      Taro.redirectTo({ url: `/subPages/thread/index?id=${data.threadId}` });
+      // }
       return true;
     } else {
       Taro.hideLoading();

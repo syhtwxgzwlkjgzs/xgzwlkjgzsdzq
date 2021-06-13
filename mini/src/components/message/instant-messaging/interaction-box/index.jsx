@@ -66,7 +66,7 @@ const InteractionBox = (props) => {
       setIsSubmiting(false);
       Taro.hideLoading();
       if (ret.code === 0) {
-        setTypingValue('');
+        if (!data.imageUrl) setTypingValue('');
         readDialogMsgList(dialogId);
       } else {
         Toast.error({ content: ret.msg });
@@ -82,7 +82,7 @@ const InteractionBox = (props) => {
       setIsSubmiting(false);
       Taro.hideLoading();
       if (ret.code === 0) {
-        setTypingValue('');
+        if (!data.imageUrl) setTypingValue('');
         updateDialogId(ret.data.dialogId);
       } else {
         Toast.error({ content: ret.msg });
