@@ -72,7 +72,7 @@ class index extends Component {
           duration: 1000,
         });
         setTimeout(() => {
-          Taro.back();
+          Taro.navigateBack();
         }, 200);
       })
       .catch((error) => {
@@ -82,7 +82,7 @@ class index extends Component {
           duration: 1000,
         });
         setTimeout(() => {
-          Taro.back();
+          Taro.navigateBack();
         }, 200);
       });
   }, 300);
