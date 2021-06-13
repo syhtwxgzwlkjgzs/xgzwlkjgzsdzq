@@ -39,7 +39,7 @@ class index extends Component {
 
   // 点击取消
   handleCancel = () => {
-    Taro.redirectTo({ url: '/subPages/my/index' });
+    Taro.navigateBack();
     this.props.user.initEditInfo();
   };
 
@@ -72,7 +72,7 @@ class index extends Component {
           duration: 1000,
         });
         setTimeout(() => {
-          Taro.redirectTo({ url: '/subPages/my/index' });
+          Taro.navigateBack();
         }, 200);
       })
       .catch((error) => {
@@ -82,7 +82,7 @@ class index extends Component {
           duration: 1000,
         });
         setTimeout(() => {
-          Taro.redirectTo({ url: '/subPages/my/index' });
+          Taro.navigateBack();
         }, 200);
       });
   }, 300);

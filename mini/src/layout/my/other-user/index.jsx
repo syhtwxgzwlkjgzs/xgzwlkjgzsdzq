@@ -8,7 +8,7 @@ import UserCenterThreads from '@components/user-center-threads';
 import BaseLayout from '@components/base-layout';
 import Router from '@discuzq/sdk/dist/router';
 import { View, Text } from '@tarojs/components';
-import Taro, { getCurrentInstance } from '@tarojs/taro';
+import Taro, { getCurrentInstance, eventCenter } from '@tarojs/taro';
 import SectionTitle from '@components/section-title'
 import BottomView from '@components/list/BottomView'
 
@@ -22,6 +22,30 @@ class H5OthersPage extends React.Component {
     this.state = {
       fetchUserInfoLoading: true,
     };
+  }
+
+  $instance = getCurrentInstance()
+
+  componentWillMount () {
+    const onShowEventId = this.$instance.router.onShow
+    // 监听
+    eventCenter.on(onShowEventId, this.onShow)
+  }
+
+  onShow = async () => {
+    const { id = '' } = getCurrentInstance().router.params;
+    const myId = this.props.user?.id;
+    if (String(myId) === id) {
+      Router.replace({ url: '/subPages/my/index' });
+      return;
+    }
+    if (id) {
+      await this.props.user.getTargetUserInfo(id);
+      await this.props.user.getTargetUserThreads(id);
+      this.setState({
+        fetchUserInfoLoading: false,
+      });
+    }
   }
 
   componentDidMount = async () => {
