@@ -10,7 +10,7 @@ import Thread from '@components/thread';
 import BaseLayout from '@components/base-layout'
 import UserCenterPost from '../../components/user-center-post';
 import SectionTitle from '@components/section-title';
-import { getCurrentInstance, eventCenter } from '@tarojs/taro';
+import Taro, { getCurrentInstance, eventCenter } from '@tarojs/taro';
 
 @inject('user')
 @observer
