@@ -93,6 +93,13 @@ class IndexAction extends IndexStore {
     }
   }
 
+  @action
+  resetHomeThreadData() {
+    this.threads = null;
+    this.sticks = null;
+    this.resetErrorInfo()
+  }
+
 /**
  * 详情页点击标签、置顶跳转首页操作
  * @param {array} categoryIds 分类Ids

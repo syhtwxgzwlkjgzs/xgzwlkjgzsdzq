@@ -11,6 +11,7 @@ import TopNew from './components/top-news';
 import NavBar from './components/nav-bar';
 import { getSelectedCategoryIds } from '@common/utils/handleCategory';
 import Taro from '@tarojs/taro';
+import { debounce } from '@common/utils/throttle-debounce.js';
 import styles from './index.module.scss';
 @inject('site')
 @inject('user')
@@ -107,6 +108,11 @@ class IndexH5Page extends React.Component {
 
     this.setState({ visible: false });
   }
+
+  debounceDispatch = debounce(() => {
+    const { dispatch = () => {} } = this.props
+    dispatch('click-filter');
+  }, 200)
 
   // 上拉加载更多
   onRefresh = () => {

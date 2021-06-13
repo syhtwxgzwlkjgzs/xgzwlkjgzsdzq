@@ -55,7 +55,7 @@ class Index extends React.Component {
     errorText: '加载失败'
   }
 
-  componentDidMount() {
+  loadData = () => {
     const { index } = this.props
     const { essence = 0, sequence = 0, attention = 0, sort = 1 } = index.filter;
 
@@ -73,7 +73,12 @@ class Index extends React.Component {
     });
   }
 
-
+  componentDidShow() {
+    const { threads } = this.props.index || {}
+    if (!threads) {
+      this.loadData()
+    }
+  }
 
   dispatch = async (type, data = {}) => {
     const { index } = this.props;
