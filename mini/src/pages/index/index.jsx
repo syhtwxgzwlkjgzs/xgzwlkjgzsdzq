@@ -66,7 +66,7 @@ class Index extends React.Component {
     this.props.index.resetErrorInfo()
     
     this.props.index.getReadCategories();
-    this.props.index.getRreadStickList();
+    this.props.index.getRreadStickList(categoryIds);
     this.props.index.getReadThreadList({
       sequence, 
       filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort } 
@@ -91,7 +91,7 @@ class Index extends React.Component {
 
     if (type === 'click-filter') { // 点击tab
       this.page = 1;
-      await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
+      return await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, isMini: true });
     } else if (type === 'moreData') {
       this.page += 1;
       return await index.getReadThreadList({
