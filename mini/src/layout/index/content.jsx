@@ -127,16 +127,16 @@ class IndexH5Page extends React.Component {
 
   handleScroll = (e) => {
       const { scrollTop = 0 } = e?.detail || {};
-      const { headerHeight = 182 } = this.state;
+      const { headerHeight = 182, navBarHeight } = this.state;
 
       const { fixedTab } = this.state;
       const PLACEHOLDER_HEIGHT = 58;
 
       // 只需要滚到临界点触发setState，而不是每一次滚动都触发
-      if(!fixedTab && scrollTop >= headerHeight + PLACEHOLDER_HEIGHT) {
+      if(!fixedTab && scrollTop >= navBarHeight) {
         this.setState(() => { return {"fixedTab": true} })
 
-      } else if(fixedTab && scrollTop < headerHeight + PLACEHOLDER_HEIGHT) {
+      } else if(fixedTab && scrollTop < navBarHeight) {
         this.setState(() => { return {"fixedTab": false} })
       }
     }
@@ -173,11 +173,7 @@ class IndexH5Page extends React.Component {
             </Tabs>
           </View>
           <NavBar title={site?.webConfig?.setSite?.siteName || ''} isShow={fixedTab} />
-          {fixedTab &&  (
-            <>
-             <View className={styles.tabPlaceholder}></View>
-            </>
-          )}
+          {/* {fixedTab &&  <View className={styles.tabPlaceholder}></View>} */}
           </>
         )}
       </>
