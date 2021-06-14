@@ -11,7 +11,32 @@
       "list": []
     },
     "miniprogram": {
-      "list": []
+      "list": [
+        {
+          "name": "subPages/thread/index",
+          "pathName": "subPages/thread/index",
+          "query": "id=47261",
+          "scene": null
+        },
+        {
+          "name": "subPages/thread/index",
+          "pathName": "subPages/thread/index",
+          "query": "id=49644",
+          "scene": null
+        },
+        {
+          "name": "subPages/500/index",
+          "pathName": "subPages/500/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "subPages/thread/index",
+          "pathName": "subPages/thread/index",
+          "query": "id=47261",
+          "scene": null
+        }
+      ]
     }
   }
 }

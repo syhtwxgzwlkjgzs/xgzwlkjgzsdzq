@@ -587,12 +587,18 @@ class ThreadH5Page extends React.Component {
     this.props.router.push('/');
   }
 
-  onClickUser = (e) => {
-    e && e.stopPropagation();
-
-    const { threadData } = this.props.thread || {};
-    this.props.router.push(`/user/${threadData?.userId}`);
-  };
+  replyAvatarClick(reply, comment, floor) {
+    if (floor === 2) {
+      const { userId } = reply;
+      if(!userId) return;
+      this.props.router.push(`/user/${userId}`)
+    }
+    if (floor === 3) {
+      const { commentUserId } = reply;
+      if(!commentUserId) return;
+      this.props.router.push(`/user/${commentUserId}`)
+    }
+  }
 
   render() {
     const { thread: threadStore } = this.props;
@@ -662,7 +668,6 @@ class ThreadH5Page extends React.Component {
               onTagClick={() => this.onTagClick()}
               onPayClick={() => this.onPayClick()}
               onPayClick={() => this.onPayClick()}
-              onClickUser={(e) => this.onClickUser(e)}
             ></RenderThreadContent>
           ) : (
             <LoadingTips type="init"></LoadingTips>
@@ -677,6 +682,7 @@ class ThreadH5Page extends React.Component {
                     router={this.props.router}
                     sort={(flag) => this.onSortChange(flag)}
                     onEditClick={(comment) => this.onEditClick(comment)}
+                    replyAvatarClick={(comment, reply, floor) =>this.replyAvatarClick(comment, reply, floor)}
                   ></RenderCommentList>
                   {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
                   {isNoMore && <NoMore className={layout.noMore} empty={totalCount === 0}></NoMore>}

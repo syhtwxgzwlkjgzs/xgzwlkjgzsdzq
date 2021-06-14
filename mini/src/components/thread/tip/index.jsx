@@ -12,7 +12,7 @@ import { inject, observer } from 'mobx-react';
  */
 
  const Index = inject('index')(
-  observer(({ imgs = [], tipData = {}, wholeNum = 1,showMore=false, index }) => {
+  observer(({ imgs = [], tipData = {}, wholeNum = 1,showMore=false, index, showCount = 5 }) => {
   const [visible, setVisible] = useState(false);
 
   const onClick = (e) => {
@@ -40,12 +40,19 @@ import { inject, observer } from 'mobx-react';
     }, [])
   }, [imgs]);
 
-  return (
+    // 点赞头像的总宽度
+  const sty = useMemo(() => {
+    return { width: `${22*(renderUsers.length)+4}px` }
+  }, [renderUsers]);
+
+  const imgAfterArr = [styles.img, styles.imgAfter2, styles.imgAfter3, styles.imgAfter4, styles.imgAfter5];
+
+    return (
     <>
-        <View className={`${styles.container} ${renderUsers.length === 1 ? styles.w24 : styles.w44}`} onClick={onClick}>
+        <View className={styles.container} onClick={onClick} style={sty}>
             {
-                wholeNum !== 0 && renderUsers?.filter((_, index) => index < 2).map((item, index) => (
-                  <View key={index} className={index === 0 ? styles.img : styles.imgAfter}>
+                wholeNum !== 0 && renderUsers?.filter((_, index) => index < showCount).map((item, index) => (
+                  <View key={index} className={imgAfterArr[index]}>
                     <Avatar
                       image={item.avatar}
                       name={item.nickname}
@@ -55,7 +62,7 @@ import { inject, observer } from 'mobx-react';
                 ))
             }
             {
-              showMore && renderUsers?.length > 2 &&
+              showMore && renderUsers?.length > showCount &&
               <View className={styles.moreIcon} size={20}>
                 <Icon name='MoreBOutlined' className={styles.icon} size={12}></Icon>
               </View>

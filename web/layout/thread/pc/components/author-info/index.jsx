@@ -25,6 +25,11 @@ class AuthorInfo extends React.Component {
     typeof this.props.onPrivateLetter === 'function' && this.props.onPrivateLetter();
   }
 
+  // 点击用户头像/用户名跳转个人中心
+  onPersonalPage() {
+    typeof this.props.onPersonalPage === 'function' && this.props.onPersonalPage();
+  }
+
   render() {
     return (
       <div className={styles.container}>
@@ -33,7 +38,7 @@ class AuthorInfo extends React.Component {
         </div>
         <div className={styles.info}>
           <div className={styles.AuthorInfo}>
-            <div className={styles.avatar}>
+            <div className={styles.avatar} onClick={() => this.onPersonalPage()}>
               <Avatar
                 image={this.user.avatarUrl}
                 name={this.user.nickname}
@@ -43,7 +48,7 @@ class AuthorInfo extends React.Component {
               ></Avatar>
             </div>
             <div className={styles.information}>
-              <div className={styles.name}>{this.user.nickname || ''}</div>
+              <div className={styles.name} onClick={() => this.onPersonalPage()}>{this.user.nickname || ''}</div>
               <div className={styles.dynamic}>活跃在 {diffDate(this.user.updatedAt)}</div>
             </div>
           </div>
