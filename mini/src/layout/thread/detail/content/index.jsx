@@ -278,7 +278,7 @@ const RenderThreadContent = inject('user')(
                 )}
               </View>
               <View className={styles.likeReward}>
-                <Tip tipData={tipData} imgs={threadStore?.threadData?.likeReward?.users || []} showMore={true}></Tip>
+                <Tip tipData={tipData} imgs={threadStore?.threadData?.likeReward?.users || []} showMore={true} showCount={5}></Tip>
               </View>
             </View>
             {threadStore?.threadData?.likeReward?.shareCount > 0 && (
