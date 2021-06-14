@@ -14,8 +14,7 @@ const NavBar = forwardRef(({ title = 'Discuz!Q', isShow = true }, ref) => {
   const navBarStyle = useMemo(() => {
     const height = `${statusBarHeight + 44}px`
     return {
-      // transform: `translateY(-${isShow ? 0 : height})`,
-      display: isShow ? 'block' : 'none',
+      transform: `translateY(-${isShow ? 0 : height})`,
       height
     } 
   }, [statusBarHeight, isShow])
