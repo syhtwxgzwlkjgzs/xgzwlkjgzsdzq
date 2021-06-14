@@ -22,12 +22,14 @@
   :global {
     .dzq-input__inner {
       height: 44px;
+      line-height: 44px;
       border: none;
       font-family: 'PingFang SC';
       font-weight: 600;
       font-size: 30px;
       text-align: left;
       color: #c5c6ca;
+      padding: 0 $padding-2n;
     }
   }
 
