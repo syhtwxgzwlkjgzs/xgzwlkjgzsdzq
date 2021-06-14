@@ -72,28 +72,34 @@ class ThreadPCPage extends React.Component {
     this.inputText = '请输入其他理由';
   }
 
-  // 滚动事件
-  handleOnScroll() {
-    // const threadBodyRef = this.threadBodyRef?.current?.listRef?.current?.listWrapper;
-
-    // if (threadBodyRef && threadBodyRef.current) {
-    //   // 加载评论列表
-    //   const scrollDistance = threadBodyRef?.current?.scrollTop;
-    //   const offsetHeight = threadBodyRef?.current?.offsetHeight;
-    //   const scrollHeight = threadBodyRef?.current?.scrollHeight;
-    //   const { isCommentReady, isNoMore } = this.props.thread;
-    //   // 记录当前的滚动位置
-    //   this.props.thread.setScrollDistance(scrollDistance);
-    //   if (
-    //     scrollDistance + offsetHeight >= scrollHeight - 20 &&
-    //     !this.state.isCommentLoading &&
-    //     isCommentReady &&
-    //     !isNoMore
-    //   ) {
+  // 上拉刷新事件
+  handleOnRefresh() {
     this.page = this.page + 1;
     return this.loadCommentList();
-    // }
-    // }
+  }
+
+  // 滚动事件
+  handleOnScroll() {
+    const threadBodyRef = this.threadBodyRef?.current?.listRef?.current?.listWrapper;
+
+    if (threadBodyRef && threadBodyRef.current) {
+      // 加载评论列表
+      const scrollDistance = threadBodyRef?.current?.scrollTop;
+      // const offsetHeight = threadBodyRef?.current?.offsetHeight;
+      // const scrollHeight = threadBodyRef?.current?.scrollHeight;
+      // const { isCommentReady, isNoMore } = this.props.thread;
+      // 记录当前的滚动位置
+      this.props.thread.setScrollDistance(scrollDistance);
+      // if (
+      //   scrollDistance + offsetHeight >= scrollHeight - 20 &&
+      //   !this.state.isCommentLoading &&
+      //   isCommentReady &&
+      //   !isNoMore
+      // ) {
+      // this.page = this.page + 1;
+      // this.loadCommentList();
+      // }
+    }
   }
 
   // baselayout componentDidMount 事件
@@ -120,11 +126,10 @@ class ThreadPCPage extends React.Component {
 
   // 滚动到指定位置
   scrollToPostion(scrollBodyRef) {
-    // 当内容加载完成后，获取评论区所在的位置
-    this.position = this.commentDataRef?.current?.offsetTop - 50;
-
     // 是否定位到评论位置
     if (this.props?.thread?.isPositionToComment) {
+      // 当内容加载完成后，获取评论区所在的位置
+      this.position = this.commentDataRef?.current?.offsetTop - 50;
       // TODO:需要监听帖子内容加载完成事件
       setTimeout(() => {
         scrollBodyRef?.current?.scrollTo(0, this.position);
@@ -133,7 +138,7 @@ class ThreadPCPage extends React.Component {
     }
 
     // 滚动到记录的指定位置
-    // scrollBodyRef?.current?.scrollTo(0, this.props.thread.scrollDistance);
+    scrollBodyRef?.current?.scrollTo(0, this.props.thread.scrollDistance);
   }
 
   // 加载评论列表
@@ -745,12 +750,12 @@ class ThreadPCPage extends React.Component {
         <ShowTop showContent={this.props.thread?.threadData?.isStick} setTop={this.state.setTop}></ShowTop>
 
         <BaseLayout
-          onRefresh={() => this.handleOnScroll()}
+          onRefresh={() => this.handleOnRefresh()}
+          onScroll={() => this.handleOnScroll()}
           noMore={isNoMore}
           ref={this.threadBodyRef}
           showRefresh={false}
           right={this.renderRight()}
-          pageName="detail"
           isShowLayoutRefresh={isCommentReady}
           ready={() => this.onBaseLayoutReady()}
           rightClassName={layout.positionSticky}
