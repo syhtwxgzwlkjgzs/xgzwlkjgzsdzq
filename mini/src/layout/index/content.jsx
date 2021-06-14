@@ -11,6 +11,7 @@ import TopNew from './components/top-news';
 import NavBar from './components/nav-bar';
 import { getSelectedCategoryIds } from '@common/utils/handleCategory';
 import Taro from '@tarojs/taro';
+import { debounce } from '@common/utils/throttle-debounce.js';
 import styles from './index.module.scss';
 @inject('site')
 @inject('user')
@@ -28,6 +29,7 @@ class IndexH5Page extends React.Component {
       fixedTab: false,
       navBarHeight: 64,
       headerHeight: 182,
+      isClickTab: false
     };
     this.tabsRef = createRef();
     this.headerRef = createRef(null);
@@ -81,6 +83,8 @@ class IndexH5Page extends React.Component {
   };
 
   onClickTab = (id = '') => {
+    this.props.index.resetErrorInfo()
+    this.setState({ isClickTab: true })
     this.changeFilter({ categoryids: [id], sequence: id === 'default' ? 1 : 0 })
   };
 
@@ -103,10 +107,17 @@ class IndexH5Page extends React.Component {
       index.setFilter(newFilter);
     }
 
-    dispatch('click-filter');
+    this.debounceDispatch()
 
-    this.setState({ visible: false });
+    this.setState({ visible: false })
   }
+
+  debounceDispatch = debounce(() => {
+    const { dispatch = () => {} } = this.props
+    dispatch('click-filter').then(() => {
+      this.setState({ isClickTab: false });
+    });
+  }, 200)
 
   // 上拉加载更多
   onRefresh = () => {
@@ -141,7 +152,7 @@ class IndexH5Page extends React.Component {
           <>
           <View 
             ref={this.tabsRef}
-            className={`${styles.homeContent} ${fixedTab && styles.fixed}`}
+            className={`${styles.homeContent} ${fixedTab ? styles.fixed : ''}`}
             style={{top: `${navBarHeight}px`}}
           >
             <Tabs
@@ -189,7 +200,7 @@ class IndexH5Page extends React.Component {
 
   render() {
     const { index, user } = this.props;
-    const { isFinished } = this.state;
+    const { isFinished, isClickTab } = this.state;
     const { threads = {}, currentCategories, filter, threadError } = index;
     const { currentPage, totalPage, pageData } = threads || {};
 
@@ -198,7 +209,7 @@ class IndexH5Page extends React.Component {
         showHeader={false}
         showTabBar
         onRefresh={this.onRefresh}
-        noMore={currentPage >= totalPage}
+        noMore={!isClickTab && currentPage >= totalPage}
         isFinished={isFinished}
         onScroll={this.handleScroll}
         curr='home'
@@ -211,16 +222,18 @@ class IndexH5Page extends React.Component {
 
         {this.renderTabs()}
 
-        {this.renderHeaderContent()}
-
-        {pageData?.map((item, index) => (
-            <ThreadContent
-              key={index}
-              showBottomStyle={index !== pageData.length - 1}
-              data={item}
-              className={styles.listItem}
-            />
-          ))}
+        <View style={{display: isClickTab ? 'none' : 'block'}}>
+          {this.renderHeaderContent()}
+       
+          {pageData?.map((item, index) => (
+              <ThreadContent
+                key={index}
+                showBottomStyle={index !== pageData.length - 1}
+                data={item}
+                className={styles.listItem}
+              />
+            ))}
+        </View>
 
         <FilterView
           data={currentCategories}
