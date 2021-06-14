@@ -34,6 +34,9 @@ export default class index extends Component {
     if (this.props.user.id) {
       await this.props.user.updateUserInfo(this.props.user.id);
     }
+  };
+
+  componentDidMount = async () => {
     try {
       await this.props.user.getUserThreads();
     } catch (e) {
@@ -46,7 +49,7 @@ export default class index extends Component {
       }
     }
     this.setState({ isLoading: false });
-  };
+  }
 
   // 处理页面栈退出后，数据没有重置
   componentWillUnmount() {
