@@ -41,10 +41,6 @@ class H5OthersPage extends React.Component {
     }
     if (id) {
       await this.props.user.getTargetUserInfo(id);
-      await this.props.user.getTargetUserThreads(id);
-      this.setState({
-        fetchUserInfoLoading: false,
-      });
     }
   }
 
