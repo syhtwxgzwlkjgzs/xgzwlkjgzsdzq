@@ -55,7 +55,7 @@ class Index extends React.Component {
     errorText: '加载失败'
   }
 
-  componentDidMount() {
+  loadData = () => {
     const { index } = this.props
     const { essence = 0, sequence = 0, attention = 0, sort = 1 } = index.filter;
 
@@ -66,14 +66,19 @@ class Index extends React.Component {
     this.props.index.resetErrorInfo()
     
     this.props.index.getReadCategories();
-    this.props.index.getRreadStickList();
+    this.props.index.getRreadStickList(categoryIds);
     this.props.index.getReadThreadList({
       sequence, 
       filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort } 
     });
   }
 
-
+  componentDidShow() {
+    const { threads } = this.props.index || {}
+    if (!threads) {
+      this.loadData()
+    }
+  }
 
   dispatch = async (type, data = {}) => {
     const { index } = this.props;
@@ -86,7 +91,7 @@ class Index extends React.Component {
 
     if (type === 'click-filter') { // 点击tab
       this.page = 1;
-      await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
+      return await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, isMini: true });
     } else if (type === 'moreData') {
       this.page += 1;
       return await index.getReadThreadList({

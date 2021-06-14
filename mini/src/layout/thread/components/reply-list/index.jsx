@@ -30,6 +30,10 @@ export default class ReplyList extends React.Component {
     typeof this.props.likeClick === 'function' && this.props.deleteClick();
   }
 
+  avatarClick(floor) {
+    typeof this.props.avatarClick === 'function' && this.props.avatarClick(floor);
+  }
+
   generatePermissions(data = {}) {
     return {
       canApprove: data.canApprove || false,
@@ -65,7 +69,7 @@ export default class ReplyList extends React.Component {
 
     return (
       <View className={styles.replyList}>
-        <View className={styles.replyListAvatar} onClick={this.props.avatarClick('2')}>
+        <View className={styles.replyListAvatar} onClick={() => {this.avatarClick(2)}}>
           <Avatar
             image={this.props?.data?.user?.avatar}
             name={this.props?.data?.user?.nickname || this?.props?.data?.user?.userName || ''}
@@ -75,14 +79,14 @@ export default class ReplyList extends React.Component {
         </View>
         <View className={styles.replyListContent}>
           <View className={styles.replyListContentText}>
-            <View className={styles.replyListName}>
+            <View className={styles.replyListName} onClick={() => {this.avatarClick(2)}}>
               {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
             </View>
             <View className={styles.replyListText}>
               {/* 二级回复用户 */}
               {this.props.data.commentUserId && this.props?.data?.commentUser ? (
                 <View className={styles.commentUser}>
-                  <View className={styles.replyedAvatar} onClick={this.props.avatarClick('3')}>
+                  <View className={styles.replyedAvatar} onClick={() => {this.avatarClick(3)}}>
                     <Avatar
                       className={styles.avatar}
                       image={this.props.data.commentUser.avatar}
@@ -91,7 +95,7 @@ export default class ReplyList extends React.Component {
                       size="small"
                     ></Avatar>
                   </View>
-                  <Text className={styles.replyedUserName}>
+                  <Text className={styles.replyedUserName} onClick={() => {this.avatarClick(3)}}>
                     {this.props.data.commentUser.nickname || this.props.data.commentUser.userName}
                   </Text>
                 </View>

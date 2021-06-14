@@ -93,6 +93,13 @@ class IndexAction extends IndexStore {
     }
   }
 
+  @action
+  resetHomeThreadData() {
+    this.threads = null;
+    this.sticks = null;
+    this.resetErrorInfo()
+  }
+
 /**
  * 详情页点击标签、置顶跳转首页操作
  * @param {array} categoryIds 分类Ids
@@ -134,13 +141,19 @@ class IndexAction extends IndexStore {
    * @param {*} param0
    */
   @action
-  async screenData({ filter = {}, sequence = 0, perPage = 10, page = 1 } = {}) {
-    this.threads = null;
-    this.sticks = null;
+  async screenData({ filter = {}, sequence = 0, perPage = 10, page = 1, isMini = false } = {}) {
+    // 如果是小程序请求，先不把数据置空，以免导致页面提前渲染
+    if (!isMini) {
+      this.threads = null;
+      this.sticks = null;
+    }
+    
     this.resetErrorInfo()
 
-    this.getRreadStickList(filter.categoryids);
-    this.getReadThreadList({ filter, sequence, perPage, page });
+    await this.getRreadStickList(filter.categoryids);
+    await this.getReadThreadList({ filter, sequence, perPage, page });
+
+    return
   }
 
   /**
@@ -227,7 +240,7 @@ class IndexAction extends IndexStore {
   @action
   async getRreadStickList(categoryIds = []) {
     const result = await readStickList({ params: { categoryIds } });
-    if (result.code === 0 && result.data) {
+    if (result.code === 0) {
       this.sticks = null;
       this.setSticks(result.data);
       return this.sticks;
