@@ -36,6 +36,21 @@ export default class index extends Component {
     }
   };
 
+  componentDidMount = async () => {
+    try {
+      await this.props.user.getUserThreads();
+    } catch (e) {
+      console.error(e);
+      if (e.Code) {
+        Toast.error({
+          content: e.Msg || '获取用户主题列表失败',
+          duration: 2000,
+        });
+      }
+    }
+    this.setState({ isLoading: false });
+  }
+
   // 处理页面栈退出后，数据没有重置
   componentWillUnmount() {
     this.props.user.clearUserThreadsInfo();
