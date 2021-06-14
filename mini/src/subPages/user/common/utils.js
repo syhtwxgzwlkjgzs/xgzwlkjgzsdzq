@@ -24,12 +24,16 @@ export const getParamCode = (commonLogin) => new Promise((resolve, reject) => {
  * 获取用户信息
  * @returns 用户信息
  */
-export const getUserProfile = (callback) => new Promise((resolve, reject) => {
+export const getUserProfile = (callback, isShowLoading = true) => new Promise((resolve, reject) => {
   Taro.getUserProfile({
     desc: "账号绑定微信",
-    success: (res) => {
+    success: async (res) => {
+      if(isShowLoading) {
+        Taro.showLoading({ title: '微信登录中', mask: true });
+      }
       if(res.errMsg === 'getUserProfile:ok'){
-        callback(res);
+        await callback(res);
+        Taro.hideLoading();
         return resolve(res);
       }
       reject(res);

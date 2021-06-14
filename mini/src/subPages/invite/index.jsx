@@ -9,6 +9,7 @@ class Invite extends React.Component {
   $getShareData(data) {
     return {
       path: data.path,
+      title: data.title,
     };
   }
 

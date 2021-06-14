@@ -14,10 +14,10 @@
 .text {
   font-size: rem($font-size-primary);
   text-align: left;
-  color: var(--color-text-primary);
+  color: $text-color-primary;
   margin-left: rem($margin-2n);
 }
 
 .number {
-  color: var(--color-error);
+  color: $error-color;
 }

@@ -255,6 +255,11 @@ class UserAction extends SiteStore {
     return !!this.userInfo && !!this.userInfo.id;
   }
 
+  @action
+  isPaid() {
+    return !!this.userInfo && !!this.userInfo.paid
+  }
+
   // 获取指定用户信息
   @action
   async getAssignUserInfo(userId) {
@@ -338,6 +343,12 @@ class UserAction extends SiteStore {
         },
       },
     });
+    if (userThreadList.code !== 0) {
+      throw {
+        Code: userThreadList.code,
+        Msg: userThreadList.msg || '获取用户主题列表失败'
+      }
+    }
     const pageData = get(userThreadList, 'data.pageData', []);
     const totalPage = get(userThreadList, 'data.totalPage', 1);
     this.userThreadsTotalPage = totalPage;
@@ -815,6 +826,25 @@ class UserAction extends SiteStore {
     this.cleanTargetUserFans();
     this.cleanTargetUserFollows();
   }
+
+  /**
+   * 支付成功后，更新帖子列表指定帖子状态
+   * @param {number} threadId 帖子id
+   * @param {object}  obj 更新数据
+   * @returns
+   */
+   @action
+   updatePayThreadInfo(threadId, obj) {
+     const targetThreads = this.findAssignThread(threadId);
+     if (!targetThreads || targetThreads.length === 0) return;
+
+     targetThreads.forEach(targetThread => {
+      const { index, key, data, store } = targetThread;
+      if (store[key] && store[key][index]) {
+        store[key][index] = obj;
+      }
+     })
+   }
 
   /**
     * 更新帖子列表指定帖子状态

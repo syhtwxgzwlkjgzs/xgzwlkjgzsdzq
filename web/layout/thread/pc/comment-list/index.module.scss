@@ -2,9 +2,9 @@
 
 .container {
   width: 100%;
-  background: var(--color-white);
+  background: $white;
   padding: rem($padding-4n) rem($padding-6n) 0 rem($padding-6n);
-  border-radius: var(--border-radius-small);
+  border-radius: rem($border-radius-small);
   box-sizing: border-box;
 
   &.isEmpty {
@@ -18,17 +18,17 @@
   align-items: center;
   justify-content: space-between;
   font-weight: normal;
-  background: var(--color-white);
+  background: $white;
   line-height: rem(22);
 
   .number {
     font-size: rem($font-size-middle);
-    color: var(--color-text-primary);
+    color: $text-color-primary;
   }
 
   .sort {
     font-size: rem($font-size-primary);
-    color: var(--color-text-secondary);
+    color: $text-color-secondary;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -45,10 +45,10 @@
 }
 
 .body {
-  background: var(--color-white);
+  background: $white;
 
   .commentItems {
-    border-bottom: var(--border-border);
+    border-bottom: $border-solid-1;
 
     &:last-child {
       border-bottom: none;

@@ -183,7 +183,7 @@
 
 
 .pc {
-  z-index: var(--zindex-dialog) !important;
+  z-index: $zindex-dialog !important;
 
   .rewards {
     position: static;

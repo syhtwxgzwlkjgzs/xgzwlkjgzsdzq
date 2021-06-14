@@ -5,6 +5,7 @@ import React, { memo, useState, useEffect } from 'react';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
 import Icon from '@discuzq/design/dist/components/icon/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Taro from '@tarojs/taro';
@@ -43,6 +44,11 @@ const Index = (props) => {
             positionChange(_position);
           }
         });
+      },
+      fail: function (err) {
+        if (err?.errMsg?.indexOf('auth deny') > -1) {
+          Toast.info({ content: '请在小程序页面右上角 - 更多 - 设置里允许小程序使用定位权限~' });
+        }
       }
     });
   };

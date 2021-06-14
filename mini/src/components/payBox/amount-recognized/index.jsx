@@ -4,37 +4,39 @@ import Icon from '@discuzq/design/dist/components/icon/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import Button from '@discuzq/design/dist/components/button/index';
 import Divider from '@discuzq/design/dist/components/divider/index';
+import Spin from '@discuzq/design/dist/components/spin/index';
 import styles from './index.module.scss';
 import { View, Text, Checkbox } from '@tarojs/components';
 import { ORDER_TRADE_TYPE } from '../../../../../common/constants/payBoxStoreConstants';
+import throttle from '@common/utils/thottle.js';
 
 @inject('payBox')
 @observer
 export default class AmountRecognized extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       tradeContent: [
         {
           type: ORDER_TRADE_TYPE.RED_PACKET,
-          name: '红包'
+          name: '红包',
         },
         {
           type: ORDER_TRADE_TYPE.POST_REWARD,
-          name: '悬赏'
-        }
-      ]
-    }
+          name: '悬赏',
+        },
+      ],
+      isLoading: false,
+    };
   }
 
   onClose = () => {
     // FIXME: 延时回调的修复
-    this.props.payBox.visible = false
+    this.props.payBox.visible = false;
     setTimeout(() => {
       this.props.payBox.clear();
-    }, 1000)
-  }
+    }, 1000);
+  };
 
   /**
    * 渲染不同交易类型
@@ -54,23 +56,23 @@ export default class AmountRecognized extends Component {
         value = '付费加入';
         break;
       case ORDER_TRADE_TYPE.PUT_PROBLEM: // 付费提问
-        value = '付费提问'
-        break
+        value = '付费提问';
+        break;
       case ORDER_TRADE_TYPE.COMBIE_PAYMENT:
-        value = '红包+悬赏'
-        break
+        value = '红包+悬赏';
+        break;
       case ORDER_TRADE_TYPE.REWARD: // 表示打赏
-        value = '打赏'
-        break
+        value = '打赏';
+        break;
       case ORDER_TRADE_TYPE.AUTHORITY_GROUP:
-        value = '购买权限组'
-        break
+        value = '购买权限组';
+        break;
       case ORDER_TRADE_TYPE.ATTACHMEMENT:
-        value = '附件'
-        break
+        value = '附件';
+        break;
       case ORDER_TRADE_TYPE.RED_PACKET:
-        value = '红包'
-        break
+        value = '红包';
+        break;
       default:
         break;
     }
@@ -78,22 +80,32 @@ export default class AmountRecognized extends Component {
   };
 
   // 点击支付去到 选择支付方式页面
-  goToThePayConfirmPage = async () => {
+  goToThePayConfirmPage = throttle(async () => {
+    if (this.state.isLoading) return;
     try {
+      this.setState({
+        isLoading: true,
+      });
       await this.props.payBox.createOrder();
+      this.setState({
+        isLoading: false,
+      });
     } catch (error) {
       Toast.error({
         content: error.Message,
         hasMask: false,
         duration: 1000,
       });
-      this.onClose()
+      this.onClose();
+      this.setState({
+        isLoading: false,
+      });
     }
-  };
+  }, 300);
 
   handleChangeIsAnonymous = (checked) => {
-    this.props.payBox.isAnonymous = checked
-  }
+    this.props.payBox.isAnonymous = checked;
+  };
 
   renderContent = () => {
     const { options = {} } = this.props?.payBox;
@@ -105,58 +117,61 @@ export default class AmountRecognized extends Component {
         {/* 主要内容区域 */}
         <View className={styles.amountContent}>
           <>
-            {
-              type === ORDER_TRADE_TYPE.COMBIE_PAYMENT ? (
-                <>
-                  {
-                    this.state.tradeContent.map((item, index) => {
-                      const amount_ = item.type === ORDER_TRADE_TYPE.RED_PACKET ? redAmount : rewardAmount
-                      return <>
-                        <View className={styles.acExplain}>
-                          <Text className={styles.acExplainLabel}>交易类型</Text>{' '}
-                          <Text className={styles.acExplainValue}>{this.renderDiffTradeType(item.type)}</Text>
-                        </View>
-                        <Divider className={styles.acExplainDivider} />
-                        <View className={styles.acExplain} style={{display: 'flex'}}>
-                          <Text className={styles.acExplainLabel}>商品名称</Text>{' '}
-                          <Text style={{display: 'block'}} className={styles.acExplainValue}>{title}</Text>
-                        </View>
-                        <Divider className={styles.acExplainDivider} />
-                        <View className={styles.acExplain}>
-                          <Text className={styles.acExplainLabel}>支付金额</Text>
-                          <Text className={styles.acExplainNum}>￥{this.transMoneyToFixed(amount_)}</Text>
-                        </View>
-                        {index === 0 && <View className={styles.ampuntLineWrap}><View className={styles.ampuntLine}></View></View>}
-                      </>
-                    })
-                  }
-                </>
-              ) : (
-                <>
-                  <View className={styles.acExplain}>
-                    <Text className={styles.acExplainLabel}>交易类型</Text>{' '}
-                    <Text className={styles.acExplainValue}>{this.renderDiffTradeType(type)}</Text>
-                  </View>
-                  <Divider className={styles.acExplainDivider} />
-                  <View className={styles.acExplain}>
-                    <Text className={styles.acExplainLabel}>商品名称</Text>{' '}
-                    <Text className={styles.acExplainValue}>{title}</Text>
-                  </View>
-                  <Divider className={styles.acExplainDivider} />
-                  <View className={styles.acExplain}>
-                    <Text className={styles.acExplainLabel}>支付金额</Text>
-                    <Text className={styles.acExplainNum}>￥{this.transMoneyToFixed(amount)}</Text>
-                  </View>
-                  {
-                    type === ORDER_TRADE_TYPE.REGEISTER_SITE &&
-                    (
-                      <View className={`${styles.acExplain} ${styles.acExplainH5}`}>
-                        <Checkbox checked={this.props.payBox.isAnonymous} onChange={this.handleChangeIsAnonymous} /> 隐藏我的付费信息
+            {type === ORDER_TRADE_TYPE.COMBIE_PAYMENT ? (
+              <>
+                {this.state.tradeContent.map((item, index) => {
+                  const amount_ = item.type === ORDER_TRADE_TYPE.RED_PACKET ? redAmount : rewardAmount;
+                  return (
+                    <>
+                      <View className={styles.acExplain}>
+                        <Text className={styles.acExplainLabel}>交易类型</Text>{' '}
+                        <Text className={styles.acExplainValue}>{this.renderDiffTradeType(item.type)}</Text>
                       </View>
-                    )}
-                </>
-              )
-            }
+                      <Divider className={styles.acExplainDivider} />
+                      <View className={styles.acExplain} style={{ display: 'flex' }}>
+                        <Text className={styles.acExplainLabel}>商品名称</Text>{' '}
+                        <Text style={{ display: 'block' }} className={styles.acExplainValue}>
+                          {title}
+                        </Text>
+                      </View>
+                      <Divider className={styles.acExplainDivider} />
+                      <View className={styles.acExplain}>
+                        <Text className={styles.acExplainLabel}>支付金额</Text>
+                        <Text className={styles.acExplainNum}>￥{this.transMoneyToFixed(amount_)}</Text>
+                      </View>
+                      {index === 0 && (
+                        <View className={styles.ampuntLineWrap}>
+                          <View className={styles.ampuntLine}></View>
+                        </View>
+                      )}
+                    </>
+                  );
+                })}
+              </>
+            ) : (
+              <>
+                <View className={styles.acExplain}>
+                  <Text className={styles.acExplainLabel}>交易类型</Text>{' '}
+                  <Text className={styles.acExplainValue}>{this.renderDiffTradeType(type)}</Text>
+                </View>
+                <Divider className={styles.acExplainDivider} />
+                <View className={styles.acExplain}>
+                  <Text className={styles.acExplainLabel}>商品名称</Text>{' '}
+                  <Text className={styles.acExplainValue}>{title}</Text>
+                </View>
+                <Divider className={styles.acExplainDivider} />
+                <View className={styles.acExplain}>
+                  <Text className={styles.acExplainLabel}>支付金额</Text>
+                  <Text className={styles.acExplainNum}>￥{this.transMoneyToFixed(amount)}</Text>
+                </View>
+                {type === ORDER_TRADE_TYPE.REGEISTER_SITE && (
+                  <View className={`${styles.acExplain} ${styles.acExplainH5}`}>
+                    <Checkbox checked={this.props.payBox.isAnonymous} onChange={this.handleChangeIsAnonymous} />{' '}
+                    隐藏我的付费信息
+                  </View>
+                )}
+              </>
+            )}
           </>
         </View>
       </View>
@@ -171,13 +186,21 @@ export default class AmountRecognized extends Component {
   render() {
     const { options = {} } = this.props.payBox;
     const { amount = 0 } = options;
+    const { isLoading } = this.state;
     return (
       <View className={styles.amountWrapper}>
         {this.renderContent()}
         {/* 按钮区域-提交内容 */}
         <View className={styles.btnBox}>
-          <Button type="primary" onClick={this.goToThePayConfirmPage} size="large" className={styles.btn} full>
-            支付 ￥{this.transMoneyToFixed(amount)}
+          <Button
+            type="primary"
+            onClick={this.goToThePayConfirmPage}
+            size="large"
+            className={styles.btn}
+            full
+            disabled={isLoading}
+          >
+            {isLoading ? <Spin type="spinner">支付中...</Spin> : `支付 ￥${this.transMoneyToFixed(amount)}`}
           </Button>
         </View>
         {/* 关闭按钮 */}

@@ -107,7 +107,7 @@ const Index = ({
       <div className={`${styles.container} ${usePointer ? styles.usePointer : ''}`} {...props}>
       <div
         ref={contentWrapperRef}
-        className={`${styles.contentWrapper} ${showHideCover ? styles.hideCover : ''} ${customHoverBg? styles.bg : ''}`}
+        className={`${styles.contentWrapper} ${showHideCover ? styles.hideCover : ''} ${customHoverBg ? styles.bg : ''}`}
         onClick={!showMore ? onShowMore : handleClick}
       >
         <div className={styles.content}>

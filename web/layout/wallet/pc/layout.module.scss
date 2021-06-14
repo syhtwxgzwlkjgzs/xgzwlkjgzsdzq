@@ -45,13 +45,13 @@
     box-sizing: border-box;
     width: rem(750);
     margin-right: rem($margin-5n);
-    background: var(--color-white);
+    background: $white;
     padding: rem($padding-6n);
     border-radius: rem(5);
 
     .header {
-      color: var(--color-text-primary);
-      border-bottom: var(--border-border);
+      color: $text-color-primary;
+      border-bottom: $border-solid-1;
       padding-bottom: rem($margin-6n);
 
       .headerTitle {
@@ -78,16 +78,16 @@
         .choiceType {
           width: rem(140);
           height: rem(36);
-          border-radius: var(--border-radius-small);
+          border-radius: $border-radius-small;
           background: transparent;
-          border: var(--border-border);
+          border: $border-solid-1;
           margin-right: rem($margin-6n);
           line-height: rem(36);
           text-align: center;
           font-family: 'PingFangSC-Regular';
           font-weight: normal;
           font-size: rem($font-size-primary);
-          color: var(--color-text-primary);
+          color: $text-color-primary;
           box-sizing: border-box;
           display: flex;
           align-items: center;
@@ -135,19 +135,19 @@
     .walletInfo {
       width: 100%;
       height: rem(424);
-      background: var(--color-white);
+      background: $white;
       margin-bottom: rem(20);
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: var(--border-radius-small);
+      border-radius: $border-radius-small;
     }
 
     .tabs {
       width: 100%;
       height: rem(188);
-      background: var(--color-white);
-      border-radius: var(--border-radius-small);
+      background: $white;
+      border-radius: $border-radius-small;
       box-shadow: 0 0 rem(8) rgba(241, 243, 244, 0.16);
     }
 
@@ -368,7 +368,7 @@
 
 .datePickerIcon {
   margin-right: rem(16);
-  margin-left: var(--margin-1n);
+  margin-left: $margin-1n;
   -webkit-transform: rotateZ(90deg);
   transform: rotateZ(90deg);
   will-change: transform;

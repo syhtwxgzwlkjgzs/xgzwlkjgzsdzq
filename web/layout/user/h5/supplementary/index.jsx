@@ -56,15 +56,19 @@ class SupplementaryH5Page extends React.Component {
   processData =() => {
     const { fields, values } = this.props.supplementary;
     return values.map((v, index) => {
-      if (v.required === 1 && v.value.length === 0) {
-        throw new Error(`${v.name}字段未填写`);
+      if (v.required === 1) {
+        if (v.value.length === 0
+          || (v.value.trim && v.value.trim().length === 0)) {
+          throw new Error(`${v.name}未填写`);
+        }
       }
+
       let fieldsExt; let options;
       if (v.value.length) {
         switch (v.type) {
           case InputType.INPUT:
           case InputType.TEXTAREA:
-            fieldsExt = v.value;
+            fieldsExt = v.value?.trim();
             break;
           case InputType.FILE:
           case InputType.PHOTO:

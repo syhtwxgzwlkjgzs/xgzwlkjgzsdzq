@@ -26,7 +26,20 @@ import styles from './index.module.scss';
 */
 
 const BaseLayout = (props) => {
-  const { index, showHeader = true, showTabBar = false, showPullDown = false, children = null, onPullDown, isFinished = true, curr, onScroll = () => {}, baselayout, pageName } = props;
+  const { 
+    index, 
+    showHeader = true, 
+    showTabBar = false, 
+    showPullDown = false, 
+    children = null, 
+    onPullDown, 
+    isFinished = true, 
+    curr, 
+    onScroll = () => {}, 
+    baselayout, 
+    pageName, 
+    onClickTabBar = () => {}
+  } = props;
   const [height, setHeight] = useState(600);
 
   // 避免小程序通过手势返回上一页时，无法重置参数
@@ -115,7 +128,7 @@ const BaseLayout = (props) => {
           )
         }
 
-        {showTabBar && <BottomNavBar placeholder curr={curr} />}
+        {showTabBar && <BottomNavBar onClick={onClickTabBar} placeholder curr={curr} />}
     </View>
   );
 };

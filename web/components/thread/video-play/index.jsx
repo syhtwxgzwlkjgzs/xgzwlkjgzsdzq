@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import { Video, Icon } from '@discuzq/design';
 import { noop } from '../utils';
+import calcVideoSize from '@common/utils/calc-video-size';
 
 /**
  * 视频
@@ -26,10 +27,13 @@ const Index = ({
   status = 0,
   onPay = noop,
   baselayout = {},
+  v_width = null,
+  v_height = null
 }) => {
   let player = null;
   const ref = useRef();
   const [width, setWidth] = useState(null);
+  const [height, setHeight] = useState(null);
 
   const onReady = (ins) => {
     player = ins;
@@ -56,11 +60,19 @@ const Index = ({
 
   useEffect(() => {
     const rect = ref.current.getBoundingClientRect();
-    setWidth(rect?.width || 343);
+    const { width, height } = calcVideoSize({
+      parentWidth: rect?.width || 343,
+      v_width,
+      v_height,
+      viewHeight: window.innerHeight
+    });
+    setWidth(width);
+    setHeight(height);
+    
   }, []);
 
   return (
-    <div id="common-video-play" className={styles.container} ref={ref}>
+    <div id="common-video-play" className={styles.container} style={{width: `${width}px`, height: `${height}px`}} ref={ref}>
       {
         width && (
           <Video
@@ -69,7 +81,7 @@ const Index = ({
             onPlay={onPlay}
             src={url}
             width={width}
-            height={9 * (width) / 16 || '224'}
+            height={height}
             poster={coverUrl}
             duration={time}
           />

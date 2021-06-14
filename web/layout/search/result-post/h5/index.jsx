@@ -58,13 +58,14 @@ class SearchResultPostH5Page extends React.Component {
           noMore={currentPage >= totalPage}
           requestError={threadsError.isError}
           errorText={threadsError.errorText}
+          showLoadingInCenter={!pageData?.length}
       >
         <div className={styles.topBox}>
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} isShowBottom={false} searchWhileTyping/>
         </div>
         {
-          pageData?.map((item, index) => (
-            <ThreadContent key={index} data={item} />
+          pageData?.map((item, index, arr) => (
+            <ThreadContent showBottomStyle={index !== arr.length - 1} key={index} data={item} />
           ))
         }
       </BaseLayout>

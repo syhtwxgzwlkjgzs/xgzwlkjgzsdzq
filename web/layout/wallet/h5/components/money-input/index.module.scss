@@ -16,7 +16,7 @@
   display: flex;
   align-items: center;
   padding: rem($padding-6n) 0;
-  border-bottom: var(--border-border);
+  border-bottom: $border-solid-1;
 
   :global {
     .dzq-input__inner {
@@ -34,7 +34,7 @@
     font-weight: 600;
     font-size: rem(30);
     text-align: left;
-    color: var(--color-text-primary);
+    color: $text-color-primary;
   }
 }
 
@@ -43,6 +43,6 @@
   font-weight: normal;
   font-size: rem($font-size-label);
   text-align: left;
-  color: var(--color-text-secondary);
+  color: $text-color-secondary;
   padding: rem($padding-6n) 0;
 }

@@ -13,7 +13,7 @@ import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
 
 const InteractionBox = (props) => {
-  const { dialogId, threadPost, showEmoji, setShowEmoji, username, updateDialogId } = props;
+  const { dialogId, threadPost, showEmoji, setShowEmoji, username, updateDialogId, keyboardHeight, inputBottom } = props;
   const { readDialogMsgList, dialogMsgList, createDialogMsg, createDialog, readDialogIdByUsername } = props.message;
 
   // const [dialogId, setDialogId] = useState(propsDialogId);
@@ -24,7 +24,7 @@ const InteractionBox = (props) => {
 
   const [isSubmiting, setIsSubmiting] = useState(false);
 
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const [focus, setFocus] = useState(false);
 
   // const checkToShowCurrentMsgTime = (curTimestamp) => {
   //   const DISPLAY_GAP_IN_MINS = 3;
@@ -51,11 +51,6 @@ const InteractionBox = (props) => {
       threadPost.fetchEmoji();
     }
 
-    // 监听键盘高度变化
-    Taro.onKeyboardHeightChange(res => {
-      setKeyboardHeight(res?.height || 0);
-    });
-
     return () => {
       Taro.hideLoading();
     };
@@ -73,7 +68,7 @@ const InteractionBox = (props) => {
       setIsSubmiting(false);
       Taro.hideLoading();
       if (ret.code === 0) {
-        setTypingValue('');
+        if (!data.imageUrl) setTypingValue('');
         readDialogMsgList(dialogId);
       } else {
         Toast.error({ content: ret.msg });
@@ -89,7 +84,7 @@ const InteractionBox = (props) => {
       setIsSubmiting(false);
       Taro.hideLoading();
       if (ret.code === 0) {
-        setTypingValue('');
+        if (!data.imageUrl) setTypingValue('');
         updateDialogId(ret.data.dialogId);
       } else {
         Toast.error({ content: ret.msg });
@@ -179,13 +174,27 @@ const InteractionBox = (props) => {
     const text = typingValue.slice(0, cursorPosition) + emoji.code + typingValue.slice(cursorPosition);
     setTypingValue(text);
     setCursorPosition(cursorPosition + emoji.code.length);
+    setTimeout(() => {
+      setFocus(false);
+      setTimeout(() => {
+        setFocus(true);
+      }, 0);
+    }, 0);
   };
 
   return (
-    <View className={styles.interactionBox} style={{ bottom: (keyboardHeight && !showEmoji) ? `14px` : '' }}>
+    <View
+      id='operation-box'
+      className={styles.interactionBox}
+      style={{
+        bottom: (keyboardHeight && !showEmoji) ? `${inputBottom}px` : 0,
+        // paddingBottom: keyboardHeight ? 0 : '',
+       }}>
       <View className={styles.operationBox}>
         <View className={styles.inputWrapper}>
           <Input
+            focus={focus}
+            cursor={cursorPosition}
             value={typingValue}
             placeholder=" 请输入内容"
             onChange={(e) => {

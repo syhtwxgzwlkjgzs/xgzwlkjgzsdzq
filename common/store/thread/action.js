@@ -119,6 +119,11 @@ class ThreadAction extends ThreadStore {
     this.threadData.likeReward.likePayCount = data;
   }
 
+  @action
+  setCheckUser = (data) => {
+    this.checkUser = data;
+  }
+
   /**
    * 更新帖子详情的点赞数据
    * @param {array} data

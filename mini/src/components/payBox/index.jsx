@@ -67,21 +67,27 @@ export default class PayBox extends Component {
     return (
       <>
         {/* <ToastProvider> */}
-          <View>
-            <Popup
-              position="bottom"
-              maskClosable={true}
-              visible={this.props.payBox.visible}
-              onClose={() => {
-                this.props.payBox.visible = false;
-              }}
-              className={styles.payPopup}
-            >
-              {this.props.payBox.step === STEP_MAP.SURE && <AmountRecognized />}
-              {this.props.payBox.step === STEP_MAP.PAYWAY && <PayConfirmed />}
-            </Popup>
-          </View>
-          {this.props.payBox.step === STEP_MAP.WALLET_PASSWORD && <PayPwd />}
+        <View>
+          <Popup
+            position="bottom"
+            maskClosable={true}
+            visible={this.props.payBox.visible}
+            onClose={() => {
+              this.props.payBox.visible = false;
+            }}
+            className={styles.payPopup}
+          >
+            <View>{this.props.payBox.step === STEP_MAP.SURE && <AmountRecognized />}</View>
+            <View>{this.props.payBox.step === STEP_MAP.PAYWAY && <PayConfirmed />}</View>
+          </Popup>
+        </View>
+        <View
+          style={{
+            display: this.props.payBox.step === STEP_MAP.WALLET_PASSWORD ? 'block' : 'none',
+          }}
+        >
+          <PayPwd />
+        </View>
         {/* </ToastProvider> */}
       </>
     );
