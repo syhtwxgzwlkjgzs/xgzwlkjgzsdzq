@@ -162,7 +162,7 @@ export default inject('user')(
           )}
         </div>
 
-        <Divider></Divider>
+        <Divider className={topic.divider}></Divider>
 
         {isApproved && (
           <div className={topic.body}>
