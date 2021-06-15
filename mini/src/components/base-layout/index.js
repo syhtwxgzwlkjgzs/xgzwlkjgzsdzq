@@ -69,12 +69,11 @@ const BaseLayout = (props) => {
     }
 
     if(baselayout.videoFullScreenStatus === "inFullScreen") {
-
-      if(osPlatform === 'ios') setShowShadow(true);
+      if(osPlatform === 'ios') setShowShadow(true); // 增加一层黑色遮罩用于推出全屏后跳转
     } else if (baselayout.videoFullScreenStatus === "offFullScreen" &&
         pageName && baselayout[pageName] > 0) {
       listRef.current.jumpToScrollTop(baselayout[pageName]);
-      if(osPlatform === 'ios') setShowShadow(false);
+      if(osPlatform === 'ios') setShowShadow(false); // 跳转完成后移除遮罩
       baselayout.videoFullScreenStatus = "";
     }
   }, [osPlatform, baselayout.videoFullScreenStatus])
