@@ -9,7 +9,7 @@ import FilterView from './components/filter-view';
 import BaseLayout from '@components/base-layout';
 import initJSSdk from '@common/utils/initJSSdk.js';
 import wxAuthorization from '../../user/h5/wx-authorization';
-import VList from './list';
+import VList from '@components/virtual-list';
 
 @inject('site')
 @inject('user')
@@ -279,7 +279,7 @@ class IndexH5Page extends React.Component {
     const newCategories = this.handleCategories();
 
     return (
-      <div
+      <BaseLayout
         showHeader={false}
         showTabBar
         onRefresh={this.onRefresh}
@@ -293,12 +293,15 @@ class IndexH5Page extends React.Component {
         onClickTabBar={this.onClickTabBar}
         requestError={this.props.isError}
         errorText={this.props.errorText}
+        disabledList={true}
       >
-        <HomeHeader ref={this.headerRef} />
+        <div>
+          <HomeHeader ref={this.headerRef} />
+        </div>
 
         {this.renderTabs()}
 
-        {/* {this.renderHeaderContent()} */}
+        {this.renderHeaderContent()}
 
         <VList list={pageData}></VList>
 
@@ -319,7 +322,7 @@ class IndexH5Page extends React.Component {
           visible={this.state.visible}
           onSubmit={this.onClickFilter}
         />
-      </div>
+      </BaseLayout>
     );
   }
 }

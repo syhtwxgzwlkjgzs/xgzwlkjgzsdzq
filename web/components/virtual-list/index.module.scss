@@ -1,0 +1,58 @@
+@import '@common/styles/index.scss';
+
+.container {
+  // overflow: hidden;
+  background: #eff1f3;
+
+  // .wrapper {
+  //   height: 100%;
+  //   width: 100%;
+  //   overflow-y: auto;
+  //   overflow-y: overlay;
+  // }
+  .hideScrollBar {
+    scrollbar-width: none; // 火狐浏览器无滑动条
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    &:hover {
+      // 整个滚动条
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    // 滚动条轨道
+    &::-webkit-scrollbar-track {
+      display: none;
+    }
+
+    // 滚动条上的滚动滑块
+    &::-webkit-scrollbar-thumb {
+      display: none;
+    }
+  }
+}
+
+
+.refreshView {
+  min-height: rem(40);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: rem($font-size-primary);
+  color: $text-color-placeholder;
+  .spin {
+    margin-right: rem(4);
+  }
+}
+
+.bottomViewBox {
+  height: 160px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
