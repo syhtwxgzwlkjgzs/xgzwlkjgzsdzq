@@ -158,7 +158,6 @@ class index extends Component {
     if (this.props.ticket && this.props.randstr) {
       if (!prevProps.ticket || !prevProps.randstr) {
         try {
-          console.log('get code');
           this.getVerifyCode({});
         } catch (e) {
           console.log(e);
@@ -229,6 +228,7 @@ class index extends Component {
   };
 
   render() {
+    console.log(Taro.getCurrentPages());
     const {
       currentStep,
       list = [],

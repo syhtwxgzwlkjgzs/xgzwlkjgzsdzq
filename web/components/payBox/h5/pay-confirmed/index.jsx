@@ -50,17 +50,18 @@ export default class PayBox extends React.Component {
     this.setState({
       isSubmit: false,
     });
-    this.props.payBox.payWay = null;
+    this.props.payBox.payWay = PAYWAY_MAP.WALLET;
   };
 
-  async componentDidMount() {
+  componentDidMount = async () => {
     const { id } = this.props?.user;
     try {
       await this.props.payBox.getWalletInfo(id);
+      this.initState();
     } catch (error) {
       Toast.error({
         content: '获取用户钱包信息失败',
-        duration: 1000,
+        duration: 2000,
       });
     }
   }
@@ -110,7 +111,7 @@ export default class PayBox extends React.Component {
       if (Number(this.props.payBox?.walletAvaAmount) < Number(amount)) {
         Toast.error({
           content: '钱包余额不足',
-          duration: 1000,
+          duration: 2000,
         });
         return;
       }
@@ -142,8 +143,8 @@ export default class PayBox extends React.Component {
       } catch (e) {
         console.error(e);
         Toast.error({
-          content: '拉起微信支付失败',
-          duration: 1000,
+          content: e.Message || '拉起微信支付失败',
+          duration: 2000,
         });
         this.setState({
           isSubmit: false,
@@ -183,7 +184,7 @@ export default class PayBox extends React.Component {
         </div>
         <div className={styles.list}>
           <Radio.Group
-            value={this.props?.payBox?.payWay}
+            value={this.props.payBox.payWay}
             onChange={(checked) => {
               this.handleChangePaymentType(checked);
             }}

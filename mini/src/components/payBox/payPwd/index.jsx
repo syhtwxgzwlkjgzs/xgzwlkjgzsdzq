@@ -175,8 +175,9 @@ class PayPassword extends React.Component {
               className={styles.forgetPasswordContainer}
               onClick={() => {
                 Taro.navigateTo({
-                  url: '/subPages/my/edit/find/paypwd/index'
+                  url: '/subPages/my/edit/find/paypwd/index?type=payBox'
                 });
+                this.props.payBox.visible = false;
               }}
             >
               <Text>忘记支付密码?</Text>

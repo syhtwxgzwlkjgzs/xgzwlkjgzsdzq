@@ -121,7 +121,7 @@ export default class PayBox extends React.Component {
       if (Number(this.props.payBox?.walletAvaAmount) < Number(amount)) {
         Toast.error({
           content: '钱包余额不足',
-          duration: 1000,
+          duration: 2000,
         });
         return;
       }
@@ -139,8 +139,8 @@ export default class PayBox extends React.Component {
       } catch (error) {
         console.error(error);
         Toast.error({
-          content: '拉起微信支付失败',
-          duration: 1000,
+          content: error.Message || '拉起微信支付失败',
+          duration: 2000,
         });
         this.setState({
           isSubmit: false,
