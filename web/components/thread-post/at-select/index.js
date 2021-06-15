@@ -69,7 +69,7 @@ class AtSelect extends Component {
   updateKeywords(val = "") {
     this.setState({
       keywords: val,
-      checkUser: [],
+      // checkUser: [], // 重新搜索时不清空已选用户
       page: 1,
       finish: false,
     });
