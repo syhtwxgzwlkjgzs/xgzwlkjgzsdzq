@@ -38,7 +38,7 @@ class IndexH5Page extends React.Component {
   setNavigationBarStyle = () => {
     Taro.setNavigationBarColor({
       frontColor: '#ffffff',
-      backgroundColor: '#ff0000'
+      backgroundColor: '#000000'
     })
   }
 
