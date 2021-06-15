@@ -45,14 +45,14 @@ export default class PayBox extends React.Component {
 
     this.state = {
       payConfig,
-      paymentType: null,
+      isSubmit: false,
     };
     this.goSetPayPwa = this.goSetPayPwa.bind(this);
   }
 
   initState = () => {
     this.setState({
-      paymentType: null,
+      isSubmit: false,
     });
     this.props.payBox.payWay = PAYWAY_MAP.WALLET;
     this.props.payBox.password = null;
@@ -129,12 +129,21 @@ export default class PayBox extends React.Component {
       this.props.payBox.walletPayEnsure();
     } else if (this.props.payBox.payWay === PAYWAY_MAP.WX) {
       try {
+        this.setState({
+          isSubmit: true,
+        });
         await this.props.payBox.wechatPayOrder({ listenWXJsBridgeAndExecCallback, onBridgeReady, wxValidator, mode });
+        this.setState({
+          isSubmit: false,
+        });
       } catch (error) {
-        console.error(e);
+        console.error(error);
         Toast.error({
           content: '拉起微信支付失败',
           duration: 1000,
+        });
+        this.setState({
+          isSubmit: false,
         });
       }
     }
@@ -149,9 +158,9 @@ export default class PayBox extends React.Component {
 
   render() {
     const { options = {} } = this.props.payBox;
-    const { payConfig, paymentType } = this.state;
+    const { payConfig, isSubmit } = this.state;
     const canWalletPay = this.props.user?.canWalletPay;
-    let disabled = !this.props.payBox.payWay;
+    let disabled = !this.props.payBox.payWay || isSubmit;
     if (this.props.payBox.payWay === PAYWAY_MAP.WALLET && !canWalletPay) {
       disabled = true;
     }
@@ -198,7 +207,7 @@ export default class PayBox extends React.Component {
             full
             onClick={this.handlePayConfirmed}
           >
-            确认支付
+            {isSubmit ? <Spin type="spinner">支付中...</Spin> : '确认支付'}
           </Button>
         </View>
         {/* 关闭按钮 */}
