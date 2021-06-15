@@ -66,7 +66,6 @@ export default class PayBox extends Component {
   render() {
     return (
       <>
-        {/* <ToastProvider> */}
         <View>
           <Popup
             position="bottom"
@@ -83,12 +82,12 @@ export default class PayBox extends Component {
         </View>
         <View
           style={{
-            display: this.props.payBox.step === STEP_MAP.WALLET_PASSWORD ? 'block' : 'none',
+            display:
+              this.props.payBox.step === STEP_MAP.WALLET_PASSWORD && this.props.payBox.visible ? 'block' : 'none',
           }}
         >
           <PayPwd />
         </View>
-        {/* </ToastProvider> */}
       </>
     );
   }

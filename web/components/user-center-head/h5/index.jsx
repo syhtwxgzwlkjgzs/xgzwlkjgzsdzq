@@ -33,7 +33,7 @@ class index extends Component {
       Toast.success({
         content: '解除屏蔽成功',
         hasMask: false,
-        duration: 1000,
+        duration: 2000,
       });
     } else {
       this.props.user.denyUser(id);
@@ -41,7 +41,7 @@ class index extends Component {
       Toast.success({
         content: '屏蔽成功',
         hasMask: false,
-        duration: 1000,
+        duration: 2000,
       });
     }
   };
