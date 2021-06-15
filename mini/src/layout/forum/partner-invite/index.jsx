@@ -83,13 +83,13 @@ class PartnerInviteH5Page extends React.Component {
   }
 
   gotoIndex = () => {
-    Router.push({ url: '/pages/index/index' });
+    Router.redirect({ url: '/pages/index/index' });
   };
 
   handleJoinSite = () => {
     const { user, site } = this.props;
     if (!user?.isLogin()) {
-      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+      Router.redirect({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
