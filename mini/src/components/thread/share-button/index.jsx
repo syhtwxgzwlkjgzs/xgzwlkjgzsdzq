@@ -2,18 +2,21 @@ import React from 'react'
 import { View, Button, Text } from '@tarojs/components'
 import styles from './index.module.scss'
 import Icon from '@discuzq/design/dist/components/icon/index';
-import Taro, { useDidHide } from '@tarojs/taro'
+import Taro, { useDidHide, useDidShow } from '@tarojs/taro'
 
-const index = ({setShow, tipData, index}) => {
+const index = ({setShow, tipData, index, getShareData, shareNickname, shareAvatar}) => {
     const {threadId} = tipData
-    const thread = index.threads?.pageData || []
+    const threads = index.threads?.pageData || []
     let threadTitle = ''
-    for(const i of thread) {
+    let thread = ''
+    for(const i of threads) {
     if(i.threadId == threadId) {
-        threadTitle =  i.title
+        thread = i
         break
         }
     }
+    console.log(thread)
+    threadTitle = thread.title
     const shareData = {
         comeFrom:'thread',
         threadId,
@@ -22,6 +25,13 @@ const index = ({setShow, tipData, index}) => {
     }
     const handleClick = () => {
         setShow(false)
+        const {nickname} = thread.user
+        const {avatar} = thread.user
+        getShareData({nickname, avatar})
+        if(thread.isAnonymous) {
+            thread.user.nickname = '匿名用户'
+            thread.user.avatar = ''
+        }
     }
     const CreateCard = () => {
         setShow(false)
@@ -33,7 +43,13 @@ const index = ({setShow, tipData, index}) => {
     useDidHide(() => {
         setShow(false) 
     })
-
+    useDidShow(() => {
+        if(shareNickname && shareNickname !== thread.user.nickname) {
+            thread.user.nickname = shareNickname
+            thread.user.avatar = shareAvatar
+            getShareData({})
+        }
+    })
     return (
         <View className={styles.contain}>
             <View className={styles.choice}>

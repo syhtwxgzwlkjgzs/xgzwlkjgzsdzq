@@ -15,6 +15,11 @@ import { handleString2Arr } from '@common/utils/handleCategory';
   needLogin: true
 })
 class Index extends React.Component {
+  state = {
+    isError: false,
+    errorText: '加载失败'
+  }
+
   $getShareData(data) {
     const { site } = this.props
     const defalutTitle = site.webConfig?.setSite?.siteName || ''
@@ -50,17 +55,13 @@ class Index extends React.Component {
   page = 1;
   prePage = 10;
 
-  state = {
-    isError: false,
-    errorText: '加载失败'
-  }
 
   loadData = () => {
     const { index } = this.props
     const { essence = 0, sequence = 0, attention = 0, sort = 1 } = index.filter;
 
-    let newTypes = handleString2Arr(index.filter, 'types');
-    let categoryIds = handleString2Arr(index.filter, 'categoryids');
+    const newTypes = handleString2Arr(index.filter, 'types');
+    const categoryIds = handleString2Arr(index.filter, 'categoryids');
 
     // 重置错误信息
     this.props.index.resetErrorInfo()
@@ -85,14 +86,14 @@ class Index extends React.Component {
     const newData = {...index.filter, ...data}
     const { essence, sequence, attention, sort, page } = newData;
 
-    let newTypes = handleString2Arr(newData, 'types');
+    const newTypes = handleString2Arr(newData, 'types');
 
-    let categoryIds = handleString2Arr(newData, 'categoryids');
+    const categoryIds = handleString2Arr(newData, 'categoryids');
 
     if (type === 'click-filter') { // 点击tab
       this.page = 1;
       return await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, isMini: true });
-    } else if (type === 'moreData') {
+    } if (type === 'moreData') {
       this.page += 1;
       return await index.getReadThreadList({
         perPage: this.prePage,
@@ -100,7 +101,7 @@ class Index extends React.Component {
         filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort },
         sequence,
       });
-    } else if (type === 'refresh-recommend') {
+    } if (type === 'refresh-recommend') {
       await index.getRecommends({ categoryIds });
     } else if (type === 'update-page') {// 单独更新页数
       this.page = page
