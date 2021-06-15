@@ -58,7 +58,7 @@ export default class index extends Component {
     return (
       <div>
         <>
-          <div className={styles.amountWrapper} id={styles.amountWrapper}>
+          <div className={styles.amountWrapper} id={styles.amountContainer}>
             <CommonAccountContent currentPaymentData={options} />
             {/* 按钮区域-提交内容 */}
             <div className={styles.amountAddUp}>
