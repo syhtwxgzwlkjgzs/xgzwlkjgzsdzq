@@ -145,6 +145,9 @@ class Index extends React.Component {
   renderDialogPayment = () => {
     const { list = [], isShow } = this.state;
     const { options = {} } = this.props?.payBox;
+    const IS_MOBILE_SERVICE_OPEN = this.props.site.isSmsOpen;
+    const IS_USER_BIND_MOBILE = this.props.user?.mobile;
+
     return (
       <div>
         <Dialog
@@ -173,11 +176,11 @@ class Index extends React.Component {
 
             <CommonPayoffPwd list={list} updatePwd={this.updatePwd} whetherIsShowPwdBox={true} />
             {/* TODO: 忘记支付密码的链接添加 */}
-            {this.props.user?.mobile && (
-              <div className={styles.forgetPasswordContainer} onClick={this.handleForgetPayPwd}>
-                <span>忘记支付密码?</span>
-              </div>
-            )}
+
+            <div className={styles.forgetPasswordContainer} onClick={this.handleForgetPayPwd}>
+              {IS_MOBILE_SERVICE_OPEN && IS_USER_BIND_MOBILE && <span>忘记支付密码?</span>}
+            </div>
+
             {/* 关闭按钮 */}
             <div className={styles.payBoxCloseIcon} onClick={this.handleCancel}>
               <Icon name="CloseOutlined" size={16} />

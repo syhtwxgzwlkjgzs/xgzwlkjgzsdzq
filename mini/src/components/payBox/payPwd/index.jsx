@@ -158,6 +158,8 @@ class PayPassword extends React.Component {
   renderDialogPayment = () => {
     const { isShow } = this.state;
     const { options = {} } = this.props?.payBox;
+    const IS_MOBILE_SERVICE_OPEN = this.props.site.isSmsOpen;
+    const IS_USER_BIND_MOBILE = this.props.user?.mobile;
     return (
       <View>
         <Dialog
@@ -186,11 +188,11 @@ class PayPassword extends React.Component {
               </View>
               <View className={styles.payList}>{this.renderPwdItem()}</View>
             </>
-            {this.props.user?.mobile && (
-              <View className={styles.forgetPasswordContainer} onClick={this.handleForgetPayPwd}>
-                <Text>忘记支付密码?</Text>
-              </View>
-            )}
+
+            <View className={styles.forgetPasswordContainer} onClick={this.handleForgetPayPwd}>
+              {IS_MOBILE_SERVICE_OPEN && IS_USER_BIND_MOBILE && <Text>忘记支付密码?</Text>}
+            </View>
+
             {/* 关闭按钮 */}
             <View className={styles.payBoxCloseIcon} onClick={this.handleCancel}>
               <Icon name="CloseOutlined" size={12} />
