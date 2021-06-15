@@ -65,29 +65,31 @@ const index = ({setShow, tipData, index, getShareData, shareNickname, shareAvata
         }
     })
     return (
-        <View className={styles.contain}>
-            <View className={styles.choice}>
-                <View className={styles.fabulous} onClick={CreateCard}>
-                    <View className={styles.fabulousIcon}>
-                        <Icon name='PictureOutlinedBig' className={styles.icon} size={25}>
+        <View className={styles.body}>
+            <View className={styles.container}>
+            <View className={styles.more}>
+                <View className={styles.moreItem} onClick={CreateCard}>
+                    <View className={styles.icon}>
+                        <Icon name='PictureOutlinedBig' size={20}>
                         </Icon>
                     </View>
-                    <Text className={styles.fabulousPost}>
+                    <Text className={styles.text}>
                         生成海报
                     </Text>
                 </View>
-                <Button className={styles.fabulous} openType='share' plain='true' data-shareData={shareData} onClick={handleClick}>
-                    <View className={styles.fabulousIcon}>
-                        <Icon name='WeChatOutlined' className={styles.icon} size={26}>
+                <Button className={styles.moreItem} openType='share' plain='true' data-shareData={shareData} onClick={handleClick}>
+                    <View className={styles.icon}>
+                        <Icon name='WeChatOutlined' size={20}>
                         </Icon>
                     </View>
-                    <Text className={styles.fabulousPost}>
+                    <Text className={styles.text}>
                         微信分享
                     </Text>
                 </Button>
             </View>
-            <View className={styles.bottom} onClick={handleClick}>
-                <Text>
+        </View>
+        <View className={styles.button} >
+                <Text className={styles.cancel} onClick={handleClick}>
                     取消
                 </Text>
             </View>
