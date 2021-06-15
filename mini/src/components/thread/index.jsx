@@ -163,6 +163,7 @@ class Index extends React.Component {
         displayTag,
         payType,
         content,
+        isAnonymous,
       } = data || {};
       const {text} = content
       const { isEssence, isPrice, isRedPack, isReward } = displayTag;
@@ -182,6 +183,7 @@ class Index extends React.Component {
                 isPay={isPrice}
                 isRed={isRedPack}
                 isReward={isReward}
+                isAnonymous={isAnonymous}
                 userId={user?.userId}
                 platform={platform}
                 onClick={this.onUser}
