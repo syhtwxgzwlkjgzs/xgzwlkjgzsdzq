@@ -36,7 +36,7 @@ const BaseLayoutControl = forwardRef((props, ref) => {
   } = props;
 
   const [listRef, setListRef] = useState(null);
-  const [baseLayoutWhiteList, setBaseLayoutWhiteList] = useState(['home', 'search', 'detail']);
+  const [baseLayoutWhiteList, setBaseLayoutWhiteList] = useState(['home', 'search']);
   const layoutRef = useRef(null);
 
   useImperativeHandle(
