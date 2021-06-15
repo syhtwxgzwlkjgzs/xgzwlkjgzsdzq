@@ -8,18 +8,26 @@ import { getCurrentInstance } from '@tarojs/taro';
 import PayBoxProvider from '@components/payBox/payBoxProvider';
 import { MINI_SITE_JOIN_WHITE_LIST } from '@common/constants/site';
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
-import Taro from '@tarojs/taro'
+import Toast from '@discuzq/design/dist/components/toast/index';
+import Taro from '@tarojs/taro';
+import { REVIEWING } from '@common/store/login/util';
 
-const INDEX_URL = '/pages/index/index'
-const PARTNER_INVITE_URL = '/subPages/forum/partner-invite/index'
-const WX_AUTH_URL = '/subPages/user/wx-auth/index'
-const BIND_NICKNAME_URL = '/subPages/user/bind-nickname/index'
-const CLOSE_URL = '/subPage/close/index'
-const PAGE_404_URL = 'subPages/404/index'
-const PAGE_500_URL = 'subPages/500/index'
+const INDEX_URL = '/pages/index/index';
+const PARTNER_INVITE_URL = '/subPages/forum/partner-invite/index';
+const WX_AUTH_URL = '/subPages/user/wx-auth/index';
+const BIND_NICKNAME_URL = '/subPages/user/bind-nickname/index';
+const CLOSE_URL = '/subPage/close/index';
+const PAGE_404_URL = '/subPages/404/index';
+const PAGE_500_URL = '/subPages/500/index';
+const THREAD_DETAIL_URL = '/subPages/thread/index';
+const USER_STATUS_URL = '/subPages/user/status/index';
+const MY_INDEX_URL = '/subPages/my/index';
+ // 审核状态下用户可访问页面
+const VALID_URLS_FOR_VIEWING_USER = [MY_INDEX_URL, USER_STATUS_URL, INDEX_URL, THREAD_DETAIL_URL];
 
 @inject('user')
 @inject('site')
+@inject('commonLogin')
 @observer
 export default class Page extends React.Component {
   static defaultProps = {
@@ -33,25 +41,25 @@ export default class Page extends React.Component {
     const { noWithLogin, withLogin, user } = this.props;
     // 是否必须登录
     if (withLogin && !user.isLogin()) {
-      Router.redirect({ url: WX_AUTH_URL, });
+      Router.redirect({ url: WX_AUTH_URL });
     }
 
     // 是否必须不登录
     if (noWithLogin && user.isLogin()) {
-      Router.redirect({ url: INDEX_URL, });
+      Router.redirect({ url: INDEX_URL });
     }
   }
 
   // 检查是否满足渲染条件
   isPass(noWait = false) {
-    const { site, user } = this.props;
+    const { site, user, commonLogin } = this.props;
     const path = getCurrentInstance().router.path;
     const siteMode = site?.webConfig?.setSite?.siteMode;
 
     if (site?.webConfig) {
       // 关闭站点
       if (path !== CLOSE_URL && site.closeSiteConfig) {
-        Router.reLaunch({ url: CLOSE_URL });
+        Router.replace({ url: CLOSE_URL });
         return false;
       }
 
@@ -59,7 +67,7 @@ export default class Page extends React.Component {
       if (siteMode === 'pay') {
         // 已付费用户，直接跳转首页
         if (path === PARTNER_INVITE_URL && user.paid) {
-          Router.reLaunch({ url: INDEX_URL, });
+          Router.replace({ url: INDEX_URL });
           return false;
         }
 
@@ -69,15 +77,15 @@ export default class Page extends React.Component {
             // 此时可能用户信息加载中。延时1000ms再检查一次
             setTimeout(() => {
               this.isPass(true);
-            }, 1000)
+            }, 1000);
             return false;
-          } else if (!user.paid){
-            Router.reLaunch({ url: PARTNER_INVITE_URL });
+          } else if (!user.paid) {
+            Router.replace({ url: PARTNER_INVITE_URL });
             return false;
           }
         }
       }
-      
+
       // TODO: 强制绑定方案待定
       if (user.isLogin()) {
         // // 绑定微信：开启微信，没有绑定微信
@@ -89,7 +97,18 @@ export default class Page extends React.Component {
         if (!site.isOffiaccountOpen && !site.isMiniProgramOpen) {
           // 绑定昵称：没有开启短信，也没有绑定昵称
           if (path !== BIND_NICKNAME_URL && !user.nickname) {
-            Router.reLaunch({ url: BIND_NICKNAME_URL });
+            Router.replace({ url: BIND_NICKNAME_URL });
+            return false;
+          }
+        }
+        // 账号审核中的 用户只能访问 首页 + 帖子详情页，以及用户状态提示页
+        if (commonLogin.statusCode === REVIEWING) {
+          if (!VALID_URLS_FOR_VIEWING_USER.includes(path)) {
+            Toast.error({
+              content: '账号审核中，无法访问',
+              duration: 1000,
+            });
+            Router.replace({ url: INDEX_URL });
             return false;
           }
         }
@@ -103,9 +122,9 @@ export default class Page extends React.Component {
     const { children, site } = this.props;
     const routerList = Taro.getCurrentPages();
     const currRouter = routerList[routerList.length - 1];
-    if ( currRouter ) {
+    if (currRouter) {
       const path = currRouter.route;
-      if ( path === INDEX_URL || path === PAGE_404_URL || path === PAGE_500_URL ) {
+      if (path === INDEX_URL || path === PAGE_404_URL || path === PAGE_500_URL) {
         return children;
       }
     }
@@ -122,7 +141,7 @@ export default class Page extends React.Component {
 
   render() {
     const { site, disabledToast } = this.props;
-    const isRender = this.isPass()
+    const isRender = this.isPass();
 
     if (!isRender) return null;
     return (

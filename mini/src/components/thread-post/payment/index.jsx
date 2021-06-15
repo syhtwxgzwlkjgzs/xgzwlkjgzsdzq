@@ -141,7 +141,7 @@ const Paid = inject('threadPost')(observer((props) => {
         <View className={styles.right}>
           <Input
             mode="number"
-            type="number"
+            miniType="digit"
             value={price}
             placeholder="金额"
             maxLength={10}
@@ -166,6 +166,7 @@ const Paid = inject('threadPost')(observer((props) => {
           <View className={styles.right}>
             <Input
               mode="number"
+              miniType="digit"
               value={price}
               placeholder="金额"
               maxLength={10}

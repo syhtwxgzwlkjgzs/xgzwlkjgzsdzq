@@ -140,6 +140,7 @@ export default class Redpacket extends Component {
               value={price}
               miniType="digit"
               mode="number"
+              miniType="digit"
               placeholder="金额"
               maxLength={6}
               onChange={e => this.onPriceChang(e.target.value)}
@@ -153,6 +154,7 @@ export default class Redpacket extends Component {
             <Input
               value={number}
               mode="number"
+              miniType="number"
               placeholder="个数"
               miniType="number"
               maxLength={3}
