@@ -1,6 +1,6 @@
 import Card from '@components/card'
 import React from 'react'
-import Taro, { getCurrentInstance } from '@tarojs/taro';
+import Taro, { getCurrentInstance, EventChannel } from '@tarojs/taro';
 import { inject, observer } from 'mobx-react';
 
 @inject('index')
@@ -10,7 +10,8 @@ import { inject, observer } from 'mobx-react';
 class Index extends React.Component {
     constructor(props) {
         super(props)
-        this.threadId = parseInt(getCurrentInstance().router.params.threadId);
+        Taro.eventCenter.once('message:detail', (data) => this.thread = data)
+        Taro.eventCenter.trigger('page:init')
     }
     async componentDidMount(){
         const {threadId} = this
@@ -20,17 +21,10 @@ class Index extends React.Component {
         await this.props.site.getMiniCode(data)
     }
     render () {
-        const threads = this.props.index.threads?.pageData || {}
         const {userInfo} = this.props.user
         const {miniCode} = this.props.site
-        let thread = ''
-        threads.forEach(item => {
-            if(item.threadId === this.threadId) {
-                thread = item
-            }
-        });
         const data = {
-            thread,
+            thread: this.thread,
             userInfo,
             miniCode
         }
