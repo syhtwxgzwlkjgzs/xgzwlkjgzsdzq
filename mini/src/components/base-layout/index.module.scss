@@ -41,4 +41,12 @@
     height: 0;
     color: transparent;
   }
+  .shadow {
+    display: blok;
+    height: 100vh;
+    width: 100vh;
+    z-index: $zindex-toast;
+    background-color: $black;
+  }
+
 }
