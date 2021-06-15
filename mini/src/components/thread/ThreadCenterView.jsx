@@ -21,11 +21,7 @@ import { View, Text } from '@tarojs/components';
 
 const Index = (props) => {
   const { title = '', payType, price, paid, attachmentPrice } = props.data || {};
-
-  const needPay = useMemo(() => {
-    return payType !== 0 && !paid;
-  }, [paid, payType]);
-
+  const needPay = useMemo(() => payType !== 0 && !paid, [paid, payType]);
   const { onClick, onPay } = props;
 
   // 标题显示37个字符
@@ -35,7 +31,6 @@ const Index = (props) => {
     }
     return title;
   }, [title]);
-
   // 帖子属性内容
   const renderThreadContent = ({ content: data, attachmentPrice, payType, paid } = {}) => {
     const {
@@ -49,7 +44,6 @@ const Index = (props) => {
       fileData,
       threadId,
     } = handleAttachmentData(data);
-
     return (
       <View className={styles.wrapper}>
         {text && <PostContent content={text} onPay={onPay} onRedirectToDetail={onClick} />}
@@ -92,7 +86,6 @@ const Index = (props) => {
       </View>
     );
   };
-
   return (
     <>
       {title && (
@@ -119,8 +112,6 @@ const Index = (props) => {
   );
 };
 
-const BrWrapper = ({ children }) => {
-  return <View className={styles.brWrapper}>{children}</View>;
-};
+const BrWrapper = ({ children }) => <View className={styles.brWrapper}>{children}</View>;
 
 export default React.memo(Index);

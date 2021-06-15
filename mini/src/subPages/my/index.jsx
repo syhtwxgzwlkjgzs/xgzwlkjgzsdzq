@@ -3,16 +3,53 @@ import MyContent from '../../layout/my/index';
 import Page from '@components/page';
 import { View, Text } from '@tarojs/components';
 import Taro from '@tarojs/taro'
+import { inject, observer } from 'mobx-react';
+import withShare from '@common/utils/withShare/withShare'
 
-export default function index() {
-
-  useEffect(() => {
+@inject('site')
+@inject('search')
+@inject('topic')
+@inject('index')
+@inject('user')
+@observer
+@withShare({})
+class Index extends React.Component {
+  componentDidMount() {
     Taro.hideHomeButton();
-  });
-
-  return (
-    <Page withLogin>
-      <MyContent />
-    </Page>
-  )
+  }
+  getShareData(data) {
+    const { site } = this.props
+    const defalutTitle = site.webConfig?.setSite?.siteName || ''
+    const defalutPath = 'pages/index/index'
+    if (data.from === 'menu') {
+      return {
+        title: defalutTitle,
+        path: defalutPath
+      }
+    }
+    const { title, path, comeFrom, threadId } = data
+    if (comeFrom && comeFrom === 'thread') {
+      const { user } = this.props
+      this.props.index.updateThreadShare({ threadId }).then(result => {
+        if (result.code === 0) {
+          this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+          this.props.search.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+          this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+        }
+      });
+    }
+    return {
+      title,
+      path
+    }
+  }
+  render(){
+    return (
+      <Page>
+        <MyContent />
+      </Page>
+    )
+  }
 }
+
+export default Index

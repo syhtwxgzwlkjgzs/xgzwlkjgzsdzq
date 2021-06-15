@@ -33,7 +33,7 @@ class Detail extends React.Component {
   }
 
   // 页面分享
-  $getShareData(data) {
+  getShareData(data) {
     const { title, threadId } = this.props.thread.threadData;
     const defalutTitle = title;
     const defalutPath = `/subPages/thread/index?id=${threadId}`;

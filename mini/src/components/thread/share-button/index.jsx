@@ -2,18 +2,13 @@ import React from 'react'
 import { View, Button, Text } from '@tarojs/components'
 import styles from './index.module.scss'
 import Icon from '@discuzq/design/dist/components/icon/index';
-import Taro, { useDidHide } from '@tarojs/taro'
+import Taro, { useDidHide, useDidShow } from '@tarojs/taro'
 
-const index = ({setShow, tipData, index}) => {
+const index = ({setShow, tipData, data, index, getShareData, shareNickname, shareAvatar, shareThreadid, getShareContent, shareContent}) => {
     const {threadId} = tipData
-    const thread = index.threads?.pageData || []
     let threadTitle = ''
-    for(const i of thread) {
-    if(i.threadId == threadId) {
-        threadTitle =  i.title
-        break
-        }
-    }
+    const thread = data
+    threadTitle = thread.title
     const shareData = {
         comeFrom:'thread',
         threadId,
@@ -22,8 +17,25 @@ const index = ({setShow, tipData, index}) => {
     }
     const handleClick = () => {
         setShow(false)
+        const {nickname} = thread.user || ''
+        const {avatar} = thread.user || ''
+        if(thread.isAnonymous && nickname !== '匿名用户') {
+            getShareData({nickname, avatar, threadId})
+            thread.user.nickname = '匿名用户'
+            thread.user.avatar = ''
+        }
+        if(thread?.displayTag?.isPrice) {
+            const {freewords} = thread
+            let content = thread.content.text
+            getShareContent({content, threadId})
+            const length = parseInt(content.length * freewords)
+            content = `${content.substring(0,length)}...`
+            thread.content.text = content
+        }
+
     }
     const CreateCard = () => {
+        setShow(false)
         Taro.navigateTo({url: `/subPages/create-card/index?threadId=${threadId}`})
     }
 
@@ -32,32 +44,45 @@ const index = ({setShow, tipData, index}) => {
     useDidHide(() => {
         setShow(false) 
     })
-
+    useDidShow(() => {
+        if(shareThreadid === threadId) {
+            if(thread.isAnonymous){
+                thread.user.nickname = shareNickname
+                thread.user.avatar = shareAvatar
+                getShareData({})
+            }
+            if(thread.displayTag.isPrice) {
+                thread.content.text = shareContent
+                getShareContent({})
+            }
+        }
+    })
     return (
-        <View className={styles.contain}>
-            <View className={styles.choice}>
-                {/* <View className={styles.fabulous} onClick={CreateCard}>
-                    <View className={styles.fabulousIcon}>
-                        <Icon name='PictureOutlinedBig' className={styles.icon} size={24}>
+        <View className={styles.body}>
+            <View className={styles.container}>
+            <View className={styles.more}>
+                <View className={styles.moreItem} onClick={CreateCard}>
+                    <View className={styles.icon}>
+                        <Icon name='PictureOutlinedBig' size={20}>
                         </Icon>
                     </View>
-                    <Text className={styles.fabulousPost}>
+                    <Text className={styles.text}>
                         生成海报
                     </Text>
-                </View> */}
-                <Button className={styles.fabulous} openType='share' plain='true' data-shareData={shareData}>
-                    <View className={styles.fabulousIcon}>
-                        <Icon name='WeChatOutlined' className={styles.icon} size={24}>
+                </View>
+                <Button className={styles.moreItem} openType='share' plain='true' data-shareData={shareData} onClick={handleClick}>
+                    <View className={styles.icon}>
+                        <Icon name='WeChatOutlined' size={20}>
                         </Icon>
                     </View>
-                    <Text className={styles.fabulousPost}>
+                    <Text className={styles.text}>
                         微信分享
                     </Text>
                 </Button>
             </View>
-            <View className={styles.space}></View>
-            <View className={styles.bottom} onClick={handleClick}>
-                <Text>
+        </View>
+        <View className={styles.button} >
+                <Text className={styles.cancel} onClick={handleClick}>
                     取消
                 </Text>
             </View>
