@@ -38,7 +38,11 @@ const index = ({
     const attachlength = attachmentsType.length * 24 + 3;
     const marglength = attachlength + 40;
     const { title } = thread
-    const { url } = thread.content?.indexes[101]?.body[0] || ''
+    let url =''
+    if (thread.content?.indexes) {
+      const { url: imageUrl } = thread.content?.indexes[101]?.body[0] || ''
+      url = imageUrl
+    }
     let imgtop = 0
     const [heightdefill, setHeightdefill] = useState(0)
     if (url) {
