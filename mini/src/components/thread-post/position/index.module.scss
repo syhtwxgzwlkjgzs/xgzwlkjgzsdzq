@@ -1,3 +1,5 @@
+@import "@common/styles/index.scss";
+
 .position {
   display: flex;
   align-items: center;
@@ -5,25 +7,23 @@
   border-radius: 5px;
   background: #f0f1f3;
   color: #4f5a70;
-  padding: 4px 5px 4px 10px;
+  padding: 4px 8px;
   margin: 9px 8px 9px 0;
-  font-size: var(--font-size-label);
-  max-width: 50%;
+  max-width: 80%;
+
+  .position-icon {
+    margin-right: $margin-1n;
+  }
 
   .text {
-    font-size: 12px;
+    font-size: $font-size-label;
     line-height: 16px;
     text-align: left;
-    display: inline-block;
-    margin-left: 4px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
+    @include text-ellipsis();
   }
 
   .remove-icon {
-    margin-left: 8px;
-    padding: 10px 5px;
+    padding-left: $padding-2n;
   }
 }
 
