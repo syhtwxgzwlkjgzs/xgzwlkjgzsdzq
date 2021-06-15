@@ -212,7 +212,7 @@ class IndexH5Page extends React.Component {
         noMore={!isClickTab && currentPage >= totalPage}
         isFinished={isFinished}
         onScroll={this.handleScroll}
-        onScrollToUpper = {this.handleScrollToUpper}
+        onScrollToUpper={this.handleScrollToUpper}
         curr='home'
         pageName='home'
         preload={1000}
