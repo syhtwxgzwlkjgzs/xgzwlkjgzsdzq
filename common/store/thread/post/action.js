@@ -225,14 +225,14 @@ class ThreadPostAction extends ThreadPostStore {
     }
     // const draft = this.isThreadPaid ? 0 : 1;
     // 红包和悬赏插件不需要传入草稿字段了，直接使用全局的即可
-    if (redpacket.price && !orderInfo.status) {
+    if (redpacket.price) { //  && !orderInfo.status 不管是否支付都传入
       contentIndexes[THREAD_TYPE.redPacket] = {
         tomId: THREAD_TYPE.redPacket,
         body: { orderSn: orderInfo.orderSn, ...redpacket },
       };
     }
 
-    if (rewardQa.value && !orderInfo.status) {
+    if (rewardQa.value) { //  && !orderInfo.status
       contentIndexes[THREAD_TYPE.reward] = {
         tomId: THREAD_TYPE.reward,
         body: { expiredAt: rewardQa.times, price: rewardQa.value, type: 0, orderSn: orderInfo.orderSn },
