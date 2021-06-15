@@ -1,5 +1,20 @@
 @import '@common/styles/index.scss';
 
+#amountWrapper {
+  .asBtn {
+    border-radius: rem(5);
+    height: rem(36);
+    padding: 0;
+    line-height: rem(36);
+    :global {
+      .dzq-spin__icon {
+        width: rem(14);
+        height: rem(14);
+      }
+    }
+  }
+}
+
 // 外部容器
 .amountWrapper {
   background: var(--color-white);
@@ -31,12 +46,8 @@
     margin: rem($margin-6n) auto 0;
     text-align: right;
     font-size: rem($font-size-middle);
-    >span {
-      margin-right: rem($margin-4n);
-    }
   }
   .asBtn {
-    border-radius: rem(5) !important;
     font-size: rem(14);
   }
   .amountCloseBtn {

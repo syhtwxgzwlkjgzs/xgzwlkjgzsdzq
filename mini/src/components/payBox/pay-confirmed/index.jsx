@@ -207,7 +207,7 @@ export default class PayBox extends React.Component {
             full
             onClick={this.handlePayConfirmed}
           >
-            {isSubmit ? <Spin type="spinner">支付中...</Spin> : '确认支付'}
+            {isSubmit ? <Spin type="spinner">拉起支付中...</Spin> : '确认支付'}
           </Button>
         </View>
         {/* 关闭按钮 */}

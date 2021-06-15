@@ -200,7 +200,7 @@ export default class AmountRecognized extends Component {
             full
             disabled={isLoading}
           >
-            {isLoading ? <Spin type="spinner">支付中...</Spin> : `支付 ￥${this.transMoneyToFixed(amount)}`}
+            {isLoading ? <Spin type="spinner">生成订单中...</Spin> : `支付 ￥${this.transMoneyToFixed(amount)}`}
           </Button>
         </View>
         {/* 关闭按钮 */}
