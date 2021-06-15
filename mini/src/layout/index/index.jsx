@@ -126,20 +126,24 @@ class IndexH5Page extends React.Component {
   };
 
   handleScroll = (e) => {
-      const { scrollTop = 0 } = e?.detail || {};
-      const { headerHeight = 182, navBarHeight } = this.state;
+    const { scrollTop = 0 } = e?.detail || {};
+    const { navBarHeight } = this.state;
+    const { fixedTab } = this.state;
 
-      const { fixedTab } = this.state;
-      const PLACEHOLDER_HEIGHT = 58;
-
-      // 只需要滚到临界点触发setState，而不是每一次滚动都触发
-      if(!fixedTab && scrollTop >= navBarHeight) {
-        this.setState(() => { return {"fixedTab": true} })
-
-      } else if(fixedTab && scrollTop < navBarHeight) {
-        this.setState(() => { return {"fixedTab": false} })
-      }
+    // 只需要滚到临界点触发setState，而不是每一次滚动都触发
+    if(!fixedTab && scrollTop >= navBarHeight) {
+      this.setState({fixedTab: true});
+    } else if(fixedTab && scrollTop < navBarHeight) {
+      this.setState({fixedTab: false});
     }
+
+  }
+
+  handleScrollToUpper = (e) => {
+    if(this.state.fixedTab) {
+      this.setState({fixedTab: false});
+    }
+  }
 
   renderTabs = () => {
     const { index, site } = this.props;
@@ -173,7 +177,7 @@ class IndexH5Page extends React.Component {
             </Tabs>
           </View>
           <NavBar title={site?.webConfig?.setSite?.siteName || ''} isShow={fixedTab} />
-          {/* {fixedTab &&  <View className={styles.tabPlaceholder}></View>} */}
+          {fixedTab &&  <View className={styles.tabPlaceholder}></View>}
           </>
         )}
       </>
@@ -208,6 +212,7 @@ class IndexH5Page extends React.Component {
         noMore={!isClickTab && currentPage >= totalPage}
         isFinished={isFinished}
         onScroll={this.handleScroll}
+        onScrollToUpper = {this.handleScrollToUpper}
         curr='home'
         pageName='home'
         preload={1000}
