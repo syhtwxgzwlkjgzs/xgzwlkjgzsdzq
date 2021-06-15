@@ -22,6 +22,9 @@
       display: flex;
       padding: rem($padding-6n) 0;
 
+      .avatar{
+        cursor: pointer;
+      }
       .information {
         padding-left: rem($padding-2n);
         font-weight: normal;
@@ -31,6 +34,7 @@
         .name {
           width: rem(200);
           @include text-ellipsis();
+          cursor: pointer;
           color: $text-color-primary;
           font-weight: $font-weight-regular;
           padding: rem($padding-1n) 0;

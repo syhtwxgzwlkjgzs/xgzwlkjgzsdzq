@@ -26,25 +26,25 @@
 }
 
 .badge {
-  min-width: rem(16);
-  height: rem(16);
+  min-width: rem(17);
+  height: rem(17);
   font-size: rem(12);
   text-align: center;
   color: $white;
   background: $error-color;
-  border-radius: rem(8);
+  border-radius: rem(8.5);
   padding: 0 rem(6);
   box-sizing: border-box;
   position: absolute;
   right: 0;
-  top: rem(-8);
+  top: rem(-8.5);
   display: flex;
   align-items: center;
   justify-content: center;
   transform: translateX(50%);
   .text{
     font-size: rem(12);
-    line-height: rem(18);
+    line-height: rem(17);
     position: absolute;
     top: 50%;
     left: 50%;
@@ -53,5 +53,5 @@
 }
 
 .isCricle {
-  width: rem(16);
+  width: rem(17);
 }

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import styles from './index.module.scss';
 import Tip from '../tip';
 import { Icon } from '@discuzq/design';
@@ -56,7 +56,7 @@ const Index = ({
       <div className={needHeight ? styles.user : styles.users}>
         {userImgs.length !== 0 ? <div className={styles.userImg}>
           <div className={styles.portrait}>
-            <Tip tipData={tipData} imgs={userImgs} wholeNum={wholeNum}></Tip>
+            <Tip tipData={tipData} imgs={userImgs} wholeNum={wholeNum} showCount={ platform === 'pc' ? 10 : 5 } platform={platform}></Tip>
           </div>
           {
             wholeNum !== 0 && (
@@ -77,10 +77,10 @@ const Index = ({
         {
           postList.map((item, index) => (
               <div key={index} className={styles.fabulous} onClick={item.event}>
-                <Icon 
-                  className={`${styles.icon} ${item.type} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`} 
-                  name={item.icon} 
-                  size={16}>  
+                <Icon
+                  className={`${styles.icon} ${item.type} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`}
+                  name={item.icon}
+                  size={16}>
                 </Icon>
                 <span className={isLiked && item.name ===  '赞' ? styles.fabulousCancel: styles.fabulousPost}>
                   {item.name}
