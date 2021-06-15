@@ -26,6 +26,7 @@ const Index = ({
   tipData,
   platform,
   index,
+  shareThreadid,
   shareNickname,
   shareAvatar,
   getShareData,
@@ -129,7 +130,7 @@ const Index = ({
         visible={show}
         onClose={onClose}
       >
-        <ShareButton setShow={setShow} tipData={tipData} index={thread} shareAvatar={shareAvatar} shareNickname={shareNickname} getShareData={getShareData}></ShareButton>
+        <ShareButton setShow={setShow} tipData={tipData} index={thread} shareThreadid={shareThreadid} shareAvatar={shareAvatar} shareNickname={shareNickname} getShareData={getShareData}></ShareButton>
       </Popup>
     </View>
   );

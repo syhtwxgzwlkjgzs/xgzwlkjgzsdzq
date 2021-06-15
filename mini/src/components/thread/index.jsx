@@ -165,7 +165,7 @@ class Index extends React.Component {
       } = data || {};
       const { isEssence, isPrice, isRedPack, isReward } = displayTag;
       const {getShareData} = this.props.user
-      const {shareNickname, shareAvatar} = this.props.user
+      const {shareNickname, shareAvatar, shareThreadid} = this.props.user
       return (
         <View className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`}>
           <View className={styles.header} onClick={this.onClick}>
@@ -204,7 +204,8 @@ class Index extends React.Component {
             index={this.props.index}
             shareNickname = {shareNickname}
             shareAvatar = {shareAvatar}
-            getShareData = { getShareData }
+            shareThreadid = {shareThreadid}
+            getShareData = {getShareData}
           />
         </View>
       );

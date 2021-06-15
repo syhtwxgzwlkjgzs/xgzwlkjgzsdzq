@@ -59,6 +59,7 @@ class UserAction extends SiteStore {
   getShareData(data) {
     this.shareNickname = data.nickname;
     this.shareAvatar = data.avatar;
+    this.shareThreadid = data.threadId;
   }
 
   // 初始化编辑用用户信息
