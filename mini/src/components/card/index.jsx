@@ -9,6 +9,7 @@ import Cardd from './components/cardimg'; // 纯图片海报  164
 // import Cardg from '@/wxcomponents/card/cardvideo'; // 视频海报 43
 import Card from './components/card'// 文字海报  46
 import codeUrl from '../../public/dzq-img/login-ORcode.png'
+import { getByteLen } from './utils'
 
 const index = ({
     data
@@ -35,8 +36,8 @@ const index = ({
       }
     }
     const attachmentsType = thread.categoryName
-    const attachlength = attachmentsType.length * 24 + 3;
-    const marglength = attachlength + 40;
+    const attachlength = getByteLen(attachmentsType) * 12;
+    const marglength = attachlength + 20;
     const { title } = thread
     let url =''
     if (thread.content?.indexes) {
@@ -52,6 +53,9 @@ const index = ({
           const num = image.height * (620 / image.width);
           setHeightdefill(num - 402)
         },
+        fail(err) {
+          setHeightdefill(402)
+        }
       });
     }
     if(!title) {
@@ -130,7 +134,7 @@ const index = ({
       // 标题文字图片海报
       if(url) {
         return (
-          <Cardb obj={obj} setShareImage={setShareImage} heightdefill={heightdefill}></Cardb>
+          heightdefill ? <Cardb obj={obj} setShareImage={setShareImage} heightdefill={heightdefill}></Cardb> : <View style={{ flex: 1 }}></View>
         )
       }
       // 标题文字海报
