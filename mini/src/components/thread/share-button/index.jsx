@@ -4,7 +4,7 @@ import styles from './index.module.scss'
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Taro, { useDidHide, useDidShow } from '@tarojs/taro'
 
-const index = ({setShow, tipData, index, getShareData, shareNickname, shareAvatar, shareThreadid}) => {
+const index = ({setShow, tipData, index, getShareData, shareNickname, shareAvatar, shareThreadid, getShareContent, shareContent}) => {
     const {threadId} = tipData
     const threads = index.threads?.pageData || []
     let threadTitle = ''
@@ -31,6 +31,15 @@ const index = ({setShow, tipData, index, getShareData, shareNickname, shareAvata
             thread.user.nickname = '匿名用户'
             thread.user.avatar = ''
         }
+        if(thread.displayTag.isPrice) {
+            const {freewords} = thread
+            let content = thread.content.text
+            getShareContent({content, threadId})
+            const length = parseInt(content.length * freewords)
+            content = `${content.substring(0,length)}...`
+            thread.content.text = content
+        }
+
     }
     const CreateCard = () => {
         setShow(false)
@@ -44,9 +53,15 @@ const index = ({setShow, tipData, index, getShareData, shareNickname, shareAvata
     })
     useDidShow(() => {
         if(shareThreadid === threadId) {
-            thread.user.nickname = shareNickname
-            thread.user.avatar = shareAvatar
-            getShareData({})
+            if(thread.isAnonymous){
+                thread.user.nickname = shareNickname
+                thread.user.avatar = shareAvatar
+                getShareData({})
+            }
+            if(thread.displayTag.isPrice) {
+                thread.content.text = shareContent
+                getShareContent({})
+            }
         }
     })
     return (
