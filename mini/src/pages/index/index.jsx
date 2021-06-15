@@ -1,5 +1,5 @@
 import React from 'react';
-import IndexPage from '@layout/index/content';
+import IndexPage from '@layout/index/index';
 import Page from '@components/page';
 import withShare from '@common/utils/withShare/withShare'
 import { inject, observer } from 'mobx-react'
