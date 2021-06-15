@@ -39,7 +39,7 @@ class index extends Component {
         Toast.error({
           content: '密码错误',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
         this.props.payBox.oldPayPwd = null;
       });
@@ -50,7 +50,7 @@ class index extends Component {
     if (!this.props.user.mobile) {
       Toast.error({
         content: '需要首先绑定手机号才能进行此操作',
-        duration: 2000
+        duration: 2000,
       });
       return;
     }
@@ -85,7 +85,7 @@ class index extends Component {
         Toast.success({
           content: '设置密码成功',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
         const type = GetQueryString('type');
         if (type === 'paybox') {
@@ -102,7 +102,7 @@ class index extends Component {
         Toast.error({
           content: '设置失败请重新设置',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
         this.props.payBox.password = null;
       });
@@ -122,7 +122,7 @@ class index extends Component {
       disabled = !payPassword || payPassword.length !== 6;
     }
     return disabled;
-  }
+  };
 
   // 如果没有设置支付密码 显示设置支付密码
   renderSetPayPwd = () => (
@@ -160,13 +160,11 @@ class index extends Component {
             trim
           />
         </div>
-        {
-          this.props.site?.isSmsOpen && (
-            <div onClick={this.handleGoToFindPayPwd} className={styles.tips}>
-              忘记旧密码？
-            </div>
-          )
-        }
+        {this.props.site?.isSmsOpen && (
+          <div onClick={this.handleGoToFindPayPwd} className={styles.tips}>
+            忘记旧密码？
+          </div>
+        )}
       </div>
     </div>
   );
@@ -177,8 +175,8 @@ class index extends Component {
         <Header />
         {this.props.user?.canWalletPay ? this.renderCanPayPwd() : this.renderSetPayPwd()}
         <div
-          className={classNames(styles.bottom,{
-            [styles.bgBtnColor]: !this.getDisabledWithButton()
+          className={classNames(styles.bottom, {
+            [styles.bgBtnColor]: !this.getDisabledWithButton(),
           })}
         >
           {this.props.user?.canWalletPay ? (

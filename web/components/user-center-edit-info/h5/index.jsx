@@ -87,7 +87,7 @@ class index extends Component {
         Toast.success({
           content: '更新信息成功',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
         Router.push({ url: '/my' });
       })
@@ -95,7 +95,7 @@ class index extends Component {
         Toast.error({
           content: error.message || '更新用户信息失败',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
         Router.push({ url: '/my' });
       });
@@ -113,7 +113,7 @@ class index extends Component {
     if (!this.props.user.canEditUsername) {
       Toast.error({
         content: '用户名一年只能修改一次',
-        duration: 1000,
+        duration: 2000,
       });
       return;
     }

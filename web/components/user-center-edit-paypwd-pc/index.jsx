@@ -50,7 +50,7 @@ class index extends Component {
         Toast.error({
           content: '密码错误',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
         this.props.payBox.oldPayPwd = null;
       });
@@ -61,7 +61,7 @@ class index extends Component {
     if (!this.props.user.mobile) {
       Toast.error({
         content: '需要首先绑定手机号才能进行此操作',
-        duration: 2000
+        duration: 2000,
       });
       return;
     }
@@ -98,7 +98,7 @@ class index extends Component {
         Toast.success({
           content: '设置密码成功',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
         this.props.payBox.password = null;
         this.props.user.userInfo.canWalletPay = true;
@@ -109,7 +109,7 @@ class index extends Component {
         Toast.error({
           content: '设置失败请重新设置',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
         this.props.payBox.password = null;
       });
