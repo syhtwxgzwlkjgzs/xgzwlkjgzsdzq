@@ -6,7 +6,7 @@ import Icon from '@discuzq/design/dist/components/icon/index';
 import Router from '@discuzq/sdk/dist/router';
 import { getCurrentInstance } from '@tarojs/taro';
 import PayBoxProvider from '@components/payBox/payBoxProvider';
-import { MINI_SITE_JOIN_WHITE_LIST } from '@common/constants/site';
+import { MINI_SITE_JOIN_WHITE_LIST, REVIEWING_USER_WHITE_LIST } from '@common/constants/site';
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import Taro from '@tarojs/taro';
@@ -19,11 +19,7 @@ const BIND_NICKNAME_URL = '/subPages/user/bind-nickname/index';
 const CLOSE_URL = '/subPage/close/index';
 const PAGE_404_URL = '/subPages/404/index';
 const PAGE_500_URL = '/subPages/500/index';
-const THREAD_DETAIL_URL = '/subPages/thread/index';
-const USER_STATUS_URL = '/subPages/user/status/index';
-const MY_INDEX_URL = '/subPages/my/index';
- // 审核状态下用户可访问页面
-const VALID_URLS_FOR_VIEWING_USER = [MY_INDEX_URL, USER_STATUS_URL, INDEX_URL, THREAD_DETAIL_URL];
+const STATUS_URL = '/subPages/user/status/index'; // 用户状态提示页
 
 @inject('user')
 @inject('site')
@@ -103,12 +99,8 @@ export default class Page extends React.Component {
         }
         // 账号审核中的 用户只能访问 首页 + 帖子详情页，以及用户状态提示页
         if (commonLogin.statusCode === REVIEWING) {
-          if (!VALID_URLS_FOR_VIEWING_USER.includes(path)) {
-            Toast.error({
-              content: '账号审核中，无法访问',
-              duration: 1000,
-            });
-            Router.replace({ url: INDEX_URL });
+          if (!REVIEWING_USER_WHITE_LIST.includes(path)) {
+            Router.replace({ url: STATUS_URL });
             return false;
           }
         }
