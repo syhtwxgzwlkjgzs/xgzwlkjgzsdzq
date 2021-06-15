@@ -77,6 +77,21 @@ class PayPassword extends React.Component {
     this.initState();
   };
 
+  handleForgetPayPwd = () => {
+    if (!this.props.user.mobile) {
+      Toast.error({
+        content: '需要首先绑定手机号才能进行此操作',
+        duration: 2000,
+      });
+      return;
+    }
+    Taro.navigateTo({
+      url: '/subPages/my/edit/find/paypwd/index?type=paybox',
+    });
+    this.props.payBox.step = null;
+    this.props.payBox.visible = false;
+  };
+
   async submitPwa() {
     let { list = [] } = this.state;
     let pwd = list.join('');
@@ -171,17 +186,11 @@ class PayPassword extends React.Component {
               </View>
               <View className={styles.payList}>{this.renderPwdItem()}</View>
             </>
-            <View
-              className={styles.forgetPasswordContainer}
-              onClick={() => {
-                Taro.navigateTo({
-                  url: '/subPages/my/edit/find/paypwd/index?type=payBox'
-                });
-                this.props.payBox.visible = false;
-              }}
-            >
-              <Text>忘记支付密码?</Text>
-            </View>
+            {this.props.user?.mobile && (
+              <View className={styles.forgetPasswordContainer} onClick={this.handleForgetPayPwd}>
+                <Text>忘记支付密码?</Text>
+              </View>
+            )}
             {/* 关闭按钮 */}
             <View className={styles.payBoxCloseIcon} onClick={this.handleCancel}>
               <Icon name="CloseOutlined" size={12} />

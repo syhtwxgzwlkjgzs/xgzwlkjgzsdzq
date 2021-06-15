@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Taro from '@tarojs/taro';
+import Taro, { getCurrentInstance } from '@tarojs/taro';
 import Button from '@discuzq/design/dist/components/button/index';
 import Input from '@discuzq/design/dist/components/input/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
@@ -11,6 +11,7 @@ import { View, Text } from '@tarojs/components';
 import classNames from 'classnames';
 import throttle from '@common/utils/thottle.js';
 import { toTCaptcha } from '@common/utils/to-tcaptcha';
+import { STEP_MAP } from '../../../../../../common/constants/payBoxStoreConstants';
 
 @inject('site')
 @inject('user')
@@ -91,12 +92,31 @@ class index extends Component {
         payPassword,
         payPasswordConfirmation,
       })
-      .then((res) => {
+      .then(async (res) => {
         Toast.success({
           content: '重置密码成功',
           hasMask: false,
           duration: 2000,
         });
+        const { type } = getCurrentInstance().router.params;
+        if (type === 'paybox') {
+          const { id } = this.props?.user;
+          try {
+            await this.props.user.updateUserInfo(id);
+            this.props.payBox.visible = true;
+            this.props.payBox.password = null;
+            this.props.payBox.step = STEP_MAP.WALLET_PASSWORD;
+            await this.props.payBox.getWalletInfo(id);
+            this.props.user.userInfo.canWalletPay = true;
+            Taro.navigateBack({ delta: 1 });
+          } catch (error) {
+            Toast.error({
+              content: '获取用户钱包信息失败',
+              duration: 2000,
+            });
+          }
+          return;
+        }
         setTimeout(() => {
           Taro.redirectTo({ url: '/subPages/my/edit/index' });
           this.initState();

@@ -8,6 +8,9 @@ import VerifyCode from '../../user-center-edit-mobile/verify-code';
 import throttle from '@common/utils/thottle.js';
 import Router from '@discuzq/sdk/dist/router';
 import classNames from 'classnames';
+import GetQueryString from '../../../../common/utils/get-query-string';
+import { withRouter } from 'next/router';
+import { STEP_MAP } from '../../../../common/constants/payBoxStoreConstants';
 @inject('site')
 @inject('user')
 @inject('payBox')
@@ -87,12 +90,32 @@ class index extends Component {
         payPassword,
         payPasswordConfirmation,
       })
-      .then((res) => {
+      .then(async (res) => {
         Toast.success({
           content: '重置密码成功',
           hasMask: false,
           duration: 2000,
         });
+        const type = GetQueryString('type');
+        if (type === 'paybox') {
+          const { id } = this.props?.user;
+          try {
+            await this.props.user.updateUserInfo(id);
+            this.props.payBox.visible = true;
+            this.props.payBox.password = null;
+            this.props.payBox.step = STEP_MAP.WALLET_PASSWORD;
+            await this.props.payBox.getWalletInfo(id);
+            this.props.user.userInfo.canWalletPay = true;
+            Router.back();
+          } catch (error) {
+            console.error(error);
+            Toast.error({
+              content: '获取用户钱包信息失败',
+              duration: 2000,
+            });
+          }
+          return;
+        }
         Router.push({ url: `/my` });
         this.initState();
       })
@@ -293,4 +316,4 @@ class index extends Component {
   }
 }
 
-export default index;
+export default withRouter(index);
