@@ -162,10 +162,12 @@ class Index extends React.Component {
         threadId,
         displayTag,
         payType,
+        content,
       } = data || {};
+      const {text} = content
       const { isEssence, isPrice, isRedPack, isReward } = displayTag;
-      const {getShareData} = this.props.user
-      const {shareNickname, shareAvatar, shareThreadid} = this.props.user
+      const {getShareData, getShareContent} = this.props.user
+      const {shareNickname, shareAvatar, shareThreadid, shareContent} = this.props.user
       return (
         <View className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`}>
           <View className={styles.header} onClick={this.onClick}>
@@ -187,7 +189,7 @@ class Index extends React.Component {
               {isShowIcon && <View className={styles.headerIcon} onClick={this.onClickHeaderIcon}><Icon name='CollectOutlinedBig' size={20}></Icon></View>}
           </View>
 
-          <ThreadCenterView data={data} onClick={this.onClick} onPay={this.onPay} platform={platform} />
+          <ThreadCenterView text={text} data={data} onClick={this.onClick} onPay={this.onPay} platform={platform} />
 
           <BottomEvent
             userImgs={likeReward.users}
@@ -206,6 +208,8 @@ class Index extends React.Component {
             shareAvatar = {shareAvatar}
             shareThreadid = {shareThreadid}
             getShareData = {getShareData}
+            shareContent = {shareContent}
+            getShareContent = {getShareContent}
           />
         </View>
       );

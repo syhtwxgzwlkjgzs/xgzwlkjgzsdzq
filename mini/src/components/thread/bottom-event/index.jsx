@@ -30,6 +30,8 @@ const Index = ({
   shareNickname,
   shareAvatar,
   getShareData,
+  getShareContent,
+  shareContent,
   onShare = () => {},
   onComment = () => {},
   onPraise = () => {},
@@ -130,7 +132,7 @@ const Index = ({
         visible={show}
         onClose={onClose}
       >
-        <ShareButton setShow={setShow} tipData={tipData} index={thread} shareThreadid={shareThreadid} shareAvatar={shareAvatar} shareNickname={shareNickname} getShareData={getShareData}></ShareButton>
+        <ShareButton setShow={setShow} tipData={tipData} index={thread} shareContent={shareContent} getShareContent={getShareContent} shareThreadid={shareThreadid} shareAvatar={shareAvatar} shareNickname={shareNickname} getShareData={getShareData}></ShareButton>
       </Popup>
     </View>
   );

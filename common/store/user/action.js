@@ -62,6 +62,13 @@ class UserAction extends SiteStore {
     this.shareThreadid = data.threadId;
   }
 
+  // 获取用户分享前的内容
+  @action.bound
+  getShareContent(data) {
+    this.shareThreadid = data.threadId;
+    this.shareContent = data.content;
+  }
+
   // 初始化编辑用用户信息
   @action
   initEditInfo() {

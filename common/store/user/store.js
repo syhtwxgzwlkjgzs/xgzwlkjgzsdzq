@@ -18,6 +18,7 @@ class UserStore {
   @observable shareNickname = '';
   @observable shareAvatar = '';
   @observable shareThreadid = '';
+  @observable shareContent = '';
   @observable userThreads = {};
   @observable userThreadsPage = 1;
   @observable userThreadsTotalCount = 0;
