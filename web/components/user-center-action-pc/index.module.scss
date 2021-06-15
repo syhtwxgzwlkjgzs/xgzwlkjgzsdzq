@@ -8,13 +8,13 @@
     padding: rem(24);
     flex-wrap: wrap;
     color: $text-color-regular;
+    justify-content: space-between;
 
     .userCenterActionItem {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        margin-right: rem(32);
         cursor: pointer;
 
         &:last-child {
