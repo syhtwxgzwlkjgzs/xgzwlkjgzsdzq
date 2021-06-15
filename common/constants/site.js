@@ -70,6 +70,13 @@ export const MINI_SITE_JOIN_WHITE_LIST = [
   '/subPages/my/edit/paypwd/index', // 设置支付密码
 ];
 
+// mini端站点，用户账号审核中可以访问的路由白名单
+export const REVIEWING_USER_WHITE_LIST = [
+  '/pages/index/index', // 首页
+  '/subPages/thread/index', // 帖子详情页
+  '/subPages/user/status/index', // 用户状态提示页
+];
+
 export const PERMISSION_PLATE = [
   {
     type: 'thread.insertImage',

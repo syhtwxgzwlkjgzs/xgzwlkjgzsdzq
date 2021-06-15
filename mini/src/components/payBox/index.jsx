@@ -66,7 +66,6 @@ export default class PayBox extends Component {
   render() {
     return (
       <>
-        {/* <ToastProvider> */}
         <View>
           <Popup
             position="bottom"
@@ -88,7 +87,6 @@ export default class PayBox extends Component {
         >
           <PayPwd />
         </View>
-        {/* </ToastProvider> */}
       </>
     );
   }
