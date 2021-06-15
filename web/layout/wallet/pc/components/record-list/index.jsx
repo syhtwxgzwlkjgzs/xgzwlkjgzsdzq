@@ -13,6 +13,9 @@ import {
 import { formatDate } from '@common/utils/format-date.js';
 import time from '@discuzq/sdk/dist/time';
 import classNames from 'classnames';
+import s9e from '@common/utils/s9e';
+import xss from '@common/utils/xss';
+import RichText from '@discuzq/design/dist/components/rich-text/index';
 
 const STATUS_MAP = {
   1: '待审核',
@@ -30,6 +33,22 @@ class WalletInfo extends React.Component {
     this.state = {};
   }
 
+  filterTag = (html) => {
+    return html?.replace(/<(\/)?([beprt]|br|div)[^>]*>|[\r\n]/gi, '')
+      .replace(/<img[^>]+>/gi, $1 => {
+        return $1.includes('qq-emotion') ? $1 : "[图片]";
+      });
+  }
+
+  // parse content
+  parseHTML = (content) => {
+    console.log('content', content);
+    console.log('1111', content);
+    let t = xss(s9e.parse(this.filterTag(content)));
+    t = (typeof t === 'string') ? t : '';
+    return t;
+  }
+
   // 获取收入明细列
   getIncomeColumns = () => {
     const columns = [
@@ -38,7 +57,7 @@ class WalletInfo extends React.Component {
         key: 'detail',
         render: item => (
           <span title={item.title} className={styles.normalText}>
-            {item.title || '暂无内容'}
+            <RichText content={this.parseHTML(item.title) || '暂无内容'} />
           </span>
         ),
       },
@@ -81,7 +100,7 @@ class WalletInfo extends React.Component {
         key: 'detail',
         render: item => (
           <span title={item.title || '暂无内容'} className={styles.normalText}>
-            {item.title || '暂无内容'}
+            <RichText content={this.parseHTML(item.title) || '暂无内容'} />
           </span>
         ),
       },
