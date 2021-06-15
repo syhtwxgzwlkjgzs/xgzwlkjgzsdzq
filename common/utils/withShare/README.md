@@ -14,7 +14,7 @@
 如果设置的分享给朋友无效,可以在页面的config.js中配置  `enableShareAppMessage: true`, 同理如果分享到朋友圈无效，可以配置enableShareTimeline: true` 
 
 
-需要定义`$getShareData` 方法,将必要的参数返回
+需要定义`getShareData` 方法,将必要的参数返回
 
 参数`Object:object` 
 
@@ -26,7 +26,7 @@
 
 有时需要这样做,因为一个页面上有多个分享按钮时,无法判断来自哪个分享按钮,
 
-当返回值时,也可以直接在按钮上绑定需要的值,例如`title`, `path` ,然后直接在`$getShareData` 中取到,或者直接在方法中从`store` 中取值
+当返回值时,也可以直接在按钮上绑定需要的值,例如`title`, `path` ,然后直接在`getShareData` 中取到,或者直接在方法中从`store` 中取值
 
 返回值`Object:onject`
 
@@ -47,7 +47,7 @@
 
 ```javascript
 //pages/index.js
-$getShareData (data) {
+getShareData (data) {
     const { topic } = this.props 
     const topicId = topic.topicDetail?.pageData[0]?.topicId || ''
     const defalutTitle = topic.topicDetail?.pageData[0]?.content || ''

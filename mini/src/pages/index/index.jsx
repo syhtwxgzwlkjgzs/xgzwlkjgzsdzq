@@ -20,7 +20,7 @@ class Index extends React.Component {
     errorText: '加载失败'
   }
 
-  $getShareData(data) {
+  getShareData(data) {
     const { site } = this.props
     const defalutTitle = site.webConfig?.setSite?.siteName || ''
     const defalutPath = 'pages/index/index'

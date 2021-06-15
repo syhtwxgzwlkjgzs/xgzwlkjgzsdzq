@@ -210,6 +210,7 @@ class Index extends React.Component {
             getShareData = {getShareData}
             shareContent = {shareContent}
             getShareContent = {getShareContent}
+            data={data}
           />
         </View>
       );

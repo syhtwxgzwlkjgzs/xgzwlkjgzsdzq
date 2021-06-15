@@ -24,6 +24,7 @@ const Index = ({
   isLiked = false,
   isSendingLike = false,
   tipData,
+  data,
   platform,
   index,
   shareThreadid,
@@ -69,7 +70,6 @@ const Index = ({
   const onClose = () => {
     setShow(false)
   }
-
   const needHeight = useMemo(() => userImgs.length !== 0 || comment > 0 || sharing > 0, [userImgs, comment, sharing])
   const thread = index
   return (
@@ -132,7 +132,7 @@ const Index = ({
         visible={show}
         onClose={onClose}
       >
-        <ShareButton setShow={setShow} tipData={tipData} index={thread} shareContent={shareContent} getShareContent={getShareContent} shareThreadid={shareThreadid} shareAvatar={shareAvatar} shareNickname={shareNickname} getShareData={getShareData}></ShareButton>
+        <ShareButton data={data} setShow={setShow} tipData={tipData} index={thread} shareContent={shareContent} getShareContent={getShareContent} shareThreadid={shareThreadid} shareAvatar={shareAvatar} shareNickname={shareNickname} getShareData={getShareData}></ShareButton>
       </Popup>
     </View>
   );

@@ -16,7 +16,7 @@ import withShare from '@common/utils/withShare/withShare'
 class Index extends React.Component {
   page = 1;
   perPage = 10;
-  $getShareData (data) {
+  getShareData (data) {
     console.log(data);
     const { topic } = this.props
     const topicId = topic.topicDetail?.pageData[0]?.topicId || ''

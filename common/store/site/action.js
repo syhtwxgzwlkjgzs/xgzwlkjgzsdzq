@@ -21,7 +21,7 @@ class SiteAction extends SiteStore {
     siteResult.data && this.setSiteConfig(siteResult.data);
   }
 
-  @action
+  @action.bound
   async getMiniCode(data) {
     this.miniCode = await getMiniCode(data);
   }

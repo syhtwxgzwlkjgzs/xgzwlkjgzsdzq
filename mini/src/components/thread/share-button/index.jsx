@@ -4,17 +4,10 @@ import styles from './index.module.scss'
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Taro, { useDidHide, useDidShow } from '@tarojs/taro'
 
-const index = ({setShow, tipData, index, getShareData, shareNickname, shareAvatar, shareThreadid, getShareContent, shareContent}) => {
+const index = ({setShow, tipData, data, index, getShareData, shareNickname, shareAvatar, shareThreadid, getShareContent, shareContent}) => {
     const {threadId} = tipData
-    const threads = index.threads?.pageData || []
     let threadTitle = ''
-    let thread = ''
-    for(const i of threads) {
-    if(i.threadId == threadId) {
-        thread = i
-        break
-        }
-    }
+    const thread = data
     threadTitle = thread.title
     const shareData = {
         comeFrom:'thread',
@@ -24,14 +17,14 @@ const index = ({setShow, tipData, index, getShareData, shareNickname, shareAvata
     }
     const handleClick = () => {
         setShow(false)
-        const {nickname} = thread.user
-        const {avatar} = thread.user
+        const {nickname} = thread.user || ''
+        const {avatar} = thread.user || ''
         if(thread.isAnonymous && nickname !== '匿名用户') {
             getShareData({nickname, avatar, threadId})
             thread.user.nickname = '匿名用户'
             thread.user.avatar = ''
         }
-        if(thread.displayTag.isPrice) {
+        if(thread?.displayTag?.isPrice) {
             const {freewords} = thread
             let content = thread.content.text
             getShareContent({content, threadId})
