@@ -20,6 +20,7 @@ UserInfo.propTypes = {
   isPay: PropTypes.bool, // 是否付费
   isReward: PropTypes.bool, // 是否悬赏
   isRed: PropTypes.bool, // 是否红包
+  isAnonymous: PropTypes.bool, // 是否是匿名贴
   userId: PropTypes.number, // 用户id PC端
   platform: PropTypes.string, // 是否展示pop PC端
   icon: PropTypes.string, // 图标：点赞或者是付费用户
@@ -52,7 +53,7 @@ export default function UserInfo(props) {
       <View className={styles.right}>
         <View className={styles.info}>
           <View className={styles.name}>{props.name}</View>
-          {props.groupName && <View className={`${styles.groupName} ${tagsNumber > 3 ? styles.groupNameText : ''}`}>{props.groupName}</View>}
+          {!props.isAnonymous && props.groupName && <View className={`${styles.groupName} ${tagsNumber > 3 ? styles.groupNameText : ''}`}>{props.groupName}</View>}
         </View>
 
         <View className={styles.meta}>
