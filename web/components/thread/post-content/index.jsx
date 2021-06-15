@@ -31,6 +31,7 @@ const Index = ({
   loading,
   usePointer = true,
   customHoverBg = false,
+  onContentHeightChange = noop,
   ...props
 }) => {
   // 内容是否超出屏幕高度
@@ -101,6 +102,10 @@ const Index = ({
       setContentTooLong(false)
     }
   }, [filterContent]);
+
+  useEffect(() => {
+    onContentHeightChange(contentWrapperRef.current.clientHeight);
+  }, content);
 
   return (
     // <div className={styles.container} {...props}>

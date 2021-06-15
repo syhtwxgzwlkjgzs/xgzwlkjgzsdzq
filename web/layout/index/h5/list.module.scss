@@ -1,0 +1,14 @@
+@import '@common/styles/index.scss';
+
+.contianer {
+  height: 500px;
+  // flex: 1;
+
+  :global {
+    .ReactVirtualized__Grid__innerScrollContainer {
+      > div {
+        background: #eff1f3;
+      }
+    }
+  }
+}

@@ -224,7 +224,13 @@ class Index extends React.Component {
               {isShowIcon && <div className={styles.headerIcon} onClick={this.onClickHeaderIcon}><Icon name='CollectOutlinedBig' size={20}></Icon></div>}
           </div>
 
-          <ThreadCenterView data={data} onClick={this.onClick} onPay={this.onPay} platform={platform} />
+          <ThreadCenterView
+            onContentHeightChange={this.props.onContentHeightChange}
+            data={data}
+            onClick={this.onClick}
+            onPay={this.onPay}
+            platform={platform}
+          />
 
           <BottomEvent
             userImgs={likeReward.users}

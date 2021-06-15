@@ -59,7 +59,7 @@ const Index = (props) => {
 
         return (
           <div className={styles.wrapper}>
-              {text && <PostContent content={text} onPay={onPay} onRedirectToDetail={onClick} />}
+              {text && <PostContent onContentHeightChange={props.onContentHeightChange} content={text} onPay={onPay} onRedirectToDetail={onClick} />}
               <div className={styles.content}>
                 {videoData && (
                   <VideoPlay
