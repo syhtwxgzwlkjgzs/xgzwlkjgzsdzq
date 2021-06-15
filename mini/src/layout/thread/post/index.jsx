@@ -466,8 +466,7 @@ class Index extends Component {
 
     const amount = rewardAmount + redAmount;
     const options = { amount };
-    if (!isDraft && amount && (!threadId
-      || (threadId && (!rewardQa.orderSn || !redpacket.orderSn)))) {
+    if (!isDraft && amount > 0) {
       let type = ORDER_TRADE_TYPE.RED_PACKET;
       let title = '支付红包';
       if (redAmount) {
@@ -484,28 +483,32 @@ class Index extends Component {
       }
 
       // 等待支付
-      await new Promise((resolve) => {
-        PayBox.createPayBox({
-          data: { ...options, title, type },
-          orderCreated: async (orderInfo) => {
-            const { orderSn } = orderInfo;
-            setPostData({ orderInfo });
-            if (orderSn) this.props.payBox.hide();
-            setTimeout(() => {
-              resolve();
-            }, 500)
-          },
-          success: async () => {
-            this.setIndexPageData();
-            if (this.state.threadId)
-              Taro.redirectTo({ url: `/subPages/thread/index?id=${this.state.threadId}` });
-          },
-        });
+      PayBox.createPayBox({
+        data: { ...options, title, type },
+        orderCreated: async (orderInfo) => {
+          const { orderSn } = orderInfo;
+          setPostData({ orderInfo });
+          if (orderSn) this.props.payBox.hide();
+          this.createThread(true, true);
+        },
+        success: async () => {
+          this.setIndexPageData();
+          if (this.state.threadId)
+            Taro.redirectTo({ url: `/subPages/thread/index?id=${this.state.threadId}` });
+        },
       });
+      return;
     }
+    return this.createThread(isDraft);
+  }
+
+  async createThread(isDraft, isPay) {
+    const { threadId } = this.state;
+    const { threadPost } = this.props;
+    const { setPostData } = threadPost;
     // 5 loading
     Taro.showLoading({
-      title: isDraft ? '保存草稿中...' : '发布中...',
+      title: isDraft && !isPay ? '保存草稿中...' : '发布中...',
       mask: true
     });
     // 6 根据是否存在主题id，选择更新主题、新建主题
@@ -518,6 +521,7 @@ class Index extends Component {
 
     // 7 处理请求数据
     const { code, data, msg } = ret;
+    console.log(ret);
     if (code === 0) {
       if (!threadId) {
         this.setState({ threadId: data.threadId, data }); // 新帖首次保存草稿后，获取id
@@ -537,8 +541,6 @@ class Index extends Component {
 
       if (!isDraft) {
         this.setIndexPageData();
-        this.postToast('发布成功', 'success');
-        Taro.redirectTo({ url: `/subPages/thread/index?id=${data.threadId}` });
       }
       this.postToast('发布成功', 'success');
       Taro.redirectTo({ url: `/subPages/thread/index?id=${data.threadId}` });
