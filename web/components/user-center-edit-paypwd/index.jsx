@@ -54,7 +54,7 @@ class index extends Component {
       });
       return;
     }
-    Router.push({ url: '/my/edit/find-paypwd?ref=payBox' });
+    Router.push({ url: '/my/edit/find-paypwd' });
   };
 
   // 初次设置密码 password
