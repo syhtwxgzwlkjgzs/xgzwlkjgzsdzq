@@ -7,6 +7,7 @@ import Divider from '@discuzq/design/dist/components/divider/index';
 import { inject, observer } from 'mobx-react';
 import { View, Text } from '@tarojs/components';
 import { STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants';
+import Taro from '@tarojs/taro';
 
 @inject('site')
 @inject('user')
@@ -144,7 +145,12 @@ class PayPassword extends React.Component {
     const { options = {} } = this.props?.payBox;
     return (
       <View>
-        <Dialog className={styles.paypwdDialogWrapper} visible={isShow} position="center" maskClosable={true}>
+        <Dialog
+          className={styles.paypwdDialogWrapper}
+          visible={this.props.payBox.step === STEP_MAP.WALLET_PASSWORD}
+          position="center"
+          maskClosable={true}
+        >
           <View className={styles.paypwdDialogContent}>
             <>
               <View className={styles.paypwdTitle}>立即支付</View>
@@ -165,8 +171,14 @@ class PayPassword extends React.Component {
               </View>
               <View className={styles.payList}>{this.renderPwdItem()}</View>
             </>
-            {/* TODO: 忘记支付密码的链接添加 */}
-            <View className={styles.forgetPasswordContainer}>
+            <View
+              className={styles.forgetPasswordContainer}
+              onClick={() => {
+                Taro.navigateTo({
+                  url: '/subPages/my/edit/find/paypwd/index'
+                });
+              }}
+            >
               <Text>忘记支付密码?</Text>
             </View>
             {/* 关闭按钮 */}
