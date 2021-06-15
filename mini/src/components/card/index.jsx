@@ -52,6 +52,9 @@ const index = ({
           const num = image.height * (620 / image.width);
           setHeightdefill(num - 402)
         },
+        fail(err) {
+          setHeightdefill(402)
+        }
       });
     }
     if(!title) {
@@ -130,7 +133,7 @@ const index = ({
       // 标题文字图片海报
       if(url) {
         return (
-          <Cardb obj={obj} setShareImage={setShareImage} heightdefill={heightdefill}></Cardb>
+          heightdefill ? <Cardb obj={obj} setShareImage={setShareImage} heightdefill={heightdefill}></Cardb> : <View style={{ flex: 1 }}></View>
         )
       }
       // 标题文字海报
