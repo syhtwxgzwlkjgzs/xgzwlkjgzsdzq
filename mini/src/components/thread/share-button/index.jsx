@@ -36,7 +36,14 @@ const index = ({setShow, tipData, data, index, getShareData, shareNickname, shar
     }
     const CreateCard = () => {
         setShow(false)
-        Taro.navigateTo({url: `/subPages/create-card/index?threadId=${threadId}`})
+        Taro.navigateTo({
+            url: `/subPages/create-card/index?threadId=${threadId}`,
+            success () {
+                Taro.eventCenter.once('page:init', () => {
+                    Taro.eventCenter.trigger('message:detail', data)
+              })
+            }
+        })
     }
 
     // 当页面被隐藏时（去分享）,收起弹窗
