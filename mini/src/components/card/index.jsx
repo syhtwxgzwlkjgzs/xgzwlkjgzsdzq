@@ -8,7 +8,6 @@ import Cardb from './components/cardaitu'; // 标题单图片文字海报 43
 import Cardd from './components/cardimg'; // 纯图片海报  164
 // import Cardg from '@/wxcomponents/card/cardvideo'; // 视频海报 43
 import Card from './components/card'// 文字海报  46
-import codeUrl from '../../public/dzq-img/login-ORcode.png'
 import { getByteLen } from './utils'
 
 const index = ({
@@ -73,7 +72,7 @@ const index = ({
         imgUrl:url,
         miniCode,
         imgtop,
-        codeUrl,
+        codeUrl:miniCode,
     }
     const [shareImage , setShareImage] = useState('')
     const saveToAlbum = () => {
@@ -134,20 +133,20 @@ const index = ({
       // 标题文字图片海报
       if(url) {
         return (
-          heightdefill ? <Cardb obj={obj} setShareImage={setShareImage} heightdefill={heightdefill}></Cardb> : <View style={{ flex: 1 }}></View>
+          miniCode && heightdefill ? <Cardb obj={obj} setShareImage={setShareImage} heightdefill={heightdefill}></Cardb> : <View style={{ flex: 1 }}></View>
         )
       }
       // 标题文字海报
       if(title) {
         return (
-          <Cardk obj={obj} setShareImage={setShareImage}></Cardk>
+          miniCode ? <Cardk obj={obj} setShareImage={setShareImage}></Cardk>: <View style={{ flex: 1 }}></View>
         )
       } 
       // 视频海报
       
       // 文字海报
       return (
-        <Card obj={obj} setShareImage={setShareImage}></Card>
+        (miniCode ? <Card obj={obj} setShareImage={setShareImage}></Card> : <View style={{ flex: 1 }}></View>)
       )
     }
     return (
