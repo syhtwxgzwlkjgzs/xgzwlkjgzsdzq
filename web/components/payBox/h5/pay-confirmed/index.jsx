@@ -50,13 +50,14 @@ export default class PayBox extends React.Component {
     this.setState({
       isSubmit: false,
     });
-    this.props.payBox.payWay = null;
+    this.props.payBox.payWay = PAYWAY_MAP.WALLET;
   };
 
-  async componentDidMount() {
+  componentDidMount = async () => {
     const { id } = this.props?.user;
     try {
       await this.props.payBox.getWalletInfo(id);
+      this.initState();
     } catch (error) {
       Toast.error({
         content: '获取用户钱包信息失败',
@@ -183,7 +184,7 @@ export default class PayBox extends React.Component {
         </div>
         <div className={styles.list}>
           <Radio.Group
-            value={this.props?.payBox?.payWay}
+            value={this.props.payBox.payWay}
             onChange={(checked) => {
               this.handleChangePaymentType(checked);
             }}
