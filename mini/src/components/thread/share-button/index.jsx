@@ -4,7 +4,7 @@ import styles from './index.module.scss'
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Taro, { useDidHide, useDidShow } from '@tarojs/taro'
 
-const index = ({setShow, tipData, index, getShareData, shareNickname, shareAvatar}) => {
+const index = ({setShow, tipData, index, getShareData, shareNickname, shareAvatar, shareThreadid}) => {
     const {threadId} = tipData
     const threads = index.threads?.pageData || []
     let threadTitle = ''
@@ -26,8 +26,8 @@ const index = ({setShow, tipData, index, getShareData, shareNickname, shareAvata
         setShow(false)
         const {nickname} = thread.user
         const {avatar} = thread.user
-        getShareData({nickname, avatar})
-        if(thread.isAnonymous) {
+        if(thread.isAnonymous && nickname !== '匿名用户') {
+            getShareData({nickname, avatar, threadId})
             thread.user.nickname = '匿名用户'
             thread.user.avatar = ''
         }
@@ -43,7 +43,7 @@ const index = ({setShow, tipData, index, getShareData, shareNickname, shareAvata
         setShow(false) 
     })
     useDidShow(() => {
-        if(shareNickname && shareNickname !== thread.user.nickname) {
+        if(shareThreadid === threadId) {
             thread.user.nickname = shareNickname
             thread.user.avatar = shareAvatar
             getShareData({})
