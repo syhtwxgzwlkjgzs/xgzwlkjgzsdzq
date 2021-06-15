@@ -135,11 +135,10 @@ export default class Simple extends React.Component {
             {
               text: `${obj.group}`,
               color: '#777',
-              x: 60,
-              y: 769 + heightdefill,
+              x: 50,
+              y: 767 + heightdefill,
               fontSize: 24,
               zIndex: 20,
-              lineHeight: 24,
               lineNum: 1,
               textAlign: 'left',
               baseLine: 'top',
