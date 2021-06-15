@@ -335,7 +335,10 @@ class PostPage extends React.Component {
     const { postData } = this.props.threadPost;
 
     if (item.type === THREAD_TYPE.redPacket && !this.state.canEditRedpacket) {
-      this.postToast('红包内容不能编辑');
+      this.setState({ currentDefaultOperation: item.id }, () => {
+        this.setState({ currentDefaultOperation: '' });
+        this.postToast('红包内容不能编辑');
+      });
       return false;
     }
 
