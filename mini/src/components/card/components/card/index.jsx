@@ -121,7 +121,7 @@ export default class Simple extends React.Component {
             },
             // 二维码描述
             {
-              text: '点击右二维码查看详情',
+              text: '长按识别小程序码查看详情',
               color: '#333',
               width: 560,
               height: 31,
