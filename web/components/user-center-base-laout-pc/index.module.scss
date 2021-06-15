@@ -33,6 +33,11 @@
   @include media('s-pc') {
     width: 100%;
   }
+
+  @include media('l-pc') {
+    width: 100%;
+    max-width: rem(1100);
+  }
 }
 
 .wrapper {
@@ -42,13 +47,13 @@
   overflow: hidden;
 
   @include media('s-pc') {
-    width: 100%;
+    width: 98%;
   }
 
   @include media('l-pc') {
-    width: rem(1100);
+    width: 95%;
+    max-width: rem(1100);
   }
-
 
   @include media('xl-pc') {
     width: rem(1100);
@@ -60,11 +65,12 @@
   display: flex;
   justify-content: center;
   @include media('s-pc') {
-    width: 100%;
+    width: 98%;
   }
 
   @include media('l-pc') {
-    width: rem(1100);
+    width: 95%;
+    max-width: rem(1100);
   }
 
   @include media('xl-pc') {
@@ -106,11 +112,12 @@
   margin-top: rem($margin-5n);
 
   @include media('s-pc') {
-    width: 100%;
+    width: 98%;
   }
 
   @include media('l-pc') {
-    width: rem(1100);
+    width: 95%;
+    max-width: rem(1100);
   }
 
   @include media('xl-pc') {
