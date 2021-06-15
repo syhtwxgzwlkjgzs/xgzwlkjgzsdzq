@@ -96,6 +96,11 @@
       }
       span[aria-label^="语言"] {
         display: inline-block !important;
+        &::before,
+        &::after {
+          content: '';
+          display: none;
+        }
       }
     }
   }

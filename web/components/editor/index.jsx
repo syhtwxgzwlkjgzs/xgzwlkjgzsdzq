@@ -14,7 +14,7 @@ import '@discuzq/vditor/src/assets/scss/index.scss';
 import { Toast } from '@discuzq/design';
 
 export default function DVditor(props) {
-  const { pc, emoji = {}, atList = [], topic, value,
+  const { pc, emoji = {}, atList = [], topic, value = '',
     onChange = () => { }, onFocus = () => { }, onBlur = () => { },
     onInit = () => { },
     onInput = () => { },
@@ -187,7 +187,7 @@ export default function DVditor(props) {
         minHeight: 44,
         // 编辑器初始化值
         tab: '  ',
-        value: '',
+        value,
         // 编辑器异步渲染完成后的回调方法
         after: () => {
           onInit(editor);
@@ -234,6 +234,11 @@ export default function DVditor(props) {
         },
         bubbleToolbar: pc ? [...baseToolbar] : [],
         icon: '',
+        preview: {
+          theme: {
+            current: '',
+          },
+        },
       },
     );
 
