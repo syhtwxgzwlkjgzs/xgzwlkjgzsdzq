@@ -145,20 +145,22 @@ class PostPage extends React.Component {
       if (ret.code === 0) {
         threadPost.formatThreadDetailToPostData(ret.data);
         // 设置主题状态、是否能操作红包和悬赏
-        const { postData, isThreadPaid } = this.props.threadPost;
+        // const { postData, isThreadPaid } = this.props.threadPost;
+        const { postData } = this.props.threadPost;
         const { isDraft } = postData;
-        if (isThreadPaid) {
-          Toast.info({ content: '已经支付的帖子不支持编辑', duration: 1000, hasMask: true });
-          const timer = setTimeout(() => {
-            clearTimeout(timer);
-            this.props.router.replace(`/thread/${id}`);
-          }, 1000);
-          return;
-        }
+        // if (isThreadPaid) {
+        //   Toast.info({ content: '已经支付的帖子不支持编辑', duration: 1000, hasMask: true });
+        //   const timer = setTimeout(() => {
+        //     clearTimeout(timer);
+        //     this.props.router.replace(`/thread/${id}`);
+        //   }, 1000);
+        //   return;
+        // }
+        // 更改交互：已发布帖子可以编辑内容，但是不能编辑红包或者悬赏属性
         this.setState({
           postType: isDraft ? 'isDraft' : 'isEdit',
-          canEditRedpacket: !isThreadPaid,
-          canEditReward: !isThreadPaid,
+          canEditRedpacket: isDraft,
+          canEditReward: isDraft,
         });
       } else {
         Toast.error({ content: ret.msg });

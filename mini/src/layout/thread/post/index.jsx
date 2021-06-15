@@ -140,19 +140,20 @@ class Index extends Component {
         .replace(/<span.*?>(.*?)<\/span>/g, `$1`);
       ret.data.content.text = realText;
       threadPost.formatThreadDetailToPostData(ret.data);
-      const { isThreadPaid } = this.props.threadPost
-      if (isThreadPaid) {
-        this.postToast('已经支付的帖子不支持编辑');
-        const timer = setTimeout(() => {
-          clearTimeout(timer);
-          Taro.redirectTo({ url: `/subPages/thread/index?id=${id}` });
-        }, 1000);
-        return;
-      }
+      // const { isThreadPaid } = this.props.threadPost
+      // if (isThreadPaid) {
+      //   this.postToast('已经支付的帖子不支持编辑');
+      //   const timer = setTimeout(() => {
+      //     clearTimeout(timer);
+      //     Taro.redirectTo({ url: `/subPages/thread/index?id=${id}` });
+      //   }, 1000);
+      //   return;
+      // }
+      // 更改交互：已发布帖子可以编辑内容，但是不能编辑红包或者悬赏属性
         this.setState({
           postType: isDraft ? 'isDraft' : 'isEdit',
-          canEditRedpacket: !isThreadPaid,
-          canEditReward: !isThreadPaid,
+          canEditRedpacket: isDraft,
+          canEditReward: isDraft,
         });
       // isDraft && this.openSaveDraft(); // 现阶段，自动保存功能关闭
     } else {

@@ -223,18 +223,19 @@ class ThreadPostAction extends ThreadPostStore {
         body: { audioId: audio.id || audio.threadVideoId || '' },
       };
     }
-    const draft = this.isThreadPaid ? 0 : 1;
+    // const draft = this.isThreadPaid ? 0 : 1;
+    // 红包和悬赏插件不需要传入草稿字段了，直接使用全局的即可
     if (redpacket.price && !orderInfo.status) {
       contentIndexes[THREAD_TYPE.redPacket] = {
         tomId: THREAD_TYPE.redPacket,
-        body: { orderSn: orderInfo.orderSn, ...redpacket, draft },
+        body: { orderSn: orderInfo.orderSn, ...redpacket },
       };
     }
 
     if (rewardQa.value && !orderInfo.status) {
       contentIndexes[THREAD_TYPE.reward] = {
         tomId: THREAD_TYPE.reward,
-        body: { expiredAt: rewardQa.times, price: rewardQa.value, type: 0, orderSn: orderInfo.orderSn, draft },
+        body: { expiredAt: rewardQa.times, price: rewardQa.value, type: 0, orderSn: orderInfo.orderSn },
       };
     }
     return contentIndexes;
