@@ -15,7 +15,6 @@ import { debounce } from '@common/utils/throttle-debounce';
 @observer
 class CommentList extends React.Component {
   constructor(props) {
-    console.log(props);
     super(props);
     this.state = {
       isHideEdit: this.props.isHideEdit, // 隐藏评论编辑删除
@@ -78,8 +77,9 @@ class CommentList extends React.Component {
     typeof this.props.replyDeleteClick === 'function' && this.props.replyDeleteClick(data);
   }
 
-  reployAvatarClick(data) {
-    typeof this.props.reployAvatarClick === 'function' && this.props.reployAvatarClick(data);
+  // 点击评论列表用户头像
+  replyAvatarClick(data,floor) {
+    typeof this.props.replyAvatarClick === 'function' && this.props.replyAvatarClick(data,floor);
   }
 
   generatePermissions(data = {}) {
@@ -94,7 +94,6 @@ class CommentList extends React.Component {
 
   render() {
     const { canDelete, canEdit, canLike } = this.generatePermissions(this.props.data);
-
     return (
       <div className={styles.commentList}>
         <div className={styles.header}>
@@ -143,7 +142,7 @@ class CommentList extends React.Component {
           {/*评论内容*/}
           <div className={styles.commentListContent}>
             <div className={styles.commentListContentText}>
-              <div className={styles.commentListName}>
+              <div className={styles.commentListName} onClick={() => this.avatarClick()}>
                 {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
               </div>
               <div className={classNames(styles.commentListText)}>
@@ -211,7 +210,7 @@ class CommentList extends React.Component {
                         data={this.needReply[0]}
                         key={this.needReply[0].id}
                         isShowOne={true}
-                        avatarClick={() => this.reployAvatarClick(this.needReply[0])}
+                        avatarClick={(floor) => this.replyAvatarClick(this.needReply[0],floor)}
                         likeClick={() => this.replyLikeClick(this.needReply[0])}
                         replyClick={() => this.replyReplyClick(this.needReply[0])}
                         deleteClick={() => this.replyDeleteClick(this.needReply[0])}
@@ -222,7 +221,7 @@ class CommentList extends React.Component {
                         <ReplyList
                           data={val}
                           key={val.id || index}
-                          avatarClick={() => this.reployAvatarClick(val)}
+                          avatarClick={(floor) => this.replyAvatarClick(val,floor)}
                           likeClick={() => this.replyLikeClick(val)}
                           replyClick={() => this.replyReplyClick(val)}
                           deleteClick={() => this.replyDeleteClick(val)}

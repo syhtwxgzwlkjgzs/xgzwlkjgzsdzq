@@ -4,11 +4,12 @@
   padding-top: $padding-4n;
   .replyListAvatar {
     margin-right: $margin-2n;
+    margin-top: $margin-1n;
   }
   .replyListContent {
     width: 100%;
     .replyListContentText {
-      padding: $padding-2n;
+      padding: $padding-2n rem($padding-3n);
       border-radius: $border-radius-small;
       background: $body-bg-color;
       .replyListName {

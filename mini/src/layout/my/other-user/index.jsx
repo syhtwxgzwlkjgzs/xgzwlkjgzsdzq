@@ -41,10 +41,6 @@ class H5OthersPage extends React.Component {
     }
     if (id) {
       await this.props.user.getTargetUserInfo(id);
-      await this.props.user.getTargetUserThreads(id);
-      this.setState({
-        fetchUserInfoLoading: false,
-      });
     }
   }
 
@@ -113,7 +109,7 @@ class H5OthersPage extends React.Component {
             </View> */}
 
             <View className={styles.threadHeader}>
-              <SectionTitle title='主题' isShowMore={false} leftNum={`${targetUserThreadsTotalCount}个主题`} />
+              <SectionTitle title='主题' isShowMore={false} leftNum={`${targetUserThreadsTotalCount || 0}个主题`} />
             </View>
 
             <View className={styles.threadItemContainer}>

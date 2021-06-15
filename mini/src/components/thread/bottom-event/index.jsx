@@ -71,7 +71,7 @@ const Index = ({
       <View className={needHeight ? styles.user : styles.users}>
         {userImgs.length !== 0 ? <View className={styles.userImg}>
           <View className={styles.portrait}>
-            <Tip tipData={tipData} imgs={userImgs} wholeNum={wholeNum}></Tip>
+            <Tip tipData={tipData} imgs={userImgs} wholeNum={wholeNum} showCount={5}></Tip>
           </View>
           {
             wholeNum !== 0 && (
@@ -87,7 +87,7 @@ const Index = ({
           {sharing > 0 && <Text className={styles.commentNum}>{`${sharing}次分享`}</Text>}
         </View>
       </View>
-          
+
       <View className={needHeight ? styles.operation : styles.operations}>
         {
           postList.map((item, index) => (
@@ -95,7 +95,7 @@ const Index = ({
                 <View key={index} className={styles.fabulous} onClick={handleClickShare}>
                  <View className={styles.fabulousIcon}>
                     <Icon
-                    className={`${styles.icon} ${item.type}`} 
+                    className={`${styles.icon} ${item.type}`}
                     name={item.icon}
                     size={16}>
                   </Icon>
@@ -108,7 +108,7 @@ const Index = ({
               (<View key={index} className={styles.fabulous} onClick={item.event}>
                  <View className={styles.fabulousIcon}>
                     <Icon
-                    className={`${styles.icon} ${item.type} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`} 
+                    className={`${styles.icon} ${item.type} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`}
                     name={item.icon}
                     size={16}>
                   </Icon>
