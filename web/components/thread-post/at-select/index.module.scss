@@ -211,10 +211,10 @@
     :global {
       .dzq-button {
         width: 100%;
+        height: rem(42px);
         padding: $padding-10 0;
         font-size: $font-size-middle;
         color: $text-color-regular;
-        line-height: $font-line-height-small;
         border: none;
         border-radius: $border-radius-small;
         background: $text-bg-color2;
