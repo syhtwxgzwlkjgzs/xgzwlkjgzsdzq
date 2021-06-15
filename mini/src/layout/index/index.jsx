@@ -83,12 +83,13 @@ class IndexH5Page extends React.Component {
   };
 
   onClickTab = (id = '') => {
-    this.props.index.resetErrorInfo()
-    this.setState({ isClickTab: true })
     this.changeFilter({ categoryids: [id], sequence: id === 'default' ? 1 : 0 })
   };
 
   changeFilter = (params) => {
+    this.props.index.resetErrorInfo()
+    this.setState({ isClickTab: true })
+
     this.props.baselayout.setJumpingToTop();
     this.props.index.setHiddenTabBar(false)
 
