@@ -142,9 +142,9 @@ export default class index extends Component {
   initState = () => {
     this.setState({
       paymentType: 'wallet',
-      list:[],
+      list: [],
       imageShow: false,
-      isSubmit: false
+      isSubmit: false,
     });
     this.props.payBox.payWay = PAYWAY_MAP.WALLET;
     this.props.payBox.password = null;
@@ -168,10 +168,10 @@ export default class index extends Component {
 
   // 点击确认支付
   handlePayConfirmed = throttle(async () => {
-    if (this.state.isSubmit) return
+    if (this.state.isSubmit) return;
     this.setState({
-      isSubmit: true
-    })
+      isSubmit: true,
+    });
     if (this.props.payBox.payWay === PAYWAY_MAP.WALLET) {
       // 表示钱包支付
       // await this.props.payBox.walletPayEnsure();
@@ -182,8 +182,8 @@ export default class index extends Component {
           duration: 1000,
         });
         this.setState({
-          isSubmit: false
-        })
+          isSubmit: false,
+        });
         return;
       }
       const { list = [] } = this.state;
@@ -195,10 +195,10 @@ export default class index extends Component {
           hasMask: false,
           duration: 1000,
         });
-        this.onClose()
+        this.onClose();
         this.setState({
-          isSubmit: false
-        })
+          isSubmit: false,
+        });
       } catch (error) {
         Toast.error({
           content: error.Message || '支付失败，请重新输入',
@@ -320,6 +320,7 @@ export default class index extends Component {
     const { amount = 0 } = options;
     const { list = [], isSubmit } = this.state;
     const newPassWord = list.join('');
+    let disabled = !newPassWord || newPassWord.length !== 6 || isSubmit;
     return (
       <div className={`${styles.walletPayment}`}>
         <div className={styles.walletTitle}>
@@ -380,10 +381,10 @@ export default class index extends Component {
                 size="large"
                 className={styles.walletConfirmBtn}
                 type="primary"
-                disabled={!newPassWord || newPassWord.length !== 6 || isSubmit}
+                disabled={disabled}
                 full
               >
-                确认支付
+                {isSubmit ? <Spin type="spinner">支付中...</Spin> : '确认支付'}
               </Button>
             </div>
           </>
@@ -409,13 +410,11 @@ export default class index extends Component {
           <div>
             <div className={styles.payTab_top}>
               <Radio.Group value={this.props.payBox.payWay} onChange={this.handleChangePaymentType}>
-                {
-                  this.props.site.isWechatPayOpen && (
-                    <Radio name={'weixin'} className={`${styles.payTab} `}>
-                      微信支付
-                    </Radio>
-                  )
-                }
+                {this.props.site.isWechatPayOpen && (
+                  <Radio name={'weixin'} className={`${styles.payTab} `}>
+                    微信支付
+                  </Radio>
+                )}
                 <Radio name={'wallet'} className={`${styles.payTab}`}>
                   钱包支付
                 </Radio>

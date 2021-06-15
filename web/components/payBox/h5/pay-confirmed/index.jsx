@@ -41,14 +41,14 @@ export default class PayBox extends React.Component {
 
     this.state = {
       payConfig,
-      paymentType: null,
+      isSubmit: false, // 是否提交
     };
     this.goSetPayPwa = this.goSetPayPwa.bind(this);
   }
 
   initState = () => {
     this.setState({
-      paymentType: null,
+      isSubmit: false,
     });
     this.props.payBox.payWay = null;
   };
@@ -120,6 +120,9 @@ export default class PayBox extends React.Component {
       // FIXME: 增加兜底处理
       // 表示微信支付
       try {
+        this.setState({
+          isSubmit: true,
+        });
         if (!isWeixin()) {
           await this.props.payBox.wechatPayOrder({
             listenWXJsBridgeAndExecCallback,
@@ -127,14 +130,23 @@ export default class PayBox extends React.Component {
             wxValidator,
             mode: PAY_MENT_MAP.WX_H5,
           });
+          this.setState({
+            isSubmit: false,
+          });
           return;
         }
         await this.props.payBox.wechatPayOrder({ listenWXJsBridgeAndExecCallback, onBridgeReady, wxValidator, mode });
+        this.setState({
+          isSubmit: false,
+        });
       } catch (e) {
         console.error(e);
         Toast.error({
           content: '拉起微信支付失败',
           duration: 1000,
+        });
+        this.setState({
+          isSubmit: false,
         });
       }
       // this.props.payBox.visible = false
@@ -155,9 +167,9 @@ export default class PayBox extends React.Component {
 
   render() {
     const { options = {} } = this.props.payBox;
-    const { payConfig, paymentType } = this.state;
+    const { payConfig, isSubmit } = this.state;
     const canWalletPay = this.props.user?.canWalletPay;
-    let disabled = !this.props.payBox.payWay;
+    let disabled = !this.props.payBox.payWay || isSubmit;
     if (this.props.payBox.payWay === PAYWAY_MAP.WALLET && !canWalletPay) {
       disabled = true;
     }
@@ -204,7 +216,7 @@ export default class PayBox extends React.Component {
             full
             onClick={this.handlePayConfirmed}
           >
-            确认支付
+            {isSubmit ? <Spin type="spinner">拉起支付中...</Spin> : '确认支付'}
           </Button>
         </div>
         {/* 关闭按钮 */}
