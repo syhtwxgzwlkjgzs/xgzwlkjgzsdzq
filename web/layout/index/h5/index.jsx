@@ -42,11 +42,15 @@ class IndexH5Page extends React.Component {
   }
 
   handleWeiXinShare = async () => {
+    let { href } = window.location;
+    href = href.split('/');
+    href = [href[0], href[1], href[2]];
+    href = href.join('/');
     const { site } = this.props;
-    const title = site.webConfig.setSite.siteName || 'Discuz! Q';
-    const desc = site.webConfig.setSite.siteUrl || 'https://bbsv3.techo.chat';
+    const title = site.webConfig?.setSite?.siteName || 'Discuz! Q';
+    const desc = site.webConfig?.setSite?.siteUrl || href;
     const imgUrl = site.webConfig?.setSite?.siteLogo;
-    const link = site.webConfig.setSite.siteUrl;
+    const link = site.webConfig?.setSite?.siteUrl;
     await initJSSdk(['updateAppMessageShareData', 'updateTimelineShareData']);
     wx.ready(() => {   // 需在用户可能点击分享按钮前就先调用
       wx.updateAppMessageShareData({

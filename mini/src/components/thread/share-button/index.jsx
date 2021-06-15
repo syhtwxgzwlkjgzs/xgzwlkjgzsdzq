@@ -15,7 +15,6 @@ const index = ({setShow, tipData, index, getShareData, shareNickname, shareAvata
         break
         }
     }
-    console.log(thread)
     threadTitle = thread.title
     const shareData = {
         comeFrom:'thread',
