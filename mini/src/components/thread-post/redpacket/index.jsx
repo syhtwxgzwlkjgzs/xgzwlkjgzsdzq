@@ -139,6 +139,7 @@ export default class Redpacket extends Component {
             <Input
               value={price}
               mode="number"
+              miniType="digit"
               placeholder="金额"
               maxLength={6}
               onChange={e => this.onPriceChang(e.target.value)}
@@ -152,6 +153,7 @@ export default class Redpacket extends Component {
             <Input
               value={number}
               mode="number"
+              miniType="number"
               placeholder="个数"
               maxLength={3}
               onChange={e => this.onNumberChang(e.target.value)}
@@ -177,6 +179,7 @@ export default class Redpacket extends Component {
               <Input
                 value={likenum}
                 mode="number"
+                miniType="number"
                 placeholder="个数"
                 maxLength={3}
                 onChange={e => this.onLikenumChang(e.target.value)}

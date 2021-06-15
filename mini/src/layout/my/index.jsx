@@ -54,6 +54,9 @@ export default class index extends Component {
   // 处理页面栈退出后，数据没有重置
   componentWillUnmount() {
     this.props.user.clearUserThreadsInfo();
+    const onShowEventId = this.$instance.router.onShow
+    // 卸载
+    eventCenter.off(onShowEventId, this.onShow)
   }
 
   formatUserThreadsData = (userThreads) => {
