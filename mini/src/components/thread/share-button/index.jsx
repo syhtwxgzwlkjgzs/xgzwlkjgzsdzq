@@ -2,18 +2,20 @@ import React from 'react'
 import { View, Button, Text } from '@tarojs/components'
 import styles from './index.module.scss'
 import Icon from '@discuzq/design/dist/components/icon/index';
-import Taro, { useDidHide } from '@tarojs/taro'
+import Taro, { useDidHide, useDidShow } from '@tarojs/taro'
 
-const index = ({setShow, tipData, index}) => {
+const index = ({setShow, tipData, index, getShareData, shareNickname, shareAvatar}) => {
     const {threadId} = tipData
-    const thread = index.threads?.pageData || []
+    const threads = index.threads?.pageData || []
     let threadTitle = ''
-    for(const i of thread) {
+    let thread = ''
+    for(const i of threads) {
     if(i.threadId == threadId) {
-        threadTitle =  i.title
+        thread = i
         break
         }
     }
+    threadTitle = thread.title
     const shareData = {
         comeFrom:'thread',
         threadId,
@@ -22,8 +24,16 @@ const index = ({setShow, tipData, index}) => {
     }
     const handleClick = () => {
         setShow(false)
+        const {nickname} = thread.user
+        const {avatar} = thread.user
+        getShareData({nickname, avatar})
+        if(thread.isAnonymous) {
+            thread.user.nickname = '匿名用户'
+            thread.user.avatar = ''
+        }
     }
     const CreateCard = () => {
+        setShow(false)
         Taro.navigateTo({url: `/subPages/create-card/index?threadId=${threadId}`})
     }
 
@@ -32,22 +42,28 @@ const index = ({setShow, tipData, index}) => {
     useDidHide(() => {
         setShow(false) 
     })
-
+    useDidShow(() => {
+        if(shareNickname && shareNickname !== thread.user.nickname) {
+            thread.user.nickname = shareNickname
+            thread.user.avatar = shareAvatar
+            getShareData({})
+        }
+    })
     return (
         <View className={styles.contain}>
             <View className={styles.choice}>
-                {/* <View className={styles.fabulous} onClick={CreateCard}>
+                <View className={styles.fabulous} onClick={CreateCard}>
                     <View className={styles.fabulousIcon}>
-                        <Icon name='PictureOutlinedBig' className={styles.icon} size={24}>
+                        <Icon name='PictureOutlinedBig' className={styles.icon} size={25}>
                         </Icon>
                     </View>
                     <Text className={styles.fabulousPost}>
                         生成海报
                     </Text>
-                </View> */}
-                <Button className={styles.fabulous} openType='share' plain='true' data-shareData={shareData}>
+                </View>
+                <Button className={styles.fabulous} openType='share' plain='true' data-shareData={shareData} onClick={handleClick}>
                     <View className={styles.fabulousIcon}>
-                        <Icon name='WeChatOutlined' className={styles.icon} size={24}>
+                        <Icon name='WeChatOutlined' className={styles.icon} size={26}>
                         </Icon>
                     </View>
                     <Text className={styles.fabulousPost}>
@@ -55,7 +71,6 @@ const index = ({setShow, tipData, index}) => {
                     </Text>
                 </Button>
             </View>
-            <View className={styles.space}></View>
             <View className={styles.bottom} onClick={handleClick}>
                 <Text>
                     取消

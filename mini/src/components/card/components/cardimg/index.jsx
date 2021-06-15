@@ -17,14 +17,14 @@ export default class Simple extends React.Component {
       canvasStatus: null,
       rssConfig: {
         width: 700,
-        height: 1082 - obj.contentHeight,
+        height: obj.heightdefill + 1100,
         backgroundColor: '#fff',
         debug: false,
         blocks: [
           // 分组
           {
             x: 40,
-            y: 757 - obj.contentHeight,
+            y: 757 + obj.heightdefill,
             width: obj.marglength,
             height: 44,
             backgroundColor: '#F7F7F7',
@@ -35,9 +35,9 @@ export default class Simple extends React.Component {
             backgroundColor: '#F9FAFC',
             width: 700,
             height: 200,
-            y: 882 - obj.contentHeight,
+            y: 900 + obj.heightdefill,
             x: 0
-          }
+          },
         ],
         images: [
           // 头像
@@ -51,12 +51,20 @@ export default class Simple extends React.Component {
                 borderColor: '#000',
                 zIndex: 10,
             },
+          // 照片内容
+            {
+              url: obj.imgUrl,
+              width: 620,
+              height: obj.heightdefill + 402,
+              y: 240 - obj.imgtop,
+              x: 40,
+              borderRadius: 12
+            },
           // 二维码登录
             {
-              // url: '../../../../public/dzq-img/login-ORcode.png',
               url: obj.codeUrl,
               x: 40,
-              y: 912 - obj.contentHeight,
+              y: 930 + obj.heightdefill,
               height: 140,
               width: 140,
               borderRadius: 20,
@@ -84,10 +92,26 @@ export default class Simple extends React.Component {
               color: '#333',
               x: 140,
               y: 88,
-              width: 500,
+              width: 535,
               height: 27,
               fontSize: 24,
               lineNum: 1,
+              textAlign: 'left',
+              zIndex:10,
+              baseLine: 'top'
+            },
+            // 标题
+            {
+              text: obj.title,
+              color: '#303133',
+              width: 453,
+              height: 339,
+              y: 160,
+              x: 40,
+              fontSize: 30,
+              fontWeight: 'bold',
+              lineNum: 1,
+              lineHeight: 33,
               textAlign: 'left',
               zIndex:10,
               baseLine: 'top'
@@ -96,14 +120,14 @@ export default class Simple extends React.Component {
             {
               text: `${obj.content}`,
               x: 40,
-              y: 161,
-              width: 620,
-              height: 520 - obj.contentHeight,
+              y: 672-obj.imgtop+obj.heightdefill,
+              width: 616,
+              height: 81,
               fontSize: 28,
-              lineHeight: 46,
+              lineHeight: 40,
               textAlign: 'left',
               zIndex: 10,
-              lineNum: 12,
+              lineNum: 2,
               color: '#333333',
               baseLine: 'top'
             },
@@ -112,7 +136,7 @@ export default class Simple extends React.Component {
               text: `${obj.group}`,
               color: '#777',
               x: 60,
-              y: 769 - obj.contentHeight,
+              y: 769 + obj.heightdefill,
               fontSize: 24,
               zIndex: 20,
               lineHeight: 24,
@@ -126,7 +150,7 @@ export default class Simple extends React.Component {
               color: '#333',
               width: 560,
               height: 31,
-              y: 942 - obj.contentHeight,
+              y: 960 + obj.heightdefill,
               x: 210,
               lineHeight: 31,
               fontSize: 28,
@@ -140,7 +164,7 @@ export default class Simple extends React.Component {
               color: '#AAAAAA',
               width:450,
               height: 27,
-              y: 989 - obj.contentHeight,
+              y: 1006 + obj.heightdefill,
               x: 210,
               fontSize: 24,
               lineNum: 1,

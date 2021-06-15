@@ -74,11 +74,11 @@ class Index extends React.Component {
 
     // 支付
     onPay = (e) => {
-      //e && e.stopPropagation();
+      // e && e.stopPropagation();
       this.handlePay()
     }
     handlePay = debounce(async (e) => {
-      //e && e.stopPropagation();
+      // e && e.stopPropagation();
 
       // 对没有登录的先做
       if (!this.props.user.isLogin()) {
@@ -147,11 +147,9 @@ class Index extends React.Component {
     render() {
       const { data, className = '', site = {}, showBottomStyle = true, isShowIcon = false } = this.props;
       const { platform = 'pc' } = site;
-
       if (!data) {
         return <NoData />;
       }
-
       const {
         user = {},
         position = {},
@@ -166,7 +164,8 @@ class Index extends React.Component {
         payType,
       } = data || {};
       const { isEssence, isPrice, isRedPack, isReward } = displayTag;
-
+      const {getShareData} = this.props.user
+      const {shareNickname, shareAvatar} = this.props.user
       return (
         <View className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`}>
           <View className={styles.header} onClick={this.onClick}>
@@ -203,6 +202,9 @@ class Index extends React.Component {
             tipData={{ postId, threadId, platform, payType }}
             platform={platform}
             index={this.props.index}
+            shareNickname = {shareNickname}
+            shareAvatar = {shareAvatar}
+            getShareData = { getShareData }
           />
         </View>
       );
