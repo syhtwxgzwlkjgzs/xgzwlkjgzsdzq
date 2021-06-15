@@ -46,7 +46,7 @@
 
 .tabs {
   width: 100%;
-  border-bottom: var(--border-border);
+  border-bottom: $border-solid-1;
 
   .tagbox {
     display: flex;
@@ -128,14 +128,14 @@
   height: rem(69);
   box-sizing: border-box;
   padding: $padding-2n $padding-4n 0;
-  background: var(--color-white);
+  background: $white;
 
   .button {
     width: 100%;
     height: rem(42);
     border-radius: rem($border-radius-small);
-    color: var(--color-white);
-    background: var(--color-primary);
+    color: $white;
+    background: $primary-color;
     font-family: 'PingFang SC';
     font-weight: normal;
     font-size: rem($font-size-middle);

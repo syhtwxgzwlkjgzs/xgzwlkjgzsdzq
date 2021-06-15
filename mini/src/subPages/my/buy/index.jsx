@@ -27,7 +27,7 @@ class Index extends React.Component {
   }
 
   componentWillUnmount() {
-    index.setThreads(null);
+    this.props.index.setThreads(null);
   }
 
   dispatch = async () => {

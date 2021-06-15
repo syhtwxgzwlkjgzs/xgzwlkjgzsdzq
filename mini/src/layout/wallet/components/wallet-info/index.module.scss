@@ -8,15 +8,11 @@
     left: 16px;
     right: 16px;
   }
-
-  background:$primary-color url('../../../../../../web/public/dzq-img/walletbackground.png') 100% no-repeat padding-box;
-  background-size: cover;
 }
 
 .totalAmount {
-  color: var(--color-white);
+  color: $white;
   text-align: left;
-  background: var(--color-primary);
 
   .moneyTitle {
     font-family: 'PingFangSC-Regular';

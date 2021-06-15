@@ -3,14 +3,6 @@
 .container {
   @include mini_container;
 }
-.banner {
-  height: 140px;
-  text-align: center;
-  background-color: var(--color-primary);
-  img {
-    margin-top: 67px;
-  }
-}
 .content {
   @include mini_content;
   .button {
@@ -18,7 +10,7 @@
   }
   .functionalRegion {
     @include mini_functionalRegion;
-    margin-top: 32px;
+    margin-top: $margin-4n * 2;
   }
   .icon{
     width: 327px;

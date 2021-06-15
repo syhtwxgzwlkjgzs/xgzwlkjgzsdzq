@@ -6,7 +6,7 @@
   flex-direction: column;
   justify-content: flex-start;
   margin: 0 auto;
-  background: var(--color-white);
+  background: $white;
   border-radius: rem($border-radius-big);
   overflow: hidden;
   padding: rem(24);
@@ -22,7 +22,7 @@
     flex: 1;
     font-size: rem($font-size-middle);
     color: $text-color-primary;
-    font-weight: var(--font-weight-regular);
+    font-weight: $font-weight-regular;
     text-align: center;
   }
   .headerIcon {
@@ -73,7 +73,7 @@
         .dzq-slider__progress__button {
           width: rem(10);
           height: rem(10);
-          border: rem(7) solid var(--color-primary);
+          border: rem(7) solid $primary-color;
         }
         .dzq-slider__value {
           font-size: rem($font-size-small);

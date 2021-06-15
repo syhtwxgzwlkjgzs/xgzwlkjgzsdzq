@@ -587,12 +587,18 @@ class ThreadH5Page extends React.Component {
     this.props.router.push('/');
   }
 
-  onClickUser = (e) => {
-    e && e.stopPropagation();
-
-    const { threadData } = this.props.thread || {};
-    this.props.router.push(`/user/${threadData?.userId}`);
-  };
+  replyAvatarClick(reply, comment, floor) {
+    if (floor === 2) {
+      const { userId } = reply;
+      if(!userId) return;
+      this.props.router.push(`/user/${userId}`)
+    }
+    if (floor === 3) {
+      const { commentUserId } = reply;
+      if(!commentUserId) return;
+      this.props.router.push(`/user/${commentUserId}`)
+    }
+  }
 
   render() {
     const { thread: threadStore } = this.props;
@@ -601,9 +607,18 @@ class ThreadH5Page extends React.Component {
       moreClick: this.onMoreClick,
     };
 
+    const isDraft = threadStore?.threadData?.isDraft;
+    // 是否红包帖
+    const isRedPack = threadStore?.threadData?.displayTag?.isRedPack;
+    // 是否悬赏帖
+    const isReward = threadStore?.threadData?.displayTag?.isReward;
+
     // 更多弹窗权限
     const morePermissions = {
-      canEdit: threadStore?.threadData?.ability?.canEdit,
+      // （不是草稿 && 有编辑权限 && 不是红包帖 && 不是悬赏帖） || （是草稿 && 有编辑权限）
+      canEdit:
+        (!isDraft && threadStore?.threadData?.ability?.canEdit && !isRedPack && !isReward)
+        || (isDraft && threadStore?.threadData?.ability?.canEdit),
       canDelete: threadStore?.threadData?.ability?.canDelete,
       canEssence: threadStore?.threadData?.ability?.canEssence,
       canStick: threadStore?.threadData?.ability?.canStick,
@@ -653,7 +668,6 @@ class ThreadH5Page extends React.Component {
               onTagClick={() => this.onTagClick()}
               onPayClick={() => this.onPayClick()}
               onPayClick={() => this.onPayClick()}
-              onClickUser={(e) => this.onClickUser(e)}
             ></RenderThreadContent>
           ) : (
             <LoadingTips type="init"></LoadingTips>
@@ -668,6 +682,7 @@ class ThreadH5Page extends React.Component {
                     router={this.props.router}
                     sort={(flag) => this.onSortChange(flag)}
                     onEditClick={(comment) => this.onEditClick(comment)}
+                    replyAvatarClick={(comment, reply, floor) =>this.replyAvatarClick(comment, reply, floor)}
                   ></RenderCommentList>
                   {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
                   {isNoMore && <NoMore className={layout.noMore} empty={totalCount === 0}></NoMore>}

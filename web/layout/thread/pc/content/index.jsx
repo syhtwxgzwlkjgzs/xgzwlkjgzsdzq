@@ -162,7 +162,7 @@ export default inject('user')(
           )}
         </div>
 
-        <Divider></Divider>
+        <Divider className={topic.divider}></Divider>
 
         {isApproved && (
           <div className={topic.body}>
@@ -192,8 +192,8 @@ export default inject('user')(
               <VideoPlay
                 url={parseContent.VIDEO.mediaUrl}
                 coverUrl={parseContent.VIDEO.coverUrl}
-                width={400}
-                height={200}
+                v_width={parseContent.VIDEO.width || null}
+                v_height={parseContent.VIDEO.height || null}
                 status={parseContent.VIDEO.status}
               />
             )}
@@ -297,7 +297,7 @@ export default inject('user')(
         <div className={topic.footer}>
           <div className={topic.thumbs}>
             <div className={topic.likeReward}>
-              <Tip tipData={tipData} imgs={threadStore?.threadData?.likeReward?.users || []}></Tip>
+              <Tip tipData={tipData} imgs={threadStore?.threadData?.likeReward?.users || []} showCount={10} platform="pc"></Tip>
             </div>
             <span>{threadStore?.threadData?.likeReward?.likePayCount || ''}</span>
           </div>

@@ -4,25 +4,25 @@
     color: $text-color-regular;
 }
 .payFalse {
-    color: var(--color-primary);
+    color: $primary-color;
 }
 
 .moneyTrue {
-    color: var(--color-error);
+    color: $error-color;
 }
 .moneyFalse {
-    color: var(--color-text-primary);
+    color: $text-color-primary;
 }
 
 .withdrawalStatus0 {
-    color: var(--color-primary);
+    color: $primary-color;
 }
 .withdrawalStatus1 {
     color: #4f5a70;
 }
 .withdrawalStatus2 {
-    color: var(--color-error);
+    color: $error-color;
 }
 .withdrawalStatus3 {
-    color: var(--color-success);
+    color: $text-color-primary;
 }

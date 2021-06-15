@@ -5,10 +5,8 @@
   left: 0;
   right: 0;
   margin: 0 rem($margin-4n);
-  padding-bottom: rem($padding-10);
   height: rem(175);
   border-radius: rem($border-radius-small);
-  border: $border-solid-1;
   background-color: var(--color-white);
   &__icon {
     margin: rem($margin-1n);
@@ -24,7 +22,6 @@
 }
 
 .h5 {
-  padding: $padding-2n;
   margin: 0;
   margin-left: 2px;
   position: absolute;
@@ -53,7 +50,7 @@
   position: static !important;
   display: flex;
   flex-flow: wrap;
-  padding: $padding-2n $padding-4n;
+  padding: $padding-10 0 $padding-10 $padding-10;
   width: 100%;
   min-height: 200px;
   height: 100%;

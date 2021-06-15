@@ -23,7 +23,7 @@ export const JUMP_TO_HOME_INDEX = -3004; // 到首页
 export const SITE_CLOSED = -3005; // 站点关闭
 export const JUMP_TO_PAY_SITE = -3006; // 到付费加入页面
 export const JUMP_TO_SUPPLEMENTARY = -3007; // 跳转到扩展字段页
-export const INVALID_TOKEN =  -4002;// token无效
+export const INVALID_TOKEN =  -4002;// 无权限
 export const JUMP_TO_404 = -4004; // 资源不存在
 export const NEED_BIND_WEIXIN_FLAG = -8000; // 需要绑定微信
 export const NEED_BIND_PHONE_FLAG = -8001; // 需要绑定手机
@@ -67,6 +67,7 @@ export const MINI_SITE_JOIN_WHITE_LIST = [
   '/subPages/user/supplementary/index', // 补充信息
   '/subPages/my/index', // 个人中心
   '/subPages/forum/partner-invite/index', // 站点加入
+  '/subPages/my/edit/paypwd/index', // 设置支付密码
 ];
 
 export const PERMISSION_PLATE = [

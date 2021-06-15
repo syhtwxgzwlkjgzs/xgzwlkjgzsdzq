@@ -333,7 +333,7 @@ class Index extends Component {
         }
       },
       // 上传中回调，获取上传进度等信息
-      progress: function (result) {
+      progress (result) {
         console.log('progress');
         console.log(result);
       },
@@ -357,7 +357,7 @@ class Index extends Component {
             setPostData({
               audio: {
                 id: data?.id,
-                mediaUrl: mediaUrl,
+                mediaUrl,
               },
               audioSrc: mediaUrl,
             });
@@ -373,7 +373,7 @@ class Index extends Component {
         // this.scrollerIntoView();
       },
       // 上传错误回调，处理异常
-      error: function (result) {
+      error (result) {
         Taro.showToast({
           title: '上传失败',
           icon: 'none',
@@ -540,13 +540,14 @@ class Index extends Component {
         this.postToast('发布成功', 'success');
         Taro.redirectTo({ url: `/subPages/thread/index?id=${data.threadId}` });
       }
+      this.postToast('发布成功', 'success');
+      Taro.redirectTo({ url: `/subPages/thread/index?id=${data.threadId}` });
+      // }
       return true;
-    } else {
-      Taro.hideLoading();
-      !isDraft && this.postToast(msg);
-      return false;
     }
-
+    Taro.hideLoading();
+    !isDraft && this.postToast(msg);
+    return false;
   }
 
   setIndexPageData = () => {
@@ -688,7 +689,7 @@ class Index extends Component {
     const headTitle = get(site, 'webConfig.setSite.siteName', '');
     return (
       <>
-        <View className={styles['container']}>
+        <View className={styles.container}>
           {/* 自定义顶部导航条 */}
           <View className={styles.topBar} style={navStyle}>
             <Icon name="RightOutlined" onClick={() => this.handlePageJump(false)} />
@@ -698,7 +699,7 @@ class Index extends Component {
           </View>
 
           {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
-          <View className={styles['content']} style={contentStyle} onClick={this.handleContentFocus}>
+          <View className={styles.content} style={contentStyle} onClick={this.handleContentFocus}>
             <View id="thread-post-content">
               <Title
                 value={postData.title}
@@ -725,7 +726,7 @@ class Index extends Component {
                 }}
               />
 
-            <View className={styles['plugin']} onClick={e => e.stopPropagation()}>
+            <View className={styles.plugin} onClick={e => e.stopPropagation()}>
 
               <GeneralUpload type={operationType} audioUpload={(file) => { this.yundianboUpload('audio', file) }}>
                 {video.thumbUrl && (
@@ -752,7 +753,7 @@ class Index extends Component {
           </View>
 
           {/* 插入内容tag展示区 */}
-          <View className={styles['tags']} style={{ display: bottomHeight ? 'none' : 'block' }}>
+          <View className={styles.tags} style={{ display: bottomHeight ? 'none' : 'block' }}>
             {(permissions?.insertPosition?.enable) &&
               <View className={styles['location-bar']}>
                 <Position currentPosition={position} positionChange={(position) => {

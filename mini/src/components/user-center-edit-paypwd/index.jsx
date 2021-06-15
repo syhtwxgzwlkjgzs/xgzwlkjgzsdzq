@@ -51,7 +51,7 @@ class index extends Component {
     if (!this.props.user.mobile) {
       Toast.error({
         content: '需要首先绑定手机号才能进行此操作',
-        duration: 2000
+        duration: 2000,
       });
       return;
     }
@@ -86,10 +86,9 @@ class index extends Component {
         Toast.success({
           content: '设置密码成功',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
         const { type } = getCurrentInstance().router.params;
-        const { id } = this.props?.user;
         if (type === 'paybox') {
           const { id } = this.props?.user;
           try {
@@ -97,16 +96,22 @@ class index extends Component {
             this.props.payBox.visible = true;
             this.props.payBox.password = null;
             await this.props.payBox.getWalletInfo(id);
+            this.props.user.userInfo.canWalletPay = true;
+            Taro.navigateBack({ delta: 1 });
           } catch (error) {
             Toast.error({
               content: '获取用户钱包信息失败',
               duration: 1000,
             });
           }
+          return;
         }
-        Taro.navigateBack({ url: '/subPages/my/edit/index' });
-        this.props.user.userInfo.canWalletPay = true;
-        this.props.payBox.password = null;
+        // 防止跳转过快
+        setTimeout(() => {
+          Taro.redirectTo({ url: '/subPages/my/edit/index' });
+          this.props.user.userInfo.canWalletPay = true;
+          this.props.payBox.password = null;
+        }, 200);
       })
       .catch((err) => {
         Toast.error({
@@ -132,7 +137,7 @@ class index extends Component {
       disabled = !payPassword || payPassword.length !== 6;
     }
     return disabled;
-  }
+  };
 
   // 如果没有设置支付密码 显示设置支付密码
   renderSetPayPwd = () => {
@@ -173,13 +178,11 @@ class index extends Component {
               trim
             />
           </View>
-          {
-            this.props.site?.isSmsOpen && (
-              <View onClick={this.handleGoToFindPayPwd} className={styles.tips}>
-                忘记旧密码？
-              </View>
-            )
-          }
+          {this.props.site?.isSmsOpen && (
+            <View onClick={this.handleGoToFindPayPwd} className={styles.tips}>
+              忘记旧密码？
+            </View>
+          )}
         </View>
       </View>
     );
@@ -187,32 +190,36 @@ class index extends Component {
 
   render() {
     return (
-        <View id={styles.setPayPwdContent}>
-          {this.props.user?.canWalletPay ? this.renderCanPayPwd() : this.renderSetPayPwd()}
-          <View className={classNames(styles.bottom, {
-            [styles.bgBtnColor]: !this.getDisabledWithButton()
-          })}>
-            {this.props.user?.canWalletPay ? (
-              <Button full
-                disabled={this.getDisabledWithButton()}
-                onClick={this.goToResetPayPwd}
-                type={'primary'}
-                className={styles.btn}>
-                下一步
-              </Button>
-            ) : (
-              <Button
-                full
-                disabled={this.getDisabledWithButton()}
-                onClick={this.handleSubmit}
-                type={'primary'}
-                className={styles.btn}
-              >
-                提交
-              </Button>
-            )}
-          </View>
+      <View id={styles.setPayPwdContent}>
+        {this.props.user?.canWalletPay ? this.renderCanPayPwd() : this.renderSetPayPwd()}
+        <View
+          className={classNames(styles.bottom, {
+            [styles.bgBtnColor]: !this.getDisabledWithButton(),
+          })}
+        >
+          {this.props.user?.canWalletPay ? (
+            <Button
+              full
+              disabled={this.getDisabledWithButton()}
+              onClick={this.goToResetPayPwd}
+              type={'primary'}
+              className={styles.btn}
+            >
+              下一步
+            </Button>
+          ) : (
+            <Button
+              full
+              disabled={this.getDisabledWithButton()}
+              onClick={this.handleSubmit}
+              type={'primary'}
+              className={styles.btn}
+            >
+              提交
+            </Button>
+          )}
         </View>
+      </View>
     );
   }
 }

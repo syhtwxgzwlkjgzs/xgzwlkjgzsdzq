@@ -51,11 +51,39 @@ class index extends Component {
     const id = this.props.router.query?.id;
     if (id) {
       if (follow !== 0) {
-        await this.props.user.cancelFollow({ id, type: 1 });
-        await this.props.user.getTargetUserInfo(id);
+        try {
+          const cancelRes = await this.props.user.cancelFollow({ id: id, type: 1 });
+          if (!cancelRes.success) {
+            Toast.error({
+              content: cancelRes.msg || '取消关注失败',
+              duration: 2000,
+            });
+          }
+          await this.props.user.getTargetUserInfo(id);
+        } catch (error) {
+          console.error(error);
+          Toast.error({
+            content: '网络错误',
+            duration: 2000,
+          });
+        }
       } else {
-        await this.props.user.postFollow(id);
-        await this.props.user.getTargetUserInfo(id);
+        try {
+          const followRes = await this.props.user.postFollow(id);
+          if (!followRes.success) {
+            Toast.error({
+              content: followRes.msg || '关注失败',
+              duration: 2000,
+            });
+          }
+          await this.props.user.getTargetUserInfo(id);
+        } catch (error) {
+          console.error(error);
+          Toast.error({
+            content: '网络错误',
+            duration: 2000,
+          });
+        }
       }
     }
   };

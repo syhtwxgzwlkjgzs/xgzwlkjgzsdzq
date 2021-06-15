@@ -6,13 +6,13 @@
   box-sizing: border-box;
 
   .header {
-    font-weight: var(--font-weight-regular);
+    font-weight: $font-weight-regular;
     line-height: rem($font-line-height-primary);
     text-align: left;
     font-size: rem(18);
-    color: var(--color-text-primary);
+    color: $text-color-primary;
     padding-bottom: rem($padding-4n);
-    border-bottom: var(--border-border);
+    border-bottom: $border-solid-1;
   }
 
   .info {
@@ -22,6 +22,9 @@
       display: flex;
       padding: rem($padding-6n) 0;
 
+      .avatar{
+        cursor: pointer;
+      }
       .information {
         padding-left: rem($padding-2n);
         font-weight: normal;
@@ -31,12 +34,13 @@
         .name {
           width: rem(200);
           @include text-ellipsis();
-          color: var(--color-text-primary);
-          font-weight: var(--font-weight-regular);
+          cursor: pointer;
+          color: $text-color-primary;
+          font-weight: $font-weight-regular;
           padding: rem($padding-1n) 0;
         }
         .dynamic {
-          color: var(--color-text-secondary);
+          color: $text-color-secondary;
           font-size: rem($font-size-primary);
         }
       }
@@ -59,10 +63,10 @@
         .number {
           height: rem(28);
           line-height: rem(28);
-          font-weight: var(--font-weight-regular);
+          font-weight: $font-weight-regular;
           font-size: rem($font-size-large);
           text-align: center;
-          color: var(--color-text-primary);
+          color: $text-color-primary;
           padding-top: rem($padding-2n);
         }
       }
@@ -73,7 +77,7 @@
     display: flex;
     justify-content: center;
     padding-top: rem($padding-6n);
-    border-top: var(--border-border);
+    border-top: $border-solid-1;
 
     .follow {
       width: rem(114);
@@ -84,8 +88,8 @@
     .privateLetter {
       width: rem(114);
       height: rem(36);
-      border: 1px solid var(--color-primary);
-      color: var(--color-primary);
+      border: 1px solid $primary-color;
+      color: $primary-color;
     }
 
     .btnItem {
@@ -101,8 +105,8 @@
 
   .is-followed {
     // TODO:token
-    background: var(--color-primary5);
-    border-color: var(--color-primary5);
+    background: $primary-disabled-color;
+    border-color: $primary-disabled-color;
   }
 
   .with-followed {

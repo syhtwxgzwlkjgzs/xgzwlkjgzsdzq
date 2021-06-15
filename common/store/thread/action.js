@@ -100,6 +100,7 @@ class ThreadAction extends ThreadStore {
     this.isPositionToComment = false; // 是否定位到评论位置
     this.isCommentListError = false;
     this.isAuthorInfoError = false;
+    this.scrollDistance = 0;
   }
 
   // 定位到评论位置
@@ -117,6 +118,11 @@ class ThreadAction extends ThreadStore {
   @action
   setThreadDetailLikePayCount(data) {
     this.threadData.likeReward.likePayCount = data;
+  }
+
+  @action
+  setCheckUser = (data) => {
+    this.checkUser = data;
   }
 
   /**

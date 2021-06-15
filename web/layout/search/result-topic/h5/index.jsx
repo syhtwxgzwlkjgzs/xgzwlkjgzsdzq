@@ -60,6 +60,7 @@ class SearchResultTopicH5Page extends React.Component {
           noMore={currentPage >= totalPage}
           requestError={topicsError.isError}
           errorText={topicsError.errorText}
+          showLoadingInCenter={!pageData?.length}
         >
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} searchWhileTyping/>
           <div className={styles.wrapper}>

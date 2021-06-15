@@ -10,7 +10,6 @@ import NoData from '@components/no-data';
 import classnames from 'classnames';
 import { inject, observer } from 'mobx-react';
 
-
 @inject('user')
 @observer
 class UserCenterFans extends React.Component {
@@ -145,6 +144,11 @@ class UserCenterFans extends React.Component {
   followUser = async ({ id: userId }) => {
     const res = await createFollow({ data: { toUserId: userId } });
     if (res.code === 0 && res.data) {
+      Toast.success({
+        content: '操作成功',
+        hasMask: false,
+        duration: 1000,
+      });
       this.setFansBeFollowed({
         id: userId,
         isMutual: res.data.isMutual,
@@ -155,6 +159,11 @@ class UserCenterFans extends React.Component {
         success: true,
       };
     }
+    Toast.error({
+      content: res.msg || '关注失败',
+      hasMask: false,
+      duration: 2000,
+    });
     return {
       msg: res.msg,
       data: null,
@@ -165,6 +174,11 @@ class UserCenterFans extends React.Component {
   unFollowUser = async ({ id }) => {
     const res = await deleteFollow({ data: { id, type: 1 } });
     if (res.code === 0 && res.data) {
+      Toast.success({
+        content: '操作成功',
+        hasMask: false,
+        duration: 1000,
+      });
       this.setFansBeUnFollowed(id);
       return {
         msg: '操作成功',
@@ -172,6 +186,11 @@ class UserCenterFans extends React.Component {
         success: true,
       };
     }
+    Toast.error({
+      content: res.msg || '取消关注失败',
+      hasMask: false,
+      duration: 2000,
+    });
     return {
       msg: res.msg,
       data: null,
@@ -213,9 +232,9 @@ class UserCenterFans extends React.Component {
   // 清理，防止内存泄露
   componentWillUnmount() {
     if (!this.containerRef.current) return;
-    this.containerRef
-      && this.containerRef.current
-      && this.containerRef.current.removeEventListener('scroll', this.loadMore);
+    this.containerRef &&
+      this.containerRef.current &&
+      this.containerRef.current.removeEventListener('scroll', this.loadMore);
   }
 
   // 检查是否满足触底加载更多的条件
@@ -264,9 +283,7 @@ class UserCenterFans extends React.Component {
   };
 
   render() {
-
-    const isNoData = followerAdapter((this.props.dataSource) || this.state.fans).length === 0
-      && !this.state.loading;
+    const isNoData = followerAdapter(this.props.dataSource || this.state.fans).length === 0 && !this.state.loading;
 
     return (
       <div
@@ -278,24 +295,24 @@ class UserCenterFans extends React.Component {
           ...this.props.styles,
         }}
       >
-        {followerAdapter((this.props.dataSource) || this.state.fans).map((user, index) => {
+        {followerAdapter(this.props.dataSource || this.state.fans).map((user, index) => {
           if (index + 1 > this.props.limit) return null;
           return (
-              <div key={user.id}>
-                <UserCenterFriends
-                  id={user.id}
-                  type={this.judgeFollowsStatus(user)}
-                  imgUrl={user.avatar}
-                  withHeaderUserInfo={this.props.isPc}
-                  onContainerClick={this.props.onContainerClick}
-                  userName={user.userName}
-                  userGroup={user.groupName}
-                  followHandler={this.followUser}
-                  itemStyle={this.props.itemStyle}
-                  unFollowHandler={this.unFollowUser}
-                />
-                {this.props.splitElement}
-              </div>
+            <div key={user.id}>
+              <UserCenterFriends
+                id={user.id}
+                type={this.judgeFollowsStatus(user)}
+                imgUrl={user.avatar}
+                withHeaderUserInfo={this.props.isPc}
+                onContainerClick={this.props.onContainerClick}
+                userName={user.userName}
+                userGroup={user.groupName}
+                followHandler={this.followUser}
+                itemStyle={this.props.itemStyle}
+                unFollowHandler={this.unFollowUser}
+              />
+              {this.props.splitElement}
+            </div>
           );
         })}
         {isNoData && <NoData />}

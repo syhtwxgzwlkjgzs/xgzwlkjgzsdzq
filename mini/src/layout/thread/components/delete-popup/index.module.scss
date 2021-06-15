@@ -4,12 +4,12 @@
   padding: $padding-6n;
   width: 364px;
   border-radius: $border-radius-small;
-  background: var(--color-white);
+  background: $white;
   margin: 0 auto;
   box-sizing: border-box;
 
   .deleteTips {
-    color: var(--color-text-primary);
+    color: $text-color-primary;
     .tips {
       width: 100%;
       font-weight: 600;

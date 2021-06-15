@@ -47,6 +47,7 @@ class H5MyPage extends React.Component {
         onRefresh={user.getUserThreads}
         noMore={userThreadsTotalPage <= userThreadsPage}
         showRefresh={!this.state.firstLoading}
+        immediateCheck
       >
         <div className={styles.mobileLayout}>
           <UserCenterHeaderImage />

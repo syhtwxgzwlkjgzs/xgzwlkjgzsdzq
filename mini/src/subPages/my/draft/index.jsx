@@ -18,7 +18,7 @@ import ThreadCenterView from '@components/thread/ThreadCenterView';
 class Index extends Component {
   page = 1;
   perPage = 10;
-  componentDidMount() {
+  componentDidShow() {
     this.fetchData();
   }
 

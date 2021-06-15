@@ -39,21 +39,22 @@ class PartnerInviteH5Page extends React.Component {
     const { forum, router, invite } = this.props;
     try {
       const inviteCode = invite.getInviteCode(router);
-      if (inviteCode) invite.setInviteCode(inviteCode);
+      if (inviteCode) {
+        invite.setInviteCode(inviteCode);
+        const inviteResp = await readUser({
+          params: {
+            pid: inviteCode.length === 32 ? 1 : inviteCode,
+          },
+        });
 
-      const inviteResp = await readUser({
-        params: {
-          pid: inviteCode.length === 32 ? 1 : inviteCode,
-        },
-      });
+        const nickname = get(inviteResp, 'data.nickname', '');
+        const avatar = get(inviteResp, 'data.avatarUrl', '');
 
-      const nickname = get(inviteResp, 'data.nickname', '');
-      const avatar = get(inviteResp, 'data.avatarUrl', '');
-
-      this.setState({
-        invitorName: inviteCode.length === 32 ? '站长' : nickname,
-        invitorAvatar: avatar,
-      });
+        this.setState({
+          invitorName: inviteCode.length === 32 ? '站长' : nickname,
+          invitorAvatar: avatar,
+        });
+      }
 
       forum.setIsLoading(false);
     } catch (e) {

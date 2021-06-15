@@ -3,7 +3,7 @@
 .container {
   padding: rem($padding-4n) 0;
   text-align: center;
-  color: var(--color-text-placeholder);
+  color: $text-color-placeholder;
   font-weight: normal;
   font-size: rem($font-size-primary);
 }
@@ -12,5 +12,5 @@
   height: rem(116);
   line-height: rem(116);
   font-size: rem($font-size-primary);
-  color: var(--color-text-placeholder);
+  color: $text-color-placeholder;
 }

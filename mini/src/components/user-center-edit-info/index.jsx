@@ -39,7 +39,7 @@ class index extends Component {
 
   // 点击取消
   handleCancel = () => {
-    Taro.navigateBack()
+    Taro.navigateBack();
     this.props.user.initEditInfo();
   };
 
@@ -72,8 +72,8 @@ class index extends Component {
           duration: 1000,
         });
         setTimeout(() => {
-          Taro.navigateBack({ url: '/subPages/my/index' });
-        }, 200)
+          Taro.navigateBack();
+        }, 200);
       })
       .catch((error) => {
         Toast.error({
@@ -82,8 +82,8 @@ class index extends Component {
           duration: 1000,
         });
         setTimeout(() => {
-          Taro.navigateBack({ url: '/subPages/my/index' });
-        }, 200)
+          Taro.navigateBack();
+        }, 200);
       });
   }, 300);
 
@@ -108,7 +108,7 @@ class index extends Component {
 
   handleGoToEditAccountPwd = () => {
     Taro.navigateTo({ url: '/subPages/my/edit/pwd/index' });
-  }
+  };
 
   handleGoToEditPayPwd = () => {
     Taro.navigateTo({ url: '/subPages/my/edit/paypwd/index' });
@@ -118,7 +118,7 @@ class index extends Component {
   renderInputNickName = () => {
     const { isClickNickName } = this.state;
     return (
-      <View className={styles.userCenterEditLabel} style={{overflow: 'hidden'}}>
+      <View className={styles.userCenterEditLabel} style={{ overflow: 'hidden' }}>
         <Text className={styles.userLabelName}>昵称</Text>
         <View className={styles.uerInputItem}>
           {isClickNickName ? (
@@ -141,80 +141,78 @@ class index extends Component {
     // 条件都满足时才显示微信
     const IS_WECHAT_ACCESSABLE = this.props.site.wechatEnv !== 'none' && !!this.user.wxNickname;
     return (
-        <View className={styles.userCenterWrapper}>
-          {/* 头部 */}
-          <View><UserCenterEditHeader /></View>
-          {/* middle */}
-          <View className={styles.userCenterEditMiddle}>
-            <View className={styles.title}>个人信息</View>
-            <View onClick={this.handleClickNickName} className={styles.userInputContent}>
-              {this.renderInputNickName()}
-            </View>
-            <View className={styles.userCenterEditItem}>
-              <View className={styles.userCenterEditLabel}>
-                <Text className={styles.userLabelName}>用户名</Text>
-              </View>
-              <View className={styles.userCenterEditValue} onClick={this.handleGoToEditUserName}>
-                <View className={styles.ucText}>{this.user.username}</View>
-                <Icon name="RightOutlined" size={12} />
-              </View>
-            </View>
-            {
-              this.props.site?.isSmsOpen && (
-                <View className={styles.userCenterEditItem}>
-                  <View className={styles.userCenterEditLabel}>
-                    <Text className={styles.userLabelName}>手机号码</Text>
-                  </View>
-                  <View className={styles.userCenterEditValue} onClick={this.handleGoToEditMobile}>
-                    <View className={styles.ucText}>{this.user.mobile || '去绑定'}</View>
-                    <Icon name="RightOutlined" size={12} />
-                  </View>
-                </View>
-              )
-            }
-            <View className={styles.userCenterEditItem}>
-              <View className={styles.userCenterEditLabel}>
-                <Text className={styles.userLabelName}>账户密码</Text>
-              </View>
-              <View className={styles.userCenterEditValue} onClick={this.handleGoToEditAccountPwd}>
-                <View className={styles.ucText}>{this.props.user?.hasPassword ? '修改' : '设置'}</View>
-                <Icon name="RightOutlined" size={12} />
-              </View>
-            </View>
-            <View className={styles.userCenterEditItem}>
-              <View className={styles.userCenterEditLabel}>
-                <Text className={styles.userLabelName}>支付密码</Text>
-              </View>
-              <View className={styles.userCenterEditValue} onClick={this.handleGoToEditPayPwd}>
-                <View className={styles.ucText}>{this.props.user?.canWalletPay ? '修改' : '设置'}</View>
-                <Icon name="RightOutlined" size={12} />
-              </View>
-            </View>
-            {
-              IS_WECHAT_ACCESSABLE && (
-                <View className={styles.userCenterEditItem} style={{ border: 'none' }}>
-                  <View className={styles.userCenterEditLabel}>
-                    <Text className={styles.userLabelName}>微信</Text>
-                    <View className={styles.userCenterEditWeChat}>
-                      <Avatar size="small" image={this.user.wxHeadImgUrl} name={this.user.wxNickname} />
-                      <Text className={styles.wxNickname}>{this.user.wxNickname}</Text>
-                    </View>
-                  </View>
-                </View>
-              )
-            }
-          </View>
-          {/* bottom */}
-          <View className={styles.userCenterEditBtn}>
-            <Button full onClick={this.handleCancel} className={styles.btn}>
-              取消
-            </Button>
-            <Button full className={styles.btn} onClick={this.handleUpdateEditedUserInfo} type="primary">
-              保存
-            </Button>
-          </View>
+      <View className={styles.userCenterWrapper}>
+        {/* 头部 */}
+        <View>
+          <UserCenterEditHeader />
         </View>
-    )
+        {/* middle */}
+        <View className={styles.userCenterEditMiddle}>
+          <View className={styles.title}>个人信息</View>
+          <View onClick={this.handleClickNickName} className={styles.userInputContent}>
+            {this.renderInputNickName()}
+          </View>
+          <View className={styles.userCenterEditItem}>
+            <View className={styles.userCenterEditLabel}>
+              <Text className={styles.userLabelName}>用户名</Text>
+            </View>
+            <View className={styles.userCenterEditValue} onClick={this.handleGoToEditUserName}>
+              <View className={styles.ucText}>{this.user.username}</View>
+              <Icon name="RightOutlined" size={12} />
+            </View>
+          </View>
+          {this.props.site?.isSmsOpen && (
+            <View className={styles.userCenterEditItem}>
+              <View className={styles.userCenterEditLabel}>
+                <Text className={styles.userLabelName}>手机号码</Text>
+              </View>
+              <View className={styles.userCenterEditValue} onClick={this.handleGoToEditMobile}>
+                <View className={styles.ucText}>{this.user.mobile || '去绑定'}</View>
+                <Icon name="RightOutlined" size={12} />
+              </View>
+            </View>
+          )}
+          <View className={styles.userCenterEditItem}>
+            <View className={styles.userCenterEditLabel}>
+              <Text className={styles.userLabelName}>账户密码</Text>
+            </View>
+            <View className={styles.userCenterEditValue} onClick={this.handleGoToEditAccountPwd}>
+              <View className={styles.ucText}>{this.props.user?.hasPassword ? '修改' : '设置'}</View>
+              <Icon name="RightOutlined" size={12} />
+            </View>
+          </View>
+          <View className={styles.userCenterEditItem}>
+            <View className={styles.userCenterEditLabel}>
+              <Text className={styles.userLabelName}>支付密码</Text>
+            </View>
+            <View className={styles.userCenterEditValue} onClick={this.handleGoToEditPayPwd}>
+              <View className={styles.ucText}>{this.props.user?.canWalletPay ? '修改' : '设置'}</View>
+              <Icon name="RightOutlined" size={12} />
+            </View>
+          </View>
+          {IS_WECHAT_ACCESSABLE && (
+            <View className={styles.userCenterEditItem} style={{ border: 'none' }}>
+              <View className={styles.userCenterEditLabel}>
+                <Text className={styles.userLabelName}>微信</Text>
+                <View className={styles.userCenterEditWeChat}>
+                  <Avatar size="small" image={this.user.wxHeadImgUrl} name={this.user.wxNickname} />
+                  <Text className={styles.wxNickname}>{this.user.wxNickname}</Text>
+                </View>
+              </View>
+            </View>
+          )}
+        </View>
+        {/* bottom */}
+        <View className={styles.userCenterEditBtn}>
+          <Button full onClick={this.handleCancel} className={styles.btn}>
+            取消
+          </Button>
+          <Button full className={styles.btn} onClick={this.handleUpdateEditedUserInfo} type="primary">
+            保存
+          </Button>
+        </View>
+      </View>
+    );
   }
 }
 
