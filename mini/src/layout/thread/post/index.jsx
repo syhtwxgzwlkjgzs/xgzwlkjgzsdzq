@@ -522,7 +522,6 @@ class Index extends Component {
 
     // 7 处理请求数据
     const { code, data, msg } = ret;
-    console.log(ret);
     if (code === 0) {
       if (!threadId) {
         this.setState({ threadId: data.threadId, data }); // 新帖首次保存草稿后，获取id
@@ -549,7 +548,7 @@ class Index extends Component {
       return true;
     }
     Taro.hideLoading();
-    !isDraft && this.postToast(msg);
+    (!isDraft || isPay) && this.postToast(msg);
     return false;
   }
 
@@ -804,7 +803,7 @@ class Index extends Component {
                   <Units
                     type='tag'
                     style={{ marginTop: 0, paddingRight: '8px' }}
-                    tagContent={`悬赏金额${(rewardQa.value).toFixed(2)}元\\结束时间 ${rewardQa.times}`}
+                    tagContent={`悬赏金额${Number(rewardQa.value).toFixed(2)}元\\结束时间 ${rewardQa.times}`}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
                     isCloseShow={this.state.canEditReward}
                     onTagRemoveClick={() => { setPostData({ rewardQa: {} }) }}
