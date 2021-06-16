@@ -45,10 +45,13 @@ class CustomHead extends React.Component {
 
 
   render() {
+    const ico = this.props.site?.webConfig?.setSite?.siteFavicon || ''
+
     return (
       <Head>
         <meta name="keywords" content={this.formatKeywords()} />
         <meta name="description" content={this.formatDescription()} />
+        {ico && <link rel="icon" href={ico}></link>}
         <title>{this.formatTitle()}</title>
       </Head>
     );
