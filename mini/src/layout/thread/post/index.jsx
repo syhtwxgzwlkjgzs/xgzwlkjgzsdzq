@@ -350,6 +350,7 @@ class Index extends Component {
                 mediaUrl: mediaUrl,
               },
               audioSrc: mediaUrl,
+              audioRecordStatus: 'uploaded',
             });
           }
           this.resetOperationType();
@@ -413,6 +414,10 @@ class Index extends Component {
     const { threadPost, site } = this.props;
     const { postData, redpacketTotalAmount } = threadPost;
     const { images, video, files, audio } = postData;
+
+    // 判断录音状态
+    if (!this.checkAudioRecordStatus()) return;
+
     if (!(postData.contentText || video.id || audio.id || Object.values(images).length
       || Object.values(files).length)) {
       this.postToast('请至少填写您要发布的内容或者上传图片、附件、视频、语音');
@@ -508,6 +513,7 @@ class Index extends Component {
       // 草稿发布，清空草稿箱缓存数据
       if (isDraft) {
         this.props.index.setDrafts({ totalCount: 0, pageData: [] });
+        return true;
       }
 
       // 非草稿，跳转主题详情页
@@ -546,7 +552,8 @@ class Index extends Component {
       this.postToast('保存成功', 'success');
       setTimeout(() => {
         Taro.hideLoading();
-        this.handlePageJump(true);
+        Taro.redirectTo({ url: `/subPages/my/draft/index` });
+        // this.handlePageJump(true);
       }, 1000);
     } else {
       this.postToast('保存失败');
@@ -596,6 +603,21 @@ class Index extends Component {
     });
   }
 
+  checkAudioRecordStatus() {
+    const { threadPost: { postData } } = this.props;
+    const { audioRecordStatus } = postData;
+    // 判断录音状态
+    if (audioRecordStatus === 'began') {
+      this.postToast('您有录制中的录音未处理，请先结束或撤销录音', 'none', 3000);
+      return false;
+    } else if (audioRecordStatus === 'completed') {
+      this.postToast('您有录制完成的录音未处理，请先上传或撤销录音', 'none', 3000);
+      return false;
+    }
+
+    return true;
+  }
+
   // 处理左上角按钮点击跳路由
   handlePageJump = async (canJump = false, url) => {
     const { postType, threadId } = this.state;
@@ -604,10 +626,12 @@ class Index extends Component {
       return Taro.redirectTo({ url: `/subPages/thread/index?id=${threadId}` });
     }
 
-    const { postData: { contentText } } = this.props.threadPost;
-    if (!canJump && contentText !== '') {
+    if (!this.checkAudioRecordStatus()) return;
+
+    const { postData: { contentText, images, video, files, audio } } = this.props.threadPost;
+    if (!canJump && (contentText || video.id || audio.id || Object.values(images).length || Object.values(files).length)) {
       this.setState({ showDraftOption: true });
-      return
+      return;
     }
 
     url ? Taro.redirectTo({ url }) : Taro.navigateBack();

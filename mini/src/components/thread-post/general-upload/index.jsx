@@ -171,7 +171,21 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
 
   // 录音并上传
   const audioRecord = (type === THREAD_TYPE.voice && !audio.id) && (
-    <AudioRecord duration={60} onUpload={(file) => { audioUpload(file) }} />
+    <AudioRecord
+      duration={10}
+      onUpload={(file) => {
+        audioUpload(file);
+      }}
+      onRecordBegan={() => {
+        setPostData({ audioRecordStatus: 'began' });
+      }}
+      onRecordCompleted={() => {
+        setPostData({ audioRecordStatus: 'completed' });
+      }}
+      onRecordReset={() => {
+        setPostData({ audioRecordStatus: 'reset' });
+      }}
+    />
   );
 
   // 录音音频
