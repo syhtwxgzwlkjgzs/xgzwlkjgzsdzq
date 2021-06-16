@@ -1,8 +1,10 @@
 @import '@common/styles/index.scss';
 
 .container {
-  // overflow: hidden;
+  overflow: hidden;
   background: #eff1f3;
+  // overflow: hidden;
+  // padding-bottom: 65px;
 
   // .wrapper {
   //   height: 100%;
@@ -10,6 +12,17 @@
   //   overflow-y: auto;
   //   overflow-y: overlay;
   // }
+
+  // .list {
+  //   height: 520px;
+  // }
+
+  :global {
+    .ReactVirtualized__Grid__innerScrollContainer {
+      max-width: initial !important;
+    }
+  }
+
   .hideScrollBar {
     scrollbar-width: none; // 火狐浏览器无滑动条
 
@@ -36,7 +49,6 @@
   }
 }
 
-
 .refreshView {
   min-height: rem(40);
   display: flex;
@@ -55,4 +67,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.list {
+  height: calc(100vh - 100px);
 }

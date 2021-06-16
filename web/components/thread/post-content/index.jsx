@@ -105,7 +105,7 @@ const Index = ({
 
   useEffect(() => {
     onContentHeightChange(contentWrapperRef.current.clientHeight);
-  }, content);
+  }, [content]);
 
   return (
     // <div className={styles.container} {...props}>

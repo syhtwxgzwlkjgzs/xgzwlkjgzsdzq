@@ -295,15 +295,13 @@ class IndexH5Page extends React.Component {
         errorText={this.props.errorText}
         disabledList={true}
       >
-        <div>
-          <HomeHeader ref={this.headerRef} />
-        </div>
+        <VList list={pageData} loadNextPage={this.onRefresh}>
+          {/* <HomeHeader ref={this.headerRef} /> */}
 
-        {this.renderTabs()}
+          {this.renderTabs()}
 
-        {this.renderHeaderContent()}
-
-        <VList list={pageData}></VList>
+          {/* {this.renderHeaderContent()} */}
+        </VList>
 
         {/* {pageData?.length > 0 &&
           pageData.map((item, index) => (

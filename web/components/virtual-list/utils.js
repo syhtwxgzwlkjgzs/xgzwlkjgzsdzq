@@ -1,16 +1,24 @@
-
 const typeHeight = {
   header: 70, // 头部
-  title: 38, // 标题
-  image: 300, // 图片
-  goods: 100, // 商品
-  redPacket: 216 + 16, // 红包
-  reward: 216 + 16, // 悬赏
-  video: 200, // 视频
-  audio: 56 + 16, // 音频
-  file: 70, // 附件
-  shareLike: 48, // 分享点赞
-  footer: 52, // 底部
+  title: 22 + 16, // 标题
+  images: {
+    // 图片
+    1: 16 + 260,
+    2: 16 + 260,
+    3: 16 + 256,
+    4: 16 + 260,
+    5: 16 + 241,
+  },
+  goods: 16 + 114, // 商品
+  redPacket: 16 + 193, // 红包
+  reward: 16 + 193, // 悬赏
+  video: 16 + 193, // 视频
+  audio: 16 + 56, // 音频
+  file: 52 + 8, // 附件
+  fileMarginTop: 16,
+  shareLike: 16 + 24 + 8, // 分享点赞
+  footer: 16 + 52, // 底部
+  footerMarginTop: 16,
 };
 
 // 获取不可变的类型高度
@@ -27,7 +35,7 @@ export const getImmutableTypeHeight = (data) => {
 
   // 分享点赞
   if (data.likeReward?.postCount || data.likeReward?.shareCount || data.likeReward?.likePayCount) {
-    height = height + typeHeight.shareLike;
+    height = height + typeHeight.shareLike - typeHeight.footerMarginTop;
   }
 
   const content = data.content;
@@ -39,7 +47,8 @@ export const getImmutableTypeHeight = (data) => {
     const conversionTomID = `${tomId}`;
     if (conversionTomID === '101' && item.body?.length) {
       // 图片
-      height = height + typeHeight.image;
+      const imgNum = item.body?.length;
+      height = height + typeHeight.images[imgNum > 5 ? 5 : imgNum];
     } else if (conversionTomID === '102' && item.body) {
       // 音频
       height = height + typeHeight.audio;
@@ -60,7 +69,7 @@ export const getImmutableTypeHeight = (data) => {
       height = height + typeHeight.reward;
     } else if (conversionTomID === '108' && item.body?.length) {
       // 附件
-      height = height + (typeHeight.file * item.body.length);
+      height = height + typeHeight.fileMarginTop + typeHeight.file * item.body.length;
     }
   });
   return height;

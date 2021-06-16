@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { List, AutoSizer, WindowScroller } from 'react-virtualized';
+import React, { useEffect, useRef, forwardRef, useState } from 'react';
+import { List, WindowScroller, AutoSizer, CellMeasurer, CellMeasurerCache } from 'react-virtualized';
 import ThreadContent from '@components/thread';
 import styles from './index.module.scss';
 import { getImmutableTypeHeight } from './utils';
@@ -19,16 +19,21 @@ import BottomView from './BottomView';
  * @prop {function} resetList 初始化list状态
  */
 
-export default function VList({ hasNextPage, isNextPageLoading, list = [], loadNextPage }) {
+function VList({ hasNextPage, isNextPageLoading, list = [], loadNextPage, ...otherPorps }, ref) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const cache = new CellMeasurerCache({
+    defaultHeight: 150,
+    fixedWidth: true,
+  });
+
   const rowCount = hasNextPage ? list.length + 1 : list.length;
-  const loadMoreRows = isNextPageLoading ? () => {} : loadNextPage;
-  const isRowLoaded = ({ index }) => !hasNextPage || index < list.length;
 
   let listRef = useRef(null);
-  const immutableHeightMap = {}; // 不可变的
+  const immutableHeightMap = {}; // 不可变的高度
+  const variableHeightMap = {}; // 可变的高度
 
-  const variableHeightMap = {}; // 可变的
-
+  // 获取每一行元素的高度
   const getRowHeight = ({ index }) => {
     const data = list[index];
 
@@ -36,23 +41,26 @@ export default function VList({ hasNextPage, isNextPageLoading, list = [], loadN
     const immutableHeight = getImmutableTypeHeight(data);
     immutableHeightMap[index] = immutableHeight;
 
-    const variableHeight = variableHeightMap[index] || 35;
+    const variableHeight = variableHeightMap[index] || 0;
 
     const rowHeight = immutableHeight + variableHeight + 10;
-
-    console.log('rowHeight', rowHeight);
 
     return rowHeight;
   };
 
-  const onContentHeightChange = (height, index) => {
-    variableHeightMap[index] = height;
+  // 重新计算指定的行高
+  const recomputeRowHeights = (index) => {
     listRef.recomputeRowHeights(index);
   };
 
-  const rowRenderer = ({ index, key, style }) => {
-    // console.log(style);
+  const onContentHeightChange = (height, index) => {
+    variableHeightMap[index] = height;
+    recomputeRowHeights(index);
+  };
 
+  // 行渲染
+  const rowRenderer = ({ index, key, style }) => {
+    const { height, ...otherStyles } = style;
     const item = list[index];
     const content = (
       <ThreadContent
@@ -61,67 +69,157 @@ export default function VList({ hasNextPage, isNextPageLoading, list = [], loadN
         showBottomStyle={index !== list.length - 1}
         data={item}
         className={styles.listItem}
+        recomputeRowHeights={() => recomputeRowHeights(index)}
       />
     );
 
+    const newStyle = {
+      height: `${height / 100}rem`,
+      ...otherStyles,
+    };
+
     return (
-      <div key={key} style={style}>
+      <div key={key} style={newStyle} data-height={variableHeightMap[index]} data-index={index} data-key={key}>
         {content}
       </div>
     );
   };
 
-  const autoSizer = (
-    <AutoSizer>
-      {({ width, height }) => (
-        <List
-          ref={(ref) => (listRef = ref)}
-          width={width}
-          autoHeight={true}
-          overscanRowCount={10}
-          rowCount={rowCount}
-          rowRenderer={rowRenderer}
-          rowHeight={getRowHeight}
-        />
-      )}
-    </AutoSizer>
+  // 行渲染
+  const rowRendererCache = ({ index, isScrolling, key, parent, style }) => {
+    const item = list[index];
+
+    return (
+      <CellMeasurer cache={cache} columnIndex={0} key={key} rowIndex={index} parent={parent}>
+        {({ measure }) => (
+          <div key={key} style={style} data-height={variableHeightMap[index]} data-index={index} data-key={key}>
+            <ThreadContent
+              onContentHeightChange={() => measure()}
+              key={index}
+              showBottomStyle={index !== list.length - 1}
+              data={item}
+              className={styles.listItem}
+              recomputeRowHeights={() => recomputeRowHeights(index)}
+            />
+          </div>
+        )}
+      </CellMeasurer>
+    );
+  };
+
+  // 滚动事件
+  const onScroll = ({ scrollTop }) => {
+    const totalHeight = listRef.Grid.getTotalRowsHeight();
+    console.log(scrollTop, totalHeight);
+    if (scrollTop + 300 > totalHeight) {
+      console.log('加载下一页');
+      loadNextPage();
+    }
+  };
+
+  // 滚动事件
+  const onChildScroll = ({ scrollTop, clientHeight, scrollHeight }) => {
+    if (scrollTop + clientHeight >= scrollHeight && !isLoading) {
+      console.log('加载下一页');
+      setIsLoading(true);
+      loadNextPage().finally(() => {
+        setIsLoading(false);
+      });
+    }
+  };
+
+  const cacheListScroller = (
+    <List
+      height={1020}
+      ref={(ref) => (listRef = ref)}
+      style={{ width: '100%' }}
+      width={500}
+      onScroll={onChildScroll}
+      overscanRowCount={10}
+      rowCount={rowCount}
+      deferredMeasurementCache={cache}
+      rowHeight={cache.rowHeight}
+      rowRenderer={rowRendererCache}
+    />
+  );
+
+  const listScroller = (
+    <List
+      height={1020}
+      ref={(ref) => (listRef = ref)}
+      style={{ width: '100%' }}
+      width={500}
+      onScroll={onChildScroll}
+      overscanRowCount={10}
+      rowCount={rowCount}
+      rowRenderer={rowRenderer}
+      rowHeight={getRowHeight}
+    />
   );
 
   const windowScroller = (
-    <WindowScroller>
-      {({ height, width, isScrolling, onChildScroll, scrollTop }) => (
-        <List
-          autoHeight
-          height={height}
-          ref={(ref) => (listRef = ref)}
-          style={{ width: '100%' }}
-          width={width}
-          overscanRowCount={10}
-          rowCount={rowCount}
-          rowRenderer={rowRenderer}
-          rowHeight={getRowHeight}
-        />
+    <WindowScroller onScroll={onScroll}>
+      {({ height, width, isScrolling, registerChild }) => (
+        <div>
+          {otherPorps.children}
+          <div>
+            <List
+              autoHeight={true}
+              height={height}
+              isScrolling={isScrolling}
+              ref={(ref) => (listRef = ref)}
+              style={{ width: '100%', overflowY: 'hidden' }}
+              width={width}
+              onScroll={onChildScroll}
+              overscanRowCount={10}
+              rowCount={rowCount}
+              rowRenderer={rowRenderer}
+              rowHeight={getRowHeight}
+            />
+          </div>
+          <div className={styles.bottomViewBox}>
+            <BottomView></BottomView>
+          </div>
+        </div>
+      )}
+    </WindowScroller>
+  );
+
+  const autoWindowScroller = (
+    <WindowScroller onScroll={onScroll}>
+      {({ height, isScrolling, scrollTop, onChildScroll }) => (
+        <AutoSizer disableHeight={true}>
+          {({ width }) => (
+            <List
+              autoHeight={true}
+              height={height}
+              isScrolling={isScrolling}
+              onScroll={onChildScroll}
+              overscanRowCount={10}
+              ref={(el) => {
+                listRef = el;
+              }}
+              rowCount={rowCount}
+              rowRenderer={rowRenderer}
+              rowHeight={getRowHeight}
+              scrollTop={scrollTop}
+              width={width}
+            />
+          )}
+        </AutoSizer>
       )}
     </WindowScroller>
   );
 
   return (
     <div className={styles.container}>
-      {windowScroller}
-
+      <div>{otherPorps.children}</div>
+      <div className="listWrapper">{listScroller}</div>
       <div className={styles.bottomViewBox}>
         <BottomView></BottomView>
       </div>
     </div>
   );
-
-  //   return (
-  //     <InfiniteLoader isRowLoaded={isRowLoaded} loadMoreRows={loadMoreRows} rowCount={rowCount}>
-  //       {({ onRowsRendered, registerChild }) => (
-  //         <AutoSizer>
-  //           {({ width, height }) => <List width={width} height={height} rowHeight={200} rowRenderer={rowRenderer} />}
-  //         </AutoSizer>
-  //       )}
-  //     </InfiniteLoader>
-  //   );
 }
+
+export default forwardRef(VList);
