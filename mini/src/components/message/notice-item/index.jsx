@@ -105,8 +105,8 @@ class Index extends Component {
   toDetailOrChat = (e, item) => {
     let url = "";
     const { type } = this.props;
-    if (type === 'financial' || type === 'account') {
-      url = `/subPages/thread/index?id=${item.threadId}`
+    if (item.threadId) {
+      url = `/subPages/thread/index?id=${item.threadId}`;
     }
     if (type === 'chat') {
       url = `/subPages/message/index?page=chat&dialogId=${item.dialogId}&nickname=${item.nickname || ''}`;
