@@ -9,7 +9,7 @@ import { inject, observer } from 'mobx-react';
  */
 function withShare(opts = {}) {
   // 设置默认
-  const defalutTitle = 'Discez!Q';
+  const defalutTitle = 'Discuz!Q';
   const defalutPath = 'pages/index/index';
 
   let menus = [];
@@ -33,8 +33,8 @@ function withShare(opts = {}) {
         }
       }
       onShareTimeline() {
-        if (this.$getShareData && typeof this.$getShareData === 'function') {
-          const shareData = this.$getShareData({ from: 'timeLine' });
+        if (this.getShareData && typeof this.getShareData === 'function') {
+          const shareData = this.getShareData({ from: 'timeLine' });
           const { title = defalutTitle, imageUrl = '' } = shareData;
           return {
             title,
@@ -59,8 +59,8 @@ function withShare(opts = {}) {
         }
         const data = res.target?.dataset?.shareData || '';
         let shareData = '';
-        if (this.$getShareData && typeof this.$getShareData === 'function') {
-          shareData = this.$getShareData({ ...data, from: res.from });
+        if (this.getShareData && typeof this.getShareData === 'function') {
+          shareData = this.getShareData({ ...data, from: res.from });
         }
         const { title = defalutTitle, path = defalutPath } = shareData;
         return {

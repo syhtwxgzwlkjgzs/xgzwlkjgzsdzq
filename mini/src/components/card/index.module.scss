@@ -1,0 +1,19 @@
+.container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    .paint{
+        height: 100%;
+        margin-bottom: 48px;
+    }
+    .shareBtn {
+        margin:20px 20px;
+        .btn {
+            color: #fff;
+            font-size: 16px;
+            height: 48px;
+            background-color: #007aff;
+            line-height: 48px;
+        }
+    }
+}

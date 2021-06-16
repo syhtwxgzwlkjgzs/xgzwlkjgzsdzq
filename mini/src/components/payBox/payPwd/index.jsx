@@ -7,6 +7,7 @@ import Divider from '@discuzq/design/dist/components/divider/index';
 import { inject, observer } from 'mobx-react';
 import { View, Text } from '@tarojs/components';
 import { STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants';
+import Taro from '@tarojs/taro';
 
 @inject('site')
 @inject('user')
@@ -76,6 +77,21 @@ class PayPassword extends React.Component {
     this.initState();
   };
 
+  handleForgetPayPwd = () => {
+    if (!this.props.user.mobile) {
+      Toast.error({
+        content: '需要首先绑定手机号才能进行此操作',
+        duration: 2000,
+      });
+      return;
+    }
+    Taro.navigateTo({
+      url: '/subPages/my/edit/find/paypwd/index?type=paybox',
+    });
+    this.props.payBox.step = null;
+    this.props.payBox.visible = false;
+  };
+
   async submitPwa() {
     let { list = [] } = this.state;
     let pwd = list.join('');
@@ -142,9 +158,16 @@ class PayPassword extends React.Component {
   renderDialogPayment = () => {
     const { isShow } = this.state;
     const { options = {} } = this.props?.payBox;
+    const IS_MOBILE_SERVICE_OPEN = this.props.site.isSmsOpen;
+    const IS_USER_BIND_MOBILE = this.props.user?.mobile;
     return (
       <View>
-        <Dialog className={styles.paypwdDialogWrapper} visible={isShow} position="center" maskClosable={true}>
+        <Dialog
+          className={styles.paypwdDialogWrapper}
+          visible={this.props.payBox.step === STEP_MAP.WALLET_PASSWORD}
+          position="center"
+          maskClosable={true}
+        >
           <View className={styles.paypwdDialogContent}>
             <>
               <View className={styles.paypwdTitle}>立即支付</View>
@@ -165,10 +188,11 @@ class PayPassword extends React.Component {
               </View>
               <View className={styles.payList}>{this.renderPwdItem()}</View>
             </>
-            {/* TODO: 忘记支付密码的链接添加 */}
-            <View className={styles.forgetPasswordContainer}>
-              <Text>忘记支付密码?</Text>
+
+            <View className={styles.forgetPasswordContainer} onClick={this.handleForgetPayPwd}>
+              {IS_MOBILE_SERVICE_OPEN && IS_USER_BIND_MOBILE && <Text>忘记支付密码?</Text>}
             </View>
+
             {/* 关闭按钮 */}
             <View className={styles.payBoxCloseIcon} onClick={this.handleCancel}>
               <Icon name="CloseOutlined" size={12} />

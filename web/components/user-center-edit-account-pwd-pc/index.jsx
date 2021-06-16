@@ -23,7 +23,7 @@ export default class index extends Component {
     if (!this.props.user.mobile) {
       Toast.error({
         content: '需要首先绑定手机号才能进行此操作',
-        duration: 2000
+        duration: 2000,
       });
       return;
     }
@@ -32,27 +32,27 @@ export default class index extends Component {
 
   // 输入旧密码
   handleSetOldPwd = (e) => {
-    if (trimLR(e.target.value) === "" || !e.target.value) {
+    if (trimLR(e.target.value) === '' || !e.target.value) {
       this.props.user.oldPassword = null;
-      return
+      return;
     }
     this.props.user.oldPassword = e.target.value;
   };
 
   // 设置账户密码
   handleSetPwd = (e) => {
-    if (trimLR(e.target.value) === "" || !e.target.value) {
+    if (trimLR(e.target.value) === '' || !e.target.value) {
       this.props.user.newPassword = null;
-      return
+      return;
     }
     this.props.user.newPassword = e.target.value;
   };
 
   // 确认新密码
   hadleNewPasswordRepeat = (e) => {
-    if (trimLR(e.target.value) === "" || !e.target.value) {
+    if (trimLR(e.target.value) === '' || !e.target.value) {
       this.props.user.newPasswordRepeat = null;
-      return
+      return;
     }
     this.props.user.newPasswordRepeat = e.target.value;
   };
@@ -66,7 +66,7 @@ export default class index extends Component {
       Toast.error({
         content: '两次密码输入有误',
         hasMask: false,
-        duration: 1000,
+        duration: 2000,
       });
       this.props.user.clearUserAccountPassword();
       return;
@@ -78,7 +78,7 @@ export default class index extends Component {
           Toast.success({
             content: '修改密码成功',
             hasMask: false,
-            duration: 1000,
+            duration: 2000,
           });
           this.props.onClose && this.props.onClose();
           this.props.user.clearUserAccountPassword();
@@ -87,7 +87,7 @@ export default class index extends Component {
           Toast.error({
             content: err.Message || '修改密码失败, 请重新设置',
             hasMask: false,
-            duration: 1000,
+            duration: 2000,
           });
           this.props.user.clearUserAccountPassword();
         });
@@ -98,7 +98,7 @@ export default class index extends Component {
           Toast.success({
             content: '设置密码成功',
             hasMask: false,
-            duration: 1000,
+            duration: 2000,
           });
           this.props.onClose && this.props.onClose();
           this.props.user.clearUserAccountPassword();
@@ -108,7 +108,7 @@ export default class index extends Component {
           Toast.error({
             content: err.Message || '设置密码失败, 请重新设置',
             hasMask: false,
-            duration: 1000,
+            duration: 2000,
           });
           this.props.user.clearUserAccountPassword();
         });
@@ -116,9 +116,9 @@ export default class index extends Component {
   }, 300);
 
   /**
- * 获取禁用按钮状态
- * @returns true 表示禁用 false 表示不禁用
- */
+   * 获取禁用按钮状态
+   * @returns true 表示禁用 false 表示不禁用
+   */
   getDisabledWithButton = () => {
     const oldPassword = this.props.user?.oldPassword;
     const newPassword = this.props.user?.newPassword;
@@ -126,7 +126,7 @@ export default class index extends Component {
 
     let isSubmit = false;
     if (this.props.user?.hasPassword) {
-      isSubmit = !oldPassword || !newPassword || !newPasswordRepeat
+      isSubmit = !oldPassword || !newPassword || !newPasswordRepeat;
     } else {
       isSubmit = !newPassword || !newPasswordRepeat;
     }
@@ -136,13 +136,19 @@ export default class index extends Component {
   handleClose = () => {
     this.props.onClose();
     this.props.user.clearUserAccountPassword();
-  }
+  };
 
   renderHasNoPassword = () => {
     return (
       <>
         <div className={styles.inputItem}>
-          <Input trim onChange={this.handleSetPwd} mode="password" placeholder="请设置密码" value={this.props.user?.newPassword} />
+          <Input
+            trim
+            onChange={this.handleSetPwd}
+            mode="password"
+            placeholder="请设置密码"
+            value={this.props.user?.newPassword}
+          />
         </div>
         <div className={styles.inputItem}>
           <Input
@@ -161,10 +167,22 @@ export default class index extends Component {
     return (
       <>
         <div className={styles.inputItem}>
-          <Input trim onChange={this.handleSetOldPwd} value={this.props.user?.oldPassword} mode="password" placeholder="请输入旧密码" />
+          <Input
+            trim
+            onChange={this.handleSetOldPwd}
+            value={this.props.user?.oldPassword}
+            mode="password"
+            placeholder="请输入旧密码"
+          />
         </div>
         <div className={styles.inputItem}>
-          <Input trim value={this.props.user?.newPassword} onChange={this.handleSetPwd} mode="password" placeholder="请输入新密码" />
+          <Input
+            trim
+            value={this.props.user?.newPassword}
+            onChange={this.handleSetPwd}
+            mode="password"
+            placeholder="请输入新密码"
+          />
         </div>
         <div className={styles.inputItem}>
           <Input
@@ -189,13 +207,18 @@ export default class index extends Component {
               <Icon onClick={this.handleClose} name="CloseOutlined" size={12} color={'#8490A8'} />
             </div>
             {this.props.user?.hasPassword ? this.renderHasPassword() : this.renderHasNoPassword()}
-            {(this.props.site?.isSmsOpen && this.props.user?.hasPassword) && (
+            {this.props.site?.isSmsOpen && this.props.user?.hasPassword && (
               <div onClick={this.handleResetPwd} className={styles.tips}>
                 忘记旧密码？
               </div>
             )}
             <div className={styles.bottom}>
-              <Button onClick={this.handleSubmit} disabled={this.getDisabledWithButton()} type={'primary'} className={styles.btn}>
+              <Button
+                onClick={this.handleSubmit}
+                disabled={this.getDisabledWithButton()}
+                type={'primary'}
+                className={styles.btn}
+              >
                 提交
               </Button>
             </div>
