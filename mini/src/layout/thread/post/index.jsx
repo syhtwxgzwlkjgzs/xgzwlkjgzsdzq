@@ -608,7 +608,7 @@ class Index extends Component {
     const { audioRecordStatus } = postData;
     // 判断录音状态
     if (audioRecordStatus === 'began') {
-      this.postToast('您有录制中的录音未处理，请先结束或撤销录音', 'none', 3000);
+      this.postToast('您有录制中的录音未处理，请先上传或撤销录音', 'none', 3000);
       return false;
     } else if (audioRecordStatus === 'completed') {
       this.postToast('您有录制完成的录音未处理，请先上传或撤销录音', 'none', 3000);
