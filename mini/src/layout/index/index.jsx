@@ -216,7 +216,7 @@ class IndexH5Page extends React.Component {
         onScrollToUpper={this.handleScrollToUpper}
         curr='home'
         pageName='home'
-        preload={1000}
+        preload={3000}
         requestError={threadError.isError}
         errorText={threadError.errorText}
       >
