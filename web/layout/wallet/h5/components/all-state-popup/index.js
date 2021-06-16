@@ -63,10 +63,10 @@ export class index extends Component {
             </div>
           </div>
           <div className={styles.footer}>
+            <div className={`${styles.cancel} ${styles.button}`} onClick={handleCancel}> 取消 </div>
             <Button className={styles.button} onClick={() => {
               this.handleSubmit(choice);
             }} type="primary">确定</Button>
-            <div className={styles.footerBtn} onClick={handleCancel}> 取消 </div>
           </div>
         </div>
       </Popup>
