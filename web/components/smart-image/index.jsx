@@ -3,7 +3,7 @@ import isServer from '@common/utils/is-server';
 
 const SmartImg = ({type, src, onClick}) => {
 
-    let newSrc = src;
+    let newSrc = src.split('?')[0];
     
     if ( !isServer() ) {
         const viewWidth = window.screen.width;
@@ -30,7 +30,6 @@ const SmartImg = ({type, src, onClick}) => {
         }
 
     }
-    console.log(newSrc)
     return (
       <img src={newSrc} onClick={onClick}/>
     );
