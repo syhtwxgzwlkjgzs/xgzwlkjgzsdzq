@@ -67,13 +67,14 @@ class Index extends React.Component {
 
     // 重置错误信息
     this.props.index.resetErrorInfo()
-    
     this.props.index.getReadCategories();
     this.props.index.getRreadStickList(categoryIds);
     this.props.index.getReadThreadList({
       sequence, 
       filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort } 
     });
+
+    this.dispatch('moreData');
   }
 
   componentDidShow() {
