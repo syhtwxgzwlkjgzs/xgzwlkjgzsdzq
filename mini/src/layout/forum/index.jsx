@@ -56,7 +56,7 @@ class ForumH5Page extends React.Component {
     const siteAuthor = get(site, 'webConfig.setSite.siteAuthor', '');
     return (
       <>
-        <HomeHeader showToolbar />
+        <HomeHeader showToolbar fullScreenTitle="站点信息" />
         <View className={layout.content}>
           {/* 站点介绍 start */}
           <View className={layout.list}>
