@@ -2,7 +2,7 @@ import React, { Component, Suspense } from 'react';
 import Header from '@components/header';
 import UserCenterEditHeader from '../../user-center-edit-header/index';
 import BaseLaout from '@components/base-layout';
-import { Button, Icon, Input, Toast } from '@discuzq/design';
+import { Button, Spin, Input, Toast } from '@discuzq/design';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import { inject, observer } from 'mobx-react';
@@ -51,6 +51,7 @@ class index extends Component {
           ),
           onSave: async () => {
             try {
+              this.saveInputEditor('昵称');
               await this.props.user.updateEditedUserNickname();
               Toast.success({
                 content: '更新昵称成功',
@@ -98,6 +99,7 @@ class index extends Component {
           ),
           onSave: async () => {
             try {
+              this.saveInputEditor('用户名');
               await this.props.user.updateUsername();
               Toast.success({
                 content: '更新用户名成功',
@@ -140,6 +142,7 @@ class index extends Component {
           ),
           onSave: async () => {
             try {
+              this.saveInputEditor('个性签名');
               await this.props.user.updateEditedUserSignature();
               Toast.success({
                 content: '更新个性签名成功',
@@ -275,6 +278,17 @@ class index extends Component {
     this.user = this.props.user || {};
   }
 
+  saveInputEditor = (name) => {
+    const { editorConfig } = this.state;
+    const targetConfig = editorConfig.filter((item) => item.name === name);
+    if (targetConfig.length) {
+      targetConfig[0].isConfirm = true;
+      this.setState({
+        editorConfig: [...editorConfig],
+      });
+    }
+  };
+
   openInputEditor(name) {
     const { editorConfig } = this.state;
     const targetConfig = editorConfig.filter((item) => item.name === name);
@@ -291,6 +305,7 @@ class index extends Component {
     const targetConfig = editorConfig.filter((item) => item.name === name);
     if (targetConfig.length) {
       targetConfig[0].display = 'show';
+      targetConfig[0].isConfirm = false;
       this.setState({
         editorConfig: [...editorConfig],
       });
@@ -317,8 +332,13 @@ class index extends Component {
               <div className={item.display === 'edit' ? styles.pcEditAutographCall : styles.pcEditAutographBox}>
                 {item.inputEditor()}
                 <div className={styles.preservation}>
-                  <Button className={styles.preservationButton} type="primary" onClick={() => item.onSave()}>
-                    保存
+                  <Button
+                    disabled={item.isConfirm}
+                    className={styles.preservationButton}
+                    type="primary"
+                    onClick={() => item.onSave()}
+                  >
+                    {item.isConfirm ? <Spin type="spinner">保存中...</Spin> : '保存'}
                   </Button>
                   <Button className={styles.preservationButton2} onClick={() => item.onCancel()}>
                     取消
@@ -339,7 +359,7 @@ class index extends Component {
       pcEditHeight = getClientHeight() - 60;
     }
     return (
-      <div className={styles.pcEditBox}>
+      <div className={styles.pcEditBox} id={styles.pcEditContainer}>
         <Header className={styles.pcEditHeaser} />
         <div className={styles.pcEditContent}>
           <div className={styles.pcEdit} style={{ height: pcEditHeight }}>
