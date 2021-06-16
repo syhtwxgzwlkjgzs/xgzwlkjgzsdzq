@@ -62,10 +62,11 @@ function withShare(opts = {}) {
         if (this.getShareData && typeof this.getShareData === 'function') {
           shareData = this.getShareData({ ...data, from: res.from });
         }
-        const { title = defalutTitle, path = defalutPath } = shareData;
+        const { title = defalutTitle, path = defalutPath, imageUrl = '' } = shareData;
         return {
           title,
           path,
+          imageUrl,
         };
       }
 
