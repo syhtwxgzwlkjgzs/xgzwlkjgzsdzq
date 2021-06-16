@@ -6,8 +6,10 @@ import { observer, inject } from 'mobx-react';
 import Button from '@discuzq/design/dist/components/button/index';
 import Page from '@components/page';
 import layout from './index.module.scss';
+import clearLoginStatus from '@common/utils/clear-login-status';
+import Router from '@discuzq/sdk/dist/router';
 
-
+@inject('user')
 @inject('site')
 @inject('commonLogin')
 @observer
@@ -42,6 +44,24 @@ class Index extends Component {
 
   componentDidHide() { }
 
+  logout() {
+    clearLoginStatus();
+    this.props.user.removeUserInfo();
+    this.props.site.getSiteInfo();
+    Router.reLaunch({ url: '/pages/index/index' });
+  }
+
+  gotoIndex() {
+    redirectTo({
+      url: `/pages/index/index`
+    });
+  }
+
+  operBtnAction() {
+    const { statusCode } = getCurrentInstance().router.params;
+    statusCode === '2' ? this.gotoIndex() : this.logout();
+  }
+
   render() {
     const { commonLogin } = this.props;
     const { statusCode, statusMsg } = getCurrentInstance().router.params;
@@ -58,11 +78,7 @@ class Index extends Component {
                   { commonLogin.statusMessage || commonLogin.setStatusMessage(statusCode, statusMsg) }
                 </Text>
             </View>
-            <Button className={layout.button} type="primary" onClick={() => {
-              redirectTo({
-                url: `/pages/index/index`
-              });
-            }}>
+            <Button className={layout.button} type="primary" onClick={() => {this.operBtnAction()}}>
               {
                 statusCode === '2'
                   ? `跳转到首页${commonLogin.statusCountDown ? `（倒计时 ${commonLogin.statusCountDown} s）` : ''}`

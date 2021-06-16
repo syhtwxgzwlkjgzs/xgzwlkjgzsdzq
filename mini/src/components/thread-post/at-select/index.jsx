@@ -72,7 +72,7 @@ class AtSelect extends Component {
   updateKeywords = (val = "") => {
     this.setState({
       keywords: val,
-      checkUser: [],
+      // checkUser: [], 此处不清理已选项
       page: 1,
       finish: false,
     });
