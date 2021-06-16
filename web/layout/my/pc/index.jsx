@@ -85,7 +85,7 @@ class PCMyPage extends React.Component {
             this.props.site?.isSmsOpen && (
               <div className={styles.userInfoWrapper}>
                 <div className={styles.userInfoKey}>手机号码</div>
-                <div className={styles.userInfoValue}>{this.props.user.mobile}</div>
+                <div className={styles.userInfoValue}>{this.props.user.mobile || '未绑定'}</div>
               </div>
             )
           }
