@@ -24,6 +24,7 @@ export default function calcVideoSize({
                 height = (height * (parentWidth / calc_width).toFixed(2)).toFixed(2);
             }
         } else {
+            const percent = (calc_width / calc_height).toFixed(2);
             const parentWidth = (parentWidth * 0.75).toFixed(2);
             width = (calc_height / calc_width).toFixed(2);
             height = (parentWidth * percent).toFixed(2);

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ImagePreviewer, Flex } from '@discuzq/design';
 import { noop } from '../utils';
 import styles from './index.module.scss';
-
+import SmartImg from '@components/smart-image';
 const { Col, Row } = Flex;
 
 // TODO 图片懒加载
@@ -139,7 +139,7 @@ const One = ({ bigImages, onClick, style }) => {
   const item = bigImages[0];
   return (
     <div className={styles[style]}>
-      <img src={item.thumbUrl} onClick={() => onClick(item.id)} />
+      <SmartImg type={item.fileType} src={item.thumbUrl} onClick={() => onClick(item.id)} />
     </div>
   );
 };
@@ -148,7 +148,7 @@ const Two = ({ bigImages, onClick, style }) => (
   <Row gutter={4} className={`${styles[style]} ${styles.row}`}>
     {bigImages.map((item, index) => (
       <Col span={6} className={styles.col} key={index}>
-        <img src={item.thumbUrl} onClick={() => onClick(item.id)} />
+        <SmartImg type={item.fileType} src={item.thumbUrl} onClick={() => onClick(item.id)} />
       </Col>
     ))}
   </Row>
@@ -157,13 +157,13 @@ const Two = ({ bigImages, onClick, style }) => (
 const Four = ({ bigImages, smallImages, onClick, style }) => (
   <Row gutter={4} className={styles[style]}>
     <Col span={8} className={styles.col}>
-      <img src={bigImages[0].thumbUrl} onClick={() => onClick(bigImages[0].id)} />
+      <SmartImg type={bigImages[0].fileType} src={bigImages[0].thumbUrl} onClick={() => onClick(bigImages[0].id)} />
     </Col>
     <Col span={4} className={styles.col}>
       <Row gutter={4} className={styles.smallRow}>
         {smallImages.map((item, index) => (
           <Col span={12} key={index} className={styles.smallCol}>
-            <img src={item.thumbUrl} onClick={() => onClick(item.id)} />
+            <SmartImg type={item.fileType} src={item.thumbUrl} onClick={() => onClick(item.id)} />
           </Col>
         ))}
       </Row>
@@ -174,12 +174,12 @@ const Four = ({ bigImages, smallImages, onClick, style }) => (
 const Three = ({ bigImages, smallImages, onClick, style }) => (
   <div className={styles[style]}>
     <div className={styles.bigImages}>
-      <img src={bigImages[0].thumbUrl} onClick={() => onClick(bigImages[0].id)} />
+      <SmartImg type={bigImages[0].fileType} src={bigImages[0].thumbUrl} onClick={() => onClick(bigImages[0].id)} />
     </div>
     <Row gutter={4} className={styles.smallImages}>
       {smallImages.map((item, index) => (
         <Col span={6} className={styles.col} key={index}>
-          <img src={item.thumbUrl} onClick={() => onClick(item.id)} />
+          <SmartImg type={item.fileType} src={item.thumbUrl} onClick={() => onClick(item.id)} />
         </Col>
       ))}
     </Row>
@@ -191,14 +191,14 @@ const Five = ({ bigImages, smallImages, onClick, style, imgData = [], onClickMor
     <Row gutter={4} className={styles.bigImages}>
       {bigImages.map((item, index) => (
         <Col span={6} className={styles.col} key={index}>
-          <img src={item.thumbUrl} onClick={() => onClick(item.id)} />
+          <SmartImg type={item.fileType} src={item.thumbUrl} onClick={() => onClick(item.id)} />
         </Col>
       ))}
     </Row>
     <Row gutter={4} className={styles.smallImages}>
       {smallImages.map((item, index) => (
         <Col span={4} className={styles.col} key={index}>
-          <img src={item.thumbUrl} onClick={() => onClick(item.id)} />
+          <SmartImg type={item.fileType} src={item.thumbUrl} onClick={() => onClick(item.id)} />
           {imgData?.length > 5 && index === smallImages.length - 1 && (
             <div className={styles.modalBox} onClick={onClickMore}>{`+${imgData.length - 5}`}</div>
           )}
@@ -207,3 +207,5 @@ const Five = ({ bigImages, smallImages, onClick, style, imgData = [], onClickMor
     </Row>
   </div>
 );
+
+

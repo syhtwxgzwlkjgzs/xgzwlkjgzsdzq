@@ -5,12 +5,13 @@ import Header from '@components/header';
 import List from '@components/list';
 import NoData from '@components/no-data';
 import ThreadContent from '@components/thread';
-import { Spin } from '@discuzq/design';
+import { Spin, Toast } from '@discuzq/design';
 import styles from './index.module.scss';
 import classnames from 'classnames';
 
 @inject('site')
 @inject('index')
+@inject('thread')
 @observer
 class Index extends React.Component {
   constructor(props) {
@@ -26,6 +27,29 @@ class Index extends React.Component {
       height: window.outerHeight - 94,
     });
   }
+
+  handleUnFavoriteItem = async (item) => {
+    const { index } = this.props;
+    const { pageData = [] } = index.threads || {};
+    const params = {
+      id: item.threadId,
+      isFavorite: false,
+    };
+    const favoriteResp = await this.props.thread.updateFavorite(params);
+    if (favoriteResp.success === false) {
+      Toast.error({
+        content: favoriteResp.msg || '取消收藏失败',
+        duration: 2000,
+      });
+    } else {
+      Toast.success({
+        content: '取消收藏成功',
+        duration: 2000,
+      });
+      pageData.splice(pageData.indexOf(item), 1);
+      this.props.index.setThreads({ pageData: [...pageData] });
+    }
+  };
 
   render() {
     const { index, page, totalPage } = this.props;
@@ -50,10 +74,16 @@ class Index extends React.Component {
             onRefresh={this.props.dispatch}
             noMore={page > totalPage}
           >
-            <div className={styles.collectSplitLine}/>
+            <div className={styles.collectSplitLine} />
             {pageData?.map((item, index) => (
               <div className={styles.listItem} key={index}>
-                <ThreadContent data={item} isShowIcon />
+                <ThreadContent
+                  data={item}
+                  isShowIcon
+                  onClickIcon={async () => {
+                    this.handleUnFavoriteItem(item);
+                  }}
+                />
               </div>
             ))}
           </List>

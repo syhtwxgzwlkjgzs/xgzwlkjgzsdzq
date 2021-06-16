@@ -9,13 +9,13 @@
   
   .topBar {
     position: absolute;
-    top: 0;
+    top: 5px;
     left: 0;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px;
+    padding: $padding-4n;
     box-sizing: border-box;
     :global(.dzq-icon){
       font-size: $font-size-middle-extra !important;
@@ -35,14 +35,18 @@
     .customCapsule{
       font-size: $font-size-middle;
       line-height: $font-line-height-base;
-      color: $white;
       display: flex;
       align-items: center;
       flex-direction: row;
       :global(.dzq-icon){
         font-size: $font-size-middle-extra !important;
         font-weight: bold;
+        color: $white;
       }
+    }
+    .fullScreenTitle {
+      font-size: $font-size-middle;
+      color: $white;
     }
     .goback{
       transform: rotate(180deg);
@@ -73,7 +77,7 @@
     align-items: center;
     justify-content: center;
     .left{
-      margin-right: 16px;
+      margin-right: $margin-4n;
     }
     .left,.right{
       font-weight: normal;
@@ -101,14 +105,14 @@
     }
     .text {
       font-size: $font-size-middle;
-      line-height: 24px;
+      line-height: $font-line-height-primary;
       color: $white;
       font-weight: normal;
       opacity: 0.6;
     }
     .shareText {
       font-size: $font-size-middle;
-      line-height: 24px;
+      line-height: $font-line-height-primary;
       color: $white;
       font-weight: normal;
     }

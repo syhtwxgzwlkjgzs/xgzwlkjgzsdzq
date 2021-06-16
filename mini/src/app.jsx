@@ -11,13 +11,15 @@ import setTitle from '@common/utils/setTitle';
 import {
   JUMP_TO_404,
   INVALID_TOKEN,
+  TOKEN_FAIL,
   JUMP_TO_LOGIN,
   JUMP_TO_REGISTER,
   JUMP_TO_AUDIT,
   JUMP_TO_HOME_INDEX,
   SITE_CLOSED,
   JUMP_TO_PAY_SITE,
-  JUMP_TO_SUPPLEMENTARY
+  JUMP_TO_SUPPLEMENTARY,
+  SITE_NO_INSTALL
 } from '@common/constants/site';
 import './app.scss';
 
@@ -126,6 +128,7 @@ class App extends Component {
         });
         return false;
       case INVALID_TOKEN:// token无效
+      case TOKEN_FAIL:// token无效
         clearLoginStatus();
         this.initSiteData(); // 重新获取数据
         return false;
@@ -149,6 +152,9 @@ class App extends Component {
         break;
       case JUMP_TO_SUPPLEMENTARY:// 跳转到扩展字段页
         Router.push({ url: '/subPages/user/supplementary/index' });
+        break;
+      case SITE_NO_INSTALL:// 未安装站点
+        Router.push({ url: '/subPages/no-install/index' });
         break;
       default: 
         Router.redirect({url: '/subPages/500/index'});

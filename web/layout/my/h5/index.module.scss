@@ -2,11 +2,12 @@
 
 .mobileLayout {
     background: $white;
+    width: 100%
 }
 
 .spinLoading {
     display: flex;
-    width: 100%;
+    width: calc(100% - 16);
     justify-content: center;
     align-items: center;
     padding: rem($padding-4n);

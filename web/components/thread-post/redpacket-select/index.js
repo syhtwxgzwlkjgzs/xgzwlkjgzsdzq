@@ -63,7 +63,7 @@ const Index = ({ data, confirm, cancel, pc, visible }) => {
     }
 
     if (parseInt(number) > 100 || parseInt(number) < 1) {
-      Toast.warning({ content: '可输入红包个数为1 ~ 200个', duration: 2000 });
+      Toast.warning({ content: '可输入红包个数为1 ~ 100个', duration: 2000 });
       return false;
     }
 
