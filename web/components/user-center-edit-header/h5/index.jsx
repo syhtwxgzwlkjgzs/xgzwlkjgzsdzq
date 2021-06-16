@@ -17,8 +17,8 @@ export default class index extends Component {
       isClickSignature: false, // 是否点击签名
       isUploadAvatarUrl: false, // 是否上传头像
       isUploadBackgroundUrl: false, // 是否上传背景图片
-      inputWidth: '100%'
-    }
+      inputWidth: '100%',
+    };
     this.user = this.props.user || {};
     this.hiddenElement = React.createRef(null);
   }
@@ -53,7 +53,7 @@ export default class index extends Component {
           Toast.success({
             content: '上传头像成功',
             hasMask: false,
-            duration: 1000,
+            duration: 2000,
           });
           this.setState({
             isUploadAvatarUrl: false,
@@ -64,7 +64,7 @@ export default class index extends Component {
         Toast.error({
           content: err.Msg || '上传头像失败',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
         this.setState({
           isUploadAvatarUrl: false,
@@ -82,7 +82,7 @@ export default class index extends Component {
 
     const IS_IMG_AUTO_ROTATE = await detectImageAutomaticRotation();
 
-      fixedImg = await fixImageOrientation(fileList.target.files[0]);
+    fixedImg = await fixImageOrientation(fileList.target.files[0]);
     this.props.user
       .updateBackground(fixedImg)
       .then((res) => {
@@ -91,7 +91,7 @@ export default class index extends Component {
           Toast.success({
             content: '上传成功',
             hasMask: false,
-            duration: 1000,
+            duration: 2000,
           });
           this.setState({
             isUploadBackgroundUrl: false,
@@ -102,7 +102,7 @@ export default class index extends Component {
         Toast.error({
           content: err.Msg || '上传背景图失败',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
         this.setState({
           isUploadBackgroundUrl: false,
@@ -114,17 +114,17 @@ export default class index extends Component {
   handleClickSignature = () => {
     this.setState({
       isClickSignature: !this.state.isClickSignature,
-      inputWidth: this.hiddenElement.current?.offsetWidth
-    })
-  }
+      inputWidth: this.hiddenElement.current?.offsetWidth,
+    });
+  };
 
   // 签名change事件
   handleChangeSignature = (e) => {
     this.props.user.editSignature = e.target.value;
     this.setState({
-      inputWidth: this.hiddenElement.current?.offsetWidth
-    })
-  }
+      inputWidth: this.hiddenElement.current?.offsetWidth,
+    });
+  };
 
   handleBlurSignature = (e) => {
     this.props.user.editSignature = e.target.value;
@@ -134,7 +134,7 @@ export default class index extends Component {
   };
 
   render() {
-    const { isUploadAvatarUrl, isUploadBackgroundUrl, inputWidth } = this.state
+    const { isUploadAvatarUrl, isUploadBackgroundUrl, inputWidth } = this.state;
     return (
       <>
         <div className={styles.userCenterEditHeader}>
@@ -181,21 +181,29 @@ export default class index extends Component {
           <div className={styles.userCenterEditDec}>
             <div className={styles.userCenterEditDecItem}>
               <Icon className={styles.compileIcon} onClick={this.handleClickSignature} name="CompileOutlined" />
-              {
-                this.state.isClickSignature ? (
-                  // true ? (
-                  <div 
-                    style={{width: inputWidth + 10, minWidth: !this.user.editSignature && '180px'}}
-                  
-                  >
-                    <Input trim className={styles.userSignatureInput} maxLength={50} focus={true} onChange={this.handleChangeSignature} onBlur={this.handleBlurSignature} value={this.user.editSignature} placeholder="这个人很懒，什么也没留下~" />
-                  </div>
-                ) : (
-                  <div style={{ minWidth: !this.user.editSignature && '180px'}} className={styles.text}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</div>
-                )
-              }
+              {this.state.isClickSignature ? (
+                // true ? (
+                <div style={{ width: inputWidth + 10, minWidth: !this.user.editSignature && '180px' }}>
+                  <Input
+                    trim
+                    className={styles.userSignatureInput}
+                    maxLength={50}
+                    focus={true}
+                    onChange={this.handleChangeSignature}
+                    onBlur={this.handleBlurSignature}
+                    value={this.user.editSignature}
+                    placeholder="这个人很懒，什么也没留下~"
+                  />
+                </div>
+              ) : (
+                <div style={{ minWidth: !this.user.editSignature && '180px' }} className={styles.text}>
+                  {this.user.editSignature || '这个人很懒，什么也没留下~'}
+                </div>
+              )}
               {/* 隐藏span--获取该内容宽度--赋值给input */}
-              <div style={{maxWidth: '80%'}} ref={this.hiddenElement} className={styles.hiddenElement}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</div>
+              <div style={{ maxWidth: '80%' }} ref={this.hiddenElement} className={styles.hiddenElement}>
+                {this.user.editSignature || '这个人很懒，什么也没留下~'}
+              </div>
             </div>
           </div>
         </div>

@@ -132,7 +132,7 @@ const Index = (props) => {
           </div>
 
           {
-            showRight && (
+            (right || showRight) && (
               <div className={styles.right}>
                 {typeof (right) === 'function' ? right({ ...props }) : right}
               </div>

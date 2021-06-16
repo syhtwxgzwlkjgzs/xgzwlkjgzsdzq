@@ -5,8 +5,9 @@ import Toast from '@discuzq/design/dist/components/toast/index';
 import Button from '@discuzq/design/dist/components/button/index';
 import Divider from '@discuzq/design/dist/components/divider/index';
 import Spin from '@discuzq/design/dist/components/spin/index';
+import Checkbox from '@discuzq/design/dist/components/checkbox/index';
 import styles from './index.module.scss';
-import { View, Text, Checkbox } from '@tarojs/components';
+import { View, Text } from '@tarojs/components';
 import { ORDER_TRADE_TYPE } from '../../../../../common/constants/payBoxStoreConstants';
 import throttle from '@common/utils/thottle.js';
 
@@ -200,7 +201,7 @@ export default class AmountRecognized extends Component {
             full
             disabled={isLoading}
           >
-            {isLoading ? <Spin type="spinner">支付中...</Spin> : `支付 ￥${this.transMoneyToFixed(amount)}`}
+            {isLoading ? <Spin type="spinner">生成订单中...</Spin> : `支付 ￥${this.transMoneyToFixed(amount)}`}
           </Button>
         </View>
         {/* 关闭按钮 */}

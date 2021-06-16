@@ -71,7 +71,7 @@ class UserCenterFans extends React.Component {
       console.error(fansRes);
       Toast.error({
         content: fansRes.msg,
-        duration: 1000,
+        duration: 2000,
       });
       return;
     }
@@ -147,7 +147,7 @@ class UserCenterFans extends React.Component {
       Toast.success({
         content: '操作成功',
         hasMask: false,
-        duration: 1000,
+        duration: 2000,
       });
       this.setFansBeFollowed({
         id: userId,
@@ -177,7 +177,7 @@ class UserCenterFans extends React.Component {
       Toast.success({
         content: '操作成功',
         hasMask: false,
-        duration: 1000,
+        duration: 2000,
       });
       this.setFansBeUnFollowed(id);
       return {
