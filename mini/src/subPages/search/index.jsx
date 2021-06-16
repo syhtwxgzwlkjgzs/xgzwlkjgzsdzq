@@ -4,6 +4,8 @@ import IndexH5Page from '../../layout/search';
 import Page from '@components/page';
 import Taro from '@tarojs/taro'
 import withShare from '@common/utils/withShare/withShare'
+import { priceShare } from '@common/utils/priceShare';
+
 @inject('search')
 @inject('topic')
 @inject('index')
@@ -17,12 +19,17 @@ class Index extends React.Component {
   constructor(props) {
     super(props);
   }
+  async componentDidMount() {
+    const { search } = this.props;
+    Taro.hideHomeButton();
+    await search.getSearchData();
+  }
   getShareData (data) {
     if(data.from === 'menu') {
       return {
       }
     }
-    const { title, path, comeFrom, threadId } = data
+    const { title, path, comeFrom, threadId, isAnonymous, isPrice} = data
     if(comeFrom && comeFrom === 'thread') {
       const { user } = this.props
       this.props.index.updateThreadShare({ threadId }).then(result => {
@@ -33,16 +40,12 @@ class Index extends React.Component {
       }
     });
     }
-    return {
+    return priceShare({isAnonymous, isPrice, path}) || {
       title,
       path
     }
   }
-  async componentDidMount() {
-    const { search } = this.props;
-    Taro.hideHomeButton();
-    await search.getSearchData();
-  }
+  
   render() {
     return (
       <Page>

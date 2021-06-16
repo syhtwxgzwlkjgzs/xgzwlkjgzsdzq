@@ -28,7 +28,7 @@ class IndexH5Page extends React.Component {
       isFinished: true,
       fixedTab: false,
       navBarHeight: 64,
-      headerHeight: 182,
+      headerHeight: 210,
       isClickTab: false
     };
     this.tabsRef = createRef();
@@ -53,12 +53,12 @@ class IndexH5Page extends React.Component {
       navBarHeight = 44 + height;
 
       const headerId = this.headerRef?.current?.domRef?.current?.uid;
-      let headerHeight = 182 - navBarHeight || 0;
+      let headerHeight = 210;
       if(headerId) { // 获取Header的高度
         Taro.createSelectorQuery()
         .select(`#${headerId}`)
         .boundingClientRect((rect) => {
-          headerHeight = rect?.height - navBarHeight || 182;
+          headerHeight = rect?.height || 210;
         }).exec();
       }
       this.setState({ headerHeight });
@@ -128,13 +128,13 @@ class IndexH5Page extends React.Component {
 
   handleScroll = (e) => {
     const { scrollTop = 0 } = e?.detail || {};
-    const { navBarHeight } = this.state;
+    const { headerHeight } = this.state;
     const { fixedTab } = this.state;
 
     // 只需要滚到临界点触发setState，而不是每一次滚动都触发
-    if(!fixedTab && scrollTop >= navBarHeight) {
+    if(!fixedTab && scrollTop >= headerHeight) {
       this.setState({fixedTab: true});
-    } else if(fixedTab && scrollTop < navBarHeight) {
+    } else if(fixedTab && scrollTop < headerHeight) {
       this.setState({fixedTab: false});
     }
 

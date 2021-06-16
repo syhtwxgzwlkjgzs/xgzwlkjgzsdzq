@@ -61,14 +61,14 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
 
   const renderMenuTitle = ({ name, threadCount }) => (
     <div className={styles.subMenuBox}>
-      <span>{name}</span>
+      <span className={styles.ellipsis}>{name}</span>
       {threadCount !== 0 && <span className={styles.span}>{name === '全部' ? totalThreads : threadCount}</span>}
     </div>
   );
 
   const renderSubMenuTitle = ({ name, threadCount }) => (
     <div>
-      <span>{name}</span>
+      <span className={styles.ellipsis}>{name}</span>
       {threadCount !== 0 && <span className={styles.subSpan}>{threadCount}</span>}
     </div>
   );

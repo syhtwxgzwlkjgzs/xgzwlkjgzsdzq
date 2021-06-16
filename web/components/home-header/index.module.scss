@@ -4,6 +4,9 @@
   overflow: hidden;
   height: rem(165);
   position: relative;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+
   :global(.dzq-popup__container) {
     bottom: 0;
   }

@@ -24,6 +24,8 @@
   background: $body-bg-color;
   overflow-y: auto;
   border-radius: rem(5);
+  scrollbar-width: none; /* Firefox */
+  scrollbar-color: transparent transparent; /* Firefox */
   ::-webkit-scrollbar {
     display: none; /* Chrome Safari */
   }
