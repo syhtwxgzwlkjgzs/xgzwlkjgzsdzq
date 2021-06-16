@@ -94,6 +94,12 @@
   font-size: rem($font-size-base);
 }
 
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 70%;
+}
+
 .verticalScrollbar::-webkit-scrollbar {
   width: rem(4);
   height: rem(8);
