@@ -116,7 +116,7 @@ const List = forwardRef(({
       onScroll={handleScroll}
       scrollTop={scrollTop}
       onScrollToUpper={handleScrollToUpper}
-      upperThreshold={182}
+      upperThreshold={210}
     >
       {children}
       {onRefresh && showRefresh && !isError && <RefreshView noMore={noMore} />}

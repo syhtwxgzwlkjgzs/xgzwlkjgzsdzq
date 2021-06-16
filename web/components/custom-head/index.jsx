@@ -2,6 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { get } from '@common/utils/get';
 import Head from 'next/head';
+import { evalScript } from './utils';
 
 
 // 默认取站点配置，当有特殊配置时，通过传入title和keywords可以组合和替换
@@ -11,6 +12,12 @@ import Head from 'next/head';
 class CustomHead extends React.Component {
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    // 添加统计
+    const siteStat = this.props.site?.webConfig?.setSite?.siteStat || ''
+    evalScript(siteStat)
   }
 
   formatTitle() {
@@ -45,10 +52,13 @@ class CustomHead extends React.Component {
 
 
   render() {
+    const ico = this.props.site?.webConfig?.setSite?.siteFavicon || ''
+
     return (
       <Head>
         <meta name="keywords" content={this.formatKeywords()} />
         <meta name="description" content={this.formatDescription()} />
+        {ico && <link rel="icon" href={ico}></link>}
         <title>{this.formatTitle()}</title>
       </Head>
     );

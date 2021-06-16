@@ -13,26 +13,19 @@ const index = ({setShow, tipData, data, index, getShareData, shareNickname, shar
         comeFrom:'thread',
         threadId,
         title:threadTitle,
-        path: `/subPages/thread/index?id=${threadId}`
+        path: `/subPages/thread/index?id=${threadId}`,
+        isAnonymous: thread.isAnonymous,
+        isPrice: thread.displayTag.isPrice,
     }
     const handleClick = () => {
         setShow(false)
         const {nickname} = thread.user || ''
         const {avatar} = thread.user || ''
-        if(thread.isAnonymous && nickname !== '匿名用户') {
+        if(thread.isAnonymous) {
             getShareData({nickname, avatar, threadId})
             thread.user.nickname = '匿名用户'
             thread.user.avatar = ''
         }
-        if(thread?.displayTag?.isPrice) {
-            const {freewords} = thread
-            let content = thread.content.text
-            getShareContent({content, threadId})
-            const length = parseInt(content.length * freewords)
-            content = `${content.substring(0,length)}...`
-            thread.content.text = content
-        }
-
     }
     const CreateCard = () => {
         setShow(false)
@@ -57,10 +50,6 @@ const index = ({setShow, tipData, data, index, getShareData, shareNickname, shar
                 thread.user.nickname = shareNickname
                 thread.user.avatar = shareAvatar
                 getShareData({})
-            }
-            if(thread.displayTag.isPrice) {
-                thread.content.text = shareContent
-                getShareContent({})
             }
         }
     })
