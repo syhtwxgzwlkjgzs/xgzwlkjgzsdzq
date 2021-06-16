@@ -124,7 +124,7 @@ class Index extends Component {
   toDetailOrChat = (e, item) => {
     if (e.target.nodeName === 'A') return;
     const { type } = this.props;
-    if (type === 'financial' || type === 'account') {
+    if (item.threadId) {
       Router.push({ url: `/thread/${item.threadId}` });
     }
     if (type === 'chat') {

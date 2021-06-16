@@ -110,6 +110,7 @@
         .dzq-richText--mini {
           overflow: hidden;
           word-break: break-all;
+          line-height: 20px !important;
 
           .dzq-a {
             display: inline;
@@ -139,6 +140,12 @@
       margin-left: $margin-2n;
       .middle {
         line-height: 22px;
+
+        :global{
+          .dzq-richText--mini {
+            font-size: $font-size-primary;
+          }
+        }
       }
     }
     /*财务详情*/
