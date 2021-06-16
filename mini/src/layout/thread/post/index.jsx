@@ -219,7 +219,7 @@ class Index extends Component {
       // }
     });
 
-    if (item.type !== 'emoji') {
+    if (item.type !== THREAD_TYPE.emoji) {
       this.setState({
         showEmoji: false
       });
@@ -240,11 +240,11 @@ class Index extends Component {
         this.resetOperationType();
         break;
       case THREAD_TYPE.redPacket:
+        this.resetOperationType();
         if (!this.state.canEditRedpacket) {
           return this.postToast('再编辑时不可操作红包');
         }
         nextRoute = '/subPages/thread/selectRedpacket/index';
-        this.resetOperationType();
         break;
       case THREAD_TYPE.paid:
         this.setState({ showPaidOption: true });
@@ -280,7 +280,7 @@ class Index extends Component {
         if (postData.anonymous) this.props.threadPost.setPostData({ anonymous: 0 });
         else this.props.threadPost.setPostData({ anonymous: 1 });
         break;
-      case 'emoji':
+      case THREAD_TYPE.emoji:
         this.setState({
           showEmoji: !this.state.showEmoji
         });
