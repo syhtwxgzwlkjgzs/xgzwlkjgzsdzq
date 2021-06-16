@@ -184,9 +184,10 @@ class ThreadCreate extends React.Component {
 
   // 顶部导航栏点击后拦截回调
   handlePageJump = (link = '') => {
-    const { postType, threadPost: {postData: { contentText }} } = this.props;
-  
-    if (postType !== "isEdit" && contentText !== '') {
+    const { postType, threadPost: { postData: { contentText, images, video, files, audio } } } = this.props;
+
+    if (!this.props.checkAudioRecordStatus()) return;
+    if (postType !== "isEdit" && (contentText || video.id || audio.id || Object.values(images).length || Object.values(files).length)) {
       this.props.handleSetState({ draftShow: true, jumpLink: link });
       return;
     }
@@ -202,7 +203,7 @@ class ThreadCreate extends React.Component {
     const { threadPost, user, site } = this.props;
     const { threadExtendPermissions, permissions } = user;
     const { webConfig = {} } = site;
-    const { postData } = threadPost;
+    const { postData, setPostData } = threadPost;
 
     const { emoji, topic, atList, currentDefaultOperation, currentAttachOperation, categoryChooseShow } = this.props;
 
@@ -259,9 +260,21 @@ class ThreadCreate extends React.Component {
             && !postData.audio.mediaUrl)
             && (
               <div className={styles['audio-record']} id="dzq-post-audio-record" onClick={e => e.stopPropagation()}>
-                <AudioRecord duration={60} onUpload={(blob) => {
-                  this.props.handleAudioUpload(blob);
-                }} />
+                <AudioRecord
+                  duration={60}
+                  onUpload={(blob) => {
+                    this.props.handleAudioUpload(blob);
+                  }}
+                  onRecordBegan={() => {
+                    setPostData({ audioRecordStatus: 'began' });
+                  }}
+                  onRecordCompleted={() => {
+                    setPostData({ audioRecordStatus: 'completed' });
+                  }}
+                  onRecordReset={() => {
+                    setPostData({ audioRecordStatus: 'reset' });
+                  }}
+                />
               </div>
             )}
 
