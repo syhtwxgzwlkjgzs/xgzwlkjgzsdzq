@@ -56,7 +56,8 @@ class Index extends Component {
   // 针对财务消息，获取后缀提示语
   getFinancialTips = (item) => {
     if (item.type === 'rewarded') {
-      return '打赏了你';
+      if (item.orderType === 3 || item.orderType === 7) return '支付了你';
+      return '打赏了你'
     }
     if (item.type === 'receiveredpacket') {
       return '获取红包';
