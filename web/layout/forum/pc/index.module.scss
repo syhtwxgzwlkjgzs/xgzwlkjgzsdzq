@@ -143,14 +143,16 @@
     border-right: 5px solid $border-color;
     border-bottom: 5px solid $border-color;
     box-sizing: border-box;
+    border-left: $border-solid-1;
+    border-top: $border-solid-1;
   }
   .plate_left_label {
-    width: max-content;
     border-right: $border-solid-1;
     border-bottom: $border-solid-1;
   }
   .plate_td {
     @include item;
+    white-space: nowrap;
     font-weight: normal;
     font-size: $font-size-base;
     line-height: $font-line-height-xs;
@@ -163,21 +165,30 @@
   .plate_th {
     background: $body-bg-color;
     height: 36px;
+    .plate_td {
+      border-top: none;
+      &:nth-child(1) {
+        border-left: none;
+      }
+    }
   }
   .plate_tr {
     height: 48px;
     .plate_td {
       padding: $padding-14;
+      &:nth-child(1) {
+        border-left: none;
+      }
     }
   }
   .my_permission_common {
     width: 100%;
     height: 343px;
     box-sizing: border-box;
-    border-right: 5px solid $border-color;
     margin-top: $margin-4n;
     display: flex;
-    border-bottom: $border-solid-1;
+    border: $border-solid-1;
+    border-right: 5px solid $border-color;
     border-radius: $border-radius-small;
     overflow: hidden;
   }
@@ -187,8 +198,6 @@
     width: 84px;
     justify-content: center;
     align-items: center;
-    border-top: $border-solid-1;
-    border-left: $border-solid-1;
   }
   .permission_common_right {
     @include scrollbar;
@@ -216,6 +225,9 @@
     border: $border-solid-1;
     border-right: none;
     border-bottom: none;
+    &:nth-child(1) {
+      border-top: none;
+    }
   }
   .permission_common_value {
     flex: 1;
@@ -229,13 +241,9 @@
     justify-content: center;
     border: $border-solid-1;
     border-bottom: none;
-  }
-  .permission_common_scroll {
-    width: 18px;
-    background: $body-bg-color;
-    border-radius: 0 $border-radius-small $border-radius-small 0;
-    border: $border-solid-1;
-    border-bottom: none;
+    &:nth-child(1) {
+      border-top: none;
+    }
   }
   @mixin scroll_border {
     position: absolute;

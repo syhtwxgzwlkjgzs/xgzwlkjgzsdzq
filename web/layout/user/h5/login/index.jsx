@@ -2,6 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import isWeiXin from '@common/utils/is-weixin';
+import { Toast } from '@discuzq/design';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import '@discuzq/design/dist/styles/index.scss';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
@@ -18,6 +19,9 @@ import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util'
 class Login extends React.Component {
   componentDidMount() {
     const { site, invite, router } = this.props;
+    this.target = Toast.loading({
+      duration: 0,
+    });
 
     if (site.wechatEnv !== 'none') {
       if (isWeiXin()) {
@@ -37,6 +41,10 @@ class Login extends React.Component {
     }
 
     router.replace('/user/username-login');
+  }
+
+  componentWillUnmount() {
+    this?.target?.hide();
   }
 
   render() {

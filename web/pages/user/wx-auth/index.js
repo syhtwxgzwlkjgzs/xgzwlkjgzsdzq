@@ -30,6 +30,10 @@ class WeixinAuth extends React.Component {
     if (inviteCode) invite.setInviteCode(inviteCode);
 
     try {
+      this.target = Toast.loading({
+        content: '微信登录中...',
+        duration: 0,
+      });
       const res = await h5WechatCodeLogin({
         timeout: 10000,
         params: {
@@ -95,6 +99,9 @@ class WeixinAuth extends React.Component {
         error,
       };
     }
+  }
+  componentWillUnmount() {
+    this?.target?.hide();
   }
 
 

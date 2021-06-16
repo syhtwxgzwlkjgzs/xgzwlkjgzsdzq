@@ -1,6 +1,7 @@
 import React from 'react';
 import isServer from '@common/utils/is-server';
 import isWeiXin from '@common/utils/is-weixin';
+import { Toast } from '@discuzq/design';
 import { inject } from 'mobx-react';
 
 export default function HOCWeixin(Component) {
@@ -14,9 +15,18 @@ export default function HOCWeixin(Component) {
       if (isServer() || !this.props.site.isOffiaccountOpen) return;
       // 如果在微信环境内，则直接拉起登录
       if (isWeiXin()) {
+        this.target = Toast.loading({
+          content: '微信登录中...',
+          duration: 0,
+        });
         this.state.isWeiXin = true;
         const redirectEncodeUrl = encodeURIComponent(`${window.location.origin}/user/wx-auth`);
         window.location.href = `${window.location.origin}/apiv3/users/wechat/h5.oauth?redirect=${redirectEncodeUrl}`;
+      }
+    }
+    componentWillUnmount() {
+      if (isWeiXin()) {
+        this?.target?.hide();
       }
     }
 

@@ -17,19 +17,29 @@
 
 .content{
   padding: 0 rem($padding-4n);
+  box-sizing: border-box;
   .list{
     border-bottom: $border-solid-1;
     height: rem(52);
     font-size: rem($font-size-base);
     font-weight: normal;
+    display: flex;
+    justify-content: space-between;
     .label{
       @include heightMiddle;
-      float: left;
       color: $text-color-regular;
+      white-space: nowrap;
+      flex: 1;
     }
     .right{
       @include heightMiddle;
-      float: right;
+      @include text-ellipsis;
+      flex: 1;
+      display: flex;
+      place-content: flex-end;
+    }
+    .list_text_ellipsis {
+      @include text-ellipsis;
     }
   }
   .forum_agent{
