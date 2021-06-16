@@ -17,7 +17,7 @@ class Index extends React.Component {
   constructor(props) {
     super(props);
   }
-  $getShareData (data) {
+  getShareData (data) {
     if(data.from === 'menu') {
       return {
       }

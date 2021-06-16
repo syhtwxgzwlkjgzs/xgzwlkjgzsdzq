@@ -23,7 +23,7 @@ class Index extends React.Component {
       this.page = 1;
       await search.getThreadList({ search: keyword });
   }
-  $getShareData (data) {
+  getShareData (data) {
     const shareData = data.target?.dataset?.shareData
     if(data.from === 'menu') {
       return {

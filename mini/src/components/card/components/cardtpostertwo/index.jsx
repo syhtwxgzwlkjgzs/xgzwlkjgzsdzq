@@ -53,7 +53,6 @@ export default class Simple extends React.Component {
             },
           // 二维码登录
             {
-              // url: '../../../../public/dzq-img/login-ORcode.png',
               url: obj.codeUrl,
               x: 40,
               y: 912 - obj.contentHeight,
@@ -92,11 +91,27 @@ export default class Simple extends React.Component {
               zIndex:10,
               baseLine: 'top'
             },
+            // 标题
+            {
+              text: obj.title,
+              color: '#303133',
+              width: 453,
+              height: 339,
+              y: 159,
+              x: 40,
+              fontSize: 30,
+              fontWeight: 'bold',
+              lineNum: 1,
+              lineHeight: 33,
+              textAlign: 'left',
+              zIndex:10,
+              baseLine: 'top'
+            },
             // 内容
             {
               text: `${obj.content}`,
               x: 40,
-              y: 161,
+              y: 240,
               width: 620,
               height: 520 - obj.contentHeight,
               fontSize: 28,

@@ -40,7 +40,9 @@ const BaseLayout = (props) => {
     pageName, 
     onClickTabBar = () => {}
   } = props;
-  const [height, setHeight] = useState(600);
+
+  const [showShadow, setShowShadow] = useState(false); // 用于修补ios视频全屏后会跳到顶部
+  const [osPlatform, setOsPlatform] = useState("");
 
   // 避免小程序通过手势返回上一页时，无法重置参数
   useDidShow(() => {
@@ -60,14 +62,21 @@ const BaseLayout = (props) => {
   // }, [])
 
   useEffect(() => {
-    if (baselayout.videoFullScreenStatus === "offFullScreen" &&
-        pageName && baselayout[pageName] > 0) {
-      setTimeout(() => {
-        listRef.current.jumpToScrollTop(baselayout[pageName]);
-        baselayout.videoFullScreenStatus = "";
-      }, 0);
+    if(!osPlatform) {
+      const res = Taro.getSystemInfoSync();
+      const { platform } = res;
+      setOsPlatform(platform);
     }
-  }, [baselayout.videoFullScreenStatus])
+
+    if(baselayout.videoFullScreenStatus === "inFullScreen") {
+      if(osPlatform === 'ios') setShowShadow(true); // 增加一层黑色遮罩用于推出全屏后跳转
+    } else if (baselayout.videoFullScreenStatus === "offFullScreen" &&
+        pageName && baselayout[pageName] > 0) {
+      listRef.current.jumpToScrollTop(baselayout[pageName]);
+      if(osPlatform === 'ios') setShowShadow(false); // 跳转完成后移除遮罩
+      baselayout.videoFullScreenStatus = "";
+    }
+  }, [osPlatform, baselayout.videoFullScreenStatus])
 
   const handleScroll = throttle((e) => {
 
@@ -111,6 +120,7 @@ const BaseLayout = (props) => {
 
   return (
     <View className={styles.container}>
+        {showShadow && <View className={styles.shadow}></View> }
         {showHeader && <Header />}
         {
           showPullDown ? (
@@ -128,7 +138,7 @@ const BaseLayout = (props) => {
           )
         }
 
-        {showTabBar && <BottomNavBar onClick={onClickTabBar} placeholder curr={curr} />}
+        {!showShadow && showTabBar && <BottomNavBar onClick={onClickTabBar} placeholder curr={curr} />}
     </View>
   );
 };

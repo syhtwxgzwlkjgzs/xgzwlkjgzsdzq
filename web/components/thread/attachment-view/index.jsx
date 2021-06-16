@@ -2,8 +2,8 @@ import React, { useState }from 'react';
 import { inject, observer } from 'mobx-react';
 import { Icon, Toast, Spin } from '@discuzq/design';
 import { extensionList, isPromise, noop } from '../utils';
-import { copyToClipboard } from '@common/utils/copyToClipboard';
 import { throttle } from '@common/utils/throttle-debounce.js';
+import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 
 import styles from './index.module.scss';
 
@@ -74,7 +74,7 @@ const Index = ({
 
       const attachmentId = item.id;
       fetchDownloadUrl(threadId, attachmentId, (url) => {
-        window.open(url);
+        window.location.href = url;
         Toast.info({ content: '下载成功' });
       });
 
@@ -86,17 +86,18 @@ const Index = ({
     }
   };
 
-  const onLinkShare = (item) => {
+  const onLinkShare = (item, e) => {
     if (!isPay) {
       if(!item || !threadId) return;
 
       const attachmentId = item.id;
-      fetchDownloadUrl(threadId, attachmentId, (url) => {
-        copyToClipboard(url);
-        Toast.success({
-          content: '链接复制成功',
-          duration: 1000,
-        });
+      fetchDownloadUrl(threadId, attachmentId, async (url) => {
+        setTimeout(() => {
+          h5Share({url: url});
+          Toast.success({
+            content: '链接复制成功',
+          });
+        }, 300);
       });
 
     } else {

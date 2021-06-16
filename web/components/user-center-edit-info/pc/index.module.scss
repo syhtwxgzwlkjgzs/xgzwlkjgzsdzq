@@ -145,14 +145,18 @@
 .pcEditNicknameImgs {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  height: rem(70);
 }
 .pcEditNicknameImg {
   width: rem(28);
   height: rem(28);
-  margin: rem(26) rem($margin-3n) 0 0;
+  margin-right: rem($margin-3n);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .pcEditWeiName {
-  padding-top: rem(29);
   font-weight: normal;
   font-size: rem($font-size-middle);
   line-height: rem(22);
