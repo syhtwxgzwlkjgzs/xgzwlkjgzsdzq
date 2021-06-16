@@ -108,7 +108,6 @@ class HomeHeader extends React.Component {
       bgColor,
       hideInfo = false,
       hideLogo = false,
-      hideMinibar = true,
       showToolbar = false,
       style = {},
       digest = null,
