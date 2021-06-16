@@ -61,7 +61,7 @@ const Index = ({ message, user }) => {
         avatar: chatPerson?.avatar,
         userId: chatPerson?.id,
         nickname: chatPerson?.nickname,
-        unreadCount: unreadCount,
+        unreadCount: dialogMessage?.unreadCount,
       });
     });
 
