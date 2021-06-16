@@ -195,6 +195,8 @@ class Index extends Component {
 
   // 点击发帖插件时回调，如上传图片、视频、附件或艾特、话题等
   handlePluginClick(item) {
+    if (!this.checkAudioRecordStatus()) return;
+
     console.log(`item`, item)
     const { postData } = this.props.threadPost;
     // 匹配附件、图片、语音上传

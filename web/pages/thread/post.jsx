@@ -236,6 +236,8 @@ class PostPage extends React.Component {
    * @param {object} data 要设置的数据
    */
   handleAttachClick = (item, data) => {
+    if (!this.checkAudioRecordStatus()) return;
+
     const { isPc } = this.props.site;
     if (!isPc && item.type === THREAD_TYPE.voice) {
       const u = navigator.userAgent.toLocaleLowerCase();
@@ -310,6 +312,9 @@ class PostPage extends React.Component {
 
   // 表情等icon
   handleDefaultIconClick = (item, child, data) => {
+    if (!this.checkAudioRecordStatus()) return;
+
+
     const { postData } = this.props.threadPost;
 
     if (item.type === THREAD_TYPE.redPacket && !this.state.canEditRedpacket) {
