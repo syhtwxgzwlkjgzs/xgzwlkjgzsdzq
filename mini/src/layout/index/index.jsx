@@ -205,6 +205,10 @@ class IndexH5Page extends React.Component {
     const { threads = {}, currentCategories, filter, threadError } = index;
     const { currentPage, totalPage, pageData } = threads || {};
 
+    const ONE_THREAD_MIN_HEIGHT = 160;
+    let preloadHeight = pageData?.length * ONE_THREAD_MIN_HEIGHT || 2000;
+    preloadHeight = preloadHeight < 10000 ? preloadHeight : 10000;
+
     return (
       <BaseLayout
         showHeader={false}
@@ -216,7 +220,7 @@ class IndexH5Page extends React.Component {
         onScrollToUpper={this.handleScrollToUpper}
         curr='home'
         pageName='home'
-        preload={1000}
+        preload={preloadHeight}
         requestError={threadError.isError}
         errorText={threadError.errorText}
       >
