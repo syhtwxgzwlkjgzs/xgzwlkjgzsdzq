@@ -53,6 +53,11 @@ class SiteStore {
     return get(this.webConfig, 'setSite.siteName');
   }
 
+  // 站点介绍
+  @computed get siteIntroduction() {
+    return get(this.webConfig, 'setSite.siteIntroduction', '暂无介绍');
+  }
+
   // 注册协议开关
   @computed get isAgreementRegister() {
     return get(this.webConfig, 'agreement.register', true);
