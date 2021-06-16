@@ -67,8 +67,8 @@ export default class Redpacket extends Component {
       return false;
     }
 
-    if (parseInt(number) < 1 || parseInt(number) > 200) {
-      this.redToast('可输入红包个数为1 ~ 200个');
+    if (parseInt(number) < 1 || parseInt(number) > 100) {
+      this.redToast('可输入红包个数为1 ~ 100个');
       return false;
     }
 
