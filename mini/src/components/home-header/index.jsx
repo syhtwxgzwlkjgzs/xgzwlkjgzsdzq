@@ -108,7 +108,6 @@ class HomeHeader extends React.Component {
       bgColor,
       hideInfo = false,
       hideLogo = false,
-      hideMinibar = false,
       showToolbar = false,
       style = {},
       digest = null,
@@ -123,8 +122,6 @@ class HomeHeader extends React.Component {
     };
 
     return (
-      <>
-        {hideMinibar ? <></> : <View className={styles.topBarForMini} style={this.getBgHeaderStyle(bgColor)}></View>}
         <View
           ref={this.domRef}
           className={`${styles.container} ${mode ? styles[`container_mode_${mode}`] : ''} ${
@@ -200,7 +197,6 @@ class HomeHeader extends React.Component {
           )}
           {isWeiXin && <SharePopup visible={visible} onClose={this.onClose} />}
         </View>
-      </>
     );
   }
 }

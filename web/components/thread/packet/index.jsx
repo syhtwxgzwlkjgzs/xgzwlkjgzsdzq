@@ -20,12 +20,24 @@ const Index = ({ money = 0, type = 0, onClick, condition = 0 }) => {
     return type === 0 ? '/dzq-img/red-packet.png' : '/dzq-img/reward-question.png'
   }, [type])
 
+  // 格式化金额，保留两位小数，且去除小数点后面的0
+  const formatMoney = useMemo(() => {
+    const num = Number(money)
+    if (!num) {
+      return money
+    }
+
+    const newNum = num.toFixed(2)
+    const regexp=/(?:\.0*|(\.\d+?)0+)$/
+    return newNum.replace(regexp,'$1')
+  }, [money])
+
   return (
     <div className={styles.container} onClick={onClick}>
       <div className={styles.wrapper}>
         <img className={styles.img} src={url} />
         <span className={styles.title}>{title}</span>
-        <span className={styles.money}>￥{money}</span>
+        <span className={styles.money}>￥{formatMoney}</span>
       </div>
     </div>
   );
