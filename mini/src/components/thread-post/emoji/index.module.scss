@@ -2,14 +2,16 @@
 .emoji-container {
   display: inline-flex;
   // justify-content: center;
-  padding-left: 10px;
+  padding: $padding-2n $padding-4n;
   align-items: center;
   flex-wrap: wrap;
   background: white;
+  height: 200px;
+  overflow: auto;
 
   .emoji-item {
-    width: 25px;
-    height: 25px;
-    margin: 4px;
+    width: 30px;
+    height: 30px;
+    margin: 0 2px;
   }
 }
