@@ -3,75 +3,91 @@ import { Button } from '@discuzq/design';
 import styles from './index.module.scss';
 import classNames from 'classnames';
 export default class VerificationCode extends React.Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       initTimeText: props.text ? props.text : '获取验证码',
       buttonDisabled: false, //初始设置按钮是可以点击的
       interval: null,
-      initTimeValue: props.initTimeValue || 60,
-      initTime: 60
+      initTimeValue: props.initTimeValue,
+      initTime: 60,
+    };
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if (state.initTimeValue !== props.initTimeValue) {
+      return {
+        initTimeValue: props.initTimeValue,
+        initTime: props.initTimeValue,
+      };
     }
   }
 
-  componentDidMount() {
-    this.setState({
-      initTimeValue: this.props.initTimeValue || 60
-    })
+  componentDidUpdate(prevProps) {
+    if (prevProps.initTimeValue !== this.state.initTimeValue) {
+      if (!this.interval) {
+        this.setTimeChecker();
+      }
+    }
   }
+
+  setTimeChecker = () => {
+    const { initTimeValue } = this.state;
+    if (this.interval !== null) {
+      clearInterval(this.interval);
+    }
+    this.interval = setInterval(() => {
+      const { initTime } = this.state;
+      this.setState({
+        initTime: initTime - 1,
+        initTimeText: initTime - 1,
+        buttonDisabled: true,
+      });
+      if (initTime <= 0) {
+        this.setState({
+          initTime: initTimeValue,
+          initTimeText: '重新获取',
+          buttonDisabled: false,
+          initTimeValue: null,
+        });
+        if (this.interval !== null) {
+          clearInterval(this.interval);
+        }
+      }
+    }, 1000);
+  };
 
   buttonClick = () => {
-    this.buttonClickAction()
-  }
+    this.buttonClickAction();
+  };
 
   buttonClickAction = () => {
-    const that = this
     if (this.state.buttonDisabled) {
-      return false
+      return false;
     }
-    that.setState(
+    this.setState(
       {
-        buttonDisabled: true
+        buttonDisabled: true,
       },
-      function () {
+      () => {
         this.props.getVerifyCode({
-          calback: function (err) {
+          calback: (err) => {
             if (err) {
-              that.setState({
-                buttonDisabled: false
-              })
-              return
+              this.setState({
+                buttonDisabled: false,
+              });
+              return;
             }
-            const { initTimeValue } = that.state
-            that.setState({
-              interval: setInterval(function () {
-                const { initTime } = that.state
-                that.setState({
-                  initTime: initTime - 1,
-                  initTimeText: initTime - 1,
-                  buttonDisabled: true
-                })
-                if (initTime === 0) {
-                  that.setState({
-                    initTime: initTimeValue,
-                    initTimeText: '重新获取',
-                    buttonDisabled: false
-                  })
-                  if (that.state.interval != null) {
-                    clearInterval(that.state.interval)
-                  }
-                }
-              }, 1000)
-            })
-          }
-        })
-      }
-    )
-  }
+            this.setTimeChecker();
+          },
+        });
+      },
+    );
+  };
+
   render() {
-    const { valuePassCheck, btnType, className } = this.props
-    const { buttonDisabled } = this.state
+    const { valuePassCheck, btnType, className } = this.props;
+    const { buttonDisabled } = this.state;
     return (
       <div
         className={classNames(styles.verifyCodeBtn, {
@@ -87,12 +103,12 @@ export default class VerificationCode extends React.Component {
           {this.state.initTimeText}
         </Button>
       </div>
-    )
+    );
   }
 }
 VerificationCode.defaultProps = {
-  getVerifyCode: function () { },
+  getVerifyCode: function () {},
   valuePassCheck: true, //校验是否可以点击
   initTimeValue: 60, // 默认倒计时间
-}
-VerificationCode.propTypes = {}
+};
+VerificationCode.propTypes = {};
