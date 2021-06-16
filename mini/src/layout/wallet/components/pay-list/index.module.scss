@@ -11,17 +11,35 @@
   font-weight: normal;
   padding-bottom: $padding-2n;
   color: $text-color-primary;
-  .text {
-    font-family: 'PingFangSC-Regular';
-    font-size: $font-size-primary;
-    text-align: left;
-    line-height: 16px;
-  }
+  font-size: $font-size-primary;
+  line-height: 16px;
+
   .money {
     font-family: 'PingFang SC';
     font-weight: 600;
     font-size: $font-size-middle;
     text-align: left;
+  }
+  :global {
+    .qq-emotion {
+      width: 14px;
+      height: 14px;
+      vertical-align: text-top;
+      display: inline-block !important;
+      flex-shrink: 0;
+    }
+
+    .dzq-richText--mini {
+      font-size: $font-size-primary;
+      overflow: hidden;
+      word-break: break-all;
+      max-width: 140px;
+      @include text-ellipsis();
+
+      .dzq-a {
+        display: inline;
+      }
+    }
   }
 }
 .footer {
