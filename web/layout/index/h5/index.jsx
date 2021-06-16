@@ -191,7 +191,6 @@ class IndexH5Page extends React.Component {
         quickScroll={true}
         curr='home'
         pageName='home'
-        preload={3000}
         onClickTabBar={this.onClickTabBar}
         requestError={threadError.isError}
         errorText={threadError.errorText}
