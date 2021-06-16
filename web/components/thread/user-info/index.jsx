@@ -19,6 +19,7 @@ UserInfo.propTypes = {
   isPay: PropTypes.bool, // 是否付费
   isReward: PropTypes.bool, // 是否悬赏
   isRed: PropTypes.bool, // 是否红包
+  isAnonymous: PropTypes.bool, // 是否是匿名贴
   userId: PropTypes.number, // 用户id PC端
   platform: PropTypes.string, // 是否展示pop PC端
   icon: PropTypes.string, // 图标：点赞或者是付费用户
@@ -53,7 +54,7 @@ export default function UserInfo(props) {
       <div className={styles.right}>
         <div className={styles.info}>
           <div className={classNames(styles.name, props.platform === 'pc' && styles.pc, !props.hideInfoPopip && styles.cursor)} onClick={(e) => props.onClick(e)}>{props.name}</div>
-          {props.groupName && <div className={`${styles.groupName} ${tagsNumber > 3 ? styles.groupNameText : ''}`}>{props.groupName}</div>}
+          {!props.isAnonymous && props.groupName && <div className={`${styles.groupName} ${tagsNumber > 3 ? styles.groupNameText : ''}`}>{props.groupName}</div>}
         </div>
 
         <div className={styles.meta}>

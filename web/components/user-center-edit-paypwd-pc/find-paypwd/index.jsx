@@ -34,7 +34,7 @@ class index extends Component {
       payPassword: null,
       payPasswordConfirmation: null,
     });
-  }
+  };
 
   componentWillUnmount() {
     this.initState();
@@ -45,8 +45,7 @@ class index extends Component {
     if (type == 'add') {
       let list_ = [...list];
       if (list.length >= 6) {
-        list_ = list_.join('').substring(0, 5)
-          .split('');
+        list_ = list_.join('').substring(0, 5).split('');
       }
       this.setState(
         {
@@ -72,93 +71,100 @@ class index extends Component {
       Toast.error({
         content: '两次密码输入有误',
         hasMask: false,
-        duration: 1000,
+        duration: 2000,
       });
       this.initState();
       return;
     }
     const mobile = this.props?.user.originalMobile;
     const code = list.join('');
-    this.props.payBox.forgetPayPwd({
-      mobile,
-      code,
-      payPassword,
-      payPasswordConfirmation,
-    }).then((res) => {
-      Toast.success({
-        content: '重置密码成功',
-        hasMask: false,
-        duration: 1000,
-      });
-      this.initState();
-      this.handleClose();
-    })
+    this.props.payBox
+      .forgetPayPwd({
+        mobile,
+        code,
+        payPassword,
+        payPasswordConfirmation,
+      })
+      .then((res) => {
+        Toast.success({
+          content: '重置密码成功',
+          hasMask: false,
+          duration: 2000,
+        });
+        this.initState();
+        this.handleClose();
+      })
       .catch((err) => {
         Toast.error({
           content: err.Msg || '重置密码失败',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
         this.initState();
         this.handleClose();
       });
-  }
+  };
 
   handleInputChange = (e) => {
     this.setState({
       payPassword: e.target.value,
       isBlur: false,
     });
-  }
+  };
 
   handleInputChange1 = (e) => {
     this.setState({
       payPasswordConfirmation: e.target.value,
       isBlur: false,
     });
-  }
+  };
 
   handleInputFocus = (e) => {
     this.setState({
       isBlur: false,
     });
-  }
+  };
 
   handleInputBlur = (e) => {
     this.setState({
       payPassword: e.target.value,
       isBlur: true,
     });
-  }
+  };
 
   handleInputFocus1 = () => {
     this.setState({
       isBlur: false,
     });
-  }
+  };
 
   handleInputBlur1 = (e) => {
     this.setState({
       payPasswordConfirmation: e.target.value,
       isBlur: true,
     });
-  }
+  };
 
   getVerifyCode = throttle(async ({ calback }) => {
     const { captchaRandStr, captchaTicket } = await this.props.showCaptcha();
     const mobile = this.props?.user.originalMobile;
-    this.props.payBox.sendSmsVerifyCode({ mobile, captchaRandStr, captchaTicket }).then((res) => {
-      this.setState({
-        initTimeValue: res.interval,
-      }, () => {
-        if (calback && typeof calback === 'function') calback();
-      });
-    })
+    this.props.payBox
+      .sendSmsVerifyCode({ mobile, captchaRandStr, captchaTicket })
+      .then((res) => {
+        this.setState(
+          {
+            initTimeValue: res.interval,
+          },
+          () => {
+            if (calback && typeof calback === 'function') calback();
+          },
+        );
+      })
       .catch((err) => {
         Toast.error({
           content: err.Message || '获取验证码失败',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
         this.setState({
           list: [],
@@ -166,26 +172,34 @@ class index extends Component {
         });
         if (calback && typeof calback === 'function') calback(err);
       });
-  }, 300)
+  }, 300);
 
   /**
- * 获取按钮禁用状态
- * @returns true 表示禁用 false表示不禁用
- */
+   * 获取按钮禁用状态
+   * @returns true 表示禁用 false表示不禁用
+   */
   getDisabledWithButton = () => {
     const { list = [], payPassword, payPasswordConfirmation } = this.state;
     let disabled = false;
     disabled = !payPassword || !payPasswordConfirmation || list.length !== 6;
     return disabled;
-  }
+  };
 
   handleClose = () => {
     this.initState();
     this.props.onClose();
-  }
+  };
 
   render() {
-    const { currentStep, list = [], isBlur, isKeyBoardVisible, initTimeValue, payPassword, payPasswordConfirmation } = this.state;
+    const {
+      currentStep,
+      list = [],
+      isBlur,
+      isKeyBoardVisible,
+      initTimeValue,
+      payPassword,
+      payPasswordConfirmation,
+    } = this.state;
     const mobile = this.props?.user.mobile;
     return (
       <div className={styles.userMobileWrapper}>
@@ -197,13 +211,14 @@ class index extends Component {
           <div className={`${styles.inputItem} ${styles.mobileItem}`}>
             <Input value={mobile} />
             <div className={styles.verifyCode}>
-              <VerifyCode 
-                key={`${initTimeValue}-${currentStep}`} 
-                btnType={"text"} 
+              <VerifyCode
+                key={`${initTimeValue}-${currentStep}`}
+                btnType={'text'}
                 className={styles.btnStyle}
-                initTimeValue={initTimeValue} 
-                text={'发送验证码'} 
-                getVerifyCode={this.getVerifyCode} />
+                initTimeValue={initTimeValue}
+                text={'发送验证码'}
+                getVerifyCode={this.getVerifyCode}
+              />
             </div>
           </div>
           <div className={styles.inputItem}>
@@ -211,15 +226,45 @@ class index extends Component {
             <CaptchaInput currentStep={currentStep} updatePwd={this.updatePwd} list={list} isBlur={isBlur} />
           </div>
           <div className={`${styles.inputItem} ${styles.inputMiddle}`}>
-            <Input tirm value={payPassword} onChange={this.handleInputChange} onFocus={this.handleInputFocus} onBlur={this.handleInputBlur} mode="password" placeholder="请输入新支付密码" maxLength={6} type="number" />
+            <Input
+              tirm
+              value={payPassword}
+              onChange={this.handleInputChange}
+              onFocus={this.handleInputFocus}
+              onBlur={this.handleInputBlur}
+              mode="password"
+              placeholder="请输入新支付密码"
+              maxLength={6}
+              type="number"
+            />
           </div>
           <div className={styles.inputItem}>
-            <Input tirm value={payPasswordConfirmation} onFocus={this.handleInputFocus1} onChange={this.handleInputChange1} onBlur={this.handleInputBlur1} mode="password" placeholder="请重复输入新支付密码" maxLength={6} type="number" />
+            <Input
+              tirm
+              value={payPasswordConfirmation}
+              onFocus={this.handleInputFocus1}
+              onChange={this.handleInputChange1}
+              onBlur={this.handleInputBlur1}
+              mode="password"
+              placeholder="请重复输入新支付密码"
+              maxLength={6}
+              type="number"
+            />
           </div>
-          <div className={classNames(styles.bottom, {
-            [styles.bgBtnColor]: !this.getDisabledWithButton(),
-          })}>
-            <Button disabled={this.getDisabledWithButton()} full onClick={this.handleStepBtn} type="primary" className={styles.btn}>设置新支付密码</Button>
+          <div
+            className={classNames(styles.bottom, {
+              [styles.bgBtnColor]: !this.getDisabledWithButton(),
+            })}
+          >
+            <Button
+              disabled={this.getDisabledWithButton()}
+              full
+              onClick={this.handleStepBtn}
+              type="primary"
+              className={styles.btn}
+            >
+              设置新支付密码
+            </Button>
           </div>
         </div>
       </div>

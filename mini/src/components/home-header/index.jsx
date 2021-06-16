@@ -29,10 +29,10 @@ class HomeHeader extends React.Component {
 
   getBgHeaderStyle(bgColor) {
     const { site } = this.props;
-    const siteData = site.webConfig;
+    const siteData = site.webConfig || {};
 
-    if (siteData && siteData.setSite && siteData.setSite.bgHeadFullImg) {
-      return { backgroundImage: `url(${siteData.bgHeadFullImg})` };
+    if (siteData.setSite?.siteBackgroundImage) {
+      return { backgroundImage: `url(${siteData.setSite.siteBackgroundImage})` };
     }
     return bgColor ? { background: bgColor } : { background: '#2469f6' };
   }
@@ -45,9 +45,9 @@ class HomeHeader extends React.Component {
     }
 
     const { site } = this.props;
-    const siteData = site.webConfig;
-    if (siteData && siteData.setSite && siteData.setSite.siteLogo) {
-      return siteData.setSite.siteLogo;
+    const siteData = site.webConfig || {};
+    if (siteData.setSite?.siteHeaderLogo) {
+      return siteData.setSite.siteHeaderLogo;
     }
     return logoImg;
   }
