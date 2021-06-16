@@ -8,6 +8,7 @@
 .wrapper {
   padding: 0 $padding-4n;
   background-color: $white;
+  border-top: $border-solid-1;
 
   :global {
     .dzq-input {
@@ -17,6 +18,10 @@
         padding: $padding-2n 0;
         text-align: right;
         border: none;
+      }
+
+      .input-placeholder{
+        color: $text-color-placeholder
       }
     }
 
@@ -56,11 +61,10 @@
 
   .paid-item {
     @include flex();
-    padding: $padding-4n 0;
+    padding-top: $padding-4n;
     font-family: $font-family;
     font-size: $font-size-primary;
     color: $text-color-primary;
-    border-top: $border-solid-1;
 
     .left {
       width: 130px;
@@ -82,8 +86,9 @@
     flex-direction: column;
 
     .free-title {
+      padding: $padding-2n 0;
       font-size: $font-size-primary;
-      color: $text-color-regular;
+      color: $text-color-secondary;
       line-height: $font-line-height-small;
       text-align: left;
     }
@@ -105,10 +110,10 @@
     :global {
       .dzq-button {
         width: 48%;
+        height: 42px;
         padding: $padding-10 0;
         font-size: $font-size-middle;
         color: $text-color-regular;
-        line-height: $font-line-height-small;
         border: none;
         border-radius: $border-radius-small;
         background: $text-bg-color2;

@@ -55,7 +55,7 @@ class index extends Component {
       });
       return;
     }
-    Taro.navigateTo({ url: '/subPages/my/edit/find/paypwd/index?ref=payBox' });
+    Taro.navigateTo({ url: '/subPages/my/edit/find/paypwd/index' });
   };
 
   // 初次设置密码 password

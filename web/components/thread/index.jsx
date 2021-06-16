@@ -200,6 +200,7 @@ class Index extends React.Component {
         threadId,
         displayTag,
         payType,
+        isAnonymous,
       } = data || {};
       const { isEssence, isPrice, isRedPack, isReward } = displayTag;
 
@@ -217,6 +218,7 @@ class Index extends React.Component {
                 isPay={isPrice}
                 isRed={isRedPack}
                 isReward={isReward}
+                isAnonymous={isAnonymous}
                 userId={user?.userId}
                 platform={platform}
                 collect={collect}

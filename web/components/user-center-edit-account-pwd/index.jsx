@@ -25,7 +25,7 @@ class index extends Component {
     if (!this.props.user.mobile) {
       Toast.error({
         content: '需要首先绑定手机号才能进行此操作',
-        duration: 2000
+        duration: 2000,
       });
       return;
     }
@@ -34,27 +34,27 @@ class index extends Component {
 
   // 输入旧密码
   handleSetOldPwd = (e) => {
-    if (trimLR(e.target.value) === "" || !e.target.value) {
+    if (trimLR(e.target.value) === '' || !e.target.value) {
       this.props.user.oldPassword = null;
-      return
+      return;
     }
     this.props.user.oldPassword = e.target.value;
   };
 
   // 设置账户密码
   handleSetPwd = (e) => {
-    if (trimLR(e.target.value) === "" || !e.target.value) {
+    if (trimLR(e.target.value) === '' || !e.target.value) {
       this.props.user.newPassword = null;
-      return
+      return;
     }
     this.props.user.newPassword = e.target.value;
   };
 
   // 确认新密码
   hadleNewPasswordRepeat = (e) => {
-    if (trimLR(e.target.value) === "" || !e.target.value) {
+    if (trimLR(e.target.value) === '' || !e.target.value) {
       this.props.user.newPasswordRepeat = null;
-      return
+      return;
     }
     this.props.user.newPasswordRepeat = e.target.value;
   };
@@ -68,7 +68,7 @@ class index extends Component {
       Toast.error({
         content: '两次密码输入有误',
         hasMask: false,
-        duration: 1000,
+        duration: 2000,
       });
       this.props.user.clearUserAccountPassword();
       return;
@@ -80,7 +80,7 @@ class index extends Component {
           Toast.success({
             content: '修改密码成功',
             hasMask: false,
-            duration: 1000,
+            duration: 2000,
           });
           Router.back();
           this.props.user.clearUserAccountPassword();
@@ -89,7 +89,7 @@ class index extends Component {
           Toast.error({
             content: err.Message || '修改密码失败, 请重新设置',
             hasMask: false,
-            duration: 1000,
+            duration: 2000,
           });
           this.props.user.clearUserAccountPassword();
         });
@@ -100,7 +100,7 @@ class index extends Component {
           Toast.success({
             content: '设置密码成功',
             hasMask: false,
-            duration: 1000,
+            duration: 2000,
           });
           Router.back();
           this.props.user.clearUserAccountPassword();
@@ -109,7 +109,7 @@ class index extends Component {
           Toast.error({
             content: err.Message || '设置密码失败, 请重新设置',
             hasMask: false,
-            duration: 1000,
+            duration: 2000,
           });
           this.props.user.clearUserAccountPassword();
         });
@@ -201,7 +201,7 @@ class index extends Component {
 
     let isSubmit = false;
     if (this.props.user?.hasPassword) {
-      isSubmit = !oldPassword || !newPassword || !newPasswordRepeat
+      isSubmit = !oldPassword || !newPassword || !newPasswordRepeat;
     } else {
       isSubmit = !newPassword || !newPasswordRepeat;
     }
@@ -215,13 +215,13 @@ class index extends Component {
         <div className={styles.content}>
           {this.props.user?.hasPassword ? this.renderHasPassword() : this.renderHasNoPassword()}
         </div>
-        {(this.props.site?.isSmsOpen && this.props.user?.hasPassword) && (
+        {this.props.site?.isSmsOpen && this.props.user?.hasPassword && (
           <div onClick={this.handleResetPwd} className={styles.tips}>
             忘记旧密码？
           </div>
         )}
         <div
-          className={classNames(styles.bottom,{
+          className={classNames(styles.bottom, {
             [styles.bgBtnColor]: !this.getDisabledWithButton(),
           })}
         >
