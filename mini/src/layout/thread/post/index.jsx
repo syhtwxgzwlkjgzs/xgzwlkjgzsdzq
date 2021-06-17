@@ -561,8 +561,9 @@ class Index extends Component {
 
   setIndexPageData = () => {
     const { threadId, data } = this.state;
+    const { params } = getCurrentInstance().router;
     // 更新帖子到首页列表
-    if (this.state.threadId) {
+    if (params && params.id) {
       this.props.index.updateAssignThreadAllData(threadId, data);
       // 添加帖子到首页数据
     } else {
