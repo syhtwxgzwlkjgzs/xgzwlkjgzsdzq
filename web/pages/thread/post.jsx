@@ -667,8 +667,9 @@ class PostPage extends React.Component {
   setIndexPageData = () => {
     const { data } = this.state;
     const { postData } = this.props.threadPost;
+    const { query } = this.props.router;
     // 更新帖子到首页列表
-    if (postData.threadId) {
+    if (query && query.id) {
       this.props.index.updateAssignThreadAllData(postData.threadId, data);
       // 添加帖子到首页数据
     } else {

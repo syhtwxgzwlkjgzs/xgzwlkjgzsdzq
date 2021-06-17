@@ -72,6 +72,7 @@
       height: 20px;
 
       .name {
+        max-width: 120px;
         font-weight: 600;
         font-size: $font-size-primary;
         text-align: left;
