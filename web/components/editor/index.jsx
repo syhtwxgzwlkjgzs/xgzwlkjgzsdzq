@@ -194,7 +194,7 @@ export default function DVditor(props) {
     const editor = new Vditor(
       vditorId,
       {
-        _lutePath: 'https://imgcache.qq.com/operation/dianshi/other/lute.min.6cbcbfbacd9fa7cda638f1a6cfde011f7305a071.js?max_age=31536000',
+        _lutePath: 'https://cloudcache.tencentcs.com/operation/dianshi/other/lute.min.6cbcbfbacd9fa7cda638f1a6cfde011f7305a071.js?max_age=31536000',
         ...baseOptions,
         minHeight: 44,
         // 编辑器初始化值
