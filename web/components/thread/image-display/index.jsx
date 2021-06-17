@@ -216,7 +216,7 @@ const Three = ({ type, bigImages, smallImages, onClick, style }) => {
             <Row gutter={4} className={styles.smallRow}>
               {smallImages.map((item, index) => (
                 <Col span={12} key={index} className={styles.smallCol}>
-                  {false&&<SmartImg type={item.fileType} src={item.thumbUrl} onClick={() => onClick(item.id)} />}
+                  <SmartImg type={item.fileType} src={item.thumbUrl} onClick={() => onClick(item.id)} />
                 </Col>
               ))}
             </Row>
