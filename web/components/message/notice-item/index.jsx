@@ -65,9 +65,6 @@ class Index extends Component {
     if (item.type === 'threadrewarded') {
       return '悬赏了你';
     }
-    if (item.type === 'withdrawal') {
-      return '获取提现';
-    }
   };
 
   // 账号信息前置语
