@@ -25,11 +25,11 @@
     .top {
       margin-bottom: rem($margin-2n);
       max-width: rem(480);
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      display: block;
       .name {
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-        display: block;
         font-weight: 700;
         font-size: rem($font-size-middle);
         line-height: rem(18);
