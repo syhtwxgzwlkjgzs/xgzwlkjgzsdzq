@@ -48,12 +48,18 @@ class MyDocument extends Document {
         
         
         <body>
-           {renderHTML('<!--[if !IE]>')}
-           <Main />
-           <NextScript/>
-           {renderHTML('<![endif]-->')}
-           {renderHTML('<!--[if IE]>')}
-           <style dangerouslySetInnerHTML={{__html: `
+            <div dangerouslySetInnerHTML={{__html: `
+              <!--[if !IE]><!-->
+            `}}/>
+            <Main />
+            <NextScript/>
+            <div dangerouslySetInnerHTML={{__html: `
+              <!--<![endif]-->
+            `}}/>
+            <div dangerouslySetInnerHTML={{__html: `
+              <!--[if IE]><!-->
+            `}}/>
+            <style dangerouslySetInnerHTML={{__html: `
               html,body{
                 width: 100%;
                 height: 100%;
@@ -69,12 +75,14 @@ class MyDocument extends Document {
                 text-align: center;
                 margin-top: 40vh;
               }  
-          `}}/>
-          <div className="box">
-            <h1>站点不支持IE浏览器！</h1>      
-            <h3>请使用QQ浏览器、chorme，Edge等浏览器。</h3>
-          </div>
-           {renderHTML('<![endif]-->')}
+            `}}/>
+            <div className="box">
+              <h1>站点不支持IE浏览器！</h1>      
+              <h3>请使用QQ浏览器、chorme，Edge等浏览器。</h3>
+            </div>
+            <div dangerouslySetInnerHTML={{__html: `
+              <!--<![endif]-->
+            `}}/>
         </body> 
         <script dangerouslySetInnerHTML={{__html: `
             // 微信设置字体最大，布局乱的补丁
