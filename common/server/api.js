@@ -89,15 +89,15 @@ http.interceptors.response.use((res) => {
   // }
   let url = null;
   switch (data.Code) {
-    // @todo 未登陆且无权限时，直接跳转加入页面。可能影响其它逻辑
     case INVALID_TOKEN: {
-      // 通过res?.config?.headers?.authorization获取用户的token判断是否登陆。
-      // 未登陆时，接口返回无权限，跳转登陆
-      if (!res?.config?.headers?.authorization) {
+      // @TODO 未登陆且无权限时，直接跳转加入页面。可能影响其它逻辑
+      // 通过res?.config?.headers?.authorization获取用户的token判断是否登陆
+      // 未登陆时，帖子列表接口返回无权限，跳转登陆
+      if (!res?.config?.headers?.authorization && ~res?.config?.url.indexOf('/thread.list')) {
         if (process.env.DISCUZ_ENV === 'web') {
           url = '/user/login';
         } else {
-          url = '/subPages/user/wx-auth/index'
+          url = '/subPages/user/wx-auth/index';
         }
         Router.push({
           url
