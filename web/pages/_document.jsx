@@ -1,5 +1,6 @@
 import React from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
+import renderHTML from 'react-render-html';
 
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
@@ -22,6 +23,8 @@ class MyDocument extends Document {
     return (
       <Html lang="cn">
         <Head>
+          <meta name="screen-orientation" content="portrait"/>
+          <meta name="x5-orientation" content="portrait"/>
           <script dangerouslySetInnerHTML={{ __html: `
               setTimeout(function() {
                 function remCalc (){
@@ -36,17 +39,51 @@ class MyDocument extends Document {
                 window.addEventListener('resize', remCalc);
               }, 0);
           ` }} />
-          {/* <!--腾讯地图定位组件--> */} 
+          {/* <!--腾讯地图定位组件--> */}
           <script async src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
+          {/* 编辑器markdown依赖 */}
+          <script async src="https://imgcache.qq.com/operation/dianshi/other/lute.min.6cbcbfbacd9fa7cda638f1a6cfde011f7305a071.js?max_age=31536000" ></script>
           {this.createMonitor()}
         </Head>
-        <body>
-          <Main />
-          <NextScript/>
-        </body>
         
-
-    
+        
+        <body>
+            <div dangerouslySetInnerHTML={{__html: `
+              <!--[if !IE]><!-->
+            `}}/>
+            <Main />
+            <NextScript/>
+            <div dangerouslySetInnerHTML={{__html: `
+              <!--<![endif]-->
+            `}}/>
+            <div dangerouslySetInnerHTML={{__html: `
+              <!--[if IE]><!-->
+            `}}/>
+            <style dangerouslySetInnerHTML={{__html: `
+              html,body{
+                width: 100%;
+                height: 100%;
+                display: block;
+              }
+              h1{
+                padding: 20px;
+              }
+              h3{
+                padding: 15px;
+              }
+              .box{
+                text-align: center;
+                margin-top: 40vh;
+              }  
+            `}}/>
+            <div className="box">
+              <h1>站点不支持IE浏览器！</h1>      
+              <h3>请使用QQ浏览器、chorme，Edge等浏览器。</h3>
+            </div>
+            <div dangerouslySetInnerHTML={{__html: `
+              <!--<![endif]-->
+            `}}/>
+        </body> 
         <script dangerouslySetInnerHTML={{__html: `
             // 微信设置字体最大，布局乱的补丁
             function is_weixn() {

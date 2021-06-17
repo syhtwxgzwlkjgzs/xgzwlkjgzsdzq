@@ -7,12 +7,11 @@ import throttle from '@common/utils/thottle.js';
 
 @inject('payBox')
 export default class index extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      isLoading: false
-    }
+      isLoading: false,
+    };
   }
 
   onClose = () => {
@@ -24,15 +23,15 @@ export default class index extends Component {
   };
 
   goToThePayConfirmPage = throttle(async () => {
-    if (this.state.isLoading) return
+    if (this.state.isLoading) return;
     try {
       this.setState({
-        isLoading: true
-      })
+        isLoading: true,
+      });
       await this.props.payBox.createOrder();
       this.setState({
-        isLoading: false
-      })
+        isLoading: false,
+      });
     } catch (error) {
       console.error(error);
       Toast.error({
@@ -42,8 +41,8 @@ export default class index extends Component {
       });
       this.onClose();
       this.setState({
-        isLoading: false
-      })
+        isLoading: false,
+      });
     }
   }, 500);
 
@@ -53,21 +52,28 @@ export default class index extends Component {
   };
 
   render() {
-    const { isLoading } = this.state
+    const { isLoading } = this.state;
     const { options = {} } = this.props.payBox;
     const { amount } = options;
     return (
       <div>
         <>
-          <div className={styles.amountWrapper}>
+          <div className={styles.amountWrapper} id={styles.amountContainer}>
             <CommonAccountContent currentPaymentData={options} />
             {/* 按钮区域-提交内容 */}
             <div className={styles.amountAddUp}>
               合计：<span className={styles.amountMoney}>￥ {this.transMoneyToFixed(amount)} </span>
             </div>
             <div className={styles.amountSubmit}>
-              <Button type="primary" onClick={this.goToThePayConfirmPage} size="large" className={styles.asBtn} full disabled={isLoading}>
-                {isLoading ? <Spin type="spinner">订单生成中...</Spin> : '确认支付'}
+              <Button
+                type="primary"
+                onClick={this.goToThePayConfirmPage}
+                size="large"
+                className={styles.asBtn}
+                full
+                disabled={isLoading}
+              >
+                {isLoading ? <Spin type="spinner">生成订单中...</Spin> : '确认支付'}
               </Button>
             </div>
             {/* 关闭按钮 */}

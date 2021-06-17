@@ -20,14 +20,22 @@ import { isExtFieldsOpen } from '@common/store/login/util';
 class WeixinBindQrCodePage extends React.Component {
   async componentDidMount() {
     try {
-      const { sessionToken, loginType, nickname } = this.props.router.query;
+      const { sessionToken, nickname } = this.props.router.query;
       const { platform, wechatEnv } = this.props.site;
       const qrCodeType = platform === 'h5' ? 'mobile_browser_bind' : 'pc_bind';
+      const { user } = this.props;
+      let name = nickname;
+      if (user.loginStatus) {
+        this.props.commonLogin.setUserId(user.id);
+        name = user.nickname;
+      }
+
+      const redirectUri = `${wechatEnv === 'miniProgram' ? '/subPages/user/wx-auth/index' : `${window.location.origin}/user/wx-auth`}?loginType=${platform}&action=wx-bind&nickname=${name}`;
       await this.props.h5QrCode.generate({
         params: {
           sessionToken,
           type: wechatEnv === 'miniProgram' ? 'pc_bind_mini' : qrCodeType,
-          redirectUri: `${encodeURIComponent(`${window.location.origin}/${wechatEnv === 'miniProgram' ? 'pages/' : ''}user/wx-auth${wechatEnv === 'miniProgram' ? '/index' : ''}?loginType=${loginType}&action=wx-bind&nickname=${nickname}`)}`,
+          redirectUri: encodeURIComponent(redirectUri),
         },
       });
       this.queryLoginState(wechatEnv === 'miniProgram' ? 'pc_bind_mini' : qrCodeType);
@@ -51,6 +59,7 @@ class WeixinBindQrCodePage extends React.Component {
           type,
           params: { sessionToken: this.props.h5QrCode.sessionToken },
         });
+        console.log(res);
         const uid = get(res, 'data.uid');
         this.props.user.updateUserInfo(uid);
         // FIXME: 使用 window 跳转用来解决，获取 forum 在登录前后不同的问题，后续需要修改 store 完成

@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Icon } from '@discuzq/design';
 import { noop } from '@components/thread/utils';
 import styles from './index.module.scss';
 import { withRouter } from 'next/router';
+import SharePopup from '@components/thread/share-popup';
+import isWeiXin from '@common/utils/is-weixin';
 
 
 /**
@@ -13,9 +15,29 @@ import { withRouter } from 'next/router';
  * @prop {function} onClick 全部话题点击事件
  */
 const TopicHeader = ({ title, viewNum = 0, contentNum = 0, onShare = noop, router }) => {
+  const [visible, setVisible] = useState(false)
+  const [loadWeiXin, setLoadWeiXin] = useState(false)
+
   const goList = () => {
     router.push('/search/result-topic');
   }
+
+  useEffect(() => {
+    setLoadWeiXin(isWeiXin())
+  }, [])
+
+  const handleShare = (e) => {
+    if (loadWeiXin) {
+      setVisible(true)
+    } else {
+      onShare(e)
+    }
+  }
+
+  const onClose = () => {
+    setVisible(false)
+  }
+
   return (
     <div className={styles.container} style={{ backgroundImage: `url('/dzq-img/topic-header.png')` }}>
       <div className={styles.title}>{title && `#${title}#`}</div>
@@ -30,7 +52,7 @@ const TopicHeader = ({ title, viewNum = 0, contentNum = 0, onShare = noop, route
             <span className={styles.content}>{contentNum}</span>
           </li>
           <li className={styles.hr}></li>
-          <li onClick={onShare}>
+          <li onClick={handleShare}>
             <Icon className={styles.shareIcon}name="ShareAltOutlined" size={14} />
             <span className={styles.text}>分享</span>
           </li>
@@ -40,6 +62,7 @@ const TopicHeader = ({ title, viewNum = 0, contentNum = 0, onShare = noop, route
             <Icon className={styles.rightIcon} name="RightOutlined" size={12} />
           </li>
         </ul>
+        {loadWeiXin && <SharePopup visible={visible} onClose={onClose} />}
     </div>
   );
 };

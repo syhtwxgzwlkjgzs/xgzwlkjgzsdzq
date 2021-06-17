@@ -22,7 +22,7 @@ class IndexH5Page extends React.Component {
     this.state = {
       visible: false,
       isFinished: true,
-      fixedTab: false
+      fixedTab: false,
     };
     this.listRef = createRef();
     // 用于获取顶部视图的高度
@@ -31,34 +31,34 @@ class IndexH5Page extends React.Component {
 
   componentDidMount() {
     try {
-      this.handleWeiXinShare()
+      this.handleWeiXinShare();
     } catch (error) {
-      
+
     }
 
     // 是否有推荐
     const isDefault = this.props.site.checkSiteIsOpenDefautlThreadListData();
-    this.props.index.setNeedDefault(isDefault)
+    this.props.index.setNeedDefault(isDefault);
   }
 
   handleWeiXinShare = async () => {
-    await initJSSdk(['updateAppMessageShareData', 'updateTimelineShareData', 'checkJsApi']);
+    let { href } = window.location;
+    href = href.split('/');
+    href = [href[0], href[1], href[2]];
+    href = href.join('/');
     const { site } = this.props;
-    const title = site.webConfig.setSite.siteName || 'Discuz! Q';
-    const desc = site.webConfig.setSite.siteIntroduction || 'Discuz! Q官方论坛';
-    const imgUrl = site.webConfig.setSite.siteLogo;
-    const link = site.webConfig.setSite.siteUrl;
-    console.log({
-      title, desc, imgUrl,
-    });
+    const title = site.webConfig?.setSite?.siteName || 'Discuz! Q';
+    const desc = site.webConfig?.setSite?.siteUrl || href;
+    const imgUrl = site.webConfig?.setSite?.siteLogo;
+    const link = site.webConfig?.setSite?.siteUrl;
+    await initJSSdk(['updateAppMessageShareData', 'updateTimelineShareData']);
     wx.ready(() => {   // 需在用户可能点击分享按钮前就先调用
       wx.updateAppMessageShareData({
         title, // 分享标题
         desc, // 分享描述
         link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        imgUrl, // 分享图标
       });
-    
+
       wx.updateTimelineShareData({
         title, // 分享标题
         link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
@@ -83,23 +83,23 @@ class IndexH5Page extends React.Component {
     if (index !== 0) {
       return;
     }
-    this.changeFilter()
+    this.changeFilter();
   }
 
   onClickTab = (id = '') => {
-    this.changeFilter({ categoryids: [id], sequence: id === 'default' ? 1 : 0 })
+    this.changeFilter({ categoryids: [id], sequence: id === 'default' ? 1 : 0 });
   };
 
   changeFilter = (params) => {
-    const { index, dispatch = () => {} } = this.props
+    const { index, dispatch = () => {} } = this.props;
 
     if (params) {
-      const { categoryids } = params
+      const { categoryids } = params;
       const categories = index.categories || [];
 
       // 获取处理之后的分类id
-      const id = categoryids[0]
-      const newCategoryIds = getSelectedCategoryIds(categories, id)
+      const id = categoryids[0];
+      const newCategoryIds = getSelectedCategoryIds(categories, id);
 
       const newFilter = { ...index.filter, ...params, categoryids: newCategoryIds };
 
@@ -191,7 +191,6 @@ class IndexH5Page extends React.Component {
         quickScroll={true}
         curr='home'
         pageName='home'
-        preload={1000}
         onClickTabBar={this.onClickTabBar}
         requestError={threadError.isError}
         errorText={threadError.errorText}
@@ -209,7 +208,7 @@ class IndexH5Page extends React.Component {
               data={item}
               className={styles.listItem}
             />
-          ))}
+        ))}
 
         <FilterView
           data={currentCategories}

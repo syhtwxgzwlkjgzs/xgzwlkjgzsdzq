@@ -55,7 +55,7 @@ class MiniAuth extends React.Component {
           inviteCode
         },
       });
-      checkUserStatus(resp);
+
       // 优先判断是否能登录
       if (resp.code === 0) {
         const { accessToken, uid } = resp.data;
@@ -63,6 +63,11 @@ class MiniAuth extends React.Component {
           accessToken,
         });
         await this.props.user.updateUserInfo(uid);
+      }
+
+      // 检查正常登陆后的其它状态码，并重置code
+      checkUserStatus(resp);
+      if (resp.code === 0) {
         redirectTo({
           url: `/pages/index/index`
         });

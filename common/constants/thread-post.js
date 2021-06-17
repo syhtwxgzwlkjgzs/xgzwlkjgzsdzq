@@ -44,6 +44,7 @@ export const THREAD_TYPE = {
   // vote: 108, // 投票
   // queue: 109, // 排队接龙
   file: 108, // 附件
+  emoji: 109, // 小表情
   // qaImage: 111, // 问答图片
   paid: 112, // 插入付费
   paidPost: 113, // 支付主题

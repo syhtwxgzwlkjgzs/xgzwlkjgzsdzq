@@ -23,7 +23,7 @@ const Index = ({ message }) => {
   const formatFinancialList = (list = []) => {
     const newList = [];
     list.forEach(({
-      amount, cashActualAmount, content, createdAt, id, threadId, threadTitle, type, userAvatar, userId, username, nickname
+      amount, cashActualAmount, content, createdAt, id, threadId, threadTitle, type, userAvatar, userId, username, nickname, orderType
     }) => {
       newList.push({
         amount: amount || cashActualAmount || 0,
@@ -36,6 +36,7 @@ const Index = ({ message }) => {
         userId,
         username,
         nickname,
+        orderType,
       });
     });
 

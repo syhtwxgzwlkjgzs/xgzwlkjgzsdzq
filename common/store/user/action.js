@@ -54,6 +54,21 @@ class UserAction extends SiteStore {
     this.permissions = data;
   }
 
+  // 获取用户分享时的名称和头像
+  @action.bound
+  getShareData(data) {
+    this.shareNickname = data.nickname;
+    this.shareAvatar = data.avatar;
+    this.shareThreadid = data.threadId;
+  }
+
+  // 获取用户分享前的内容
+  @action.bound
+  getShareContent(data) {
+    this.shareThreadid = data.threadId;
+    this.shareContent = data.content;
+  }
+
   // 初始化编辑用用户信息
   @action
   initEditInfo() {
@@ -257,7 +272,7 @@ class UserAction extends SiteStore {
 
   @action
   isPaid() {
-    return !!this.userInfo && !!this.userInfo.paid
+    return !!this.userInfo && !!this.userInfo.paid;
   }
 
   // 获取指定用户信息
@@ -346,8 +361,8 @@ class UserAction extends SiteStore {
     if (userThreadList.code !== 0) {
       throw {
         Code: userThreadList.code,
-        Msg: userThreadList.msg || '获取用户主题列表失败'
-      }
+        Msg: userThreadList.msg || '获取用户主题列表失败',
+      };
     }
     const pageData = get(userThreadList, 'data.pageData', []);
     const totalPage = get(userThreadList, 'data.totalPage', 1);
@@ -509,7 +524,6 @@ class UserAction extends SiteStore {
       Message: updateUserInfoRes.msg,
     };
   }
-
 
   @action
   async updateEditedUserSignature() {
@@ -834,17 +848,17 @@ class UserAction extends SiteStore {
    * @returns
    */
    @action
-   updatePayThreadInfo(threadId, obj) {
-     const targetThreads = this.findAssignThread(threadId);
-     if (!targetThreads || targetThreads.length === 0) return;
+  updatePayThreadInfo(threadId, obj) {
+    const targetThreads = this.findAssignThread(threadId);
+    if (!targetThreads || targetThreads.length === 0) return;
 
-     targetThreads.forEach(targetThread => {
+    targetThreads.forEach((targetThread) => {
       const { index, key, data, store } = targetThread;
       if (store[key] && store[key][index]) {
         store[key][index] = obj;
       }
-     })
-   }
+    });
+  }
 
   /**
     * 更新帖子列表指定帖子状态
@@ -856,49 +870,49 @@ class UserAction extends SiteStore {
     * @returns
     */
   @action
-  updateAssignThreadInfo(threadId, obj = {}) {
-    const targetThreads = this.findAssignThread(threadId);
+   updateAssignThreadInfo(threadId, obj = {}) {
+     const targetThreads = this.findAssignThread(threadId);
 
-    if (!targetThreads || targetThreads.length === 0) return;
+     if (!targetThreads || targetThreads.length === 0) return;
 
-    targetThreads.forEach((targetThread) => {
-      if (!targetThread) return;
+     targetThreads.forEach((targetThread) => {
+       if (!targetThread) return;
 
-      const { index, key, data, store } = targetThread; // 这里是数组
-      const { updateType, updatedInfo, user } = obj;
+       const { index, key, data, store } = targetThread; // 这里是数组
+       const { updateType, updatedInfo, user } = obj;
 
-      if (!data && !data?.likeReward && !data?.likeReward?.users) return;
+       if (!data && !data?.likeReward && !data?.likeReward?.users) return;
 
-      // 更新点赞
-      if (updateType === 'like' && !typeofFn.isUndefined(updatedInfo.isLiked)
+       // 更新点赞
+       if (updateType === 'like' && !typeofFn.isUndefined(updatedInfo.isLiked)
         && !typeofFn.isNull(updatedInfo.isLiked) && user) {
-        const { isLiked, likePayCount = 0 } = updatedInfo;
-        const theUserId = user.userId || user.id;
-        data.isLike = isLiked;
+         const { isLiked, likePayCount = 0 } = updatedInfo;
+         const theUserId = user.userId || user.id;
+         data.isLike = isLiked;
 
-        const userData = threadReducer.createUpdateLikeUsersData(user, 1);
-        // 添加当前用户到按过赞的用户列表
-        const newLikeUsers = threadReducer.setThreadDetailLikedUsers(data.likeReward, !!isLiked, userData);
+         const userData = threadReducer.createUpdateLikeUsersData(user, 1);
+         // 添加当前用户到按过赞的用户列表
+         const newLikeUsers = threadReducer.setThreadDetailLikedUsers(data.likeReward, !!isLiked, userData);
 
-        data.likeReward.users = newLikeUsers;
-        data.likeReward.likePayCount = likePayCount;
-      }
+         data.likeReward.users = newLikeUsers;
+         data.likeReward.likePayCount = likePayCount;
+       }
 
-      // 更新评论
-      if (updateType === 'comment' && data?.likeReward) {
-        data.likeReward.postCount = data.likeReward.postCount + 1;
-      }
+       // 更新评论
+       if (updateType === 'comment' && data?.likeReward) {
+         data.likeReward.postCount = data.likeReward.postCount + 1;
+       }
 
-      // 更新分享
-      if (updateType === 'share') {
-        data.likeReward.shareCount = data.likeReward.shareCount + 1;
-      }
+       // 更新分享
+       if (updateType === 'share') {
+         data.likeReward.shareCount = data.likeReward.shareCount + 1;
+       }
 
-      if (store[key] && store[key][index]) {
-        store[key][index] = data;
-      }
-    });
-  }
+       if (store[key] && store[key][index]) {
+         store[key][index] = data;
+       }
+     });
+   }
 
   // 获取指定的帖子数据
   findAssignThread(threadId) {

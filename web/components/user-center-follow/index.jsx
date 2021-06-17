@@ -67,11 +67,11 @@ class UserCenterFollows extends React.Component {
       const followRes = await getUserFollow(opts);
 
       if (followRes.code !== 0) {
-        console.error(followRes);
-        Toast.error({
-          content: followRes.msg,
-          duration: 1000,
-        });
+        // console.error(followRes);
+        // Toast.error({
+        //   content: followRes.msg,
+        //   duration: 2000,
+        // });
         return;
       }
 
@@ -105,7 +105,7 @@ class UserCenterFollows extends React.Component {
       if (error.code) {
         Toast.error({
           content: error.msg,
-          duration: 1000,
+          duration: 2000,
         });
       }
     }
@@ -154,7 +154,7 @@ class UserCenterFollows extends React.Component {
         Toast.success({
           content: '操作成功',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
         this.setFansBeFollowed({
           id: userId,
@@ -193,7 +193,7 @@ class UserCenterFollows extends React.Component {
         Toast.success({
           content: '操作成功',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
         this.setFansBeUnFollowed(id);
         return {

@@ -20,9 +20,8 @@ class SiteStore {
   @observable platform = null;
   @observable closeSiteConfig = null;
   @observable theme = APP_THEME.light;
-
+  @observable miniCode = null
   @observable isUserLoginVisible = null;
-
   @computed get isRegister() {
     return !this.isSmsOpen && this.wechatEnv === 'none';
   }
@@ -51,6 +50,11 @@ class SiteStore {
   // 站点名称
   @computed get siteName() {
     return get(this.webConfig, 'setSite.siteName');
+  }
+
+  // 站点介绍
+  @computed get siteIntroduction() {
+    return get(this.webConfig, 'setSite.siteIntroduction', '暂无介绍');
   }
 
   // 注册协议开关
