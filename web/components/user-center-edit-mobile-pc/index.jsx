@@ -216,6 +216,20 @@ class index extends Component {
     this.props.onClose();
   };
 
+  // 渲染button文案
+  renderButtonText = () => {
+    const { isSubmit, currentStep } = this.state;
+    if (isSubmit) {
+      return <Spin type="spinner">提交中...</Spin>;
+    } else {
+      if (currentStep === 'first') {
+        return '下一步';
+      } else {
+        return '提交';
+      }
+    }
+  };
+
   render() {
     const mobile = this.props.user?.mobile;
     const { currentStep, list = [], isBlur, bindMobile, isSubmit } = this.state;
@@ -283,14 +297,7 @@ class index extends Component {
                 type={'primary'}
                 className={styles.btn}
               >
-                {}
-                {isSubmit ? (
-                  <Spin type="spinner">提交中...</Spin>
-                ) : this.state.currentStep === 'first' ? (
-                  '下一步'
-                ) : (
-                  '提交修改'
-                )}
+                {this.renderButtonText()}
               </Button>
             </div>
           </div>

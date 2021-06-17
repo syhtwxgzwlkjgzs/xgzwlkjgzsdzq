@@ -1,7 +1,7 @@
 @import '@common/styles/index.scss';
 
 @mixin uploadStyles {
-  transition: all .5s;
+  transition: all 0.5s;
   position: absolute;
   left: 0;
   top: 0;
@@ -17,143 +17,147 @@
 }
 
 .box {
+  width: 100%;
+  min-height: rem(54);
+  position: relative;
+  background: $white;
+  box-sizing: border-box;
+  border-radius: 0 0 rem($border-radius-small) rem($border-radius-small);
+
+  .boxTop {
+    position: absolute;
     width: 100%;
-    min-height: rem(54);
-    position: relative;
-    background: $white;
+    top: rem(-81);
+    display: flex;
+    height: rem(136);
+    padding: 0 rem(24) 0 rem(65);
     box-sizing: border-box;
-    border-radius: 0 0 rem($border-radius-small) rem($border-radius-small);
-    
-    .boxTop {
+  }
+  .headImgBox {
+    position: relative;
+    width: rem(120);
+    height: rem(120);
+    .userCenterEditCameraIcon {
       position: absolute;
-      width: 100%;
-      top: rem(-81);
-      display: flex;
-      height: rem(136);
-      padding: 0 rem(24) 0 rem(65);
+      width: rem(34);
+      height: rem(34);
+      background-color: $primary-color;
+      border-radius: 50%;
+      right: 0;
+      bottom: 0;
       box-sizing: border-box;
-    }
-    .headImgBox {
-      position: relative;
-      width: rem(120);
-      height: rem(120);
-      .userCenterEditCameraIcon {
-        position: absolute;
-        width: rem(34);
-        height: rem(34);
-        background-color: $primary-color;
-        border-radius: 50%;
-        right: 0;
-        bottom: 0;
-        box-sizing: border-box;
-        border: rem(2) solid $white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 1;
-        :global {
-          .dzq-icon {
-            color: $white;
-          }
+      border: rem(2) solid $white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      :global {
+        .dzq-icon {
+          color: $white;
         }
       }
     }
-    .contentBox {
-      flex: 1;
-      display: flex;
-      justify-content: space-between;
-    }
-    .userNameOrTeam{
-      height: rem(120);
-      padding-top: rem(13);
-      padding-left: rem(24);
-      box-sizing: border-box;
-      .username {
-        font-weight: 600;
-        font-size: rem(20);
-        line-height: rem($font-line-height-small);
-        color: $white;
-      }
-      .groupName {
-        font-size: rem($font-size-base);
-        line-height: rem($font-line-height-small);
-        color: $white;
-        margin-top: rem(4);
-      }
-      .text {
-        position: absolute;
-        bottom: rem(16);
-        font-size: rem($font-size-primary);
-        line-height: rem($font-line-height-small);
-        color: $text-color-primary;
-        left: rem(210);
-        right: 0;
-        @include text-ellipsis();
-      }
-    }
-    .upload {
-      cursor: pointer;
-      .uploadIcon {
-        margin-right: rem(6);
-      }
-      .uploadText {
-        display: flex;
-        align-items: center;
-      }
-      padding-top: rem(48);
-      font-size: rem($font-size-small);
-      line-height: rem(22);
+  }
+  .contentBox {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    overflow: hidden;
+  }
+  .userNameOrTeam {
+    height: rem(120);
+    padding-top: rem(13);
+    padding-left: rem(24);
+    box-sizing: border-box;
+    overflow: hidden;
+    .username {
+      font-weight: 600;
+      font-size: rem(20);
+      line-height: rem($font-line-height-small);
       color: $white;
+      @include text-ellipsis();
     }
-    .otherUserBtn {
+    .groupName {
+      font-size: rem($font-size-base);
+      line-height: rem($font-line-height-small);
+      color: $white;
+      margin-top: rem(4);
+    }
+    .text {
       position: absolute;
-      right: rem($margin-6n);
-      bottom: rem(9);
-      text-align: right;
-      .shieldBtn {
-        font-size: rem($font-size-primary);
-        line-height: rem($font-line-height-small);
-        color: $white;
-        cursor: pointer;
-        :global {
-          .dzq-icon {
-            vertical-align: middle;
-            margin-right: rem($margin-2n);
-          }
+      bottom: rem(16);
+      font-size: rem($font-size-primary);
+      line-height: rem($font-line-height-small);
+      color: $text-color-primary;
+      left: rem(210);
+      right: 0;
+      @include text-ellipsis();
+    }
+  }
+  .upload {
+    cursor: pointer;
+    flex-shrink: 0;
+    .uploadIcon {
+      margin-right: rem(6);
+    }
+    .uploadText {
+      display: flex;
+      align-items: center;
+    }
+    padding-top: rem(48);
+    font-size: rem($font-size-small);
+    line-height: rem(22);
+    color: $white;
+  }
+  .otherUserBtn {
+    position: absolute;
+    right: rem($margin-6n);
+    bottom: rem(9);
+    text-align: right;
+    .shieldBtn {
+      font-size: rem($font-size-primary);
+      line-height: rem($font-line-height-small);
+      color: $white;
+      cursor: pointer;
+      :global {
+        .dzq-icon {
+          vertical-align: middle;
+          margin-right: rem($margin-2n);
         }
       }
     }
-    .userBtn {
-      margin-top: rem(26);
-      button {
-        width: rem(113);
-        height: rem(36);
-        font-size: rem($font-size-primary);
-        display: inline-block;
-        :global {
-          .dzq-icon {
-            vertical-align: middle;
-          }
+  }
+  .userBtn {
+    margin-top: rem(26);
+    button {
+      width: rem(113);
+      height: rem(36);
+      font-size: rem($font-size-primary);
+      display: inline-block;
+      :global {
+        .dzq-icon {
+          vertical-align: middle;
         }
       }
-      button:nth-child(2) {
-        margin-left: rem($margin-2n);
-        border-color: $primary-color;
-        color: $primary-color;
-      }
-      .userBtnText {
-        vertical-align: middle;
-        margin-left: rem($margin-2n);
-      }
-      .userFriendsBtn {
-        background: $warn-color;
-        border-color: $warn-color;
-      }
-      .userFollowedBtn {
-        background: $button-primary-disabled-bg-color;
-        border-color: $button-primary-disabled-bg-color;
-      }
     }
+    button:nth-child(2) {
+      margin-left: rem($margin-2n);
+      border-color: $primary-color;
+      color: $primary-color;
+    }
+    .userBtnText {
+      vertical-align: middle;
+      margin-left: rem($margin-2n);
+    }
+    .userFriendsBtn {
+      background: $warn-color;
+      border-color: $warn-color;
+    }
+    .userFollowedBtn {
+      background: $button-primary-disabled-bg-color;
+      border-color: $button-primary-disabled-bg-color;
+    }
+  }
 }
 
 // 上传样式

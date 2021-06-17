@@ -66,6 +66,7 @@ class index extends Component {
                   duration: 2000,
                 });
                 this.props.user.editNickName = '';
+                this.closeInputEditor('昵称');
               }
             }
           },
@@ -115,6 +116,7 @@ class index extends Component {
                 });
               }
               this.props.user.editUserName = '';
+              this.closeInputEditor('用户名');
             }
           },
           onCancel: () => {
@@ -157,6 +159,7 @@ class index extends Component {
                   duration: 2000,
                 });
                 this.props.user.editSignature = '';
+                this.closeInputEditor('个性签名');
               }
             }
           },
