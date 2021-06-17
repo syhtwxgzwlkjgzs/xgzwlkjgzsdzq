@@ -52,7 +52,7 @@ class SearchResultPostH5Page extends React.Component {
     const { keyword } = this.state;
     const { threads, threadsError } = this.props.search;
     const { pageData, currentPage, totalPage } = threads || {};
-console.log(!pageData?.length);
+
     return (
       <BaseLayout
           onRefresh={this.fetchMoreData}
