@@ -306,6 +306,13 @@
   box-sizing: border-box;
 }
 
+@mixin mini_input_icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 19px;
+  z-index: $zindex-tooltip;
+}
 @mixin mini_input {
   width: 327px;
   box-sizing: border-box;
@@ -326,18 +333,10 @@
     }
   }
   :global(.dzq-icon-EyeOutlined) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    top: 17px;
-    z-index: $zindex-tooltip;
+    @include mini_input_icon;
   }
   :global(.dzq-input__icon){
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    top: 17px;
-    z-index: $zindex-tooltip;
+    @include mini_input_icon;
     font-size: $font-size-middle !important;
   }
 }

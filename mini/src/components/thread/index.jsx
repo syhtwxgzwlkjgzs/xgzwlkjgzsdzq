@@ -74,11 +74,11 @@ class Index extends React.Component {
 
     // 支付
     onPay = (e) => {
-      //e && e.stopPropagation();
+      // e && e.stopPropagation();
       this.handlePay()
     }
     handlePay = debounce(async (e) => {
-      //e && e.stopPropagation();
+      // e && e.stopPropagation();
 
       // 对没有登录的先做
       if (!this.props.user.isLogin()) {
@@ -147,11 +147,9 @@ class Index extends React.Component {
     render() {
       const { data, className = '', site = {}, showBottomStyle = true, isShowIcon = false } = this.props;
       const { platform = 'pc' } = site;
-
       if (!data) {
         return <NoData />;
       }
-
       const {
         user = {},
         position = {},
@@ -164,9 +162,13 @@ class Index extends React.Component {
         threadId,
         displayTag,
         payType,
+        content,
+        isAnonymous,
       } = data || {};
+      const {text} = content
       const { isEssence, isPrice, isRedPack, isReward } = displayTag;
-
+      const {getShareData, getShareContent} = this.props.user
+      const {shareNickname, shareAvatar, shareThreadid, shareContent} = this.props.user
       return (
         <View className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`}>
           <View className={styles.header} onClick={this.onClick}>
@@ -181,14 +183,15 @@ class Index extends React.Component {
                 isPay={isPrice}
                 isRed={isRedPack}
                 isReward={isReward}
+                isAnonymous={isAnonymous}
                 userId={user?.userId}
                 platform={platform}
                 onClick={this.onUser}
               />
-              {isShowIcon && <View className={styles.headerIcon} onClick={this.onClickHeaderIcon}><Icon name='CollectOutlinedBig' size={20}></Icon></View>}
+              {isShowIcon && <View className={styles.headerIcon} onClick={this.onClickHeaderIcon}><Icon name='CollectOutlinedBig' className={styles.collectIcon}></Icon></View>}
           </View>
 
-          <ThreadCenterView data={data} onClick={this.onClick} onPay={this.onPay} platform={platform} />
+          <ThreadCenterView text={text} data={data} onClick={this.onClick} onPay={this.onPay} platform={platform} />
 
           <BottomEvent
             userImgs={likeReward.users}
@@ -203,6 +206,13 @@ class Index extends React.Component {
             tipData={{ postId, threadId, platform, payType }}
             platform={platform}
             index={this.props.index}
+            shareNickname = {shareNickname}
+            shareAvatar = {shareAvatar}
+            shareThreadid = {shareThreadid}
+            getShareData = {getShareData}
+            shareContent = {shareContent}
+            getShareContent = {getShareContent}
+            data={data}
           />
         </View>
       );

@@ -42,7 +42,7 @@ class InviteH5Page extends React.Component {
           <Image src={bgImage} className={layout.top_bg_image} />
         </View>
         {/* 头部全屏的背景图片 end */}
-        <HomeHeader hideInfo hideLogo showToolbar />
+        <HomeHeader hideInfo hideLogo showToolbar fullScreenTitle="推广邀请" />
         <View className={layout.content}>
           {/* 用户信息 start */}
           <View className={layout.user_info}>

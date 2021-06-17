@@ -74,37 +74,21 @@
 
 .footer {
     background-color: $white;
-    text-align: center;
-    height: 120px;
+    display: flex;
+    justify-content: space-between;
 
     .button {
-        width: 290;
+        width: 167px;
         height: 42px;
         font-size: $font-size-middle;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 0;
-        margin: $padding-3n auto 24px;
     }
-
-    .footerBtn {
-        position: relative;
-        line-height: 42px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: $font-size-primary;
+    .cancel {
         color: $text-color-regular;
-
-        &:before {
-            content: ' ';
-            position: absolute;
-            right: -16px;
-            left: -16px;
-            height: 1px;
-            top: 0;
-            background-color: $border-color;
-        }
+        background: $text-bg-color2;
+        border-radius: $border-radius-small;
     }
 }

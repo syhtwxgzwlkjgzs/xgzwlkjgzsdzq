@@ -53,7 +53,7 @@ export const defaultIcon = [
     name: 'SmilingFaceOutlined', // emoji
     // active: activeColor, // 这3个图标永远不需要上颜色
     id: defaultOperation.emoji,
-    type: defaultOperation.emoji,
+    type: THREAD_TYPE.emoji,
   },
   {
     name: 'AtOutlined', // @

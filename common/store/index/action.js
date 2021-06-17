@@ -350,7 +350,7 @@ class IndexAction extends IndexStore {
    */
   @action
   updateAssignThreadAllData(threadId, threadInfo) {
-    if (!threadId) return false;
+    if (!threadId || !threadInfo || !Object.keys(threadInfo).length) return false;
     const targetThread = this.findAssignThread(typeofFn.isNumber(threadId) ? threadId : +threadId);
     if (!targetThread) return false;
     const { index, data } = targetThread;
@@ -420,10 +420,18 @@ class IndexAction extends IndexStore {
    */
   @action
   addThread(threadInfo) {
-    const { pageData } = this.threads || {};
-    if (pageData) {
-      pageData.unshift(threadInfo);
-      this.threads.pageData = this.threads.pageData.slice();
+    const { threadId = '' } = threadInfo
+    const targetThread = this.findAssignThread(threadId);
+
+    // 如果更新的数据不存在，则直接插入。若存在，则替代原有数据
+    if (!targetThread || targetThread.length === 0) {
+      const { pageData } = this.threads || {};
+      if (pageData) {
+        pageData.unshift(threadInfo);
+        this.threads.pageData = this.threads.pageData.slice();
+      }
+    } else {
+      this.updateAssignThreadAllData(threadId, threadInfo)
     }
   }
 

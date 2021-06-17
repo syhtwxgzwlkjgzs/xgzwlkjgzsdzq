@@ -17,17 +17,17 @@ export default class index extends Component {
       await this.props.user.updateUsername();
       Toast.success({
         content: '修改用户名成功',
-        duration: 1000
-      })
+        duration: 2000,
+      });
       setTimeout(() => {
         Router.back();
       }, 1000);
     } catch (err) {
-      console.log(err);
+      console.error(err);
       if (err.Code) {
         Toast.error({
-          content: err.Msg,
-          duration: 1000
+          content: err.Msg || '修改用户名失败',
+          duration: 2000,
         });
       }
     }

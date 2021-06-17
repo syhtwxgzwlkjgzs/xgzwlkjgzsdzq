@@ -60,11 +60,13 @@
         background: $body-bg-color;
 
         .commentListName {
+          max-width: 100px;
           font-weight: bold;
           font-size: $font-size-primary;
           line-height: 20px;
           text-align: left;
           color: $text-color-primary;
+          @include text-ellipsis();
         }
         .commentListText {
           margin-top: $margin-1n;

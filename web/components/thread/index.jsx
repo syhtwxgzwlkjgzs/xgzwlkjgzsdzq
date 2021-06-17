@@ -200,12 +200,13 @@ class Index extends React.Component {
         threadId,
         displayTag,
         payType,
+        isAnonymous,
       } = data || {};
       const { isEssence, isPrice, isRedPack, isReward } = displayTag;
 
       return (
         <div className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`}>
-          <div className={styles.header}>
+          <div className={styles.header} onClick={this.onClick}>
               <UserInfo
                 name={user.nickname || ''}
                 avatar={user.avatar || ''}
@@ -217,6 +218,7 @@ class Index extends React.Component {
                 isPay={isPrice}
                 isRed={isRedPack}
                 isReward={isReward}
+                isAnonymous={isAnonymous}
                 userId={user?.userId}
                 platform={platform}
                 collect={collect}

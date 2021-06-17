@@ -27,13 +27,16 @@ const Index = inject('user', 'threadPost')(observer(({
   const getIconCls = (item) => {
     const cls = styles['plug-icon'];
     const activeCls = `${styles['plug-icon']} ${styles.active}`;
+    if (item.type === THREAD_TYPE.emoji && item.type === currentTool) return activeCls;
     if (item.type === THREAD_TYPE.at) return cls;
     if (item.type === THREAD_TYPE.topic) return cls;
     const { postData } = threadPost;
     if (item.type === THREAD_TYPE.redPacket && postData?.redpacket?.price) return activeCls;
     if (item.type === THREAD_TYPE.paid && (postData?.price || postData?.attachmentPrice)) return activeCls;
-    if (item.id === currentTool) return activeCls;
-    if (item.type === THREAD_TYPE.file && Object.keys(postData?.files || []).length > 0) return activeCls;
+    if (
+      item.type === THREAD_TYPE.file
+      && (item.type === currentTool || Object.keys(postData?.files || []).length > 0)
+    ) return activeCls;
     return cls;
   };
 
@@ -48,13 +51,8 @@ const Index = inject('user', 'threadPost')(observer(({
           key={index}
           className={getIconCls(item)}
           onClick={() => {
-            if (item.id === currentTool) {
-              setCurrentTool("");
-              onPluginClick({ type: "" });
-            } else {
-              setCurrentTool(item.id);
-              onPluginClick(item);
-            }
+            setCurrentTool(item.type);
+            onPluginClick(item);
           }}
           name={item.name}
           size='20'

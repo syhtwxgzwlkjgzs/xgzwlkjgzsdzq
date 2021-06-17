@@ -74,35 +74,22 @@
 
 .footer {
     background-color: $white;
-    text-align: center;
-    height: rem(120);
+    display: flex;
+    justify-content: space-between;
 
     .button {
-        width: rem(290);
+        width: rem(167);
         height: rem(42);
         margin-bottom: rem(24);
         font-size: rem($font-size-middle);
-        display: inline-block;
-        margin-top: rem($padding-3n);
-    }
-
-    .footerBtn {
-        position: relative;
-        line-height: rem(42);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: rem($font-size-primary);
+        padding: 0;
+    }
+    .cancel {
         color: $text-color-regular;
-
-        &:before {
-            content: ' ';
-            position: absolute;
-            right: rem(-16);
-            left: rem(-16);
-            height: 1px;
-            top: 0;
-            background-color: $border-color;
-        }
+        background: $text-bg-color2;
+        border-radius: $border-radius-small;
     }
 }

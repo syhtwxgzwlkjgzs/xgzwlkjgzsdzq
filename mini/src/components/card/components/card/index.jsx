@@ -1,7 +1,7 @@
 import React from 'React'
 import Taro from '@tarojs/taro'
-import { View, Button, Image } from '@tarojs/components'
-import  TaroCanvasDrawer  from '../taro-plugin-canvas'
+import { View, Image } from '@tarojs/components'
+import  TaroCanvasDrawer  from '../taro-plugin-canvas'; // npm 引入方式
 import styles from './index.module.scss'
 
 export default class Simple extends React.Component {
@@ -16,64 +16,63 @@ export default class Simple extends React.Component {
       // TaroCanvasDrawer 组件状态
       canvasStatus: null,
       rssConfig: {
-        width: 750,
-        height: `${750 + obj.contentHeight * 24}`,
-        backgroundColor: '#ffffff',
+        width: 700,
+        height: 1082 - obj.contentHeight,
+        backgroundColor: '#fff',
         debug: false,
         blocks: [
-          {
-            x: 20,
-            y: 20,
-            width: 710,
-            height: 710,
-            paddingLeft: 0,
-            paddingRight: 0,
-            borderWidth: 0,
-            // borderColor: '#ccc',
-            backgroundColor: '#EFF3F5',
-            borderRadius: 0,
-          },
-          {
-            x: 25,
-            y: 25,
-            width: 700,
-            height: 700,
-            paddingLeft: 0,
-            paddingRight: 0,
-            borderWidth: 0,
-            // borderColor: '#ccc',
-            backgroundColor: '#fff',
-            borderRadius: 12,
-          },
           // 分组
           {
-            x: 75,
-            y: `${obj.contentHeight * 24 + 400}`,
-            width: `${obj.groupLength * 24 + 20}`,
+            x: 40,
+            y: 757 - obj.contentHeight,
+            width: obj.marglength,
             height: 44,
-            backgroundColor: '#EFF3F5',
-            // backgroundColor: '#f00'
+            backgroundColor: '#F7F7F7',
+            borderRadius: 6
+          },
+          // 二维码和文字部分
+          {
+            backgroundColor: '#F9FAFC',
+            width: 700,
+            height: 200,
+            y: 882 - obj.contentHeight,
+            x: 0
           }
         ],
         images: [
           // 头像
             {   
                 url: obj.avatarUrl,
-                x: 75,
-                y: 75,
+                x: 40,
+                y: 40,
                 width: 80,
                 height: 80,
                 borderRadius: 80,
-                borderColor: '#000000',
+                borderColor: '#000',
                 zIndex: 10,
+            },
+          // 二维码登录
+            {
+              // url: '../../../../public/dzq-img/login-ORcode.png',
+              url: obj.codeUrl,
+              x: 40,
+              y: 912 - obj.contentHeight,
+              height: 140,
+              width: 140,
+              borderRadius: 20,
+              zIndex: 10
             }
         ],
         texts: [
           // 介绍
             {
                 text: `${obj.username}  推荐`,
-                x: 170,
-                y: 75,
+                color: '#000000',
+                x: 140,
+                y: 41,
+                width: 500,
+                height: 27,
+                lineHeight:31,
                 fontSize: 28,
                 fontWeight: 'bold',
                 textAlign: 'left',
@@ -82,11 +81,13 @@ export default class Simple extends React.Component {
             },
             {
               text: `${obj.threadUser}在${obj.group}中发表的内容`,
-              x: 170,
-              y: 131,
-              width: 530,
+              color: '#333',
+              x: 140,
+              y: 88,
+              width: 500,
+              height: 27,
               fontSize: 24,
-              fontWeight: 400,
+              lineNum: 1,
               textAlign: 'left',
               zIndex:10,
               baseLine: 'top'
@@ -94,25 +95,58 @@ export default class Simple extends React.Component {
             // 内容
             {
               text: `${obj.content}`,
-              x: 75,
-              y: 200,
-              width: 600,
+              x: 40,
+              y: 161,
+              width: 620,
+              height: 520 - obj.contentHeight,
               fontSize: 28,
+              lineHeight: 46,
               textAlign: 'left',
               zIndex: 10,
-              lineNum: 2,
+              lineNum: 12,
+              color: '#333333',
               baseLine: 'top'
             },
             // 分组内容
             {
               text: `${obj.group}`,
-              //  lineHeight: 50,
-              x: 85,
-              y: obj.contentHeight * 24 + 410,
+              color: '#777',
+              x: 50,
+              y: 767 - obj.contentHeight,
               fontSize: 24,
               zIndex: 20,
+              lineNum: 1,
               textAlign: 'left',
               baseLine: 'top',
+            },
+            // 二维码描述
+            {
+              text: '长按识别小程序码查看详情',
+              color: '#333',
+              width: 560,
+              height: 31,
+              y: 942 - obj.contentHeight,
+              x: 210,
+              lineHeight: 31,
+              fontSize: 28,
+              fontWeight: 'bold',
+              textAlign: 'left',
+              zIndex:10,
+            },
+            // 站点名称
+            {
+              text: '来自Discuz！Q',
+              color: '#AAAAAA',
+              width:450,
+              height: 27,
+              y: 989 - obj.contentHeight,
+              x: 210,
+              fontSize: 24,
+              lineNum: 1,
+              lineHeight: 26.64,
+              textAlign: 'left',
+              baseLine: 'top',
+              zIndex: 10,
             }
         ], 
       }
@@ -127,22 +161,17 @@ export default class Simple extends React.Component {
       title: '绘制中...'
     })
   }
-  // 调用绘画 => canvasStatus 置为true、同时设置config
-  // canvasDrawFunc = (config = this.state.rssConfig) => {
-  //   this.setState({
-  //     canvasStatus: true,
-  //     config,
-  //   })
-  // }
 
   // 绘制成功回调函数 （必须实现）=> 接收绘制结果、重置 TaroCanvasDrawer 状态
   onCreateSuccess = (result) => {
     const { tempFilePath, errMsg } = result;
+    const { setShareImage } = this.props
+    setShareImage(tempFilePath)
     Taro.hideLoading();
     if (errMsg === 'canvasToTempFilePath:ok') {
       this.setState({
-        shareImage: tempFilePath,
         // 重置 TaroCanvasDrawer 状态，方便下一次调用
+        shareImage: tempFilePath,
         canvasStatus: false,
         config: null
       })
@@ -155,11 +184,6 @@ export default class Simple extends React.Component {
       Taro.showToast({ icon: 'none', title: errMsg || '出现错误' });
       console.log(errMsg);
     }
-    // 预览
-    // Taro.previewImage({
-    //   current: tempFilePath,
-    //   urls: [tempFilePath]
-    // })
   }
 
   // 绘制失败回调函数 （必须实现）=> 接收绘制错误信息、重置 TaroCanvasDrawer 状态
@@ -172,21 +196,12 @@ export default class Simple extends React.Component {
     })
     console.log(error);
   }
-
-   // 保存图片至本地
-  saveToAlbum = () => {
-    const res = Taro.saveImageToPhotosAlbum({
-      filePath: this.state.shareImage,
-    });
-    if (res.errMsg === 'saveImageToPhotosAlbum:ok') {
-      Taro.showToast({
-        title: '保存图片成功',
-        icon: 'success',
-        duration: 2000,
-      });
-    }
+  preView = () => {
+    Taro.previewImage({
+      current: this.state.shareImage,
+      urls: [this.state.shareImage]
+    })
   }
-
   render(){
     return (
       <View className={styles.painter}>
@@ -196,13 +211,13 @@ export default class Simple extends React.Component {
               className={styles.centImage}
               src={this.state.shareImage}
               mode='widthFix'
+              lazy-load
+              onClick={this.preView}
             />
           </View>
           {
-            // 由于部分限制，目前组件通过状态的方式来动态加载
             this.state.canvasStatus &&
             (
-            // <View>111</View>
             <View className={styles.boxImg}>
               <TaroCanvasDrawer
               config={this.state.config} // 绘制配置
@@ -212,9 +227,6 @@ export default class Simple extends React.Component {
             </View>
             )
           }
-        </View>
-        <View className={styles.shareBtn}>
-          <Button className={styles.btn} onClick={this.saveToAlbum}>保存到相册</Button>
         </View>
       </View>
     )

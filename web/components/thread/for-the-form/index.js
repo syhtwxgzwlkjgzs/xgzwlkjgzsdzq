@@ -9,6 +9,7 @@ import DatePickers from '@components/thread/date-picker'; // 原来就有的封�
 import DDialog from '@components/dialog';
 import DatePicker from 'react-datepicker';
 import { formatDate } from '@common/utils/format-date';
+import { priceFormat } from '@common/utils/price-format';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from './index.module.scss'; // 私有样式
@@ -53,9 +54,12 @@ const ForTheForm = ({ confirm, cancel, data, pc, visible }) => {
         <div className={styles.item}>
           <Input
             mode="number"
+            min="0"
+            max="1000000"
             value={value}
             placeholder="金额"
-            onChange={e => setValue(e.target.value)}
+            onChange={e => setValue(e.target.value.replace(/\D*(\d*)(\.?)(\d{0,2})\d*/, '$1$2$3'))}
+            pattern="[0-9]*\.?[0-9]{0,2}"
           />
           元
         </div>

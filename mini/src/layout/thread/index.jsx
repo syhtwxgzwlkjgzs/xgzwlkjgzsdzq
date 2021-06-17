@@ -288,16 +288,23 @@ class ThreadH5Page extends React.Component {
 
     // 生成海报
     if (type === 'posterShare') {
-      Toast.info({ content: '生成海报' });
-      // this.onShareClick();
-    }
-
-    // 微信分享
-    if (type === 'weixinShare') {
-      Toast.info({ content: '微信分享' });
-      // this.onShareClick();
+      this.onPosterShare();
     }
   };
+
+  // 生成海报
+  onPosterShare() {
+    const threadId = this.props.thread?.threadData?.id;
+    const threadData = this.props.thread?.threadData;
+    Taro.navigateTo({
+      url: `/subPages/create-card/index?threadId=${threadId}`,
+      success () {
+        Taro.eventCenter.once('page:init', () => {
+            Taro.eventCenter.trigger('message:detail', threadData);
+        })
+      }
+    })
+  }
 
   // 确定举报
   async onReportOk(val) {
@@ -743,19 +750,20 @@ class ThreadH5Page extends React.Component {
     const fun = {
       moreClick: this.onMoreClick,
     };
-    
-    const isDraft = threadStore?.threadData?.isDraft;
-    // 是否红包帖
-    const isRedPack = threadStore?.threadData?.displayTag?.isRedPack;
-    // 是否悬赏帖
-    const isReward = threadStore?.threadData?.displayTag?.isReward;
+
+    // const isDraft = threadStore?.threadData?.isDraft;
+    // // 是否红包帖
+    // const isRedPack = threadStore?.threadData?.displayTag?.isRedPack;
+    // // 是否悬赏帖
+    // const isReward = threadStore?.threadData?.displayTag?.isReward;
 
     // 更多弹窗权限
     const morePermissions = {
       // （不是草稿 && 有编辑权限 && 不是红包帖 && 不是悬赏帖） || （是草稿 && 有编辑权限）
-      canEdit:
-        (!isDraft && threadStore?.threadData?.ability?.canEdit && !isRedPack && !isReward)
-        || (isDraft && threadStore?.threadData?.ability?.canEdit),
+      // canEdit:
+      //   (!isDraft && threadStore?.threadData?.ability?.canEdit && !isRedPack && !isReward)
+      //   || (isDraft && threadStore?.threadData?.ability?.canEdit),
+      canEdit: threadStore?.threadData?.ability?.canEdit, // 更新：帖子都可以编辑，根据编辑的权限来处理即可
       canDelete: threadStore?.threadData?.ability?.canDelete,
       canEssence: threadStore?.threadData?.ability?.canEssence,
       canStick: threadStore?.threadData?.ability?.canStick,
@@ -903,10 +911,12 @@ class ThreadH5Page extends React.Component {
               onSubmit={(value, imgList) => this.publishClick(value, imgList)}
               site={this.props.site}
               checkUser={this.props?.thread?.checkUser || []}
+              thread={this.props?.thread}
             ></InputPopup>
 
             {/* 更多弹层 */}
             <MorePopup
+              shareData={this.shareData}
               permissions={morePermissions}
               statuses={moreStatuses}
               visible={this.state.showMorePopup}

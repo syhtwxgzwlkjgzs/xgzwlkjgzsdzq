@@ -43,6 +43,10 @@
       }
     }
 
+    .pick-view-wallet {
+      height: 216px;
+    }
+
     .btn {
       display: flex;
       flex-wrap: nowrap;
@@ -58,6 +62,7 @@
       :global {
         .dzq-button {
           width: 48%;
+          height: 42px;
           padding: 10px 0;
           font-size: 16px;
           color: #4f5a70;
