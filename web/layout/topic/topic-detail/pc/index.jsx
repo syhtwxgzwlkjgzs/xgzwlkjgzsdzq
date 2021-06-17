@@ -11,7 +11,7 @@ import DetailsHeader from './components/details-header';
 import ThreadContent from '@components/thread'
 import Copyright from '@components/copyright';
 import { Toast } from '@discuzq/design';
-import ActiveUsers from '@components/active-users'
+import ActiveUsers from '@components/search/active-users'
 
 @inject('site')
 @inject('user')

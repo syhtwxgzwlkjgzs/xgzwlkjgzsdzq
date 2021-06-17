@@ -3,17 +3,14 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import styles from './index.module.scss';
 import BaseLayout from '@components/base-layout';
-import SectionTitle from '@components/section-title'
-import TrendingTopicMore from './components/trending-topic-more';
 import ThreadContent from '@components/thread';
-import ActiveUsersMore from './components/active-users-more';
-import Stepper from './components/stepper';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import Copyright from '@components/copyright';
 import SidebarPanel from '@components/sidebar-panel';
-import { Toast, Spin } from '@discuzq/design';
-import TopicItem from '@components/topic-item'
-import Nodata from '@components/no-data'
+import { Toast } from '@discuzq/design';
+import TopicItem from '@components/search/topic-item'
+import ActiveUsersMore from '@components/search/active-user-more-items';
+import Stepper from './components/stepper';
 
 @inject('site')
 @inject('search')
@@ -56,7 +53,7 @@ class SearchPCPage extends React.Component {
     this.props.router.push(`/topic/topic-detail/${topicId}`);
   };
 
-  onPostClick = data => console.log('post click', data);
+  // onPostClick = data => console.log('post click', data);
 
   searchData = (keyword) => {
     const { dispatch } = this.props;
