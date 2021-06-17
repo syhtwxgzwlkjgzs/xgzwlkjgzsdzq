@@ -90,7 +90,7 @@ class ThreadPCPage extends React.Component {
       if (e.Code) {
         Toast.error({
           content: e.Msg,
-          duration: 1000,
+          duration: 2000,
         });
       }
     }
@@ -371,9 +371,13 @@ class ThreadPCPage extends React.Component {
                         }}
                         dateFormat="yyyy年MM月"
                       />
-                      <Icon name={'RightOutlined'} size={12} className={classnames(layout.datePickerIcon, {
-                        [layout.datePickerIconOpen]: this.state.datePickerOpen
-                      })} />
+                      <Icon
+                        name={'RightOutlined'}
+                        size={12}
+                        className={classnames(layout.datePickerIcon, {
+                          [layout.datePickerIconOpen]: this.state.datePickerOpen,
+                        })}
+                      />
                     </div>
                     <div className={layout.choiceType}>
                       <Dropdown

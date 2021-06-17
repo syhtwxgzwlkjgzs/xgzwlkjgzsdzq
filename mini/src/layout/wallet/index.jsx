@@ -225,7 +225,7 @@ class WalletH5Page extends React.Component {
       if (e.Code) {
         Toast.error({
           content: e.Msg,
-          duration: 1000,
+          duration: 2000,
         });
       }
     }
@@ -381,26 +381,18 @@ class WalletH5Page extends React.Component {
                   <Tabs.TabPanel key={id} id={id} label={label} name={icon.name}></Tabs.TabPanel>
                 ))}
               </Tabs>
-              {this.state.tabsType === 'income' && (
+              {this.state.tabsType === 'income' &&
                 incomeData.map((value, index) => (
-                    <IncomeList key={value.id} incomeVal={value} itemKey={index} dataLength={incomeData.length} />
-                  ))
-              )}
-              {this.state.tabsType === 'pay' && (
+                  <IncomeList key={value.id} incomeVal={value} itemKey={index} dataLength={incomeData.length} />
+                ))}
+              {this.state.tabsType === 'pay' &&
                 expandData.map((value, index) => (
-                    <PayList key={value.id} payVal={value} itemKey={index} dataLength={expandData.length} />
-                  ))
-              )}
-              {this.state.tabsType === 'withdrawal' && (
+                  <PayList key={value.id} payVal={value} itemKey={index} dataLength={expandData.length} />
+                ))}
+              {this.state.tabsType === 'withdrawal' &&
                 cashData.map((value, index) => (
-                    <WithdrawalList
-                      key={value.id}
-                      withdrawalVal={value}
-                      itemKey={index}
-                      dataLength={cashData.length}
-                    />
-                  ))
-              )}
+                  <WithdrawalList key={value.id} withdrawalVal={value} itemKey={index} dataLength={cashData.length} />
+                ))}
             </View>
           </List>
 
