@@ -66,7 +66,7 @@ class index extends Component {
                   duration: 2000,
                 });
                 this.props.user.editNickName = '';
-                this.closeInputEditor('昵称');
+                this.cancelInputConfirmEditor('昵称');
               }
             }
           },
@@ -116,7 +116,7 @@ class index extends Component {
                 });
               }
               this.props.user.editUserName = '';
-              this.closeInputEditor('用户名');
+              this.cancelInputConfirmEditor('用户名');
             }
           },
           onCancel: () => {
@@ -159,7 +159,7 @@ class index extends Component {
                   duration: 2000,
                 });
                 this.props.user.editSignature = '';
-                this.closeInputEditor('个性签名');
+                this.cancelInputConfirmEditor('个性签名');
               }
             }
           },
@@ -285,6 +285,17 @@ class index extends Component {
     const targetConfig = editorConfig.filter((item) => item.name === name);
     if (targetConfig.length) {
       targetConfig[0].isConfirm = true;
+      this.setState({
+        editorConfig: [...editorConfig],
+      });
+    }
+  };
+
+  cancelInputConfirmEditor = (name) => {
+    const { editorConfig } = this.state;
+    const targetConfig = editorConfig.filter((item) => item.name === name);
+    if (targetConfig.length) {
+      targetConfig[0].isConfirm = false;
       this.setState({
         editorConfig: [...editorConfig],
       });
