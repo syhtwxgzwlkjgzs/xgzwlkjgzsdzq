@@ -7,6 +7,8 @@ import clearLoginStatus from '@common/utils/clear-login-status';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import { numberFormat } from '@common/utils/number-format';
+import browser from '@common/utils/browser';
+
 @inject('user')
 @observer
 class index extends Component {
@@ -217,13 +219,13 @@ class index extends Component {
             <>
               <Button full className={styles.btn} onClick={this.goToMyEditInfo} type="primary">
                 <div className={styles.actionButtonContentWrapper}>
-                  <Icon name="CompileOutlined" size={16} />
+                  <Icon name="CompileOutlined" size={browser.env('ios') ? 14 : 16} />
                   <span className={styles.userBtnText}>编辑资料</span>
                 </div>
               </Button>
               <Button full className={styles.btn} onClick={this.logout}>
                 <div className={styles.actionButtonContentWrapper}>
-                  <Icon name="PoweroffOutlined" size={16} />
+                  <Icon name="PoweroffOutlined" size={browser.env('ios') ? 14 : 16} />
                   <span className={styles.userBtnText}>退出登录</span>
                 </div>
               </Button>

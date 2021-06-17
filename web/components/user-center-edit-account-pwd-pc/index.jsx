@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import styles from './index.module.scss';
-import { Avatar, Input, Icon, Dialog, Toast, Button } from '@discuzq/design';
+import { Spin, Input, Icon, Dialog, Toast, Button } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
 import { trimLR } from '@common/utils/get-trimly.js';
 import throttle from '@common/utils/thottle.js';
+import classNames from 'classnames';
 
 @inject('site')
 @inject('user')
@@ -12,7 +13,16 @@ import throttle from '@common/utils/thottle.js';
 export default class index extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      isSubmit: false, // 是否点击提交
+    };
   }
+
+  initState = () => {
+    this.setState({
+      isSubmit: false,
+    });
+  };
 
   componentDidMount() {
     this.props.user.clearUserAccountPassword();
@@ -60,6 +70,9 @@ export default class index extends Component {
   // 点击提交
   handleSubmit = throttle(async () => {
     if (this.getDisabledWithButton()) return;
+    this.setState({
+      isSubmit: true,
+    });
     const newPassword = this.props.user?.newPassword;
     const newPasswordRepeat = this.props.user?.newPasswordRepeat;
     if (newPassword !== newPasswordRepeat) {
@@ -69,6 +82,7 @@ export default class index extends Component {
         duration: 2000,
       });
       this.props.user.clearUserAccountPassword();
+      this.initState();
       return;
     }
     if (this.props.user.hasPassword) {
@@ -80,6 +94,7 @@ export default class index extends Component {
             hasMask: false,
             duration: 2000,
           });
+          this.initState();
           this.props.onClose && this.props.onClose();
           this.props.user.clearUserAccountPassword();
         })
@@ -89,6 +104,7 @@ export default class index extends Component {
             hasMask: false,
             duration: 2000,
           });
+          this.initState();
           this.props.user.clearUserAccountPassword();
         });
     } else {
@@ -100,6 +116,7 @@ export default class index extends Component {
             hasMask: false,
             duration: 2000,
           });
+          this.initState();
           this.props.onClose && this.props.onClose();
           this.props.user.clearUserAccountPassword();
           this.props.user.userInfo.hasPassword = true;
@@ -110,6 +127,7 @@ export default class index extends Component {
             hasMask: false,
             duration: 2000,
           });
+          this.initState();
           this.props.user.clearUserAccountPassword();
         });
     }
@@ -123,14 +141,16 @@ export default class index extends Component {
     const oldPassword = this.props.user?.oldPassword;
     const newPassword = this.props.user?.newPassword;
     const newPasswordRepeat = this.props.user?.newPasswordRepeat;
-
-    let isSubmit = false;
-    if (this.props.user?.hasPassword) {
-      isSubmit = !oldPassword || !newPassword || !newPasswordRepeat;
+    const { isSubmit } = this.state;
+    let isDisabled = false;
+    if (isSubmit) {
+      isDisabled = isSubmit;
+    } else if (this.props.user?.hasPassword) {
+      isDisabled = !oldPassword || !newPassword || !newPasswordRepeat;
     } else {
-      isSubmit = !newPassword || !newPasswordRepeat;
+      isDisabled = !newPassword || !newPasswordRepeat;
     }
-    return isSubmit;
+    return isDisabled;
   };
 
   handleClose = () => {
@@ -198,6 +218,7 @@ export default class index extends Component {
   };
 
   render() {
+    const { isSubmit } = this.state;
     return (
       <div className={styles.userMobileWrapper}>
         <Dialog visible={this.props.visible} position="center" maskClosable={true} onClose={this.props.onClose}>
@@ -212,14 +233,18 @@ export default class index extends Component {
                 忘记旧密码？
               </div>
             )}
-            <div className={styles.bottom}>
+            <div
+              className={classNames(styles.bottom, {
+                [styles.bgBtnColor]: !this.getDisabledWithButton(),
+              })}
+            >
               <Button
                 onClick={this.handleSubmit}
                 disabled={this.getDisabledWithButton()}
                 type={'primary'}
                 className={styles.btn}
               >
-                提交
+                {isSubmit ? <Spin type="spinner">提交中...</Spin> : '提交'}
               </Button>
             </div>
           </div>
