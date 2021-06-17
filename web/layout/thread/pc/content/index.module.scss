@@ -145,10 +145,12 @@
 
 .goods {
   display: flex;
+  height: rem(114);
 }
 
 .buyBtn {
   width: rem(113);
+  height: calc(100% - 2px);
   box-sizing: content-box;
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;

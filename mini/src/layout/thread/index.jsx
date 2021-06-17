@@ -288,16 +288,23 @@ class ThreadH5Page extends React.Component {
 
     // 生成海报
     if (type === 'posterShare') {
-      Toast.info({ content: '生成海报' });
-      // this.onShareClick();
-    }
-
-    // 微信分享
-    if (type === 'weixinShare') {
-      Toast.info({ content: '微信分享' });
-      // this.onShareClick();
+      this.onPosterShare();
     }
   };
+
+  // 生成海报
+  onPosterShare() {
+    const threadId = this.props.thread?.threadData?.id;
+    const threadData = this.props.thread?.threadData;
+    Taro.navigateTo({
+      url: `/subPages/create-card/index?threadId=${threadId}`,
+      success () {
+        Taro.eventCenter.once('page:init', () => {
+            Taro.eventCenter.trigger('message:detail', threadData);
+        })
+      }
+    })
+  }
 
   // 确定举报
   async onReportOk(val) {
@@ -903,10 +910,12 @@ class ThreadH5Page extends React.Component {
               onSubmit={(value, imgList) => this.publishClick(value, imgList)}
               site={this.props.site}
               checkUser={this.props?.thread?.checkUser || []}
+              thread={this.props?.thread}
             ></InputPopup>
 
             {/* 更多弹层 */}
             <MorePopup
+              shareData={this.shareData}
               permissions={morePermissions}
               statuses={moreStatuses}
               visible={this.state.showMorePopup}

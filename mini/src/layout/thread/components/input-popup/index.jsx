@@ -9,13 +9,14 @@ import Toast from '@discuzq/design/dist/components/toast/index';
 import classnames from 'classnames';
 import { readEmoji } from '@common/server';
 import { THREAD_TYPE } from '@common/constants/thread-post';
+import { debounce } from '@common/utils/throttle-debounce';
 import Emoji from '@components/emoji';
 import AtSelect from '@components/thread-post/at-select';
 import styles from './index.module.scss';
 import ImageUpload from '../image-upload';
 
 const InputPop = (props) => {
-  const { visible, onSubmit, onClose, initValue, inputText = '写评论...', site, checkUser = [] } = props;
+  const { visible, onSubmit, onClose, initValue, inputText = '写评论...', site, thread, checkUser = [] } = props;
 
   const textareaRef = createRef();
   const [value, setValue] = useState('');
@@ -53,11 +54,13 @@ const InputPop = (props) => {
         setLoading(true);
         const success = await onSubmit(value, imageList);
         if (success) {
-          setValue('');
+          setTimeout(() => {
+            setValue('');
+          });
           setShowPicture(false);
           setShowEmojis(false);
           setImageList([]);
-          this.props.thread.setCheckUser([]);
+          thread.setCheckUser([]);
         }
       } catch (error) {
         console.log(error);
@@ -214,10 +217,10 @@ const InputPop = (props) => {
               onBlur={(e) => {
                 onChange(e);
               }}
-              onChange={(e) => {
+              onChange={debounce(e => {
                 onChange(e);
                 setValue(e.target.value);
-              }}
+              }, 100)}
               onFocus={() => setShowEmojis(false)}
               placeholder={inputText}
               disabled={loading}
