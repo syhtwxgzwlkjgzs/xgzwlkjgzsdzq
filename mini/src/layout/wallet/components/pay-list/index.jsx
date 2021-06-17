@@ -3,6 +3,9 @@ import { observer } from 'mobx-react';
 import { View } from '@tarojs/components';
 import { diffDate } from '@common/utils/diff-date';
 import { time } from '@discuzq/sdk/dist/index';
+import s9e from '@common/utils/s9e';
+import xss from '@common/utils/xss';
+import RichText from '@discuzq/design/dist/components/rich-text/index';
 
 import styles from './index.module.scss';
 
@@ -25,12 +28,27 @@ class IncomeList extends React.Component {
     this.payStatus = true;
   }
 
+  filterTag(html) {
+    return html?.replace(/<(\/)?([beprt]|br|div)[^>]*>|[\r\n]/gi, '')
+      .replace(/<img[^>]+>/gi, $1 => {
+        return $1.includes('qq-emotion') ? $1 : "[图片]";
+      });
+  }
+
+  // parse content
+  parseHTML = (content) => {
+    let t = xss(s9e.parse(this.filterTag(content)));
+    t = (typeof t === 'string') ? t : '';
+
+    return t;
+  }
+
   render() {
     const { itemKey, dataLength } = this.props;
     return (
       <View className={styles.container}>
         <View className={styles.content}>
-          <View className={styles.text}>{this.props.payVal.title || this.props.payVal.changeDesc}</View>
+          <RichText content={this.parseHTML(this.props.payVal.title || this.props.payVal.changeDesc)} onClick={this.handleContentClick} />
           <View className={styles.money}>{this.props.payVal.amount}</View>
         </View>
         {/* // FIXME:这里的结构有问题 怪怪的 所以只能用数组长度取消底部边框线 */}

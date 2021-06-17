@@ -16,7 +16,29 @@
         text-align: left;
         color: $text-color-primary;
         line-height: 16px;
-    }
+
+        :global {
+            .qq-emotion {
+                width: 14px;
+                height: 14px;
+                display: inline-block !important;
+                flex-shrink: 0;
+              }
+          
+              .dzq-richText--mini {
+                font-size: $font-size-primary;
+                overflow: hidden;
+                word-break: break-all;
+                max-width: 140px;
+                line-height: 16px;
+                @include text-ellipsis();
+          
+                .dzq-a {
+                  display: inline;
+                }
+              }
+            }
+        }
     .money {
         font-family: 'PingFangSC-Semibold';
         font-size: $font-size-middle;
