@@ -417,10 +417,10 @@ class ThreadH5Page extends React.Component {
   }
 
   // 点击发布按钮
-  async publishClick(val, imageList) {
+  async publishClick(val = '', imageList = []) {
     const valuestr = val.replace(/\s/g, '');
     // 如果内部为空，且只包含空格或空行
-    if (!valuestr) {
+    if (!valuestr && imageList.length === 0) {
       Toast.info({ content: '请输入内容' });
       return;
     }

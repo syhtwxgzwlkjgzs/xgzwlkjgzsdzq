@@ -169,7 +169,7 @@ const InputPop = (props) => {
 
       let isAllLegal = true; // 状态：此次上传图片是否全部合法
       cloneList.forEach((item, index) => {
-        const arr = item.name.split('.').pop();
+        const arr = item.path.split('.').pop();
         const imageType = arr.toLocaleLowerCase();
         const isLegalType = supportImgExt.toLocaleLowerCase().includes(imageType);
 

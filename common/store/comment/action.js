@@ -98,7 +98,7 @@ class CommentAction extends CommentStore {
   @action
   async createComment(params, ThreadStore) {
     const { id, content, attachments, postId, sort, isNoMore } = params;
-    if (!id || !content) {
+    if (!id || (!content && attachments.length === 0)) {
       return {
         msg: '参数不完整',
         success: false,
