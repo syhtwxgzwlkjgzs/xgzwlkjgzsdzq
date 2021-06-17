@@ -573,8 +573,8 @@ class ThreadH5Page extends React.Component {
   }
 
   // 创建回复评论+回复回复接口
-  async createReply(val, imageList) {
-    if (!val) {
+  async createReply(val = '', imageList = []) {
+    if (!val && imageList.length === 0) {
       Toast.info({ content: '请输入内容!' });
       return;
     }

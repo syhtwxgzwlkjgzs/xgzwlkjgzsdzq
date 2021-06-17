@@ -222,10 +222,10 @@ class RenderCommentList extends React.Component {
   }
 
   // 创建回复评论+回复回复接口
-  async createReply(val, imageList) {
+  async createReply(val = '', imageList = []) {
     const valuestr = val.replace(/\s/g, '');
     // 如果内部为空，且只包含空格或空行
-    if (!valuestr) {
+    if (!valuestr && imageList.length === 0) {
       Toast.info({ content: '请输入内容' });
       return;
     }
