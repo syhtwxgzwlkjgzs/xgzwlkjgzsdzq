@@ -9,13 +9,11 @@ export const getConfig = ({
   imgUrl,
   heightdefill,
   }) => {
-    console.log(heightdefill)
   if(imgUrl) {
     contentHeight = heightdefill
   } else {
     contentHeight = -contentHeight
   }
-  console.log(heightdefill)
   return {
       width: 700,
       height: 1082 + contentHeight,

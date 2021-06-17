@@ -78,7 +78,6 @@ const index = ({
         imgUrl:url,
         miniCode,
         imgtop,
-        codeUrl:miniCode,
     }
     const [shareImage , setShareImage] = useState('')
     const saveToAlbum = () => {
@@ -139,20 +138,20 @@ const index = ({
       // 标题文字图片海报
       if(url) {
         return (
-          miniCode && heightdefill ? <Cardb obj={obj} setShareImage={setShareImage} heightdefill={heightdefill}></Cardb> : <View style={{ flex: 1 }}></View>
+          <Cardb obj={obj} setShareImage={setShareImage} heightdefill={heightdefill}></Cardb>
         )
       }
       // 标题文字海报
       if(title) {
         return (
-          miniCode ? <Cardk obj={obj} setShareImage={setShareImage}></Cardk>: <View style={{ flex: 1 }}></View>
+         <Cardk obj={obj} setShareImage={setShareImage}></Cardk>
         )
       } 
       // 视频海报
       
       // 文字海报
       return (
-        (miniCode ? <Card obj={obj} setShareImage={setShareImage}></Card> : <View style={{ flex: 1 }}></View>)
+        <Card obj={obj} setShareImage={setShareImage}></Card>
       )
     }
     return (

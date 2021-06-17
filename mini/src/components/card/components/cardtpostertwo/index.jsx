@@ -17,10 +17,11 @@ export default class Simple extends React.Component {
       canvasStatus: null,
     }
 }
-  componentDidMount() {
-    const { obj } = this.props
-    const { texts, blocks, images, width, height, backgroundColor } = getConfig(obj)
-    this.setState({
+static getDerivedStateFromProps(nextProps) {
+  if (nextProps.obj.miniCode) {
+    const { obj, heightdefill } = nextProps
+    const { texts, blocks, images, width, height, backgroundColor } = getConfig({...obj, heightdefill, codeUrl: nextProps.obj.miniCode})
+    return {
       canvasStatus: true,
       config: {
         width,
@@ -61,9 +62,13 @@ export default class Simple extends React.Component {
           },
         ],
         blocks,
-        images
+        images,
       }
-    })
+    }
+  }
+  return null;
+}
+  componentDidMount() {
     Taro.showLoading({
       title: '绘制中...'
     })

@@ -18,23 +18,11 @@ export default class Simple extends React.Component {
     }
 }
 
-static getDerivedStateFromProps(nextProps, prevState) {
-  console.log(nextProps, prevState)
-  if (nextProps.miniCode !== prevState) {
+static getDerivedStateFromProps(nextProps) {
+  if (nextProps.obj.miniCode) {
+    const { obj, heightdefill } = nextProps
+    const { texts, blocks, images, width, height, backgroundColor } = getConfig({...obj, heightdefill, codeUrl: nextProps.obj.miniCode})
     return {
-      isScrollingDown:
-        nextProps.currentRow > prevState.lastRow,
-      lastRow: nextProps.currentRow,
-    };
-  }
-  return null;
-}
-
-
-  componentDidMount() {
-    const { obj, heightdefill } = this.props
-    const { texts, blocks, images, width, height, backgroundColor } = getConfig({...obj, heightdefill})
-    this.setState({
       canvasStatus: true,
       config: {
         width,
@@ -61,7 +49,13 @@ static getDerivedStateFromProps(nextProps, prevState) {
         blocks,
         images,
       }
-    })
+    }
+  }
+  return null;
+}
+
+
+  componentDidMount() {
     Taro.showLoading({
       title: '绘制中...'
     })
