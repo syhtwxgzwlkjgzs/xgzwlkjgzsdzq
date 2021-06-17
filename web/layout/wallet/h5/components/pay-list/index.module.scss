@@ -1,45 +1,47 @@
 @import '@common/styles/index.scss';
 
 .container {
-    padding: rem($padding-4n) rem($padding-4n) 0;
-    background: $white;
+  padding: rem($padding-4n) rem($padding-4n) 0;
+  background: $white;
 }
 
 .content {
-    display: flex;
-    justify-content: space-between;
-    font-weight: normal;
-    padding-bottom: rem($padding-4n);
-    color: $text-color-primary;
-    .text {
-        font-family: 'PingFangSC-Regular';
-        font-size: rem($font-size-primary);
-        text-align: left;
-        line-height: rem(16);
-    }
-    .money {
-        font-family: "PingFang SC";
-        font-weight: 600;
-        font-size: rem($font-size-middle);
-        text-align: left;
-    }
+  display: flex;
+  justify-content: space-between;
+  font-weight: normal;
+  padding-bottom: rem($padding-2n);
+  color: $text-color-primary;
+  height: rem(20);
+  line-height: rem(20);
+  .text {
+    font-family: 'PingFangSC-Regular';
+    font-size: rem($font-size-primary);
+    text-align: left;
+    // line-height: rem(16);
+  }
+  .money {
+    font-family: 'PingFang SC';
+    font-weight: 600;
+    font-size: rem($font-size-middle);
+    text-align: left;
+  }
 }
 .footer {
-    display: flex;
-    justify-content: space-between;
-    border-bottom: $border-solid-1;
-    font-family: 'PingFangSC-Regular';
-    font-weight: normal;
-    font-size: rem($font-size-label);
-    .time {
-        text-align: left;
-        color: $text-color-secondary;
-        padding-bottom: rem($padding-4n);
-    }
-    .payStatusTrue {
-        color: $text-color-regular;
-    }
-    .payStatusFalse {
-        color: $primary-color;
-    }
+  display: flex;
+  justify-content: space-between;
+  border-bottom: $border-solid-1;
+  font-family: 'PingFangSC-Regular';
+  font-weight: normal;
+  font-size: rem($font-size-label);
+  .time {
+    text-align: left;
+    color: $text-color-secondary;
+    padding-bottom: rem($padding-4n);
+  }
+  .payStatusTrue {
+    color: $text-color-regular;
+  }
+  .payStatusFalse {
+    color: $primary-color;
+  }
 }
