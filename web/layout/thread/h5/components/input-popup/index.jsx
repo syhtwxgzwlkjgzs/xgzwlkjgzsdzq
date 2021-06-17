@@ -136,7 +136,8 @@ const InputPop = (props) => {
 
       let isAllLegal = true; // 状态：此次上传图片是否全部合法
       cloneList.forEach((item, index) => {
-        const imageType = item.name.match(/\.(.+)$/)[1].toLocaleLowerCase();
+        const arr = item.name.split('.').pop();
+        const imageType = arr.toLocaleLowerCase();
         const isLegalType = supportImgExt.toLocaleLowerCase().includes(imageType);
 
         // 存在不合法图片时，从上传图片列表删除
