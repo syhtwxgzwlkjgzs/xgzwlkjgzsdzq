@@ -8,8 +8,9 @@ import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
 import UserCenterUsers from '@components/user-center-users';
 import { get } from '@common/utils/get';
-import layout from './index.module.scss';
+import Router from '@discuzq/sdk/dist/router';
 import { simpleRequest } from '@common/utils/simple-request';
+import layout from './index.module.scss';
 
 @inject('site')
 @inject('forum')
@@ -39,8 +40,8 @@ class ForumH5Page extends React.Component {
   };
 
   // @TODO
-  onUserClick = (id) => {
-    // Router.push(`/user/${id}`);
+  onUserClick = ({ id }) => {
+    Router.push({ url: `/subPages/user/index?id=${id}` });
   };
 
   render() {
@@ -130,7 +131,7 @@ class ForumH5Page extends React.Component {
           onClose={() => forum.setIsPopup(false)}
           containerClassName={layout.forum_users_popup}
         >
-          <UserCenterUsers />
+          <UserCenterUsers onContainerClick={this.onUserClick} />
         </Popup>
       </>
     );
