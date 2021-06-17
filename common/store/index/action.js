@@ -242,7 +242,7 @@ class IndexAction extends IndexStore {
     const result = await readStickList({ params: { categoryIds } });
     if (result.code === 0) {
       this.sticks = null;
-      this.setSticks(result.data);
+      this.setSticks(result.data || []);
       return this.sticks;
     }
     return null;
@@ -465,8 +465,8 @@ class IndexAction extends IndexStore {
     this.updateRecommendsStatus('loading');
     
     const result = await readRecommends({ params: { categoryIds } })
-    if (result.code === 0 && result.data) {
-      this.setRecommends(result.data);
+    if (result.code === 0) {
+      this.setRecommends(result.data || []);
       this.updateRecommendsStatus('none');
       return this.recommends;
     } else {
