@@ -13,9 +13,8 @@ class SiteInfo extends Component {
   render() {
     const { site, forum } = this.props;
     const { threadTotal, updataTime } = forum;
+    const { siteIntroduction } = site;
 
-    // 站点介绍
-    const siteIntroduction = get(site, 'webConfig.setSite.siteIntroduction', '');
     return (
       <View className={layout.site}>
         <SectionTitle

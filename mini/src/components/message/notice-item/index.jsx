@@ -46,6 +46,7 @@ class Index extends Component {
   // 针对财务消息，获取后缀提示语
   getFinancialTips = (item) => {
     if (item.type === 'rewarded') {
+      if (item.orderType === 3 || item.orderType === 7) return '支付了你';
       return '打赏了你';
     }
     if (item.type === 'receiveredpacket') {
@@ -105,8 +106,8 @@ class Index extends Component {
   toDetailOrChat = (e, item) => {
     let url = "";
     const { type } = this.props;
-    if (type === 'financial' || type === 'account') {
-      url = `/subPages/thread/index?id=${item.threadId}`
+    if (item.threadId) {
+      url = `/subPages/thread/index?id=${item.threadId}`;
     }
     if (type === 'chat') {
       url = `/subPages/message/index?page=chat&dialogId=${item.dialogId}&nickname=${item.nickname || ''}`;

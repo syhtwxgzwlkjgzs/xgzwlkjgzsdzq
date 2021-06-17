@@ -26,6 +26,7 @@ export const SITE_CLOSED = -3005; // 站点关闭
 export const JUMP_TO_PAY_SITE = -3006; // 到付费加入页面
 export const JUMP_TO_SUPPLEMENTARY = -3007; // 跳转到扩展字段页
 export const INVALID_TOKEN =  -4002;// 无权限
+export const TOKEN_FAIL =  -4011;// token失效
 export const JUMP_TO_404 = -4004; // 资源不存在
 export const NEED_BIND_WEIXIN_FLAG = -8000; // 需要绑定微信
 export const NEED_BIND_PHONE_FLAG = -8001; // 需要绑定手机

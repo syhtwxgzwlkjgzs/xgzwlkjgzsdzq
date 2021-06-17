@@ -15,6 +15,7 @@ import {
   WEB_SITE_JOIN_WHITE_LIST,
   JUMP_TO_404,
   INVALID_TOKEN,
+  TOKEN_FAIL,
   JUMP_TO_LOGIN,
   JUMP_TO_REGISTER,
   JUMP_TO_AUDIT,
@@ -181,6 +182,7 @@ export default function HOCFetchSiteData(Component) {
           Router.redirect({ url: '/close' });
           break;
         case INVALID_TOKEN:// token无效
+        case TOKEN_FAIL:// token无效
           clearLoginStatus();
           window.location.reload();
           break;

@@ -11,6 +11,7 @@ import setTitle from '@common/utils/setTitle';
 import {
   JUMP_TO_404,
   INVALID_TOKEN,
+  TOKEN_FAIL,
   JUMP_TO_LOGIN,
   JUMP_TO_REGISTER,
   JUMP_TO_AUDIT,
@@ -129,6 +130,7 @@ class App extends Component {
         });
         return false;
       case INVALID_TOKEN:// token无效
+      case TOKEN_FAIL:// token无效
         clearLoginStatus();
         this.initSiteData(); // 重新获取数据
         return false;

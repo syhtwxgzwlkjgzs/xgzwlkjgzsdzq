@@ -236,6 +236,7 @@ class PostPage extends React.Component {
             type: file.type,
           },
           audioSrc: video.url,
+          audioRecordStatus: 'uploaded',
         });
         this.isAudioUploadDone = true;
       }
@@ -258,6 +259,8 @@ class PostPage extends React.Component {
    * @param {object} data 要设置的数据
    */
   handleAttachClick = (item, data) => {
+    if (!this.checkAudioRecordStatus()) return;
+
     const { isPc } = this.props.site;
     if (!isPc && item.type === THREAD_TYPE.voice) {
       const u = navigator.userAgent.toLocaleLowerCase();
@@ -332,6 +335,9 @@ class PostPage extends React.Component {
 
   // 表情等icon
   handleDefaultIconClick = (item, child, data) => {
+    if (!this.checkAudioRecordStatus()) return;
+
+
     const { postData } = this.props.threadPost;
 
     if (item.type === THREAD_TYPE.redPacket && !this.state.canEditRedpacket) {
@@ -501,6 +507,21 @@ class PostPage extends React.Component {
     return true;
   }
 
+  checkAudioRecordStatus() {
+    const { threadPost: { postData } } = this.props;
+    const { audioRecordStatus } = postData;
+    // 判断录音状态
+    if (audioRecordStatus === 'began') {
+      Toast.info({ content: '您有录制中的录音未处理，请先上传或撤销录音', duration: 3000, });
+      return false;
+    } else if (audioRecordStatus === 'completed') {
+      Toast.info({ content: '您有录制完成的录音未处理，请先上传或撤销录音', duration: 3000, });
+      return false;
+    }
+
+    return true;
+  }
+
   // 发布提交
   handleSubmit = async (isDraft) => {
     if (!isDraft) this.setPostData({ draft: 0 });
@@ -526,6 +547,9 @@ class PostPage extends React.Component {
       this.postToast('请等待文件上传完成再发布');
       return;
     }
+
+    if (!this.checkAudioRecordStatus()) return;
+
     const { images, video, files, audio } = postData;
     if (!(postData.contentText || video.id || audio.id || Object.values(images).length
       || Object.values(files).length)) {
@@ -732,6 +756,7 @@ class PostPage extends React.Component {
         onVideoReady={this.onVideoReady}
         handleDraft={this.handleDraft}
         handleEditorBoxScroller={this.handleEditorBoxScroller}
+        checkAudioRecordStatus={this.checkAudioRecordStatus.bind(this)}
         {...this.state}
       />
     );
