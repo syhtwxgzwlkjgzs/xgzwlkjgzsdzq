@@ -3,11 +3,11 @@ import Taro from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import  TaroCanvasDrawer  from '../taro-plugin-canvas'; // npm 引入方式
 import styles from './index.module.scss'
+import { getConfig } from '../config';
 
 export default class Simple extends React.Component {
   constructor(props) {
     super(props)
-    const { obj } = this.props
     this.state = {
       // 绘图配置文件
       config: null,
@@ -15,162 +15,54 @@ export default class Simple extends React.Component {
       shareImage: null,
       // TaroCanvasDrawer 组件状态
       canvasStatus: null,
-      rssConfig: {
-        width: 700,
-        height: 1082 - obj.contentHeight,
-        backgroundColor: '#fff',
-        debug: false,
-        blocks: [
-          // 分组
-          {
-            x: 40,
-            y: 757 - obj.contentHeight,
-            width: obj.marglength,
-            height: 44,
-            backgroundColor: '#F7F7F7',
-            borderRadius: 6
-          },
-          // 二维码和文字部分
-          {
-            backgroundColor: '#F9FAFC',
-            width: 700,
-            height: 200,
-            y: 882 - obj.contentHeight,
-            x: 0
-          }
-        ],
-        images: [
-          // 头像
-            {   
-                url: obj.avatarUrl,
-                x: 40,
-                y: 40,
-                width: 80,
-                height: 80,
-                borderRadius: 80,
-                borderColor: '#000',
-                zIndex: 10,
-            },
-          // 二维码登录
-            {
-              url: obj.codeUrl,
-              x: 40,
-              y: 912 - obj.contentHeight,
-              height: 140,
-              width: 140,
-              borderRadius: 20,
-              zIndex: 10
-            }
-        ],
-        texts: [
-          // 介绍
-            {
-                text: `${obj.username}  推荐`,
-                color: '#000000',
-                x: 140,
-                y: 41,
-                width: 500,
-                height: 27,
-                lineHeight:31,
-                fontSize: 28,
-                fontWeight: 'bold',
-                textAlign: 'left',
-                zIndex:10,
-                baseLine: 'top'
-            },
-            {
-              text: `${obj.threadUser}在${obj.group}中发表的内容`,
-              color: '#333',
-              x: 140,
-              y: 88,
-              width: 500,
-              height: 27,
-              fontSize: 24,
-              lineNum: 1,
-              textAlign: 'left',
-              zIndex:10,
-              baseLine: 'top'
-            },
-            // 标题
-            {
-              text: obj.title,
-              color: '#303133',
-              width: 453,
-              height: 339,
-              y: 159,
-              x: 40,
-              fontSize: 30,
-              fontWeight: 'bold',
-              lineNum: 1,
-              lineHeight: 33,
-              textAlign: 'left',
-              zIndex:10,
-              baseLine: 'top'
-            },
-            // 内容
-            {
-              text: `${obj.content}`,
-              x: 40,
-              y: 240,
-              width: 620,
-              height: 520 - obj.contentHeight,
-              fontSize: 28,
-              lineHeight: 46,
-              textAlign: 'left',
-              zIndex: 10,
-              lineNum: 12,
-              color: '#333333',
-              baseLine: 'top'
-            },
-            // 分组内容
-            {
-              text: `${obj.group}`,
-              color: '#777',
-              x: 50,
-              y: 767 - obj.contentHeight,
-              fontSize: 24,
-              zIndex: 20,
-              lineNum: 1,
-              textAlign: 'left',
-              baseLine: 'top',
-            },
-            // 二维码描述
-            {
-              text: '长按识别小程序码查看详情',
-              color: '#333',
-              width: 560,
-              height: 31,
-              y: 942 - obj.contentHeight,
-              x: 210,
-              lineHeight: 31,
-              fontSize: 28,
-              fontWeight: 'bold',
-              textAlign: 'left',
-              zIndex:10,
-            },
-            // 站点名称
-            {
-              text: '来自Discuz！Q',
-              color: '#AAAAAA',
-              width:450,
-              height: 27,
-              y: 989 - obj.contentHeight,
-              x: 210,
-              fontSize: 24,
-              lineNum: 1,
-              lineHeight: 26.64,
-              textAlign: 'left',
-              baseLine: 'top',
-              zIndex: 10,
-            }
-        ], 
-      }
     }
 }
   componentDidMount() {
+    const { obj } = this.props
+    const { texts, blocks, images, width, height, backgroundColor } = getConfig(obj)
     this.setState({
       canvasStatus: true,
-      config:this.state.rssConfig
+      config: {
+        width,
+        height,
+        backgroundColor,
+        texts: [
+          ...texts,
+          // 标题
+          {
+            text: obj.title,
+            color: '#303133',
+            width: 453,
+            height: 339,
+            y: 159,
+            x: 40,
+            fontSize: 30,
+            fontWeight: 'bold',
+            lineNum: 1,
+            lineHeight: 33,
+            textAlign: 'left',
+            zIndex:10,
+            baseLine: 'top'
+          },
+          // 内容
+          {
+            text: `${obj.content}`,
+            x: 40,
+            y: 240,
+            width: 620,
+            height: 520 - obj.contentHeight,
+            fontSize: 28,
+            lineHeight: 46,
+            textAlign: 'left',
+            zIndex: 10,
+            lineNum: 11,
+            color: '#333333',
+            baseLine: 'top'
+          },
+        ],
+        blocks,
+        images
+      }
     })
     Taro.showLoading({
       title: '绘制中...'
