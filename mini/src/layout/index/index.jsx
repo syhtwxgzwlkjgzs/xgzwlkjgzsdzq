@@ -86,6 +86,12 @@ class IndexH5Page extends React.Component {
     this.changeFilter({ categoryids: [id], sequence: id === 'default' ? 1 : 0 })
   };
 
+  handleClickTabBar = (item, idx) => {
+    if(item?.router === "/pages/index/index") { // 点击首页刷新
+      this.changeFilter()
+    }
+  }
+
   changeFilter = (params) => {
     this.props.index.resetErrorInfo()
     this.setState({ isClickTab: true })
@@ -219,6 +225,7 @@ class IndexH5Page extends React.Component {
         preload={3000}
         requestError={threadError.isError}
         errorText={threadError.errorText}
+        onClickTabBar={this.handleClickTabBar}
       >
         <HomeHeader ref={this.headerRef} />
 
