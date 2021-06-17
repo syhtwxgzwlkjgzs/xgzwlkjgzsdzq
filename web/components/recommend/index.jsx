@@ -73,11 +73,11 @@ class Index extends React.Component {
     return (
       <div className={style.recommend} style={{
         /* stylelint-disable */
-        maxHeight: (this.state.windowSize?.innerHeight - 80) || '600px'
+        // maxHeight: (this.state.windowSize?.innerHeight - 80) || '600px'
       }}>
         <div className={style.recommendContent}>推荐内容</div>
         { (recommendsStatus === 'loading' || recommendsStatus === 'error') && (
-            <BottomView isBox isError={isError} errorText={errorText} noMore={false} loadingText='正在加载' /> 
+            <BottomView isBox isError={isError} errorText={errorText} noMore={false} loadingText='正在加载' />
         )}
         {
           recommendsStatus === 'none' && recommends?.filter((_, index) => index < filterCount).map((item, index) => {
