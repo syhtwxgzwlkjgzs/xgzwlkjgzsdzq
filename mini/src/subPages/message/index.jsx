@@ -43,13 +43,13 @@ const Index = () => {
         setTitle('我的私信');
         break;
       case 'thread':
-        setTitle('帖子通知');
+        setTitle('账号消息');
         break;
       case 'financial':
         setTitle('财务通知');
         break;
       case 'account':
-        setTitle('账号消息');
+        setTitle('帖子通知');
         break;
       case 'chat':
         const name = nickname.substr(0, 6);

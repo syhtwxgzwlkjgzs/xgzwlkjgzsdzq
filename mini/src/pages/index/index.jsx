@@ -4,6 +4,7 @@ import Page from '@components/page';
 import withShare from '@common/utils/withShare/withShare'
 import { inject, observer } from 'mobx-react'
 import { handleString2Arr } from '@common/utils/handleCategory';
+import { priceShare } from '@common/utils/priceShare';
 
 @inject('site')
 @inject('search')
@@ -35,7 +36,7 @@ class Index extends React.Component {
         path: defalutPath
       }
     }
-    const { title, path, comeFrom, threadId } = data
+    const { title, path, comeFrom, threadId, isAnonymous, isPrice } = data
     if (comeFrom && comeFrom === 'thread') {
       const { user } = this.props
       this.props.index.updateThreadShare({ threadId }).then(result => {
@@ -46,7 +47,8 @@ class Index extends React.Component {
         }
       });
     }
-    return {
+    return     priceShare({isAnonymous, isPrice, path}) || 
+    {
       title,
       path
     }
@@ -65,13 +67,14 @@ class Index extends React.Component {
 
     // 重置错误信息
     this.props.index.resetErrorInfo()
-    
     this.props.index.getReadCategories();
     this.props.index.getRreadStickList(categoryIds);
     this.props.index.getReadThreadList({
       sequence, 
       filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort } 
     });
+
+    this.dispatch('moreData');
   }
 
   componentDidShow() {

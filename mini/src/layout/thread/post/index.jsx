@@ -16,6 +16,7 @@ import PayBox from '@components/payBox/index';
 import { ORDER_TRADE_TYPE } from '@common/constants/payBoxStoreConstants';
 import { get } from '@common/utils/get';
 
+@inject('payBox')
 @inject('index')
 @inject('site')
 @inject('user')
@@ -39,6 +40,7 @@ class Index extends Component {
       showPaidOption: false, // 显示付费选项弹框
       showDraftOption: false, // 显示草稿选项弹框
       bottomHeight: 0,
+      data: {},
     }
     this.timer = null;
     this.ticket = ''; // 腾讯云验证码返回票据
@@ -138,11 +140,20 @@ class Index extends Component {
         .replace(/<span.*?>(.*?)<\/span>/g, `$1`);
       ret.data.content.text = realText;
       threadPost.formatThreadDetailToPostData(ret.data);
-      const { postData: { redpacket, rewardQa } } = this.props.threadPost
+      // const { isThreadPaid } = this.props.threadPost
+      // if (isThreadPaid) {
+      //   this.postToast('已经支付的帖子不支持编辑');
+      //   const timer = setTimeout(() => {
+      //     clearTimeout(timer);
+      //     Taro.redirectTo({ url: `/subPages/thread/index?id=${id}` });
+      //   }, 1000);
+      //   return;
+      // }
+      // 更改交互：已发布帖子可以编辑内容，但是不能编辑红包或者悬赏属性
         this.setState({
           postType: isDraft ? 'isDraft' : 'isEdit',
-          canEditRedpacket: isDraft || !(redpacket.money > 0),
-          canEditReward: isDraft || !(rewardQa.money > 0),
+          canEditRedpacket: isDraft,
+          canEditReward: isDraft,
         });
       // isDraft && this.openSaveDraft(); // 现阶段，自动保存功能关闭
     } else {
@@ -323,7 +334,7 @@ class Index extends Component {
         }
       },
       // 上传中回调，获取上传进度等信息
-      progress: function (result) {
+      progress (result) {
         console.log('progress');
         console.log(result);
       },
@@ -347,7 +358,7 @@ class Index extends Component {
             setPostData({
               audio: {
                 id: data?.id,
-                mediaUrl: mediaUrl,
+                mediaUrl,
               },
               audioSrc: mediaUrl,
             });
@@ -363,7 +374,7 @@ class Index extends Component {
         // this.scrollerIntoView();
       },
       // 上传错误回调，处理异常
-      error: function (result) {
+      error (result) {
         Taro.showToast({
           title: '上传失败',
           icon: 'none',
@@ -450,13 +461,13 @@ class Index extends Component {
     const { rewardQa, redpacket } = postData;
 
     // 如果是编辑的悬赏帖子，则不用再次支付
-    const rewardAmount = (threadId && rewardQa.id) ? 0 : (Number(rewardQa.value) || 0);
+    const rewardAmount = threadPost.isThreadPaid ? 0 : (Number(rewardQa.value) || 0);
     // 如果是编辑的红包帖子，则不用再次支付
-    const redAmount = (threadId && redpacket.id) ? 0 : (Number(redpacketTotalAmount) || 0);
+    const redAmount = threadPost.isThreadPaid ? 0 : (Number(redpacketTotalAmount) || 0);
 
     const amount = rewardAmount + redAmount;
     const options = { amount };
-    if (!isDraft && amount) {
+    if (!isDraft && amount > 0) {
       let type = ORDER_TRADE_TYPE.RED_PACKET;
       let title = '支付红包';
       if (redAmount) {
@@ -473,22 +484,32 @@ class Index extends Component {
       }
 
       // 等待支付
-      await new Promise((resolve) => {
-        PayBox.createPayBox({
-          data: { ...options, title, type },
-          success: async (orderInfo) => {
-            const { orderSn } = orderInfo;
-            setPostData({ orderSn });
-            setTimeout(() => {
-              resolve();
-            }, 1200)
-          },
-        });
+      PayBox.createPayBox({
+        data: { ...options, title, type },
+        orderCreated: async (orderInfo) => {
+          const { orderSn } = orderInfo;
+          setPostData({ orderInfo });
+          if (orderSn) this.props.payBox.hide();
+          this.createThread(true, true);
+        },
+        success: async () => {
+          this.setIndexPageData();
+          if (this.state.threadId)
+            Taro.redirectTo({ url: `/subPages/thread/index?id=${this.state.threadId}` });
+        },
       });
+      return;
     }
+    return this.createThread(isDraft);
+  }
+
+  async createThread(isDraft, isPay) {
+    const { threadId } = this.state;
+    const { threadPost } = this.props;
+    const { setPostData } = threadPost;
     // 5 loading
     Taro.showLoading({
-      title: isDraft ? '保存草稿中...' : '发布中...',
+      title: isDraft && !isPay ? '保存草稿中...' : '发布中...',
       mask: true
     });
     // 6 根据是否存在主题id，选择更新主题、新建主题
@@ -498,43 +519,53 @@ class Index extends Component {
     } else {
       ret = await threadPost.createThread();
     }
+
     // 7 处理请求数据
     const { code, data, msg } = ret;
     if (code === 0) {
       if (!threadId) {
-        this.setState({ threadId: data.threadId }); // 新帖首次保存草稿后，获取id
+        this.setState({ threadId: data.threadId, data }); // 新帖首次保存草稿后，获取id
       }
-
-      // 草稿发布，清空草稿箱缓存数据
-      if (isDraft) {
-        this.props.index.setDrafts({ totalCount: 0, pageData: [] });
-      }
+      setPostData({ threadId: data.threadId });
 
       // 非草稿，跳转主题详情页
       Taro.hideLoading();
-      // if (!isDraft) {
-      // 更新帖子到首页列表
-      if (threadId && !isDraft) {
-        this.props.index.updateAssignThreadAllData(threadId, data);
-      // 添加帖子到首页数据
-      } else {
-        const { categoryId = '' } = data
-        // 首页如果是全部或者是当前分类，则执行数据添加操作
-        if (this.props.index.isNeedAddThread(categoryId)) {
-          this.props.index.addThread(data);
-        }
+
+      // 未支付的订单
+      if (isDraft && threadPost.postData.orderInfo.orderSn
+        && !threadPost.postData.orderInfo.status
+        && !threadPost.postData.draft) {
+        this.props.payBox.show();
+        return;
+      }
+
+      if (!isDraft) {
+        this.setIndexPageData();
       }
       this.postToast('发布成功', 'success');
       Taro.redirectTo({ url: `/subPages/thread/index?id=${data.threadId}` });
       // }
       return true;
-    } else {
-      Taro.hideLoading();
-      !isDraft && this.postToast(msg);
-      return false;
     }
-
+    Taro.hideLoading();
+    (!isDraft || isPay) && this.postToast(msg);
+    return false;
   }
+
+  setIndexPageData = () => {
+    const { threadId, data } = this.state;
+    // 更新帖子到首页列表
+    if (this.state.threadId) {
+      this.props.index.updateAssignThreadAllData(threadId, data);
+      // 添加帖子到首页数据
+    } else {
+      const { categoryId = '' } = data;
+      // 首页如果是全部或者是当前分类，则执行数据添加操作
+      if (this.props.index.isNeedAddThread(categoryId)) {
+        this.props.index.addThread(data);
+      }
+    }
+  };
 
   // 处理用户主动点击保存草稿
   handleSaveDraft = async () => {
@@ -660,7 +691,7 @@ class Index extends Component {
     const headTitle = get(site, 'webConfig.setSite.siteName', '');
     return (
       <>
-        <View className={styles['container']}>
+        <View className={styles.container}>
           {/* 自定义顶部导航条 */}
           <View className={styles.topBar} style={navStyle}>
             <Icon name="RightOutlined" onClick={() => this.handlePageJump(false)} />
@@ -670,7 +701,7 @@ class Index extends Component {
           </View>
 
           {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
-          <View className={styles['content']} style={contentStyle} onClick={this.handleContentFocus}>
+          <View className={styles.content} style={contentStyle} onClick={this.handleContentFocus}>
             <View id="thread-post-content">
               <Title
                 value={postData.title}
@@ -697,7 +728,7 @@ class Index extends Component {
                 }}
               />
 
-            <View className={styles['plugin']} onClick={e => e.stopPropagation()}>
+            <View className={styles.plugin} onClick={e => e.stopPropagation()}>
 
               <GeneralUpload type={operationType} audioUpload={(file) => { this.yundianboUpload('audio', file) }}>
                 {video.thumbUrl && (
@@ -724,7 +755,7 @@ class Index extends Component {
           </View>
 
           {/* 插入内容tag展示区 */}
-          <View className={styles['tags']} style={{ display: bottomHeight ? 'none' : 'block' }}>
+          <View className={styles.tags} style={{ display: bottomHeight ? 'none' : 'block' }}>
             {(permissions?.insertPosition?.enable) &&
               <View className={styles['location-bar']}>
                 <Position currentPosition={position} positionChange={(position) => {
@@ -772,7 +803,7 @@ class Index extends Component {
                   <Units
                     type='tag'
                     style={{ marginTop: 0, paddingRight: '8px' }}
-                    tagContent={`悬赏金额${(rewardQa.value).toFixed(2)}元\\结束时间 ${rewardQa.times}`}
+                    tagContent={`悬赏金额${Number(rewardQa.value).toFixed(2)}元\\结束时间 ${rewardQa.times}`}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
                     isCloseShow={this.state.canEditReward}
                     onTagRemoveClick={() => { setPostData({ rewardQa: {} }) }}

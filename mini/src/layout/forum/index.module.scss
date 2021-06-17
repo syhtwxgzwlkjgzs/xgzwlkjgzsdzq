@@ -31,6 +31,12 @@
       color: $text-color-primary;
       @include lineHeight52;
     }
+    .textEllipsis {
+      max-width: 50%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
   .forum_agent{
     @include lineHeight52;

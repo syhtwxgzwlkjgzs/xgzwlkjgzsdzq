@@ -64,7 +64,9 @@ class ForumH5Page extends React.Component {
           {/* 站点介绍 start */}
           <div className={layout.list}>
             <div className={layout.label}>站点介绍</div>
-            <div className={layout.right}>{siteIntroduction}</div>
+            <div className={layout.right} title={siteIntroduction}>
+              <span className={layout.list_text_ellipsis}>{siteIntroduction}</span>
+            </div>
           </div>
           {/* 站点介绍 end */}
           {/* 创建时间 start */}

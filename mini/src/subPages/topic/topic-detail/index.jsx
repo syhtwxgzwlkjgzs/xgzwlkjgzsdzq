@@ -6,6 +6,7 @@ import { readTopicsList } from '@server';
 import { getCurrentInstance } from '@tarojs/taro';
 import Page from '@components/page';
 import withShare from '@common/utils/withShare/withShare'
+import { priceShare } from '@common/utils/priceShare';
 
 @inject('search')
 @inject('topic')
@@ -33,7 +34,7 @@ class Index extends React.Component {
         path:defalutPath
       }
     }
-    const { title, path, comeFrom, threadId } = data
+    const { title, path, comeFrom, threadId, isAnonymous, isPrice } = data
     if(comeFrom && comeFrom === 'thread') {
       const { user } = this.props
       this.props.index.updateThreadShare({ threadId }).then(result => {
@@ -44,7 +45,7 @@ class Index extends React.Component {
       }
     });
     }
-    return {
+    return priceShare({isPrice, isAnonymous, path}) || {
       title,
       path
     }

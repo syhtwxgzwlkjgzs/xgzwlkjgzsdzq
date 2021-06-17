@@ -5,6 +5,7 @@ import { View, Text } from '@tarojs/components';
 import Taro from '@tarojs/taro'
 import { inject, observer } from 'mobx-react';
 import withShare from '@common/utils/withShare/withShare'
+import { priceShare } from '@common/utils/priceShare';
 
 @inject('site')
 @inject('search')
@@ -24,7 +25,7 @@ class Index extends React.Component {
         path: defalutPath
       }
     }
-    const { title, path, comeFrom, threadId } = data
+    const { title, path, comeFrom, threadId, isAnonymous, isPrice } = data
     if (comeFrom && comeFrom === 'thread') {
       const { user } = this.props
       this.props.index.updateThreadShare({ threadId }).then(result => {
@@ -36,7 +37,7 @@ class Index extends React.Component {
         }
       });
     }
-    return {
+    return priceShare({isAnonymous, isPrice, path}) || {
       title,
       path
     }

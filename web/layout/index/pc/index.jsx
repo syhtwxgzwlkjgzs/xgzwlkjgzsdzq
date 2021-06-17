@@ -230,6 +230,7 @@ class IndexPCPage extends React.Component {
         left={ this.renderLeft(countThreads) }
         right={ this.renderRight() }
         pageName='home'
+        preload={3000}
         requestError={threadError.isError}
         errorText={threadError.errorText}
       >
