@@ -68,11 +68,11 @@ class UserCenterFollows extends React.Component {
       const followRes = await getUserFollow(opts);
 
       if (followRes.code !== 0) {
-        console.error(followRes);
-        Toast.error({
-          content: followRes.msg,
-          duration: 2000,
-        });
+        // console.error(followRes);
+        // Toast.error({
+        //   content: followRes.msg,
+        //   duration: 2000,
+        // });
         return;
       }
 

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, PickerView, PickerViewColumn, } from '@tarojs/components';
 import Button from '@discuzq/design/dist/components/button/index';
 import styles from './index.module.scss';
+import classNames from 'classnames';
 
 import {
   getPickerViewList,
@@ -154,7 +155,9 @@ class DateTimePicker extends Component {
             <View className={styles['model-box']}>
               {/* content */}
               <PickerView
-                className={styles['pick-view']}
+                className={classNames(styles['pick-view'], { 
+                  [styles['pick-view-wallet']]: this.props.type === 'wallet' 
+                })}
                 indicatorStyle="height: 46px"
                 value={selectIndexList}
                 onChange={this.handelChange}

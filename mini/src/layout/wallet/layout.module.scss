@@ -28,6 +28,29 @@
   .header {
     width: 100%;
     background:$primary-color url('../../../../web/public/dzq-img/walletbackground.png') 100% no-repeat padding-box;
+    background-size: 100% 100%;
+
+    .topBar {
+      position: fixed;
+      top: 54px;
+      left: 0;
+      display: flex;
+      justify-content: flex-start;
+      width: 100%;
+            
+      :global {
+        .dzq-icon {
+          display: inline-flex;
+          align-items: center;
+          height: 100%;
+          width: 40px;
+          padding-left: $padding-10;
+          transform: rotate(180deg);
+          font-size: $font-size-middle;
+          color: $white;
+        }
+      }
+    }
   }
 
   .choiceTime {
@@ -76,19 +99,20 @@
       }
 
       .dzq-tabs__label {
-        padding-bottom: $padding-2n !important;
+        padding-bottom: $padding-14 !important;
         font-family: 'PingFang SC';
         font-weight: 600;
         font-size: rem($font-size-primary);
+        line-height: 20px;
       }
 
       .dzq-tabs__item {
-        height: rem(50);
+        height: 52px;
         box-sizing: border-box;
         flex: 1;
 
         &::after {
-          width: rem(82);
+          width: 80px;
           margin: auto;
         }
       }

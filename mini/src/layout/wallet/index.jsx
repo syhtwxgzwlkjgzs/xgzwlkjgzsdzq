@@ -7,6 +7,7 @@ import Toast from '@discuzq/design/dist/components/toast/index';
 import { View, Text } from '@tarojs/components';
 import classNames from 'classnames';
 import Router from '@discuzq/sdk/dist/router';
+import Taro from '@tarojs/taro';
 
 import Page from '@components/page';
 import List from '@components/list';
@@ -298,6 +299,11 @@ class WalletH5Page extends React.Component {
     }
   };
 
+  // 点击返回按钮
+  handlePageJump = () => {
+    Taro.navigateBack();
+  }
+
   render() {
     const tabList = [
       [
@@ -354,6 +360,10 @@ class WalletH5Page extends React.Component {
             className={layout.scroll}
           >
             <View className={layout.header}>
+              {/* 自定义顶部返回 */}
+              <View className={layout.topBar}>
+                <Icon name="RightOutlined" onClick={() => this.handlePageJump()} />
+              </View>
               <WalletInfo
                 walletData={walletInfo}
                 webPageType="h5"
@@ -420,6 +430,7 @@ class WalletH5Page extends React.Component {
             disabledTime={true}
             wrap-class="my-class"
             select-item-class="mySelector"
+            type='wallet'
           />
         </View>
       </Page>

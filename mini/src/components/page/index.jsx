@@ -97,10 +97,11 @@ export default class Page extends React.Component {
             return false;
           }
         }
+
         // 账号审核中的 用户只能访问 首页 + 帖子详情页，以及用户状态提示页
-        if (commonLogin.statusCode === REVIEWING) {
+        if (user.userStatus === REVIEWING) {
           if (!REVIEWING_USER_WHITE_LIST.includes(path)) {
-            Router.replace({ url: STATUS_URL });
+            Router.replace({ url: `${STATUS_URL}?statusCode=${user.userStatus}` });
             return false;
           }
         }
@@ -132,12 +133,12 @@ export default class Page extends React.Component {
   }
 
   render() {
-    const { site, disabledToast } = this.props;
+    const { site, disabledToast, className = '' } = this.props;
     const isRender = this.isPass();
 
     if (!isRender) return null;
     return (
-      <View className={`${styles['dzq-page']} dzq-theme-${site.theme}`}>
+      <View className={`${styles['dzq-page']} dzq-theme-${site.theme} ${className}`}>
         <PayBoxProvider>{this.createContent()}</PayBoxProvider>
         {!disabledToast && <ToastProvider></ToastProvider>}
       </View>

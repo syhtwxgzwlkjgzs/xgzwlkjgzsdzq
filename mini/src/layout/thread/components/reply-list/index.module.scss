@@ -13,11 +13,13 @@
       border-radius: $border-radius-small;
       background: $body-bg-color;
       .replyListName {
+        max-width: 100px;
         font-size: $font-size-primary;
         font-weight: bold;
         line-height: 20px;
         text-align: left;
         color: $text-color-primary;
+        @include text-ellipsis();
       }
       .replyListText {
         margin-top: $margin-1n;
@@ -76,12 +78,14 @@
           height: 28px;
 
           .replyedUserName {
+            max-width: 100px;
             font-weight: bold;
             font-size: $font-size-primary;
             margin-right: $margin-2n;
             line-height: 18px;
             text-align: left;
             color: $primary-color;
+            @include text-ellipsis();
           }
           .replyedAvatar {
             display: inline-block;

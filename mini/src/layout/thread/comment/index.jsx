@@ -446,6 +446,7 @@ class CommentH5Page extends React.Component {
             onSubmit={(value, imageList) => this.createReply(value, imageList)}
             site={this.props.site}
             checkUser={this.props?.thread?.checkUser || []}
+            thread={this.props?.thread}
           ></InputPopup>
 
           {/* 更多弹层 */}

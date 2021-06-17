@@ -8,15 +8,20 @@
   width: 100%;
   height: 100%;
   text-align: right;
-  .sharePoint {
-    display: inline-block;
-    width: 70%;
-    margin-top: rem($margin-10);
-    margin-right: rem(30);
-  }
-  .shareKnow {
-    display: block;
-    width: 35%;
-    margin: 20vh auto rem(30);
-  }
+}
+.sharePoint {
+  display: inline-block;
+  width: 70%;
+  margin-top: rem($margin-10);
+  margin-right: rem(30);
+}
+.shareKnow {
+  display: block;
+  width: 35%;
+  margin: 20vh auto rem(30);
+}
+.threadDetail {
+  width: 100%;
+  height: 100%;
+  text-align: right;
 }
