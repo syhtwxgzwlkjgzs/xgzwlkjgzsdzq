@@ -1,8 +1,6 @@
 @import '@common/styles/index.scss';
 
-
 .container {
-
   :global {
     .datepicker-modal {
       z-index: 1 !important;
@@ -18,7 +16,6 @@
   justify-content: flex-start;
   background: var(--comment-content-bg-color);
 }
-
 
 .header {
   width: 100%;
@@ -54,7 +51,6 @@
     align-items: center;
   }
 
-
   :global {
     .dzq-tabs__panel {
       height: 0;
@@ -62,6 +58,8 @@
 
     .dzq-tabs__list {
       display: flex;
+      justify-content: space-between;
+      padding: 0 rem($padding-4n);
     }
 
     .dzq-tabs__content {
@@ -94,7 +92,8 @@
     .dzq-tabs__item {
       height: rem(50);
       box-sizing: border-box;
-      flex: 1;
+      // flex: 1;
+      padding: 0;
 
       &:after {
         width: rem(82);
@@ -102,12 +101,10 @@
       }
     }
   }
-
 }
 
 .tag {
   margin-right: $margin-2n;
-
 }
 
 .tag-active-green {
@@ -121,7 +118,6 @@
 .tag-active-red {
   color: $error-color;
 }
-
 
 .footer {
   width: 100%;
