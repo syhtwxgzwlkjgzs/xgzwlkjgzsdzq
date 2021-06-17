@@ -7,6 +7,7 @@ import Toast from '@discuzq/design/dist/components/toast/index';
 import { View, Text } from '@tarojs/components';
 import classNames from 'classnames';
 import Router from '@discuzq/sdk/dist/router';
+import Taro from '@tarojs/taro';
 
 import Page from '@components/page';
 import List from '@components/list';
@@ -225,7 +226,7 @@ class WalletH5Page extends React.Component {
       if (e.Code) {
         Toast.error({
           content: e.Msg,
-          duration: 1000,
+          duration: 2000,
         });
       }
     }
@@ -298,6 +299,11 @@ class WalletH5Page extends React.Component {
     }
   };
 
+  // 点击返回按钮
+  handlePageJump = () => {
+    Taro.navigateBack();
+  }
+
   render() {
     const tabList = [
       [
@@ -354,6 +360,10 @@ class WalletH5Page extends React.Component {
             className={layout.scroll}
           >
             <View className={layout.header}>
+              {/* 自定义顶部返回 */}
+              <View className={layout.topBar}>
+                <Icon name="RightOutlined" onClick={() => this.handlePageJump()} />
+              </View>
               <WalletInfo
                 walletData={walletInfo}
                 webPageType="h5"
@@ -381,26 +391,18 @@ class WalletH5Page extends React.Component {
                   <Tabs.TabPanel key={id} id={id} label={label} name={icon.name}></Tabs.TabPanel>
                 ))}
               </Tabs>
-              {this.state.tabsType === 'income' && (
+              {this.state.tabsType === 'income' &&
                 incomeData.map((value, index) => (
-                    <IncomeList key={value.id} incomeVal={value} itemKey={index} dataLength={incomeData.length} />
-                  ))
-              )}
-              {this.state.tabsType === 'pay' && (
+                  <IncomeList key={value.id} incomeVal={value} itemKey={index} dataLength={incomeData.length} />
+                ))}
+              {this.state.tabsType === 'pay' &&
                 expandData.map((value, index) => (
-                    <PayList key={value.id} payVal={value} itemKey={index} dataLength={expandData.length} />
-                  ))
-              )}
-              {this.state.tabsType === 'withdrawal' && (
+                  <PayList key={value.id} payVal={value} itemKey={index} dataLength={expandData.length} />
+                ))}
+              {this.state.tabsType === 'withdrawal' &&
                 cashData.map((value, index) => (
-                    <WithdrawalList
-                      key={value.id}
-                      withdrawalVal={value}
-                      itemKey={index}
-                      dataLength={cashData.length}
-                    />
-                  ))
-              )}
+                  <WithdrawalList key={value.id} withdrawalVal={value} itemKey={index} dataLength={cashData.length} />
+                ))}
             </View>
           </List>
 
@@ -428,6 +430,7 @@ class WalletH5Page extends React.Component {
             disabledTime={true}
             wrap-class="my-class"
             select-item-class="mySelector"
+            type='wallet'
           />
         </View>
       </Page>

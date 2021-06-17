@@ -38,7 +38,7 @@ class Index extends React.Component {
         isError: true,
         errorText: error
       });
-    } 
+    }
   }
 
   redirectToSearchResultTopic = () => {
@@ -50,15 +50,15 @@ class Index extends React.Component {
     const { isError, errorText } = this.state
 
     return (
-      <SidebarPanel 
+      <SidebarPanel
         title="潮流话题"
         isLoading={!pageData}
-        noData={!pageData?.length} 
+        noData={!pageData?.length}
         onShowMore={this.redirectToSearchResultTopic}
         isError={isError}
         errorText={errorText}
       >
-          <TrendingTopic data={pageData?.filter((_, index) => index < 10)} onItemClick={this.onTopicClick}/>
+          <TrendingTopic className="pop-topic" data={pageData?.filter((_, index) => index < 8)} onItemClick={this.onTopicClick}/>
       </SidebarPanel>
     );
   }

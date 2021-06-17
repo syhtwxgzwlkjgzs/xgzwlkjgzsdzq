@@ -4,6 +4,7 @@ import Taro, { getCurrentInstance } from '@tarojs/taro';
 import Button from '@discuzq/design/dist/components/button/index';
 import Input from '@discuzq/design/dist/components/input/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
+import Spin from '@discuzq/design/dist/components/spin/index';
 import styles from './index.module.scss';
 import CaptchaInput from '../../../user-center-edit-mobile/captcha-input';
 import VerifyCode from '../../../user-center-edit-mobile/verify-code';
@@ -28,6 +29,7 @@ class index extends Component {
       initTimeValue: null,
       payPassword: null,
       payPasswordConfirmation: null,
+      isSubmit: false, // 是否点击提交
     };
   }
 
@@ -40,8 +42,13 @@ class index extends Component {
       initTimeValue: null,
       payPassword: null,
       payPasswordConfirmation: null,
+      isSubmit: false,
     });
   };
+
+  componentWillUnmount() {
+    this.initState();
+  }
 
   updatePwd = (set_num, type) => {
     const { list = [] } = this.state;
@@ -70,9 +77,31 @@ class index extends Component {
     }
   };
 
+  // 处理支付相关逻辑
+  handlePayBoxWithTriggerIncident = async () => {
+    const { id } = this.props?.user;
+    try {
+      await this.props.user.updateUserInfo(id);
+      this.props.payBox.visible = true;
+      this.props.payBox.password = null;
+      this.props.payBox.step = STEP_MAP.WALLET_PASSWORD;
+      await this.props.payBox.getWalletInfo(id);
+      this.props.user.userInfo.canWalletPay = true;
+      Taro.navigateBack({ delta: 1 });
+    } catch (error) {
+      Toast.error({
+        content: '获取用户钱包信息失败',
+        duration: 2000,
+      });
+    }
+  };
+
   // 点击下一步
   handleStepBtn = () => {
     if (this.getDisabledWithButton()) return;
+    this.setState({
+      isSubmit: true,
+    });
     const { list = [], payPassword, payPasswordConfirmation } = this.state;
     if (payPassword !== payPasswordConfirmation) {
       Toast.error({
@@ -92,7 +121,7 @@ class index extends Component {
         payPassword,
         payPasswordConfirmation,
       })
-      .then(async (res) => {
+      .then((res) => {
         Toast.success({
           content: '重置密码成功',
           hasMask: false,
@@ -100,21 +129,7 @@ class index extends Component {
         });
         const { type } = getCurrentInstance().router.params;
         if (type === 'paybox') {
-          const { id } = this.props?.user;
-          try {
-            await this.props.user.updateUserInfo(id);
-            this.props.payBox.visible = true;
-            this.props.payBox.password = null;
-            this.props.payBox.step = STEP_MAP.WALLET_PASSWORD;
-            await this.props.payBox.getWalletInfo(id);
-            this.props.user.userInfo.canWalletPay = true;
-            Taro.navigateBack({ delta: 1 });
-          } catch (error) {
-            Toast.error({
-              content: '获取用户钱包信息失败',
-              duration: 2000,
-            });
-          }
+          this.handlePayBoxWithTriggerIncident();
           return;
         }
         setTimeout(() => {
@@ -241,14 +256,13 @@ class index extends Component {
    * @returns true 表示禁用 false表示不禁用
    */
   getDisabledWithButton = () => {
-    const { list = [], payPassword, payPasswordConfirmation } = this.state;
+    const { list = [], payPassword, payPasswordConfirmation, isSubmit } = this.state;
     let disabled = false;
-    disabled = !payPassword || !payPasswordConfirmation || list.length !== 6;
+    disabled = !payPassword || !payPasswordConfirmation || list.length !== 6 || isSubmit;
     return disabled;
   };
 
   render() {
-    console.log(Taro.getCurrentPages());
     const {
       currentStep,
       list = [],
@@ -257,6 +271,7 @@ class index extends Component {
       initTimeValue,
       payPassword,
       payPasswordConfirmation,
+      isSubmit,
     } = this.state;
     const mobile = this.props?.user.mobile;
     return (
@@ -338,7 +353,7 @@ class index extends Component {
             type={'primary'}
             className={styles.btn}
           >
-            提交
+            {isSubmit ? <Spin type="spinner">提交中...</Spin> : '提交'}
           </Button>
         </View>
       </View>

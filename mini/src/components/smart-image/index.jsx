@@ -2,7 +2,7 @@ import React from 'react';
 import { Image } from '@tarojs/components'
 import Taro from '@tarojs/taro';
 
-const SmartImg = ({type, src, onClick}) => {
+const SmartImg = ({type, src, onClick, mode = ''}) => {
 
     let newSrc = src.split('?')[0];
     const info = Taro.getSystemInfoSync();
@@ -29,7 +29,7 @@ const SmartImg = ({type, src, onClick}) => {
     }
     
     return (
-      <Image src={newSrc} onClick={onClick}/>
+      <Image src={newSrc} mode={mode} onClick={onClick}/>
     );
 }
 
