@@ -23,12 +23,24 @@ const Index = ({ money = 0, type = 0, onClick, condition = 0 }) => {
     return type === 0 ? redPacketImg : rewardQuestion;
   }, [type])
 
+  // 格式化金额，保留两位小数，且去除小数点后面的0
+  const formatMoney = useMemo(() => {
+    const num = Number(money)
+    if (!num) {
+      return money
+    }
+
+    const newNum = num.toFixed(2)
+    const regexp=/(?:\.0*|(\.\d+?)0+)$/
+    return newNum.replace(regexp,'$1')
+  }, [money])
+
   return (
     <View className={styles.container} onClick={onClick}>
       <View className={styles.wrapper}>
         <Image className={styles.img} src={url} />
         <Text className={styles.title}>{title}</Text>
-        <Text className={styles.money}>￥{money}</Text>
+        <Text className={styles.money}>￥{formatMoney}</Text>
       </View>
     </View>
   );

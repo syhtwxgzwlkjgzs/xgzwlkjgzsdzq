@@ -531,8 +531,9 @@ class Index extends Component {
     const { code, data, msg } = ret;
     if (code === 0) {
       if (!threadId) {
-        this.setState({ threadId: data.threadId, data }); // 新帖首次保存草稿后，获取id
+        this.setState({ threadId: data.threadId }); // 新帖首次保存草稿后，获取id
       }
+      this.setState({ data });
       setPostData({ threadId: data.threadId });
 
       // 非草稿，跳转主题详情页
@@ -561,8 +562,9 @@ class Index extends Component {
 
   setIndexPageData = () => {
     const { threadId, data } = this.state;
+    const { params } = getCurrentInstance().router;
     // 更新帖子到首页列表
-    if (this.state.threadId) {
+    if (params && params.id) {
       this.props.index.updateAssignThreadAllData(threadId, data);
       // 添加帖子到首页数据
     } else {

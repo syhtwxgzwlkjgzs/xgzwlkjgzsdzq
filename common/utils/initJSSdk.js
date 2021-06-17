@@ -41,7 +41,7 @@ export default async function initJSSdk(jsApiList = []) {
   });
   allPromise.push(ajaxPromise);
   const [_ret, ret] = (await Promise.all(allPromise));
-  if (ret.Code === 0) {
+  if (ret && ret.Code === 0) {
     const params = (({ appId, timestamp, nonceStr, signature }) => ({ appId, timestamp, nonceStr, signature }))(ret.Data);
     wx.config({
       debug: false,
