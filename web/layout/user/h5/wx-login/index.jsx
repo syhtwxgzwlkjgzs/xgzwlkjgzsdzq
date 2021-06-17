@@ -34,7 +34,6 @@ class WXLoginH5Page extends React.Component {
       let inviteCode = invite.getInviteCode(router);
       if (inviteCode) inviteCode = `&inviteCode=${inviteCode}`;
 
-      console.log(111, site)
       if (platform === 'h5' && site?.isMiniProgramOpen) {
         // 在h5 浏览器中 且小程序设置打开 通过小程序schema跳转
         const resp = await genMiniScheme();
