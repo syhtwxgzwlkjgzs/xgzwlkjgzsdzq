@@ -668,7 +668,7 @@ class PostPage extends React.Component {
     const { data } = this.state;
     const { postData } = this.props.threadPost;
     // 更新帖子到首页列表
-    if (this.state.threadId) {
+    if (postData.threadId) {
       this.props.index.updateAssignThreadAllData(postData.threadId, data);
       // 添加帖子到首页数据
     } else {
