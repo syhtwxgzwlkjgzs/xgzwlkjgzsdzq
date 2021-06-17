@@ -45,22 +45,22 @@ class MyDocument extends Document {
           <script async src="https://imgcache.qq.com/operation/dianshi/other/lute.min.6cbcbfbacd9fa7cda638f1a6cfde011f7305a071.js?max_age=31536000" ></script>
           {this.createMonitor()}
         </Head>
-        
-        
+
+
         <body>
             <Main />
             <script dangerouslySetInnerHTML={{__html: `
-                var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串  
-                var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; //判断是否IE<11浏览器  
+                var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+                var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; //判断是否IE<11浏览器
                 var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
                 if(isIE || isIE11) {
                   document.body.innerHTML = '<style>html,body{width: 100%;height: 100%;display: block;}h1{padding: 20px;}h3{padding: 15px;}.box{text-align: center;margin-top: 40vh;}</style><div class="box"><h1>站点不支持IE浏览器！</h1><h3>请使用QQ浏览器、chorme，Edge等浏览器。</h3></div>';
                 }
             `}}>
-              
+
             </script>
             <NextScript/>
-        </body> 
+        </body>
         <script dangerouslySetInnerHTML={{__html: `
             // 微信设置字体最大，布局乱的补丁
             function is_weixn() {

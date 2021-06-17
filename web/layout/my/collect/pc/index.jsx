@@ -48,6 +48,7 @@ class CollectPCPage extends React.Component {
           right={this.renderRight}
           rightClass={styles.rightSide}
           isShowLayoutRefresh={!!pageData?.length}
+          className="mycollect"
         >
           <SidebarPanel
             title="我的收藏"
