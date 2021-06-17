@@ -56,7 +56,7 @@ class SearchResultTopicH5Page extends React.Component {
   render() {
     const { keyword } = this.state;
     const { topics, topicsError } = this.props.search;
-    const { pageData = [], currentPage, totalPage } = topics || { pageData: [] };
+    const { pageData = [], currentPage, totalPage } = topics || {};
 
     return (
         <BaseLayout
@@ -65,6 +65,7 @@ class SearchResultTopicH5Page extends React.Component {
           showHeader={false}
           requestError={topicsError.isError}
           errorText={topicsError.errorText}
+          showLoadingInCenter={!pageData?.length}
         >
           <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} searchWhileTyping/>
           <View className={styles.wrapper}>
