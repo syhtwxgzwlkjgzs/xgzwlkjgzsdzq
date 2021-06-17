@@ -5,6 +5,9 @@ import { withRouter } from 'next/router';
 import Avatar from '@components/avatar';
 import { diffDate } from '@common/utils/diff-date';
 import { time } from '@discuzq/sdk/dist/index';
+import s9e from '@common/utils/s9e';
+import xss from '@common/utils/xss';
+import RichText from '@discuzq/design/dist/components/rich-text/index';
 
 import styles from './index.module.scss';
 
@@ -27,12 +30,26 @@ class IncomeList extends React.Component {
     this.payStatus = true;
   }
 
+  filterTag(html) {
+    return html?.replace(/<(\/)?([beprt]|br|div)[^>]*>|[\r\n]/gi, '')
+      .replace(/<img[^>]+>/gi, $1 => {
+        return $1.includes('qq-emotion') ? $1 : "[图片]";
+      });
+  }
+
+  // parse content
+  parseHTML = (content) => {
+    let t = xss(s9e.parse(this.filterTag(content)));
+    t = (typeof t === 'string') ? t : '';
+    return t;
+  }
+
   render() {
     const { itemKey, dataLength } = this.props
     return (
       <div className={styles.container}>
         <div className={styles.content}>
-          <div className={styles.text}>{this.props.payVal.title || this.props.payVal.changeDesc}</div>
+          <RichText content={this.parseHTML(this.props.payVal.title || this.props.payVal.changeDesc)} onClick={this.handleContentClick} />
           <div className={styles.money}>{this.props.payVal.amount}</div>
         </div>
         {/* // FIXME:这里的结构有问题 怪怪的 所以只能用数组长度取消底部边框线 */}

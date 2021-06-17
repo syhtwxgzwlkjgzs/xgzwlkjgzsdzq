@@ -2,6 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import Button from '@discuzq/design/dist/components/button/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import { View } from '@tarojs/components';
 import classNames from 'classnames';
 import MoneyInput from './components/money-input';
@@ -100,6 +101,11 @@ class Withdrawal extends React.Component {
       });
   };
 
+  // 点击返回按钮
+  handlePageJump = () => {
+    Taro.navigateBack();
+  };
+
   render() {
     const { inputValue } = this.state;
     const btnDisabled =
@@ -108,6 +114,10 @@ class Withdrawal extends React.Component {
       <>
         <View className={styles.container}>
           <View className={styles.main}>
+            {/* 自定义顶部返回 */}
+            <View className={styles.topBar}>
+              <Icon name="RightOutlined" onClick={() => this.handlePageJump()} />
+            </View>
             <View className={styles.totalAmount}>
               <View className={styles.moneyTitle}>可提现金额</View>
               <View className={styles.moneyNum}>{this.props.walletData?.availableAmount}</View>

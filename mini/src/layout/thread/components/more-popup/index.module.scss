@@ -29,6 +29,7 @@
         background: $white;
         border-radius: $border-radius-small;
         color: $text-color-regular;
+        border: none;
 
         > View {
           font-size: 26px !important;
@@ -73,4 +74,11 @@
   padding-bottom: constant(safe-area-inset-bottom); ///兼容 IOS<11.2/
   padding-bottom: env(safe-area-inset-bottom); ///兼容 IOS>11.2/
   background: $white;
+}
+
+
+.share {
+  padding: 0;
+  border: none !important;
+  overflow: initial;
 }
