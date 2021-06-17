@@ -425,14 +425,12 @@ class IndexAction extends IndexStore {
 
     // 如果更新的数据不存在，则直接插入。若存在，则替代原有数据
     if (!targetThread || targetThread.length === 0) {
-      console.log(2);
       const { pageData } = this.threads || {};
       if (pageData) {
         pageData.unshift(threadInfo);
         this.threads.pageData = this.threads.pageData.slice();
       }
     } else {
-      console.log(1);
       this.updateAssignThreadAllData(threadId, threadInfo)
     }
   }
