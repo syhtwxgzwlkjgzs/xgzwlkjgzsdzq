@@ -15,6 +15,8 @@ import {
   JUMP_TO_LOGIN,
   JUMP_TO_REGISTER,
   JUMP_TO_AUDIT,
+  JUMP_TO_REFUSE,
+  JUMP_TO_DISABLED,
   JUMP_TO_HOME_INDEX,
   SITE_CLOSED,
   JUMP_TO_PAY_SITE,
@@ -124,6 +126,28 @@ http.interceptors.response.use((res) => {
         url = '/user/status?statusCode=2';
       } else {
         url = '/subPages/user/status/index?statusCode=2'
+      }
+      Router.push({
+        url
+      });
+      break;
+    }
+    case JUMP_TO_REFUSE: {
+      if (process.env.DISCUZ_ENV === 'web') {
+        url = '/user/status?statusCode=-4007';
+      } else {
+        url = '/subPages/user/status/index?statusCode=-4007'
+      }
+      Router.push({
+        url
+      });
+      break;
+    }
+    case JUMP_TO_DISABLED: {
+      if (process.env.DISCUZ_ENV === 'web') {
+        url = '/user/status?statusCode=-4009';
+      } else {
+        url = '/subPages/user/status/index?statusCode=-4009'
       }
       Router.push({
         url
