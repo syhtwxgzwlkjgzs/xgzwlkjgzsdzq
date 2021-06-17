@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button, Input, Toast } from '@discuzq/design';
+import { Button, Input, Toast, Spin } from '@discuzq/design';
 import Header from '@components/header';
 import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
@@ -14,7 +14,16 @@ import classNames from 'classnames';
 class index extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      isSubmit: false, // 是否点击提交
+    };
   }
+
+  initState = () => {
+    this.setState({
+      isSubmit: false,
+    });
+  };
 
   componentDidMount() {
     this.props.user.clearUserAccountPassword();
@@ -62,6 +71,9 @@ class index extends Component {
   // 点击提交
   handleSubmit = throttle(async () => {
     if (this.getDisabledWithButton()) return;
+    this.setState({
+      isSubmit: true,
+    });
     const newPassword = this.props.user?.newPassword;
     const newPasswordRepeat = this.props.user?.newPasswordRepeat;
     if (newPassword !== newPasswordRepeat) {
@@ -71,6 +83,7 @@ class index extends Component {
         duration: 2000,
       });
       this.props.user.clearUserAccountPassword();
+      this.initState();
       return;
     }
     if (this.props.user.hasPassword) {
@@ -82,8 +95,11 @@ class index extends Component {
             hasMask: false,
             duration: 2000,
           });
-          Router.back();
+          this.initState();
           this.props.user.clearUserAccountPassword();
+          setTimeout(() => {
+            Router.back();
+          }, 300);
         })
         .catch((err) => {
           Toast.error({
@@ -91,6 +107,7 @@ class index extends Component {
             hasMask: false,
             duration: 2000,
           });
+          this.initState();
           this.props.user.clearUserAccountPassword();
         });
     } else {
@@ -102,8 +119,11 @@ class index extends Component {
             hasMask: false,
             duration: 2000,
           });
-          Router.back();
+          this.initState();
           this.props.user.clearUserAccountPassword();
+          setTimeout(() => {
+            Router.back();
+          }, 300);
         })
         .catch((err) => {
           Toast.error({
@@ -111,6 +131,7 @@ class index extends Component {
             hasMask: false,
             duration: 2000,
           });
+          this.initState();
           this.props.user.clearUserAccountPassword();
         });
     }
@@ -198,17 +219,20 @@ class index extends Component {
     const oldPassword = this.props.user?.oldPassword;
     const newPassword = this.props.user?.newPassword;
     const newPasswordRepeat = this.props.user?.newPasswordRepeat;
-
-    let isSubmit = false;
-    if (this.props.user?.hasPassword) {
-      isSubmit = !oldPassword || !newPassword || !newPasswordRepeat;
+    const { isSubmit } = this.state;
+    let isDisabled = false;
+    if (isSubmit) {
+      isDisabled = isSubmit;
+    } else if (this.props.user?.hasPassword) {
+      isDisabled = !oldPassword || !newPassword || !newPasswordRepeat;
     } else {
-      isSubmit = !newPassword || !newPasswordRepeat;
+      isDisabled = !newPassword || !newPasswordRepeat;
     }
-    return isSubmit;
+    return isDisabled;
   };
 
   render() {
+    const { isSubmit } = this.state;
     return (
       <div id={styles.accountPwdContent}>
         <Header />
@@ -232,7 +256,7 @@ class index extends Component {
             type={'primary'}
             className={styles.btn}
           >
-            提交
+            {isSubmit ? <Spin type="spinner">提交中...</Spin> : '提交'}
           </Button>
         </div>
       </div>

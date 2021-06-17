@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button, Dialog, Input, Toast, Icon } from '@discuzq/design';
+import { Button, Spin, Input, Toast, Icon } from '@discuzq/design';
 import styles from './index.module.scss';
 import CaptchaInput from '../../user-center-edit-mobile-pc/captcha-input/index';
 import VerifyCode from '../../user-center-edit-mobile/verify-code';
@@ -22,6 +22,7 @@ class index extends Component {
       initTimeValue: null,
       payPassword: null,
       payPasswordConfirmation: null,
+      isSubmit: false, // 是否点击提交
     };
   }
 
@@ -33,6 +34,7 @@ class index extends Component {
       initTimeValue: null,
       payPassword: null,
       payPasswordConfirmation: null,
+      isSubmit: false,
     });
   };
 
@@ -66,6 +68,9 @@ class index extends Component {
   // 点击下一步
   handleStepBtn = () => {
     if (this.getDisabledWithButton()) return;
+    this.setState({
+      isSubmit: true,
+    });
     const { list = [], payPassword, payPasswordConfirmation } = this.state;
     if (payPassword !== payPasswordConfirmation) {
       Toast.error({
@@ -179,9 +184,9 @@ class index extends Component {
    * @returns true 表示禁用 false表示不禁用
    */
   getDisabledWithButton = () => {
-    const { list = [], payPassword, payPasswordConfirmation } = this.state;
+    const { list = [], payPassword, payPasswordConfirmation, isSubmit } = this.state;
     let disabled = false;
-    disabled = !payPassword || !payPasswordConfirmation || list.length !== 6;
+    disabled = !payPassword || !payPasswordConfirmation || list.length !== 6 || isSubmit;
     return disabled;
   };
 
@@ -195,10 +200,10 @@ class index extends Component {
       currentStep,
       list = [],
       isBlur,
-      isKeyBoardVisible,
       initTimeValue,
       payPassword,
       payPasswordConfirmation,
+      isSubmit,
     } = this.state;
     const mobile = this.props?.user.mobile;
     return (
@@ -212,7 +217,7 @@ class index extends Component {
             <Input value={mobile} />
             <div className={styles.verifyCode}>
               <VerifyCode
-                key={`${initTimeValue}-${currentStep}`}
+                key={currentStep}
                 btnType={'text'}
                 className={styles.btnStyle}
                 initTimeValue={initTimeValue}
@@ -263,7 +268,7 @@ class index extends Component {
               type="primary"
               className={styles.btn}
             >
-              设置新支付密码
+              {isSubmit ? <Spin type="spinner">提交中...</Spin> : '设置新支付密码'}
             </Button>
           </div>
         </div>
