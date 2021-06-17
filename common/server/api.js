@@ -11,6 +11,7 @@ import Router from '@discuzq/sdk/dist/router';
 import { handleError } from '@discuzq/sdk/dist/api/utils/handle-error';
 import {
   ENV_CONFIG,
+  INVALID_TOKEN,
   JUMP_TO_404,
   JUMP_TO_LOGIN,
   JUMP_TO_REGISTER,
@@ -88,6 +89,22 @@ http.interceptors.response.use((res) => {
   // }
   let url = null;
   switch (data.Code) {
+    // @todo 未登陆且无权限时，直接跳转加入页面。可能影响其它逻辑
+    case INVALID_TOKEN: {
+      // 通过res?.config?.headers?.authorization获取用户的token判断是否登陆。
+      // 未登陆时，接口返回无权限，跳转站点加入页面
+      if (!res?.config?.headers?.authorization) {
+        if (process.env.DISCUZ_ENV === 'web') {
+          url = '/forum/partner-invite';
+        } else {
+          url = '/subPages/forum/partner-invite/index'
+        }
+        Router.push({
+          url
+        });
+      }
+      break;
+    }
     case JUMP_TO_404: {
       if (process.env.DISCUZ_ENV === 'web') {
         url = '/404';
