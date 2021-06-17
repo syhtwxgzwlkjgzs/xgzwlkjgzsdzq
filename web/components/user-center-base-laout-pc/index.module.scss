@@ -157,4 +157,9 @@
   height: 100%;
   background-color: $white;
   border-radius: rem(5);
+  color: $loading-text-color;
+
+  span {
+    color: $loading-text-color;
+  }
 }
