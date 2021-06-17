@@ -4,6 +4,9 @@ import { withRouter } from 'next/router';
 import { time } from '@discuzq/sdk/dist/index';
 import { diffDate } from '@common/utils/diff-date';
 import styles from './index.module.scss';
+import s9e from '@common/utils/s9e';
+import xss from '@common/utils/xss';
+import RichText from '@discuzq/design/dist/components/rich-text/index';
 
 
 @observer
@@ -11,6 +14,20 @@ class IncomeList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+  }
+
+  filterTag(html) {
+    return html?.replace(/<(\/)?([beprt]|br|div)[^>]*>|[\r\n]/gi, '')
+      .replace(/<img[^>]+>/gi, $1 => {
+        return $1.includes('qq-emotion') ? $1 : "[图片]";
+      });
+  }
+
+  // parse content
+  parseHTML = (content) => {
+    let t = xss(s9e.parse(this.filterTag(content)));
+    t = (typeof t === 'string') ? t : '';
+    return t;
   }
 
   render() {    
@@ -22,7 +39,8 @@ class IncomeList extends React.Component {
                     {
                         this.props.incomeVal.type === 0 ? <span className={styles.name}>{'打赏用户名'} </span> : ''
                     }
-                    <span>{this.props.incomeVal.title || this.props.incomeVal.changeDesc}</span>
+                    {/* <span>{this.props.incomeVal.title || this.props.incomeVal.changeDesc}</span> */}
+                    <RichText content={this.parseHTML(this.props.incomeVal.title || this.props.incomeVal.changeDesc)} />
                 </div>
                 <div className={styles.money}>+{this.props.incomeVal.amount}</div>
             </div>

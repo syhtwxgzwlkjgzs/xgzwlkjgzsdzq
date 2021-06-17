@@ -20,6 +20,12 @@ const index = ({
     const parse = new Parser({
         ontext(text) {
             content.push(text)
+        },
+        onclosetag(tagname) {
+          // 处理换行
+          if(tagname === 'br') {
+            content.push('\n')
+          }
         }
     })
     parse.parseComplete(thread.content.text)

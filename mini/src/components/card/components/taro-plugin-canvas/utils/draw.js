@@ -41,7 +41,7 @@ export function _drawSingleText(drawData, drawOptions) {
     const { ctx, toPx } = drawOptions;
     ctx.save();
     ctx.beginPath();
-    ctx.font = fontStyle + " " + fontWeight + " " + toPx(fontSize, true) + "px " + fontFamily;
+    ctx.font = `${fontStyle  } ${  fontWeight  } ${  toPx(fontSize, true)  }px ${  fontFamily}`;
     ctx.setGlobalAlpha(opacity);
     if (typeof text === 'object') {
         text = text.text;
@@ -51,16 +51,21 @@ export function _drawSingleText(drawData, drawOptions) {
     ctx.setTextAlign(textAlign);
     let textWidth = (ctx.measureText(text).width);
     const textArr = [];
-    let drawWidth = toPx(width);
+    const drawWidth = toPx(width);
     if (width && textWidth > drawWidth) {
         let fillText = '';
         let line = 1;
         for (let i = 0; i <= text.length - 1; i++) {
             fillText = fillText + text[i];
-            if ((ctx.measureText(fillText).width) >= drawWidth) {
+            if(text[i] === '\n' && line <= lineNum) {
+                textArr.push(fillText)
+                fillText = '';
+                line++;
+            }
+            else {if ((ctx.measureText(fillText).width) >= drawWidth) {
                 if (line === lineNum) {
                     if (i !== text.length - 1) {
-                        fillText = fillText.substring(0, fillText.length - 1) + '...';
+                        fillText = `${fillText.substring(0, fillText.length - 1)  }...`;
                     }
                 }
                 if (line <= lineNum) {
@@ -77,10 +82,21 @@ export function _drawSingleText(drawData, drawOptions) {
                 }
             }
         }
+        }
         textWidth = width;
     }
     else {
-        textArr.push(text);
+        let fillText = '';
+        let line = 1;
+        for (let i = 0; i <= text.length - 1; i++) {
+            fillText = fillText + text[i];
+            if(text[i] === '\n' && line <= lineNum) {
+                textArr.push(fillText)
+                fillText = '';
+                line++;
+            }
+        }
+        textArr.push(fillText);
     }
     textArr.forEach((item, index) => {
         ctx.fillText(item, toPx(x), toPx(y + (lineHeight || fontSize) * index));
@@ -90,7 +106,7 @@ export function _drawSingleText(drawData, drawOptions) {
         let lineY = y;
         if (textDecoration === 'line-through') {
             lineY = y;
-            let threshold = 5;
+            const threshold = 5;
             switch (baseLine) {
                 case 'top':
                     lineY += fontSize / 2 + threshold;
@@ -117,7 +133,7 @@ export function _drawSingleText(drawData, drawOptions) {
 export function drawText(params, drawOptions) {
     const { x, y, text, baseLine, } = params;
     if (Array.isArray(text)) {
-        let preText = { x, y, baseLine };
+        const preText = { x, y, baseLine };
         text.forEach(item => {
             preText.x += item.marginLeft || 0;
             const textWidth = _drawSingleText(Object.assign(item, Object.assign({}, preText)), drawOptions);
@@ -133,7 +149,7 @@ export function drawImage(data, drawOptions) {
     const { imgPath, x, y, w, h, sx, sy, sw, sh, borderRadius = 0, borderWidth = 0, borderColor } = data;
     ctx.save();
     if (borderRadius > 0) {
-        let drawData = {
+        const drawData = {
             x, y, w, h,
             r: borderRadius
         };
@@ -196,7 +212,7 @@ export function drawBlock(blockData, drawOptions) {
         ctx.setGlobalAlpha(opacity);
         ctx.setFillStyle(backgroundColor);
         if (borderRadius > 0) {
-            let drawData = {
+            const drawData = {
                 x, y, w: blockWidth, h: height, r: borderRadius
             };
             _drawRadiusRect(drawData, drawOptions);
@@ -213,7 +229,7 @@ export function drawBlock(blockData, drawOptions) {
         borderColor && ctx.setStrokeStyle(borderColor);
         ctx.setLineWidth(toPx(borderWidth));
         if (borderRadius > 0) {
-            let drawData = {
+            const drawData = {
                 x, y, w: blockWidth, h: height, r: borderRadius,
             };
             _drawRadiusRect(drawData, drawOptions);
