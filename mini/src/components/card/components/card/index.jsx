@@ -17,7 +17,6 @@ export default class Simple extends React.Component {
       canvasStatus: null,
     }
 }
-
 static getDerivedStateFromProps(nextProps) {
   if (nextProps.obj.miniCode) {
     const { obj, heightdefill } = nextProps
