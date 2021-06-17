@@ -45,8 +45,8 @@ class MyDocument extends Document {
           <script async src="https://imgcache.qq.com/operation/dianshi/other/lute.min.6cbcbfbacd9fa7cda638f1a6cfde011f7305a071.js?max_age=31536000" ></script>
           {this.createMonitor()}
         </Head>
-        
-        
+
+
         <body>
            {renderHTML('<!--[if !IE]>')}
            <Main />
@@ -68,14 +68,14 @@ class MyDocument extends Document {
               .box{
                 text-align: center;
                 margin-top: 40vh;
-              }  
+              }
           `}}/>
           <div className="box">
-            <h1>站点不支持IE浏览器！</h1>      
+            <h1>站点不支持IE浏览器！</h1>
             <h3>请使用QQ浏览器、chorme，Edge等浏览器。</h3>
           </div>
            {renderHTML('<![endif]-->')}
-        </body> 
+        </body>
         <script dangerouslySetInnerHTML={{__html: `
             // 微信设置字体最大，布局乱的补丁
             function is_weixn() {

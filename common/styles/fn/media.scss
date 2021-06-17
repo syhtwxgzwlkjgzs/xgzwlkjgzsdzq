@@ -19,3 +19,35 @@ $xl-pc: 1420px;
         }
     }
 }
+
+// 最小高度
+$s-height-pc: 780px; // 定这个像素是发现首页右侧栏：扫码 + 推荐 + 版本号 之后的高度
+$detail-height-pc: $s-height-pc;
+$home-height-pc: 650px;
+
+/**
+ * 目前只针对小于等于 $s-height-pc 的屏幕尺寸做处理
+ * 所以有需要的页面只需要进行如下编写，在需要的样式中：
+ * .test {
+      @include heightMedia() {
+        ... ...
+      }
+ * }
+ */
+@mixin heightMedia($max: $s-height-pc, $min: 0) {
+  @if $max and not $min {
+    @media only screen and (max-height: $max) {
+      @content;
+    }
+  }
+  @else if $max and $min {
+    @media only screen and (min-width: $min) and (max-height: $max) {
+      @content;
+    }
+  }
+  @else if not $max and $min {
+    @media only screen and (min-width: $min) {
+      @content;
+    }
+  }
+}
