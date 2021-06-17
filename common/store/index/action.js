@@ -350,7 +350,7 @@ class IndexAction extends IndexStore {
    */
   @action
   updateAssignThreadAllData(threadId, threadInfo) {
-    if (!threadId) return false;
+    if (!threadId || !threadInfo || !Object.keys(threadInfo).length) return false;
     const targetThread = this.findAssignThread(typeofFn.isNumber(threadId) ? threadId : +threadId);
     if (!targetThread) return false;
     const { index, data } = targetThread;
