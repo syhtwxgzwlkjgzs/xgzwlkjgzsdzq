@@ -29,7 +29,6 @@ const ActiveUsers = ({ data, onItemClick }) => {
                 const prevIndex = rowIndex * 5;
                 const user = newData[index + prevIndex];
                 if (!user) return null;
-                // return <User key={index} data={user} onClick={onItemClick} />;
                 return (
                   <div key={index} className={styles.item} onClick={() => click(user)}>
                     <Avatar className={styles.avatarImg} image={user.avatar} name={user.nickname} />
@@ -42,23 +41,5 @@ const ActiveUsers = ({ data, onItemClick }) => {
   </div>
   );
 };
-
-// /**
-//  * 用户组件
-//  * @prop {object} data 用户数据
-//  * @prop {function} onClick 用户点击事件
-//  */
-// const User = ({ data, onClick }) => {
-//   const click = useCallback(() => {
-//     onClick && onClick(data);
-//   }, [data, onClick]);
-
-//   return (
-//     <div className={styles.item} onClick={click}>
-//       <Avatar className={styles.avatarImg} image={data.avatar} name={data.nickname} />
-//       <div className={styles.name}>{data.nickname || ''}</div>
-//     </div>
-//   );
-// };
 
 export default React.memo(ActiveUsers);

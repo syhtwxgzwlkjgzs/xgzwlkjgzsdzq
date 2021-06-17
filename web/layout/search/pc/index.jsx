@@ -10,7 +10,7 @@ import SidebarPanel from '@components/sidebar-panel';
 import { Toast } from '@discuzq/design';
 import TopicItem from '@components/search/topic-item'
 import ActiveUsersMore from '@components/search/active-user-more-items';
-import Stepper from './components/stepper';
+import Stepper from '@components/stepper';
 
 @inject('site')
 @inject('search')
@@ -43,7 +43,6 @@ class SearchPCPage extends React.Component {
     this.props.router.push(`/search/result-topic?keyword=${this.state.value || ''}`);
   };
 
-  // TODO 处理用户是自己的数据
   onUserClick = ({ userId } = {}) => {
     this.props.router.push(`/user/${userId}`);
   };
@@ -52,8 +51,6 @@ class SearchPCPage extends React.Component {
     const { topicId } = data
     this.props.router.push(`/topic/topic-detail/${topicId}`);
   };
-
-  // onPostClick = data => console.log('post click', data);
 
   searchData = (keyword) => {
     const { dispatch } = this.props;
@@ -138,7 +135,7 @@ class SearchPCPage extends React.Component {
 
     if(scrollTop) {
       if(scrollTop < activeUsersScrollTo) {
-        this.setState({stepIndex: 0}); // TODO: 暂时写死index，应该通过steps传回index
+        this.setState({stepIndex: 0});
       } else if(scrollTop < hotTopicScrollTo && scrollTop >= activeUsersScrollTo) {
         this.setState({stepIndex: 1});
       } else if(scrollTop >= hotTopicScrollTo) {
