@@ -1,8 +1,8 @@
 @import '@common/styles/index.scss';
 
 .container {
-    padding: rem($padding-4n) rem($padding-4n) 0;
-    background: $white;
+  padding: rem($padding-4n) rem($padding-4n) 0;
+  background: $white;
 }
 
 .content {
@@ -45,14 +45,30 @@
         text-align: left;
         color: $error-color;
     }
+  }
+  .text {
+    font-family: 'PingFang SC';
+    font-size: rem($font-size-primary);
+    text-align: left;
+    color: $text-color-primary;
+    // line-height: rem(16);
+  }
+  .money {
+    font-family: 'PingFangSC-Semibold';
+    font-size: rem($font-size-middle);
+    text-align: left;
+    color: $error-color;
+  }
 }
 
 .time {
-    font-family: 'PingFangSC-Regular';
-    font-weight: normal;
-    font-size: rem($font-size-label);
-    text-align: left;
-    color: $text-color-secondary;
-    padding-bottom: rem($padding-4n);
-    border-bottom: solid rem(1) $border-color;
+  font-family: 'PingFangSC-Regular';
+  font-weight: normal;
+  font-size: rem($font-size-label);
+  text-align: left;
+  color: $text-color-secondary;
+  padding-bottom: rem($padding-4n);
+  border-bottom: solid rem(1) $border-color;
+  height: rem(16);
+  line-height: rem(16);
 }

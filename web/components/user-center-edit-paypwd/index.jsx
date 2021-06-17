@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button, Input, Toast } from '@discuzq/design';
+import { Button, Input, Toast, Spin } from '@discuzq/design';
 import Header from '@components/header';
 import styles from './index.module.scss';
 import { withRouter } from 'next/router';
@@ -18,9 +18,15 @@ class index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isSubmit: false,
+      isSubmit: false, // 是否点击提交
     };
   }
+
+  initState = () => {
+    this.setState({
+      isSubmit: false,
+    });
+  };
 
   componentDidMount() {
     this.props.payBox.clearPayPassword();
@@ -29,11 +35,15 @@ class index extends Component {
   // 点击去到下一步 ---> 清空旧密码oldPayPwd状态
   goToResetPayPwd = throttle(() => {
     if (this.getDisabledWithButton()) return;
+    this.setState({
+      isSubmit: true,
+    });
     this.props.payBox
       .getPayPwdResetToken()
       .then(() => {
         Router.push({ url: '/my/edit/reset-paypwd' });
         this.props.payBox.oldPayPwd = null;
+        this.initState();
       })
       .catch(() => {
         Toast.error({
@@ -42,6 +52,7 @@ class index extends Component {
           duration: 2000,
         });
         this.props.payBox.oldPayPwd = null;
+        this.initState();
       });
   }, 300);
 
@@ -71,10 +82,29 @@ class index extends Component {
     this.props.payBox.oldPayPwd = securityCode[0];
   };
 
+  // 处理支付相关逻辑
+  handlePayBoxWithTriggerIncident = async () => {
+    const { id } = this.props?.user;
+    try {
+      await this.props.user.updateUserInfo(id);
+      this.props.payBox.visible = true;
+      this.props.payBox.password = null;
+      await this.props.payBox.getWalletInfo(id);
+      this.props.user.userInfo.canWalletPay = true;
+      this.initState();
+      Router.back();
+    } catch (error) {
+      Toast.error({
+        content: '获取用户钱包信息失败',
+        duration: 2000,
+      });
+      this.initState();
+    }
+  };
+
   // 点击提交 ----> 设置密码password成功 ---> 清空 password状态
   handleSubmit = throttle(async () => {
-    const { isSubmit } = this.state;
-    if (isSubmit || this.getDisabledWithButton()) return;
+    if (this.getDisabledWithButton()) return;
     this.setState({
       isSubmit: true,
     });
@@ -89,13 +119,12 @@ class index extends Component {
         });
         const type = GetQueryString('type');
         if (type === 'paybox') {
-          const { id } = this.props?.user;
-          this.props.user.updateUserInfo(id);
-          this.props.payBox.visible = true;
-          this.props.payBox.password = null;
+          this.handlePayBoxWithTriggerIncident();
+          return;
         }
         Router.back();
         this.props.payBox.password = null;
+        this.initState();
       })
       .catch((err) => {
         console.log(err);
@@ -105,6 +134,7 @@ class index extends Component {
           duration: 2000,
         });
         this.props.payBox.password = null;
+        this.initState();
       });
   }, 500);
 
@@ -115,8 +145,11 @@ class index extends Component {
   getDisabledWithButton = () => {
     const payPassword = this.props.payBox?.password;
     const oldPayPwd = this.props.payBox?.oldPayPwd;
+    const { isSubmit } = this.state;
     let disabled = false;
-    if (this.props.user?.canWalletPay) {
+    if (isSubmit) {
+      disabled = isSubmit;
+    } else if (this.props.user?.canWalletPay) {
       disabled = !oldPayPwd || oldPayPwd.length !== 6;
     } else {
       disabled = !payPassword || payPassword.length !== 6;
@@ -170,6 +203,7 @@ class index extends Component {
   );
 
   render() {
+    const { isSubmit } = this.state;
     return (
       <div id={styles.setPayPwdContent}>
         <Header />
@@ -187,7 +221,7 @@ class index extends Component {
               type={'primary'}
               className={styles.btn}
             >
-              下一步
+              {isSubmit ? <Spin type="spinner">加载中...</Spin> : '下一步'}
             </Button>
           ) : (
             <Button
@@ -197,7 +231,7 @@ class index extends Component {
               type={'primary'}
               className={styles.btn}
             >
-              提交
+              {isSubmit ? <Spin type="spinner">提交中...</Spin> : '提交'}
             </Button>
           )}
         </div>
