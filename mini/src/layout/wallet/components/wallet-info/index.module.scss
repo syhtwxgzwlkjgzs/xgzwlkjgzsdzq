@@ -4,7 +4,7 @@
 .container {
   padding: {
     top: 90px;
-    bottom: 14px;
+    bottom: 27px;
     left: 16px;
     right: 16px;
   }
@@ -15,19 +15,21 @@
   text-align: left;
 
   .moneyTitle {
+    height: 20px;
     font-family: 'PingFangSC-Regular';
     font-weight: normal;
     font-size: 14px;
-    line-height: 16.8px;
-    padding-bottom: 8px;
+    line-height: 20px;
+    margin-bottom: $margin-1n;
   }
 
   .moneyNum {
+    height: 42px;
     font-family: "PingFang SC";
     font-weight: 600;
     font-size: 30px;
-    line-height: 30px;
-    padding: 8px 0 20px 0;
+    line-height: 42px;
+    margin-bottom: $margin-4n;
   }
 }
 
@@ -37,22 +39,22 @@
   justify-content: space-between;
   color: var(--color-white);
   text-align: left;
-  background: var(--color-primary);
 
   .statusTitle {
+    height: 20px;
     font-family: 'PingFangSC-Regular';
     font-weight: normal;
     font-size: 14px;
-    line-height: 24px;
-
+    line-height: 20px;
+    margin-bottom: 3px;
   }
 
   .statusNum {
+    height: 28px;
     font-family: 'PingFang SC';
     font-weight: normal;
     font-size: 20px;
-    line-height: 16.8px;
-    padding: 14px 0;
+    line-height: 28px;
   }
 
   .withdrawalAmount {
