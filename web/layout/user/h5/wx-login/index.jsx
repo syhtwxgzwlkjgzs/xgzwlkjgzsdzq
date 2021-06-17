@@ -34,16 +34,14 @@ class WXLoginH5Page extends React.Component {
       let inviteCode = invite.getInviteCode(router);
       if (inviteCode) inviteCode = `&inviteCode=${inviteCode}`;
 
-      const redirectUri = `${encodeURIComponent(`${window.location.origin}/user/wx-authorization?type=${platform}${inviteCode}`)}`;
-      let params;
+      console.log(111, site)
       if (platform === 'h5' && site?.isMiniProgramOpen) {
-        // TODO：小程序还未过审核，暂时无法进行小程序微信登录，先注释代码，并做出提示
         // 在h5 浏览器中 且小程序设置打开 通过小程序schema跳转
-        // const resp = await genMiniScheme();
-        // if (resp.code === 0) {
-        //   window.location.href = `${get(resp, 'data.openLink', '')}?${inviteCode.substr(1)}`;
-        //   return;
-        // }
+        const resp = await genMiniScheme();
+        if (resp.code === 0) {
+          window.location.href = `${get(resp, 'data.openLink', '')}?${inviteCode.substr(1)}`;
+          return;
+        }
         Toast.error({
           content: '当前小程序不可使用，请联系管理人员切换成公众号模式',
           hasMask: false,
@@ -53,20 +51,24 @@ class WXLoginH5Page extends React.Component {
       }
 
       // 在h5浏览器中，且公众号设置打开
-      params = {
+      const params = {
         type: 'mobile_browser_login',
-        redirectUri,
+        redirectUri: encodeURIComponent(`${window.location.origin}/user/wx-authorization?type=${platform}${inviteCode}`),
       };
 
+      // pc端打开
       if (platform === 'pc') {
-        const type = site?.isMiniProgramOpen ?  'pc_login_mini' : 'pc_login';
-        params = {
-          type,
-          redirectUri,
-        };
+        // 开启小程序登陆
+        if (site?.isMiniProgramOpen) {
+          params.type = 'pc_login_mini';
+          params.redirectUri = encodeURIComponent(`/subPages/user/wx-authorization/index`);
+        } else {
+          params.type = 'pc_login';
+        }
       }
 
       await this.props.h5QrCode.generate({ params });
+
       if (platform === 'pc') {
         this.queryLoginState(params.type);
       }
