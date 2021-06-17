@@ -14,6 +14,8 @@ import {
   JUMP_TO_LOGIN,
   JUMP_TO_REGISTER,
   JUMP_TO_AUDIT,
+  JUMP_TO_REFUSE,
+  JUMP_TO_DISABLED,
   JUMP_TO_HOME_INDEX,
   SITE_CLOSED,
   JUMP_TO_PAY_SITE,
@@ -141,6 +143,12 @@ class App extends Component {
         break;
       case JUMP_TO_AUDIT:// 到审核页
         Router.push({ url: '/subPages/user/status/index?statusCode=2' });
+        break;
+      case JUMP_TO_REFUSE:// 到审核拒绝页
+        Router.push({ url: '/subPages/user/status/index?statusCode=-4007' });
+        break;
+      case JUMP_TO_DISABLED:// 到审核禁用页
+        Router.push({ url: '/subPages/user/status/index?statusCode=-4009' });
         break;
       case JUMP_TO_HOME_INDEX:// 到首页
         Router.redirect({ url: '/pages/index/index' });

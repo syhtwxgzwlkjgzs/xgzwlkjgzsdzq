@@ -7,6 +7,7 @@ import { readForum, readUser, readPermissions } from '@server';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import clearLoginStatus from '@common/utils/clear-login-status';
+import { REVIEWING } from '@common/store/login/util';
 import { Spin, Icon } from '@discuzq/design';
 import typeofFn from '@common/utils/typeof';
 import styles from './HOCFetchSiteData.module.scss';
@@ -17,10 +18,13 @@ import {
   JUMP_TO_LOGIN,
   JUMP_TO_REGISTER,
   JUMP_TO_AUDIT,
+  JUMP_TO_REFUSE,
+  JUMP_TO_DISABLED,
   JUMP_TO_HOME_INDEX,
   SITE_CLOSED,
   JUMP_TO_PAY_SITE,
-  JUMP_TO_SUPPLEMENTARY
+  JUMP_TO_SUPPLEMENTARY,
+  REVIEWING_USER_WHITE_LIST_WEB,
 } from '@common/constants/site';
 
 // 获取全站数据
@@ -192,6 +196,12 @@ export default function HOCFetchSiteData(Component) {
         case JUMP_TO_AUDIT:// 到审核页
           Router.push({ url: '/user/status?statusCode=2' });
           break;
+        case JUMP_TO_REFUSE:// 到审核拒绝页
+          Router.push({ url: '/user/status?statusCode=-4007' });
+          break;
+        case JUMP_TO_DISABLED:// 到审核禁用页
+          Router.push({ url: '/user/status?statusCode=-4009' });
+          break;
         case JUMP_TO_SUPPLEMENTARY:// 跳转到扩展字段页
           Router.push({ url: '/user/supplementary' });
           break;
@@ -247,9 +257,14 @@ export default function HOCFetchSiteData(Component) {
             Router.redirect({ url: '/user/bind-nickname' });
             return false;
           }
+          // 账号审核中的 用户只能访问 首页 + 帖子详情页，以及用户状态提示页
+          if (user.userStatus === REVIEWING) {
+            if (!REVIEWING_USER_WHITE_LIST_WEB.includes(router.pathname)) {
+              Router.replace({ url: `/user/status?statusCode=${user.userStatus}` });
+              return false;
+            }
+          }
         }
-        console.log(router.asPath);
-        console.log(router.pathname);
 
 
         if (site?.webConfig?.setSite?.siteMode !== 'pay') {
