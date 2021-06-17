@@ -59,7 +59,7 @@ const Index = () => {
   });
 
   return (
-    <Page>
+    <Page className={styles.page}>
       <Message {...params} />
     </Page>
   );
