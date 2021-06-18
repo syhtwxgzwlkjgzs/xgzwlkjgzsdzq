@@ -30,11 +30,16 @@
   line-height: rem($font-line-height-primary);
   color: var(--color-text-primary);
   margin-left: rem($padding-2n);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  display: block;
 }
 .left {
   display: flex;
   align-items: center;
   height: rem($font-line-height-primary);
+  width: 80%;
 }
 .right {
   display: flex;
