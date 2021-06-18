@@ -275,6 +275,62 @@
         }
       }
     }
+    .mydraft {
+      @include heightMedia(955px, 900px) {
+        .user-center-friends-item:nth-last-child(-n + 2) {
+          display: none;
+        }
+      }
+      @include heightMedia(900px, 845px) {
+        .user-center-friends-item:nth-last-child(-n + 3) {
+          display: none;
+        }
+      }
+      @include heightMedia(900px) {
+        .user-center-friends-mini {
+          display: flex !important;
+        }
+
+        .user-center-friends-item {
+          display: none;
+        }
+      }
+      @include heightMedia(830px, 775px) {
+        .pop-topic div:nth-last-child(1) {
+          display: none;
+        }
+      }
+
+      @include heightMedia(775px, 725px) {
+        .pop-topic div:nth-last-child(-n + 2) {
+          display: none;
+        }
+      }
+
+      @include heightMedia(725px, 670px) {
+        .pop-topic div:nth-last-child(-n + 3) {
+          display: none;
+        }
+      }
+
+      @include heightMedia(670px, 615px) {
+        .pop-topic div:nth-last-child(-n + 4) {
+          display: none;
+        }
+      }
+
+      @include heightMedia(615px, 560px) {
+        .pop-topic div:nth-last-child(-n + 5) {
+          display: none;
+        }
+      }
+
+      @include heightMedia(560px) {
+        .right {
+          position: static;
+        }
+      }
+    }
   }
 }
 
