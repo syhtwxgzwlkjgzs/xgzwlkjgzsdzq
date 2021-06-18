@@ -1,6 +1,8 @@
 import React, {useState, useEffect, useCallback, useRef} from 'react';
 import isServer from '@common/utils/is-server';
 import styles from './index.module.scss';
+import {isLongImage} from '@common/utils/calc-image-type';
+
 const SmartImg = ({type, src, onClick}) => {
 
     const [imgSrc, changeImgSrc] = useState(null);
@@ -41,9 +43,7 @@ const SmartImg = ({type, src, onClick}) => {
         if (img && img.current) {
             const width = img.current.naturalWidth;
             const height = img.current.naturalHeight;
-            if (height/width >= 2.5) {
-                changeIsLong(true)
-            }
+            changeIsLong(isLongImage(width, height));
         }
         
     }, [img])

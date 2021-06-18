@@ -74,6 +74,7 @@ const Index = ({ page, subPage, dialogId, username, message, user, nickname }) =
   return (
     <BaseLayout
       right={rightContent}
+      className="mymessage-page"immediateCheck={false}
     >
       {mainContent}
     </BaseLayout>

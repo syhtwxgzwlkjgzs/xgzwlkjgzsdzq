@@ -36,12 +36,12 @@ export default class index extends Component {
 
   render() {
     const { optionsList = [] } = this.state;
-    const { activeType } = this.props;
+    const { activeType, className = '' } = this.props;
     return (
-      <div className={styles.container}>
+      <div className={`${styles.container} ${className}`}>
         {
           optionsList.map((item, index) => {
-            
+
             return (
               <div className={styles.detailed} onClick={() => { this.handleTriggerSelectedTypes(item.type) }}>
                 <div className={styles.left}>
@@ -69,7 +69,7 @@ export default class index extends Component {
                   <span
                     className={classNames(styles.text,{
                       [styles.textColor]: activeType === item.type
-                    })}                  
+                    })}
                   >{item.title}</span>
                 </div>
               </div>

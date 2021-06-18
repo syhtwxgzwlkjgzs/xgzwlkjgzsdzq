@@ -16,20 +16,19 @@ import BottomView from '@components/list/BottomView'
 @inject('topic')
 @observer
 class TopicH5Page extends React.Component {
-
-
-
-  renderItem = ({ content = '', threadCount = 0, viewCount = 0, threads = [] }, index) => <View className={styles.themeContent} key={index}>
+  renderItem = ({ content = '', threadCount = 0, viewCount = 0, threads = [] }, index) => <View key={index}>
       <DetailsHeader title={content} viewNum={viewCount} contentNum={threadCount} onShare={this.onShare} />
+      <View className={styles.themeContent}>
         {
           threads?.length ?
             (
               threads?.map((item, itemIndex) => (
-                <ThreadContent data={item} key={itemIndex} className={styles.item} />
+                <ThreadContent data={item} key={itemIndex} />
               ))
             )
             : <NoData />
         }
+        </View>
       </View>
       
   render() {

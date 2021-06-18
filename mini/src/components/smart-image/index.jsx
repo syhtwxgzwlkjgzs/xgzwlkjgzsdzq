@@ -1,8 +1,12 @@
-import React from 'react';
-import { Image } from '@tarojs/components'
+import React, {useState, useCallback} from 'react';
+import { View, Image, Text } from '@tarojs/components'
 import Taro from '@tarojs/taro';
+import styles from './index.module.scss';
+import {isLongImage} from '@common/utils/calc-image-type';
 
 const SmartImg = ({type, src, onClick, mode = ''}) => {
+    const [imgSrc, changeImgSrc] = useState(null);
+    const [isLong, changeIsLong] = useState(false);
 
     let newSrc = src.split('?')[0];
     const info = Taro.getSystemInfoSync();
@@ -27,9 +31,20 @@ const SmartImg = ({type, src, onClick, mode = ''}) => {
         }
         newSrc = `${src}?${d}${zoom}`;
     }
+
+    const imgOnload = useCallback((data) => {
+        if (data && data.detail) {
+            const { height, width } = data.detail;
+            changeIsLong(isLongImage(width,height));
+        }
+        
+    }, [src])
     
     return (
-      <Image src={newSrc} mode={mode} onClick={onClick}/>
+        <View className={styles.box}>
+            <Image src={newSrc}  onLoad={imgOnload} mode={mode} onClick={onClick}/>
+            {isLong && <View className={styles.longImgBox}>长图</View>}
+        </View>
     );
 }
 
