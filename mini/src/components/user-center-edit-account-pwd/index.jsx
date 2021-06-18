@@ -33,17 +33,20 @@ class index extends Component {
   }
 
   // 点击忘记密码
-  handleResetPwd = () => {
+  handleResetPwd = throttle(() => {
     if (!this.props.user.mobile) {
       Toast.error({
         content: '需要首先绑定手机号才能进行此操作',
         duration: 2000,
       });
+      setTimeout(() => {
+        Taro.navigateTo({ url: '/subPages/user/bind-phone/index?from=userCenter' });
+      }, 1000);
       return;
     }
     // FIXME: 页面缺失
     Taro.navigateTo({ url: '/subPages/user/reset-password/index' });
-  };
+  }, 1000);
 
   // 输入旧密码
   handleSetOldPwd = (e) => {

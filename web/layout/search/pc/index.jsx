@@ -19,7 +19,7 @@ import Stepper from '@components/stepper';
 class SearchPCPage extends React.Component {
   constructor(props) {
     super(props);
-    
+
     const keyword = this.props.router.query.keyword || '';
     this.state = {
       value: keyword,
@@ -157,8 +157,8 @@ class SearchPCPage extends React.Component {
     return (
       <div className={styles.searchContent}>
         <div ref={this.treadingTopicRef}>
-          <SidebarPanel 
-            title="潮流话题" 
+          <SidebarPanel
+            title="潮流话题"
             type='normal'
             isLoading={!topicsPageData}
             noData={!topicsPageData?.length}
@@ -169,15 +169,15 @@ class SearchPCPage extends React.Component {
           >
             <div className={styles.topic}>
               {topicsPageData?.map((item, index) => (
-                <TopicItem data={item} key={index} onClick={this.onTopicClick} />  
+                <TopicItem data={item} key={index} onClick={this.onTopicClick} />
               ))}
             </div>
           </SidebarPanel>
         </div>
 
         <div ref={this.activeUsersRef}>
-          <SidebarPanel 
-            title="活跃用户" 
+          <SidebarPanel
+            title="活跃用户"
             type='normal'
             isLoading={!usersPageData}
             noData={!usersPageData?.length}
@@ -191,7 +191,7 @@ class SearchPCPage extends React.Component {
         </div>
 
         <div ref={this.hotTopicRef}>
-          <SidebarPanel 
+          <SidebarPanel
             type='normal'
             isLoading={!threadsPageData}
             noData={!threadsPageData?.length}
@@ -217,7 +217,8 @@ class SearchPCPage extends React.Component {
           onScroll={ this.handleScroll }
           jumpTo={this.state.position}
           pageName="search"
-          showRefresh={false}
+        showRefresh={false}
+        className="search-page"
         >
           { this.renderContent() }
         </BaseLayout>

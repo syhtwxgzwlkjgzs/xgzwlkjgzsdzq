@@ -1,4 +1,5 @@
-import React,  { useCallback, useEffect, useImperativeHandle, useRef, useState, forwardRef } from 'react';
+/* eslint-disable react/display-name */
+import React, { useCallback, useEffect, useImperativeHandle, useRef, useState, forwardRef } from 'react';
 import Header from '@components/header';
 import List from '@components/list';
 import BottomNavBar from '@components/bottom-nav-bar';
@@ -36,6 +37,7 @@ const BaseLayout = forwardRef((props, ref) => {
     immediateCheck = false,
     platform = 'h5',
     footer,
+    disabledList = false,
   } = props;
 
   const [height, setHeight] = useState(600);
@@ -43,46 +45,41 @@ const BaseLayout = forwardRef((props, ref) => {
   const pullDownWrapper = useRef(null);
   const listRef = useRef(null);
 
-  useImperativeHandle(
-    ref,
-    () => ({
-      listRef
-    }),
+  useImperativeHandle(ref, () => ({
+    listRef,
+  }));
+
+  let content = showPullDown ? (
+    <div className={styles.list} ref={pullDownWrapper}>
+      <PullDownRefresh onRefresh={onPullDown} isFinished={isFinished} height={height}>
+        <List {...props} className={styles.listHeight} ref={listRef} onScroll={onScroll} platform={platform}>
+          {typeof children === 'function' ? children({ ...props }) : children}
+        </List>
+      </PullDownRefresh>
+    </div>
+  ) : (
+    <List
+      {...props} // props的位置必须要在第一个，否则后面的参数可能被覆盖
+      immediateCheck={immediateCheck}
+      className={styles.list}
+      ref={listRef}
+      onScroll={onScroll}
+      platform={platform}
+    >
+      {typeof children === 'function' ? children({ ...props }) : children}
+    </List>
   );
+
+  if (disabledList) {
+    content = typeof children === 'function' ? children({ ...props }) : children;
+  }
 
   return (
     <div className={styles.container}>
-        {showHeader && <Header />}
-        {
-          showPullDown ? (
-            <div className={styles.list} ref={pullDownWrapper}>
-              <PullDownRefresh onRefresh={onPullDown} isFinished={isFinished} height={height}>
-                  <List
-                    {...props}
-                    className={styles.listHeight}
-                    ref={listRef}
-                    onScroll={onScroll}
-                    platform={platform}
-                  >
-                      {typeof(children) === 'function' ? children({ ...props }) : children}
-                  </List>
-              </PullDownRefresh>
-            </div>
-          ) : (
-            <List
-              {...props} // props的位置必须要在第一个，否则后面的参数可能被覆盖
-              immediateCheck={immediateCheck}
-              className={styles.list}
-              ref={listRef}
-              onScroll={onScroll}
-              platform={platform}
-            >
-                {typeof(children) === 'function' ? children({ ...props }) : children}
-            </List>
-          )
-        }
-        {footer}
-        {showTabBar && <BottomNavBar onClick={onClickTabBar} placeholder curr={curr} />}
+      {showHeader && <Header />}
+      {content}
+      {footer}
+      {showTabBar && <BottomNavBar onClick={onClickTabBar} placeholder curr={curr} />}
     </div>
   );
 });

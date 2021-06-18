@@ -86,7 +86,7 @@ export const getSelectedCategoryIds = (categories, id) => {
     }
 
     let newCategoryIds = [id];
-    const tmp = categories.filter(item => item.pid === id);
+    const tmp = categories.filter(item => `${item.pid}` === `${id}`);
     if (tmp?.length && tmp[0]?.children?.length) {
       tmp[0]?.children?.forEach((item) => {
         newCategoryIds.push(item.pid);

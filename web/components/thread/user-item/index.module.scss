@@ -12,6 +12,7 @@
   .wrapper {
     display: flex;
     align-items: center;
+    max-width: 75%;
   }
 
   .header {
@@ -49,6 +50,7 @@
     justify-content: center;
     font-size: rem($font-size-primary);
     .title {
+      @include lamp-clamp(1);
       color: $text-color-primary;
       line-height: rem(20);
     }

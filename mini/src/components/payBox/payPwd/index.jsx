@@ -8,6 +8,7 @@ import { inject, observer } from 'mobx-react';
 import { View, Text } from '@tarojs/components';
 import { STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants';
 import Taro from '@tarojs/taro';
+import throttle from '@common/utils/thottle.js';
 
 @inject('site')
 @inject('user')
@@ -77,12 +78,15 @@ class PayPassword extends React.Component {
     this.initState();
   };
 
-  handleForgetPayPwd = () => {
+  handleForgetPayPwd = throttle(() => {
     if (!this.props.user.mobile) {
       Toast.error({
         content: '需要首先绑定手机号才能进行此操作',
         duration: 2000,
       });
+      setTimeout(() => {
+        Taro.navigateTo({ url: '/subPages/user/bind-phone/index?from=paybox' });
+      }, 1000);
       return;
     }
     Taro.navigateTo({
@@ -90,7 +94,7 @@ class PayPassword extends React.Component {
     });
     this.props.payBox.step = null;
     this.props.payBox.visible = false;
-  };
+  }, 1000);
 
   async submitPwa() {
     let { list = [] } = this.state;
