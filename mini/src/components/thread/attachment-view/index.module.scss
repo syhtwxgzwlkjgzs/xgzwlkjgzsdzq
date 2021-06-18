@@ -1,4 +1,9 @@
 @import '@common/styles/index.scss';
+.wrapper {
+  > View:not(:last-child) {
+    margin-bottom: 8px;
+  }
+}
 .container {
   position: relative;
   display: flex;
@@ -8,7 +13,6 @@
   height: 50px;
   border-radius: $border-radius-small;
   background: $body-bg-color;
-  margin-bottom: 8px;
 
   .wrapper {
     width: 100%;
