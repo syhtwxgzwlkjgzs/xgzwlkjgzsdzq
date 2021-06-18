@@ -19,7 +19,7 @@ class Index extends React.Component {
     const id = ctx?.query?.id;
     const topicFilter = {
       topicId: id,
-      hot: 0
+      hot: 0,
     };
     const result = await readTopicsList({ params: { filter: topicFilter } });
 
@@ -35,6 +35,11 @@ class Index extends React.Component {
     const { serverTopic, topic } = this.props;
     // 初始化数据到store中
     serverTopic && serverTopic.topicDetail && topic.setTopicDetail(serverTopic.topicDetail);
+    this.state = {
+      fetchTopicInfoLoading: true,
+      isError: false,
+      errorText: '加载失败',
+    };
   }
 
   async componentDidMount() {
@@ -43,7 +48,7 @@ class Index extends React.Component {
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasTopics = !!topic.topicDetail;
     if (hasTopics) {
-      topic.setTopicDetail(null)
+      topic.setTopicDetail(null);
     }
     // this.toastInstance = Toast.loading({
     //   content: '加载中...',
@@ -51,14 +56,30 @@ class Index extends React.Component {
     // });
 
     this.page = 1;
-    await topic.getTopicsDetail({ topicId: id });
-
+    try {
+      await topic.getTopicsDetail({ topicId: id });
+      this.setState({
+        fetchTopicInfoLoading: false,
+      });
+    } catch (errMsg) {
+      this.setState({
+        isError: true,
+        errorText: errMsg,
+      });
+    }
     // this.toastInstance?.destroy();
   }
   render() {
     return <ViewAdapter
-            h5={<IndexH5Page dispatch={this.dispatch} />}
-            pc={<IndexPCPage dispatch={this.dispatch} />}
+            h5={<IndexH5Page dispatch={this.dispatch}
+            fetchTopicInfoLoading={this.state.fetchTopicInfoLoading}
+            isError={this.state.isError}
+            errorText={this.state.errorText}/>}
+
+            pc={<IndexPCPage dispatch={this.dispatch}
+            fetchTopicInfoLoading={this.state.fetchTopicInfoLoading}
+            isError={this.state.isError}
+            errorText={this.state.errorText}/>}
             title='话题详情'
           />;
   }
