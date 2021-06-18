@@ -111,7 +111,7 @@ function VList({ hasNextPage, isNextPageLoading, list = [], sticks = [], loadNex
     const content = otherPorps.renderItem(item, index, recomputeRowHeights, onContentHeightChange);
 
     const newStyle = {
-      height: `${height / 100}rem`,
+      height,
       ...otherStyles,
     };
 

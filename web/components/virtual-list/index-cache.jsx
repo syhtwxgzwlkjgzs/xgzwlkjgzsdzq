@@ -117,7 +117,7 @@ function VList(
     }
 
     const newStyle = {
-      height: `${height / 100}rem`,
+      height,
       ...otherStyles,
     };
 
