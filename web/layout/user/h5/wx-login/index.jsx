@@ -38,7 +38,7 @@ class WXLoginH5Page extends React.Component {
         // 在h5 浏览器中 且小程序设置打开 通过小程序schema跳转
         const resp = await genMiniScheme();
         if (resp.code === 0) {
-          window.location.href = `${get(resp, 'data.openLink', '')}?${inviteCode.substr(1)}`;
+          window.location.href = `${get(resp, 'data.openLink', '')}${inviteCode}`;
           return;
         }
         Toast.error({
