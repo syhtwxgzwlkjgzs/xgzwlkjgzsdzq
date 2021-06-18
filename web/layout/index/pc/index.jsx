@@ -193,7 +193,7 @@ class IndexPCPage extends React.Component {
         <TopFilterView onFilterClick={this.onFilterClick} onPostThread={this.onPostThread} isShowDefault={isShowDefault} />
 
         <div className={styles.contnetTop}>
-          {sticks?.length && <div className={`${styles.TopNewsBox} ${!visible && styles.noBorder}`}>
+          {sticks?.length > 0 && <div className={`${styles.TopNewsBox} ${!visible && styles.noBorder}`}>
             <TopNews data={sticks} platform="pc" isShowBorder={false}/>
           </div>}
           {
