@@ -33,6 +33,7 @@
       padding-top: rem(6);
     }
 
+    .dzq-submenu__title.is-active,
     .dzq-menu > li {
       border-bottom: rem(1) solid $border-color;
       &:last-child {
@@ -54,6 +55,7 @@
     .dzq-submenu > .dzq-menu {
       padding-bottom: rem(6);
       padding-top: rem(6);
+      padding-left: rem(20);
       line-height: rem(20);
     }
   
@@ -76,6 +78,7 @@
     }
     .dzq-submenu__icon {
       font-size: rem(10) !important;
+      color: $text-color-secondary;
     }
   }
 }
