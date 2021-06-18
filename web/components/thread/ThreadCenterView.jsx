@@ -70,6 +70,7 @@ const Index = (props) => {
                     onPay={onPay}
                     isPay={needPay}
                     status={videoData.status}
+                    onVideoReady={props.onVideoReady}
                   />
                 )}
                 {imageData && (
@@ -78,6 +79,7 @@ const Index = (props) => {
                         imgData={imageData} 
                         isPay={needPay}
                         onPay={onPay}
+                        onImageReady={props.onImageReady}
                         onClickMore={onClick} />
                     )
                 }

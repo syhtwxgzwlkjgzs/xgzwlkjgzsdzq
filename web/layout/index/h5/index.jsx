@@ -10,7 +10,7 @@ import BaseLayout from '@components/base-layout';
 import initJSSdk from '@common/utils/initJSSdk.js';
 import { getSelectedCategoryIds } from '@common/utils/handleCategory';
 import wxAuthorization from '../../user/h5/wx-authorization';
-import VList from '@components/virtual-list';
+import VList from '@components/virtual-list/index-cache';
 
 @inject('site')
 @inject('user')
@@ -178,7 +178,7 @@ class IndexH5Page extends React.Component {
 
   render() {
     const { index } = this.props;
-    const { filter, isFinished } = this.state;
+    const { filter, isFinished, currentCategories } = this.state;
     const { threads = {}, sticks } = index;
     const { currentPage, totalPage, pageData } = threads || {};
 
@@ -205,14 +205,18 @@ class IndexH5Page extends React.Component {
           sticks={sticks}
           onScroll={this.handleScroll}
           loadNextPage={this.onRefresh}
-          renderItem={(item, index, recomputeRowHeights, onContentHeightChange) => (
+          noMore={currentPage >= totalPage}
+          requestError={this.props.isError}
+          renderItem={(item, index, recomputeRowHeights, onContentHeightChange, measure) => (
             <ThreadContent
-              onContentHeightChange={(height) => onContentHeightChange(height, index)}
+              onContentHeightChange={measure}
+              onImageReady={measure}
+              onVideoReady={measure}
               key={index}
               // showBottomStyle={index !== pageData.length - 1}
               data={item}
               className={styles.listItem}
-              recomputeRowHeights={() => recomputeRowHeights(index)}
+              recomputeRowHeights={measure}
             />
           )}
         >

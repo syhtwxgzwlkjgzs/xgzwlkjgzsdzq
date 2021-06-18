@@ -234,6 +234,8 @@ class Index extends React.Component {
 
           <ThreadCenterView
             onContentHeightChange={this.props.onContentHeightChange}
+            onImageReady={this.props.onImageReady}
+            onVideoReady={this.props.onVideoReady}
             data={data}
             onClick={this.onClick}
             onPay={this.onPay}

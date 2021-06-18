@@ -1,34 +1,43 @@
 import React, { useEffect, useRef, forwardRef, useState, useImperativeHandle } from 'react';
-import { List, AutoSizer } from 'react-virtualized';
+import { List, AutoSizer, CellMeasurer, CellMeasurerCache } from 'react-virtualized';
 import styles from './index.module.scss';
-import { getImmutableTypeHeight, getSticksHeight } from './utils';
+import { getSticksHeight } from './utils';
 import BottomView from './BottomView';
 
-function VList({ hasNextPage, isNextPageLoading, list = [], sticks = [], loadNextPage, onScroll, ...otherPorps }, ref) {
+function VList(
+  { noMore, requestError, defaultScrollTop = 0, list = [], sticks = [], loadNextPage, onScroll, ...otherPorps },
+  ref,
+) {
   const [isLoading, setIsLoading] = useState(false);
 
-  const rowCount = hasNextPage ? list.length + 1 : list.length;
+  const cache = new CellMeasurerCache({
+    defaultHeight: 150,
+    fixedWidth: true,
+  });
+
+  const rowCount = !noMore ? list.length + 1 : list.length;
 
   const header = {
     type: 'header',
+    key: 'header',
   };
   const footer = {
     type: 'footer',
+    key: 'footer',
   };
 
   const [vList, setVList] = useState([header, footer]);
 
-  let scrollToPosition = 0;
+  let scrollToPosition = defaultScrollTop;
 
   let listRef = useRef(null);
-  const immutableHeightMap = {}; // 不可变的高度
-  const variableHeightMap = {}; // 可变的高度
 
   useEffect(() => {
     if (listRef) {
+      // console.log('defaultScrollTop', defaultScrollTop);
       listRef.scrollToPosition(scrollToPosition);
     }
-  }, []);
+  }, [defaultScrollTop, listRef]);
 
   useEffect(() => {
     setVList([header, ...list, footer]);
@@ -40,7 +49,6 @@ function VList({ hasNextPage, isNextPageLoading, list = [], sticks = [], loadNex
 
   // 获取每一行元素的高度
   const getRowHeight = ({ index }) => {
-    console.log(vList[index], index);
     const data = vList[index];
 
     if (!data) {
@@ -55,20 +63,11 @@ function VList({ hasNextPage, isNextPageLoading, list = [], sticks = [], loadNex
     if (data.type === 'footer') {
       return 160;
     }
-
-    // 获取不可变的元素高度
-    const immutableHeight = getImmutableTypeHeight(data);
-    immutableHeightMap[index] = immutableHeight;
-
-    const variableHeight = variableHeightMap[index] || 0;
-
-    const rowHeight = immutableHeight + variableHeight + 10;
-
-    return rowHeight;
+    return cache.rowHeight({ index });
   };
 
   // 行渲染
-  const rowRenderer = ({ index, key, style }) => {
+  const rowRenderer = ({ index, isScrolling, key, parent, style }) => {
     const { height, ...otherStyles } = style;
     const item = vList[index];
 
@@ -76,11 +75,26 @@ function VList({ hasNextPage, isNextPageLoading, list = [], sticks = [], loadNex
       return '';
     }
 
+    const dividerStyle = {
+      height: '10px',
+      width: '100%',
+      background: '#eff1f3',
+      position: 'absolute',
+      bottom: '0',
+      left: '0',
+    };
+
     // 头部数据
     if (item.type === 'header') {
+      const headerStyle = {
+        background: '#eff1f3',
+        ...style,
+      };
+
       return (
-        <div key={key} style={style} data-type="header">
+        <div key={key} style={headerStyle} data-type="header">
           {otherPorps.children}
+          <div style={dividerStyle}></div>
         </div>
       );
     }
@@ -88,26 +102,30 @@ function VList({ hasNextPage, isNextPageLoading, list = [], sticks = [], loadNex
     // 底部加载
     if (item.type === 'footer') {
       return (
-        <div style={style} className={styles.bottomViewBox} data-type="footer">
-          <BottomView></BottomView>
-        </div>
+        <CellMeasurer cache={cache} columnIndex={0} key={key} parent={parent} rowIndex={index}>
+          {({ measure, registerChild }) => (
+            <div style={style} className={styles.bottomViewBox} data-type="footer">
+              <BottomView noMore={noMore} isError={requestError}></BottomView>
+            </div>
+          )}
+        </CellMeasurer>
       );
     }
 
-    const content = otherPorps.renderItem(item, index, recomputeRowHeights, onContentHeightChange);
-
     const newStyle = {
       height: `${height / 100}rem`,
-      paddingBottom: '10px',
-      boxSizing: 'border-box',
       ...otherStyles,
     };
 
     return (
-      <div key={key} style={newStyle} data-index={index} data-key={key}>
-        {content}
-        <div style={{height: '10px', background: 'red'}}>123</div>
-      </div>
+      <CellMeasurer cache={cache} columnIndex={0} key={key} parent={parent} rowIndex={index}>
+        {({ measure, registerChild }) => (
+          <div key={key} style={newStyle} data-index={index} data-key={key} data-id={item.threadId}>
+            {otherPorps.renderItem(item, index, recomputeRowHeights, onContentHeightChange, measure)}
+            <div style={dividerStyle}></div>
+          </div>
+        )}
+      </CellMeasurer>
     );
   };
 
@@ -117,17 +135,14 @@ function VList({ hasNextPage, isNextPageLoading, list = [], sticks = [], loadNex
   };
 
   const onContentHeightChange = (height, index) => {
-    variableHeightMap[index] = height;
     recomputeRowHeights(index);
   };
 
   // 滚动事件
   const onChildScroll = ({ scrollTop, clientHeight, scrollHeight }) => {
     scrollToPosition = scrollTop;
-
     onScroll({ scrollTop, clientHeight, scrollHeight });
-    // onListScroll({ scrollTop, clientHeight, scrollHeight });
-    if (scrollTop + clientHeight + 50 >= scrollHeight && !isLoading) {
+    if (scrollTop + clientHeight + clientHeight / 2 >= scrollHeight && !isLoading) {
       console.log('加载下一页');
       setIsLoading(true);
       loadNextPage().finally(() => {
@@ -145,6 +160,7 @@ function VList({ hasNextPage, isNextPageLoading, list = [], sticks = [], loadNex
           width={width}
           onScroll={onChildScroll}
           overscanRowCount={12}
+          deferredMeasurementCache={cache}
           rowCount={rowCount}
           rowRenderer={rowRenderer}
           rowHeight={getRowHeight}
