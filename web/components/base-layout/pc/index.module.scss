@@ -240,6 +240,13 @@
         }
       }
     }
+    .mywallet-page {
+      @include heightMedia(620px) {
+        .right {
+          position: static;
+        }
+      }
+    }
   }
 }
 
