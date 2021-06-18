@@ -52,7 +52,7 @@ class IndexPCPage extends React.Component {
    // 右侧 - 活跃用户 版权信息
    renderRight = () => (
       <>
-      <ActiveUsers />
+      <ActiveUsers className="topic-detail-activeuser" />
       <Copyright/>
       </>
    )
@@ -83,7 +83,8 @@ class IndexPCPage extends React.Component {
         <BaseLayout
           onSearch={this.onSearch}
           right={ this.renderRight }
-          showRefresh={false}
+        showRefresh={false}
+        className="topic-detail-page"
         >
           {
           fetchTopicInfoLoading ? (

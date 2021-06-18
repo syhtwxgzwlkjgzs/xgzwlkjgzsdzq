@@ -247,6 +247,34 @@
         }
       }
     }
+    .topic-detail-activeuser,
+    .search-result-topic {
+      @include heightMedia(655px, 600px) {
+        .active-users-item:nth-last-child(1) {
+          display: none;
+        }
+      }
+      @include heightMedia(600px, 545px) {
+        .active-users-item:nth-last-child(-n + 2) {
+          display: none;
+        }
+      }
+
+      @include heightMedia(545px, 490px) {
+        .active-users-item:nth-last-child(-n + 3) {
+          display: none;
+        }
+      }
+    }
+    .topic-detail-page,
+    .search-result-topic,
+    .search-page {
+      @include heightMedia(440px) {
+        .right {
+          position: static;
+        }
+      }
+    }
   }
 }
 
