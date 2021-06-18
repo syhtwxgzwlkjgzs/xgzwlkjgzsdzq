@@ -11,7 +11,7 @@ const Index = ({ imgData = [], flat = false, platform = 'h5', isPay = false, onP
   const [visible, setVisible] = useState(false);
   const [defaultImg, setDefaultImg] = useState('');
   const ImagePreviewerRef = React.useRef(null);
-  const [firstImgData, setFirstImgData] = useState(null);
+  const [firstImgData, setFirstImgData] = useState({width: 500, height: 700});
 
   const imagePreviewers = useMemo(() => imgData.map((item) => item.url), [imgData]);
   useEffect(() => {
@@ -20,51 +20,51 @@ const Index = ({ imgData = [], flat = false, platform = 'h5', isPay = false, onP
     }
   }, [visible]);
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    if (flat) return;
+  //   if (flat) return;
 
-    let timer;
-    if ( imgData && imgData.length !== 0 ) {
-      const img = new Image();
-      img.src = imgData[0].thumbUrl;
-      // 超时处理
-      timer = setTimeout(() => {
-        if ( firstImgData === null ) {
-          setFirstImgData('fail');
-        }
-      }, 2000);
-      if (img.complete) {
-        // 如果图片被缓存，则直接返回缓存数据
-        if ( !img.naturalWidth || !img.naturalHeight  ) {
-          setFirstImgData('fail');
-        }
-        setFirstImgData({
-          width: img.naturalWidth,
-          height: img.naturalHeight
-        });
-      } else {
-          img.onload = function () {
-            timer && clearTimeout(timer);
-            if ( !img.naturalWidth || !img.naturalHeight  ) {
-              setFirstImgData('fail');
-            } else {
-              setFirstImgData({
-                width: img.naturalWidth,
-                height: img.naturalHeight
-              });
-            }
-          }
-          img.onerror = function() {
-            timer && clearTimeout(timer);
-            setFirstImgData('fail');
-          }
-      }
-    }
-    return () => {
-      timer && clearTimeout(timer);
-    }
-  }, [flat, imgData]);
+  //   let timer;
+  //   if ( imgData && imgData.length !== 0 ) {
+  //     const img = new Image();
+  //     img.src = imgData[0].thumbUrl;
+  //     // 超时处理
+  //     timer = setTimeout(() => {
+  //       if ( firstImgData === null ) {
+  //         setFirstImgData('fail');
+  //       }
+  //     }, 2000);
+  //     if (img.complete) {
+  //       // 如果图片被缓存，则直接返回缓存数据
+  //       if ( !img.naturalWidth || !img.naturalHeight  ) {
+  //         setFirstImgData('fail');
+  //       }
+  //       setFirstImgData({
+  //         width: img.naturalWidth,
+  //         height: img.naturalHeight
+  //       });
+  //     } else {
+  //         img.onload = function () {
+  //           timer && clearTimeout(timer);
+  //           if ( !img.naturalWidth || !img.naturalHeight  ) {
+  //             setFirstImgData('fail');
+  //           } else {
+  //             setFirstImgData({
+  //               width: img.naturalWidth,
+  //               height: img.naturalHeight
+  //             });
+  //           }
+  //         }
+  //         img.onerror = function() {
+  //           timer && clearTimeout(timer);
+  //           setFirstImgData('fail');
+  //         }
+  //     }
+  //   }
+  //   return () => {
+  //     timer && clearTimeout(timer);
+  //   }
+  // }, [flat, imgData]);
 
   // 当更新了firstImgData，代表确定了布局方式，可以通知外部更新
   useEffect(() => {
