@@ -17,7 +17,6 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
 
   const onClick = (subIndex, index) => {
     let categoryIds = subIndex.split('/')
-<<<<<<< HEAD
   
     // 点击没有二级分类的一级分类，或者是二级分类
     if (categoryIds.length !== 1) { 
@@ -28,13 +27,6 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
       } else {
         categoryIds = [categoryIds[1]]
       }
-=======
-
-    setFistIndex(categoryIds[0]);
-    setSecondIndex(categoryIds[1]);
-    if (categoryIds[1] === 'all') {
-      categoryIds = [categoryIds[0]]
->>>>>>> releases
     } else {
       setFistIndex(categoryIds[0]);
       setSecondIndex('all');
