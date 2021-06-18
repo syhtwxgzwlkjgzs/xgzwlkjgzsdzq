@@ -80,11 +80,11 @@
   line-height: rem($font-line-height-primary);
 }
 .icon1 {
-  color: var(--color-success);
+  color: $success-color;
 }
 .icon2 {
-  color: var(--color-warn);
+  color: $warn-color;
 }
 .icon3 {
-  color: $primary-color;
+  color: $error-color;
 }
