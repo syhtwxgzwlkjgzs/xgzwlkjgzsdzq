@@ -115,6 +115,10 @@ class App extends Component {
 
       loginStatus = !!userInfo.data && !!userInfo.data.id;
     }
+
+    // 未登陆状态下，清空accessToken
+    !loginStatus && clearLoginStatus();
+
     user.updateLoginStatus(loginStatus);
   }
 
