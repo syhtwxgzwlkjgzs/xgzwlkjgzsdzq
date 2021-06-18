@@ -5,6 +5,7 @@ import styles from './index.module.scss';
 import ResetPassword from './reset-paypwd/index';
 import FindPassword from './find-paypwd/index';
 import throttle from '@common/utils/thottle.js';
+import Router from '@discuzq/sdk/dist/router';
 
 @inject('site')
 @inject('user')
@@ -60,18 +61,21 @@ class index extends Component {
   };
 
   // 点击忘记密码
-  handleGoToFindPayPwd = () => {
+  handleGoToFindPayPwd = throttle(() => {
     if (!this.props.user.mobile) {
       Toast.error({
         content: '需要首先绑定手机号才能进行此操作',
         duration: 2000,
       });
+      setTimeout(() => {
+        Router.push({ url: '/user/bind-phone?from=userCenter' });
+      }, 1000);
       return;
     }
     this.setState({
       step: 'find_password',
     });
-  };
+  }, 1000);
 
   // 初次设置密码
   handleSetPwd = (e) => {

@@ -86,6 +86,7 @@ class Withdrawal extends React.Component {
         this.initState();
       })
       .catch((err) => {
+        console.error(err);
         if (err.Code) {
           Toast.error({
             content: err.Msg || '申请提现失败，请重试',
