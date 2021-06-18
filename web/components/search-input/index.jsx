@@ -1,6 +1,5 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Input, Icon } from '@discuzq/design';
-import { debounce } from '@common/utils/throttle-debounce.js';
 
 
 import styles from './index.module.scss';
