@@ -59,7 +59,7 @@ const Index = (props) => {
 
         return (
           <div className={styles.wrapper}>
-              {text && <PostContent content={text} onPay={onPay} onRedirectToDetail={onClick} />}
+              {text && <PostContent onContentHeightChange={props.onContentHeightChange} content={text} onPay={onPay} onRedirectToDetail={onClick} />}
               <div className={styles.content}>
                 {videoData && (
                   <VideoPlay
@@ -70,6 +70,7 @@ const Index = (props) => {
                     onPay={onPay}
                     isPay={needPay}
                     status={videoData.status}
+                    onVideoReady={props.onVideoReady}
                   />
                 )}
                 {imageData && (
@@ -78,6 +79,7 @@ const Index = (props) => {
                         imgData={imageData} 
                         isPay={needPay}
                         onPay={onPay}
+                        onImageReady={props.onImageReady}
                         onClickMore={onClick} />
                     )
                 }
