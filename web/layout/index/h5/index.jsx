@@ -33,9 +33,7 @@ class IndexH5Page extends React.Component {
   componentDidMount() {
     try {
       this.handleWeiXinShare();
-    } catch (error) {
-
-    }
+    } catch (error) {}
 
     // 是否有推荐
     const isDefault = this.props.site.checkSiteIsOpenDefautlThreadListData();
@@ -53,7 +51,8 @@ class IndexH5Page extends React.Component {
     const imgUrl = site.webConfig?.setSite?.siteLogo;
     const link = site.webConfig?.setSite?.siteUrl;
     await initJSSdk(['updateAppMessageShareData', 'updateTimelineShareData']);
-    wx.ready(() => {   // 需在用户可能点击分享按钮前就先调用
+    wx.ready(() => {
+      // 需在用户可能点击分享按钮前就先调用
       wx.updateAppMessageShareData({
         title, // 分享标题
         desc, // 分享描述
@@ -72,7 +71,7 @@ class IndexH5Page extends React.Component {
 
   // 点击更多弹出筛选
   searchClick = () => {
-    this.setState({ visible: true  });
+    this.setState({ visible: true });
   };
   // 关闭筛选框
   onClose = () => {
@@ -85,7 +84,7 @@ class IndexH5Page extends React.Component {
       return;
     }
     this.changeFilter();
-  }
+  };
 
   onClickTab = (id = '') => {
     this.changeFilter({ categoryids: [id], sequence: id === 'default' ? 1 : 0 });
@@ -110,7 +109,7 @@ class IndexH5Page extends React.Component {
     dispatch('click-filter');
 
     this.setState({ visible: false });
-  }
+  };
 
   // 上拉加载更多
   onRefresh = () => {
@@ -137,25 +136,25 @@ class IndexH5Page extends React.Component {
       <>
         {categories?.length > 0 && (
           <>
-          <div ref={this.listRef} className={`${styles.homeContent} ${fixedTab && styles.fixed}`}>
-            <Tabs
-              className={styles.tabsBox}
-              scrollable
-              type="primary"
-              onActive={this.onClickTab}
-              activeId={activeCategoryId}
-              tabBarExtraContent={
-                <div onClick={this.searchClick} className={styles.tabIcon}>
-                  <Icon name="SecondaryMenuOutlined" className={styles.buttonIcon} size={16} />
-                </div>
-              }
-            >
-              {currentCategories?.map((item, index) => (
-                <Tabs.TabPanel key={index} id={item.pid} label={item.name} />
-              ))}
-            </Tabs>
-          </div>
-          {fixedTab &&  <div className={styles.tabPlaceholder}></div>}
+            <div ref={this.listRef} className={`${styles.homeContent} ${fixedTab && styles.fixed}`}>
+              <Tabs
+                className={styles.tabsBox}
+                scrollable
+                type="primary"
+                onActive={this.onClickTab}
+                activeId={activeCategoryId}
+                tabBarExtraContent={
+                  <div onClick={this.searchClick} className={styles.tabIcon}>
+                    <Icon name="SecondaryMenuOutlined" className={styles.buttonIcon} size={16} />
+                  </div>
+                }
+              >
+                {currentCategories?.map((item, index) => (
+                  <Tabs.TabPanel key={index} id={item.pid} label={item.name} />
+                ))}
+              </Tabs>
+            </div>
+            {fixedTab && <div className={styles.tabPlaceholder}></div>}
           </>
         )}
       </>
@@ -181,6 +180,8 @@ class IndexH5Page extends React.Component {
     const { filter, isFinished, currentCategories } = this.state;
     const { threads = {}, sticks } = index;
     const { currentPage, totalPage, pageData } = threads || {};
+    // 是否开启虚拟滚动
+    const enableVlist = true;
 
     return (
       <BaseLayout
@@ -191,48 +192,71 @@ class IndexH5Page extends React.Component {
         isFinished={isFinished}
         onScroll={this.handleScroll}
         quickScroll={true}
-        curr='home'
-        pageName='home'
+        curr="home"
+        pageName="home"
         onClickTabBar={this.onClickTabBar}
         requestError={this.props.isError}
         errorText={this.props.errorText}
-        disabledList={true}
+        disabledList={enableVlist}
       >
-        {this.state.fixedTab && this.renderTabs()}
+        {enableVlist && (
+          <Fragment>
+            {this.state.fixedTab && this.renderTabs()}
 
-        <VList
-          list={pageData}
-          sticks={sticks}
-          onScroll={this.handleScroll}
-          loadNextPage={this.onRefresh}
-          noMore={currentPage >= totalPage}
-          requestError={this.props.isError}
-          renderItem={(item, index, recomputeRowHeights, onContentHeightChange, measure) => (
-            <ThreadContent
-              onContentHeightChange={measure}
-              onImageReady={measure}
-              onVideoReady={measure}
-              key={index}
-              // showBottomStyle={index !== pageData.length - 1}
-              data={item}
-              className={styles.listItem}
-              recomputeRowHeights={measure}
-            />
-          )}
-        >
-          <HomeHeader ref={this.headerRef} />
-          {this.renderTabs()}
-          {this.renderHeaderContent()}
-        </VList>
+            <VList
+              list={pageData}
+              sticks={sticks}
+              onScroll={this.handleScroll}
+              loadNextPage={this.onRefresh}
+              noMore={currentPage >= totalPage}
+              requestError={this.props.isError}
+              renderItem={(item, index, recomputeRowHeights, onContentHeightChange, measure) => (
+                <ThreadContent
+                  onContentHeightChange={measure}
+                  onImageReady={measure}
+                  onVideoReady={measure}
+                  key={index}
+                  // showBottomStyle={index !== pageData.length - 1}
+                  data={item}
+                  className={styles.listItem}
+                  recomputeRowHeights={measure}
+                />
 
-        {/* {pageData?.map((item, index) => (
-            <ThreadContent
-              key={index}
-              showBottomStyle={index !== pageData.length - 1}
-              data={item}
-              className={styles.listItem}
-            />
-        ))} */}
+                // <ThreadContent
+                //   onContentHeightChange={(height) => onContentHeightChange(height, index)}
+                //   onImageReady={measure}
+                //   onVideoReady={measure}
+                //   key={index}
+                //   // showBottomStyle={index !== pageData.length - 1}
+                //   data={item}
+                //   className={styles.listItem}
+                //   recomputeRowHeights={recomputeRowHeights}
+                // />
+              )}
+            >
+              <HomeHeader ref={this.headerRef} />
+              {this.renderTabs()}
+              {this.renderHeaderContent()}
+            </VList>
+          </Fragment>
+        )}
+
+        {!enableVlist && (
+          <Fragment>
+            <HomeHeader ref={this.headerRef} />
+            {this.renderTabs()}
+            {this.renderHeaderContent()}
+
+            {pageData?.map((item, index) => (
+              <ThreadContent
+                key={index}
+                showBottomStyle={index !== pageData.length - 1}
+                data={item}
+                className={styles.listItem}
+              />
+            ))}
+          </Fragment>
+        )}
 
         <FilterView
           data={currentCategories}

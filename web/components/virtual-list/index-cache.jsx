@@ -47,6 +47,10 @@ function VList(
     recomputeRowHeights(0);
   }, [sticks]);
 
+  // useEffect(()=>{
+  //   listRef.scrollToPosition(scrollToPosition);
+  // }, [listRef?.Grid?.getTotalRowsHeight()]);
+
   // 获取每一行元素的高度
   const getRowHeight = ({ index }) => {
     const data = vList[index];
@@ -142,7 +146,7 @@ function VList(
   const onChildScroll = ({ scrollTop, clientHeight, scrollHeight }) => {
     scrollToPosition = scrollTop;
     onScroll({ scrollTop, clientHeight, scrollHeight });
-    if (scrollTop + clientHeight + clientHeight / 2 >= scrollHeight && !isLoading) {
+    if (scrollTop + clientHeight + (clientHeight / 2) >= scrollHeight && !isLoading) {
       console.log('加载下一页');
       setIsLoading(true);
       loadNextPage().finally(() => {

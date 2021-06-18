@@ -40,7 +40,6 @@ function VList({ hasNextPage, isNextPageLoading, list = [], sticks = [], loadNex
 
   // 获取每一行元素的高度
   const getRowHeight = ({ index }) => {
-    console.log(vList[index], index);
     const data = vList[index];
 
     if (!data) {
@@ -76,11 +75,26 @@ function VList({ hasNextPage, isNextPageLoading, list = [], sticks = [], loadNex
       return '';
     }
 
+    const dividerStyle = {
+      height: '10px',
+      width: '100%',
+      background: '#eff1f3',
+      position: 'absolute',
+      bottom: '0',
+      left: '0',
+    };
+
     // 头部数据
     if (item.type === 'header') {
+      const headerStyle = {
+        background: '#eff1f3',
+        ...style,
+      };
+
       return (
-        <div key={key} style={style} data-type="header">
+        <div key={key} style={headerStyle} data-type="header">
           {otherPorps.children}
+          <div style={dividerStyle}></div>
         </div>
       );
     }
@@ -98,15 +112,13 @@ function VList({ hasNextPage, isNextPageLoading, list = [], sticks = [], loadNex
 
     const newStyle = {
       height: `${height / 100}rem`,
-      paddingBottom: '10px',
-      boxSizing: 'border-box',
       ...otherStyles,
     };
 
     return (
       <div key={key} style={newStyle} data-index={index} data-key={key}>
         {content}
-        <div style={{height: '10px', background: 'red'}}>123</div>
+        <div style={dividerStyle}></div>
       </div>
     );
   };
