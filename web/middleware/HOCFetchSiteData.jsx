@@ -190,10 +190,12 @@ export default function HOCFetchSiteData(Component) {
           Router.redirect({ url: '/404' });
           break;
         case JUMP_TO_LOGIN:// 到登录页
-          Router.push({ url: '/user/login' });
+          clearLoginStatus();
+          window.location.replace('/user/login');
           break;
         case JUMP_TO_REGISTER:// 到注册页
-          Router.push({ url: '/user/register' });
+          clearLoginStatus();
+          window.location.replace('/user/register');
           break;
         case JUMP_TO_AUDIT:// 到审核页
           Router.push({ url: '/user/status?statusCode=2' });
