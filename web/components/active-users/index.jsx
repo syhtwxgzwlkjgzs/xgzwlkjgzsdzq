@@ -42,12 +42,13 @@ class Index extends React.Component {
         isError: true,
         errorText: error
       });
-    } 
+    }
   }
 
   render() {
     const { pageData } = this.state.users || {};
     const { isError, errorText } = this.state
+    const { className = '' } = this.props;
     return (
       <SidebarPanel
         title="活跃用户"
@@ -56,6 +57,7 @@ class Index extends React.Component {
         noData={!pageData?.length}
         isError={isError}
         errorText={errorText}
+        className={className}
       >
         <ActiveUsers data={pageData} direction='left' onItemClick={this.onUserClick}/>
       </SidebarPanel>

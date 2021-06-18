@@ -5,59 +5,37 @@ import { noop } from '../utils'
 import styles from './index.module.scss';
 import { View, Image } from '@tarojs/components'
 import SmartImg from '@components/smart-image';
-
+import Taro from '@tarojs/taro';
+import {calcImageType, calcImageDefaultType} from '@common/utils/calc-image-type';
 const { Col, Row } = Flex
 
 // TODO 图片懒加载
 const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) => {
-    const [bigImages, setBigImages] = useState([]);
-    const [smallImages, setSmallImages] = useState([]);
     const [visible, setVisible] = useState(false);
     const [defaultImg, setDefaultImg] = useState('');
-    const [smallSty, setSmallSty] = useState(null);
-  const ImagePreviewerRef = React.useRef(null);
-
-    const smallImg = useRef(null);
+    const ImagePreviewerRef = React.useRef(null);
+    const [firstImgData, setFirstImgData] = useState(null);
 
     const imagePreviewers = useMemo(() => imgData.map(item => item.url), [imgData]);
 
     useEffect(() => {
-      if (imgData.length < 3) {
-        setBigImages(imgData);
-      } else if (imgData.length < 5) {
-        setBigImages([imgData[0]]);
-        setSmallImages(imgData.slice(1, imgData.length + 1));
-      } else {
-        setBigImages([imgData[0], imgData[1]]);
-        setSmallImages([imgData[2], imgData[3], imgData[4]]);
+      if (visible && ImagePreviewerRef && ImagePreviewerRef.current) {
+        ImagePreviewerRef.current.show();
       }
-    }, [imgData]);
+    }, [visible]);
 
-    // 设置大于4张图片时的高度
-    // useEffect(() => {
-    //     if (smallImg.current && imgData?.length > 4) {
-    //         setSmallSty({ height: `${smallImg.current.clientWidth}px`, width: `${smallImg.current.clientWidth}px` })
-    //     }
-    // }, [imgData])
-
-  useEffect(() => {
-    if (visible && ImagePreviewerRef && ImagePreviewerRef.current) {
-      ImagePreviewerRef.current.show();
-    }
-  }, [visible]);
-
-  const onClick = (id) => {
-    if (isPay) {
-      onPay();
-    } else {
-      imgData.forEach((item) => {
-        if (item.id === id) {
-          setDefaultImg(item.url);
-          setVisible(true);
-        }
-      });
-    }
-  };
+    const onClick = (id) => {
+      if (isPay) {
+        onPay();
+      } else {
+        imgData.forEach((item) => {
+          if (item.id === id) {
+            setDefaultImg(item.url);
+            setVisible(true);
+          }
+        });
+      }
+    };
 
     const onClickMore = (e) => {
       e.stopPropagation();
@@ -68,6 +46,39 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
       }, 0);
     };
 
+    useEffect(() => {
+      let timer;
+      if ( imgData && imgData.length !== 0 ) {
+        Taro.getImageInfo({
+          src: imgData[0].thumbUrl,
+          complete: () => {
+            timer && clearTimeout(timer);
+          },
+          fail: () => {
+            setFirstImgData('fail');
+          },
+          success: (result) => {
+            if ( !result.width || !result.height  ) {
+              setFirstImgData('fail');
+            } else {
+              setFirstImgData({
+                width: result.width,
+                height: result.height
+              });
+            }
+          },
+        });
+        timer = setTimeout(() => {
+          if ( firstImgData === null ) {
+            setFirstImgData('fail');
+          }
+        }, 2000);
+      } 
+      return () => {
+        timer && clearTimeout(timer);
+      }
+    }, [imgData]);
+
     const style = useMemo(() => {
       const num = imgData.length > 5 ? 5 : imgData?.length;
       return `containerNum${num}`;
@@ -75,38 +86,39 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
 
     const handleImages = () => {
       if (imgData.length < 3) {
-        setBigImages(imgData);
         return { bigImages: imgData, smallImages: [] };
       }
       if (imgData.length < 5) {
-        setBigImages([imgData[0]]);
-        setSmallImages(imgData.slice(1, imgData.length + 1));
-
         return { bigImages: [imgData[0]], smallImages: imgData.slice(1, imgData.length + 1) };
       }
-      setBigImages([imgData[0], imgData[1]]);
-      setSmallImages([imgData[2], imgData[3], imgData[4]]);
-
       return { bigImages: [imgData[0], imgData[1]], smallImages: [imgData[2], imgData[3], imgData[4]] };
     };
 
+
     const ImageView = useMemo(() => {
+      if ( !imgData || imgData.length === 0 ) {
+        return null;
+      }
+
+      if ( firstImgData === null ) return <View className={`${styles['placeholder']}`}/>;
       const res = handleImages();
+      const type = firstImgData === 'fail' ? calcImageDefaultType(imgData.length) : calcImageType(firstImgData.width, firstImgData.height);
       if (imgData.length === 1) {
-        return <One bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} />;
+        return <One type={type} bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} />;
       }
       if (imgData.length === 2) {
-        return <Two bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} />;
+        return <Two type={type} bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} />;
       }
       if (imgData.length === 3) {
-        return <Three bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} />;
+        return <Three type={type} bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} />;
       }
       if (imgData.length === 4) {
-        return <Four bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} />;
+        return <Four type={type} bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} />;
       }
       if (imgData.length >= 5) {
         return (
           <Five
+            type={type}
             bigImages={res.bigImages}
             onClick={onClick}
             smallImages={res.smallImages}
@@ -117,10 +129,10 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
         );
       }
       return null;
-    }, [imgData]);
+    }, [imgData, firstImgData]);
 
   return (
-    <View className={`${platform === 'h5' ? styles.container : styles.containerPC}`}>
+    <View className={`${styles.container}`}>
       {ImageView}
       {visible && (
         <ImagePreviewer
@@ -138,17 +150,17 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
 
   export default React.memo(Index);
 
-  const One = ({ bigImages, onClick, style }) => {
+  const One = ({ type, bigImages, onClick, style }) => {
     const item = bigImages[0];
     return (
-      <View className={styles[style]}>
+      <View className={`${styles[style]} ${styles[type]}`}>
         <SmartImg type={item.fileType} src={item.thumbUrl} mode='aspectFill' onClick={() => onClick(item.id)} />
       </View>
     );
   };
 
-  const Two = ({ bigImages, onClick, style }) => (
-    <Row gutter={4} className={`${styles[style]} ${styles.row}`}>
+  const Two = ({ type, bigImages, onClick, style }) => (
+    <Row gutter={4} className={`${styles[style]} ${styles[type]} ${styles.row}`}>
       {bigImages.map((item, index) => (
         <Col span={6} className={styles.col} key={index}>
           <SmartImg type={item.fileType} src={item.thumbUrl} mode='aspectFill' onClick={() => onClick(item.id)} />
@@ -157,7 +169,45 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
     </Row>
   );
 
-  const Four = ({ bigImages, smallImages, onClick, style }) => (
+  const Three = ({ type, bigImages, smallImages, onClick, style }) => {
+    if ( type === 'long' || type === 'longitudinal' ) {
+      return (
+        <View className={`${styles[style]} ${styles[type]}`}>
+          <Row gutter={4}>
+            <Col span={8} className={styles.col}>
+              <SmartImg type={bigImages[0].fileType} mode='aspectFill' src={bigImages[0].thumbUrl} onClick={() => onClick(bigImages[0].id)} />
+            </Col>
+            <Col span={4} className={styles.col}>
+              <Row gutter={4} className={styles.smallRow}>
+                {smallImages.map((item, index) => (
+                  <Col span={12} key={index} className={styles.smallCol}>
+                    <SmartImg type={item.fileType} mode='aspectFill' src={item.thumbUrl} onClick={() => onClick(item.id)} />
+                  </Col>
+                ))}
+              </Row>
+            </Col>
+          </Row>
+        </View>
+        
+      );
+    }
+    return (
+      <View className={`${styles[style]} ${styles[type]}`}>
+        <View className={styles.bigImages}>
+          <SmartImg type={bigImages[0].fileType} src={bigImages[0].thumbUrl} mode='aspectFill' onClick={() => onClick(bigImages[0].id)} />
+        </View>
+        <Row gutter={4} className={styles.smallImages}>
+          {smallImages.map((item, index) => (
+            <Col span={6} className={styles.col} key={index}>
+              <SmartImg type={item.fileType} src={item.thumbUrl} mode='aspectFill' onClick={() => onClick(item.id)} />
+            </Col>
+          ))}
+        </Row>
+      </View>
+    );
+  }
+
+  const Four = ({ type, bigImages, smallImages, onClick, style }) => (
     <Row gutter={4} className={styles[style]}>
       <Col span={8} className={styles.col}>
         <SmartImg type={bigImages[0].fileType} src={bigImages[0].thumbUrl} mode='aspectFill' onClick={() => onClick(bigImages[0].id)} />
@@ -172,21 +222,6 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
         </Row>
       </Col>
     </Row>
-  );
-
-  const Three = ({ bigImages, smallImages, onClick, style }) => (
-    <View className={styles[style]}>
-      <View className={styles.bigImages}>
-        <SmartImg type={bigImages[0].fileType} src={bigImages[0].thumbUrl} mode='aspectFill' onClick={() => onClick(bigImages[0].id)} />
-      </View>
-      <Row gutter={4} className={styles.smallImages}>
-        {smallImages.map((item, index) => (
-          <Col span={6} className={styles.col} key={index}>
-            <SmartImg type={item.fileType} src={item.thumbUrl} mode='aspectFill' onClick={() => onClick(item.id)} />
-          </Col>
-        ))}
-      </Row>
-    </View>
   );
 
   const Five = ({ bigImages, smallImages, onClick, style, imgData = [], onClickMore }) => (

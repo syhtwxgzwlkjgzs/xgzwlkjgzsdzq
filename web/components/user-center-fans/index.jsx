@@ -1,7 +1,8 @@
 import React from 'react';
 import UserCenterFriends from '../user-center-friends';
-import { Spin, Toast } from '@discuzq/design';
+import { Spin, Toast, Avatar } from '@discuzq/design';
 import { followerAdapter } from './adapter';
+import friendsStyle from '@components/user-center/friend-pc/index.module.scss';
 import styles from './index.module.scss';
 import { createFollow, deleteFollow, getUserFans } from '@server';
 import { get } from '@common/utils/get';
@@ -287,7 +288,7 @@ class UserCenterFans extends React.Component {
 
     return (
       <div
-        className={this.props.className}
+        className={`${this.props.className} user-center-friends`}
         ref={this.containerRef}
         style={{
           height: '100%',
@@ -298,14 +299,14 @@ class UserCenterFans extends React.Component {
         {followerAdapter(this.props.dataSource || this.state.fans).map((user, index) => {
           if (index + 1 > this.props.limit) return null;
           return (
-            <div key={user.id}>
+            <div key={user.id} className="user-center-friends-item">
               <UserCenterFriends
                 id={user.id}
                 type={this.judgeFollowsStatus(user)}
                 imgUrl={user.avatar}
                 withHeaderUserInfo={this.props.isPc}
                 onContainerClick={this.props.onContainerClick}
-                userName={user.userName}
+                userName={user.nickName}
                 userGroup={user.groupName}
                 followHandler={this.followUser}
                 itemStyle={this.props.itemStyle}
@@ -315,6 +316,26 @@ class UserCenterFans extends React.Component {
             </div>
           );
         })}
+        <div className={`${friendsStyle.friendWrap} ${styles.friendWrap} ${styles['display-none']} user-center-friends-mini`}>
+          {followerAdapter(this.props.dataSource || this.state.fans).map((user, index) => {
+            if (index + 1 > this.props.limit) return null;
+            return (
+              <div key={user.id + index} className={friendsStyle.friendItem}>
+                <div className={friendsStyle.friendAvatar}>
+                  <Avatar
+                    image={user.avatar}
+                    userId={user.id}
+                    circle
+                    name={user.userName}
+                  />
+                </div>
+                <div className={friendsStyle.friendTextInfo}>
+                  {user.userName}
+                </div>
+              </div>
+            );
+          })}
+        </div>
         {isNoData && <NoData />}
         {this.state.loading && (
           <div className={classnames(styles.loadMoreContainer, this.props.loadingElementClass)}>

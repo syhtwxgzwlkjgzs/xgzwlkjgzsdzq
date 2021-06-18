@@ -70,5 +70,5 @@ export default function stringToColor(string) {
   const hue = num % 360;
   const rgb = hsvToRgb(hue / 360, 0.3, 0.9);
 
-  return '' + rgb.r.toString(16) + rgb.g.toString(16) + rgb.b.toString(16);
+  return '#' + rgb.r.toString(16) + rgb.g.toString(16) + rgb.b.toString(16);
 }

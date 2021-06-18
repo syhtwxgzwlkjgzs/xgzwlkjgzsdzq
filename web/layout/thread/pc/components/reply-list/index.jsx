@@ -55,13 +55,13 @@ export default class ReplyList extends React.Component {
       canApprove: data.canApprove || false,
       canDelete: data.canDelete || false,
       canEdit: data.canEdit || false,
-      canHide: data.canLike || false,
+      canHide: data.canHide || false,
       canLike: data.canLike || false,
     };
   }
 
   render() {
-    const { canLike, canDelete } = this.generatePermissions(this.props.data);
+    const { canLike, canDelete, canHide } = this.generatePermissions(this.props.data);
 
     return (
       <div className={styles.replyList}>
@@ -141,7 +141,7 @@ export default class ReplyList extends React.Component {
                   <Icon className={styles.icon} name="MessageOutlined"></Icon>
                   <span>回复</span>
                 </div>
-                {canDelete && (
+                {canHide && (
                   <div className={styles.replyDelete} onClick={() => this.deleteClick()}>
                     <Icon className={styles.icon} name="DeleteOutlined"></Icon>
                     <span>删除</span>

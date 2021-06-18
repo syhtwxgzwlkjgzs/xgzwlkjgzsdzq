@@ -15,7 +15,7 @@ const Index = (props) => {
   // 标签展示
   const tag = (
     <View className={styles['tag']} style={style}>
-      <Text  className={styles['tag-text']} onClick={() => {onTagClick();}}>{tagContent}</Text>
+      <Text className={styles['tag-text']} onClick={() => {onTagClick();}}>{tagContent}</Text>
       {onTagRemoveClick && isCloseShow && (
         <Icon className={styles.remove} name='CloseOutlined' size={10} onClick={onTagRemoveClick} />
       )}
@@ -26,7 +26,7 @@ const Index = (props) => {
   // 图片展示
   const img = (
     <View className={[styles['img'], className].join(' ')}>
-      <Image src={src} onClick={() => {
+      <Image src={src} mode="aspectFill" onClick={() => {
         Taro.previewImage({
           current: src,
           urls: [src]

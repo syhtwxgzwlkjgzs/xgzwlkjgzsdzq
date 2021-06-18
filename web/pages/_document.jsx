@@ -1,6 +1,5 @@
 import React from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
-import renderHTML from 'react-render-html';
 
 class MyDocument extends Document {
   static async getInitialProps(ctx) {

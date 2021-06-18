@@ -3,6 +3,7 @@ import { ImagePreviewer, Flex } from '@discuzq/design';
 import { noop } from '../utils';
 import styles from './index.module.scss';
 import SmartImg from '@components/smart-image';
+import {calcImageType, calcImageDefaultType} from '@common/utils/calc-image-type';
 const { Col, Row } = Flex;
 
 // TODO 图片懒加载
@@ -104,39 +105,13 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop, onI
     return { bigImages: [imgData[0], imgData[1]], smallImages: [imgData[2], imgData[3], imgData[4]] };
   };
 
-  const calcImageType = useCallback((width, height) => {
-    if ( width >= height ) {
-      // 全景图
-      if ( width/height >= 2 ) {
-        return 'panorama'
-      } else {
-        return 'transverse'
-      }
-    } else {
-      // 长图
-      if ( height/width >= 2.5 ) {
-        return 'long'
-      } else {
-        return 'longitudinal'
-      }
-    }
-  }, []);
-
-  const setImageDefaultType = useCallback((n) => {
-    if (n === 3) {
-      return 'longitudinal';
-    } else {
-      return 'panorama';
-    }
-  }, [])
-
   const ImageView = useMemo(() => {
     if ( !imgData || imgData.length === 0 ) {
       return null;
     }
     if ( firstImgData === null ) return <div className={`${platform === 'h5' ? styles['placeholderH5'] : styles['placeholderPC']}`}/>;
     const res = handleImages();
-    const type = firstImgData === 'fail' ? setImageDefaultType(imgData.length) : calcImageType(firstImgData.width, firstImgData.height);
+    const type = firstImgData === 'fail' ? calcImageDefaultType(imgData.length) : calcImageType(firstImgData.width, firstImgData.height);
 
     if (imgData.length === 1) {
       return <One type={type} bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} />;
