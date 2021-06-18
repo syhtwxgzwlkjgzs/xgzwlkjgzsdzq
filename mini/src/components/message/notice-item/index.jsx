@@ -142,7 +142,7 @@ class Index extends Component {
                   text={item.nickname}
                   circle={true}
                   style={{
-                    backgroundColor: `${this.getBackgroundColor(item.nickname)}`
+                    backgroundColor: this.getBackgroundColor(item.nickname)
                   }}
                 />
               }
