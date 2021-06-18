@@ -1,4 +1,4 @@
-import React, { createRef } from 'react';
+import React, { createRef, Fragment } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Icon, Tabs } from '@discuzq/design';
 import ThreadContent from '@components/thread';
@@ -10,6 +10,7 @@ import BaseLayout from '@components/base-layout';
 import initJSSdk from '@common/utils/initJSSdk.js';
 import { getSelectedCategoryIds } from '@common/utils/handleCategory';
 import wxAuthorization from '../../user/h5/wx-authorization';
+import VList from '@components/virtual-list';
 
 @inject('site')
 @inject('user')
@@ -67,7 +68,7 @@ class IndexH5Page extends React.Component {
 
       console.log(111);
     });
-  }
+  };
 
   // 点击更多弹出筛选
   searchClick = () => {
@@ -126,7 +127,7 @@ class IndexH5Page extends React.Component {
     } else if (fixedTab && scrollTop < height) {
       this.setState({ fixedTab: false });
     }
-  }
+  };
 
   renderTabs = () => {
     const { fixedTab } = this.state;
@@ -176,8 +177,9 @@ class IndexH5Page extends React.Component {
   };
 
   render() {
-    const { isFinished } = this.state;
-    const { threads = {}, currentCategories, filter, threadError } = this.props.index;
+    const { index } = this.props;
+    const { filter, isFinished } = this.state;
+    const { threads = {}, sticks } = index;
     const { currentPage, totalPage, pageData } = threads || {};
 
     return (
@@ -192,23 +194,41 @@ class IndexH5Page extends React.Component {
         curr='home'
         pageName='home'
         onClickTabBar={this.onClickTabBar}
-        requestError={threadError.isError}
-        errorText={threadError.errorText}
+        requestError={this.props.isError}
+        errorText={this.props.errorText}
+        disabledList={true}
       >
-        <HomeHeader ref={this.headerRef}/>
+        {this.state.fixedTab && this.renderTabs()}
 
-        {this.renderTabs()}
+        <VList
+          list={pageData}
+          sticks={sticks}
+          onScroll={this.handleScroll}
+          loadNextPage={this.onRefresh}
+          renderItem={(item, index, recomputeRowHeights, onContentHeightChange) => (
+            <ThreadContent
+              onContentHeightChange={(height) => onContentHeightChange(height, index)}
+              key={index}
+              // showBottomStyle={index !== pageData.length - 1}
+              data={item}
+              className={styles.listItem}
+              recomputeRowHeights={() => recomputeRowHeights(index)}
+            />
+          )}
+        >
+          <HomeHeader ref={this.headerRef} />
+          {this.renderTabs()}
+          {this.renderHeaderContent()}
+        </VList>
 
-        {this.renderHeaderContent()}
-
-        {pageData?.map((item, index) => (
+        {/* {pageData?.map((item, index) => (
             <ThreadContent
               key={index}
               showBottomStyle={index !== pageData.length - 1}
               data={item}
               className={styles.listItem}
             />
-        ))}
+        ))} */}
 
         <FilterView
           data={currentCategories}

@@ -88,4 +88,3 @@ export const ON_PAY_REWARD = 'ON_PAY_REWARD'; // 悬赏付费事件
 export const ON_PAY_ATTACHMENT = 'ON_PAY_ATTACHMENT'; // 附件付费事件
 export const ON_PAY_CONTENT = 'ON_PAY_CONTENT'; // 文字付费事件
 export const ON_PAY_IMAGE = 'ON_PAY_IMAGE'; // 图片付费事件
-
