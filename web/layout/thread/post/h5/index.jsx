@@ -224,6 +224,7 @@ class ThreadCreate extends React.Component {
             emoji={emoji}
             atList={atList}
             topic={topic}
+            onCountChange={count => this.props.handleSetState({ count })}
             onInput={(vditor) => this.props.handleVditorChange(vditor, 'input')}
             onChange={this.props.handleVditorChange}
             onFocus={(action, event) => {

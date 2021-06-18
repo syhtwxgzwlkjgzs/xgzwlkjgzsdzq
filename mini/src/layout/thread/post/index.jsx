@@ -7,7 +7,7 @@ import { PluginToolbar, DefaultToolbar, GeneralUpload, Title, Content, ClassifyP
 import Toast from '@discuzq/design/dist/components/toast/index';
 import { Units } from '@components/common';
 import styles from './index.module.scss';
-import { THREAD_TYPE } from '@common/constants/thread-post';
+import { THREAD_TYPE, MAX_COUNT } from '@common/constants/thread-post';
 import { paidOption, draftOption } from '@common/constants/const';
 import { readYundianboSignature } from '@common/server';
 import VodUploader from 'vod-wx-sdk-v2';
@@ -35,7 +35,7 @@ class Index extends Component {
       maxLength: 5000, // 文本输入最大长度
       showClassifyPopup: false, // 切换分类弹框show
       operationType: 0,
-      contentTextLength: 5000,
+      contentTextLength: MAX_COUNT,
       showEmoji: false,
       showPaidOption: false, // 显示付费选项弹框
       showDraftOption: false, // 显示草稿选项弹框
@@ -193,9 +193,9 @@ class Index extends Component {
     const { setPostData } = this.props.threadPost;
     setPostData({ contentText });
     this.toHideTitle();
-    // this.setState({
-    //   contentTextLength: maxLength - contentText.length
-    // });
+    this.setState({
+      contentTextLength: maxLength - contentText.length
+    });
   }
 
   resetOperationType() {
@@ -423,10 +423,14 @@ class Index extends Component {
 
   handleSubmit = async (isDraft) => {
     // 1 校验
-    const { threadId } = this.state;
+    const { contentTextLength } = this.state;
     const { threadPost, site } = this.props;
     const { postData, redpacketTotalAmount } = threadPost;
     const { images, video, files, audio } = postData;
+    if (contentTextLength <= 0) {
+      this.postToast(`最多输入${MAX_COUNT}字`);
+      return;
+    }
 
     // 判断录音状态
     if (!this.checkAudioRecordStatus()) return;
