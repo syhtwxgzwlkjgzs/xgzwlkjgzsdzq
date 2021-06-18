@@ -30,10 +30,7 @@
   line-height: rem($font-line-height-primary);
   color: var(--color-text-primary);
   margin-left: rem($padding-2n);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  display: block;
+  @include lamp-clamp(1);
 }
 .left {
   display: flex;
