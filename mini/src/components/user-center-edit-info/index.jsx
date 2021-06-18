@@ -5,10 +5,10 @@ import Button from '@discuzq/design/dist/components/button/index';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Input from '@discuzq/design/dist/components/input/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
+import Spin from '@discuzq/design/dist/components/spin/index';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import { inject, observer } from 'mobx-react';
-import Router from '@discuzq/sdk/dist/router';
 import throttle from '@common/utils/thottle.js';
 import { View, Text } from '@tarojs/components';
 
@@ -20,6 +20,7 @@ class index extends Component {
     super(props);
     this.state = {
       isClickNickName: false,
+      isConfirm: false, // 是否点击保存
     };
     this.user = this.props.user || {};
   }
@@ -27,6 +28,7 @@ class index extends Component {
   initState = () => {
     this.setState({
       isClickNickName: false,
+      isConfirm: false,
     });
   };
 
@@ -38,10 +40,11 @@ class index extends Component {
   }
 
   // 点击取消
-  handleCancel = () => {
+  handleCancel = throttle(() => {
     Taro.navigateBack();
     this.props.user.initEditInfo();
-  };
+    this.initState();
+  }, 300);
 
   handleClickNickName = () => {
     this.setState({
@@ -63,6 +66,10 @@ class index extends Component {
   };
 
   handleUpdateEditedUserInfo = throttle(() => {
+    if (this.state.isConfirm) return;
+    this.setState({
+      isConfirm: true,
+    });
     this.props.user
       .updateEditedUserInfo()
       .then((res) => {
@@ -71,9 +78,10 @@ class index extends Component {
           hasMask: false,
           duration: 1000,
         });
+        this.initState();
         setTimeout(() => {
           Taro.navigateBack();
-        }, 200);
+        }, 300);
       })
       .catch((error) => {
         Toast.error({
@@ -81,9 +89,10 @@ class index extends Component {
           hasMask: false,
           duration: 1000,
         });
+        this.initState();
         setTimeout(() => {
           Taro.navigateBack();
-        }, 200);
+        }, 300);
       });
   }, 300);
 
@@ -138,6 +147,7 @@ class index extends Component {
   };
 
   render() {
+    const { isConfirm } = this.state;
     // 条件都满足时才显示微信
     const IS_WECHAT_ACCESSABLE = this.props.site.wechatEnv !== 'none' && !!this.user.wxNickname;
     return (
@@ -207,8 +217,14 @@ class index extends Component {
           <Button full onClick={this.handleCancel} className={styles.btn}>
             取消
           </Button>
-          <Button full className={styles.btn} onClick={this.handleUpdateEditedUserInfo} type="primary">
-            保存
+          <Button
+            full
+            className={styles.btn}
+            onClick={this.handleUpdateEditedUserInfo}
+            type="primary"
+            disabled={isConfirm}
+          >
+            {isConfirm ? <Spin type="spinner">保存中...</Spin> : '保存'}
           </Button>
         </View>
       </View>

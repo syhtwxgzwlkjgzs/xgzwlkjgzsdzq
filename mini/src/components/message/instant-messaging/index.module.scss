@@ -1,6 +1,7 @@
 @import './vars.scss';
 
 .container {
+  height: 100%;
   @include im-pagebed;
   position: relative;
   border-top: $border-solid-1;

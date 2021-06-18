@@ -39,7 +39,7 @@ export default class ReplyList extends React.Component {
       canApprove: data.canApprove || false,
       canDelete: data.canDelete || false,
       canEdit: data.canEdit || false,
-      canHide: data.canLike || false,
+      canHide: data.canHide || false,
       canLike: data.canLike || false,
     };
   }
@@ -65,7 +65,7 @@ export default class ReplyList extends React.Component {
   }
 
   render() {
-    const { canLike, canDelete } = this.generatePermissions(this.props.data);
+    const { canLike, canDelete, canHide } = this.generatePermissions(this.props.data);
 
     return (
       <View className={styles.replyList}>
@@ -132,7 +132,7 @@ export default class ReplyList extends React.Component {
                 <View className={styles.replyReply}>
                   <Text onClick={() => this.replyClick()}>回复</Text>
                 </View>
-                {canDelete && (
+                {canHide && (
                   <View className={styles.replyReply}>
                     <Text onClick={debounce(() => this.deleteClick(), 500)}>删除</Text>
                   </View>

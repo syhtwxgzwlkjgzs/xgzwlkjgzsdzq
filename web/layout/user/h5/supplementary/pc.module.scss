@@ -57,6 +57,15 @@
     :global(.dzq-upload) {
       padding: 0;
     }
+    :global(.dzq-upload__area) {
+      width: 100px !important;
+      height: 100px !important;
+      border: $border-solid-1 !important;
+    }
+    :global(.dzq-upload-list-card__item) {
+      width: 100px !important;
+      height: 100px !important;
+    }
   }
   .attachmentsUpload{
     float: left;

@@ -1,9 +1,11 @@
-import React, {useState, useEffect, useMemo, useCallback} from 'react';
+import React, {useState, useEffect, useCallback, useRef} from 'react';
 import isServer from '@common/utils/is-server';
-
+import styles from './index.module.scss';
 const SmartImg = ({type, src, onClick}) => {
 
     const [imgSrc, changeImgSrc] = useState(null);
+    const [isLong, changeIsLong] = useState(false);
+    const img = useRef(null);
 
     const calcImgSrc = useCallback(() => {
         let newSrc = src.split('?')[0];
@@ -35,13 +37,27 @@ const SmartImg = ({type, src, onClick}) => {
         return newSrc;
     }, [src, type])
 
+    const imgOnload = useCallback(() => {
+        if (img && img.current) {
+            const width = img.current.naturalWidth;
+            const height = img.current.naturalHeight;
+            if (height/width >= 2.5) {
+                changeIsLong(true)
+            }
+        }
+        
+    }, [img])
+
     useEffect(() => {
         const newSrc = calcImgSrc();
         changeImgSrc(newSrc);
     });
     
     return (
-      <img src={imgSrc} onClick={onClick}/>
+        <div className={styles.box}>
+            <img ref={img} src={imgSrc} onLoad={imgOnload} onClick={onClick}/>
+            {isLong && <div className={styles.longImgBox}><p className={styles.longImgText}>长图</p></div>}
+        </div>
     );
 }
 

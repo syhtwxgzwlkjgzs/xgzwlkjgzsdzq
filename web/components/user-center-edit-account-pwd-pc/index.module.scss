@@ -1,5 +1,4 @@
 @import '@common/styles/index.scss';
-@import '@common/styles/_variable.scss';
 
 .userMobileWrapper {
   :global {
@@ -79,4 +78,12 @@
     color: $primary-color;
     cursor: pointer;
   }
-} 
+}
+
+.bgBtnColor {
+  :global {
+    .dzq-button--primary.is-mouseenter {
+      @include button-primary();
+    }
+  }
+}

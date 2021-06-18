@@ -1,7 +1,7 @@
 @import '@common/styles/index.scss';
 
 @mixin uploadStyles {
-  transition: all .5s;
+  transition: all 0.5s;
   position: absolute;
   left: 0;
   top: 0;
@@ -133,7 +133,7 @@
   overflow: hidden;
   display: block;
 
-  >div {
+  > div {
     height: rem(153);
   }
 }
@@ -150,4 +150,19 @@
 .uploadCon {
   display: flex;
   align-items: center;
+}
+
+.spinLoading {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background-color: $white;
+  border-radius: rem(5);
+  color: $loading-text-color;
+
+  span {
+    color: $loading-text-color;
+  }
 }
