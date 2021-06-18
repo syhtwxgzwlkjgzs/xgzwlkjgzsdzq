@@ -58,65 +58,66 @@ const Index = (props) => {
         } = handleAttachmentData(data);
 
         return (
-          <div className={styles.wrapper}>
+          <>
               {text && <PostContent content={text} onPay={onPay} onRedirectToDetail={onClick} />}
-              <div className={styles.content}>
-                {videoData && (
-                  <VideoPlay
-                    url={videoData.mediaUrl}
-                    coverUrl={videoData.coverUrl}
-                    v_width={videoData.width || null}
-                    v_height={videoData.height || null}
-                    onPay={onPay}
-                    isPay={needPay}
-                    status={videoData.status}
-                  />
-                )}
-                {imageData && (
-                    <ImageDisplay 
-                        platform={props.platform} 
-                        imgData={imageData} 
-                        isPay={needPay}
-                        onPay={onPay}
-                        onClickMore={onClick} />
-                    )
-                }
-                {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} />}
-                {fileData && <AttachmentView threadId={threadId} attachments={fileData} onPay={onPay} isPay={needPay} />}
-                {goodsData && <ProductItem
-                    image={goodsData.imagePath}
-                    amount={goodsData.price}
-                    title={goodsData.title}
-                    onClick={onClick}
-                />}
-                {rewardData && <Packet
-                  type={1}
-                  money={rewardData.money}
+
+              {videoData && (
+                <VideoPlay
+                  url={videoData.mediaUrl}
+                  coverUrl={videoData.coverUrl}
+                  v_width={videoData.width || null}
+                  v_height={videoData.height || null}
+                  onPay={onPay}
+                  isPay={needPay}
+                  status={videoData.status}
+                />
+              )}
+              {imageData?.length > 0 && (
+                  <ImageDisplay 
+                      platform={props.platform} 
+                      imgData={imageData} 
+                      isPay={needPay}
+                      onPay={onPay}
+                      onClickMore={onClick} />
+                  )
+              }
+              {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} />}
+              {fileData?.length > 0 && <AttachmentView threadId={threadId} attachments={fileData} onPay={onPay} isPay={needPay} />}
+              {goodsData && <ProductItem
+                  image={goodsData.imagePath}
+                  amount={goodsData.price}
+                  title={goodsData.title}
                   onClick={onClick}
-                />}
-                {redPacketData && <Packet money={redPacketData.money || 0} onClick={onClick} condition={redPacketData.condition} />}
-              </div>
-          </div>
+              />}
+              {rewardData && <Packet
+                type={1}
+                money={rewardData.money}
+                onClick={onClick}
+              />}
+              {redPacketData && <Packet money={redPacketData.money || 0} onClick={onClick} condition={redPacketData.condition} />}
+          </>
         );
     }
 
     return (
         <>
+          <div className={styles.wrapper}>
             {title && <div className={styles.title} onClick={onClick}>{newTitle}</div>}
 
             {renderThreadContent(props.data)}
-
-            {
-                needPay && (
-                  <div className={styles.pay}>
-                    <Button className={styles.button} type="primary" onClick={onPay}>
-                        <Icon className={styles.payIcon} name="GoldCoinOutlined" size={16}></Icon>
-                        {payType === 1 ? <p className={styles.payText}>{`支付${price}元查看剩余内容`}</p> : <p className={styles.payText}>{`支付${attachmentPrice}元查看附件内容`}</p>}
-                    </Button>                  
-                  </div>
-                  
-                )
-            }
+          </div>
+            
+          {
+              needPay && (
+                <div className={styles.pay}>
+                  <Button className={styles.button} type="primary" onClick={onPay}>
+                      <Icon className={styles.payIcon} name="GoldCoinOutlined" size={16}></Icon>
+                      {payType === 1 ? <p className={styles.payText}>{`支付${price}元查看剩余内容`}</p> : <p className={styles.payText}>{`支付${attachmentPrice}元查看附件内容`}</p>}
+                  </Button>                  
+                </div>
+                
+              )
+          }
         </>
     )
 }

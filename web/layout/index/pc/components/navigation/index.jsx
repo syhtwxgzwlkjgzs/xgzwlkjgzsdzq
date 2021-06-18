@@ -79,10 +79,6 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
     </div>
   );
 
-  const aaa = (index) => {
-    debugger
-  }
-
   const CategoriesContent = () => (
     <Menu defaultOpeneds={[`${fistIndex}`]} defaultSubmenuActives={[`${fistIndex}`]} defaultActives={[`${fistIndex}/${secondIndex}`]}>
       {
