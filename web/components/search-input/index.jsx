@@ -47,7 +47,6 @@ const SearchInput = ({
     if(timeoutID !== null) {
       clearTimeout(timeoutID);
       setTimeoutID(null);
-      return;
     }
     setTimeoutID(setTimeout(() => {
       onSearch(e.target.value);
