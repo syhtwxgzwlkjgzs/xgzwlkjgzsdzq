@@ -17,13 +17,19 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
 
   const onClick = (subIndex, index) => {
     let categoryIds = subIndex.split('/')
-    
-    setFistIndex(categoryIds[0]);
-    setSecondIndex(categoryIds[1]);
-    if (categoryIds[1] === 'all') {
-      categoryIds = [categoryIds[0]]
+  
+    // 点击没有二级分类的一级分类，或者是二级分类
+    if (categoryIds.length !== 1) { 
+      setFistIndex(categoryIds[0]);
+      setSecondIndex(categoryIds[1]);
+      if (categoryIds[1] === 'all') {
+        categoryIds = [categoryIds[0]]
+      } else {
+        categoryIds = [categoryIds[1]]
+      }
     } else {
-      categoryIds = [categoryIds[1]]
+      setFistIndex(categoryIds[0]);
+      setSecondIndex('all');
     }
 
     onNavigationClick({ categoryIds })
@@ -73,11 +79,15 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
     </div>
   );
 
+  const aaa = (index) => {
+    debugger
+  }
+
   const CategoriesContent = () => (
     <Menu defaultOpeneds={[`${fistIndex}`]} defaultSubmenuActives={[`${fistIndex}`]} defaultActives={[`${fistIndex}/${secondIndex}`]}>
       {
         categories?.map((item, index) => (item?.children?.length > 0 ? (
-          <Menu.SubMenu key={index} index={`${item.pid}`} title={renderMenuTitle(item)}>
+          <Menu.SubMenu key={index} index={`${item.pid}`} title={renderMenuTitle(item)} onClick={onClick}>
             {item.children.map((child, subIndex) => (
               <Menu.Item index={`${item.pid}/${child.pid}`} key={subIndex} onClick={onClick}>{renderSubMenuTitle(child)}</Menu.Item>
             ))}
