@@ -26,6 +26,7 @@ const SearchInput = ({
   const [value, setValue] = React.useState(defaultValue);
   const [isShow, setIsShow] = React.useState(false);
   const [timeoutID, setTimeoutID] = React.useState(null);
+
   const inputChange = (e) => {
     const val = e.target.value;
     setValue(val);
@@ -42,10 +43,17 @@ const SearchInput = ({
       }, searchWhileTyping ? 1000 : 0));
     }
   }
+
+  const onEnter = (e) => {
+    if(timeoutID !== null) return;
+    onSearch(e.target.value)
+  }
+
   const clearInput = () => {
     setValue('');
     setIsShow(false)
   }
+
   return (
     <div className={`${styles.container} ${!isShowBottom && styles.hiddenBottom}`}>
       <div className={styles.inputWrapper}>
@@ -53,7 +61,7 @@ const SearchInput = ({
         <Input
           value={value}
           placeholder='请输入想要搜索的内容...'
-          onEnter={e => onSearch(e.target.value)}
+          onEnter={e => onEnter(e)}
           onChange={e => inputChange(e)}
           className={styles.input}
         />
