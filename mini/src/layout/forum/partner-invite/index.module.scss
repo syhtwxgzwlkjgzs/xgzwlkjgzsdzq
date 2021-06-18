@@ -55,8 +55,10 @@
       display: inline;
     }
   }
+  .bottom_button_wrap {
+    @include ios-safe-area-inset-bottom;
+  }
   .bottom_button{
-    width: 100%;
     height: rem(42);
     line-height: rem(42);
     border-color: $primary-color;

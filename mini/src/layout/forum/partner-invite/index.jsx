@@ -208,9 +208,11 @@ class PartnerInviteH5Page extends React.Component {
             ) : (
               <></>
             )}
-            <Button className={layout.bottom_button} onClick={this.handleJoinSite}>
-              {siteMode === 'pay' ? `¥${sitePrice}` : ''} 立即加入
-            </Button>
+            <View className={layout.bottom_button_wrap}>
+              <Button className={layout.bottom_button} onClick={this.handleJoinSite}>
+                {siteMode === 'pay' ? `¥${sitePrice}` : ''} 立即加入
+              </Button>
+            </View>
           </View>
         </View>
       </List>

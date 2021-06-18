@@ -98,7 +98,7 @@ class CommentAction extends CommentStore {
   @action
   async createComment(params, ThreadStore) {
     const { id, content, attachments, postId, sort, isNoMore } = params;
-    if (!id || !content) {
+    if (!id || (!content && attachments.length === 0)) {
       return {
         msg: '参数不完整',
         success: false,
@@ -216,7 +216,7 @@ class CommentAction extends CommentStore {
   @action
   async createReply(params, ThreadStore) {
     const { id, commentId, replyId, commentPostId, content, isComment, attachments } = params;
-    if (!id || !content || !replyId || !commentId) {
+    if (!id || (!content && attachments.length === 0) || !replyId || !commentId) {
       return {
         msg: '参数不完整',
         success: false,
