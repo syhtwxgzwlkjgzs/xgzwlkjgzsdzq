@@ -174,7 +174,7 @@ class Index extends Component {
                 onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
               >
                 {/* 仅帖子通知没有nickname，使用title代替显示 */}
-                {item.nickname || this.filterTag(item.title) || "用户异常"}
+                {item.nickname || this.filterTag(item.title) || "用户已删除"}
               </div>
               {['chat', 'thread'].includes(type) && (
                 <div className={styles.time}>{diffDate(item.createdAt)}</div>

@@ -165,7 +165,7 @@ class Index extends Component {
                 })}
                 onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
               >
-                {item.nickname || this.filterTag(item.title) || "用户异常"}
+                {item.nickname || this.filterTag(item.title) || "用户已删除"}
               </View>
               {['chat', 'thread'].includes(type) &&
                 <View className={styles.time}>{diffDate(item.createdAt)}</View>
