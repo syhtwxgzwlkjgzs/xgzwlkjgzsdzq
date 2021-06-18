@@ -71,17 +71,23 @@ class Index extends React.Component {
   }
   render() {
     return <ViewAdapter
-            h5={<IndexH5Page dispatch={this.dispatch}
-            fetchTopicInfoLoading={this.state.fetchTopicInfoLoading}
-            isError={this.state.isError}
-            errorText={this.state.errorText}/>}
+            h5={
+              <IndexH5Page
+                dispatch={this.dispatch}
+                fetchTopicInfoLoading={this.state.fetchTopicInfoLoading}
+                isError={this.state.isError}
+                errorText={this.state.errorText}
+              />
+            }
 
-            pc={<IndexPCPage dispatch={this.dispatch}
-            fetchTopicInfoLoading={this.state.fetchTopicInfoLoading}
-            isError={this.state.isError}
-            errorText={this.state.errorText}/>}
-            title='话题详情'
-          />;
+            pc={
+              <IndexPCPage
+                dispatch={this.dispatch}
+                fetchTopicInfoLoading={this.state.fetchTopicInfoLoading}
+                isError={this.state.isError}
+                errorText={this.state.errorText}/>}
+                title='话题详情'
+              />;
   }
 }
 
