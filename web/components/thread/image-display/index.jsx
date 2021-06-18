@@ -134,7 +134,7 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop, onI
     if ( !imgData || imgData.length === 0 ) {
       return null;
     }
-    if ( true || firstImgData === null ) return <div className={`${platform === 'h5' ? styles['placeholderH5'] : styles['placeholderPC']}`}/>;
+    if ( firstImgData === null ) return <div className={`${platform === 'h5' ? styles['placeholderH5'] : styles['placeholderPC']}`}/>;
     const res = handleImages();
     const type = firstImgData === 'fail' ? setImageDefaultType(imgData.length) : calcImageType(firstImgData.width, firstImgData.height);
 
