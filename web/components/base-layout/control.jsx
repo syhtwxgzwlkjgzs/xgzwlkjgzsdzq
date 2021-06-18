@@ -59,11 +59,16 @@ const BaseLayoutControl = forwardRef((props, ref) => {
       if (jumpTo > 0) {
         baselayout[pageName] = jumpTo;
         listRef.current.jumpToScrollTop(jumpTo);
-      } else if (baselayout[pageName] > 0 && baseLayoutWhiteList.indexOf(pageName) !== -1) {
-        listRef.current.jumpToScrollTop(baselayout[pageName]);
+      } else if (baseLayoutWhiteList.indexOf(pageName) !== -1) {
+        if(baselayout[pageName] > 0) {
+          listRef.current.jumpToScrollTop(baselayout[pageName]);
+        } else if(baselayout.isJumpingToTop) {
+          baselayout.removeJumpingToTop();
+          listRef.current.onBackTop();
+        }
       }
     }
-  }, [jumpTo, listRef, baselayout]);
+  });
 
 
   const quickScrolling = (e) => {
@@ -73,12 +78,7 @@ const BaseLayoutControl = forwardRef((props, ref) => {
       return;
     }
     const { scrollTop } = e;
-    if (baselayout.isJumpingToTop) {
-      baselayout.removeJumpingToTop();
-      listRef.current.onBackTop();
-    } else {
-      if (scrollTop && pageName) baselayout[pageName] = scrollTop;
-    }
+    if (scrollTop && pageName) baselayout[pageName] = scrollTop;
 
     const { playingVideoDom } = baselayout;
 
