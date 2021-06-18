@@ -11,6 +11,7 @@ import Router from '@discuzq/sdk/dist/router';
 import { handleError } from '@discuzq/sdk/dist/api/utils/handle-error';
 import {
   ENV_CONFIG,
+  INVALID_TOKEN,
   JUMP_TO_404,
   JUMP_TO_LOGIN,
   JUMP_TO_REGISTER,
@@ -88,6 +89,22 @@ http.interceptors.response.use((res) => {
   // }
   let url = null;
   switch (data.Code) {
+    case INVALID_TOKEN: {
+      // @TODO 未登陆且无权限时，直接跳转加入页面。可能影响其它逻辑
+      // 通过res?.config?.headers?.authorization获取用户的token判断是否登陆
+      // 未登陆时，帖子列表接口返回无权限，跳转登陆
+      if (!res?.config?.headers?.authorization && ~res?.config?.url.indexOf('/thread.list')) {
+        if (process.env.DISCUZ_ENV === 'web') {
+          url = '/user/login';
+        } else {
+          url = '/subPages/user/wx-auth/index';
+        }
+        Router.push({
+          url
+        });
+      }
+      break;
+    }
     case JUMP_TO_404: {
       if (process.env.DISCUZ_ENV === 'web') {
         url = '/404';
