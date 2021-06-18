@@ -69,11 +69,11 @@ class UserCenterFans extends React.Component {
     const fansRes = await getUserFans(opts);
 
     if (fansRes.code !== 0) {
-      // console.error(fansRes);
-      // Toast.error({
-      //   content: fansRes.msg,
-      //   duration: 2000,
-      // });
+      console.error(fansRes);
+      Toast.error({
+        content: fansRes.msg,
+        duration: 2000,
+      });
       return;
     }
 
