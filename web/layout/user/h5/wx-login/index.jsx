@@ -60,7 +60,7 @@ class WXLoginH5Page extends React.Component {
         // 开启小程序登陆
         if (site?.isMiniProgramOpen) {
           params.type = 'pc_login_mini';
-          params.redirectUri = encodeURIComponent(`/subPages/user/wx-authorization/index`);
+          params.redirectUri = undefined; // 无需传入redirectUri
         } else {
           params.type = 'pc_login';
         }
