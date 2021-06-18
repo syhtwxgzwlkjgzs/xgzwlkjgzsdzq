@@ -57,7 +57,7 @@ const Index = (props) => {
   const removeLocation = () => {
     setPosition({});
     setIsChose(false);
-    positionChange(position);
+    positionChange({});
   };
 
 
@@ -65,7 +65,7 @@ const Index = (props) => {
     <View onClick={chooseLocation} className={classNames(styles['position'], {
       [styles['chose']]: isChose,
     })}>
-      <Icon name='PositionOutlined' size={10} />
+      <Icon className={styles['position-icon']} name='PositionOutlined' size={12} />
       <Text className={styles['text']}>{position.location || '你在哪里？'}</Text>
       {isChose && <Icon className={styles['remove-icon']} name='CloseOutlined' size={10} onClick={(e) => {
         removeLocation();

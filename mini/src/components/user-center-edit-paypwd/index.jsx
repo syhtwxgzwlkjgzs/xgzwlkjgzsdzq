@@ -4,12 +4,11 @@ import Taro, { getCurrentInstance } from '@tarojs/taro';
 import Button from '@discuzq/design/dist/components/button/index';
 import Input from '@discuzq/design/dist/components/input/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
+import Spin from '@discuzq/design/dist/components/spin/index';
 import styles from './index.module.scss';
-import Router from '@discuzq/sdk/dist/router';
 import { View, Text } from '@tarojs/components';
 import throttle from '@common/utils/thottle.js';
 import classNames from 'classnames';
-import { toTCaptcha } from '@common/utils/to-tcaptcha';
 
 @inject('site')
 @inject('user')
@@ -19,9 +18,15 @@ class index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isSubmit: false,
+      isSubmit: false, // 是否点击提交
     };
   }
+
+  initState = () => {
+    this.setState({
+      isSubmit: false,
+    });
+  };
 
   componentDidMount() {
     this.props.payBox.clearPayPassword();
@@ -30,19 +35,24 @@ class index extends Component {
   // 点击去到下一步 ---> 清空旧密码oldPayPwd状态
   goToResetPayPwd = throttle(() => {
     if (this.getDisabledWithButton()) return;
+    this.setState({
+      isSubmit: true,
+    });
     this.props.payBox
       .getPayPwdResetToken()
       .then(() => {
         Taro.navigateTo({ url: '/subPages/my/edit/reset/paypwd/index' });
         this.props.payBox.oldPayPwd = null;
+        this.initState();
       })
       .catch((err) => {
         Toast.error({
           content: err.Msg || '密码错误',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
         this.props.payBox.oldPayPwd = null;
+        this.initState();
       });
   }, 300);
 
@@ -55,7 +65,7 @@ class index extends Component {
       });
       return;
     }
-    Taro.navigateTo({ url: '/subPages/my/edit/find/paypwd/index?ref=payBox' });
+    Taro.navigateTo({ url: '/subPages/my/edit/find/paypwd/index' });
   };
 
   // 初次设置密码 password
@@ -72,10 +82,29 @@ class index extends Component {
     this.props.payBox.oldPayPwd = securityCode[0];
   };
 
+  // 处理支付相关逻辑
+  handlePayBoxWithTriggerIncident = async () => {
+    const { id } = this.props?.user;
+    try {
+      await this.props.user.updateUserInfo(id);
+      this.props.payBox.visible = true;
+      this.props.payBox.password = null;
+      await this.props.payBox.getWalletInfo(id);
+      this.props.user.userInfo.canWalletPay = true;
+      Taro.navigateBack({ delta: 1 });
+      this.initState();
+    } catch (error) {
+      Toast.error({
+        content: '获取用户钱包信息失败',
+        duration: 2000,
+      });
+      this.initState();
+    }
+  };
+
   // 点击提交 ----> 设置密码password成功 ---> 清空 password状态
   handleSubmit = throttle(async () => {
-    const { isSubmit } = this.state;
-    if (isSubmit || this.getDisabledWithButton()) return;
+    if (this.getDisabledWithButton()) return;
     this.setState({
       isSubmit: true,
     });
@@ -90,20 +119,7 @@ class index extends Component {
         });
         const { type } = getCurrentInstance().router.params;
         if (type === 'paybox') {
-          const { id } = this.props?.user;
-          try {
-            await this.props.user.updateUserInfo(id);
-            this.props.payBox.visible = true;
-            this.props.payBox.password = null;
-            await this.props.payBox.getWalletInfo(id);
-            this.props.user.userInfo.canWalletPay = true;
-            Taro.navigateBack({ delta: 1 });
-          } catch (error) {
-            Toast.error({
-              content: '获取用户钱包信息失败',
-              duration: 1000,
-            });
-          }
+          this.handlePayBoxWithTriggerIncident();
           return;
         }
         // 防止跳转过快
@@ -111,15 +127,17 @@ class index extends Component {
           Taro.redirectTo({ url: '/subPages/my/edit/index' });
           this.props.user.userInfo.canWalletPay = true;
           this.props.payBox.password = null;
+          this.initState();
         }, 200);
       })
       .catch((err) => {
         Toast.error({
           content: '设置失败请重新设置',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
         this.props.payBox.password = null;
+        this.initState();
       });
   }, 500);
 
@@ -130,8 +148,11 @@ class index extends Component {
   getDisabledWithButton = () => {
     const payPassword = this.props.payBox?.password;
     const oldPayPwd = this.props.payBox?.oldPayPwd;
+    const { isSubmit } = this.state;
     let disabled = false;
-    if (this.props.user?.canWalletPay) {
+    if (isSubmit) {
+      disabled = isSubmit;
+    } else if (this.props.user?.canWalletPay) {
       disabled = !oldPayPwd || oldPayPwd.length !== 6;
     } else {
       disabled = !payPassword || payPassword.length !== 6;
@@ -189,6 +210,7 @@ class index extends Component {
   };
 
   render() {
+    const { isSubmit } = this.state;
     return (
       <View id={styles.setPayPwdContent}>
         {this.props.user?.canWalletPay ? this.renderCanPayPwd() : this.renderSetPayPwd()}
@@ -205,7 +227,7 @@ class index extends Component {
               type={'primary'}
               className={styles.btn}
             >
-              下一步
+              {isSubmit ? <Spin type="spinner">加载中...</Spin> : '下一步'}
             </Button>
           ) : (
             <Button
@@ -215,7 +237,7 @@ class index extends Component {
               type={'primary'}
               className={styles.btn}
             >
-              提交
+              {isSubmit ? <Spin type="spinner">提交中...</Spin> : '提交'}
             </Button>
           )}
         </View>

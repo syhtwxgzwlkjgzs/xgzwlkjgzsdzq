@@ -19,11 +19,14 @@ export const APP_THEME = {
 export const JUMP_TO_LOGIN = -3001; // 到登录页
 export const JUMP_TO_REGISTER = -3002; // 到注册页
 export const JUMP_TO_AUDIT = -3003; // 到注册审核页
+export const JUMP_TO_REFUSE = -4007; // 到审核拒绝页
+export const JUMP_TO_DISABLED = -4009; // 到审核禁用页
 export const JUMP_TO_HOME_INDEX = -3004; // 到首页
 export const SITE_CLOSED = -3005; // 站点关闭
 export const JUMP_TO_PAY_SITE = -3006; // 到付费加入页面
 export const JUMP_TO_SUPPLEMENTARY = -3007; // 跳转到扩展字段页
 export const INVALID_TOKEN =  -4002;// 无权限
+export const TOKEN_FAIL =  -4011;// token失效
 export const JUMP_TO_404 = -4004; // 资源不存在
 export const NEED_BIND_WEIXIN_FLAG = -8000; // 需要绑定微信
 export const NEED_BIND_PHONE_FLAG = -8001; // 需要绑定手机
@@ -68,6 +71,20 @@ export const MINI_SITE_JOIN_WHITE_LIST = [
   '/subPages/my/index', // 个人中心
   '/subPages/forum/partner-invite/index', // 站点加入
   '/subPages/my/edit/paypwd/index', // 设置支付密码
+];
+
+// mini端站点，用户账号审核中可以访问的路由白名单
+export const REVIEWING_USER_WHITE_LIST = [
+  '/pages/index/index', // 首页
+  '/subPages/thread/index', // 帖子详情页
+  '/subPages/user/status/index', // 用户状态提示页
+];
+
+// web端站点，用户账号审核中可以访问的路由白名单
+export const REVIEWING_USER_WHITE_LIST_WEB = [
+  '/', // 首页
+  '/thread/[id]', // 帖子详情页
+  '/user/status', // 用户状态提示页
 ];
 
 export const PERMISSION_PLATE = [

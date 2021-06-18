@@ -46,7 +46,7 @@ export default class index extends Component {
           Toast.success({
             content: '上传头像成功',
             hasMask: false,
-            duration: 1000,
+            duration: 2000,
           });
           this.setState({
             isUploadAvatarUrl: false,
@@ -57,7 +57,7 @@ export default class index extends Component {
         Toast.error({
           content: err.Msg || '上传头像失败',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
         this.setState({
           isUploadAvatarUrl: false,
@@ -80,7 +80,7 @@ export default class index extends Component {
           Toast.success({
             content: '上传成功',
             hasMask: false,
-            duration: 1000,
+            duration: 2000,
           });
           this.setState({
             isUploadBackgroundUrl: false,
@@ -91,7 +91,7 @@ export default class index extends Component {
         Toast.error({
           content: err.Msg || '上传背景图失败',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
         this.setState({
           isUploadBackgroundUrl: false,
@@ -119,7 +119,7 @@ export default class index extends Component {
   };
 
   render() {
-    const { isUploadAvatarUrl, isUploadBackgroundUrl } = this.state
+    const { isUploadAvatarUrl, isUploadBackgroundUrl } = this.state;
     return (
       <>
         <div className={styles.userCenterEditHeader}>

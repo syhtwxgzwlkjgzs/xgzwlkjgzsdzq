@@ -7,7 +7,7 @@ import styles from './index.module.scss';
 import className from 'classnames';
 
 const InputPop = (props) => {
-  const { visible, onSubmit, onClose, onOperClick, permissions = {}, statuses = {} } = props;
+  const { visible, onSubmit, onClose, onOperClick, permissions = {}, statuses = {}, shareData } = props;
 
   const { canEdit, canDelete, canEssence, canStick, canShare, canCollect } = permissions;
   const { isEssence, isStick, isCollect } = statuses;
@@ -80,23 +80,27 @@ const InputPop = (props) => {
               </View>
             )}
             {/* TODO:生成海报 */}
-            {/* {canShare && (
+            {canShare && (
               <View className={styles.moreItem} onClick={() => onOperClick('posterShare')}>
                 <View className={styles.icon}>
                   <Icon name="PictureOutlinedBig" size={20}></Icon>
                 </View>
                 <View className={styles.text}>生成海报</View>
               </View>
-            )} */}
+            )}
             {/* TODO:微信分享 */}
-            {/* {canShare && (
-              <View className={styles.moreItem} onClick={() => onOperClick('weixinShare')}>
-                <View className={styles.icon}>
-                  <Icon name="WechatOutlined" size={20}></Icon>
-                </View>
+            {canShare && (
+              <View className={styles.moreItem}>
+                <Button
+                  className={className(styles.icon)}
+                  openType="share"
+                  data-shareData={shareData}
+                >
+                  <Icon className={styles.icon} size="20" name="WechatOutlined"></Icon>
+                </Button>
                 <View className={styles.text}>微信分享</View>
               </View>
-            )} */}
+            )}
 
             <View className={styles.moreItem} onClick={() => onOperClick('report')}>
               <View className={styles.icon}>

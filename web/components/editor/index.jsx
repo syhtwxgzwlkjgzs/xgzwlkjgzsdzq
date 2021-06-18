@@ -14,7 +14,7 @@ import '@discuzq/vditor/src/assets/scss/index.scss';
 import { Toast } from '@discuzq/design';
 
 export default function DVditor(props) {
-  const { pc, emoji = {}, atList = [], topic, value,
+  const { pc, emoji = {}, atList = [], topic, value = '',
     onChange = () => { }, onFocus = () => { }, onBlur = () => { },
     onInit = () => { },
     onInput = () => { },
@@ -94,20 +94,32 @@ export default function DVditor(props) {
   //   onCountChange(contentCount);
   // }, [contentCount]);
 
-  useEffect(() => {
-    try {
-      const timer = setTimeout(() => {
-        clearTimeout(timer);
-        if ((vditor && vditor.getValue && vditor.getValue() !== '\n') || !value) return;
+  // 设置编辑器初始值，主要是针对编辑帖子
+  let errorNum = 0;
+  const setEditorInitValue = () => {
+    const timer = setTimeout(() => {
+      clearTimeout(timer);
+      try {
+        if (!value || (vditor && vditor.getValue && vditor.getValue() !== '\n')) {
+          errorNum = 0;
+          return;
+        }
         if (vditor && vditor.getValue && vditor.getValue() === '\n' && vditor.getValue() !== value) {
+          errorNum = 0;
           html2mdSetValue(value);
           vditor.vditor[vditor.vditor.currentMode].element.blur();
         }
-      }, 200);
-    } catch (error) {
-      console.log(error);
-    }
-  }, [value]);
+      } catch (error) {
+        console.log(error);
+        errorNum += 1;
+        if (errorNum <= 3) setEditorInitValue();
+      }
+    }, 300);
+  };
+
+  useEffect(() => {
+    setEditorInitValue();
+  }, [value, vditor]);
 
   const bubbleBarHidden = () => {
     const timer = setTimeout(() => {
@@ -182,18 +194,20 @@ export default function DVditor(props) {
     const editor = new Vditor(
       vditorId,
       {
-        _lutePath: 'https://imgcache.qq.com/operation/dianshi/other/lute.min.6cbcbfbacd9fa7cda638f1a6cfde011f7305a071.js?max_age=31536000',
+        _lutePath: 'https://cloudcache.tencentcs.com/operation/dianshi/other/lute.min.6cbcbfbacd9fa7cda638f1a6cfde011f7305a071.js?max_age=31536000',
         ...baseOptions,
         minHeight: 44,
         // 编辑器初始化值
         tab: '  ',
-        value: '',
+        value,
         // 编辑器异步渲染完成后的回调方法
         after: () => {
           onInit(editor);
-          const md = !value ? '' : editor.html2md(value);
-          editor.setValue(md);
+          editor.setValue('');
+          setEditorInitValue();
           editor.vditor[editor.vditor.currentMode].element.blur();
+          // 去掉异步渲染之后的光标focus
+          if (getSelection().rangeCount > 0) getSelection().removeAllRanges();
         },
         focus: () => {},
         input: () => {
@@ -234,6 +248,11 @@ export default function DVditor(props) {
         },
         bubbleToolbar: pc ? [...baseToolbar] : [],
         icon: '',
+        preview: {
+          theme: {
+            current: '',
+          },
+        },
       },
     );
 

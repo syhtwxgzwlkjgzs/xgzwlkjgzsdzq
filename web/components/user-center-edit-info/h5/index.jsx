@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import UserCenterEditHeader from '../../user-center-edit-header/index';
-import { Button, Icon, Input, Toast } from '@discuzq/design';
+import { Button, Icon, Input, Toast, Spin } from '@discuzq/design';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import { inject, observer } from 'mobx-react';
@@ -15,6 +15,7 @@ class index extends Component {
     super(props);
     this.state = {
       isClickNickName: false,
+      isConfirm: false, // 是否点击保存
     };
     this.user = this.props.user || {};
   }
@@ -22,6 +23,7 @@ class index extends Component {
   initState = () => {
     this.setState({
       isClickNickName: false,
+      isConfirm: false,
     });
   };
 
@@ -33,10 +35,11 @@ class index extends Component {
   }
 
   // 点击取消
-  handleCancel = () => {
+  handleCancel = throttle(() => {
     Router.back();
     this.props.user.initEditInfo();
-  };
+    this.initState();
+  }, 300);
 
   handleClickNickName = () => {
     this.setState({
@@ -81,13 +84,17 @@ class index extends Component {
   };
 
   handleUpdateEditedUserInfo = throttle(() => {
+    if (this.state.isConfirm) return;
+    this.setState({
+      isConfirm: true,
+    });
     this.props.user
       .updateEditedUserInfo()
       .then((res) => {
         Toast.success({
           content: '更新信息成功',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
         Router.push({ url: '/my' });
       })
@@ -95,7 +102,7 @@ class index extends Component {
         Toast.error({
           content: error.message || '更新用户信息失败',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
         Router.push({ url: '/my' });
       });
@@ -113,7 +120,7 @@ class index extends Component {
     if (!this.props.user.canEditUsername) {
       Toast.error({
         content: '用户名一年只能修改一次',
-        duration: 1000,
+        duration: 2000,
       });
       return;
     }
@@ -129,6 +136,7 @@ class index extends Component {
   };
 
   render() {
+    const { isConfirm } = this.state;
     // 条件都满足时才显示微信
     const IS_WECHAT_ACCESSABLE = this.props.site.wechatEnv !== 'none' && !!this.user.wxNickname;
     return (
@@ -209,8 +217,8 @@ class index extends Component {
           <Button full onClick={this.handleCancel}>
             取消
           </Button>
-          <Button full onClick={this.handleUpdateEditedUserInfo} type="primary">
-            保存
+          <Button disabled={isConfirm} full onClick={this.handleUpdateEditedUserInfo} type="primary">
+            {isConfirm ? <Spin type="spinner">保存中...</Spin> : '保存'}
           </Button>
         </div>
       </div>

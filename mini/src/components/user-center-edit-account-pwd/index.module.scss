@@ -29,14 +29,13 @@
         @include passwordInput;
       }
     }
-
   }
 }
 
 .tips {
   text-align: right;
   color: $primary-color;
-  padding-right: rem($padding-6n);
+  // padding-right: rem($padding-6n);
   font-size: rem($font-size-primary);
   margin-top: rem($margin-6n);
 }
@@ -64,7 +63,7 @@
 .bgBtnColor {
   :global {
     .dzq-button--primary.is-mouseenter {
-      @include button-primary()
+      @include button-primary();
     }
   }
 }

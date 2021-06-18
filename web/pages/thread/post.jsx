@@ -23,6 +23,7 @@ import ViewAdapter from '@components/view-adapter';
 @inject('index')
 @inject('thread')
 @inject('user')
+@inject('payBox')
 @observer
 class PostPage extends React.Component {
   toastInstance = null;
@@ -52,6 +53,7 @@ class PostPage extends React.Component {
       draftShow: false,
       isTitleShow: true,
       jumpLink: '', // 退出页面时的跳转路径,默认返回上一页
+      data: {}, // 创建帖子返回的数据
     };
     this.vditor = null;
     // 语音、视频、图片、附件是否上传完成。默认没有上传所以是上传完成的
@@ -125,6 +127,10 @@ class PostPage extends React.Component {
     if (!user.permissions) user.updateUserInfo();
   }
 
+  postToast = (content) => {
+    Toast.info({ content, duration: 2000, hasMask: true });
+  };
+
   async fetchDetail() {
     const { thread, threadPost } = this.props;
     // 如果是编辑操作，需要获取链接中的帖子id，通过帖子id获取帖子详情信息
@@ -139,11 +145,22 @@ class PostPage extends React.Component {
       if (ret.code === 0) {
         threadPost.formatThreadDetailToPostData(ret.data);
         // 设置主题状态、是否能操作红包和悬赏
-        const { postData: { isDraft, redpacket, rewardQa } } = this.props.threadPost
+        // const { postData, isThreadPaid } = this.props.threadPost;
+        const { postData } = this.props.threadPost;
+        const { isDraft } = postData;
+        // if (isThreadPaid) {
+        //   Toast.info({ content: '已经支付的帖子不支持编辑', duration: 1000, hasMask: true });
+        //   const timer = setTimeout(() => {
+        //     clearTimeout(timer);
+        //     this.props.router.replace(`/thread/${id}`);
+        //   }, 1000);
+        //   return;
+        // }
+        // 更改交互：已发布帖子可以编辑内容，但是不能编辑红包或者悬赏属性
         this.setState({
           postType: isDraft ? 'isDraft' : 'isEdit',
-          canEditRedpacket: isDraft || !(redpacket.money > 0),
-          canEditReward: isDraft || !(rewardQa.money > 0),
+          canEditRedpacket: isDraft,
+          canEditReward: isDraft,
         });
       } else {
         Toast.error({ content: ret.msg });
@@ -173,6 +190,7 @@ class PostPage extends React.Component {
         this.handleVodUploadComplete(res, file, THREAD_TYPE.voice);
       },
       onError: (err) => {
+        this.handleVodUploadComplete(null, blob, THREAD_TYPE.voice);
         Toast.error({ content: err.message });
       },
     });
@@ -184,6 +202,11 @@ class PostPage extends React.Component {
 
   // 通过云点播上传成功之后处理：主要是针对语音和视频
   handleVodUploadComplete = async (ret, file, type) => {
+    if (!ret) {
+      this.isVideoUploadDone = true;
+      this.isAudioUploadDone = true;
+      return;
+    }
     const { fileId, video } = ret;
     const params = {
       fileId,
@@ -213,6 +236,7 @@ class PostPage extends React.Component {
             type: file.type,
           },
           audioSrc: video.url,
+          audioRecordStatus: 'uploaded',
         });
         this.isAudioUploadDone = true;
       }
@@ -235,6 +259,8 @@ class PostPage extends React.Component {
    * @param {object} data 要设置的数据
    */
   handleAttachClick = (item, data) => {
+    if (!this.checkAudioRecordStatus()) return;
+
     const { isPc } = this.props.site;
     if (!isPc && item.type === THREAD_TYPE.voice) {
       const u = navigator.userAgent.toLocaleLowerCase();
@@ -271,7 +297,7 @@ class PostPage extends React.Component {
     const { postData } = this.props.threadPost;
 
     if (item.type === THREAD_TYPE.reward && !this.state.canEditReward) {
-      Toast.info({ content: '悬赏内容不能再次编辑' });
+      Toast.info({ content: '悬赏内容不可编辑' });
       return false;
     }
     if (item.type === THREAD_TYPE.anonymity) {
@@ -309,10 +335,16 @@ class PostPage extends React.Component {
 
   // 表情等icon
   handleDefaultIconClick = (item, child, data) => {
+    if (!this.checkAudioRecordStatus()) return;
+
+
     const { postData } = this.props.threadPost;
 
     if (item.type === THREAD_TYPE.redPacket && !this.state.canEditRedpacket) {
-      Toast.info({ content: '红包内容不能再次编辑' });
+      this.setState({ currentDefaultOperation: item.id }, () => {
+        this.setState({ currentDefaultOperation: '' });
+        this.postToast('红包内容不能编辑');
+      });
       return false;
     }
 
@@ -323,7 +355,7 @@ class PostPage extends React.Component {
     if (child && child.id) {
       const content = '帖子付费和附件付费不能同时设置';
       if (postData.price && child.id === '附件付费') {
-        Toast.error({ content });
+        this.postToast(content);
         return false;
       }
       if (postData.attachmentPrice && child.id === '帖子付费') {
@@ -475,54 +507,64 @@ class PostPage extends React.Component {
     return true;
   }
 
+  checkAudioRecordStatus() {
+    const { threadPost: { postData } } = this.props;
+    const { audioRecordStatus } = postData;
+    // 判断录音状态
+    if (audioRecordStatus === 'began') {
+      Toast.info({ content: '您有录制中的录音未处理，请先上传或撤销录音', duration: 3000, });
+      return false;
+    } else if (audioRecordStatus === 'completed') {
+      Toast.info({ content: '您有录制完成的录音未处理，请先上传或撤销录音', duration: 3000, });
+      return false;
+    }
+
+    return true;
+  }
+
   // 发布提交
   handleSubmit = async (isDraft) => {
+    if (!isDraft) this.setPostData({ draft: 0 });
     const { postData } = this.props.threadPost;
     if (!this.props.user.threadExtendPermissions.createThread) {
       Toast.info({ content: '您没有发帖权限' });
+      this.postToast('您没有发帖权限');
       return;
     }
     if (!this.isAudioUploadDone) {
-      Toast.info({ content: '请等待语音上传完成再发布' });
+      this.postToast('请等待语音上传完成再发布');
       return;
     }
     if (!this.isVideoUploadDone) {
-      Toast.info({ content: '请等待视频上传完成再发布' });
+      this.postToast('请等待视频上传完成再发布');
       return;
     }
     if (this.imageList.length > 0) {
-      Toast.info({ content: '请等待图片上传完成再发布' });
+      this.postToast('请等待图片上传完成再发布');
       return;
     }
     if (this.fileList.length > 0) {
-      Toast.info({ content: '请等待文件上传完成再发布' });
+      this.postToast('请等待文件上传完成再发布');
       return;
     }
+
+    if (!this.checkAudioRecordStatus()) return;
+
     const { images, video, files, audio } = postData;
     if (!(postData.contentText || video.id || audio.id || Object.values(images).length
       || Object.values(files).length)) {
-      Toast.info({ content: '请至少填写您要发布的内容或者上传图片、附件、视频、语音' });
+      this.postToast('请至少填写您要发布的内容或者上传图片、附件、视频、语音');
       return;
     }
     if (!this.checkAttachPrice()) {
-      Toast.info({ content: '请先上传附件、图片、视频或者语音' });
+      this.postToast('请先上传附件、图片、视频或者语音');
       return;
     }
     // if (!isDraft && this.state.count > MAX_COUNT) {
     //   Toast.info({ content: `输入的内容不能超过${MAX_COUNT}字` });
     //   return;
     // }
-    if (isDraft) {
-      // const { contentText } = postData;
-      // if (contentText === '') {
-      //   return Toast.info({ content: '内容不能为空' });
-      // } else {
-      //   this.setPostData({ draft: 1 });
-      // }
-      this.setPostData({ draft: 1 });
-    } else {
-      this.setPostData({ draft: 0 });
-    }
+
     const { threadPost } = this.props;
 
     // 2 验证码
@@ -538,17 +580,16 @@ class PostPage extends React.Component {
       }
     }
 
-    const threadId = this.props.router.query?.id || '';
-
     // 支付流程
-    const { rewardQa, redpacket } = threadPost.postData;
+    const { rewardQa } = threadPost.postData;
     const { redpacketTotalAmount } = threadPost;
     // 如果是编辑的悬赏帖子，则不用再次支付
-    const rewardAmount = (threadId && rewardQa.id) ? 0 : plus(rewardQa.value, 0);
+    const rewardAmount = threadPost.isThreadPaid ? 0 : plus(rewardQa.value, 0);
     // 如果是编辑的红包帖子，则不用再次支付
-    const redAmount = (threadId && redpacket.id) ? 0 : plus(redpacketTotalAmount, 0);
+    const redAmount = threadPost.isThreadPaid ? 0 : plus(redpacketTotalAmount, 0);
     const amount = plus(rewardAmount, redAmount);
     const data = { amount };
+    // 保存草稿操作不执行支付流程
     if (!isDraft && amount > 0) {
       let type = ORDER_TRADE_TYPE.RED_PACKET;
       let title = '支付红包';
@@ -566,10 +607,16 @@ class PostPage extends React.Component {
       }
       PayBox.createPayBox({
         data: { ...data, title, type },
-        success: async (orderInfo) => {
+        orderCreated: async (orderInfo) => {
           const { orderSn } = orderInfo;
-          this.setPostData({ orderSn });
-          this.createThread(isDraft);
+          this.setPostData({ orderInfo });
+          if (orderSn) this.props.payBox.hide();
+          this.createThread(true);
+        },
+        success: async () => {
+          this.setIndexPageData();
+          const { threadId } = this.props.threadPost.postData;
+          if (threadId) this.props.router.replace(`/thread/${threadId}`);
         }, // 支付成功回调
       });
       return;
@@ -580,30 +627,30 @@ class PostPage extends React.Component {
 
   async createThread(isDraft) {
     const { threadPost, thread } = this.props;
-    const threadId = this.props.router.query.id || '';
     let ret = {};
-    this.toastInstance = Toast.loading({ content: isDraft ? '保存草稿中...' : '创建中...' });
-    if (threadId) ret = await threadPost.updateThread(threadId);
+    this.toastInstance = Toast.loading({ content: '发布中...', hasMask: true });
+    if (threadPost.postData.threadId) ret = await threadPost.updateThread(threadPost.postData.threadId);
     else ret = await threadPost.createThread();
     const { code, data, msg } = ret;
     if (code === 0) {
+      this.setState({ data });
       thread.reset();
       this.toastInstance?.destroy();
+      this.setPostData({ threadId: data.threadId });
       // 防止被清除
-      const _isDraft = isDraft;
 
-      if (!_isDraft) {
-        // 更新帖子到首页列表
-        if (threadId) {
-          this.props.index.updateAssignThreadAllData(threadId, data);
-          // 添加帖子到首页数据
-        } else {
-          const { categoryId = '' } = data;
-          // 首页如果是全部或者是当前分类，则执行数据添加操作
-          if (this.props.index.isNeedAddThread(categoryId)) {
-            this.props.index.addThread(data);
-          }
-        }
+      // 未支付的订单
+      if (isDraft
+        && threadPost.postData.orderInfo.orderSn
+        && !threadPost.postData.orderInfo.status
+        && !threadPost.postData.draft
+      ) {
+        this.props.payBox.show();
+        return;
+      }
+
+      if (!isDraft) {
+        this.setIndexPageData();
         this.props.router.replace(`/thread/${data.threadId}`);
       } else {
         const { jumpLink } = this.state;
@@ -617,17 +664,33 @@ class PostPage extends React.Component {
     Toast.error({ content: msg });
   }
 
+  setIndexPageData = () => {
+    const { data } = this.state;
+    const { postData } = this.props.threadPost;
+    const { query } = this.props.router;
+    // 更新帖子到首页列表
+    if (query && query.id) {
+      this.props.index.updateAssignThreadAllData(postData.threadId, data);
+      // 添加帖子到首页数据
+    } else {
+      const { categoryId = '' } = data;
+      // 首页如果是全部或者是当前分类，则执行数据添加操作
+      if (this.props.index.isNeedAddThread(categoryId)) {
+        this.props.index.addThread(data);
+      }
+    }
+  };
+
   // 保存草稿
   handleDraft = (val) => {
     const { site: { isPC } } = this.props;
-    this.setState({ draftShow: false });
-
     if (isPC) {
       this.setPostData({ draft: 1 });
       this.handleSubmit(true);
       return;
     }
 
+    this.setState({ draftShow: false });
     if (val === '保存草稿') {
       this.setPostData({ draft: 1 });
       this.handleSubmit(true);
@@ -668,6 +731,7 @@ class PostPage extends React.Component {
         handleVditorFocus={this.handleVditorFocus}
         handleVditorInit={this.handleVditorInit}
         onVideoReady={this.onVideoReady}
+        handleDraft={this.handleDraft}
         {...this.state}
       />
     );
@@ -693,6 +757,7 @@ class PostPage extends React.Component {
         onVideoReady={this.onVideoReady}
         handleDraft={this.handleDraft}
         handleEditorBoxScroller={this.handleEditorBoxScroller}
+        checkAudioRecordStatus={this.checkAudioRecordStatus.bind(this)}
         {...this.state}
       />
     );

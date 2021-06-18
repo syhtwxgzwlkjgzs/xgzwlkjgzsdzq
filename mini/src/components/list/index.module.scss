@@ -12,6 +12,15 @@
 
 }
 
+.wrapperH5Center {
+  .bottomView {
+    height: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 0;
   height: 0;

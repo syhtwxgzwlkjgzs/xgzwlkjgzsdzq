@@ -94,7 +94,7 @@ class UsernameH5Login extends React.Component {
   handleLoginButtonClick = async () => {
     try {
       const resp = await this.props.userLogin.login();
-      const uid = get(resp, 'uid', '');
+      const uid = get(resp, 'data.uid', '');
       this.props.user.updateUserInfo(uid);
       Toast.success({
         content: '登录成功',

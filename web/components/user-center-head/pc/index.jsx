@@ -41,7 +41,7 @@ class index extends Component {
           Toast.success({
             content: '上传头像成功',
             hasMask: false,
-            duration: 1000,
+            duration: 2000,
           });
           this.setState({
             isUploadAvatarUrl: false,
@@ -52,7 +52,7 @@ class index extends Component {
         Toast.error({
           content: err.Msg || '上传头像失败',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
         this.setState({
           isUploadAvatarUrl: false,
@@ -75,7 +75,7 @@ class index extends Component {
           Toast.success({
             content: '上传成功',
             hasMask: false,
-            duration: 1000,
+            duration: 2000,
           });
           this.props.handleSetBgLoadingStatus(false);
         }
@@ -84,21 +84,49 @@ class index extends Component {
         Toast.error({
           content: err.Msg || '上传背景图失败',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
         this.props.handleSetBgLoadingStatus(false);
       });
   };
   // 点击关注
   handleChangeAttention = async (follow) => {
-    const { query } = this.props.router;
-    if (query.id) {
+    const id = this.props.router.query?.id;
+    if (id) {
       if (follow !== 0) {
-        await this.props.user.cancelFollow({ id: query.id, type: 1 });
-        await this.props.user.getTargetUserInfo(query.id);
+        try {
+          const cancelRes = await this.props.user.cancelFollow({ id: id, type: 1 });
+          if (!cancelRes.success) {
+            Toast.error({
+              content: cancelRes.msg || '取消关注失败',
+              duration: 2000,
+            });
+          }
+          await this.props.user.getTargetUserInfo(id);
+        } catch (error) {
+          console.error(error);
+          Toast.error({
+            content: '网络错误',
+            duration: 2000,
+          });
+        }
       } else {
-        await this.props.user.postFollow(query.id);
-        await this.props.user.getTargetUserInfo(query.id);
+        try {
+          const followRes = await this.props.user.postFollow(id);
+          if (!followRes.success) {
+            Toast.error({
+              content: followRes.msg || '关注失败',
+              duration: 2000,
+            });
+          }
+          await this.props.user.getTargetUserInfo(id);
+        } catch (error) {
+          console.error(error);
+          Toast.error({
+            content: '网络错误',
+            duration: 2000,
+          });
+        }
       }
     }
   };
@@ -134,7 +162,7 @@ class index extends Component {
         Toast.success({
           content: '解除屏蔽成功',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
       } else {
         await this.props.user.denyUser(query.id);
@@ -142,7 +170,7 @@ class index extends Component {
         Toast.success({
           content: '屏蔽成功',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
       }
     } catch (err) {
@@ -150,7 +178,7 @@ class index extends Component {
       if (err.Code) {
         Toast.error({
           content: err.Msg,
-          duration: 1000,
+          duration: 2000,
           hasMask: false,
         });
       }

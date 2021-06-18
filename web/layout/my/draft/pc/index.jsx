@@ -75,6 +75,7 @@ class PC extends React.Component {
         noMore={currentPage >= totalPage}
         showRefresh={false}
         right={this.renderRight()}
+        className="mydraft"
       >
         {this.renderContent()}
       </BaseLayout>

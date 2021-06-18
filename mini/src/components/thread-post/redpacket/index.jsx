@@ -67,8 +67,8 @@ export default class Redpacket extends Component {
       return false;
     }
 
-    if (parseInt(number) < 1 || parseInt(number) > 200) {
-      this.redToast('可输入红包个数为1 ~ 200个');
+    if (parseInt(number) < 1 || parseInt(number) > 100) {
+      this.redToast('可输入红包个数为1 ~ 100个');
       return false;
     }
 
@@ -138,7 +138,9 @@ export default class Redpacket extends Component {
           <View className={styles.right}>
             <Input
               value={price}
+              miniType="digit"
               mode="number"
+              miniType="digit"
               placeholder="金额"
               maxLength={6}
               onChange={e => this.onPriceChang(e.target.value)}
@@ -152,7 +154,9 @@ export default class Redpacket extends Component {
             <Input
               value={number}
               mode="number"
+              miniType="number"
               placeholder="个数"
+              miniType="number"
               maxLength={3}
               onChange={e => this.onNumberChang(e.target.value)}
             />个
@@ -177,6 +181,7 @@ export default class Redpacket extends Component {
               <Input
                 value={likenum}
                 mode="number"
+                miniType="number"
                 placeholder="个数"
                 maxLength={3}
                 onChange={e => this.onLikenumChang(e.target.value)}

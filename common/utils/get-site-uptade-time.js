@@ -1,6 +1,6 @@
 
 /**
- * 获取站点更新时间
+ * 获取与当前的时间差
  */
 
 export const getSiteUpdateTime = function (startTime) {
