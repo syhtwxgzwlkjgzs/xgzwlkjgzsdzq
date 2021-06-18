@@ -233,6 +233,13 @@
         }
       }
     }
+    .mymessage-page {
+      @include heightMedia(590px) {
+        .right {
+          position: static;
+        }
+      }
+    }
   }
 }
 
