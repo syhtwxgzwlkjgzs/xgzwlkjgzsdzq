@@ -225,6 +225,14 @@
         }
       }
     }
+
+    .myblock-page {
+      @include heightMedia(470px) {
+        .right {
+          position: static;
+        }
+      }
+    }
   }
 }
 
