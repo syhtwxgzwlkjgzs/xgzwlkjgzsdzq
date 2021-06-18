@@ -92,19 +92,22 @@ class Index extends React.Component {
     }
   }
 
-  handleForgetPayPwd = () => {
+  handleForgetPayPwd = throttle(() => {
     if (!this.props.user.mobile) {
       Toast.error({
         content: '需要首先绑定手机号才能进行此操作',
         duration: 2000,
       });
+      setTimeout(() => {
+        Router.push({ url: '/user/bind-phone?from=paybox' });
+      }, 1000);
       return;
     }
     Router.push({ url: '/my/edit/find-paypwd?type=paybox' });
     this.initState();
     this.props.payBox.visible = false;
     this.props.payBox.step = null;
-  };
+  }, 1000);
 
   async submitPwa() {
     const { list = [] } = this.state;

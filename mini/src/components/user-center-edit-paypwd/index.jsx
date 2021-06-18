@@ -57,16 +57,19 @@ class index extends Component {
   }, 300);
 
   // 点击忘记密码
-  handleGoToFindPayPwd = () => {
+  handleGoToFindPayPwd = throttle(() => {
     if (!this.props.user.mobile) {
       Toast.error({
         content: '需要首先绑定手机号才能进行此操作',
         duration: 2000,
       });
+      setTimeout(() => {
+        Taro.navigateTo({ url: '/subPages/user/bind-phone/index?from=userCenter' });
+      }, 1000);
       return;
     }
     Taro.navigateTo({ url: '/subPages/my/edit/find/paypwd/index' });
-  };
+  }, 1000);
 
   // 初次设置密码 password
   handleSetPwd = (e) => {
