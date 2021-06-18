@@ -79,13 +79,14 @@ class Withdrawal extends React.Component {
       })
       .then((res) => {
         Toast.success({
-          content: res.Msg || '申请提现成功',
+          content: '申请提现成功',
           hasMask: false,
           duration: 2000,
         });
         this.initState();
       })
       .catch((err) => {
+        console.error(err);
         if (err.Code) {
           Toast.error({
             content: err.Msg || '申请提现失败，请重试',
