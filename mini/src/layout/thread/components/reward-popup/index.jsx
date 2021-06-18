@@ -26,7 +26,7 @@ const InputPop = (props) => {
   };
 
   const onSubmitClick = async () => {
-    if (value === '' || Number(value) <= 0) return;
+    if (value === '' || Number(value) <= 0 || Number(value) > 1000000) return;
     if (typeof onOkClick === 'function') {
       try {
         const success = await onOkClick(value);
