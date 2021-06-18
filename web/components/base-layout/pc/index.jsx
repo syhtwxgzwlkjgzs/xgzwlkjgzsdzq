@@ -18,6 +18,7 @@ import styles from './index.module.scss';
 * @prop {boolean} requestError 是否接口请求报错
 * @prop {string} errorText 报错文案
 * @prop {string} rightClassName 右侧class
+* @prop {string} className body class
 * @example.home-right
 *     <BaseLayout
         left={<div>左边</div>}
@@ -35,13 +36,13 @@ const BaseLayout = forwardRef((props, ref) => {
 
     // List组件相关，参考List组件props注释
     const { noMore = false, onRefresh, onScroll = noop, immediateCheck = false } = props
-  
+
     // Header组件相关
     const { onSearch } = props
-  
+
     // 自定义加载视图 & 报错视图
     const { requestError = false, errorText = '', isShowLayoutRefresh = true } = props
-  
+
     // 页面滑动位置缓存相关
     const { pageName = '' } = props
 
@@ -90,7 +91,7 @@ const BaseLayout = forwardRef((props, ref) => {
     <div className={styles.container}>
         {(header && header({ ...props })) || <Header onSearch={onSearch} />}
 
-        <div className={`${styles.body} ${cls}`}>
+        <div className={`${styles.body} ${cls} ${props.className}`}>
           <List {...props} immediateCheck={immediateCheck} className={styles.list} wrapperClass={styles.wrapper} ref={listRef} onError={onError} onScroll={onScroll}>
             {
               (pageName === 'home' || left) && (
@@ -103,13 +104,13 @@ const BaseLayout = forwardRef((props, ref) => {
             <div className={styles.center}>
               {typeof(children) === 'function' ? children({ ...props }) : children}
               {isShowLayoutRefresh && onRefresh && (
-                <BottomView isError={isError} errorText={isErrorText} noMore={noMore} /> 
+                <BottomView isError={isError} errorText={isErrorText} noMore={noMore} />
               )}
             </div>
 
             {
               (pageName === 'home' || right) && (
-                <div className={`${styles.right} ${rightClassName} ${(pageName === "home") ? styles["home-right"] : ""}`}>
+                <div className={`right ${styles.right} ${rightClassName} ${(pageName === "home") ? styles["home-right"] : ""}`}>
                   {typeof(right) === 'function' ? right({ ...props }) : right}
                 </div>
               )

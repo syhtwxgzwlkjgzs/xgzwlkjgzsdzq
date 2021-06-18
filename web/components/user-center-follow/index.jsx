@@ -35,6 +35,7 @@ class UserCenterFollows extends React.Component {
     followHandler: async () => {},
     unFollowHandler: async () => {},
     onContainerClick: async ({ id }) => {},
+    customActionArea: null,
     hasMorePage: false,
     className: '',
     style: {},
@@ -325,6 +326,7 @@ class UserCenterFollows extends React.Component {
             <div key={user.id}>
               <UserCenterFriends
                 id={user.id}
+                customActionArea={this.props.customActionArea}
                 type={this.judgeFollowsStatus(user)}
                 imgUrl={user.avatar}
                 withHeaderUserInfo={this.props.isPc}

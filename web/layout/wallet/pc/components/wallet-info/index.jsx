@@ -33,7 +33,7 @@ class WalletInfo extends React.Component {
                       size={'large'}
                       className={styles.avatar}>
                     </Avatar>
-                    <div className={styles.name}>{this.props.user?.nickname}</div>
+                    <div className={styles.name}><span title={this.props.user?.nickname}>{this.props.user?.nickname}</span></div>
                 </div> : ''
             }
             <div className={`${this.props.webPageType === 'h5' ? styles.totalAmountH5 : styles.totalAmountPC}`}>

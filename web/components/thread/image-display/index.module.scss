@@ -1,5 +1,32 @@
 @import '@common/styles/index.scss';
 
+.placeholderH5{
+  width: 100%;
+  height: rem(258);
+  animation: loading 1.5s linear infinite;
+  background-image: linear-gradient(50deg, #e8e7e7, #e8e7e7 52%, #f1f1f1 55%, #e8e7e7 58%, #e8e7e7);
+  background-repeat: no-repeat;
+  background-size: 400% 100%;
+}
+.placeholderPC{
+  width: 100%;
+  height: rem(532);
+  animation: loading 1.5s linear infinite;
+  background-image: linear-gradient(50deg, #e8e7e7, #e8e7e7 52%, #f1f1f1 55%, #e8e7e7 58%, #e8e7e7);
+  background-repeat: no-repeat;
+  background-size: 400% 100%;
+}
+@keyframes loading {
+  0% {
+    background-position: 100% 50%;
+
+  }
+  100% {
+    background-position: 0% 50%;
+
+  }
+}
+
 .container {
   width: 100%;
 
@@ -51,18 +78,39 @@
   }
 
   .containerNum3 {
-    .bigImages {
-      height: rem(126);
-      margin-bottom: 4px;
+    
+    &.panorama, 
+    &.transverse{
+      .bigImages {
+        height: rem(126);
+        margin-bottom: 4px;
+      }
+      .smallImages {
+        height: rem(126);
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        .col {
+          height: 100%;
+          padding-top: 0 !important;
+          padding-bottom: 0 !important;
+        }
+      }
     }
-    .smallImages {
-      height: rem(126);
-      margin-top: 0 !important;
-      margin-bottom: 0 !important;
+    
+    &.long,
+    &.longitudinal{
+      height: rem(258);
       .col {
-        height: 100%;
+        height: rem(258);
         padding-top: 0 !important;
         padding-bottom: 0 !important;
+      }
+      .smallCol {
+        height: 50%;
+      }
+      .smallRow{
+        width: 100%;
+        height: 100%;
       }
     }
   }
@@ -70,6 +118,18 @@
   .containerNum2 {
     height: rem(260);
     margin-bottom: 0 !important;
+    &.panorama{
+      height: rem(193);
+    }
+    &.transverse{
+      height: rem(260);
+    }
+    &.long{
+      height: rem(260);
+    }
+    &.longitudinal{
+      height: rem(260);
+    }
     .col {
       height: 100%;
       padding-top: 0 !important;
@@ -79,6 +139,23 @@
 
   .containerNum1 {
     height: rem(260);
+    &.panorama{
+      width: 100%;
+      height: rem(193);
+    }
+    &.transverse{
+      width: 100%;
+      height: rem(260);
+    }
+    &.long{
+      width: rem(170);
+      height: rem(260);
+    }
+    &.longitudinal{
+      width: rem(170);
+      height: rem(260);
+    }
+    
   }
 }
 
@@ -127,27 +204,63 @@
     .smallCol {
       height: 33.33%;
     }
+    .smallRow {
+      width: 100%;
+    }
   }
 
   .containerNum3 {
-    .bigImages {
-      height: rem(266);
-      margin-bottom: rem(6);
+    &.panorama, 
+    &.transverse{
+      .bigImages {
+        height: rem(266);
+        margin-bottom: rem(6);
+      }
+      .smallImages {
+        height: rem(262);
+        margin-bottom: 0 !important;
+        .col {
+          height: 100%;
+          padding-top: 0 !important;
+          padding-bottom: 0 !important;
+        }
+      }
     }
-    .smallImages {
-      height: rem(262);
-      margin-bottom: 0 !important;
+    
+    &.long,
+    &.longitudinal{
+      height: rem(532);
       .col {
-        height: 100%;
+        height: rem(532);
         padding-top: 0 !important;
         padding-bottom: 0 !important;
       }
+      .smallCol {
+        height: 50%;
+      }
+      .smallRow{
+        width: 100%;
+        height: 100%;
+      }
     }
+    
   }
 
   .containerNum2 {
     height: rem(532);
     margin-bottom: 0 !important;
+    &.panorama{
+      height: rem(395);
+    }
+    &.transverse{
+      height: rem(532);
+    }
+    &.long{
+      height: rem(532);
+    }
+    &.longitudinal{
+      height: rem(532);
+    }
     .col {
       height: 100%;
       padding-top: 0 !important;
@@ -157,6 +270,22 @@
 
   .containerNum1 {
     height: rem(532);
+    &.panorama{
+      width: 100%;
+      height: rem(395);
+    }
+    &.transverse{
+      width: 100%;
+      height: rem(532);
+    }
+    &.long{
+      width: rem(349);
+      height: rem(532);
+    }
+    &.longitudinal{
+      width: rem(349);
+      height: rem(532);
+    }
   }
 }
  

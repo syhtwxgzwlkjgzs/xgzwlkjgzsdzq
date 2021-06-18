@@ -1,8 +1,8 @@
 @import '@common/styles/index.scss';
 
 .container {
-    padding: rem($padding-4n) rem($padding-4n) 0;
-    background: $white;
+  padding: rem($padding-4n) rem($padding-4n) 0;
+  background: $white;
 }
 
 .content {
@@ -44,21 +44,21 @@
     }
 }
 .footer {
-    display: flex;
-    justify-content: space-between;
-    border-bottom: $border-solid-1;
-    font-family: 'PingFangSC-Regular';
-    font-weight: normal;
-    font-size: rem($font-size-label);
-    .time {
-        text-align: left;
-        color: $text-color-secondary;
-        padding-bottom: rem($padding-4n);
-    }
-    .payStatusTrue {
-        color: $text-color-regular;
-    }
-    .payStatusFalse {
-        color: $primary-color;
-    }
+  display: flex;
+  justify-content: space-between;
+  border-bottom: $border-solid-1;
+  font-family: 'PingFangSC-Regular';
+  font-weight: normal;
+  font-size: rem($font-size-label);
+  .time {
+    text-align: left;
+    color: $text-color-secondary;
+    padding-bottom: rem($padding-4n);
+  }
+  .payStatusTrue {
+    color: $text-color-regular;
+  }
+  .payStatusFalse {
+    color: $primary-color;
+  }
 }

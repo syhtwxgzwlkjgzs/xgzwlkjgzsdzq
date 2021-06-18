@@ -759,6 +759,7 @@ class ThreadPCPage extends React.Component {
           isShowLayoutRefresh={isCommentReady}
           ready={() => this.onBaseLayoutReady()}
           rightClassName={layout.positionSticky}
+          className="detail"
         >
           {this.renderContent()}
         </BaseLayout>

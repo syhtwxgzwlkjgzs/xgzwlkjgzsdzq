@@ -2,11 +2,11 @@ import locals from './local-bridge';
 import constants from '../constants/index';
 
 export const setCookie = (name, value, exdays) => {
-  if (exdays) {
-    const Days = 30;
+  if (parseInt(exdays)) {
     const exp = new Date();
-    exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+    exp.setTime(exp.getTime() + exdays * 24 * 60 * 60 * 1000);
     document.cookie = `${name}=${value};expires=${exp.toGMTString()};path=/;`;
+    return;
   }
   document.cookie = `${name}=${value};path=/;`;
 };
