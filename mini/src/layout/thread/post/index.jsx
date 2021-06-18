@@ -24,8 +24,8 @@ import { get } from '@common/utils/get';
 @inject('threadPost')
 @observer
 class Index extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       threadId: '', // 主题id
       postType: 'isFirst', // 发布状态 isFirst-首次，isEdit-再编辑，isDraft-草稿
@@ -39,7 +39,6 @@ class Index extends Component {
       showEmoji: false,
       showPaidOption: false, // 显示付费选项弹框
       showDraftOption: false, // 显示草稿选项弹框
-      bottomHeight: 0,
       data: {},
     }
     this.timer = null;
@@ -52,11 +51,6 @@ class Index extends Component {
 
   async componentDidMount() {
     this.getNavHeight();
-    // 监听键盘高度变化
-    Taro.onKeyboardHeightChange(res => {
-      this.setState({ bottomHeight: res?.height || 0 });
-    });
-
     this.redirectToHome();
     await this.fetchCategories(); // 请求分类
     const { params } = getCurrentInstance().router;
@@ -83,7 +77,6 @@ class Index extends Component {
     clearInterval(this.timer);
     Taro.eventCenter.off('captchaResult', this.handleCaptchaResult);
     Taro.eventCenter.off('closeChaReault', this.handleCloseChaReault);
-    // Taro.offKeyboardHeightChange(() => {});
     this.props.thread.reset();
   }
 
@@ -608,15 +601,6 @@ class Index extends Component {
     }
   }
 
-  // 手动关闭键盘
-  hideKeyboard = () => {
-    Taro.hideKeyboard({
-      complete: res => {
-        this.setState({ bottomHeight: 0 });
-      }
-    })
-  }
-
   // 处理textarea聚焦
   // onContentFocus = () => {
   //   this.setState({
@@ -627,7 +611,7 @@ class Index extends Component {
 
   // 点击空白区域自动聚焦文本框
   handleContentFocus = () => {
-    if (this.contentRef && this.state.bottomHeight === 0) {
+    if (this.contentRef && this.props.bottomHeight === 0) {
       this.contentRef.current.focus();
     }
 
@@ -691,6 +675,7 @@ class Index extends Component {
   // }
 
   render() {
+    const { bottomHeight } = this.props;
     const { permissions } = this.props.user;
     const { categories } = this.props.index;
     const { postData, setPostData, setCursorPosition, navInfo, cursorPosition } = this.props.threadPost;
@@ -703,7 +688,6 @@ class Index extends Component {
       showPaidOption,
       showEmoji,
       showDraftOption,
-      bottomHeight,
     } = this.state;
     const navStyle = {
       height: `${navInfo.navHeight}px`,
@@ -734,7 +718,6 @@ class Index extends Component {
                 value={postData.title}
                 show={isShowTitle}
                 onChange={this.onTitleChange}
-                onBlur={this.hideKeyboard}
                 onFocus={() => {
                   this.setState({
                     showEmoji: false,
@@ -751,7 +734,6 @@ class Index extends Component {
                 onBlur={(e) => {
                   console.log('set', e.detail.cursor);
                   setCursorPosition(e.detail.cursor);
-                  this.hideKeyboard();
                 }}
               />
 

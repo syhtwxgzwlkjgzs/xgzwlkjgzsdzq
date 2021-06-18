@@ -34,8 +34,7 @@ class Index extends Component {
 
   // 获取头像背景色
   getBackgroundColor = (name) => {
-    const character = name?.charAt(0).toUpperCase() || 'a';
-    return stringToColor(character);
+    return name ? stringToColor(name.toUpperCase()[0]) : "#8590a6";
   }
 
   // 未读消息数
@@ -95,8 +94,8 @@ class Index extends Component {
   // 跳转用户中心
   toUserCenter = (e, canJump, item) => {
     e.stopPropagation();
-    // 后续用户中心做好后，再根据用户id设置对应路由
-    canJump && Taro.navigateTo({ url: `/subPages/user/index?id=${item.userId}` })
+    if (!canJump || !item.nickname || !item.userId) return;
+    Taro.navigateTo({ url: `/subPages/user/index?id=${item.userId}` })
   }
 
   // 跳转主题详情or私信
@@ -143,7 +142,7 @@ class Index extends Component {
                   text={item.nickname}
                   circle={true}
                   style={{
-                    backgroundColor: `#${this.getBackgroundColor(item.nickname)}`
+                    backgroundColor: this.getBackgroundColor(item.nickname)
                   }}
                 />
               }
@@ -166,7 +165,7 @@ class Index extends Component {
                 })}
                 onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
               >
-                {item.nickname || this.filterTag(item.title)}
+                {item.nickname || this.filterTag(item.title) || "用户已删除"}
               </View>
               {['chat', 'thread'].includes(type) &&
                 <View className={styles.time}>{diffDate(item.createdAt)}</View>
