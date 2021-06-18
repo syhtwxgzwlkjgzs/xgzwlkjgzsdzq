@@ -25,10 +25,7 @@
     .top {
       margin-bottom: rem($margin-2n);
       max-width: rem(480);
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-      display: block;
+      @include lamp-clamp(1);
       .name {
         font-weight: 700;
         font-size: rem($font-size-middle);
