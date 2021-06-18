@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Input, Icon } from '@discuzq/design';
 import { debounce } from '@common/utils/throttle-debounce.js';
 
@@ -45,8 +45,14 @@ const SearchInput = ({
   }
 
   const onEnter = (e) => {
-    if(timeoutID !== null) return;
-    onSearch(e.target.value)
+    if(timeoutID !== null) {
+      clearTimeout(timeoutID);
+      setTimeoutID(null);
+      return;
+    }
+    setTimeoutID(setTimeout(() => {
+      onSearch(e.target.value);
+    }, 500));
   }
 
   const clearInput = () => {
