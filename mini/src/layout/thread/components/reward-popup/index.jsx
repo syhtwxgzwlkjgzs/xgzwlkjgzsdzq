@@ -13,7 +13,6 @@ const InputPop = (props) => {
   const [refresh, setRefresh] = useState(true); // 手动刷新
 
   const onInputChange = (val) => {
-    setValue('');
     const arr = val.match(/([1-9]\d{0,6}|0)(\.\d{0,2})?/);
     setValue( arr ? arr[0] : '');
     setRefresh(!refresh);
