@@ -1,7 +1,8 @@
 import React from 'react';
 import UserCenterFriends from '../user-center-friends';
-import { Spin, Toast } from '@discuzq/design';
+import { Spin, Toast, Avatar } from '@discuzq/design';
 import { followerAdapter } from './adapter';
+import friendsStyle from '@components/user-center/friend-pc/index.module.scss';
 import styles from './index.module.scss';
 import { createFollow, deleteFollow, getUserFollow } from '@server';
 import { get } from '@common/utils/get';
@@ -323,7 +324,7 @@ class UserCenterFollows extends React.Component {
         {followerAdapter(this.props.dataSource || this.state.follows).map((user, index) => {
           if (index + 1 > this.props.limit) return null;
           return (
-            <div key={user.id}>
+            <div key={user.id} className="user-center-follow-item">
               <UserCenterFriends
                 id={user.id}
                 customActionArea={this.props.customActionArea}
@@ -341,6 +342,26 @@ class UserCenterFollows extends React.Component {
             </div>
           );
         })}
+        <div className={`${friendsStyle.friendWrap} ${styles.friendWrap} ${styles['display-none']} user-center-follow-mini`}>
+          {followerAdapter(this.props.dataSource || this.state.follows).map((user, index) => {
+            if (index + 1 > this.props.limit) return null;
+            return (
+              <div key={user.id + index} className={friendsStyle.friendItem}>
+                <div className={friendsStyle.friendAvatar}>
+                  <Avatar
+                    image={user.avatar}
+                    userId={user.id}
+                    circle
+                    name={user.userName}
+                  />
+                </div>
+                <div className={friendsStyle.friendTextInfo}>
+                  {user.userName}
+                </div>
+              </div>
+            );
+          })}
+        </div>
         {followerAdapter(this.props.dataSource || this.state.follows).length === 0 && !this.state.loading && <NoData />}
         {this.state.loading && (
           <div className={styles.loadMoreContainer}>

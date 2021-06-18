@@ -64,6 +64,7 @@ class UserCenterFollowsPc extends React.Component {
           mold={'wrapper'}
           leftNum={followCount}
           onShowMore={this.moreFollow}
+          className={this.props.className}
         >
           <div className={styles.followsWrapper}>
             {Number(followCount) !== 0 && (

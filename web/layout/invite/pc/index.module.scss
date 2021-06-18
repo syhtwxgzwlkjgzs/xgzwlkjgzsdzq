@@ -250,3 +250,30 @@
 .content_header {
   min-height: 10px;
 }
+
+// 高度自适应
+:global {
+  .invite-pc {
+    @include heightMedia(1050px, 995px) {
+      .user-center-friends-item:nth-last-child(-n + 2) {
+        display: none;
+      }
+    }
+    @include heightMedia(995px, 940px) {
+      .user-center-friends-item:nth-last-child(-n + 3) {
+        display: none;
+      }
+    }
+    .user-center-friends-mini {
+      display: none;
+    }
+    @include heightMedia(940px) {
+      .user-center-friends-mini {
+        display: flex !important;
+      }
+      .user-center-friends-item {
+        display: none;
+      }
+    }
+  }
+}

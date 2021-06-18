@@ -122,13 +122,13 @@ class CommentList extends React.Component {
       canApprove: data.canApprove || false,
       canDelete: data.canDelete || false,
       canEdit: data.canEdit || false,
-      canHide: data.canLike || false,
+      canHide: data.canHide || false,
       canLike: data.canLike || false,
     };
   }
 
   render() {
-    const { canDelete, canEdit, canLike } = this.generatePermissions(this.props.data);
+    const { canDelete, canEdit, canLike, canHide } = this.generatePermissions(this.props.data);
 
     return (
       <div className={styles.commentList}>
@@ -223,7 +223,7 @@ class CommentList extends React.Component {
                             编辑
                           </div>
                         )} */}
-                      {canDelete && (
+                      {canHide && (
                         <div className={styles.revise} onClick={() => this.deleteClick()}>
                           <Icon className={styles.icon} name="DeleteOutlined"></Icon>
                           <span>删除</span>

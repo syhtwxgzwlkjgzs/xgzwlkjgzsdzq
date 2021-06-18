@@ -46,7 +46,7 @@ class BlockPcPage extends React.Component {
 
   // 右侧 - 潮流话题 粉丝 版权信息
   renderRight = () => (
-    <div className={styles.right}>
+    <div className={`${styles.right} myblock`}>
       <UserCenterFansPc />
       <UserCenterFollowsPc />
       <Copyright />
@@ -67,6 +67,7 @@ class BlockPcPage extends React.Component {
         noMore={userShieldTotalPage < userShieldPage}
         rightClass={styles.rightSide}
         isShowLayoutRefresh={!!userShield?.length && !isLoading}
+        className="myblock-page"
       >
         <SidebarPanel
           title="我的屏蔽"
