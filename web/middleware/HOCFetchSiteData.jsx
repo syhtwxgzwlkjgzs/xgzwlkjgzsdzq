@@ -7,6 +7,7 @@ import { readForum, readUser, readPermissions } from '@server';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import clearLoginStatus from '@common/utils/clear-login-status';
+import { clearAccessToken } from '@common/utils/set-access-token';
 import { REVIEWING } from '@common/store/login/util';
 import { Spin, Icon } from '@discuzq/design';
 import typeofFn from '@common/utils/typeof';
@@ -150,10 +151,7 @@ export default function HOCFetchSiteData(Component) {
       }
       // 判断是否有token
       if (siteConfig && siteConfig.user) {
-        if (
-          (!user || !user.userInfo)
-                  && (!serverUser || !serverUser.userInfo)
-        ) {
+        if ((!user || !user.userInfo) && (!serverUser || !serverUser.userInfo)) {
           const userInfo = await readUser({ params: { pid: siteConfig.user.userId } });
           const userPermissions = await readPermissions({});
 
@@ -168,6 +166,8 @@ export default function HOCFetchSiteData(Component) {
       } else {
         loginStatus = false;
       }
+      // 未登陆状态下，清空accessToken
+      !loginStatus && clearAccessToken();
       user.updateLoginStatus(loginStatus);
       this.setState({ isPass: this.isPass() });
     }

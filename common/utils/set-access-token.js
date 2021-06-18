@@ -18,13 +18,18 @@ export const getCookie = (cname) => {
   return null;
 };
 
-const setAccessToken = ({
+export const setAccessToken = ({
   accessToken,
 }) => {
   if (!accessToken) return;
   const expireSeconds = 30 * 24 * 60 * 60 * 1000;
   setCookie(constants.ACCESS_TOKEN_NAME, accessToken, 30);
   locals.set(constants.ACCESS_TOKEN_NAME, accessToken, expireSeconds);
+};
+
+export const clearAccessToken = () => {
+  setCookie(constants.ACCESS_TOKEN_NAME, '', -1);
+  locals.set(constants.ACCESS_TOKEN_NAME, '', -1);
 };
 
 export default setAccessToken;
