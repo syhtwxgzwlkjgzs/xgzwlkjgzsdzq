@@ -103,7 +103,6 @@ const Index = ({ imgData = [], flat = false, platform = 'h5', isPay = false, onP
       }
       return { bigImages: [imgData[0], imgData[1]], smallImages: [imgData[2], imgData[3], imgData[4]] };
     };
-    console.log(flat)
 
     const ImageView = useMemo(() => {
       if ( !imgData || imgData.length === 0 ) {
