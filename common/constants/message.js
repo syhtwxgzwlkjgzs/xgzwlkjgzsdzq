@@ -2,6 +2,10 @@
  * 消息模块常量
  */
 
+// 全局未读消息轮询间隔时间(毫秒)
+export const unreadUpdateInterval = 60000;
+
+
 // 侧边栏常量
 export const sidebarData = [
   {
