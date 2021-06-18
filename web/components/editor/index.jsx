@@ -204,7 +204,7 @@ export default function DVditor(props) {
         // 编辑器异步渲染完成后的回调方法
         after: () => {
           onInit(editor);
-          editor.setValue('');
+          setEditorInitValue();
           editor.vditor[editor.vditor.currentMode].element.blur();
           // 去掉异步渲染之后的光标focus
           if (getSelection().rangeCount > 0) getSelection().removeAllRanges();

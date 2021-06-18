@@ -172,7 +172,7 @@
 
       // 如果小于默认高度不吸顶
       @include heightMedia() {
-        .right {
+        .baselayout-right {
           position: static;
         }
       }
@@ -182,7 +182,7 @@
 
       // 如果小于默认高度不吸顶
       @include heightMedia($home-height-pc) {
-        .right {
+        .baselayout-right {
           position: static;
         }
       }
@@ -220,7 +220,7 @@
         }
       }
       @include heightMedia(395px) {
-        .right {
+        .baselayout-right {
           position: static;
         }
       }
@@ -228,21 +228,21 @@
 
     .myblock-page {
       @include heightMedia(470px) {
-        .right {
+        .baselayout-right {
           position: static;
         }
       }
     }
     .mymessage-page {
       @include heightMedia(590px) {
-        .right {
+        .baselayout-right {
           position: static;
         }
       }
     }
     .mywallet-page {
       @include heightMedia(620px) {
-        .right {
+        .baselayout-right {
           position: static;
         }
       }
@@ -270,7 +270,7 @@
     .search-result-topic,
     .search-page {
       @include heightMedia(440px) {
-        .right {
+        .baselayout-right {
           position: static;
         }
       }
@@ -326,7 +326,7 @@
       }
 
       @include heightMedia(560px) {
-        .right {
+        .baselayout-right {
           position: static;
         }
       }
