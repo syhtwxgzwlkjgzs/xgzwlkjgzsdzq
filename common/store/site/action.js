@@ -79,6 +79,28 @@ class SiteAction extends SiteStore {
     }
     return false;
   }
+
+  // 用户访问起始页面
+  @action
+  setInitialPage(pageUrl) {
+    this.initialPage = pageUrl;
+  }
+  @action
+  clearInitialPage() {
+    this.initialPage = null;
+  }
+  @action
+  useInitialPage() {
+    let url = this.initialPage;
+
+    if (url && process.env.DISCUZ_ENV !== 'web') {
+      url = `/${url}`
+    }
+    
+    this.clearInitialPage();
+
+    return url;
+  }
 }
 
 export default SiteAction;

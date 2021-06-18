@@ -53,6 +53,20 @@ class App extends Component {
     if (TITLE && TITLE !== '') {
       setTitle(TITLE);
     }
+
+    // 初始进入页，保留初始页信息
+    this.initInitialPath(options);
+  }
+
+  // 记录用户访问的地址，用于登陆、付费等处理后，正确跳回目的地址
+  initInitialPath(options) {
+    console.log('Enter Page: ', options)
+
+    const {path, query} = options;
+    const url = `${path}?${Object.entries(query).map(([key, value]) => `${key}=${value}`).join('&')}`;
+
+    const { site } = this.store;
+    site.setInitialPage(url);
   }
 
   /**

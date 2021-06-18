@@ -8,7 +8,6 @@ import { getCurrentInstance } from '@tarojs/taro';
 import PayBoxProvider from '@components/payBox/payBoxProvider';
 import { MINI_SITE_JOIN_WHITE_LIST, REVIEWING_USER_WHITE_LIST } from '@common/constants/site';
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
-import Toast from '@discuzq/design/dist/components/toast/index';
 import Taro from '@tarojs/taro';
 import { REVIEWING } from '@common/store/login/util';
 
@@ -34,7 +33,8 @@ export default class Page extends React.Component {
 
   constructor(props) {
     super(props);
-    const { noWithLogin, withLogin, user } = this.props;
+    const { noWithLogin, withLogin, user, site } = this.props;
+
     // 是否必须登录
     if (withLogin && !user.isLogin()) {
       Router.redirect({ url: WX_AUTH_URL });
@@ -105,6 +105,16 @@ export default class Page extends React.Component {
             return false;
           }
         }
+      }
+
+      // 所有判断结束后，看是否有预留目标地址
+      const initialPage = site.useInitialPage();
+      if (initialPage) {
+        console.log(999, initialPage)
+        Router.replace({
+          url: initialPage,
+        });
+        return false;
       }
     }
 
