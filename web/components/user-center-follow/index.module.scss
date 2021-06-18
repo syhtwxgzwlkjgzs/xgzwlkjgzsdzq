@@ -15,3 +15,40 @@
         }
     }
 }
+
+.searchInputWrapper {
+    :global {
+        .dzq-input {
+            width: 100%;
+
+            .dzq-icon {
+                height: rem(44);
+                line-height: rem(44);
+                width: auto;
+                margin-right: rem(16);
+            }
+
+            input {
+                height: rem(44);
+                line-height: rem(44);
+                padding-left: rem(16);
+            }
+        }
+    }
+}
+
+.messageButton {
+    height: rem(25);
+    width: rem(88);
+    font-size: rem(12);
+}
+
+.messageButtonContent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    span {
+        margin-left: rem(4);
+    }
+}
