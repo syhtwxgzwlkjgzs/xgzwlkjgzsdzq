@@ -1,7 +1,7 @@
 import React from 'React'
 import Taro from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
-import  TaroCanvasDrawer  from '../taro-plugin-canvas'; // npm 引入方式
+import TaroCanvasDrawer from '../taro-plugin-canvas'; // npm 引入方式
 import styles from './index.module.scss'
 import { getConfig } from '../config';
 
@@ -16,19 +16,19 @@ export default class Simple extends React.Component {
       // TaroCanvasDrawer 组件状态
       canvasStatus: null,
     }
-}
-static getDerivedStateFromProps(nextProps) {
-  if (nextProps.obj.miniCode) {
-    const { obj, heightdefill } = nextProps
-    const { texts, blocks, images, width, height, backgroundColor } = getConfig({...obj, heightdefill, codeUrl: nextProps.obj.miniCode})
-    return {
-      canvasStatus: true,
-      config: {
-        width,
-        height,
-        backgroundColor,
-        texts: [
-          ...texts,
+  }
+  static getDerivedStateFromProps(nextProps) {
+    if (nextProps.obj.miniCode) {
+      const { obj, heightdefill } = nextProps
+      const { texts, blocks, images, width, height, backgroundColor } = getConfig({ ...obj, heightdefill, codeUrl: nextProps.obj.miniCode })
+      return {
+        canvasStatus: true,
+        config: {
+          width,
+          height,
+          backgroundColor,
+          texts: [
+            ...texts,
             {
               text: `${obj.content}`,
               x: 40,
@@ -43,15 +43,14 @@ static getDerivedStateFromProps(nextProps) {
               color: '#333333',
               baseLine: 'top'
             },
-
-        ],
-        blocks,
-        images,
+          ],
+          blocks,
+          images,
+        }
       }
     }
+    return null;
   }
-  return null;
-}
 
 
   componentDidMount() {
@@ -59,7 +58,7 @@ static getDerivedStateFromProps(nextProps) {
       title: '绘制中...'
     })
   }
-  
+
 
   // 绘制成功回调函数 （必须实现）=> 接收绘制结果、重置 TaroCanvasDrawer 状态
   onCreateSuccess = (result) => {
@@ -99,7 +98,7 @@ static getDerivedStateFromProps(nextProps) {
       urls: [this.state.shareImage]
     })
   }
-  render(){
+  render() {
     return (
       <View className={styles.painter}>
         <View className={styles.canvanBox}>
@@ -115,13 +114,13 @@ static getDerivedStateFromProps(nextProps) {
           {
             this.state.canvasStatus &&
             (
-            <View className={styles.boxImg}>
-              <TaroCanvasDrawer
-              config={this.state.config} // 绘制配置
-              onCreateSuccess={this.onCreateSuccess} // 绘制成功回调
-              onCreateFail={this.onCreateFail} // 绘制失败回调
-            ></TaroCanvasDrawer>
-            </View>
+              <View className={styles.boxImg}>
+                <TaroCanvasDrawer
+                  config={this.state.config} // 绘制配置
+                  onCreateSuccess={this.onCreateSuccess} // 绘制成功回调
+                  onCreateFail={this.onCreateFail} // 绘制失败回调
+                ></TaroCanvasDrawer>
+              </View>
             )
           }
         </View>

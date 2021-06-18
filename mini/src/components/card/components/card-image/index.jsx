@@ -1,7 +1,7 @@
 import React from 'React'
 import Taro from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
-import  TaroCanvasDrawer  from '../taro-plugin-canvas'; // npm 引入方式
+import TaroCanvasDrawer from '../taro-plugin-canvas'; // npm 引入方式
 import styles from './index.module.scss'
 import { getConfig } from '../config';
 
@@ -15,59 +15,70 @@ export default class Simple extends React.Component {
       shareImage: null,
       // TaroCanvasDrawer 组件状态
       canvasStatus: null,
-    }
-}
-static getDerivedStateFromProps(nextProps) {
-  if (nextProps.obj.miniCode) {
-    const { obj, heightdefill } = nextProps
-    const { texts, blocks, images, width, height, backgroundColor } = getConfig({...obj, heightdefill, codeUrl: nextProps.obj.miniCode})
-    return {
-      canvasStatus: true,
-      config: {
-        width,
-        height,
-        backgroundColor,
-        texts: [
-          ...texts,
-          // 标题
-          {
-            text: obj.title,
-            color: '#303133',
-            width: 453,
-            height: 339,
-            y: 159,
-            x: 40,
-            fontSize: 30,
-            fontWeight: 'bold',
-            lineNum: 1,
-            lineHeight: 33,
-            textAlign: 'left',
-            zIndex:10,
-            baseLine: 'top'
-          },
-          // 内容
-          {
-            text: `${obj.content}`,
-            x: 40,
-            y: 240,
-            width: 620,
-            height: 520 - obj.contentHeight,
-            fontSize: 28,
-            lineHeight: 46,
-            textAlign: 'left',
-            zIndex: 10,
-            lineNum: 11,
-            color: '#333333',
-            baseLine: 'top'
-          },
-        ],
-        blocks,
-        images,
-      }
+
     }
   }
-  return null;
-}
+  static getDerivedStateFromProps(nextProps) {
+    if (nextProps.obj.miniCode && nextProps.heightdefill) {
+      const { obj, heightdefill } = nextProps
+      const { texts, blocks, images, width, height, backgroundColor } = getConfig({ ...obj, heightdefill, codeUrl: nextProps.obj.miniCode })
+      return {
+        canvasStatus: true,
+        config: {
+          width,
+          height,
+          backgroundColor,
+          texts: [
+            ...texts,
+            // 标题
+            {
+              text: obj.title,
+              color: '#303133',
+              width: 453,
+              height: 339,
+              y: 160,
+              x: 40,
+              fontSize: 30,
+              fontWeight: 'bold',
+              lineNum: 1,
+              lineHeight: 33,
+              textAlign: 'left',
+              zIndex: 10,
+              baseLine: 'top'
+            },
+            // 内容
+            {
+              text: `${obj.content}`,
+              x: 40,
+              y: 672 - obj.imgtop + heightdefill,
+              width: 616,
+              height: 81,
+              fontSize: 28,
+              lineHeight: 40,
+              textAlign: 'left',
+              zIndex: 10,
+              lineNum: 2,
+              color: '#333333',
+              baseLine: 'top'
+            },
+          ],
+          blocks,
+          images: [
+            ...images,
+            {
+              url: obj.imgUrl,
+              width: 620,
+              height: heightdefill + 402,
+              y: 240 - obj.imgtop,
+              x: 40,
+              borderRadius: 12
+            },
+          ]
+        }
+      }
+    }
+    return null;
+  }
   componentDidMount() {
     Taro.showLoading({
       title: '绘制中...'
@@ -114,7 +125,7 @@ static getDerivedStateFromProps(nextProps) {
       urls: [this.state.shareImage]
     })
   }
-  render(){
+  render() {
     return (
       <View className={styles.painter}>
         <View className={styles.canvanBox}>
@@ -130,13 +141,13 @@ static getDerivedStateFromProps(nextProps) {
           {
             this.state.canvasStatus &&
             (
-            <View className={styles.boxImg}>
-              <TaroCanvasDrawer
-              config={this.state.config} // 绘制配置
-              onCreateSuccess={this.onCreateSuccess} // 绘制成功回调
-              onCreateFail={this.onCreateFail} // 绘制失败回调
-            ></TaroCanvasDrawer>
-            </View>
+              <View className={styles.boxImg}>
+                <TaroCanvasDrawer
+                  config={this.state.config} // 绘制配置
+                  onCreateSuccess={this.onCreateSuccess} // 绘制成功回调
+                  onCreateFail={this.onCreateFail} // 绘制失败回调
+                ></TaroCanvasDrawer>
+              </View>
             )
           }
         </View>
