@@ -17,7 +17,7 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
 
   const onClick = (subIndex, index) => {
     let categoryIds = subIndex.split('/')
-    
+
     setFistIndex(categoryIds[0]);
     setSecondIndex(categoryIds[1]);
     if (categoryIds[1] === 'all') {
@@ -93,7 +93,7 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
     <Card className={`${styles.container} ${styles.verticalScrollbar}`} style={{
       /* stylelint-disable */
       background: '#fff', overflowY: 'auto',
-      maxHeight: (windowSize?.innerHeight - 80) || '600px'
+      maxHeight: (windowSize?.innerHeight - 95) || '600px'
     }} bordered={false}>
       {
         categories?.length ?
