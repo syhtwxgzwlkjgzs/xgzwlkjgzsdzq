@@ -17,6 +17,7 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
 
   const onClick = (subIndex, index) => {
     let categoryIds = subIndex.split('/')
+<<<<<<< HEAD
   
     // 点击没有二级分类的一级分类，或者是二级分类
     if (categoryIds.length !== 1) { 
@@ -27,6 +28,13 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
       } else {
         categoryIds = [categoryIds[1]]
       }
+=======
+
+    setFistIndex(categoryIds[0]);
+    setSecondIndex(categoryIds[1]);
+    if (categoryIds[1] === 'all') {
+      categoryIds = [categoryIds[0]]
+>>>>>>> releases
     } else {
       setFistIndex(categoryIds[0]);
       setSecondIndex('all');
@@ -99,7 +107,7 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
     <Card className={`${styles.container} ${styles.verticalScrollbar}`} style={{
       /* stylelint-disable */
       background: '#fff', overflowY: 'auto',
-      maxHeight: (windowSize?.innerHeight - 80) || '600px'
+      maxHeight: (windowSize?.innerHeight - 95) || '600px'
     }} bordered={false}>
       {
         categories?.length ?

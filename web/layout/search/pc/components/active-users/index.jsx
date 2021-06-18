@@ -10,9 +10,13 @@ import styles from './index.module.scss';
  */
 const ActiveUsers = ({ direction = 'right', data, onItemClick }) => (
   <div className={styles.list}>
-    {data?.map((item, index) => (
-      <User direction={direction} key={index} data={item} onClick={onItemClick} />
-    ))}
+    {data?.map((item, index) => {
+      // 根据设计稿展示，只展示6条
+      if (index < 6) return (
+        <User direction={direction} key={index} data={item} onClick={onItemClick} />
+      );
+      return null;
+    })}
   </div>
 );
 
@@ -26,7 +30,7 @@ const User = ({ direction = 'right', data, onClick }) => {
     onClick && onClick(data);
   }, [data, onClick]);
   return (
-    <div className={styles.item} onClick={click}>
+    <div className={`${styles.item} active-users-item`} onClick={click}>
       <div className={styles.avatar}>
         <Avatar direction={direction} image={data.avatar} name={data.nickname} isShowUserInfo userId={data.userId} />
       </div>

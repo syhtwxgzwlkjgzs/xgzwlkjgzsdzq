@@ -1,6 +1,6 @@
 import React from 'react';
 import UserCenterFriends from '../user-center-friends';
-import { Spin, Toast, Avatar } from '@discuzq/design';
+import { Spin, Toast, Input, Button, Icon, Avatar } from '@discuzq/design';
 import { followerAdapter } from './adapter';
 import friendsStyle from '@components/user-center/friend-pc/index.module.scss';
 import styles from './index.module.scss';
@@ -9,6 +9,8 @@ import { get } from '@common/utils/get';
 import deepClone from '@common/utils/deep-clone';
 import NoData from '@components/no-data';
 import { inject, observer } from 'mobx-react';
+import { debounce } from '@common/utils/throttle-debounce';
+import Router from '@discuzq/sdk/dist/router';
 
 @inject('user')
 @observer
@@ -41,6 +43,7 @@ class UserCenterFollows extends React.Component {
     className: '',
     style: {},
     itemStyle: {},
+    messageMode: false,
   };
 
   constructor(props) {
@@ -48,6 +51,7 @@ class UserCenterFollows extends React.Component {
     this.state = {
       loading: true,
       follows: {},
+      searchValue: '',
     };
   }
 
@@ -65,6 +69,10 @@ class UserCenterFollows extends React.Component {
           },
         },
       };
+
+      if (this.state.searchValue) {
+        opts.params.filter['nickName'] = this.state.searchValue;
+      }
 
       const followRes = await getUserFollow(opts);
 
@@ -310,6 +318,39 @@ class UserCenterFollows extends React.Component {
     }
   };
 
+  searchDispatch = debounce(async () => {
+    this.setState({
+      loading: true,
+    });
+    this.setState({
+      follows: []
+    })
+    if (this.props.setDataSource) {
+      this.props.setDataSource({});
+    }
+    await this.fetchFollows();
+    this.setState({
+      loading: false,
+    });
+  }, 300);
+
+  handleSearchValueChange = async (e) => {
+    this.setState({
+      searchValue: e.target.value
+    });
+
+    if (this.props.updateSourcePage) {
+      this.props.updateSourcePage(1);
+    }
+    if (this.props.updateSourceTotalPage) {
+      this.props.updateSourceTotalPage(1);
+    }
+
+    this.page = 1;
+    this.totalPage = 1;
+    this.searchDispatch();
+  };
+
   render() {
     return (
       <div
@@ -321,6 +362,17 @@ class UserCenterFollows extends React.Component {
           ...this.props.style,
         }}
       >
+        {this.props.messageMode && (
+          <div className={styles.searchInputWrapper}>
+            <Input
+              value={this.state.searchValue}
+              onChange={this.handleSearchValueChange}
+              placeholder={'搜索联系人'}
+              icon={'SearchOutlined'}
+            />
+          </div>
+        )}
+
         {followerAdapter(this.props.dataSource || this.state.follows).map((user, index) => {
           if (index + 1 > this.props.limit) return null;
           return (
@@ -332,11 +384,28 @@ class UserCenterFollows extends React.Component {
                 imgUrl={user.avatar}
                 withHeaderUserInfo={this.props.isPc}
                 onContainerClick={this.props.onContainerClick}
-                userName={user.userName}
+                userName={user.nickName}
                 userGroup={user.groupName}
                 followHandler={this.followUser}
                 unFollowHandler={this.unFollowUser}
                 itemStyle={this.props.itemStyle}
+                customActionArea={
+                  this.props.messageMode ? (
+                    <Button
+                      className={styles.messageButton}
+                      type={'primary'}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        Router.replace({ url: `/message?page=chat&username=${user.userName}&nickname=${user.nickName}` });
+                      }}
+                    >
+                      <div className={styles.messageButtonContent}>
+                        <Icon size={12} name={'CommentOutlined'} />
+                        <span>立即聊天</span>
+                      </div>
+                    </Button>
+                  ) : null
+                }
               />
               {this.props.splitElement}
             </div>

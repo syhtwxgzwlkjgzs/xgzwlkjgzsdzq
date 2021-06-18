@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { Button, Icon, RichText } from '@discuzq/design';
-import { noop } from '../utils'
+import { noop } from '../utils';
 
 import fuzzyCalcContentLength from '@common/utils/fuzzy-calc-content-length';
 import s9e from '@common/utils/s9e';
@@ -31,11 +31,12 @@ const Index = ({
   loading,
   usePointer = true,
   customHoverBg = false,
+  onContentHeightChange = noop,
   ...props
 }) => {
   // 内容是否超出屏幕高度
   const [contentTooLong, setContentTooLong] = useState(false);
-  const [cutContentForDisplay, setCutContentForDisplay] = useState("");
+  const [cutContentForDisplay, setCutContentForDisplay] = useState('');
   const [showMore, setHiddenMore] = useState(!useShowMore);
   const contentWrapperRef = useRef(null);
   const texts = {
@@ -53,65 +54,80 @@ const Index = ({
   // 是否显示遮罩 是付费内容并且隐藏内容百分比大于0 或 显示查看更多并且查看更多状态为false 则显示遮罩
   const showHideCover = !loading ? (isPayContent && hidePercent > 0) || (useShowMore && !showMore) : false;
 
-  const onShowMore = useCallback((e) => {
-    e && e.stopPropagation();
+  const onShowMore = useCallback(
+    (e) => {
+      e && e.stopPropagation();
 
-    if (contentTooLong) {
-      // 内容过长直接跳转到详情页面
-      onRedirectToDetail && onRedirectToDetail();
-    } else {
-      setHiddenMore(true);
-    }
-  }, [contentTooLong]);
+      if (contentTooLong) {
+        // 内容过长直接跳转到详情页面
+        onRedirectToDetail && onRedirectToDetail();
+      } else {
+        setHiddenMore(true);
+      }
+    },
+    [contentTooLong],
+  );
 
   const handleClick = (e) => {
     if (e.target.localName === 'a') {
-      return
+      return;
     }
     e && e.stopPropagation();
 
-    onRedirectToDetail()
-  }
+    onRedirectToDetail();
+  };
 
   const getCutContentForDisplay = (maxContentLength) => {
     const ctn = filterContent;
     let ctnSubstring = ctn.substring(0, maxContentLength); // 根据长度截断
 
-    const cutPoint = (ctnSubstring.lastIndexOf("<img") > 0) ?
-                      ctnSubstring.lastIndexOf("<img") : ctnSubstring.length;
+    const cutPoint = ctnSubstring.lastIndexOf('<img') > 0 ? ctnSubstring.lastIndexOf('<img') : ctnSubstring.length;
 
-    ctnSubstring = ctnSubstring.substring(0, cutPoint)
+    ctnSubstring = ctnSubstring.substring(0, cutPoint);
     setCutContentForDisplay(ctnSubstring);
-  }
+  };
 
   useEffect(() => {
     const lengthInLine = parseInt((contentWrapperRef.current.offsetWidth || 704) / 16);
     const length = fuzzyCalcContentLength(filterContent, lengthInLine);
     const maxContentLength = lengthInLine * 6; // 如果默认长度是704，一共可容纳264个字符
 
-    if (length < maxContentLength && length <= 1200) { // 显示6行内容
+    if (length < maxContentLength && length <= 1200) {
+      // 显示6行内容
       setHiddenMore(true);
     } else {
       setHiddenMore(false);
     }
     if (length > 1200) {
-      if(useShowMore) getCutContentForDisplay(1200);
-      setContentTooLong(true)
+      if (useShowMore) getCutContentForDisplay(1200);
+      setContentTooLong(true);
     } else {
-      setContentTooLong(false)
+      setContentTooLong(false);
     }
   }, [filterContent]);
 
+  // const onImgsLoaded = () => {
+  //   onContentHeightChange(contentWrapperRef.current.clientHeight);
+  // };
+
+  useEffect(() => {
+    onContentHeightChange(contentWrapperRef.current.clientHeight);
+  }, [contentWrapperRef?.current?.clientHeight]);
+
   return (
     // <div className={styles.container} {...props}>
-      <div className={`${styles.container} ${usePointer ? styles.usePointer : ''}`} {...props}>
+    <div className={`${styles.container} ${usePointer ? styles.usePointer : ''}`} {...props}>
       <div
         ref={contentWrapperRef}
         className={`${styles.contentWrapper} ${showHideCover ? styles.hideCover : ''} ${customHoverBg ? styles.bg : ''}`}
         onClick={!showMore ? onShowMore : handleClick}
       >
         <div className={styles.content}>
-          <RichText content={(useShowMore && cutContentForDisplay) ? cutContentForDisplay : filterContent} onClick={handleClick} />
+          <RichText
+            // onImgsLoaded={onImgsLoaded}
+            content={useShowMore && cutContentForDisplay ? cutContentForDisplay : filterContent}
+            onClick={handleClick}
+          />
         </div>
       </div>
       {!loading && useShowMore && !showMore && (

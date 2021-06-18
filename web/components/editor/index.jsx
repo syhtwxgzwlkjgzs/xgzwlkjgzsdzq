@@ -19,6 +19,7 @@ export default function DVditor(props) {
     onInit = () => { },
     onInput = () => { },
     setState = () => { },
+    onCountChange = () => {},
   } = props;
   const vditorId = 'dzq-vditor';
   let timeoutId = null;
@@ -234,8 +235,9 @@ export default function DVditor(props) {
         counter: {
           enable: true,
           after(count) {
+            onCountChange(count);
             if (count >= MAX_COUNT) {
-              Toast.info({ content: '最多输入50000字' });
+              Toast.info({ content: `最多输入${MAX_COUNT}字` });
             }
           },
           type: 'markdown',
