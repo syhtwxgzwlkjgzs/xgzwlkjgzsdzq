@@ -4,18 +4,18 @@ import { withRouter } from 'next/router';
 import styles from './index.module.scss';
 import BaseLayout from '@components/base-layout';
 import NoData from '@components/no-data';
-import DetailsHeader from './components/details-header'
+import DetailsHeader from './components/details-header';
 import ThreadContent from '@components/thread';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import { Toast } from '@discuzq/design';
+import BottomView from '@components/list/BottomView';
 
 @inject('site')
 @inject('user')
 @inject('topic')
 @observer
 class TopicH5Page extends React.Component {
-
   // 分享
   onShare = (e) => {
     e.stopPropagation();
@@ -33,14 +33,13 @@ class TopicH5Page extends React.Component {
     h5Share({ title: content, path: `/topic/topic-detail/${topicId}` });
   }
 
-  renderItem = ({ content = '', threadCount = 0, viewCount = 0, threads = [] }, index) => {
-    return (
+  renderItem = ({ content = '', threadCount = 0, viewCount = 0, threads = [] }, index) => (
       <div key={index}>
         <DetailsHeader title={content} viewNum={viewCount} contentNum={threadCount} onShare={this.onShare} />
         <div className={styles.themeContent}>
           {
-            threads?.length ?
-              (
+            threads?.length
+              ? (
                 threads?.map((item, index) => (
                   <ThreadContent data={item} key={index} className={styles.item} />
                 ))
@@ -49,17 +48,21 @@ class TopicH5Page extends React.Component {
           }
         </div>
       </div>
-    )
-  }
+  )
 
   render() {
     const { pageData } = this.props.topic?.topicDetail || {};
+    const { isError, errorText, fetchTopicInfoLoading = true } = this.props;
     return (
       <BaseLayout allowRefresh={false}>
         {
-          pageData?.map((item, index) => (
-            this.renderItem(item, index))  
+          fetchTopicInfoLoading ? (
+            <BottomView loadingText='加载中...' isError={isError} errorText={errorText} />
           )
+            : (
+              pageData?.map((item, index) => (
+                this.renderItem(item, index)))
+            )
         }
       </BaseLayout>
     );
