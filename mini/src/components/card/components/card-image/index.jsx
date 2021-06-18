@@ -15,10 +15,11 @@ export default class Simple extends React.Component {
       shareImage: null,
       // TaroCanvasDrawer 组件状态
       canvasStatus: null,
+
     }
   }
   static getDerivedStateFromProps(nextProps) {
-    if (nextProps.obj.miniCode) {
+    if (nextProps.obj.miniCode && nextProps.heightdefill) {
       const { obj, heightdefill } = nextProps
       const { texts, blocks, images, width, height, backgroundColor } = getConfig({ ...obj, heightdefill, codeUrl: nextProps.obj.miniCode })
       return {
@@ -29,36 +30,60 @@ export default class Simple extends React.Component {
           backgroundColor,
           texts: [
             ...texts,
+            // 标题
+            {
+              text: obj.title,
+              color: '#303133',
+              width: 453,
+              height: 339,
+              y: 160,
+              x: 40,
+              fontSize: 30,
+              fontWeight: 'bold',
+              lineNum: 1,
+              lineHeight: 33,
+              textAlign: 'left',
+              zIndex: 10,
+              baseLine: 'top'
+            },
+            // 内容
             {
               text: `${obj.content}`,
               x: 40,
-              y: 161,
-              width: 620,
-              height: 520 - obj.contentHeight,
+              y: 672 - obj.imgtop + heightdefill,
+              width: 616,
+              height: 81,
               fontSize: 28,
-              lineHeight: 46,
+              lineHeight: 40,
               textAlign: 'left',
               zIndex: 10,
-              lineNum: 12,
+              lineNum: 2,
               color: '#333333',
               baseLine: 'top'
             },
           ],
           blocks,
-          images,
+          images: [
+            ...images,
+            {
+              url: obj.imgUrl,
+              width: 620,
+              height: heightdefill + 402,
+              y: 240 - obj.imgtop,
+              x: 40,
+              borderRadius: 12
+            },
+          ]
         }
       }
     }
     return null;
   }
-
-
   componentDidMount() {
     Taro.showLoading({
       title: '绘制中...'
     })
   }
-
 
   // 绘制成功回调函数 （必须实现）=> 接收绘制结果、重置 TaroCanvasDrawer 状态
   onCreateSuccess = (result) => {
@@ -80,6 +105,7 @@ export default class Simple extends React.Component {
         config: null
       })
       Taro.showToast({ icon: 'none', title: errMsg || '出现错误' });
+      console.log(errMsg);
     }
   }
 
@@ -91,6 +117,7 @@ export default class Simple extends React.Component {
       canvasStatus: false,
       config: null
     })
+    console.log(error);
   }
   preView = () => {
     Taro.previewImage({

@@ -15,10 +15,17 @@ import { priceShare } from '@common/utils/priceShare';
 @observer
 @withShare()
 class Index extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      fetchTopicInfoLoading: true,
+      isError: false,
+      errorText: '加载失败',
+    }
+  }
   page = 1;
   perPage = 10;
   getShareData (data) {
-    console.log(data);
     const { topic } = this.props
     const topicId = topic.topicDetail?.pageData[0]?.topicId || ''
     const defalutTitle = topic.topicDetail?.pageData[0]?.content || ''
@@ -60,14 +67,24 @@ class Index extends React.Component {
     //   });
       topic.setTopicDetail(null)
       this.page = 1;
-      await topic.getTopicsDetail({ topicId: id });
-
+      try {
+        await topic.getTopicsDetail({ topicId: id });
+        this.setState({
+          fetchTopicInfoLoading:false,
+        })
+      }
+      catch (errMsg){
+        this.setState({
+          isError: true,
+          errorText: errMsg
+        })
+      }
       // this.toastInstance?.destroy();
     // }
 
   }
   render() {
-    return <Page><IndexPage dispatch={this.dispatch} /></Page>;
+    return <Page><IndexPage dispatch={this.dispatch} fetchTopicInfoLoading={this.state.fetchTopicInfoLoading} isError={this.state.isError} errorText={this.state.errorText}/></Page>;
   }
 }
 

@@ -1,7 +1,7 @@
 @import '@common/styles/index.scss';
 
 .list {
-  padding: $padding-4n 0;
+  padding: rem($padding-4n) 0;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -9,7 +9,7 @@
   .itemRow{
     display: flex;
     flex-direction: row;
-    margin-bottom: $padding-6n;
+    margin-bottom: rem($padding-6n);
     width: 100%;
   }
   .lastRow{
@@ -27,8 +27,8 @@
       margin-right: 0;
     }
     .avatar {
-      width: 38px;
-      height: 38px;
+      width: rem(38);
+      height: rem(38);
       margin: 0 auto;
       line-height: 0;
     }
@@ -38,9 +38,9 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      margin-top: 12px;
-      font-size: $font-size-primary;
-      line-height: 18px;
+      margin-top: rem(12);
+      font-size: rem($font-size-primary);
+      line-height: rem(18);
       color: var(--color-text-primary);
     }
   }

@@ -29,17 +29,34 @@ export default class Simple extends React.Component {
           backgroundColor,
           texts: [
             ...texts,
+            // 标题
+            {
+              text: obj.title,
+              color: '#303133',
+              width: 453,
+              height: 339,
+              y: 159,
+              x: 40,
+              fontSize: 30,
+              fontWeight: 'bold',
+              lineNum: 1,
+              lineHeight: 33,
+              textAlign: 'left',
+              zIndex: 10,
+              baseLine: 'top'
+            },
+            // 内容
             {
               text: `${obj.content}`,
               x: 40,
-              y: 161,
+              y: 240,
               width: 620,
               height: 520 - obj.contentHeight,
               fontSize: 28,
               lineHeight: 46,
               textAlign: 'left',
               zIndex: 10,
-              lineNum: 12,
+              lineNum: 11,
               color: '#333333',
               baseLine: 'top'
             },
@@ -51,14 +68,11 @@ export default class Simple extends React.Component {
     }
     return null;
   }
-
-
   componentDidMount() {
     Taro.showLoading({
       title: '绘制中...'
     })
   }
-
 
   // 绘制成功回调函数 （必须实现）=> 接收绘制结果、重置 TaroCanvasDrawer 状态
   onCreateSuccess = (result) => {
@@ -80,6 +94,7 @@ export default class Simple extends React.Component {
         config: null
       })
       Taro.showToast({ icon: 'none', title: errMsg || '出现错误' });
+      console.log(errMsg);
     }
   }
 
@@ -91,6 +106,7 @@ export default class Simple extends React.Component {
       canvasStatus: false,
       config: null
     })
+    console.log(error);
   }
   preView = () => {
     Taro.previewImage({
