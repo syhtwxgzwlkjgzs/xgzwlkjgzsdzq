@@ -62,7 +62,7 @@ const Index = ({ page, subPage, dialogId, username, message, user, nickname }) =
       <div className={styles['stepper-container']}>
         <Stepper onItemClick={sidebarClick} selectIndex={sidebarIndex} data={sidebarData} />
       </div>
-      <UserCenterFollowsPc userId={user.id} />
+      <UserCenterFollowsPc userId={user.id} className="mymessage" />
       <Copyright />
     </div>
   );
@@ -74,6 +74,7 @@ const Index = ({ page, subPage, dialogId, username, message, user, nickname }) =
   return (
     <BaseLayout
       right={rightContent}
+      className="mymessage-page"immediateCheck={false}
     >
       {mainContent}
     </BaseLayout>
