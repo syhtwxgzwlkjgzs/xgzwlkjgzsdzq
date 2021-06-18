@@ -10,9 +10,9 @@ import styles from './index.module.scss';
  */
 const ActiveUsers = ({ direction = 'right', data, onItemClick }) => {
 
-  const click = useCallback((data) => {
+  const click = (data) => {
     typeof onItemClick === 'function' && onItemClick(data);
-  }, [data]);
+  };
 
   return (
     <div className={styles.list}>

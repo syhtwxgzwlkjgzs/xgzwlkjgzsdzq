@@ -12,9 +12,9 @@ const ActiveUsers = ({ data, onItemClick }) => {
 
   const newData = data.filter((_, index) => index < 10);
 
-  const click = useCallback((data) => {
+  const click = (data) => {
     typeof onItemClick === 'function' && onItemClick(data);
-  }, [data]);
+  };
 
   return (
   <div className={styles.list}>

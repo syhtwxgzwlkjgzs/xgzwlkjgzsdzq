@@ -30,7 +30,7 @@ const ActiveUsers = ({ data, onItemClick, onFollow, userId, noOperation = false 
  * @prop {function} onClick 用户点击事件
  */
 const User = ({ data, onClick, onFollow, userId, noOperation }) => {
-  const click = useCallback((e) => {
+  const click = (e) => {
     e && e.stopPropagation();
 
     const avatarPopup = e?.currentTarget.querySelector("#avatar-popup");
@@ -39,7 +39,7 @@ const User = ({ data, onClick, onFollow, userId, noOperation }) => {
     }
 
     onClick && onClick(data);
-  }, [data, onClick]);
+  };
 
   const handleFollow = (e) => {
     e && e.stopPropagation();

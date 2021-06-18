@@ -13,12 +13,12 @@ import xss from '@common/utils/xss';
  * @prop {number} index
  */
 const TopicItem = ({ data, onClick = noop, index, footer }) => {
-  const click = useCallback((e) => {
+  const click = (e) => {
     if (e.target.localName === 'a') {
       return
     }
     onClick && onClick(data);
-  }, [data, onClick]);
+  };
   
   const { threads = [] } = data
 
