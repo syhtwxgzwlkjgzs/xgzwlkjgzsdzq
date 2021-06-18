@@ -29,15 +29,16 @@
 .headerbox {
   display: flex;
   justify-content: center;
+  width: 100%;
   min-height: rem(230);
-  @include media('s-pc') {
-    width: 100%;
-  }
+  // @include media('s-pc') {
+  //   width: 100%;
+  // }
 
-  @include media('l-pc') {
-    width: 100%;
-    max-width: rem(1100);
-  }
+  // @include media('l-pc') {
+  //   width: 100%;
+  //   max-width: rem(1100);
+  // }
 }
 
 .wrapper {
@@ -51,12 +52,12 @@
   }
 
   @include media('l-pc') {
-    width: 95%;
-    max-width: rem(1100);
+    // width: 95%;
+    padding: 0 calc((100vw - 1100px) / 2);
   }
 
   @include media('xl-pc') {
-    width: rem(1100);
+    padding: 0 calc((100vw - 1100px) / 2);
   }
 }
 
@@ -64,18 +65,19 @@
   position: relative;
   display: flex;
   justify-content: center;
-  @include media('s-pc') {
-    width: 98%;
-  }
+  width: 100%;
+  // @include media('s-pc') {
+  //   width: 98%;
+  // }
 
-  @include media('l-pc') {
-    width: 95%;
-    max-width: rem(1100);
-  }
+  // @include media('l-pc') {
+  //   width: 95%;
+  //   max-width: rem(1100);
+  // }
 
-  @include media('xl-pc') {
-    width: rem(1100);
-  }
+  // @include media('xl-pc') {
+  //   width: rem(1100);
+  // }
 }
 
 .center {
@@ -110,19 +112,19 @@
 
 .userHeader {
   margin-top: rem($margin-5n);
+  width: 100%;
+  // @include media('s-pc') {
+  //   width: 98%;
+  // }
 
-  @include media('s-pc') {
-    width: 98%;
-  }
+  // @include media('l-pc') {
+  //   width: 95%;
+  //   max-width: rem(1100);
+  // }
 
-  @include media('l-pc') {
-    width: 95%;
-    max-width: rem(1100);
-  }
-
-  @include media('xl-pc') {
-    width: rem(1100);
-  }
+  // @include media('xl-pc') {
+  //   width: rem(1100);
+  // }
 }
 
 .headImgWrapper {

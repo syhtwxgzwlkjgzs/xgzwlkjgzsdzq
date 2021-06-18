@@ -164,6 +164,8 @@
     }
   }
 }
+
+// 高度自适应
 .container {
   :global {
     .detail {
@@ -187,8 +189,6 @@
     }
 
     // 这几个页面只有一个潮流话题和版权，如果要增加模块或者更改啥，需要再单独处理一下
-    $base: 650px;
-    $space: 55px;
     .mybuy,
     .mylike,
     .mycollect,
