@@ -26,7 +26,7 @@ class WXAuthorization extends Component {
   }
 
   authorization = async (params) => {
-    const { sessionToken, inviteCode } = getCurrentInstance().router.params;
+    const { scene: sessionToken, inviteCode } = getCurrentInstance().router.params;
     try {
       // 小程序登录
       const res = await miniLogin({
