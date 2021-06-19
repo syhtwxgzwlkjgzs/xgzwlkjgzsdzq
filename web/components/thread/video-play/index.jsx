@@ -28,7 +28,8 @@ const Index = ({
   onPay = noop,
   baselayout = {},
   v_width = null,
-  v_height = null
+  v_height = null,
+  onVideoReady = noop,
 }) => {
   let player = null;
   const ref = useRef();
@@ -68,7 +69,8 @@ const Index = ({
     });
     setWidth(width);
     setHeight(height);
-    
+
+    onVideoReady && onVideoReady();
   }, []);
 
   return (

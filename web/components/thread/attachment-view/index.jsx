@@ -158,7 +158,7 @@ const Index = ({
   };
 
   return (
-    <div>
+    <div className={styles.wrapper}>
         {
           attachments.map((item, index) => {
             // 获取文件类型

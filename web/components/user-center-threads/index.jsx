@@ -6,8 +6,8 @@ class UserCenterThreads extends React.Component {
   render() {
     return (
       <div className={styles.threadsContainer}>
-        {this.props.data.map((itemInfo, index) => (
-          <Thread data={itemInfo} className={index === 0 ? styles.threadBorder : ''} />
+        {this.props.data.map((itemInfo, index, arr) => (
+          <Thread data={itemInfo} showBottomStyle={index !== arr.length - 1} />
         ))}
       </div>
     );

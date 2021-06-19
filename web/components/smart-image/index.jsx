@@ -1,13 +1,16 @@
 import React, {useState, useEffect, useCallback, useRef} from 'react';
 import isServer from '@common/utils/is-server';
 import styles from './index.module.scss';
-const SmartImg = ({type, src, onClick}) => {
+import {isLongImage} from '@common/utils/calc-image-type';
+
+const SmartImg = ({type, src, onClick, noSmart = false}) => {
 
     const [imgSrc, changeImgSrc] = useState(null);
     const [isLong, changeIsLong] = useState(false);
     const img = useRef(null);
 
     const calcImgSrc = useCallback(() => {
+        if (noSmart) return src;
         let newSrc = src.split('?')[0];
         if ( !isServer() ) {
             const viewWidth = window.screen.width;
@@ -41,9 +44,7 @@ const SmartImg = ({type, src, onClick}) => {
         if (img && img.current) {
             const width = img.current.naturalWidth;
             const height = img.current.naturalHeight;
-            if (height/width >= 2.5) {
-                changeIsLong(true)
-            }
+            changeIsLong(isLongImage(width, height));
         }
         
     }, [img])

@@ -185,7 +185,7 @@ export default inject('user')(
             )}
 
             {/* 图片 */}
-            {parseContent.IMAGE && <ImageDisplay platform="pc" imgData={parseContent.IMAGE} />}
+            {parseContent.IMAGE && <ImageDisplay flat platform="pc" imgData={parseContent.IMAGE} />}
 
             {/* 视频 */}
             {parseContent.VIDEO && (

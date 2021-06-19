@@ -9,6 +9,7 @@ import isServer from '@common/utils/is-server';
 import Toast from '@discuzq/design/dist/components/toast';
 import Router from '@discuzq/sdk/dist/router';
 import { handleError } from '@discuzq/sdk/dist/api/utils/handle-error';
+import clearLoginStatus from '@common/utils/clear-login-status';
 import {
   ENV_CONFIG,
   INVALID_TOKEN,
@@ -117,23 +118,25 @@ http.interceptors.response.use((res) => {
       break;
     }
     case JUMP_TO_LOGIN: {
+      clearLoginStatus();
       if (process.env.DISCUZ_ENV === 'web') {
-        url = '/user/login';
+        window.location.replace('/user/login');
       } else {
         url = '/subPages/user/wx-auth/index'
       }
-      Router.push({
+      Router.replace({
         url
       });
       break;
     }
     case JUMP_TO_REGISTER: {
+      clearLoginStatus();
       if (process.env.DISCUZ_ENV === 'web') {
-        url = '/user/register';
+        window.location.replace('/user/register');
       } else {
         url = '/subPages/user/wx-auth/index'
       }
-      Router.push({
+      Router.replace({
         url
       });
       break;

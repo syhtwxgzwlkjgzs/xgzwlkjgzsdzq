@@ -150,10 +150,7 @@ export default function HOCFetchSiteData(Component) {
       }
       // 判断是否有token
       if (siteConfig && siteConfig.user) {
-        if (
-          (!user || !user.userInfo)
-                  && (!serverUser || !serverUser.userInfo)
-        ) {
+        if ((!user || !user.userInfo) && (!serverUser || !serverUser.userInfo)) {
           const userInfo = await readUser({ params: { pid: siteConfig.user.userId } });
           const userPermissions = await readPermissions({});
 
@@ -168,6 +165,10 @@ export default function HOCFetchSiteData(Component) {
       } else {
         loginStatus = false;
       }
+      
+      // 未登陆状态下，清空accessToken
+      !loginStatus && clearLoginStatus();
+
       user.updateLoginStatus(loginStatus);
       this.setState({ isPass: this.isPass() });
     }
@@ -190,10 +191,12 @@ export default function HOCFetchSiteData(Component) {
           Router.redirect({ url: '/404' });
           break;
         case JUMP_TO_LOGIN:// 到登录页
-          Router.push({ url: '/user/login' });
+          clearLoginStatus();
+          window.location.replace('/user/login');
           break;
         case JUMP_TO_REGISTER:// 到注册页
-          Router.push({ url: '/user/register' });
+          clearLoginStatus();
+          window.location.replace('/user/register');
           break;
         case JUMP_TO_AUDIT:// 到审核页
           Router.push({ url: '/user/status?statusCode=2' });

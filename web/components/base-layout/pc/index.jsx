@@ -110,7 +110,7 @@ const BaseLayout = forwardRef((props, ref) => {
 
             {
               (pageName === 'home' || right) && (
-                <div className={`right ${styles.right} ${rightClassName} ${(pageName === "home") ? styles["home-right"] : ""}`}>
+                <div className={`baselayout-right ${styles.right} ${rightClassName} ${(pageName === "home") ? styles["home-right"] : ""}`}>
                   {typeof(right) === 'function' ? right({ ...props }) : right}
                 </div>
               )

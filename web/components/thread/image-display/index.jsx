@@ -3,14 +3,16 @@ import { ImagePreviewer, Flex } from '@discuzq/design';
 import { noop } from '../utils';
 import styles from './index.module.scss';
 import SmartImg from '@components/smart-image';
+import {calcImageType, calcImageDefaultType} from '@common/utils/calc-image-type';
 const { Col, Row } = Flex;
 
 // TODO 图片懒加载
-const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop, onImageReady = () => {} }) => {
+const Index = ({ imgData = [], flat = false, platform = 'h5', isPay = false, onPay = noop, onImageReady = () => {} }) => {
   const [visible, setVisible] = useState(false);
   const [defaultImg, setDefaultImg] = useState('');
   const ImagePreviewerRef = React.useRef(null);
   const [firstImgData, setFirstImgData] = useState(null);
+  // const [firstImgData, setFirstImgData] = useState({width: 500, height: 700});
 
   const imagePreviewers = useMemo(() => imgData.map((item) => item.url), [imgData]);
   useEffect(() => {
@@ -20,6 +22,9 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop, onI
   }, [visible]);
 
   useEffect(() => {
+
+    if (flat) return;
+
     let timer;
     if ( imgData && imgData.length !== 0 ) {
       const img = new Image();
@@ -60,12 +65,13 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop, onI
     return () => {
       timer && clearTimeout(timer);
     }
-  }, [imgData]);
+  }, [flat, imgData]);
 
   // 当更新了firstImgData，代表确定了布局方式，可以通知外部更新
   useEffect(() => {
+    if (flat) return;
     onImageReady && onImageReady();
-  }, [firstImgData]);
+  }, [flat, firstImgData]);
 
   const onClick = (id) => {
     if (isPay) {
@@ -94,7 +100,10 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop, onI
     return `containerNum${num}`;
   }, [imgData]);
 
-  const handleImages = () => {
+  const handleImages = (flat) => {
+    if ( flat ) {
+      return { bigImages: imgData, smallImages: [] };
+    }
     if (imgData.length < 3) {
       return { bigImages: imgData, smallImages: [] };
     }
@@ -104,39 +113,27 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop, onI
     return { bigImages: [imgData[0], imgData[1]], smallImages: [imgData[2], imgData[3], imgData[4]] };
   };
 
-  const calcImageType = useCallback((width, height) => {
-    if ( width >= height ) {
-      // 全景图
-      if ( width/height >= 2 ) {
-        return 'panorama'
-      } else {
-        return 'transverse'
-      }
-    } else {
-      // 长图
-      if ( height/width >= 2.5 ) {
-        return 'long'
-      } else {
-        return 'longitudinal'
-      }
-    }
-  }, []);
-
-  const setImageDefaultType = useCallback((n) => {
-    if (n === 3) {
-      return 'longitudinal';
-    } else {
-      return 'panorama';
-    }
-  }, [])
-
   const ImageView = useMemo(() => {
     if ( !imgData || imgData.length === 0 ) {
       return null;
     }
-    if ( firstImgData === null ) return <div className={`${platform === 'h5' ? styles['placeholderH5'] : styles['placeholderPC']}`}/>;
-    const res = handleImages();
-    const type = firstImgData === 'fail' ? setImageDefaultType(imgData.length) : calcImageType(firstImgData.width, firstImgData.height);
+    if ( !flat && firstImgData === null ) return <div className={`${platform === 'h5' ? styles['placeholderH5'] : styles['placeholderPC']}`}/>;
+    const res = handleImages(flat);
+
+    // 扁平处理
+    if ( flat ) {
+      return (
+        <div>
+            {res.bigImages.map((item, index) => (
+              <div key={index} className={styles.flatItem}>
+                <SmartImg noSmart type={item.fileType} src={item.url} onClick={() => onClick(item.id)} />
+              </div>
+            ))}
+        </div>
+      );
+    }
+
+    const type = firstImgData === 'fail' ? calcImageDefaultType(imgData.length) : calcImageType(firstImgData.width, firstImgData.height);
 
     if (imgData.length === 1) {
       return <One type={type} bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} />;
@@ -164,7 +161,7 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop, onI
       );
     }
     return null;
-  }, [imgData, firstImgData]);
+  }, [imgData, firstImgData, flat]);
 
   return (
     <div className={`${platform === 'h5' ? styles.container : styles.containerPC}`}>

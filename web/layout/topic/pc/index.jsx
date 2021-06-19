@@ -4,8 +4,7 @@ import { withRouter } from 'next/router';
 import styles from './index.module.scss';
 import BaseLayout from '@components/base-layout';
 import SectionTitle from '@components/section-title';
-import TrendingTopicMore from '@layout/search/pc/components/trending-topic-more';
-import ActiveUsers from '@layout/search/pc/components/active-users'
+import TopicItem from '@components/search/topic-item';
 import List from '@components/list';
 import Copyright from '@components/copyright';
 @inject('site')
@@ -21,7 +20,8 @@ class IndexPCPage extends React.Component {
     this.props.router.push('/search/result-user');
   };
   onTopicClick = data => {
-    this.props.router.push(`/topic/topic-detail/${id}`);
+    const { topicId } = data;
+    if(topicId) this.props.router.push(`/topic/topic-detail/${topicId}`);
   };
   fetchMoreData = () => {
     const { dispatch } = this.props;
@@ -66,7 +66,9 @@ class IndexPCPage extends React.Component {
             isShowMore={false}
             icon={{ type: 1, name: 'StrongSharpOutlined' }}
           />
-          <TrendingTopicMore data={pageData} onItemClick={this.onTopicClick}/>
+          {pageData?.map((item, index, arr) => (
+            <TopicItem data={item} key={index} onClick={this.onTopicClick}/>
+          ))}
         </div>
       </div>
     )

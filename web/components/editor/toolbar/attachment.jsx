@@ -219,7 +219,7 @@ function AttachmentToolbar(props) {
             {props.category}
           </div>
           <div className={styles['dvditor-attachment-toolbar__right']} onClick={handleToggle}>
-            {currentIcon && <Icon name={currentIcon} size="20" />}
+            {currentIcon && props.permission[action] && <Icon name={currentIcon} size="20" />}
             <Icon name="MoreBOutlined" size="20" />
           </div>
         </>

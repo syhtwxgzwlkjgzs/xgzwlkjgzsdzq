@@ -5,6 +5,7 @@ import { Icon, Toast } from '@discuzq/design';
 import { noop } from '@components/thread/utils';
 import { withRouter } from 'next/router';
 import UnreadRedDot from '@components/unread-red-dot';
+import { unreadUpdateInterval } from '@common/constants/message';
 
 /**
  * BottomNavBar组件
@@ -26,14 +27,14 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
     { icon: 'ProfessionOutlined', text: '我的', active: checkCurrActiveTab(curr, 'my'), router: '/my' },
   ]);
 
-  // 每20秒更新一次未读消息
+  // 轮询更新未读消息
   const timeoutRef = useRef();
   const updateUnreadMessage = () => {
     if (!user.id) return;
     timeoutRef.current = setTimeout(() => {
       readUnreadCount();
       updateUnreadMessage();
-    }, 20000);
+    }, unreadUpdateInterval);
   }
 
   useEffect(() => {

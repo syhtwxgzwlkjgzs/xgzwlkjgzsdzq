@@ -23,13 +23,8 @@ class Index extends React.Component {
     render () {
         const {userInfo} = this.props.user
         const {miniCode} = this.props.site
-        const data = {
-            thread: this.thread,
-            userInfo,
-            miniCode
-        }
         return (
-            <Card data={data}>
+            <Card thread={this.thread} userInfo={userInfo} miniCode={miniCode}>
 
             </Card>
         )

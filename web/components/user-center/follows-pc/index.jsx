@@ -6,6 +6,7 @@ import Router from '@discuzq/sdk/dist/router';
 import styles from './index.module.scss';
 import UserCenterFollows from '../../user-center-follow';
 import { withRouter } from 'next/router';
+import classnames from 'classnames';
 
 @inject('user')
 @observer
@@ -19,6 +20,13 @@ class UserCenterFollowsPc extends React.Component {
       sourceTotalPage: 1,
     };
   }
+
+  static defaultProps = {
+    showMore: true,
+    withLimit: 5,
+    className: '',
+    messageMode: false
+  };
 
   // 点击粉丝更多
   moreFollow = () => {
@@ -63,9 +71,11 @@ class UserCenterFollowsPc extends React.Component {
           title="关注"
           mold={'wrapper'}
           leftNum={followCount}
+          isShowMore={this.props.showMore}
           onShowMore={this.moreFollow}
+          className={this.props.className}
         >
-          <div className={styles.followsWrapper}>
+          <div className={classnames(styles.followsWrapper, this.props.className)}>
             {Number(followCount) !== 0 && (
               <UserCenterFollows
                 style={{
@@ -77,6 +87,7 @@ class UserCenterFollowsPc extends React.Component {
                 updateSourcePage={this.updateSourcePage}
                 sourceTotalPage={this.state.sourceTotalPage}
                 updateSourceTotalPage={this.updateSourceTotalPage}
+                messageMode={this.props.messageMode}
                 userId={this.props.userId}
                 onContainerClick={({ id }) => {
                   this.props.router.push({
@@ -93,31 +104,33 @@ class UserCenterFollowsPc extends React.Component {
                   paddingBottom: 8,
                 }}
                 className={styles.friendsWrapper}
-                limit={5}
+                limit={this.props.withLimit}
               />
             )}
           </div>
         </SidebarPanel>
 
-        <UserCenterFollowPopup
-          id={this.props.userId}
-          visible={this.state.showFollowsPopup}
-          dataSource={this.state.dataSource}
-          setDataSource={this.setDataSource}
-          sourcePage={this.state.sourcePage}
-          updateSourcePage={this.updateSourcePage}
-          sourceTotalPage={this.state.sourceTotalPage}
-          updateSourceTotalPage={this.updateSourceTotalPage}
-          onContainerClick={({ id }) => {
-            this.props.router.push({
-              pathname: '/user/[id]',
-              query: {
-                id,
-              },
-            });
-          }}
-          onClose={() => this.setState({ showFollowsPopup: false })}
-        />
+        {this.props.showMore && (
+          <UserCenterFollowPopup
+            id={this.props.userId}
+            visible={this.state.showFollowsPopup}
+            dataSource={this.state.dataSource}
+            setDataSource={this.setDataSource}
+            sourcePage={this.state.sourcePage}
+            updateSourcePage={this.updateSourcePage}
+            sourceTotalPage={this.state.sourceTotalPage}
+            updateSourceTotalPage={this.updateSourceTotalPage}
+            onContainerClick={({ id }) => {
+              this.props.router.push({
+                pathname: '/user/[id]',
+                query: {
+                  id,
+                },
+              });
+            }}
+            onClose={() => this.setState({ showFollowsPopup: false })}
+          />
+        )}
       </>
     );
   }

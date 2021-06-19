@@ -46,7 +46,7 @@ class App extends Component {
    * 注意：options 参数的字段在不同小程序中可能存在差异。所以具体使用的时候请看相关小程序的文档
    */
   async onLaunch(options) {
-    this.initSiteData();
+    await this.initSiteData();
     const { site } = this.store;
     const { envConfig } = site;
     const { TITLE } = envConfig;
@@ -129,6 +129,10 @@ class App extends Component {
 
       loginStatus = !!userInfo.data && !!userInfo.data.id;
     }
+
+    // 未登陆状态下，清空accessToken
+    !loginStatus && clearLoginStatus();
+
     user.updateLoginStatus(loginStatus);
   }
 
@@ -152,10 +156,14 @@ class App extends Component {
         Router.redirect({ url: '/subPages/404/index' });
         break;
       case JUMP_TO_LOGIN:// 到登录页
-        Router.push({ url: '/subPages/user/wx-auth/index' });
+        clearLoginStatus();
+        this.initSiteData(); // 重新获取数据
+        Router.reLaunch({ url: '/subPages/user/wx-auth/index' });
         break;
       case JUMP_TO_REGISTER:// 到注册页
-        Router.push({ url: '/subPages/user/wx-auth/index' });
+        clearLoginStatus();
+        this.initSiteData(); // 重新获取数据
+        Router.reLaunch({ url: '/subPages/user/wx-auth/index' });
         break;
       case JUMP_TO_AUDIT:// 到审核页
         Router.push({ url: '/subPages/user/status/index?statusCode=2' });

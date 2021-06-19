@@ -4,7 +4,6 @@ import { Button, Input, Toast, Spin } from '@discuzq/design';
 import Header from '@components/header';
 import styles from './index.module.scss';
 import { withRouter } from 'next/router';
-import HOCFetchSiteData from '../../middleware/HOCFetchSiteData';
 import Router from '@discuzq/sdk/dist/router';
 import GetQueryString from '../../../common/utils/get-query-string';
 import throttle from '@common/utils/thottle.js';
@@ -57,16 +56,19 @@ class index extends Component {
   }, 300);
 
   // 点击忘记密码
-  handleGoToFindPayPwd = () => {
+  handleGoToFindPayPwd = throttle(() => {
     if (!this.props.user.mobile) {
       Toast.error({
         content: '需要首先绑定手机号才能进行此操作',
         duration: 2000,
       });
+      setTimeout(() => {
+        Router.push({ url: '/user/bind-phone?from=userCenter' });
+      }, 1000);
       return;
     }
     Router.push({ url: '/my/edit/find-paypwd' });
-  };
+  }, 1000);
 
   // 初次设置密码 password
   handleSetPwd = (e) => {

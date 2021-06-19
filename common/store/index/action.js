@@ -3,7 +3,7 @@ import IndexStore from './store';
 import { readCategories, readStickList, readThreadList, updatePosts, createThreadShare, readRecommends } from '@server';
 import typeofFn from '@common/utils/typeof';
 import threadReducer from '../thread/reducer';
-import { getCategoryName, getActiveId, getCategories } from '@common/utils/handleCategory'
+import { getCategoryName, getActiveId, getCategories, handleString2Arr } from '@common/utils/handleCategory'
 
 class IndexAction extends IndexStore {
   constructor(props) {
@@ -114,7 +114,9 @@ class IndexAction extends IndexStore {
 
       this.setFilter({ categoryids: categoryIds })
     } else {
-      const { categoryids = [], sequence = 0 } = this.filter
+      const { sequence = 0 } = this.filter
+      const categoryids = handleString2Arr(this.filter, 'categoryids')
+
       this.screenData({ filter: { categoryids }, sequence })
     }
   }

@@ -59,7 +59,7 @@ class WithdrawalPop extends Component {
       })
       .then((res) => {
         Toast.success({
-          content: res.Msg || '申请提现成功',
+          content: '申请提现成功',
           hasMask: false,
           duration: 2000,
         });
