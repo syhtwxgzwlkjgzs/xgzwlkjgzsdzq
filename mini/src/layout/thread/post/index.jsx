@@ -98,7 +98,7 @@ class Index extends Component {
     if (permissions && permissions.createThread && !permissions.createThread.enable) {
       this.postToast('暂无发帖权限, 即将回到首页');
       setTimeout(() => {
-        Taro.redirectTo({ url: '/pages/index/index' })
+        Taro.redirectTo({ url: '/pages/home/index' })
       }, 1000)
     }
   }

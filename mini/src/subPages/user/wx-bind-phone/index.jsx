@@ -103,7 +103,7 @@ class Index extends Component {
         duration: 1000,
         onClose: () => {
           navigateTo({
-            url: `/pages/index/index`
+            url: `/pages/home/index`
           });
         }
       });
@@ -115,7 +115,7 @@ class Index extends Component {
           redirectTo({ url: '/subPages/user/supplementary/index' });
           return;
         }
-        redirectTo({ url: '/pages/index/index' });
+        redirectTo({ url: '/pages/home/index' });
         return;
       }
       // 跳转状态页

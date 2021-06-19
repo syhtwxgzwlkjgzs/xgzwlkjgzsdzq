@@ -178,7 +178,7 @@ http.interceptors.response.use((res) => {
       if (process.env.DISCUZ_ENV === 'web') {
         url = '/';
       } else {
-        url = '/pages/index/index'
+        url = '/pages/home/index'
       }
       Router.replace({
         url
