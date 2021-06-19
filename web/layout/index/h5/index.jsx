@@ -181,7 +181,7 @@ class IndexH5Page extends React.Component {
     const { threads = {}, sticks } = index;
     const { currentPage, totalPage, pageData } = threads || {};
     // 是否开启虚拟滚动
-    const enableVlist = false;
+    const enableVlist = true;
 
     return (
       <BaseLayout
