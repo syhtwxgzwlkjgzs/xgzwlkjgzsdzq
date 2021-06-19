@@ -46,6 +46,9 @@ class App extends Component {
    * 注意：options 参数的字段在不同小程序中可能存在差异。所以具体使用的时候请看相关小程序的文档
    */
   async onLaunch(options) {
+    // 初始进入页，保留初始页信息
+    this.initInitialPath(options);
+
     await this.initSiteData();
     const { site } = this.store;
     const { envConfig } = site;
@@ -53,19 +56,18 @@ class App extends Component {
     if (TITLE && TITLE !== '') {
       setTitle(TITLE);
     }
-
-    // 初始进入页，保留初始页信息
-    this.initInitialPath(options);
   }
 
   // 记录用户访问的地址，用于登陆、付费等处理后，正确跳回目的地址
   initInitialPath(options) {
     console.log('Enter Page: ', options)
-
     const {path, query} = options;
-    const url = `${path}?${Object.entries(query).map(([key, value]) => `${key}=${value}`).join('&')}`;
-
     const { site } = this.store;
+
+    let url = path;
+    if (Object.keys(query).length > 0) {
+      url = `${url}?${Object.entries(query).map(([key, value]) => `${key}=${value}`).join('&')}`
+    }
     site.setInitialPage(url);
   }
 

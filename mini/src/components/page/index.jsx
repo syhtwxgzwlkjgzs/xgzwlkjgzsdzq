@@ -106,15 +106,25 @@ export default class Page extends React.Component {
           }
         }
       }
-
-      // 所有判断结束后，看是否有预留目标地址
-      const initialPage = site.useInitialPage();
+      
+      // TODO: 用户通过分享链接访问，经过多次拦截后跳回目标页
+      const initialPage = site.getInitialPage();
       if (initialPage) {
-        console.log(999, initialPage)
-        Router.replace({
-          url: initialPage,
-        });
-        return false;
+        const whiteList = [...MINI_SITE_JOIN_WHITE_LIST];
+        user.isLogin() && whiteList.push(...REVIEWING_USER_WHITE_LIST);
+        // 如果当前并非处于原始进入页，且当前的路径并非白名单或首页，则跳转目标页
+        if (!initialPage.includes(path)) {
+          if (!whiteList.includes(path) || '/pages/index/index' === path) {
+            console.log('Redirect to initital page, from', path, 'to', initialPage);
+            site.clearInitialPage();
+            Router.replace({
+              url: initialPage,
+            });
+            return false;
+          }
+        } else {
+          site.clearInitialPage();
+        }
       }
     }
 

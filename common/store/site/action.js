@@ -2,7 +2,6 @@ import { action } from 'mobx';
 import { readUserLoginDisplay, readForum, getMiniCode } from '@server';
 import SiteStore from './store';
 import { get } from '../../utils/get';
-
 class SiteAction extends SiteStore {
   constructor(props) {
     super(props);
@@ -89,15 +88,16 @@ class SiteAction extends SiteStore {
   clearInitialPage() {
     this.initialPage = null;
   }
+  // 读取并清空记录的初始页面地址
   @action
-  useInitialPage() {
+  getInitialPage() {
     let url = this.initialPage;
 
     if (url && process.env.DISCUZ_ENV !== 'web') {
       url = `/${url}`
     }
     
-    this.clearInitialPage();
+    // this.clearInitialPage();
 
     return url;
   }

@@ -14,8 +14,6 @@ import ActiveUsers from '../../search/components/active-users';
 import PopularContents from '../../search/components/popular-contents';
 import layout from './index.module.scss';
 import SiteInfo from '../site-info';
-import { inviteDetail } from '@server';
-import goToLoginPage from '@common/utils/go-to-login-page';
 import PayBox from '@components/payBox';
 import { simpleRequest } from '@common/utils/simple-request';
 import Router from '@discuzq/sdk/dist/router';

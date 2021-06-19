@@ -3,7 +3,7 @@ import styles from './index.module.scss';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import { inject, observer } from 'mobx-react';
 import { View, Text, Image, Button } from '@tarojs/components';
-import Router from '@discuzq/sdk/dist/router';
+import Taro from '@tarojs/taro';
 import SharePopup from '../thread/share-popup';
 import isWeiXin from '@common/utils/is-weixin';
 import { get } from '@common/utils/get';
@@ -50,6 +50,16 @@ class HomeHeader extends React.Component {
       return siteData.setSite.siteHeaderLogo;
     }
     return logoImg;
+  }
+
+  goBack() {
+    Taro.navigateBack({
+      fail() {
+        Taro.navigateTo({
+          url: '/pages/index/index'
+        });
+      }
+    });
   }
 
   getSiteInfo() {
@@ -141,7 +151,7 @@ class HomeHeader extends React.Component {
           {hideInfo && mode !== 'join' && (
             <View className={styles.topBar}>
               {mode === 'login' ? (
-                <View onClick={() => Router.back()} className={styles.left}>
+                <View onClick={() => this.goBack()} className={styles.left}>
                   <Icon name="LeftOutlined" />
                 </View>
               ) : (
@@ -156,7 +166,7 @@ class HomeHeader extends React.Component {
           )}
           {showToolbar && (
             <View className={styles.topBar}>
-              <View onClick={() => Router.back()} className={styles.customCapsule} style={this.getTopBarBtnStyle()}>
+              <View onClick={() => this.goBack()} className={styles.customCapsule} style={this.getTopBarBtnStyle()}>
                 <Icon name="LeftOutlined" />
               </View>
               <View style={this.getTopBarTitleStyle()} className={styles.fullScreenTitle}>{ fullScreenTitle }</View>
