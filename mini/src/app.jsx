@@ -46,7 +46,7 @@ class App extends Component {
    * 注意：options 参数的字段在不同小程序中可能存在差异。所以具体使用的时候请看相关小程序的文档
    */
   async onLaunch(options) {
-    await this.initSiteData();
+    this.initSiteData();
     const { site } = this.store;
     const { envConfig } = site;
     const { TITLE } = envConfig;
@@ -133,7 +133,7 @@ class App extends Component {
           url: '/subPages/close/index'
         });
         return false;
-      case INVALID_TOKEN:// token无效
+      case INVALID_TOKEN:// 没有权限,只能针对forum接口做此判断
       case TOKEN_FAIL:// token无效
         clearLoginStatus();
         this.initSiteData(); // 重新获取数据

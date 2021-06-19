@@ -182,7 +182,7 @@ export default function HOCFetchSiteData(Component) {
           site.setCloseSiteConfig(result.data);
           Router.redirect({ url: '/close' });
           break;
-        case INVALID_TOKEN:// token无效
+        case INVALID_TOKEN:// 没有权限,只能针对forum接口做此判断
         case TOKEN_FAIL:// token无效
           clearLoginStatus();
           window.location.reload();
