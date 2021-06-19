@@ -5,8 +5,8 @@ const config = {
   // TODO: 分包处理
   // 首页和详情页在主包
   pages: [
-    'pages/home/index',
     'pages/index/index',
+    'pages/home/index',
   ],
   subPackages: [
     {

@@ -31,17 +31,12 @@ const CLOSE_URL = '/subPage/close/index';
 @observer
 class Index extends React.Component {
 
-    async componentDidMount() {
-      await this.initSiteData();
-
-    }
-
     componentDidUpdate() {
 
     }
 
     componentDidShow() {
-
+      this.initSiteData();
     }
 
     // 检查站点状态
@@ -105,53 +100,59 @@ class Index extends React.Component {
       return true;
     }
 
-  // 初始化站点数据
-  async initSiteData() {
+    // 初始化站点数据
+    async initSiteData() {
 
-    const { site, user} = this.props;
+      const { site, user} = this.props;
 
-    let loginStatus = false;
+      let loginStatus = false;
 
-    site.setPlatform('mini');
+      site.setPlatform('mini');
 
-    // 获取站点信息
-    const siteResult = await readForum({});
+      let webConfig;
+      if ( !site.webConfig ) {
+        // 获取站点信息  
+        const siteResult = await readForum({});
 
-    // 检查站点状态
-    const isPass = this.setAppCommonStatus(siteResult);
-    if(!isPass) return;
+        // 检查站点状态
+        const isPass = this.setAppCommonStatus(siteResult);
+        if(!isPass) return;
+        site.setSiteConfig(siteResult.data);
+        webConfig = siteResult.data;
+      } else {
+        webConfig = site.webConfig;
+      }
 
-    siteResult.data && site.setSiteConfig(siteResult.data);
 
-    if( siteResult && siteResult.data && siteResult.data.user ) {
+      if( webConfig && webConfig.user ) {
 
-      const userInfo = await readUser({ params: { pid: siteResult.data.user.userId } });
-      const userPermissions = await readPermissions({});
+        const userInfo = await readUser({ params: { pid: webConfig.user.userId } });
+        const userPermissions = await readPermissions({});
 
-      // 添加用户发帖权限
-      userPermissions.code === 0 && userPermissions.data && user.setUserPermissions(userPermissions.data);
-      // 当客户端无法获取用户信息，那么将作为没有登录处理
-      userInfo.code === 0 && userInfo.data && user.setUserInfo(userInfo.data);
+        // 添加用户发帖权限
+        userPermissions.code === 0 && userPermissions.data && user.setUserPermissions(userPermissions.data);
+        // 当客户端无法获取用户信息，那么将作为没有登录处理
+        userInfo.code === 0 && userInfo.data && user.setUserInfo(userInfo.data);
 
-      loginStatus = !!userInfo.data && !!userInfo.data.id;
+        loginStatus = !!userInfo.data && !!userInfo.data.id;
+      }
+
+      // 未登陆状态下，清空accessToken
+      !loginStatus && clearLoginStatus();
+
+      user.updateLoginStatus(loginStatus);
+
+      const isGoToHome = await this.isPass();
+      if (isGoToHome ) {
+        Router.redirect({
+          url: '/pages/home/index'
+        });
+      } else {
+        Router.redirect({
+          url: '/subPages/500/index'
+        });
+      }
     }
-
-    // 未登陆状态下，清空accessToken
-    !loginStatus && clearLoginStatus();
-
-    user.updateLoginStatus(loginStatus);
-
-    const isGoToHome = await this.isPass();
-    if (isGoToHome ) {
-      Router.redirect({
-        url: '/pages/home/index'
-      });
-    } else {
-      Router.redirect({
-        url: '/subPages/500/index'
-      });
-    }
-  }
 
   // 检查是否满足渲染条件
   isPass() {
