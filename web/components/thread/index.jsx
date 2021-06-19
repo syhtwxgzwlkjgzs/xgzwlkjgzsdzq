@@ -213,7 +213,7 @@ class Index extends React.Component {
         payType,
         isAnonymous,
       } = data || {};
-      const { isEssence, isPrice, isRedPack, isReward } = displayTag;
+      const { isEssence, isPrice, isRedPack, isReward } = displayTag || {};
 
       return (
         <div className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`}>
