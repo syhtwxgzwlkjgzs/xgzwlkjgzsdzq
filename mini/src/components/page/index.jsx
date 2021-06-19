@@ -11,7 +11,7 @@ import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvid
 import Taro from '@tarojs/taro';
 import { REVIEWING } from '@common/store/login/util';
 
-const INDEX_URL = '/pages/index/index';
+const INDEX_URL = '/pages/home/index';
 const PARTNER_INVITE_URL = '/subPages/forum/partner-invite/index';
 const WX_AUTH_URL = '/subPages/user/wx-auth/index';
 const BIND_NICKNAME_URL = '/subPages/user/bind-nickname/index';
@@ -155,7 +155,6 @@ export default class Page extends React.Component {
   render() {
     const { site, disabledToast, className = '' } = this.props;
     const isRender = this.isPass();
-
     if (!isRender) return null;
     return (
       <View className={`${styles['dzq-page']} dzq-theme-${site.theme} ${className}`}>

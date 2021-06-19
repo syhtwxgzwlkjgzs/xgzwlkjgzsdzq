@@ -57,12 +57,14 @@ class WithdrawalPop extends Component {
       .createWalletCash({
         money: this.state.inputValue,
       })
-      .then((res) => {
+      .then(async (res) => {
         Toast.success({
           content: '申请提现成功',
           hasMask: false,
           duration: 2000,
         });
+        const { getUserWalletInfo } = this.props.wallet;
+        await getUserWalletInfo();
         this.initState();
       })
       .catch((err) => {

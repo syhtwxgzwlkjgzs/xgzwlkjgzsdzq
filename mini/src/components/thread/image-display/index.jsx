@@ -14,7 +14,8 @@ const Index = ({ imgData = [], flat = false, platform = 'h5', isPay = false, onP
     const [visible, setVisible] = useState(false);
     const [defaultImg, setDefaultImg] = useState('');
     const ImagePreviewerRef = React.useRef(null);
-    const [firstImgData, setFirstImgData] = useState(null);
+    // const [firstImgData, setFirstImgData] = useState(null);
+    const [firstImgData, setFirstImgData] = useState({width: (imgData && imgData[0].fileWidth) || 0, height: (imgData && imgData[0].fileHeight) || 0});
 
     const imagePreviewers = useMemo(() => imgData.map(item => item.url), [imgData]);
 
@@ -46,45 +47,45 @@ const Index = ({ imgData = [], flat = false, platform = 'h5', isPay = false, onP
       }, 0);
     };
 
-    useEffect(() => {
-      if (flat) return;
-      let timer;
-      if ( imgData && imgData.length !== 0 ) {
-        Taro.getImageInfo({
-          src: imgData[0].thumbUrl,
-          complete: () => {
-            timer && clearTimeout(timer);
-          },
-          fail: () => {
-            setFirstImgData('fail');
-          },
-          success: (result) => {
-            if ( !result.width || !result.height  ) {
-              setFirstImgData('fail');
-            } else {
-              setFirstImgData({
-                width: result.width,
-                height: result.height
-              });
-            }
-          },
-        });
-        timer = setTimeout(() => {
-          if ( firstImgData === null ) {
-            setFirstImgData('fail');
-          }
-        }, 2000);
-      } 
-      return () => {
-        timer && clearTimeout(timer);
-      }
-    }, [flat, imgData]);
+    // useEffect(() => {
+    //   if (flat) return;
+    //   let timer;
+    //   if ( imgData && imgData.length !== 0 ) {
+    //     Taro.getImageInfo({
+    //       src: imgData[0].thumbUrl,
+    //       complete: () => {
+    //         timer && clearTimeout(timer);
+    //       },
+    //       fail: () => {
+    //         setFirstImgData('fail');
+    //       },
+    //       success: (result) => {
+    //         if ( !result.width || !result.height  ) {
+    //           setFirstImgData('fail');
+    //         } else {
+    //           setFirstImgData({
+    //             width: result.width,
+    //             height: result.height
+    //           });
+    //         }
+    //       },
+    //     });
+    //     timer = setTimeout(() => {
+    //       if ( firstImgData === null ) {
+    //         setFirstImgData('fail');
+    //       }
+    //     }, 2000);
+    //   } 
+    //   return () => {
+    //     timer && clearTimeout(timer);
+    //   }
+    // }, [flat, imgData]);
 
     // 当更新了firstImgData，代表确定了布局方式，可以通知外部更新
-    useEffect(() => {
-      if (flat) return;
-      onImageReady && onImageReady();
-    }, [flat, firstImgData]);
+    // useEffect(() => {
+    //   if (flat) return;
+    //   onImageReady && onImageReady();
+    // }, [flat, firstImgData]);
 
     const style = useMemo(() => {
       const num = imgData.length > 5 ? 5 : imgData?.length;

@@ -24,7 +24,7 @@ class Index extends Component {
   handleBindButtonClick = async () => {
     try {
       const resp = await this.props.userLogin.login();
-      const uid = get(resp, 'uid', '');
+      const uid = get(resp, 'data.uid', '');
       this.props.user.updateUserInfo(uid);
       Toast.success({
         content: '登录成功',
@@ -32,7 +32,7 @@ class Index extends Component {
         duration: 1000,
         onClose: () => {
           navigateTo({
-            url: `/pages/index/index`
+            url: `/pages/home/index`
           });
         }
       });
@@ -44,7 +44,7 @@ class Index extends Component {
           redirectTo({ url: '/subPages/user/supplementary/index' });
           return;
         }
-        redirectTo({ url: '/pages/index/index' });
+        redirectTo({ url: '/pages/home/index' });
         return;
       }
 

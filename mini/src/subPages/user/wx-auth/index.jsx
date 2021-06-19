@@ -69,7 +69,7 @@ class MiniAuth extends React.Component {
       checkUserStatus(resp);
       if (resp.code === 0) {
         redirectTo({
-          url: `/pages/index/index`
+          url: `/pages/home/index`
         });
         return;
       }
@@ -94,7 +94,7 @@ class MiniAuth extends React.Component {
           redirectTo({ url: '/subPages/user/supplementary/index' });
           return;
         }
-        redirectTo({ url: '/pages/index/index' });
+        redirectTo({ url: '/pages/home/index' });
         return;
       }
       // 跳转状态页
