@@ -6,6 +6,7 @@ import MoneyInput from './components/money-input';
 import styles from './index.module.scss';
 import { Icon, Button, Toast } from '@discuzq/design';
 import classNames from 'classnames';
+import Router from '@discuzq/sdk/dist/router';
 
 @inject('wallet')
 @inject('site')
@@ -77,13 +78,16 @@ class Withdrawal extends React.Component {
       .createWalletCash({
         money: this.state.withdrawalAmount,
       })
-      .then((res) => {
+      .then(async (res) => {
         Toast.success({
           content: '申请提现成功',
           hasMask: false,
           duration: 2000,
         });
+        const { getUserWalletInfo } = this.props.wallet;
+        await getUserWalletInfo();
         this.initState();
+        Router.back();
       })
       .catch((err) => {
         console.error(err);
