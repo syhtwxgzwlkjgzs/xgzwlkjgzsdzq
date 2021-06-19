@@ -113,7 +113,6 @@ const Index = ({
     obj.imgtop = 0
   }
   const renderCard = () => {
-
     // 标题文字图片海报
     if (url) {
       return (
@@ -127,9 +126,8 @@ const Index = ({
         <Cardk obj={obj} setShareImage={setShareImage}></Cardk>
       )
     }
-
     // 文字海报
-    if (data.content) {
+    if (data.marglength) {
       return (
         <Card obj={obj} setShareImage={setShareImage}></Card>
       )
