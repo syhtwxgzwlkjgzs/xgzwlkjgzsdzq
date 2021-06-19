@@ -194,7 +194,7 @@ class PayPassword extends React.Component {
             </>
 
             <View className={styles.forgetPasswordContainer} onClick={this.handleForgetPayPwd}>
-              {IS_MOBILE_SERVICE_OPEN && IS_USER_BIND_MOBILE && <Text>忘记支付密码?</Text>}
+              {IS_MOBILE_SERVICE_OPEN && <Text>忘记支付密码?</Text>}
             </View>
 
             {/* 关闭按钮 */}
