@@ -21,7 +21,7 @@ import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-stor
 @observer
 class WXBind extends Component {
   getUserProfileCallback = async (params) => {
-    const { sessionToken } = getCurrentInstance().router.params;
+    const { scene: sessionToken } = getCurrentInstance().router.params;
 
     try {
       await getParamCode(this.props.commonLogin);
