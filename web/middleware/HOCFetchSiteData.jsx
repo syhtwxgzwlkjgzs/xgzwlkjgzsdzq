@@ -175,6 +175,12 @@ export default function HOCFetchSiteData(Component) {
 
     setAppCommonStatus(result) {
       const { site } = this.props;
+
+      const CODE_NEED_SAVE = [JUMP_TO_LOGIN, JUMP_TO_REGISTER, JUMP_TO_AUDIT, JUMP_TO_REFUSE, JUMP_TO_DISABLED, JUMP_TO_SUPPLEMENTARY, JUMP_TO_PAY_SITE];
+      if (CODE_NEED_SAVE.includes(result.code)) {
+        this.saveInitialPage();
+      }
+
       switch (result.code) {
         case 0:
           break;
@@ -221,10 +227,25 @@ export default function HOCFetchSiteData(Component) {
       }
     }
 
+    saveInitialPage() {
+      const { site } = this.props;
+
+      if (!site.getInitialPage()) {
+        site.setInitialPage(window.location.href);
+      }
+    }
+
+    saveAndRedirect(url) {
+      this.saveInitialPage(url);
+
+      Router.redirect({ url });
+    }
+
     // 检查是否满足渲染条件
     isPass() {
       const { site, router, user } = this.props;
       const { isNoSiteData } = this.state;
+
       if (site && site.webConfig) {
         isNoSiteData && this.setState({
           isNoSiteData: false,
@@ -250,16 +271,13 @@ export default function HOCFetchSiteData(Component) {
           if (!site.isOffiaccountOpen && !site.isMiniProgramOpen) {
             // 绑定手机: 开启短信，没有绑定手机号
             if (router.asPath !== '/user/bind-phone' && site.isSmsOpen && !user.mobile) {
-              Router.redirect({ url: '/user/bind-phone' });
+              this.saveAndRedirect( '/user/bind-phone' );
               return false;
             }
           }
           // 绑定昵称：没有昵称
-          if (
-            router.asPath !== '/user/bind-nickname'
-            && !user.nickname
-          ) {
-            Router.redirect({ url: '/user/bind-nickname' });
+          if (router.asPath !== '/user/bind-nickname' && !user.nickname) {
+            this.saveAndRedirect( '/user/bind-nickname' );
             return false;
           }
           // 账号审核中的 用户只能访问 首页 + 帖子详情页，以及用户状态提示页
@@ -270,7 +288,6 @@ export default function HOCFetchSiteData(Component) {
             }
           }
         }
-
 
         if (site?.webConfig?.setSite?.siteMode !== 'pay') {
           return true;
@@ -289,10 +306,33 @@ export default function HOCFetchSiteData(Component) {
         const code = router.query.inviteCode;
         const query = code ? `?inviteCode=${code}` : '';
         if (!user?.paid) {
-          Router.redirect({ url: `/forum/partner-invite${query}` });
+          this.saveAndRedirect(`/forum/partner-invite${query}`);
           return false;
         }
+
+        // 跳转初始访问页面
+        // TODO: 用户通过分享链接访问，经过多次拦截后跳回目标页
+        const initialPage = site.getInitialPage();
+        if (initialPage) {
+          const whiteList = [...WEB_SITE_JOIN_WHITE_LIST];
+          user.isLogin() && whiteList.push(...REVIEWING_USER_WHITE_LIST_WEB);
+          // 如果当前并非处于原始进入页，且当前的路径并非白名单或首页，则跳转目标页
+          const urlObj = new URL(initialPage);
+          if (urlObj.pathname !== router.asPath) {
+            if (!whiteList.includes(router.asPath) || router.asPath === '/') {
+              console.log('Redirect to initital page, from', window.location.href, 'to', initialPage);
+              site.clearInitialPage();
+              Router.redirect({
+                url: initialPage,
+              });
+              return false;
+            }
+          } else {
+            site.clearInitialPage();
+          }
+        }
       }
+
       return true;
     }
 

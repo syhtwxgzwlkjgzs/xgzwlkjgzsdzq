@@ -2,6 +2,7 @@ import { action } from 'mobx';
 import { readUserLoginDisplay, readForum, getMiniCode } from '@server';
 import SiteStore from './store';
 import { get } from '../../utils/get';
+import locals from '@common/utils/local-bridge';
 class SiteAction extends SiteStore {
   constructor(props) {
     super(props);
@@ -82,16 +83,16 @@ class SiteAction extends SiteStore {
   // 用户访问起始页面
   @action
   setInitialPage(pageUrl) {
-    this.initialPage = pageUrl;
+    locals.set('initialPage', pageUrl);
   }
   @action
   clearInitialPage() {
-    this.initialPage = null;
+    locals.remove('initialPage');
   }
   // 读取并清空记录的初始页面地址
   @action
   getInitialPage() {
-    let url = this.initialPage;
+    let url = locals.get('initialPage')
 
     if (url && process.env.DISCUZ_ENV !== 'web') {
       url = `/${url}`
