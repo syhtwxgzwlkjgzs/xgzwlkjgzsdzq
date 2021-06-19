@@ -32,7 +32,6 @@ class App extends Component {
     // 初始进入页，保留初始页信息
     this.initInitialPath(options);
 
-    await this.initSiteData();
     const { site } = this.store;
     const { envConfig } = site;
     const { TITLE } = envConfig;

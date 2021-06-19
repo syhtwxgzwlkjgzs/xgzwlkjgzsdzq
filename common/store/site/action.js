@@ -81,9 +81,10 @@ class SiteAction extends SiteStore {
   }
 
   // 用户访问起始页面
+  EXPIRATION_SECONDS = 10 * 60; // 记录的跳转地址10min内有效
   @action
   setInitialPage(pageUrl) {
-    locals.set('initialPage', pageUrl);
+    locals.set('initialPage', pageUrl, this.EXPIRATION_SECONDS);
   }
   @action
   clearInitialPage() {
@@ -97,8 +98,6 @@ class SiteAction extends SiteStore {
     if (url && process.env.DISCUZ_ENV !== 'web') {
       url = `/${url}`
     }
-    
-    // this.clearInitialPage();
 
     return url;
   }
