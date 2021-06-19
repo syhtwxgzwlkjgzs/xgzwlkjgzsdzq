@@ -1,124 +1,190 @@
 import React from 'react';
-import IndexPage from '@layout/index/index';
-import Page from '@components/page';
-import withShare from '@common/utils/withShare/withShare'
 import { inject, observer } from 'mobx-react'
-import { handleString2Arr } from '@common/utils/handleCategory';
-import { priceShare } from '@common/utils/priceShare';
+import styles from './index.module.scss';
+import { View } from '@tarojs/components';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Toast from '@discuzq/design/dist/components/toast';
+import clearLoginStatus from '@common/utils/clear-login-status';
+import Router from '@discuzq/sdk/dist/router';
+import {readForum, readUser, readPermissions} from '@server';
+import {
+  JUMP_TO_404,
+  INVALID_TOKEN,
+  TOKEN_FAIL,
+  JUMP_TO_LOGIN,
+  JUMP_TO_REGISTER,
+  JUMP_TO_AUDIT,
+  JUMP_TO_REFUSE,
+  JUMP_TO_DISABLED,
+  JUMP_TO_HOME_INDEX,
+  SITE_CLOSED,
+  JUMP_TO_PAY_SITE,
+  JUMP_TO_SUPPLEMENTARY,
+  SITE_NO_INSTALL
+} from '@common/constants/site';
+
+const PARTNER_INVITE_URL = '/subPages/forum/partner-invite/index';
+const CLOSE_URL = '/subPage/close/index';
 
 @inject('site')
-@inject('search')
-@inject('topic')
-@inject('index')
 @inject('user')
 @observer
-@withShare({
-  needLogin: true
-})
 class Index extends React.Component {
-  state = {
-    isError: false,
-    errorText: '加载失败'
+
+    async componentDidMount() {
+      await this.initSiteData();
+
+    }
+
+    componentDidUpdate() {
+
+    }
+
+    componentDidShow() {
+
+    }
+
+    // 检查站点状态
+    setAppCommonStatus(result) {
+      const { site } = this.props;
+      switch (result.code) {
+        case 0:
+          break;
+        case SITE_CLOSED: site.setCloseSiteConfig(result.data);// 关闭站点
+          Router.redirect({
+            url: '/subPages/close/index'
+          });
+          return false;
+        case INVALID_TOKEN:// 没有权限,只能针对forum接口做此判断
+        case TOKEN_FAIL:// token无效
+          clearLoginStatus();
+          this.initSiteData(); // 重新获取数据
+          return false;
+        case JUMP_TO_404:// 资源不存在
+          Router.redirect({ url: '/subPages/404/index' });
+          break;
+        case JUMP_TO_LOGIN:// 到登录页
+          clearLoginStatus();
+          this.initSiteData(); // 重新获取数据
+          Router.reLaunch({ url: '/subPages/user/wx-auth/index' });
+          break;
+        case JUMP_TO_REGISTER:// 到注册页
+          clearLoginStatus();
+          this.initSiteData(); // 重新获取数据
+          Router.reLaunch({ url: '/subPages/user/wx-auth/index' });
+          break;
+        case JUMP_TO_AUDIT:// 到审核页
+          Router.push({ url: '/subPages/user/status/index?statusCode=2' });
+          break;
+        case JUMP_TO_REFUSE:// 到审核拒绝页
+          Router.push({ url: '/subPages/user/status/index?statusCode=-4007' });
+          break;
+        case JUMP_TO_DISABLED:// 到审核禁用页
+          Router.push({ url: '/subPages/user/status/index?statusCode=-4009' });
+          break;
+        case JUMP_TO_HOME_INDEX:// 到首页
+          Router.redirect({ url: '/pages/home/index' });
+          break;
+        case JUMP_TO_PAY_SITE:// 到付费加入页面
+          Router.push({ url: '/subPages/forum/partner-invite/index' });
+          break;
+        case JUMP_TO_SUPPLEMENTARY:// 跳转到扩展字段页
+          Router.push({ url: '/subPages/user/supplementary/index' });
+          break;
+        case SITE_NO_INSTALL:// 未安装站点
+          Router.push({ url: '/subPages/no-install/index' });
+          break;
+        default: 
+          Router.redirect({url: '/subPages/500/index'});
+          clearLoginStatus();
+          Toast.error({
+            content: result.msg || '未知错误'
+          })
+          break;
+      }
+      return true;
+    }
+
+  // 初始化站点数据
+  async initSiteData() {
+
+    const { site, user} = this.props;
+
+    let loginStatus = false;
+
+    site.setPlatform('mini');
+
+    // 获取站点信息
+    const siteResult = await readForum({});
+
+    // 检查站点状态
+    const isPass = this.setAppCommonStatus(siteResult);
+    if(!isPass) return;
+
+    siteResult.data && site.setSiteConfig(siteResult.data);
+
+    if( siteResult && siteResult.data && siteResult.data.user ) {
+
+      const userInfo = await readUser({ params: { pid: siteResult.data.user.userId } });
+      const userPermissions = await readPermissions({});
+
+      // 添加用户发帖权限
+      userPermissions.code === 0 && userPermissions.data && user.setUserPermissions(userPermissions.data);
+      // 当客户端无法获取用户信息，那么将作为没有登录处理
+      userInfo.code === 0 && userInfo.data && user.setUserInfo(userInfo.data);
+
+      loginStatus = !!userInfo.data && !!userInfo.data.id;
+    }
+
+    // 未登陆状态下，清空accessToken
+    !loginStatus && clearLoginStatus();
+
+    user.updateLoginStatus(loginStatus);
+
+    const isGoToHome = await this.isPass();
+    if (isGoToHome ) {
+      Router.redirect({
+        url: '/pages/home/index'
+      });
+    } else {
+      Router.redirect({
+        url: '/subPages/500/index'
+      });
+    }
   }
 
-  getShareData(data) {
-    const { site } = this.props
-    const defalutTitle = site.webConfig?.setSite?.siteName || ''
-    const defalutPath = 'pages/index/index'
-    if (data.from === 'timeLine') {
-      return {
-        title: defalutTitle
+  // 检查是否满足渲染条件
+  isPass() {
+    const { site, user } = this.props;
+    
+    const siteMode = site?.webConfig?.setSite?.siteMode;
+    if (site?.webConfig) {
+      // 关闭站点
+      if (site.closeSiteConfig) {
+        Router.redirect({ url: CLOSE_URL });
+        return false;
       }
-    }
-    if (data.from === 'menu') {
-      return {
-        title: defalutTitle,
-        path: defalutPath
-      }
-    }
-    const { title, path, comeFrom, threadId, isAnonymous, isPrice } = data
-    if (comeFrom && comeFrom === 'thread') {
-      const { user } = this.props
-      this.props.index.updateThreadShare({ threadId }).then(result => {
-        if (result.code === 0) {
-          this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
-          this.props.search.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
-          this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+
+      // 付费模式处理
+      if (siteMode === 'pay') {
+        // 未付费用户访问非白名单页面，强制跳转付费页
+        if (!user.isLogin() || !user.paid) {
+          Router.redirect({ url: PARTNER_INVITE_URL });
+          return false;
         }
-      });
+      }
+    } else {
+      return false;
     }
-    return     priceShare({isAnonymous, isPrice, path}) || 
-    {
-      title,
-      path
-    }
-  }
 
-  page = 1;
-  prePage = 10;
-
-
-  loadData = () => {
-    const { index } = this.props
-    const { essence = 0, sequence = 0, attention = 0, sort = 1 } = index.filter;
-
-    const newTypes = handleString2Arr(index.filter, 'types');
-    const categoryIds = handleString2Arr(index.filter, 'categoryids');
-
-    // 重置错误信息
-    this.props.index.resetErrorInfo()
-    this.props.index.getReadCategories();
-    this.props.index.getRreadStickList(categoryIds);
-    this.props.index.getReadThreadList({
-      sequence, 
-      filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort } 
-    });
-
-    this.dispatch('moreData');
-  }
-
-  componentDidShow() {
-    const { threads } = this.props.index || {}
-    if (!threads) {
-      this.loadData()
-    }
-  }
-
-  dispatch = async (type, data = {}) => {
-    const { index } = this.props;
-    const newData = {...index.filter, ...data}
-    const { essence, sequence, attention, sort, page } = newData;
-
-    const newTypes = handleString2Arr(newData, 'types');
-
-    const categoryIds = handleString2Arr(newData, 'categoryids');
-
-    if (type === 'click-filter') { // 点击tab
-      this.page = 1;
-      return await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, isMini: true });
-    } if (type === 'moreData') {
-      this.page += 1;
-      return await index.getReadThreadList({
-        perPage: this.prePage,
-        page: this.page,
-        filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort },
-        sequence,
-      });
-    } if (type === 'refresh-recommend') {
-      await index.getRecommends({ categoryIds });
-    } else if (type === 'update-page') {// 单独更新页数
-      this.page = page
-    } else if (type === 'refresh-thread') { // 点击帖子更新数的按钮，刷新帖子数据
-      this.page = 1;
-      return await index.getReadThreadList({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
-    }
+    return true;
   }
 
   render() {
     return (
-      <Page>
-        <IndexPage dispatch={this.dispatch} />
-      </Page>
+      <View className={styles.loadingBox}>
+        <Icon className={styles.loading} name="LoadingOutlined" size="large" />
+      </View>
     );
   }
 }

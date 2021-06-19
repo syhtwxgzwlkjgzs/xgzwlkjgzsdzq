@@ -24,8 +24,8 @@ export const getConfig = ({
       {
         x: 40,
         y: 757 + contentHeight,
-        width: marglength,
-        height: 44,
+        width: marglength + 10,
+        height: 54,
         backgroundColor: '#F7F7F7',
         borderRadius: 6
       },

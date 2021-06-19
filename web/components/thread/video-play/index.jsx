@@ -69,9 +69,13 @@ const Index = ({
     });
     setWidth(width);
     setHeight(height);
-
-    onVideoReady && onVideoReady();
   }, []);
+
+  useEffect(() => {
+    if (ref?.current?.clientHeight) {
+      onVideoReady && onVideoReady();
+    }
+  }, [ref?.current?.clientHeight]);
 
   return (
     <div id="common-video-play" className={styles.container} style={{width: `${width}px`, height: `${height}px`}} ref={ref}>
