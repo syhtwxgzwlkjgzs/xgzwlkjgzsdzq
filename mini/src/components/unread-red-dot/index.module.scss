@@ -11,13 +11,12 @@
     }
 
     .dzq-badge__circle {
-      height: 16px;
-      line-height: 16px;
-      font-size: $font-size-small;
+      width: 17px;
+      height: 17px;
+      font-size: 12px;
       font-weight: normal;
       color: $white !important;
       background: $error-color !important;
-      border-radius: $border-radius-8 !important;
     }
   }
 
@@ -25,12 +24,14 @@
     .dzq-badge__circle {
       top: rem(8px);
       right: rem(2px);
+      border-radius: 8px/9px;
     }
   }
 
   .icon-badge {
     .dzq-badge__circle {
       top: 2px;
+      border-radius: 8px/9px;
     }
     &.special-badge {
       .dzq-badge__circle {
@@ -52,7 +53,7 @@
 
   .large-badge {
     .dzq-badge__circle {
-      width: 34px;
+      width: 36px;
     }
   }
 
