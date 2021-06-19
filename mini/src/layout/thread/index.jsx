@@ -740,7 +740,7 @@ class ThreadH5Page extends React.Component {
       this.props.index.refreshHomeData({ categoryIds: [categoryId] });
     }
     Taro.redirectTo({
-      url: '/pages/index/index',
+      url: '/pages/home/index',
     });
   }
 

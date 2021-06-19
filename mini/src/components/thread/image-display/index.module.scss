@@ -19,6 +19,12 @@
     height: 100%;
   }
 
+  .flatItem{
+    &:not(:last-child) {
+      margin-bottom: 10px;
+    }
+  }
+
   .containerNum5 {
     .bigImages {
       height: 126px;

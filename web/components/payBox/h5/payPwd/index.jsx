@@ -181,7 +181,7 @@ class Index extends React.Component {
             {/* TODO: 忘记支付密码的链接添加 */}
 
             <div className={styles.forgetPasswordContainer} onClick={this.handleForgetPayPwd}>
-              {IS_MOBILE_SERVICE_OPEN && IS_USER_BIND_MOBILE && <span>忘记支付密码?</span>}
+              {IS_MOBILE_SERVICE_OPEN && <span>忘记支付密码?</span>}
             </div>
 
             {/* 关闭按钮 */}

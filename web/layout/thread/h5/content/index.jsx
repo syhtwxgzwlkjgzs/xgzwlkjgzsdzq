@@ -152,7 +152,7 @@ const RenderThreadContent = inject('user')(
           )}
 
           {/* 图片 */}
-          {parseContent.IMAGE && <ImageDisplay imgData={parseContent.IMAGE} />}
+          {parseContent.IMAGE && <ImageDisplay flat imgData={parseContent.IMAGE} />}
 
           {/* 视频 */}
           {parseContent.VIDEO && (

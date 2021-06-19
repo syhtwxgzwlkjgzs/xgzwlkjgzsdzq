@@ -10,11 +10,12 @@ import {calcImageType, calcImageDefaultType} from '@common/utils/calc-image-type
 const { Col, Row } = Flex
 
 // TODO 图片懒加载
-const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) => {
+const Index = ({ imgData = [], flat = false, platform = 'h5', isPay = false, onPay = noop, onImageReady = () => {} }) => {
     const [visible, setVisible] = useState(false);
     const [defaultImg, setDefaultImg] = useState('');
     const ImagePreviewerRef = React.useRef(null);
-    const [firstImgData, setFirstImgData] = useState(null);
+    // const [firstImgData, setFirstImgData] = useState(null);
+    const [firstImgData, setFirstImgData] = useState({width: (imgData && imgData[0].fileWidth) || 0, height: (imgData && imgData[0].fileHeight) || 0});
 
     const imagePreviewers = useMemo(() => imgData.map(item => item.url), [imgData]);
 
@@ -46,38 +47,45 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
       }, 0);
     };
 
-    useEffect(() => {
-      let timer;
-      if ( imgData && imgData.length !== 0 ) {
-        Taro.getImageInfo({
-          src: imgData[0].thumbUrl,
-          complete: () => {
-            timer && clearTimeout(timer);
-          },
-          fail: () => {
-            setFirstImgData('fail');
-          },
-          success: (result) => {
-            if ( !result.width || !result.height  ) {
-              setFirstImgData('fail');
-            } else {
-              setFirstImgData({
-                width: result.width,
-                height: result.height
-              });
-            }
-          },
-        });
-        timer = setTimeout(() => {
-          if ( firstImgData === null ) {
-            setFirstImgData('fail');
-          }
-        }, 2000);
-      } 
-      return () => {
-        timer && clearTimeout(timer);
-      }
-    }, [imgData]);
+    // useEffect(() => {
+    //   if (flat) return;
+    //   let timer;
+    //   if ( imgData && imgData.length !== 0 ) {
+    //     Taro.getImageInfo({
+    //       src: imgData[0].thumbUrl,
+    //       complete: () => {
+    //         timer && clearTimeout(timer);
+    //       },
+    //       fail: () => {
+    //         setFirstImgData('fail');
+    //       },
+    //       success: (result) => {
+    //         if ( !result.width || !result.height  ) {
+    //           setFirstImgData('fail');
+    //         } else {
+    //           setFirstImgData({
+    //             width: result.width,
+    //             height: result.height
+    //           });
+    //         }
+    //       },
+    //     });
+    //     timer = setTimeout(() => {
+    //       if ( firstImgData === null ) {
+    //         setFirstImgData('fail');
+    //       }
+    //     }, 2000);
+    //   } 
+    //   return () => {
+    //     timer && clearTimeout(timer);
+    //   }
+    // }, [flat, imgData]);
+
+    // 当更新了firstImgData，代表确定了布局方式，可以通知外部更新
+    // useEffect(() => {
+    //   if (flat) return;
+    //   onImageReady && onImageReady();
+    // }, [flat, firstImgData]);
 
     const style = useMemo(() => {
       const num = imgData.length > 5 ? 5 : imgData?.length;
@@ -85,6 +93,9 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
     }, [imgData]);
 
     const handleImages = () => {
+      if ( flat ) {
+        return { bigImages: imgData, smallImages: [] };
+      }
       if (imgData.length < 3) {
         return { bigImages: imgData, smallImages: [] };
       }
@@ -94,14 +105,27 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop }) =
       return { bigImages: [imgData[0], imgData[1]], smallImages: [imgData[2], imgData[3], imgData[4]] };
     };
 
-
     const ImageView = useMemo(() => {
       if ( !imgData || imgData.length === 0 ) {
         return null;
       }
 
-      if ( firstImgData === null ) return <View className={`${styles['placeholder']}`}/>;
+      if ( !flat && firstImgData === null ) return <View className={`${styles['placeholder']}`}/>;
       const res = handleImages();
+
+      // 扁平处理
+      if ( flat ) {
+        return (
+          <View>
+              {res.bigImages.map((item, index) => (
+                <View key={index} className={styles.flatItem}>
+                  <SmartImg autoSize noSmart type={item.fileType} src={item.url} mode='widthFix' onClick={() => onClick(item.id)} />
+                </View>
+              ))}
+          </View>
+        );
+      }
+      
       const type = firstImgData === 'fail' ? calcImageDefaultType(imgData.length) : calcImageType(firstImgData.width, firstImgData.height);
       if (imgData.length === 1) {
         return <One type={type} bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} />;

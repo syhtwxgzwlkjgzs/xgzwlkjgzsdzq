@@ -59,7 +59,7 @@ const Index = (props) => {
 
         return (
           <>
-              {text && <PostContent content={text} onPay={onPay} onRedirectToDetail={onClick} />}
+              {text && <PostContent onContentHeightChange={props.onContentHeightChange} content={text} onPay={onPay} onRedirectToDetail={onClick} />}
 
               {videoData && (
                 <VideoPlay
@@ -70,6 +70,7 @@ const Index = (props) => {
                   onPay={onPay}
                   isPay={needPay}
                   status={videoData.status}
+                  onVideoReady={props.onVideoReady}
                 />
               )}
               {imageData?.length > 0 && (
@@ -78,7 +79,8 @@ const Index = (props) => {
                       imgData={imageData} 
                       isPay={needPay}
                       onPay={onPay}
-                      onClickMore={onClick} />
+                      onClickMore={onClick} 
+                      onImageReady={props.onImageReady}/>
                   )
               }
               {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} />}

@@ -3,13 +3,14 @@ import isServer from '@common/utils/is-server';
 import styles from './index.module.scss';
 import {isLongImage} from '@common/utils/calc-image-type';
 
-const SmartImg = ({type, src, onClick}) => {
+const SmartImg = ({type, src, onClick, noSmart = false}) => {
 
     const [imgSrc, changeImgSrc] = useState(null);
     const [isLong, changeIsLong] = useState(false);
     const img = useRef(null);
 
     const calcImgSrc = useCallback(() => {
+        if (noSmart) return src;
         let newSrc = src.split('?')[0];
         if ( !isServer() ) {
             const viewWidth = window.screen.width;

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, forwardRef, useState, useImperativeHandle } from 'react';
-import { List, CellMeasurer, CellMeasurerCache, AutoSizer, InfiniteLoader } from 'react-virtualized';
+import { List, AutoSizer, CellMeasurer, CellMeasurerCache } from 'react-virtualized';
 import styles from './index.module.scss';
 import { getSticksHeight } from './utils';
 import BottomView from './BottomView';
@@ -146,63 +146,31 @@ function VList(
   const onChildScroll = ({ scrollTop, clientHeight, scrollHeight }) => {
     scrollToPosition = scrollTop;
     onScroll({ scrollTop, clientHeight, scrollHeight });
-    // if (scrollTop + clientHeight + clientHeight / 2 >= scrollHeight && !isLoading) {
-    //   console.log('加载下一页');
-    //   setIsLoading(true);
-    //   loadNextPage().finally(() => {
-    //     setIsLoading(false);
-    //   });
-    // }
-  };
-
-  const isRowLoaded = ({ index }) => {
-    if (!isLoading) {
-      return false;
-    } else {
-      return true;
+    if (scrollTop + clientHeight + (clientHeight / 2) >= scrollHeight && !isLoading) {
+      console.log('加载下一页');
+      setIsLoading(true);
+      loadNextPage().finally(() => {
+        setIsLoading(false);
+      });
     }
   };
 
-  const loadMoreRows = ({ startIndex, stopIndex }) => {
-    console.log(123);
-    let promiseResolver;
-
-    setIsLoading(true);
-    loadNextPage()
-      .then(() => {
-        promiseResolver();
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-
-    return new Promise((res) => {
-      promiseResolver = res;
-    });
-  };
-
   const listScroller = (
-    <InfiniteLoader isRowLoaded={isRowLoaded} loadMoreRows={loadMoreRows} rowCount={list.length}>
-      {({ onRowsRendered, registerChild }) => {
-        return (
-          <AutoSizer>
-            {({ height, width }) => (
-              <List
-                height={height}
-                ref={(ref) => (listRef = ref)}
-                width={width}
-                onScroll={onChildScroll}
-                overscanRowCount={12}
-                deferredMeasurementCache={cache}
-                rowCount={rowCount}
-                rowRenderer={rowRenderer}
-                rowHeight={getRowHeight}
-              />
-            )}
-          </AutoSizer>
-        );
-      }}
-    </InfiniteLoader>
+    <AutoSizer>
+      {({ height, width }) => (
+        <List
+          height={height}
+          ref={(ref) => (listRef = ref)}
+          width={width}
+          onScroll={onChildScroll}
+          overscanRowCount={12}
+          deferredMeasurementCache={cache}
+          rowCount={rowCount}
+          rowRenderer={rowRenderer}
+          rowHeight={getRowHeight}
+        />
+      )}
+    </AutoSizer>
   );
 
   useImperativeHandle(ref, () => ({

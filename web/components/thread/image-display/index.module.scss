@@ -29,6 +29,12 @@
     height: 100%;
   }
 
+  .flatItem{
+    &:not(:last-child) {
+      margin-bottom: rem(10);
+    }
+  }
+
   .containerNum5 {
     .bigImages {
       height: rem(126);
@@ -160,6 +166,12 @@
     background-color: $body-bg-color;
     width: 100%;
     height: 100%;
+  }
+
+  .flatItem{
+    &:not(:last-child) {
+      margin-bottom: rem(10);
+    }
   }
 
   .containerNum5 {
