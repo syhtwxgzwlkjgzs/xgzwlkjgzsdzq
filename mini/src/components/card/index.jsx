@@ -43,8 +43,12 @@ const Index = ({
       Taro.getImageInfo({
         src: image,
         success(img) {
-          const num = img.height * (620 / img.width);
-          setHeightdefill(num - 402)
+          if(img.type.toLowerCase() === 'gif') {
+            setUrl('')
+          } else {
+            const num = img.height * (620 / img.width);
+            setHeightdefill(num - 402)
+          }
         },
         fail(err) {
           setHeightdefill(402)
