@@ -23,7 +23,6 @@ import {
   SITE_NO_INSTALL
 } from '@common/constants/site';
 
-const INDEX_URL = '/pages/home/index';
 const PARTNER_INVITE_URL = '/subPages/forum/partner-invite/index';
 const CLOSE_URL = '/subPage/close/index';
 
@@ -143,7 +142,6 @@ class Index extends React.Component {
     user.updateLoginStatus(loginStatus);
 
     const isGoToHome = await this.isPass();
-    console.log('isGoToHome', isGoToHome)
     if (isGoToHome ) {
       Router.redirect({
         url: '/pages/home/index'
@@ -160,25 +158,18 @@ class Index extends React.Component {
     const { site, user } = this.props;
     
     const siteMode = site?.webConfig?.setSite?.siteMode;
-    console.log('siteMode', siteMode)
     if (site?.webConfig) {
       // 关闭站点
       if (site.closeSiteConfig) {
-    console.log('closeSiteConfig')
-
-        // Router.redirect({ url: CLOSE_URL });
+        Router.redirect({ url: CLOSE_URL });
         return false;
       }
 
       // 付费模式处理
       if (siteMode === 'pay') {
-    console.log('pay')
-
         // 未付费用户访问非白名单页面，强制跳转付费页
         if (!user.isLogin() || !user.paid) {
-    console.log('no-pay')
-
-          // Router.redirect({ url: PARTNER_INVITE_URL });
+          Router.redirect({ url: PARTNER_INVITE_URL });
           return false;
         }
       }
