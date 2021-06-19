@@ -5,7 +5,7 @@ import Page from '@components/page';
 
 class ParnerInvite extends React.Component {
   componentDidMount() {
-    Taro.hideHomeButton();
+    // Taro.hideHomeButton();
   }
   render() {
     return (
