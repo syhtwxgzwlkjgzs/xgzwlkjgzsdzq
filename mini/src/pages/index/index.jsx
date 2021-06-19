@@ -142,10 +142,15 @@ class Index extends React.Component {
 
     user.updateLoginStatus(loginStatus);
 
-
-    if (await this.isPass()) {
+    const isGoToHome = await this.isPass();
+    console.log('isGoToHome', isGoToHome)
+    if (isGoToHome ) {
       Router.redirect({
         url: '/pages/home/index'
+      });
+    } else {
+      Router.redirect({
+        url: '/subPages/500/index'
       });
     }
   }
@@ -155,28 +160,30 @@ class Index extends React.Component {
     const { site, user } = this.props;
     
     const siteMode = site?.webConfig?.setSite?.siteMode;
-
+    console.log('siteMode', siteMode)
     if (site?.webConfig) {
       // 关闭站点
       if (site.closeSiteConfig) {
-        Router.replace({ url: CLOSE_URL });
+    console.log('closeSiteConfig')
+
+        // Router.redirect({ url: CLOSE_URL });
         return false;
       }
 
       // 付费模式处理
       if (siteMode === 'pay') {
-        // 已付费用户，直接跳转首页
-        if (user.paid) {
-          Router.replace({ url: INDEX_URL });
-          return false;
-        }
+    console.log('pay')
 
         // 未付费用户访问非白名单页面，强制跳转付费页
         if (!user.isLogin() || !user.paid) {
-          Router.replace({ url: PARTNER_INVITE_URL });
+    console.log('no-pay')
+
+          // Router.redirect({ url: PARTNER_INVITE_URL });
           return false;
         }
       }
+    } else {
+      return false;
     }
 
     return true;
