@@ -17,7 +17,7 @@ class CommentList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isHideEdit: this.props.isHideEdit, // 隐藏评论编辑删除
+      // isHideEdit: this.props.isHideEdit, // 隐藏评论编辑删除
       isShowOne: this.props.isShowOne || false, // 是否只显示一条评论回复
     };
     this.needReply = this.props.data.lastThreeComments; // 评论的回复
@@ -87,13 +87,13 @@ class CommentList extends React.Component {
       canApprove: data.canApprove || false,
       canDelete: data.canDelete || false,
       canEdit: data.canEdit || false,
-      canHide: data.canLike || false,
+      canHide: data.canHide || false,
       canLike: data.canLike || false,
     };
   }
 
   render() {
-    const { canDelete, canEdit, canLike } = this.generatePermissions(this.props.data);
+    const { canDelete, canEdit, canLike, canHide } = this.generatePermissions(this.props.data);
     return (
       <div className={styles.commentList}>
         <div className={styles.header}>
@@ -184,10 +184,10 @@ class CommentList extends React.Component {
                         <span onClick={() => this.props.onAboptClick()}>采纳</span>
                       </div>
                     )}
-                    {!this.state.isHideEdit && canDelete && (
+                    {canHide && (
                       <div className={styles.extra}>
                         {/* {canEdit && <div className={styles.revise} onClick={() => this.editClick()}>编辑</div>} */}
-                        {canDelete && (
+                        {canHide && (
                           <div className={styles.revise} onClick={() => this.deleteClick()}>
                             删除
                           </div>

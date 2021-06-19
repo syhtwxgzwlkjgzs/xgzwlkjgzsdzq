@@ -1,5 +1,5 @@
 export const followerAdapter = (data) => {
-  const followers = [];
+  const followers = []
   Object.keys(data).forEach((key) => {
     const users = data[key];
     if (!users) return null;
@@ -7,7 +7,8 @@ export const followerAdapter = (data) => {
       id: user.user.pid,
       groupName: user.group.groupName,
       avatar: user.user.avatar,
-      userName: user.user.nickname || user.user.userName,
+      userName: user.user.userName,
+      nickName: user.user.nickName,
       isMutual: user.userFollow.isMutual,
       isFollow: user.userFollow.isFollow,
     }));

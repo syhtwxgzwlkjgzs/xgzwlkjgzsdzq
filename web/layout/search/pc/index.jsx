@@ -3,17 +3,14 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import styles from './index.module.scss';
 import BaseLayout from '@components/base-layout';
-import SectionTitle from '@components/section-title'
-import TrendingTopicMore from './components/trending-topic-more';
 import ThreadContent from '@components/thread';
-import ActiveUsersMore from './components/active-users-more';
-import Stepper from './components/stepper';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import Copyright from '@components/copyright';
 import SidebarPanel from '@components/sidebar-panel';
-import { Toast, Spin } from '@discuzq/design';
-import TopicItem from '@components/topic-item'
-import Nodata from '@components/no-data'
+import { Toast } from '@discuzq/design';
+import TopicItem from '@components/search/topic-item'
+import ActiveUsersMore from '@components/search/active-user-more-items';
+import Stepper from '@components/stepper';
 
 @inject('site')
 @inject('search')
@@ -22,7 +19,7 @@ import Nodata from '@components/no-data'
 class SearchPCPage extends React.Component {
   constructor(props) {
     super(props);
-    
+
     const keyword = this.props.router.query.keyword || '';
     this.state = {
       value: keyword,
@@ -46,7 +43,6 @@ class SearchPCPage extends React.Component {
     this.props.router.push(`/search/result-topic?keyword=${this.state.value || ''}`);
   };
 
-  // TODO 处理用户是自己的数据
   onUserClick = ({ userId } = {}) => {
     this.props.router.push(`/user/${userId}`);
   };
@@ -55,8 +51,6 @@ class SearchPCPage extends React.Component {
     const { topicId } = data
     this.props.router.push(`/topic/topic-detail/${topicId}`);
   };
-
-  onPostClick = data => console.log('post click', data);
 
   searchData = (keyword) => {
     const { dispatch } = this.props;
@@ -141,7 +135,7 @@ class SearchPCPage extends React.Component {
 
     if(scrollTop) {
       if(scrollTop < activeUsersScrollTo) {
-        this.setState({stepIndex: 0}); // TODO: 暂时写死index，应该通过steps传回index
+        this.setState({stepIndex: 0});
       } else if(scrollTop < hotTopicScrollTo && scrollTop >= activeUsersScrollTo) {
         this.setState({stepIndex: 1});
       } else if(scrollTop >= hotTopicScrollTo) {
@@ -163,8 +157,8 @@ class SearchPCPage extends React.Component {
     return (
       <div className={styles.searchContent}>
         <div ref={this.treadingTopicRef}>
-          <SidebarPanel 
-            title="潮流话题" 
+          <SidebarPanel
+            title="潮流话题"
             type='normal'
             isLoading={!topicsPageData}
             noData={!topicsPageData?.length}
@@ -175,15 +169,15 @@ class SearchPCPage extends React.Component {
           >
             <div className={styles.topic}>
               {topicsPageData?.map((item, index) => (
-                <TopicItem data={item} key={index} onClick={this.onTopicClick} />  
+                <TopicItem data={item} key={index} onClick={this.onTopicClick} />
               ))}
             </div>
           </SidebarPanel>
         </div>
 
         <div ref={this.activeUsersRef}>
-          <SidebarPanel 
-            title="活跃用户" 
+          <SidebarPanel
+            title="活跃用户"
             type='normal'
             isLoading={!usersPageData}
             noData={!usersPageData?.length}
@@ -197,7 +191,7 @@ class SearchPCPage extends React.Component {
         </div>
 
         <div ref={this.hotTopicRef}>
-          <SidebarPanel 
+          <SidebarPanel
             type='normal'
             isLoading={!threadsPageData}
             noData={!threadsPageData?.length}
@@ -223,7 +217,8 @@ class SearchPCPage extends React.Component {
           onScroll={ this.handleScroll }
           jumpTo={this.state.position}
           pageName="search"
-          showRefresh={false}
+        showRefresh={false}
+        className="search-page"
         >
           { this.renderContent() }
         </BaseLayout>

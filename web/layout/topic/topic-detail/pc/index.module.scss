@@ -18,5 +18,13 @@
     box-shadow: 0 0 rem($padding-2n) rgba(241, 243, 244, 0.16);
   }
 }
+.bottomViewBox {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 
 

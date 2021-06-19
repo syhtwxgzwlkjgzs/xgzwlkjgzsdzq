@@ -7,7 +7,7 @@ import Taro from '@tarojs/taro'
 import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
 import UnreadRedDot from '@components/unread-red-dot';
-
+import { unreadUpdateInterval } from '@common/constants/message';
 
 /**
  * BottomNavBar组件
@@ -40,7 +40,7 @@ class BottomNavBar extends React.Component {
   componentDidMount() {
     const { curr = 'home' } = this.props
     const tabs = [
-      { icon: 'HomeOutlined', text: '首页', active: this.checkCurrActiveTab(curr, 'home'), router: '/pages/index/index' },
+      { icon: 'HomeOutlined', text: '首页', active: this.checkCurrActiveTab(curr, 'home'), router: '/pages/home/index' },
       { icon: 'FindOutlined', text: '发现', active: this.checkCurrActiveTab(curr, 'search'), router: '/subPages/search/index' },
       { icon: 'PlusOutlined', router: '/subPages/thread/post/index' },
       { icon: 'MailOutlined', text: '消息', active: this.checkCurrActiveTab(curr, 'message'), router: '/subPages/message/index' },
@@ -99,12 +99,12 @@ class BottomNavBar extends React.Component {
     //
   };
 
-  // 每20秒更新一次未读消息
+  // 轮询更新未读消息
   updateUnreadMessage = () => {
     this.timeoutRef.current = setTimeout(() => {
       this.props.message.readUnreadCount();
       this.updateUnreadMessage();
-    }, 20000);
+    }, unreadUpdateInterval);
   }
 
   render() {

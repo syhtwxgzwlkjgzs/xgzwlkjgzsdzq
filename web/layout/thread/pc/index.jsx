@@ -353,7 +353,7 @@ class ThreadPCPage extends React.Component {
   }
 
   // 点击发布按钮
-  async onPublishClick(val, imageList) {
+  async onPublishClick(val = '', imageList = []) {
     if (!this.props.user.isLogin()) {
       Toast.info({ content: '请先登录!' });
       goToLoginPage({ url: '/user/login' });
@@ -362,7 +362,7 @@ class ThreadPCPage extends React.Component {
 
     const valuestr = val.replace(/\s/g, '');
     // 如果内部为空，且只包含空格或空行
-    if (!valuestr) {
+    if (!valuestr && imageList.length === 0) {
       Toast.info({ content: '请输入内容' });
       return;
     }
@@ -759,6 +759,7 @@ class ThreadPCPage extends React.Component {
           isShowLayoutRefresh={isCommentReady}
           ready={() => this.onBaseLayoutReady()}
           rightClassName={layout.positionSticky}
+          className="detail"
         >
           {this.renderContent()}
         </BaseLayout>

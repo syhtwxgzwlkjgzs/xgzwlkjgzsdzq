@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button, Input, Toast } from '@discuzq/design';
+import { Button, Input, Toast, Spin } from '@discuzq/design';
 import Header from '@components/header';
 import Router from '@discuzq/sdk/dist/router';
 import styles from './index.module.scss';
@@ -8,12 +8,28 @@ import styles from './index.module.scss';
 @inject('user')
 @observer
 export default class index extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isSubmit: false,
+    };
+  }
+
+  initState = () => {
+    this.setState({
+      isSubmit: false,
+    });
+  };
+
   handleChangeNewUserName = (e) => {
     this.props.user.editUserName = e.target.value;
   };
 
   handleSubmit = async () => {
     try {
+      this.setState({
+        isSubmit: true,
+      });
       await this.props.user.updateUsername();
       Toast.success({
         content: '修改用户名成功',
@@ -21,6 +37,7 @@ export default class index extends Component {
       });
       setTimeout(() => {
         Router.back();
+        this.initState();
       }, 1000);
     } catch (err) {
       console.error(err);
@@ -29,6 +46,7 @@ export default class index extends Component {
           content: err.Msg || '修改用户名失败',
           duration: 2000,
         });
+        this.initState();
       }
     }
   };
@@ -36,6 +54,7 @@ export default class index extends Component {
   render() {
     const { user } = this.props;
     const { editUserName } = user;
+    const { isSubmit } = this.state;
     return (
       <div id={styles.resetUserName}>
         <Header />
@@ -54,8 +73,14 @@ export default class index extends Component {
           </div>
         </div>
         <div className={styles.bottom}>
-          <Button disabled={!editUserName} full onClick={this.handleSubmit} type={'primary'} className={styles.btn}>
-            提交
+          <Button
+            disabled={!editUserName || isSubmit}
+            full
+            onClick={this.handleSubmit}
+            type={'primary'}
+            className={styles.btn}
+          >
+            {isSubmit ? <Spin type="spinner">提交中...</Spin> : '提交'}
           </Button>
         </div>
       </div>

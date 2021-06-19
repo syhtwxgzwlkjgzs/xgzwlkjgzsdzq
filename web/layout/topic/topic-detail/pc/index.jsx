@@ -6,12 +6,13 @@ import BaseLayout from '@components/base-layout';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import NoData from '@components/no-data';
-import SectionTitle from '@components/section-title'
+import SectionTitle from '@components/section-title';
 import DetailsHeader from './components/details-header';
-import ThreadContent from '@components/thread'
+import ThreadContent from '@components/thread';
 import Copyright from '@components/copyright';
 import { Toast } from '@discuzq/design';
-import ActiveUsers from '@components/active-users'
+import ActiveUsers from '@components/active-users';
+import BottomView from '@components/list/BottomView';
 
 @inject('site')
 @inject('user')
@@ -49,23 +50,20 @@ class IndexPCPage extends React.Component {
   }
 
    // 右侧 - 活跃用户 版权信息
-   renderRight = () => {
-    return (
+   renderRight = () => (
       <>
-      <ActiveUsers />
+      <ActiveUsers className="topic-detail-activeuser" />
       <Copyright/>
       </>
-    )
-  }
+   )
 
-  renderItem = ({ content = '', threadCount = 0, viewCount = 0, threads = [] }, index) => {
-    return (
+  renderItem = ({ content = '', threadCount = 0, viewCount = 0, threads = [] }, index) => (
       <div className={styles.topicContent} key={index}>
         <DetailsHeader title={content} viewNum={viewCount} contentNum={threadCount} onShare={this.onShare} />
         <div className={styles.themeContent}>
           {
-            threads?.length ?
-              (
+            threads?.length
+              ? (
                 threads?.map((item, index) => (
                   <ThreadContent data={item} key={index} className={styles.item} />
                 ))
@@ -74,25 +72,31 @@ class IndexPCPage extends React.Component {
           }
         </div>
       </div>
-    )
-  }
+  )
 
   render() {
     const { pageData = [] } = this.props.topic?.topicDetail || {};
-
+    const { isError, errorText, fetchTopicInfoLoading = true } = this.props;
     return (
-      // <List className={styles.topicWrap}>
-     
+    // <List className={styles.topicWrap}>
+
         <BaseLayout
           onSearch={this.onSearch}
           right={ this.renderRight }
-          showRefresh={false}
+        showRefresh={false}
+        className="topic-detail-page"
         >
-          { 
-            pageData?.map((item, index) => this.renderItem(item, index)) || <NoData />
-          }
+          {
+          fetchTopicInfoLoading ? (
+            <BottomView loadingText='加载中...' isError={isError} errorText={errorText} />
+          )
+            : (
+              pageData?.map((item, index) => (
+                this.renderItem(item, index)))
+            )
+        }
         </BaseLayout>
-      // </List>
+    // </List>
     );
   }
 }

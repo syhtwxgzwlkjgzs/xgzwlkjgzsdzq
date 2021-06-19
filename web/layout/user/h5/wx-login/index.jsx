@@ -38,7 +38,7 @@ class WXLoginH5Page extends React.Component {
         // 在h5 浏览器中 且小程序设置打开 通过小程序schema跳转
         const resp = await genMiniScheme();
         if (resp.code === 0) {
-          window.location.href = `${get(resp, 'data.openLink', '')}?${inviteCode.substr(1)}`;
+          window.location.href = `${get(resp, 'data.openLink', '')}${inviteCode}`;
           return;
         }
         Toast.error({
@@ -60,7 +60,7 @@ class WXLoginH5Page extends React.Component {
         // 开启小程序登陆
         if (site?.isMiniProgramOpen) {
           params.type = 'pc_login_mini';
-          params.redirectUri = encodeURIComponent(`/subPages/user/wx-authorization/index`);
+          params.redirectUri = undefined; // 无需传入redirectUri
         } else {
           params.type = 'pc_login';
         }

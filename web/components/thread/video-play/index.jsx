@@ -28,7 +28,8 @@ const Index = ({
   onPay = noop,
   baselayout = {},
   v_width = null,
-  v_height = null
+  v_height = null,
+  onVideoReady = noop,
 }) => {
   let player = null;
   const ref = useRef();
@@ -68,8 +69,13 @@ const Index = ({
     });
     setWidth(width);
     setHeight(height);
-    
   }, []);
+
+  useEffect(() => {
+    if (ref?.current?.clientHeight) {
+      onVideoReady && onVideoReady();
+    }
+  }, [ref?.current?.clientHeight]);
 
   return (
     <div id="common-video-play" className={styles.container} style={{width: `${width}px`, height: `${height}px`}} ref={ref}>

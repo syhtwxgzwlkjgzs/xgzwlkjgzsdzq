@@ -76,8 +76,8 @@ class Index extends React.Component {
         maxHeight: (this.state.windowSize?.innerHeight - 80) || '600px'
       }}>
         <div className={style.recommendContent}>推荐内容</div>
-        { (recommendsStatus === 'loading' || recommendsStatus === 'error') && (
-            <BottomView isBox isError={isError} errorText={errorText} noMore={false} loadingText='正在加载' /> 
+        { (recommendsStatus === 'loading' || recommendsStatus === 'error' || !recommends?.length) && (
+            <BottomView isBox isError={isError} errorText={errorText} noMore={recommendsStatus === 'none' && !recommends?.length} loadingText='正在加载' noMoreText='暂无数据' /> 
         )}
         {
           recommendsStatus === 'none' && recommends?.filter((_, index) => index < filterCount).map((item, index) => {

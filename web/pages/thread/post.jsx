@@ -8,7 +8,7 @@ import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import HOCWithLogin from '@middleware/HOCWithLogin';
 import * as localData from '@layout/thread/post/common';
 import { Toast } from '@discuzq/design';
-import { THREAD_TYPE } from '@common/constants/thread-post';
+import { THREAD_TYPE, MAX_COUNT } from '@common/constants/thread-post';
 import Router from '@discuzq/sdk/dist/router';
 import PayBox from '@components/payBox/index';
 import { ORDER_TRADE_TYPE } from '@common/constants/payBoxStoreConstants';
@@ -525,6 +525,7 @@ class PostPage extends React.Component {
   // 发布提交
   handleSubmit = async (isDraft) => {
     if (!isDraft) this.setPostData({ draft: 0 });
+    if (this.state.count >= MAX_COUNT) return;
     const { postData } = this.props.threadPost;
     if (!this.props.user.threadExtendPermissions.createThread) {
       Toast.info({ content: '您没有发帖权限' });

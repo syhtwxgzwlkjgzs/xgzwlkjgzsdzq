@@ -1,3 +1,4 @@
+@import '@common/styles/index.scss';
 .rightside {
   width: 100%;
   height: 100%;
@@ -7,4 +8,31 @@
 .stepper-container {
   width: 100%;
   margin-bottom: 20px;
+}
+
+:global {
+  .mymessage {
+
+    @include heightMedia(785px, 730px) {
+      .user-center-follow-item:nth-last-child(-n + 2) {
+        display: none;
+      }
+    }
+
+    @include heightMedia(730px, 675px) {
+      .user-center-follow-item:nth-last-child(-n + 3) {
+        display: none;
+      }
+    }
+
+    @include heightMedia(675px) {
+      .user-center-follow-mini {
+        display: flex !important;
+      }
+
+      .user-center-follow-item {
+        display: none;
+      }
+    }
+  }
 }
