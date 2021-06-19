@@ -7,11 +7,12 @@ import {calcImageType, calcImageDefaultType} from '@common/utils/calc-image-type
 const { Col, Row } = Flex;
 
 // TODO 图片懒加载
-const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop, onImageReady = () => {} }) => {
+const Index = ({ imgData = [], flat = false, platform = 'h5', isPay = false, onPay = noop, onImageReady = () => {} }) => {
   const [visible, setVisible] = useState(false);
   const [defaultImg, setDefaultImg] = useState('');
   const ImagePreviewerRef = React.useRef(null);
-  const [firstImgData, setFirstImgData] = useState(null);
+  // const [firstImgData, setFirstImgData] = useState(null);
+  const [firstImgData, setFirstImgData] = useState({width: (imgData && imgData[0].fileWidth) || 0, height: (imgData && imgData[0].fileHeight) || 0});
 
   const imagePreviewers = useMemo(() => imgData.map((item) => item.url), [imgData]);
   useEffect(() => {
@@ -20,53 +21,58 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop, onI
     }
   }, [visible]);
 
-  useEffect(() => {
-    let timer;
-    if ( imgData && imgData.length !== 0 ) {
-      const img = new Image();
-      img.src = imgData[0].thumbUrl;
-      // 超时处理
-      timer = setTimeout(() => {
-        if ( firstImgData === null ) {
-          setFirstImgData('fail');
-        }
-      }, 2000);
-      if (img.complete) {
-        // 如果图片被缓存，则直接返回缓存数据
-        if ( !img.naturalWidth || !img.naturalHeight  ) {
-          setFirstImgData('fail');
-        }
-        setFirstImgData({
-          width: img.naturalWidth,
-          height: img.naturalHeight
-        });
-      } else {
-          img.onload = function () {
-            timer && clearTimeout(timer);
-            if ( !img.naturalWidth || !img.naturalHeight  ) {
-              setFirstImgData('fail');
-            } else {
-              setFirstImgData({
-                width: img.naturalWidth,
-                height: img.naturalHeight
-              });
-            }
-          }
-          img.onerror = function() {
-            timer && clearTimeout(timer);
-            setFirstImgData('fail');
-          }
-      }
-    }
-    return () => {
-      timer && clearTimeout(timer);
-    }
-  }, [imgData]);
+
+  // useEffect(() => {
+
+  //   if (flat) return;
+
+  //   let timer;
+  //   if ( imgData && imgData.length !== 0 ) {
+  //     const img = new Image();
+  //     img.src = imgData[0].thumbUrl;
+  //     // 超时处理
+  //     timer = setTimeout(() => {
+  //       if ( firstImgData === null ) {
+  //         setFirstImgData('fail');
+  //       }
+  //     }, 2000);
+  //     if (img.complete) {
+  //       // 如果图片被缓存，则直接返回缓存数据
+  //       if ( !img.naturalWidth || !img.naturalHeight  ) {
+  //         setFirstImgData('fail');
+  //       }
+  //       setFirstImgData({
+  //         width: img.naturalWidth,
+  //         height: img.naturalHeight
+  //       });
+  //     } else {
+  //         img.onload = function () {
+  //           timer && clearTimeout(timer);
+  //           if ( !img.naturalWidth || !img.naturalHeight  ) {
+  //             setFirstImgData('fail');
+  //           } else {
+  //             setFirstImgData({
+  //               width: img.naturalWidth,
+  //               height: img.naturalHeight
+  //             });
+  //           }
+  //         }
+  //         img.onerror = function() {
+  //           timer && clearTimeout(timer);
+  //           setFirstImgData('fail');
+  //         }
+  //     }
+  //   }
+  //   return () => {
+  //     timer && clearTimeout(timer);
+  //   }
+  // }, [flat, imgData]);
 
   // 当更新了firstImgData，代表确定了布局方式，可以通知外部更新
-  useEffect(() => {
-    onImageReady && onImageReady();
-  }, [firstImgData]);
+  // useEffect(() => {
+  //   if (flat) return;
+  //   onImageReady && onImageReady();
+  // }, [flat, firstImgData]);
 
   const onClick = (id) => {
     if (isPay) {
@@ -95,7 +101,10 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop, onI
     return `containerNum${num}`;
   }, [imgData]);
 
-  const handleImages = () => {
+  const handleImages = (flat) => {
+    if ( flat ) {
+      return { bigImages: imgData, smallImages: [] };
+    }
     if (imgData.length < 3) {
       return { bigImages: imgData, smallImages: [] };
     }
@@ -109,8 +118,22 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop, onI
     if ( !imgData || imgData.length === 0 ) {
       return null;
     }
-    if ( firstImgData === null ) return <div className={`${platform === 'h5' ? styles['placeholderH5'] : styles['placeholderPC']}`}/>;
-    const res = handleImages();
+    if ( !flat && firstImgData === null ) return <div className={`${platform === 'h5' ? styles['placeholderH5'] : styles['placeholderPC']}`}/>;
+    const res = handleImages(flat);
+
+    // 扁平处理
+    if ( flat ) {
+      return (
+        <div>
+            {res.bigImages.map((item, index) => (
+              <div key={index} className={styles.flatItem}>
+                <SmartImg noSmart type={item.fileType} src={item.url} onClick={() => onClick(item.id)} />
+              </div>
+            ))}
+        </div>
+      );
+    }
+
     const type = firstImgData === 'fail' ? calcImageDefaultType(imgData.length) : calcImageType(firstImgData.width, firstImgData.height);
 
     if (imgData.length === 1) {
@@ -139,7 +162,7 @@ const Index = ({ imgData = [], platform = 'h5', isPay = false, onPay = noop, onI
       );
     }
     return null;
-  }, [imgData, firstImgData]);
+  }, [imgData, firstImgData, flat]);
 
   return (
     <div className={`${platform === 'h5' ? styles.container : styles.containerPC}`}>

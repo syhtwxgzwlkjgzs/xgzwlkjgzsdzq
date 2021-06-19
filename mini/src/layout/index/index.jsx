@@ -87,7 +87,7 @@ class IndexH5Page extends React.Component {
   };
 
   handleClickTabBar = (item, idx) => {
-    if(item?.router === "/pages/index/index") { // 点击首页刷新
+    if(item?.router === "/pages/home/index") { // 点击首页刷新
       this.changeFilter()
     }
   }

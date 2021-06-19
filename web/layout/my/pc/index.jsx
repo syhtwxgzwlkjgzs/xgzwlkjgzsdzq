@@ -18,6 +18,7 @@ import UserCenterFollowsPc from '../../../components/user-center/follows-pc';
 import Thread from '@components/thread';
 import SectionTitle from '@components/section-title';
 import BaseLayout from '../../../components/user-center-base-laout-pc';
+import { Toast } from '@discuzq/design';
 
 @inject('site')
 @inject('user')
@@ -32,7 +33,22 @@ class PCMyPage extends React.Component {
     };
   }
   async componentDidMount() {
-    await this.props.user.getUserThreads();
+
+    try {
+      await this.props.user.getUserThreads();
+    } catch (err) {
+      console.error(err);
+      let errMessage = '加载用户列表失败';
+      if (err.Code && err.Code !== 0) {
+        errMessage = err.Msg;
+      }
+
+      Toast.error({
+        content: errMessage,
+        duration: 2000,
+        hasMask: false
+      })
+    }
 
     this.setState({ isLoading: false });
   }
