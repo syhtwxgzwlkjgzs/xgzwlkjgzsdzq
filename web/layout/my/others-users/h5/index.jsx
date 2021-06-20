@@ -27,6 +27,9 @@ class H5OthersPage extends React.Component {
   componentDidMount = async () => {
     const { query } = this.props.router;
     const id = this.props.user?.id;
+    if (!query.id || query.id === 'undefined') {
+      Router.replace({ url: '/' })
+    }
     if (String(id) === query.id) {
       Router.replace({ url: '/my' });
       return;
