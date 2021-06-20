@@ -97,7 +97,6 @@ export default function HOCFetchSiteData(Component) {
     constructor(props) {
       super(props);
       let isNoSiteData;
-      const isPass = true;
       const { serverUser, serverSite, user, site } = props;
 
       serverSite && serverSite.platform && site.setPlatform(serverSite.platform);
@@ -122,7 +121,7 @@ export default function HOCFetchSiteData(Component) {
       }
       this.state = {
         isNoSiteData,
-        isPass,
+        isPass: false,
       };
     }
 
@@ -165,7 +164,7 @@ export default function HOCFetchSiteData(Component) {
       } else {
         loginStatus = false;
       }
-      
+
       // 未登陆状态下，清空accessToken
       !loginStatus && clearLoginStatus();
 
