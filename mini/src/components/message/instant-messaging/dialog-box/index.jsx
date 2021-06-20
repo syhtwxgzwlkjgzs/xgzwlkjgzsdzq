@@ -49,7 +49,7 @@ const DialogBox = (props) => {
 
         const padding = (keyboardHeight && !showEmoji) ? inputBottom : 0
 
-        setPaddingBottom(clientHeight + padding);
+        setPaddingBottom(clientHeight);
         setTimeout(scrollEnd, 300);
       }).exec();
     }, 0);
