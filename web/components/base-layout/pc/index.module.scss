@@ -162,6 +162,11 @@
     &.home-right {
       top: rem(-125);
     }
+    @include media('xl-pc') {
+      &.home-right {
+        top: rem(-135);
+      }
+    }
   }
 }
 
