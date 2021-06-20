@@ -11,6 +11,8 @@ const Index = () => {
     Taro.onKeyboardHeightChange(res => {
       setBottomHeight(res?.height || 0);
     });
+
+    setBottomHeight(0);
   })
 
   useDidHide(() => {
