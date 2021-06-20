@@ -148,6 +148,7 @@ class Index extends React.Component {
         // 带有指定的路径，将不去首页。
         const $instance = Taro.getCurrentInstance()
         const router = $instance.router;
+        console.log(router)
         if (router.params && router.params.path) {
           Router.redirect({
             url: decodeURIComponent(router.params.path),
