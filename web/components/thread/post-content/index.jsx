@@ -5,6 +5,7 @@ import { noop } from '../utils';
 import fuzzyCalcContentLength from '@common/utils/fuzzy-calc-content-length';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
+import { urlToLink } from '@common/utils/replace-url-to-a';
 
 import styles from './index.module.scss';
 
@@ -125,7 +126,7 @@ const Index = ({
         <div className={styles.content}>
           <RichText
             // onImgsLoaded={onImgsLoaded}
-            content={useShowMore && cutContentForDisplay ? cutContentForDisplay : filterContent}
+            content={useShowMore && cutContentForDisplay ? cutContentForDisplay : urlToLink(filterContent)}
             onClick={handleClick}
           />
         </div>
