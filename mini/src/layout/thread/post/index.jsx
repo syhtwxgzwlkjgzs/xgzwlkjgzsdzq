@@ -621,7 +621,7 @@ class Index extends Component {
 
     this.setState({
       showEmoji: false,
-      operationType: 0,
+      // operationType: 0,
     });
   }
 
@@ -725,7 +725,7 @@ class Index extends Component {
                 onFocus={() => {
                   this.setState({
                     showEmoji: false,
-                    operationType: 0,
+                    // operationType: 0,
                   });
                 }}
               />
@@ -741,29 +741,27 @@ class Index extends Component {
                 }}
               />
 
-            <View className={styles.plugin} onClick={e => e.stopPropagation()}>
+              <View className={styles.plugin} onClick={e => e.stopPropagation()}>
+                <GeneralUpload type={operationType} audioUpload={(file) => { this.yundianboUpload('audio', file) }}>
+                  {video.thumbUrl && (
+                    <Units
+                      type='video'
+                      deleteShow
+                      src={video.thumbUrl}
+                      onDelete={() => setPostData({ video: {} })}
+                      onVideoLoaded={() => {
+                        Taro.pageScrollTo({
+                          scrollTop: 3000,
+                          // selector: '#thread-post-video',
+                          complete: (a,b,c) => {console.log(a,b,c)}
+                        });
+                      }}
+                    />
+                  )}
+                </GeneralUpload>
+                {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => setPostData({ product: {} })} />}
+              </View>
 
-              <GeneralUpload type={operationType} audioUpload={(file) => { this.yundianboUpload('audio', file) }}>
-                {video.thumbUrl && (
-                  <Units
-                    type='video'
-                    deleteShow
-                    src={video.thumbUrl}
-                    onDelete={() => setPostData({ video: {} })}
-                    onVideoLoaded={() => {
-                      Taro.pageScrollTo({
-                        scrollTop: 3000,
-                        // selector: '#thread-post-video',
-                        complete: (a,b,c) => {console.log(a,b,c)}
-                      });
-                    }}
-                  />
-                )}
-              </GeneralUpload>
-
-              {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => setPostData({ product: {} })} />}
-
-            </View>
             </View>
           </View>
 
@@ -771,9 +769,15 @@ class Index extends Component {
           <View className={styles.tags} style={{ display: bottomHeight ? 'none' : 'block' }}>
             {(permissions?.insertPosition?.enable) &&
               <View className={styles['location-bar']}>
-                <Position currentPosition={position} positionChange={(position) => {
-                  setPostData({ position });
-                }} />
+                <Position
+                  currentPosition={position}
+                  positionChange={(position) => {
+                    setPostData({ position });
+                  }}
+                  canJumpToChoose={() => {
+                    return this.checkAudioRecordStatus();
+                  }}
+                />
               </View>
             }
 
@@ -842,13 +846,13 @@ class Index extends Component {
                 this.setState({
                   showClassifyPopup: true,
                   showEmoji: false,
-                  operationType: 0
+                  // operationType: 0
                 });
               }}
               onSetplugShow={() => {
                 showEmoji && this.setState({
                   showEmoji: false,
-                  operationType: 0
+                  // operationType: 0
                 });
               }}
             />
@@ -867,7 +871,7 @@ class Index extends Component {
               onHide={() => {
                 this.setState({
                   showEmoji: false,
-                  operationType: 0
+                  // operationType: 0
                 });
               }}
               onClick={(emoji) => {

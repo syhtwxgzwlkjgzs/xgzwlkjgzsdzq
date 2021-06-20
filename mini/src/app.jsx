@@ -39,7 +39,7 @@ class App extends Component {
     const $instance = Taro.getCurrentInstance()
     const router = $instance.router;
     const {path, params} = router;
-    if (path !== '/pages/index/index') {
+    if (path.indexOf('pages/index/index') === -1) {
       let targetUrl = path;
       let targetParmas = '';
       const paramsArr = [];
@@ -57,7 +57,11 @@ class App extends Component {
       }
       Router.redirect({
         url: `/pages/index/index?path=${encodeURIComponent(targetUrl)}`,
+        fail: (err) => {
+          console.log(err,123132)
+        }
       });
+      
     }
   }
 
