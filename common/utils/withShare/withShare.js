@@ -11,7 +11,6 @@ function withShare(opts = {}) {
   // 设置默认
   const defalutTitle = 'Discuz!Q';
   const defalutPath = 'pages/index/index';
-
   let menus = [];
   const { needShareline = true, needLogin = true } = opts;
   if (needShareline) {
@@ -62,10 +61,22 @@ function withShare(opts = {}) {
         if (this.getShareData && typeof this.getShareData === 'function') {
           shareData = this.getShareData({ ...data, from: res.from });
         }
-        const { title = defalutTitle, path = defalutPath, imageUrl = '' } = shareData;
+        let { title = defalutTitle, path = '', imageUrl = '' } = shareData;
+        
+        if (path === '') {
+          try {
+            const $instance = Taro.getCurrentInstance()
+            const router = $instance.router;
+            const currPath = router.path;
+            path = currPath;
+          } catch(err) {
+            path = defalutPath;
+          }
+        }
+        const encodePath = `/pages/index/index?path=${encodeURIComponent(path)}`;
         return {
           title,
-          path,
+          path: encodePath,
           imageUrl,
         };
       }

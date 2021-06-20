@@ -10,6 +10,7 @@ import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import ImageDisplay from '@components/thread/image-display';
 import { debounce } from '@common/utils/throttle-debounce';
+import { urlToLink } from '@common/utils/replace-url-to-a';
 
 @observer
 export default class ReplyList extends React.Component {
@@ -30,7 +31,7 @@ export default class ReplyList extends React.Component {
     let newContent = this.props?.data?.content || '';
     newContent = s9e.parse(newContent);
     newContent = xss(newContent);
-
+    newContent = urlToLink(newContent);
     return newContent;
   }
 
@@ -117,7 +118,7 @@ export default class ReplyList extends React.Component {
               )}
             </div>
           </div>
-          
+
           <div className={styles.replyListFooter}>
             <div className={styles.replyTime}>{diffDate(this.props.data.createdAt)}</div>
 

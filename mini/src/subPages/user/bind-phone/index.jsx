@@ -94,13 +94,19 @@ class BindPhoneH5Page extends React.Component {
       const { sessionToken, from = '' } = getCurrentInstance().router.params;
       const resp = await this.props.mobileBind.bind(sessionToken);
       const uid = get(resp, 'uid', '');
-      this.props.user.updateUserInfo(uid);
+
+      if (from === 'paybox' || from === 'userCenter') {
+        this.props.user.updateUserInfo(this.props.user.id)
+      } else {
+        this.props.user.updateUserInfo(uid);
+      }
+
       Toast.success({
         content: '登录成功',
         hasMask: false,
         duration: 2000,
         onClose: () => {
-          if (from === 'userCenter') {
+          if (from === 'userCenter' || from === 'paybox') {
             navigateBack();
             return;
           }
@@ -172,10 +178,10 @@ class BindPhoneH5Page extends React.Component {
             />
             {/* 输入框 end */}
             <Button className={layout.button} type="primary" onClick={this.handleBindButtonClick}>
-              {from === 'userCenter' ? '绑定' : '下一步'}
+              {(from === 'userCenter' || from === 'paybox') ? '绑定' : '下一步'}
             </Button>
             {
-              from !== 'userCenter'
+              (from !== 'userCenter' && from !== 'paybox')
               && (
                 <View className={layout.functionalRegion}>
                   <Text className={layout.clickBtn} onClick={() => {

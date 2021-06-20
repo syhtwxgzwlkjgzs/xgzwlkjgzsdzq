@@ -7,6 +7,7 @@ import Toast from '@discuzq/design/dist/components/toast';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import Router from '@discuzq/sdk/dist/router';
 import {readForum, readUser, readPermissions} from '@server';
+import Taro from '@tarojs/taro';
 import {
   JUMP_TO_404,
   INVALID_TOKEN,
@@ -30,7 +31,7 @@ const CLOSE_URL = '/subPage/close/index';
 @inject('user')
 @observer
 class Index extends React.Component {
-
+    
     componentDidUpdate() {
 
     }
@@ -144,9 +145,23 @@ class Index extends React.Component {
 
       const isGoToHome = await this.isPass();
       if (isGoToHome ) {
-        Router.redirect({
-          url: '/pages/home/index'
-        });
+        // 带有指定的路径，将不去首页。
+        const $instance = Taro.getCurrentInstance()
+        const router = $instance.router;
+        if (router.params && router.params.path) {
+          Router.redirect({
+            url: decodeURIComponent(router.params.path),
+            fail: () => {
+              Router.redirect({
+                url: '/pages/home/index'
+              });
+            }
+          });
+        } else {
+          Router.redirect({
+            url: '/pages/home/index'
+          });
+        }
       } else {
         Router.redirect({
           url: '/subPages/500/index'

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useRef, forwardRef, useState, useEffect } from 'react';
 import './index.scss';
 import Item from './item';
 import BottomView from '../BottomView';
@@ -8,183 +8,164 @@ import { getSticksHeight } from '../utils';
 import { List, CellMeasurer, CellMeasurerCache, AutoSizer, InfiniteLoader } from 'react-virtualized';
 import { inject, observer } from 'mobx-react';
 
-@observer
-@inject('index')
-@inject('vlist')
-export default class Home extends Component {
-  constructor(props) {
-    super(props);
-    this._cache = new CellMeasurerCache({
-      fixedWidth: true,
-      minHeight: 150,
-      show: false,
-    });
+// @observer
+// @inject('index')
+// @inject('vlist')
 
-    const { threads = {}, sticks } = this.props.index;
-    const { pageData = [] } = threads || {};
-    this.state = {
-      list: [{ type: 'header' }, [...pageData], { type: 'footer' }],
-      wait: 0,
-    };
+function Home(props, ref) {
+  const cache = new CellMeasurerCache({
+    fixedWidth: true,
+    minHeight: 150,
+    show: false,
+  });
 
-    this.rowRenderer = this.rowRenderer.bind(this);
-    this.onScroll = this.onScroll.bind(this);
-    this._isRowLoaded = this._isRowLoaded.bind(this);
-    this._loadMoreRows = this._loadMoreRows.bind(this);
-    this._getRowHeight = this._getRowHeight.bind(this);
-    this._clearAllCache = this._clearAllCache.bind(this);
+  const [list, setList] = useState([{ type: 'header' }, ...(props.list || []), { type: 'footer' }]);
+  let listRef = useRef(null);
+  let loadData = false;
+  const rowCount = list.length;
 
-    this.listRef = null;
-  }
+  useEffect(() => {
+    setList([{ type: 'header' }, ...(props.list || []), { type: 'footer' }]);
+  }, [props.list]);
 
-  loadData = false;
+  useEffect(() => {
+    if (listRef) {
+      listRef.scrollToPosition(props.vlist.home || 0);
+    }
+  }, [listRef?.Grid?.getTotalRowsHeight()]);
 
-  componentDidMount() {
-    setTimeout(() => {
-      if (this.listRef) {
-        this.listRef.scrollToPosition(this.props.vlist.home || 0);
-      }
-    }, 1000);
-  }
+  // componentDidMount() {
+  //   setTimeout(() => {
+  //     if (listRef) {
+  //       listRef.scrollToPosition(props.vlist.home || 0);
+  //     }
+  //   }, 1000);
+  // }
 
   // 获取每一行元素的高度
-  _getRowHeight({ index }) {
-    const data = this.state.list[index];
+  const getRowHeight = ({ index }) => {
+    const data = list[index];
 
     if (!data) {
-      return 0;
-    }
-
-    if (!data.type && !data.threadId) {
       return 0;
     }
 
     // 头部
     if (data.type === 'header') {
-      return 165 + 56 + 16 + getSticksHeight(this.props.sticks);
+      return 165 + 56 + 16 + getSticksHeight(props.sticks);
     }
 
     // 底部
     if (data.type === 'footer') {
-      return 160;
+      return 60;
     }
-    return this._cache.rowHeight({ index });
-  }
+    return cache.rowHeight({ index });
+  };
 
-  renderListItem(type, data, measure, { index, key, parent, style }) {
+  const renderListItem = (type, data, measure, { index, key, parent, style }) => {
     switch (type) {
       case 'header':
-        return this.props.children;
+        return props.children;
       case 'footer':
-        return <BottomView noMore={this.props.noMore} isError={this.props.requestError}></BottomView>;
+        return <BottomView noMore={props.noMore} isError={props.requestError}></BottomView>;
       default:
         return <Item data={data} measure={measure} />;
     }
-  }
+  };
 
-  rowRenderer({ index, key, parent, style }) {
-    const data = this.state.list[index];
+  const rowRenderer = ({ index, key, parent, style }) => {
+    const data = list[index];
 
     if (!data) {
       return '';
     }
 
-    if (!data.type && !data.threadId) {
-      return '';
-    }
-
     return (
-      <CellMeasurer cache={this._cache} columnIndex={0} key={key} rowIndex={index} parent={parent}>
+      <CellMeasurer cache={cache} columnIndex={0} key={key} rowIndex={index} parent={parent}>
         {({ measure, registerChild }) => (
           <div ref={registerChild} key={key} style={style} data-index={index} data-key={key} data-id={data.threadId}>
-            {this.renderListItem(data.type, data, measure, { index, key, parent, style })}
+            {renderListItem(data.type, data, measure, { index, key, parent, style })}
             {/* <div style={dividerStyle}></div> */}
           </div>
-
-          //   <div style={style}>
-          //     {this.renderListItem(data.type, data, measure, { index, key, parent, style })}
-          //   </div>
         )}
       </CellMeasurer>
     );
-  }
+  };
 
-  onScroll({ clientHeight, scrollHeight, scrollTop }) {
-    this.props.vlist.setPosition(scrollTop);
-    this.props.onScroll({ scrollTop, clientHeight, scrollHeight });
-  }
+  // 滚动事件
+  const onScroll = ({ scrollTop, clientHeight, scrollHeight }) => {
+    // scrollToPosition = scrollTop;
 
-  _isRowLoaded({ index }) {
-    if (!this.loadData && this.state.list.length - index <= 5) {
-      this.loadData = true;
-      return false;
-    } else {
-      return true;
+    props.onScroll && props.onScroll({ scrollTop, clientHeight, scrollHeight });
+    if (scrollTop !== 0) {
+      props.vlist.setPosition(scrollTop);
     }
-  }
 
-  _loadMoreRows({ startIndex, stopIndex }) {
-    let promiseResolver;
+    if (scrollTop + clientHeight + 50 >= scrollHeight && !loadData) {
+      loadData = true;
+      props.loadNextPage().finally(() => {
+        loadData = false;
+      });
+    }
+  };
 
-    const { threads = {} } = this.props.index;
-    const { currentPage, totalPage, pageData = [] } = threads || {};
+  const isRowLoaded = ({ index }) => !!list[index];
 
-    this.props.loadNextPage().then((res) => {
-      const newList = [...this.state.list.slice(0, this.state.list.length - 2), ...pageData];
-      newList.push({ type: 'footer' });
-      this.setState(
-        {
-          list: newList,
-        },
-        () => {
-          this.loadData = false;
-          promiseResolver();
-        },
-      );
-    });
+  const loadMoreRows = ({ startIndex, stopIndex }) => {
+    console.log(!loadData);
+    // if (!loadData) return;
+
+    // let promiseResolver;
+
+    // loadData = true;
+
+    // props
+    //   .loadNextPage()
+    //   .then(() => {
+    //     loadData = false;
+    //     promiseResolver();
+    //   })
+    //   .finally(() => {
+    //     console.log(loadData);
+    //     loadData = false;
+    //   });
 
     return new Promise((res) => {
-      promiseResolver = res;
+      // promiseResolver = res;
     });
-  }
+  };
 
-  _clearAllCache() {
-    this._cache.clearAll();
-  }
+  const clearAllCache = () => {
+    cache.clearAll();
+  };
 
-  render() {
-    return (
-      <div className="page">
-        <InfiniteLoader
-          isRowLoaded={this._isRowLoaded}
-          loadMoreRows={this._loadMoreRows}
-          rowCount={this.state.list.length}
-        >
-          {({ onRowsRendered, registerChild }) => {
-            return (
-              <AutoSizer className="list">
-                {({ height, width }) => (
-                  <List
-                    ref={(ref) => {
-                      this.listRef = ref;
-                      registerChild(ref);
-                    }}
-                    onScroll={this.onScroll}
-                    deferredMeasurementCache={this._cache}
-                    height={height}
-                    overscanRowCount={5}
-                    onRowsRendered={onRowsRendered}
-                    rowCount={this.state.list.length}
-                    rowHeight={this._getRowHeight}
-                    rowRenderer={this.rowRenderer}
-                    width={width}
-                  />
-                )}
-              </AutoSizer>
-            );
-          }}
-        </InfiniteLoader>
-      </div>
-    );
-  }
+  return (
+    <div className="page">
+      <InfiniteLoader isRowLoaded={isRowLoaded} loadMoreRows={loadMoreRows} rowCount={rowCount}>
+        {({ onRowsRendered, registerChild }) => (
+          <AutoSizer className="list">
+            {({ height, width }) => (
+              <List
+                ref={(ref) => {
+                  listRef = ref;
+                  registerChild(ref);
+                }}
+                onScroll={onScroll}
+                deferredMeasurementCache={cache}
+                height={height}
+                overscanRowCount={5}
+                onRowsRendered={onRowsRendered}
+                rowCount={rowCount}
+                rowHeight={getRowHeight}
+                rowRenderer={rowRenderer}
+                width={width}
+              />
+            )}
+          </AutoSizer>
+        )}
+      </InfiniteLoader>
+    </div>
+  );
 }
+
+export default observer(inject('vlist')(forwardRef(Home)));

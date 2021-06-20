@@ -14,6 +14,7 @@ import xss from '@common/utils/xss';
 import ImageDisplay from '@components/thread/image-display';
 import PostContent from '@components/thread/post-content';
 import { debounce } from '@common/utils/throttle-debounce';
+import { urlToLink } from '@common/utils/replace-url-to-a';
 
 @observer
 class CommentList extends React.Component {

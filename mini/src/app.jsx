@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Provider } from 'mobx-react';
 import initializeStore from '@common/store';
-import Router from '@discuzq/sdk/dist/router';
 import Taro from '@tarojs/taro'
-
+import Router from '@discuzq/sdk/dist/router';
 import setTitle from '@common/utils/setTitle';
 
 import './app.scss';
@@ -34,6 +33,35 @@ class App extends Component {
     const { TITLE } = envConfig;
     if (TITLE && TITLE !== '') {
       setTitle(TITLE);
+    }
+    // 如果启动页面不是pages/index/index，那么将保留路径，跳去启动页
+    // 暂时发现是小程序分享朋友圈无法设置url
+    const $instance = Taro.getCurrentInstance()
+    const router = $instance.router;
+    const {path, params} = router;
+    if (path.indexOf('pages/index/index') === -1) {
+      let targetUrl = path;
+      let targetParmas = '';
+      const paramsArr = [];
+      for (let key in params) {
+        paramsArr.push(`${key}=${params[key]}`);
+      }
+      if (paramsArr.length > 0) {
+        targetParmas = paramsArr.join('&');
+      }
+      if (targetParmas !== '') {
+        targetUrl = `${targetUrl}?${targetParmas}`;
+      }
+      if (targetUrl[0] !== '/') {
+        targetUrl = `/${targetUrl}`;
+      }
+      Router.redirect({
+        url: `/pages/index/index?path=${encodeURIComponent(targetUrl)}`,
+        fail: (err) => {
+          console.log(err,123132)
+        }
+      });
+      
     }
   }
 

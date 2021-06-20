@@ -1,5 +1,5 @@
 import React, { createRef, Fragment } from 'react';
-import { inject, observer } from 'mobx-react';
+import { inject, observer, Observer } from 'mobx-react';
 import { Icon, Tabs } from '@discuzq/design';
 import ThreadContent from '@components/thread';
 import HomeHeader from '@components/home-header';
@@ -233,8 +233,8 @@ class IndexH5Page extends React.Component {
               )}
             >
               <HomeHeader ref={this.headerRef} />
-              {this.renderTabs()}
-              {this.renderHeaderContent()}
+              <Observer>{() => this.renderTabs()}</Observer>
+              <Observer>{() => this.renderHeaderContent()}</Observer>
             </VList>
           </Fragment>
         )}

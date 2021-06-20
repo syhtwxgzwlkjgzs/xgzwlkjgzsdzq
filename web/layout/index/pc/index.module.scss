@@ -92,7 +92,7 @@
     flex-wrap: wrap;
     justify-content: center;
 
-   
+
     @include media('s-pc') {
       align-items: flex-start;
       flex-direction: column;
