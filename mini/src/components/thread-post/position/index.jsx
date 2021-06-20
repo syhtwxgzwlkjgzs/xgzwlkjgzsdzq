@@ -11,7 +11,7 @@ import classNames from 'classnames';
 import Taro from '@tarojs/taro';
 
 const Index = (props) => {
-  const { currentPosition = {}, positionChange = () => { } } = props;
+  const { currentPosition = {}, positionChange = () => { }, canJumpToChoose = () => true } = props;
 
   // 是否已经选择定位
   const [isChose, setIsChose] = useState(false);
@@ -28,6 +28,7 @@ const Index = (props) => {
 
   // 选择定位
   const chooseLocation = () => {
+    if (!canJumpToChoose()) return;
     Taro.authorize({
       scope: 'scope.userLocation',
       success: function () {
