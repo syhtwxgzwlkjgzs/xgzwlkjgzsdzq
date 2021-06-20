@@ -33,6 +33,7 @@ class PCMyPage extends React.Component {
     };
   }
   async componentDidMount() {
+    await this.props.user.updateUserInfo(this.props.user.id);
 
     try {
       await this.props.user.getUserThreads();
@@ -46,8 +47,8 @@ class PCMyPage extends React.Component {
       Toast.error({
         content: errMessage,
         duration: 2000,
-        hasMask: false
-      })
+        hasMask: false,
+      });
     }
 
     this.setState({ isLoading: false });
