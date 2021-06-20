@@ -26,8 +26,11 @@ class BindPhoneH5Page extends React.Component {
     this.ticket = ''; // 腾讯云验证码返回票据
     this.randstr = ''; // 腾讯云验证码返回随机字符串
     this.onFocus = () => {}
+    const { from = '' } = getCurrentInstance()?.router?.params || {};
+    this.state = {
+      from
+    }
   }
-
 
   componentDidMount() {
     // 监听腾讯验证码事件
@@ -157,7 +160,6 @@ class BindPhoneH5Page extends React.Component {
 
   render() {
     const { mobileBind } = this.props;
-    const { from = '' } = getCurrentInstance().router.params;
     return (
       <Page>
         <View className={layout.container}>
@@ -178,10 +180,10 @@ class BindPhoneH5Page extends React.Component {
             />
             {/* 输入框 end */}
             <Button className={layout.button} type="primary" onClick={this.handleBindButtonClick}>
-              {(from === 'userCenter' || from === 'paybox') ? '绑定' : '下一步'}
+              {(this.state.from === 'userCenter' || this.state.from === 'paybox') ? '绑定' : '下一步'}
             </Button>
             {
-              (from !== 'userCenter' && from !== 'paybox')
+              (this.state.from !== 'userCenter' && this.state.from !== 'paybox')
               && (
                 <View className={layout.functionalRegion}>
                   <Text className={layout.clickBtn} onClick={() => {
