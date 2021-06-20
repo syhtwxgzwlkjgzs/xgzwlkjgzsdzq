@@ -116,7 +116,7 @@ export default class Page extends React.Component {
         user.isLogin() && whiteList.push(...REVIEWING_USER_WHITE_LIST);
         // 如果当前并非处于原始进入页，且当前的路径并非白名单或首页，则跳转目标页
         if (!initialPage.includes(path)) {
-          if (!whiteList.includes(path) || '/pages/index/index' === path) {
+          if (!whiteList.includes(path) || ['/pages/index/index', '/pages/home/index'].includes(path)) {
             console.log('Redirect to initital page, from', path, 'to', initialPage);
             site.clearInitialPage();
             Router.replace({
