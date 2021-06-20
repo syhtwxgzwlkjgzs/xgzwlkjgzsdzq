@@ -10,8 +10,7 @@ import { inject, observer } from 'mobx-react';
 function withShare(opts = {}) {
   // 设置默认
   const defalutTitle = 'Discuz!Q';
-  let defalutPath = 'pages/index/index';
-  defalutPath = `/pages/index/index?path=${defalutPath}`;
+  const defalutPath = 'pages/index/index';
   let menus = [];
   const { needShareline = true, needLogin = true } = opts;
   if (needShareline) {
