@@ -10,6 +10,8 @@ import { get } from '@common/utils/get';
 import logoImg from '../../../../web/public/dzq-img/admin-logo-x2.png';
 import joinLogoImg from '../../../../web/public/dzq-img/join-banner-bg.png';
 import { numberFormat } from '@common/utils/number-format';
+import Router from '@discuzq/sdk/dist/router';
+
 /**
  * 帖子头部
  * @prop {string} bgColor 背景颜色
@@ -53,10 +55,10 @@ class HomeHeader extends React.Component {
   }
 
   goBack() {
-    Taro.navigateBack({
-      fail() {
-        Taro.navigateTo({
-          url: '/pages/index/index'
+    Router.back({
+      fail: () => {
+        Router.redirect({
+          url: '/pages/home/index'
         });
       }
     });
