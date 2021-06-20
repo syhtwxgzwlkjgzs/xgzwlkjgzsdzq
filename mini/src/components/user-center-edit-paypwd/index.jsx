@@ -89,12 +89,12 @@ class index extends Component {
   handlePayBoxWithTriggerIncident = async () => {
     const { id } = this.props?.user;
     try {
+      Taro.navigateBack({ delta: 1 });
       await this.props.user.updateUserInfo(id);
-      this.props.payBox.visible = true;
-      this.props.payBox.password = null;
       await this.props.payBox.getWalletInfo(id);
       this.props.user.userInfo.canWalletPay = true;
-      Taro.navigateBack({ delta: 1 });
+      this.props.payBox.visible = true;
+      this.props.payBox.password = null;
       this.initState();
     } catch (error) {
       Toast.error({
