@@ -217,8 +217,8 @@ class SearchPCPage extends React.Component {
           onScroll={ this.handleScroll }
           jumpTo={this.state.position}
           pageName="search"
-        showRefresh={false}
-        className="search-page"
+          showRefresh={false}
+          className="search-page"
         >
           { this.renderContent() }
         </BaseLayout>
