@@ -87,9 +87,11 @@ export default class PayBox extends React.Component {
         </Text>
       );
     }
+
     if (Number(this.props.payBox?.walletAvaAmount) < Number(amount)) {
       return <Text className={styles.subText}>余额不足</Text>;
     }
+
     return (
       <>
         {this.props.payBox?.walletAvaAmount ? (

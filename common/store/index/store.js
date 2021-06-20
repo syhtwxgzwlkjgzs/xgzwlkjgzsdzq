@@ -71,6 +71,8 @@ class IndexStore {
 
   @observable recommends = null;
   @observable recommendsStatus = 'none'
+
+  @observable topMenuIndex = '0'
 }
 
 export default IndexStore;

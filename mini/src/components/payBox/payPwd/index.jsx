@@ -85,6 +85,8 @@ class PayPassword extends React.Component {
         duration: 2000,
       });
       setTimeout(() => {
+        // TODO: 回跳逻辑补充
+        this.props.payBox.visible = false;
         Taro.navigateTo({ url: '/subPages/user/bind-phone/index?from=paybox' });
       }, 1000);
       return;
