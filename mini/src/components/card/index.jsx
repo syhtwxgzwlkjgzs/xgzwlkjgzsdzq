@@ -43,8 +43,12 @@ const Index = ({
       Taro.getImageInfo({
         src: image,
         success(img) {
-          const num = img.height * (620 / img.width);
-          setHeightdefill(num - 402)
+          if(img.type.toLowerCase() === 'gif') {
+            setUrl('')
+          } else {
+            const num = img.height * (620 / img.width);
+            setHeightdefill(num - 402)
+          }
         },
         fail(err) {
           setHeightdefill(402)
@@ -113,7 +117,6 @@ const Index = ({
     obj.imgtop = 0
   }
   const renderCard = () => {
-
     // 标题文字图片海报
     if (url) {
       return (
@@ -127,9 +130,8 @@ const Index = ({
         <Cardk obj={obj} setShareImage={setShareImage}></Cardk>
       )
     }
-
     // 文字海报
-    if (data.content) {
+    if (data.marglength) {
       return (
         <Card obj={obj} setShareImage={setShareImage}></Card>
       )
