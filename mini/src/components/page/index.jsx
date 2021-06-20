@@ -33,8 +33,8 @@ export default class Page extends React.Component {
 
   constructor(props) {
     super(props);
-    const { noWithLogin, withLogin, user, site } = this.props;
-
+    const { noWithLogin, withLogin, user } = this.props;
+    
     // 是否必须登录
     if (withLogin && !user.isLogin()) {
       Router.redirect({ url: WX_AUTH_URL });

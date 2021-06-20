@@ -90,6 +90,14 @@
       height: 70px;
       margin: 0 $margin-4n;
       border-top: $border-solid-1;
+
+      :global {
+        .dzq-checkbox-wrap.is-checked {
+          .dzq-checkbox {
+            border: none;
+          }
+        }
+      }
     }
     &:first-child .at-item__inner {
       border-top: none;
