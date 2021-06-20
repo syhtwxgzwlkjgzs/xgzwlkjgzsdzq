@@ -39,7 +39,7 @@ class App extends Component {
     const $instance = Taro.getCurrentInstance()
     const router = $instance.router;
     const {path, params} = router;
-    if (path !== 'pages/index/index') {
+    if (path !== '/pages/index/index') {
       let targetUrl = path;
       let targetParmas = '';
       const paramsArr = [];
