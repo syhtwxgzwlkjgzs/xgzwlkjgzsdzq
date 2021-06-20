@@ -67,6 +67,7 @@ export const MINI_SITE_JOIN_WHITE_LIST = [
   '/subPages/user/wx-authorization/index', // 微信授权
   '/subPages/user/wx-bind-username/index', // 用户名绑定
   '/subPages/user/wx-bind-phone/index', // 绑定手机号
+  '/subPages/my/edit/find/paypwd/index', // 忘记密码
   '/subPages/user/supplementary/index', // 补充信息
   '/subPages/my/index', // 个人中心
   '/subPages/forum/partner-invite/index', // 站点加入
