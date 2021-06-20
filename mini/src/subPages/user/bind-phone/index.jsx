@@ -98,18 +98,20 @@ class BindPhoneH5Page extends React.Component {
       const resp = await this.props.mobileBind.bind(sessionToken);
       const uid = get(resp, 'uid', '');
 
-      if (from === 'paybox' || from === 'userCenter') {
+      const IS_FROM_BIND_SOURCE = from === 'paybox' || from === 'userCenter'
+
+      if (IS_FROM_BIND_SOURCE) {
         this.props.user.updateUserInfo(this.props.user.id)
       } else {
         this.props.user.updateUserInfo(uid);
       }
 
       Toast.success({
-        content: '登录成功',
+        content: IS_FROM_BIND_SOURCE ? '绑定成功' : '登录成功',
         hasMask: false,
         duration: 2000,
         onClose: () => {
-          if (from === 'userCenter' || from === 'paybox') {
+          if (IS_FROM_BIND_SOURCE) {
             navigateBack();
             return;
           }
