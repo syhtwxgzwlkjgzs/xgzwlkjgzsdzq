@@ -156,12 +156,21 @@ const InteractionBox = (props) => {
         'type': 1
       },
       success(res) {
+        Taro.hideLoading();
         if (res.statusCode === 200) {
-          const data = JSON.parse(res.data).Data;
-          submit({ imageUrl: data.url });
+          const ret = JSON.parse(res.data);
+          const { Data: data, Code, Message: msg } = ret;
+          if (Code === 0) {
+            submit({
+              imageUrl: data.url,
+              width: data.fileWidth,
+              height: data.fileHeight,
+            });
+          } else {
+            Toast.error({ content: msg || '图片发送失败' });
+          }
         } else {
-          Taro.hideLoading();
-          Toast.error({ content: ret.msg });
+          Toast.error({ content: '网络发生错误' });
         }
       },
       fail(res) {
