@@ -37,6 +37,10 @@
 //   padding: 8px;
 // }
 
+.placeholderClass {
+  color: var(--border-color-hover);
+}
+
 .inputWrapper {
   display: flex;
   background-color: $text-bg-color2;

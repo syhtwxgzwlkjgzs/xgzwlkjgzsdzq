@@ -202,6 +202,7 @@ const InteractionBox = (props) => {
       <View className={styles.operationBox}>
         <View className={styles.inputWrapper}>
           <Input
+            placeholderClass={styles.placeholderClass}
             cursorSpacing={16}
             focus={focus}
             cursor={cursorPosition}
