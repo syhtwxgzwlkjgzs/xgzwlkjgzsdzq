@@ -70,11 +70,12 @@ class Index extends React.Component {
     this.props.index.getReadCategories();
     this.props.index.getRreadStickList(categoryIds);
     this.props.index.getReadThreadList({
-      sequence, 
-      filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort } 
+        sequence, 
+        filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort } 
+    }).then(() => {
+      // 若第一次接口请求成功，则开始第二次请求，提高数据渲染效率
+      this.dispatch('moreData');
     });
-
-    this.dispatch('moreData');
   }
 
   componentDidShow() {

@@ -27,6 +27,7 @@ import MessageStore from './message/action';
 import store from './store';
 import BaseLayoutStore from './baselayout/action';
 import WalletStore from './wallet/action';
+import VListStore from './vlist/action';
 
 useStaticRendering(isServer());
 
@@ -63,6 +64,7 @@ export default function initializeStore(initProps = {}) {
       forum: new ForumStore(),
       baselayout: new BaseLayoutStore(),
       wallet: new WalletStore(),
+      vlist: new VListStore(),
     };
   }
   if (store.getStore() === null) {
@@ -95,6 +97,7 @@ export default function initializeStore(initProps = {}) {
       forum: new ForumStore(),
       baselayout: new BaseLayoutStore(),
       wallet: new WalletStore(),
+      vlist: new VListStore(),
     });
   }
 

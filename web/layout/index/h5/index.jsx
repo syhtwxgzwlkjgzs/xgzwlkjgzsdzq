@@ -1,5 +1,5 @@
 import React, { createRef, Fragment } from 'react';
-import { inject, observer } from 'mobx-react';
+import { inject, observer, Observer } from 'mobx-react';
 import { Icon, Tabs } from '@discuzq/design';
 import ThreadContent from '@components/thread';
 import HomeHeader from '@components/home-header';
@@ -10,7 +10,7 @@ import BaseLayout from '@components/base-layout';
 import initJSSdk from '@common/utils/initJSSdk.js';
 import { getSelectedCategoryIds } from '@common/utils/handleCategory';
 import wxAuthorization from '../../user/h5/wx-authorization';
-import VList from '@components/virtual-list/index-cache';
+import VList from '@components/virtual-list/example/index';
 
 @inject('site')
 @inject('user')
@@ -235,8 +235,8 @@ class IndexH5Page extends React.Component {
               )}
             >
               <HomeHeader ref={this.headerRef} />
-              {this.renderTabs()}
-              {this.renderHeaderContent()}
+              <Observer>{() => this.renderTabs()}</Observer>
+              <Observer>{() => this.renderHeaderContent()}</Observer>
             </VList>
           </Fragment>
         )}
