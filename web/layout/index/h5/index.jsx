@@ -182,7 +182,6 @@ class IndexH5Page extends React.Component {
     const { currentPage, totalPage, pageData } = threads || {};
     // 是否开启虚拟滚动
     const enableVlist = true;
-
     return (
       <BaseLayout
         showHeader={false}
@@ -210,8 +209,9 @@ class IndexH5Page extends React.Component {
               loadNextPage={this.onRefresh}
               noMore={currentPage >= totalPage}
               requestError={this.props.isError}
-              renderItem={(item, index, recomputeRowHeights, onContentHeightChange, measure) => (
-                <ThreadContent
+              renderItem={(item, index, recomputeRowHeights, onContentHeightChange, measure) => {
+                console.log(item);
+                return <ThreadContent
                   onContentHeightChange={measure}
                   onImageReady={measure}
                   onVideoReady={measure}
@@ -232,7 +232,7 @@ class IndexH5Page extends React.Component {
                 //   className={styles.listItem}
                 //   recomputeRowHeights={recomputeRowHeights}
                 // />
-              )}
+              }}
             >
               <HomeHeader ref={this.headerRef} />
               {this.renderTabs()}

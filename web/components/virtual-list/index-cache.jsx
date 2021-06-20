@@ -180,7 +180,7 @@ function VList(
       promiseResolver = res;
     });
   };
-
+  console.log(list.length)
   const listScroller = (
     <InfiniteLoader isRowLoaded={isRowLoaded} loadMoreRows={loadMoreRows} rowCount={list.length}>
       {({ onRowsRendered, registerChild }) => {
@@ -194,6 +194,7 @@ function VList(
                 onScroll={onChildScroll}
                 overscanRowCount={12}
                 deferredMeasurementCache={cache}
+                onRowsRendered={onRowsRendered}
                 rowCount={rowCount}
                 rowRenderer={rowRenderer}
                 rowHeight={getRowHeight}
