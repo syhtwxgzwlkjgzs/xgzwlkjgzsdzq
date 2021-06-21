@@ -1,6 +1,7 @@
 import React from 'react';
 import Withdrawal from '@layout/wallet/withdrawal';
 import { readWalletUser } from '@server';
+import Taro from '@tarojs/taro';
 import Page from '@components/page';
 import Toast from '@discuzq/design/dist/components/toast/index';
 
@@ -24,8 +25,16 @@ class WalletPage extends React.Component {
     }
   }
 
+  setNavigationBarStyle = () => {
+    Taro.setNavigationBarColor({
+      frontColor: '#ffffff',
+      backgroundColor: '#ffffff'
+    })
+  }
+
   componentDidMount() {
     this.getWallet();
+    this.setNavigationBarStyle();
   }
 
   render() {
