@@ -35,6 +35,12 @@ function avatar(props) {
   const [blocking, changeBlockStatus] = useState(false);
   const [isSameWithMe, changeIsSameWithMe] = useState(false);
 
+  const onClickUserImage = (e) => {
+    if ((image && image !== '') ||  (userName !== '匿' && userName !== '')) {
+      onClick(e)
+    }
+  } 
+
   const onMouseEnterHandler = useCallback(async () => {
     if (!userId) return;
     changeIsShow(true);
@@ -262,7 +268,7 @@ function avatar(props) {
   if (image && image !== '') {
     return (
       <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler} >
-        <div className={styles.avatarWrapper} onClick={onClick}>
+        <div className={styles.avatarWrapper} onClick={onClickUserImage}>
           <Avatar className={className} circle={circle} image={image} size={size}></Avatar>
           {
             userTypeIcon && (
@@ -279,8 +285,8 @@ function avatar(props) {
 
   return (
     <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
-      <div className={styles.cursor} onClick={onClick}>
-        <Avatar className={className} circle={circle} text={userName} size={size} onClick={onClick}></Avatar>
+      <div className={styles.cursor} onClick={onClickUserImage}>
+        <Avatar className={className} circle={circle} text={userName} size={size} onClick={onClickUserImage}></Avatar>
         {
           userTypeIcon && (
             <div className={`${styles.userIcon} ${bgClrBasedOnType}`}>

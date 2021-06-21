@@ -10,16 +10,22 @@ export default function avatar(props) {
     return newName;
   }, [name]);
 
+  const onClickUserImage = (e) => {
+    if ((image && image !== '') ||  (userName !== '匿' && userName !== '')) {
+      onClick(e)
+    }
+  } 
+
   if (image && image !== '') {
     return (
-      <View onClick={onClick}>
+      <View onClick={onClickUserImage}>
         <Avatar className={className} circle={circle} image={image} size={size}></Avatar>
       </View>
     );
   }
 
   return (
-    <View onClick={onClick}>
+    <View onClick={onClickUserImage}>
       <Avatar className={className} circle={circle} text={userName} size={size}></Avatar>
     </View>
   );
