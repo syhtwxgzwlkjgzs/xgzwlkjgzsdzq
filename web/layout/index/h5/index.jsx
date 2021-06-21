@@ -175,8 +175,8 @@ class IndexH5Page extends React.Component {
 
   render() {
     const { index } = this.props;
-    const { filter, isFinished, currentCategories } = this.state;
-    const { threads = {}, sticks } = index;
+    const { filter, isFinished } = this.state;
+    const { threads = {}, sticks, currentCategories } = index;
     const { currentPage, totalPage, pageData } = threads || {};
     // 是否开启虚拟滚动
     const enableVlist = true;
