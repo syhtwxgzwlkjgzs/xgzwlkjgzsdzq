@@ -61,7 +61,7 @@ class App extends Component {
       Router.redirect({
         url: `/pages/index/index?path=${encodeURIComponent(targetUrl)}`,
         fail: (err) => {
-          console.log(err,123132)
+          console.log(err)
         }
       });
       

@@ -157,15 +157,14 @@ const InteractionBox = (props) => {
     const { code, data } = ret;
     if (code === 0) {
       await submit({
+        attachmentId: data.id,
         imageUrl: data.url,
-        width: data.fileWidth,
-        height: data.fileHeight,
       });
     } else {
       Toast.error({ content: ret.msg });
     }
     uploadRef.current.value = '';
-  }
+  };
 
   const recordCursor = (e) => {
     setCursorPosition(e.target.selectionStart);

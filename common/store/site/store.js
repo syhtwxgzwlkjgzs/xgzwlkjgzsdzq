@@ -60,7 +60,7 @@ class SiteStore {
 
   // 站点介绍
   @computed get siteIntroduction() {
-    return get(this.webConfig, 'setSite.siteIntroduction', '暂无介绍');
+    return get(this.webConfig, 'setSite.siteIntroduction') || '暂无介绍';
   }
 
   // 注册协议开关

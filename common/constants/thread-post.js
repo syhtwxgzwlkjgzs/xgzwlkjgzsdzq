@@ -60,17 +60,6 @@ export const THREAD_TYPE = {
 // 图片类型
 // https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types
 export const ACCEPT_IMAGE_TYPES = [
-  'image/apng',
-  'image/bmp',
-  'image/gif',
-  'image/jpeg',
-  'image/pjpeg',
-  'image/png',
-  'image/svg+xml',
-  'image/tiff',
-  'image/webp',
-  'image/x-icon',
-  'image/vnd.microsoft.icon',
   'image/*',
 ];
 
