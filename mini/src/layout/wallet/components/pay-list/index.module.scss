@@ -12,13 +12,14 @@
   padding-bottom: $padding-2n;
   color: $text-color-primary;
   font-size: $font-size-primary;
-  line-height: 16px;
+  line-height: 20px;
 
   .money {
     font-family: 'PingFang SC';
     font-weight: 600;
     font-size: $font-size-middle;
     text-align: left;
+    line-height: 20px;
   }
   :global {
     .qq-emotion {
@@ -34,6 +35,7 @@
       overflow: hidden;
       word-break: break-all;
       max-width: 140px;
+      line-height: 20px;
       @include text-ellipsis();
 
       .dzq-a {
