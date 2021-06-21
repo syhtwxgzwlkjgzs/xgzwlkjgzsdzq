@@ -43,7 +43,7 @@ const WrapperContent = (props) => {
 
   return (
     <div className={`${styles.container} ${pcStyle} ${className} ${isNeedBottom && styles.bottom}`}>
-      {header || <SectionTitle {...props} />}
+      {header || <SectionTitle bigSize={platform === 'pc'} {...props} />}
       {(!isLoading && !isNoData) ? children : <BottomView isError={isError} errorText={errorText} noMore={!isLoading && isNoData} loadingText='正在加载' />}
       {footer}
     </div>
@@ -75,7 +75,7 @@ const PlaneContent = (props) => {
   return (
     <div className={className}>
       <div className={`${pcStyle} ${styles.containerPlane} ${titleWrapper}`}>
-        {header || <SectionTitle {...props} />}
+        {header || <SectionTitle bigSize={platform === 'pc'} {...props} />}
       </div>
       {(!isLoading && !isNoData) ? children : <BottomView className={styles.bottomView} isError={isError} errorText={errorText} noMore={!isLoading && isNoData} loadingText='正在加载' />}
     </div>

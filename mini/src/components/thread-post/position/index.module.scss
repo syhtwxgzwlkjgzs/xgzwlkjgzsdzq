@@ -7,23 +7,25 @@
   border-radius: 5px;
   background: #f0f1f3;
   color: #4f5a70;
-  padding: 4px 8px;
   margin: 9px 8px 9px 0;
   max-width: 80%;
 
   .position-icon {
-    margin-right: $margin-1n;
+    margin: 0 $margin-1n 0 $margin-2n;
   }
 
   .text {
+    align-self: stretch;
+    line-height: 27px;
     font-size: $font-size-label;
-    line-height: 16px;
     text-align: left;
     @include text-ellipsis();
   }
 
   .remove-icon {
-    padding-left: $padding-2n;
+    align-self: stretch;
+    line-height: 27px;
+    padding: 0 $padding-2n;
   }
 }
 

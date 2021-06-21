@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button, Input, Toast } from '@discuzq/design';
+import { Button, Input, Toast, Spin } from '@discuzq/design';
 import Header from '@components/header';
 import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
@@ -9,6 +9,19 @@ import classNames from 'classnames';
 @inject('payBox')
 @observer
 export default class index extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isSubmit: false, // 是否点击提交
+    };
+  }
+
+  initState = () => {
+    this.setState({
+      isSubmit: false,
+    });
+  };
+
   componentDidMount() {
     this.props.payBox.clearPayPassword();
   }
@@ -26,6 +39,9 @@ export default class index extends Component {
   // 点击确认 ---> 清空对应密码状态
   handleSubmit = throttle(() => {
     if (this.getDisabledWithButton()) return;
+    this.setState({
+      isSubmit: true,
+    });
     const newPayPwd = this.props.payBox?.newPayPwd;
     const newPayPwdRepeat = this.props.payBox?.newPayPwdRepeat;
     if (newPayPwd !== newPayPwdRepeat) {
@@ -35,6 +51,7 @@ export default class index extends Component {
         duration: 2000,
       });
       this.props.payBox.clearPayPassword();
+      this.initState();
       return;
     }
     this.props.payBox
@@ -47,6 +64,7 @@ export default class index extends Component {
         });
         Router.push({ url: `/my` });
         this.props.payBox.clearPayPassword();
+        this.initState();
       })
       .catch((err) => {
         Toast.error({
@@ -55,6 +73,7 @@ export default class index extends Component {
           duration: 2000,
         });
         this.props.payBox.clearPayPassword();
+        this.initState();
       });
   }, 300);
 
@@ -65,12 +84,14 @@ export default class index extends Component {
   getDisabledWithButton = () => {
     const newPayPwd = this.props.payBox?.newPayPwd;
     const newPayPwdRepeat = this.props.payBox?.newPayPwdRepeat;
-    return !newPayPwd || !newPayPwdRepeat;
+    const { isSubmit } = this.state;
+    return !newPayPwd || !newPayPwdRepeat || isSubmit;
   };
 
   render() {
     const newPayPwd = this.props.payBox?.newPayPwd;
     const newPayPwdRepeat = this.props.payBox?.newPayPwdRepeat;
+    const { isSubmit } = this.state;
     return (
       <div id={styles.resetPayPwdContent}>
         <Header />
@@ -113,7 +134,7 @@ export default class index extends Component {
             type={'primary'}
             className={styles.btn}
           >
-            提交
+            {isSubmit ? <Spin type="spinner">提交中...</Spin> : '提交'}
           </Button>
         </div>
       </div>

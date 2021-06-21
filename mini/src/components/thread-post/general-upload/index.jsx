@@ -8,6 +8,7 @@ import { observer, inject } from 'mobx-react';
 import { View } from '@tarojs/components';
 import AudioRecord from '@discuzq/design/dist/components/audio-record/index';
 import Audio from '@discuzq/design/dist/components/audio/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import { Units } from '@components/common';
 import styles from './index.module.scss';
 import locals from '@common/utils/local-bridge';
@@ -53,12 +54,27 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
 
     // 3 等待上传完成
     Promise.all(uploadPromise)
-      .then(() => {
+      .then((res) => {
         Taro.hideLoading();
-        !isAllLegal && Taro.showToast({
-          title: `仅支持${supportExt}格式，且0~${supportMaxSize}MB的${isImage ? '图片' : '文件'}`,
-          icon: 'none'
+
+        let count = 0;
+        res.forEach((item) => {
+          if (item.statusCode !== 200 || JSON.parse(item.data).Code !== 0) {
+            count++;
+          }
         });
+
+        if (count > 0 && isAllLegal) {
+          Toast.error({
+            content: `${count} 张照片上传失败`,
+          });
+        }
+
+        if (!isAllLegal) {
+          Toast.error({
+            content: `仅支持${supportExt}格式，且0~${supportMaxSize}MB的${isImage ? '图片' : '文件'}`,
+          });
+        }
       })
   }
 
@@ -85,29 +101,32 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
         },
         success(res) {
           if (res.statusCode === 200) {
-            const data = JSON.parse(res.data).Data;
-            switch (type) {
-              case THREAD_TYPE.image:
-                images[data.id] = {
-                  thumbUrl: tempFilePath,
-                  ...data,
-                };
-                setPostData({ images });
-                break;
-              case THREAD_TYPE.file:
-                files[data.id] = {
-                  thumbUrl: tempFilePath,
-                  name: file.name,
-                  size: file.size,
-                  ...data,
-                };
-                setPostData({ files });
-                break;
+            const ret = JSON.parse(res.data);
+            if (ret.Code === 0) {
+              const data = ret.Data;
+              switch (type) {
+                case THREAD_TYPE.image:
+                  images[data.id] = {
+                    thumbUrl: tempFilePath,
+                    ...data,
+                  };
+                  setPostData({ images });
+                  break;
+                case THREAD_TYPE.file:
+                  files[data.id] = {
+                    thumbUrl: tempFilePath,
+                    name: file.name,
+                    size: file.size,
+                    ...data,
+                  };
+                  setPostData({ files });
+                  break;
+              }
             }
           } else {
             console.log(res);
           }
-          resolve();
+          resolve(res);
         },
         fail(res) {
           console.log(res);
@@ -190,7 +209,9 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
 
   // 录音音频
   const audioPlayer = (audio?.mediaUrl) && (
-    <Audio src={audio.mediaUrl} onDelete={() => { setPostData({ audio: {} }); }} />
+    <View className={styles['audio-container']}>
+      <Audio src={audio.mediaUrl} onDelete={() => { setPostData({ audio: {} }); }} />
+    </View>
   );
 
 

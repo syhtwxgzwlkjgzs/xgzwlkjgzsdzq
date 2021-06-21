@@ -29,13 +29,11 @@ const index = ({setShow, tipData, data, index, getShareData, shareNickname, shar
     }
     const CreateCard = () => {
         setShow(false)
+        Taro.eventCenter.once('page:init', () => {
+            Taro.eventCenter.trigger('message:detail', data)
+        })
         Taro.navigateTo({
             url: `/subPages/create-card/index?threadId=${threadId}`,
-            success () {
-                Taro.eventCenter.once('page:init', () => {
-                    Taro.eventCenter.trigger('message:detail', data)
-              })
-            }
         })
     }
 

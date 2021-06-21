@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button, Input, Toast } from '@discuzq/design';
+import { Button, Input, Toast, Spin } from '@discuzq/design';
 import Header from '@components/header';
 import styles from './index.module.scss';
 import CaptchaInput from '../../user-center-edit-mobile/captcha-input';
@@ -26,6 +26,7 @@ class index extends Component {
       initTimeValue: null,
       payPassword: null,
       payPasswordConfirmation: null,
+      isSubmit: false, // 是否点击提交
     };
   }
 
@@ -38,6 +39,7 @@ class index extends Component {
       initTimeValue: null,
       payPassword: null,
       payPasswordConfirmation: null,
+      isSubmit: false,
     });
   };
 
@@ -68,9 +70,32 @@ class index extends Component {
     }
   };
 
+  // 处理支付相关逻辑
+  handlePayBoxWithTriggerIncident = async () => {
+    const { id } = this.props?.user;
+    try {
+      await this.props.user.updateUserInfo(id);
+      this.props.payBox.visible = true;
+      this.props.payBox.password = null;
+      this.props.payBox.step = STEP_MAP.WALLET_PASSWORD;
+      await this.props.payBox.getWalletInfo(id);
+      this.props.user.userInfo.canWalletPay = true;
+      Router.back();
+    } catch (error) {
+      console.error(error);
+      Toast.error({
+        content: '获取用户钱包信息失败',
+        duration: 2000,
+      });
+    }
+  };
+
   // 点击下一步
   handleStepBtn = () => {
     if (this.getDisabledWithButton()) return;
+    this.setState({
+      isSubmit: true,
+    });
     const { list = [], payPassword, payPasswordConfirmation } = this.state;
     if (payPassword !== payPasswordConfirmation) {
       Toast.error({
@@ -98,22 +123,8 @@ class index extends Component {
         });
         const type = GetQueryString('type');
         if (type === 'paybox') {
-          const { id } = this.props?.user;
-          try {
-            await this.props.user.updateUserInfo(id);
-            this.props.payBox.visible = true;
-            this.props.payBox.password = null;
-            this.props.payBox.step = STEP_MAP.WALLET_PASSWORD;
-            await this.props.payBox.getWalletInfo(id);
-            this.props.user.userInfo.canWalletPay = true;
-            Router.back();
-          } catch (error) {
-            console.error(error);
-            Toast.error({
-              content: '获取用户钱包信息失败',
-              duration: 2000,
-            });
-          }
+          this.handlePayBoxWithTriggerIncident();
+          this.initState();
           return;
         }
         Router.push({ url: `/my` });
@@ -212,9 +223,9 @@ class index extends Component {
    * @returns true 表示禁用 false表示不禁用
    */
   getDisabledWithButton = () => {
-    const { list = [], payPassword, payPasswordConfirmation } = this.state;
+    const { list = [], payPassword, payPasswordConfirmation, isSubmit } = this.state;
     let disabled = false;
-    disabled = !payPassword || !payPasswordConfirmation || list.length !== 6;
+    disabled = !payPassword || !payPasswordConfirmation || list.length !== 6 || isSubmit;
     return disabled;
   };
 
@@ -227,6 +238,7 @@ class index extends Component {
       initTimeValue,
       payPassword,
       payPasswordConfirmation,
+      isSubmit,
     } = this.state;
     const mobile = this.props?.user.mobile;
     return (
@@ -308,7 +320,7 @@ class index extends Component {
             type={'primary'}
             className={styles.btn}
           >
-            提交
+            {isSubmit ? <Spin type="spinner">提交中...</Spin> : '提交'}
           </Button>
         </div>
       </div>

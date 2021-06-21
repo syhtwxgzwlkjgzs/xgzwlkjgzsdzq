@@ -213,6 +213,7 @@ class Index extends React.Component {
             shareContent = {shareContent}
             getShareContent = {getShareContent}
             data={data}
+            user={this.props.user}
           />
         </View>
       );

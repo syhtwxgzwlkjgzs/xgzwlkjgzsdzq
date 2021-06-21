@@ -16,7 +16,6 @@
     line-height: 22px;
     color: $text-color-primary;
     width: 100%;
-    margin-bottom: $margin-4n;
   }
 
   .header {
@@ -31,8 +30,13 @@
     justify-content: flex-end;
   }
 
-  .content {
+  .wrapper {
     position: relative;
+    overflow: hidden;
+
+    > View:not(:last-child) {
+      margin-bottom: $margin-4n;
+    }
 
     .cover {
       position: absolute;
@@ -81,10 +85,6 @@
   .header {
     padding: $padding-6n 0;
   }
-}
-
-.wrapper {
-  overflow: hidden;
 }
 
 .brWrapper {

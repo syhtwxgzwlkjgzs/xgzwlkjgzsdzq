@@ -133,9 +133,11 @@ class HomeHeader extends React.Component {
     return (
         <View
           ref={this.domRef}
-          className={`${styles.container} ${mode ? styles[`container_mode_${mode}`] : ''} ${
-            hideLogo ? styles['hide_logo'] : ''
-          }`}
+          className={`
+            ${styles.container} 
+            ${mode ? styles[`container_mode_${mode}`] : ''} 
+            ${hideLogo ? styles['hide_logo'] : ''}
+          `}
           style={{ ...style, ...this.getBgHeaderStyle(bgColor) }}
         >
           {hideInfo && mode !== 'join' && (

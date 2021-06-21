@@ -45,56 +45,50 @@ const Index = (props) => {
       threadId,
     } = handleAttachmentData(data);
     return (
-      <View className={styles.wrapper}>
+      <>
         {text && <PostContent content={text} onPay={onPay} onRedirectToDetail={onClick} />}
-        <View className={styles.content}>
-          {videoData && (
-            <BrWrapper>
-              <VideoPlay
-                url={videoData.mediaUrl}
-                coverUrl={videoData.coverUrl}
-                v_width={videoData.width || null}
-                v_height={videoData.height || null}
-                onPay={onPay}
-                isPay={needPay}
-                status={videoData.status}
-              />
-            </BrWrapper>
-          )}
-          {imageData?.length ? (
-            <BrWrapper>
-              <ImageDisplay platform="h5" imgData={imageData} isPay={needPay} onPay={onPay} onClickMore={onClick} />
-            </BrWrapper>
-          ) : null}
-          {audioData && <BrWrapper><AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} /></BrWrapper>}
-          {fileData?.length ? <BrWrapper><AttachmentView threadId={threadId} attachments={fileData} onPay={onPay} isPay={needPay} /></BrWrapper> : null}
-          {goodsData && (
-            <BrWrapper>
-              <ProductItem
-                image={goodsData.imagePath}
-                amount={goodsData.price}
-                title={goodsData.title}
-                onClick={onClick}
-              />
-            </BrWrapper>
-          )}
-          {rewardData && <BrWrapper><Packet type={1} money={rewardData.money} onClick={onClick} /></BrWrapper>}
-          {redPacketData && (
-            <BrWrapper><Packet money={redPacketData.money || 0} onClick={onClick} condition={redPacketData.condition} /></BrWrapper>
-          )}
-        </View>
-      </View>
+        {videoData && (
+            <VideoPlay
+              url={videoData.mediaUrl}
+              coverUrl={videoData.coverUrl}
+              v_width={videoData.width || null}
+              v_height={videoData.height || null}
+              onPay={onPay}
+              isPay={needPay}
+              status={videoData.status}
+            />
+        )}
+        {imageData?.length ? (
+            <ImageDisplay platform="h5" imgData={imageData} isPay={needPay} onPay={onPay} onClickMore={onClick} />
+        ) : null}
+        {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} />}
+        {fileData?.length ? <AttachmentView threadId={threadId} attachments={fileData} onPay={onPay} isPay={needPay} /> : null}
+        {goodsData && (
+            <ProductItem
+              image={goodsData.imagePath}
+              amount={goodsData.price}
+              title={goodsData.title}
+              onClick={onClick}
+            />
+        )}
+        {rewardData && <Packet type={1} money={rewardData.money} onClick={onClick} />}
+        {redPacketData && (
+          <Packet money={redPacketData.money || 0} onClick={onClick} condition={redPacketData.condition} />
+        )}
+      </>
     );
   };
   return (
     <>
-      {title && (
-        <View className={styles.title} onClick={onClick}>
-          {newTitle}
-        </View>
-      )}
+      <View className={styles.wrapper}>
+        {title && (
+          <View className={styles.title} onClick={onClick}>
+            {newTitle}
+          </View>
+        )}
 
-      {renderThreadContent(props.data)}
+        {renderThreadContent(props.data)}
+      </View>
 
       {needPay && (
         <View className={styles.pay}>

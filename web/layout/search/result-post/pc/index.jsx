@@ -6,6 +6,7 @@ import ThreadContent from '@components/thread';
 import { withRouter } from 'next/router';
 import styles from './index.module.scss';
 import PopTopic from '@components/pop-topic';
+import Copyright from '@components/copyright';
 
 @inject('site')
 @inject('search')
@@ -50,10 +51,11 @@ class SearchResultPostH5Page extends React.Component {
         onRefresh={this.fetchMoreData}
         showRefresh={false}
         isShowLayoutRefresh={!!pageData?.length}
-        right={<PopTopic />}
+        className="search-result-post"
+        right={<><PopTopic /><Copyright/></>}
       >
-        <SidebarPanel 
-          title="热门内容" 
+        <SidebarPanel
+          title="热门内容"
           type='large'
           isShowMore={false}
           isLoading={!pageData}

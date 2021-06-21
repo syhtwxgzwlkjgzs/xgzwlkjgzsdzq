@@ -3,7 +3,7 @@ import IndexStore from './store';
 import { readCategories, readStickList, readThreadList, updatePosts, createThreadShare, readRecommends } from '@server';
 import typeofFn from '@common/utils/typeof';
 import threadReducer from '../thread/reducer';
-import { getCategoryName, getActiveId, getCategories } from '@common/utils/handleCategory'
+import { getCategoryName, getActiveId, getCategories, handleString2Arr } from '@common/utils/handleCategory'
 
 class IndexAction extends IndexStore {
   constructor(props) {
@@ -114,7 +114,9 @@ class IndexAction extends IndexStore {
 
       this.setFilter({ categoryids: categoryIds })
     } else {
-      const { categoryids = [], sequence = 0 } = this.filter
+      const { sequence = 0 } = this.filter
+      const categoryids = handleString2Arr(this.filter, 'categoryids')
+
       this.screenData({ filter: { categoryids }, sequence })
     }
   }
@@ -242,7 +244,7 @@ class IndexAction extends IndexStore {
     const result = await readStickList({ params: { categoryIds } });
     if (result.code === 0) {
       this.sticks = null;
-      this.setSticks(result.data);
+      this.setSticks(result.data || []);
       return this.sticks;
     }
     return null;
@@ -350,7 +352,7 @@ class IndexAction extends IndexStore {
    */
   @action
   updateAssignThreadAllData(threadId, threadInfo) {
-    if (!threadId) return false;
+    if (!threadId || !threadInfo || !Object.keys(threadInfo).length) return false;
     const targetThread = this.findAssignThread(typeofFn.isNumber(threadId) ? threadId : +threadId);
     if (!targetThread) return false;
     const { index, data } = targetThread;
@@ -465,8 +467,8 @@ class IndexAction extends IndexStore {
     this.updateRecommendsStatus('loading');
     
     const result = await readRecommends({ params: { categoryIds } })
-    if (result.code === 0 && result.data) {
-      this.setRecommends(result.data);
+    if (result.code === 0) {
+      this.setRecommends(result.data || []);
       this.updateRecommendsStatus('none');
       return this.recommends;
     } else {

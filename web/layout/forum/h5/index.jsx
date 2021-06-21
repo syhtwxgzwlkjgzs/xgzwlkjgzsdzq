@@ -40,7 +40,7 @@ class ForumH5Page extends React.Component {
     forum.setUsersPageData(usersList);
   }
 
-  onUserClick = (id) => {
+  onUserClick = ({ id }) => {
     this.props.router.push(`/user/${id}`);
   };
 
@@ -137,7 +137,7 @@ class ForumH5Page extends React.Component {
           onClose={() => forum.setIsPopup(false)}
           containerClassName={layout.forum_users_popup}
         >
-          <UserCenterUsers/>
+          <UserCenterUsers onContainerClick={this.onUserClick}/>
         </Popup>
       </>
     );

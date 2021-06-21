@@ -7,8 +7,8 @@ import styles from './index.module.scss';
  * @prop {string[]} data 话题数据
  * @prop {function} onItemClick 话题点击事件
  */
-const TrendingTopics = ({ data, onItemClick }) => (
-    <div className={styles.list}>
+const TrendingTopics = ({ data, onItemClick, className = '' }) => (
+    <div className={`${styles.list} ${className}`}>
     {data?.map((item, index, arr) => (
       <Topic key={index} index={index} data={item} onClick={onItemClick} footer={arr.length - index < 3} />
     ))}

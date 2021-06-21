@@ -19,6 +19,7 @@ import List from '@components/list';
 import zhCN from 'date-fns/locale/zh-CN';
 import 'react-datepicker/dist/react-datepicker.css';
 import classnames from 'classnames';
+import BaseLayout from '@components/base-layout';
 
 @inject('site')
 @inject('wallet')
@@ -90,7 +91,7 @@ class ThreadPCPage extends React.Component {
       if (e.Code) {
         Toast.error({
           content: e.Msg,
-          duration: 1000,
+          duration: 2000,
         });
       }
     }
@@ -314,6 +315,31 @@ class ThreadPCPage extends React.Component {
     }
   };
 
+  renderRight = () => {
+    const { walletInfo } = this.props.wallet;
+    return (
+      <div className={layout.bodyRigth}>
+        <div className={layout.walletInfo}>
+          <WalletInfo
+            walletData={walletInfo}
+            webPageType="PC"
+            showWithrawal={this.showWithrawal}
+            onFrozenAmountClick={this.onFrozenAmountClick}
+          ></WalletInfo>
+        </div>
+        <div className={layout.tabs}>
+          <Tabs
+            className="wallet-tabs"
+            activeType={this.state.activeType}
+            handleTriggerSelectedTypes={this.handleTriggerSelectedTypes} />
+        </div>
+        <div className={layout.copyright}>
+          <Copyright />
+        </div>
+      </div>
+    );
+  };
+
   render() {
     const recordType = {
       income: '收入明细',
@@ -322,14 +348,16 @@ class ThreadPCPage extends React.Component {
       frozen: '冻结金额',
     };
     const { walletInfo } = this.props.wallet;
-    const { activeType, totalPage } = this.state;
+    const { activeType } = this.state;
     return (
-      <div className={layout.container}>
-        <div className={layout.header}>
-          <Header />
-        </div>
-        <div className={`${layout.body} ${totalPage !== 1 ? layout.bodyPaddingTop20 : layout.bodyPadding20}`}>
-          {/* 左边内容 */}
+      <BaseLayout
+        right={this.renderRight()}
+        immediateCheck={true}
+        onRefresh={this.fetcher}
+        showRefresh={false}
+        noMore={this.state.page > this.state.totalPage}
+        className={`mywallet-page ${layout.container}`}
+      >
           <div className={layout.bodyLeft}>
             <div className={layout.header}>
               <div className={layout.headerTitle}>
@@ -371,9 +399,13 @@ class ThreadPCPage extends React.Component {
                         }}
                         dateFormat="yyyy年MM月"
                       />
-                      <Icon name={'RightOutlined'} size={12} className={classnames(layout.datePickerIcon, {
-                        [layout.datePickerIconOpen]: this.state.datePickerOpen
-                      })} />
+                      <Icon
+                        name={'RightOutlined'}
+                        size={12}
+                        className={classnames(layout.datePickerIcon, {
+                          [layout.datePickerIconOpen]: this.state.datePickerOpen,
+                        })}
+                      />
                     </div>
                     <div className={layout.choiceType}>
                       <Dropdown
@@ -398,38 +430,11 @@ class ThreadPCPage extends React.Component {
                 <div className={layout.recordNumber}>共有{this.state.totalCount}条记录</div>
               )}
             </div>
-
-            <List
-              className={layout.recordList}
-              onRefresh={this.fetcher}
-              noMore={this.state.page > this.state.totalPage}
-            >
-              <RecordList data={this.getRecordData()} activeType={this.state.activeType}></RecordList>
-            </List>
-          </div>
-
-          {/* 右边信息 */}
-          <div className={layout.bodyRigth}>
-            <div className={layout.walletInfo}>
-              <WalletInfo
-                walletData={walletInfo}
-                webPageType="PC"
-                showWithrawal={this.showWithrawal}
-                onFrozenAmountClick={this.onFrozenAmountClick}
-              ></WalletInfo>
-            </div>
-            <div className={layout.tabs}>
-              <Tabs activeType={this.state.activeType} handleTriggerSelectedTypes={this.handleTriggerSelectedTypes} />
-            </div>
-            <div className={layout.copyright}>
-              <Copyright />
-            </div>
-          </div>
+            <RecordList data={this.getRecordData()} activeType={this.state.activeType}></RecordList>
         </div>
-
         {/* 提现弹框 */}
         <WithdrawalPop visible={this.state.showWithdrawalPopup} onClose={this.onClose} />
-      </div>
+      </BaseLayout>
     );
   }
 }

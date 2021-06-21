@@ -45,6 +45,17 @@ const SearchInput = ({
       }, searchWhileTyping ? 1000 : 0));
     }
   }
+
+  const onEnter = (e) => {
+    if(timeoutID !== null) {
+      clearTimeout(timeoutID);
+      setTimeoutID(null);
+    }
+    setTimeoutID(setTimeout(() => {
+      onSearch(e.target.value);
+    }, 500));
+  }
+
   const clearInput = () => {
     if(inputRef.current.props) {
       inputRef.current.props.value = '';
@@ -65,7 +76,7 @@ const SearchInput = ({
         <Input
           value={debounce(() => value, 0)}
           placeholder='请输入想要搜索的内容...'
-          onEnter={e => inputClick(e)}
+          onEnter={e => onEnter(e)}
           onInput={e => inputChange(e)}
           className={styles.input}
           confirmType='search'

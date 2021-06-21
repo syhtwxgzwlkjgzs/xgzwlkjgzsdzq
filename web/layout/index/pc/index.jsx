@@ -33,7 +33,7 @@ class IndexPCPage extends React.Component {
 
   // 轮询定时器
   timer = null
-  
+
   // List组件ref
   listRef = React.createRef()
   // 存储最新的数据，以便于点击刷新时，可以直接赋值
@@ -43,7 +43,7 @@ class IndexPCPage extends React.Component {
     if (this.timer) {
       clearInterval(this.timer);
     }
-    
+
     this.timer = setInterval(() => {
       this.handleIntervalRequest()
     }, 30000);
@@ -59,7 +59,7 @@ class IndexPCPage extends React.Component {
     const { filter } = this.props.index
 
     const { essence, attention, sort, sequence } = filter;
-    
+
     const { totalCount: nowTotal = -1 } = this.props.index?.threads || {};
 
     let newTypes = handleString2Arr(filter, 'types');
@@ -94,7 +94,7 @@ class IndexPCPage extends React.Component {
 
   onFilterClick = (result) => {
     const { sequence, filter: { types, sort, essence, attention, } } = result;
-    
+
     this.changeFilter({ types, sort, essence, attention, sequence })
   }
 
@@ -155,12 +155,12 @@ class IndexPCPage extends React.Component {
     return (
       <div className={styles.indexLeft}>
         <div className={styles.indexLeftBox}>
-          <Navigation 
-            categories={currentCategories} 
-            defaultFisrtIndex={activeCategoryId} 
+          <Navigation
+            categories={currentCategories}
+            defaultFisrtIndex={activeCategoryId}
             defaultSecondIndex={activeChildCategoryId}
-            totalThreads={countThreads} 
-            onNavigationClick={this.onNavigationClick} 
+            totalThreads={countThreads}
+            onNavigationClick={this.onNavigationClick}
             isError={categoryError.isError}
             errorText={categoryError.errorText}
           />
@@ -193,7 +193,7 @@ class IndexPCPage extends React.Component {
         <TopFilterView onFilterClick={this.onFilterClick} onPostThread={this.onPostThread} isShowDefault={isShowDefault} />
 
         <div className={styles.contnetTop}>
-          {sticks?.length && <div className={`${styles.TopNewsBox} ${!visible && styles.noBorder}`}>
+          {sticks?.length > 0 && <div className={`${styles.TopNewsBox} ${!visible && styles.noBorder}`}>
             <TopNews data={sticks} platform="pc" isShowBorder={false}/>
           </div>}
           {
@@ -232,6 +232,7 @@ class IndexPCPage extends React.Component {
         pageName='home'
         requestError={threadError.isError}
         errorText={threadError.errorText}
+        className="home"
       >
         {this.renderContent(index)}
       </BaseLayout>

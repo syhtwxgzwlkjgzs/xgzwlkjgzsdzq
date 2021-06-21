@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import OtherView from '../../layout/my/other-user/index';
 import Page from '@components/page';
 import { View, Text } from '@tarojs/components';
-import Taro from '@tarojs/taro'
 import { inject, observer } from 'mobx-react';
 import withShare from '@common/utils/withShare/withShare'
 import { priceShare } from '@common/utils/priceShare';
+import Taro, { getCurrentInstance, eventCenter } from '@tarojs/taro';
 
 @inject('site')
 @inject('search')
@@ -17,8 +17,9 @@ import { priceShare } from '@common/utils/priceShare';
 class Index extends React.Component {
   getShareData(data) {
     const { site } = this.props
+    const { id = '' } = getCurrentInstance().router.params;
     const defalutTitle = site.webConfig?.setSite?.siteName || ''
-    const defalutPath = 'subPages/user/index'
+    const defalutPath = 'subPages/user/index?id=' + id;
     if (data.from === 'menu') {
       return {
         title: defalutTitle,

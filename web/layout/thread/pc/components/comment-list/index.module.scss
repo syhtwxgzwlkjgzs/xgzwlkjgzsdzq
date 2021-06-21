@@ -17,6 +17,9 @@
     .commentListAvatar {
       margin-right: rem($margin-2n);
     }
+    .avatar {
+      cursor: pointer;
+    }
     .commentListContent {
       width: 100%;
       .commentListContentText {

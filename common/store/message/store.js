@@ -15,6 +15,11 @@ class MessageStore {
   @observable totalUnread = 0;
 
   /**
+   * 私信未读消息
+   */
+  @observable dialogMessageUnread = 0;
+
+  /**
    * 帖子通知未读消息
    */
   @observable threadUnread = 0;

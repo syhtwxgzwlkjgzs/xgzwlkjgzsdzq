@@ -8,6 +8,8 @@ import xss from '@common/utils/xss';
 import classnames from 'classnames';
 import ImageDisplay from '@components/thread/image-display';
 import { debounce } from '@common/utils/throttle-debounce';
+import { urlToLink } from '@common/utils/replace-url-to-a';
+
 @observer
 export default class ReplyList extends React.Component {
   // 跳转至评论详情
@@ -44,7 +46,7 @@ export default class ReplyList extends React.Component {
     let newContent = this.props?.data?.content || '';
     newContent = s9e.parse(newContent);
     newContent = xss(newContent);
-
+    newContent = urlToLink(newContent);
     return newContent;
   }
 

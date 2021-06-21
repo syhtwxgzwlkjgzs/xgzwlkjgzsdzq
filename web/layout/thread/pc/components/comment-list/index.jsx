@@ -14,6 +14,7 @@ import xss from '@common/utils/xss';
 import ImageDisplay from '@components/thread/image-display';
 import PostContent from '@components/thread/post-content';
 import { debounce } from '@common/utils/throttle-debounce';
+import { urlToLink } from '@common/utils/replace-url-to-a';
 
 @observer
 class CommentList extends React.Component {
@@ -46,7 +47,7 @@ class CommentList extends React.Component {
 
   // 点击头像
   avatarClick() {
-    typeof this.props?.avatarClick === 'function' && this.props.avatarClick();
+    typeof this.props?.avatarClick === 'function' && this.props.avatarClick(this.props.data?.user?.id);
   }
 
   // 点击评论赞
@@ -131,7 +132,7 @@ class CommentList extends React.Component {
     const { canDelete, canEdit, canLike, canHide } = this.generatePermissions(this.props.data);
 
     return (
-      <div className={styles.commentList}>
+      <div className={`${styles.commentList} dzq-comment`}>
         {this.props.data?.rewards || this.props.data?.redPacketAmount ? (
           <div className={styles.header}>
             {this.props.data?.rewards ? <RewardDisplay number={this.props.data.rewards}></RewardDisplay> : ''}
@@ -155,6 +156,7 @@ class CommentList extends React.Component {
               circle={true}
               userId={this.props.data?.user?.id}
               isShowUserInfo={this.props.isShowOne}
+              className={styles.avatar}
             ></Avatar>
           </div>
           <div className={styles.commentListContent}>

@@ -41,19 +41,17 @@
     padding-bottom: rem($margin-2n);
   }
   .imgUpload{
-    .imgUpload-dom{
-      width: rem(100);
-      height: rem(100);
-      border-radius: rem($border-radius-small);
-      background: $body-bg-color;
-      border: $border-solid-1;
-      text-align: center;
-      line-height: rem(100);
-      font-size: rem($font-size-large);
-      color: $text-color-secondary;
-    }
     :global(.dzq-upload) {
       padding: 0;
+    }
+    :global(.dzq-upload__area) {
+      width: rem(100) !important;
+      height: rem(100) !important;
+      border: $border-solid-1 !important;
+    }
+    :global(.dzq-upload-list-card__item) {
+      width: rem(100) !important;
+      height: rem(100) !important;
     }
   }
   .attachmentsUpload{

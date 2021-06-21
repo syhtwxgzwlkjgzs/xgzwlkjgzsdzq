@@ -143,7 +143,7 @@ class Index extends React.Component {
             dispatch={this.dispatch}
           />
         }
-        title={`我的收藏 - ${this.props.site?.siteName}`}
+        title={`我的购买 - ${this.props.site?.siteName}`}
       />
     );
   }

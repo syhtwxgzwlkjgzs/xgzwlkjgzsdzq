@@ -1,4 +1,9 @@
 @import '@common/styles/index.scss';
+.wrapper {
+  :last-child {
+    margin-bottom: 0;
+  }
+}
 .container {
   position: relative;
   display: flex;
@@ -48,6 +53,7 @@
     white-space: nowrap;
     margin-left: rem(8);
     margin-right: rem(8);
+    margin-top: rem(2);
     flex: 1;
   }
   .size {

@@ -78,6 +78,12 @@
     @include media('s-pc') {
       padding: rem(6.5) rem($padding-4n) rem(16);
     }
+    @media only screen and (min-width: 800px) and (max-width: 830px) {
+      padding: rem(6.5) 0;
+    }
+    @media only screen and (min-width: 830px) and (max-width: 860px) {
+      padding: rem(6.5) rem($padding-1n);
+    }
     display: flex;
     align-items: center;
     background: var(--color-white);
@@ -86,7 +92,7 @@
     flex-wrap: wrap;
     justify-content: center;
 
-   
+
     @include media('s-pc') {
       align-items: flex-start;
       flex-direction: column;
