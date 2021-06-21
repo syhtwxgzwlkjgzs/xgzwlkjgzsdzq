@@ -8,9 +8,8 @@ import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
 
 const DialogBox = (props) => {
-  const { platform, message, user, dialogId, showEmoji } = props;
+  const { platform, message, user, dialogId, showEmoji, username } = props;
   const { readDialogMsgList, dialogMsgList, dialogMsgListLength, updateDialog } = message;
-
   const [previewerVisibled, setPreviewerVisibled] = useState(false);
   const [defaultImg, setDefaultImg] = useState('');
   // const router = useRouter();
@@ -23,6 +22,10 @@ const DialogBox = (props) => {
     });
     return () => clearTimeout(timeoutId.current);
   }, []);
+
+  useEffect(() => {
+    clearTimeout(timeoutId.current);
+  }, [username]);
 
   useEffect(() => {
     if (dialogId) {
