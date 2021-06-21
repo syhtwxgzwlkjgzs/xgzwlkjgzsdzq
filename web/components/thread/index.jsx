@@ -152,9 +152,14 @@ class Index extends React.Component {
     }, 1000)
 
     onClickUser = (e) => {
-        e && e.stopPropagation()
-        const { user = {} } = this.props.data || {};
+      e && e.stopPropagation()
+
+      const { user = {}, isAnonymous } = this.props.data || {};
+      if (!!isAnonymous) {
+        this.onClick()
+      } else {
         this.props.router.push(`/user/${user?.userId}`);
+      }
     }
 
     onClick = throttle(() => {
