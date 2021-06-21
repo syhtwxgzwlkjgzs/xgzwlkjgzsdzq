@@ -55,7 +55,6 @@ class App extends Component {
       if (targetUrl[0] !== '/') {
         targetUrl = `/${targetUrl}`;
       }
-      console.log(`/pages/index/index?path=${encodeURIComponent(targetUrl)}`)
       Router.redirect({
         url: `/pages/index/index?path=${encodeURIComponent(targetUrl)}`,
         fail: (err) => {
