@@ -5,6 +5,9 @@ import Icon from '@discuzq/design/dist/components/icon/index';
 import { View, Text } from '@tarojs/components'
 import ShareButton from '../share-button'
 import Popup from '@discuzq/design/dist/components/popup/index';
+import goToLoginPage from '@common/utils/go-to-login-page';
+import Taro from '@tarojs/taro'
+import Toast from '@discuzq/design/dist/components/toast';
 
 /**
  * 帖子底部内容
@@ -33,6 +36,7 @@ const Index = ({
   getShareData,
   getShareContent,
   shareContent,
+  user,
   onShare = () => {},
   onComment = () => {},
   onPraise = () => {},
@@ -60,6 +64,12 @@ const Index = ({
   }, [isLiked]);
   const [ show, setShow ] = useState(false)
   const handleClickShare = () => {
+    // 对没有登录的先登录
+    if (!user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+      return;
+    }
     setShow(true)
   }
 
