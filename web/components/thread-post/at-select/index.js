@@ -80,11 +80,12 @@ class AtSelect extends Component {
   searchInput() {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
-      this.onScrollBottom();
+      this.state.keywords ? this.fetchAllUser() : this.fetchFollow();
     }, 300);
   }
 
   onScrollBottom = () => {
+    if (this.state.page === 1) return; // 阻止首次重复请求
     return this.state.keywords ? this.fetchAllUser() : this.fetchFollow();
   }
 
