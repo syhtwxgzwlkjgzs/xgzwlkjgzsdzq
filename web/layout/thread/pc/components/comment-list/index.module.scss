@@ -103,14 +103,21 @@
             justify-content: flex-start;
             cursor: pointer;
           }
-          .commentDelete {
+          .commentAdopt {
+            // flex: 1;
+            cursor: pointer;
+          }
+          .commentDelete{
             display: flex;
             align-items: center;
             justify-content: flex-start;
             cursor: pointer;
           }
-          .commentAdopt {
-            // flex: 1;
+          .commentReport{
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            cursor: pointer;
           }
         }
         .moreReply {
@@ -130,7 +137,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    cursor: pointer;
+    //cursor: pointer;
     > div {
       margin-left: rem(24);
     }
