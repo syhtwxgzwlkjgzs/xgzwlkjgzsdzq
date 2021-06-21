@@ -31,14 +31,13 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
   const timeoutRef = useRef();
   const updateUnreadMessage = () => {
     if (!user.id) return;
+    readUnreadCount();
     timeoutRef.current = setTimeout(() => {
-      readUnreadCount();
       updateUnreadMessage();
     }, unreadUpdateInterval);
   };
 
   useEffect(() => {
-    readUnreadCount();
     updateUnreadMessage();
     return () => clearTimeout(timeoutRef.current);
   }, []);

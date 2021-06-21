@@ -34,15 +34,13 @@ class Header extends React.Component {
   updateUnreadMessage() {
     if (!this.props.user.id) return;
     const { message: { readUnreadCount } } = this.props;
+    readUnreadCount();
     this.timeoutId = setTimeout(() => {
-      readUnreadCount();
       this.updateUnreadMessage();
     }, unreadUpdateInterval);
   }
 
   async componentDidMount() {
-    const { message: { readUnreadCount } } = this.props;
-    readUnreadCount();
     this.updateUnreadMessage();
     try {
       await this.props.forum.setOtherPermissions();
