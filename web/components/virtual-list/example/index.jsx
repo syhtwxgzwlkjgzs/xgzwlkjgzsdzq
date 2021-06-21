@@ -2,28 +2,63 @@ import React, { useRef, forwardRef, useState, useEffect } from 'react';
 import './index.scss';
 import Item from './item';
 import BottomView from '../BottomView';
-import styles from '../index.module.scss';
-import { getSticksHeight } from '../utils';
+
+import { getImmutableTypeHeight, getSticksHeight } from '../utils';
 
 import { List, CellMeasurer, CellMeasurerCache, AutoSizer, InfiniteLoader } from 'react-virtualized';
 import { inject, observer } from 'mobx-react';
 
-// @observer
-// @inject('index')
-// @inject('vlist')
+const immutableHeightMap = {}; // 不可变的高度
+
+// 增强cache实例
+function extendCache(instance) {
+  instance.getDefaultHeight = ({ index, data }) => {
+    if (!data) {
+      return 0;
+    }
+
+    // 获取不可变的元素高度
+    const immutableHeight = getImmutableTypeHeight(data);
+    immutableHeightMap[index] = immutableHeight;
+
+    const variableHeight = 0;
+
+    const rowHeight = immutableHeight + variableHeight + 10;
+
+    return rowHeight;
+  };
+
+  instance.rowHeight = ({ index, data }) => {
+    const key = instance._keyMapper(index, 0);
+    const height =
+      instance._rowHeightCache[key] !== undefined
+        ? instance._rowHeightCache[key]
+        : instance.getDefaultHeight({ index, data });
+
+    console.log(index, height);
+    return height;
+  };
+}
 
 function Home(props, ref) {
-  const cache = new CellMeasurerCache({
-    fixedWidth: true,
-    minHeight: 150,
-    show: false,
-  });
+  let cache = props.vlist.cache;
+
+  if (!cache) {
+    cache = new CellMeasurerCache({
+      fixedWidth: true,
+      show: false,
+    });
+
+    extendCache(cache);
+    props.vlist.setCache(cache);
+  }
 
   const [list, setList] = useState([{ type: 'header' }, ...(props.list || []), { type: 'footer' }]);
   let listRef = useRef(null);
   let loadData = false;
   const rowCount = list.length;
 
+  // 监听list列表
   useEffect(() => {
     setList([{ type: 'header' }, ...(props.list || []), { type: 'footer' }]);
   }, [props.list]);
@@ -33,14 +68,6 @@ function Home(props, ref) {
       listRef.scrollToPosition(props.vlist.home || 0);
     }
   }, [listRef?.Grid?.getTotalRowsHeight()]);
-
-  // componentDidMount() {
-  //   setTimeout(() => {
-  //     if (listRef) {
-  //       listRef.scrollToPosition(props.vlist.home || 0);
-  //     }
-  //   }, 1000);
-  // }
 
   // 获取每一行元素的高度
   const getRowHeight = ({ index }) => {
@@ -59,7 +86,7 @@ function Home(props, ref) {
     if (data.type === 'footer') {
       return 60;
     }
-    return cache.rowHeight({ index });
+    return cache.rowHeight({ index, data });
   };
 
   const renderListItem = (type, data, measure, { index, key, parent, style }) => {

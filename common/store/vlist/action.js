@@ -13,6 +13,11 @@ class IndexAction extends IndexStore {
   setPosition(position) {
     this.home = position;
   }
+
+  @action
+  setCache(cache) {
+    this.cache = cache;
+  }
 }
 
 export default IndexAction;
