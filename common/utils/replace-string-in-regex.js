@@ -42,12 +42,12 @@ export default function replaceStringInRegex(text, type, newSubstr) {
     case "tags":
       newText = newText.replace(/<[^<>]*>|<\/[^<>]*>/g, newSubstr);
     case "heading":
-      newText = newText.replace(/<h[0-9][^\/]*>|<\/h[0-9]>/g, newSubstr);
+      newText = newText.replace(/<h[0-9][^\/\>]*>|<\/h[0-9]>/g, newSubstr);
     case "headingWithContent":
       // 包括标签内文字
       newText = newText.replace(/<h[0-9][^\/]*[^\<\/]<\/h[0-9]>/g, newSubstr);
     case "paragraph":
-      newText = newText.replace(/<p[^\/]*>|<\/p>/g, newSubstr);
+      newText = newText.replace(/<p[\s]?[^\/\>]*>|<\/p>/g, newSubstr);
     case "list":
       newText = newText.replace(/<ol[^<>]*>|<(ul|li)[^<>]*>/g, newSubstr);
       newText = newText.replace(/<\/(li|ul|ol)>/g, newSubstr);
