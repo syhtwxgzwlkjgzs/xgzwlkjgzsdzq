@@ -52,6 +52,7 @@ class Index extends React.Component {
           });
           return false;
         case INVALID_TOKEN:// 没有权限,只能针对forum接口做此判断
+          break;
         case TOKEN_FAIL:// token无效
           clearLoginStatus();
           this.initSiteData(); // 重新获取数据
