@@ -1,8 +1,9 @@
-import { action } from 'mobx';
+import { action, observable } from 'mobx';
 import { readUserLoginDisplay, readForum, getMiniCode } from '@server';
 import SiteStore from './store';
 import { get } from '../../utils/get';
-import locals from '@common/utils/local-bridge';
+
+const INITIAL_PAGE_LABEL = '_initialPage';
 class SiteAction extends SiteStore {
   constructor(props) {
     super(props);
@@ -80,23 +81,33 @@ class SiteAction extends SiteStore {
     return false;
   }
 
-  // 用户访问起始页面
-  EXPIRATION_SECONDS = 10 * 60; // 记录的跳转地址10min内有效
+
+  // 记录用户访问的初始地址，用户登陆、付费等操作后跳回
+  _initialPage = '';
   @action
   setInitialPage(pageUrl) {
-    locals.set('initialPage', pageUrl, this.EXPIRATION_SECONDS);
+    if (process.env.DISCUZ_ENV === 'web' && window?.sessionStorage) {
+      window.sessionStorage.setItem(INITIAL_PAGE_LABEL, pageUrl);
+    } else {
+      this._initialPage = pageUrl;
+    }
   }
   @action
   clearInitialPage() {
-    locals.remove('initialPage');
+    if (process.env.DISCUZ_ENV === 'web' && window?.sessionStorage) {
+      window.sessionStorage.removeItem(INITIAL_PAGE_LABEL);
+    } else {
+      this._initialPage = '';
+    }
   }
-  // 读取并清空记录的初始页面地址
   @action
   getInitialPage() {
-    let url = locals.get('initialPage')
+    let url = '';
 
-    if (url && process.env.DISCUZ_ENV !== 'web') {
-      url = `/${url}`
+    if (process.env.DISCUZ_ENV === 'web' && window?.sessionStorage) {
+      url = window.sessionStorage.getItem(INITIAL_PAGE_LABEL);
+    } else {
+      url = `/${this._initialPage}`;
     }
 
     return url;

@@ -22,12 +22,6 @@ class SiteStore {
   @observable theme = APP_THEME.light;
   @observable miniCode = null
   @observable isUserLoginVisible = null;
-
-  // 用户进入的初始目标页
-  @observable initialPage = null;
-  // @observable beforeInitialPageAction = null;
-  // @observable afterInitialPageAction = null;
-
   @computed get isRegister() {
     return !this.isSmsOpen && this.wechatEnv === 'none';
   }
