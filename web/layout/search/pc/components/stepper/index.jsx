@@ -54,15 +54,9 @@ return (
       )
     }
     <Icon className={styles.icon} name={data.iconName} size={20} color={`${selectIndex === index ? '#2469f6' : data.iconColor}`}/>
-    <div className={`${styles.content} ${selectIndex === index ? styles.itemActive : ''}`}>{data.content}</div>
-
-    {/* 渲染未读消息红点 */}
-    {!!data.unreadCount && (
-      <div className={styles.badgeMargin}>
-        <UnreadRedDot unreadCount={data.unreadCount}></UnreadRedDot>
+      <div className={`${styles.content} ${selectIndex === index ? styles.itemActive : ''}`}>
+        <UnreadRedDot type="text" unreadCount={data?.unreadCount}>{data.content}</UnreadRedDot>
       </div>
-    )}
-
   </div>
 );
 };

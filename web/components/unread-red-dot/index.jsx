@@ -17,6 +17,7 @@ const Index = ({ children, unreadCount, type = '', style={} }) => {
         'normal-badge': true,
         'avatar-badge': type === 'avatar',
         'icon-badge': type === 'icon',
+        'text-badge': type === 'text',
         'special-badge': unreadCount > 9 && unreadCount < 100,
         'large-badge': unreadCount > 99,
       })}

@@ -211,16 +211,18 @@ class Header extends React.Component {
                   <p className={styles.iconText}>首页</p>
                 </div>
                 <div className={styles.iconItem} onClick={() => this.handleRouter('/message')}>
-                  <UnreadRedDot type="icon" style={{width: '17px'}} unreadCount={totalUnread}>
-                    <Icon
-                      onClick={() => {
-                        this.iconClickHandle('home');
-                      }}
-                      name="MailOutlined"
-                      size={17}
-                    />
+                  <UnreadRedDot type="icon" unreadCount={totalUnread}>
+                    <div className={styles.message}>
+                      <Icon
+                        onClick={() => {
+                          this.iconClickHandle('home');
+                        }}
+                        name="MailOutlined"
+                        size={17}
+                      />
+                      <p className={styles.iconText}>消息</p>
+                    </div>
                   </UnreadRedDot>
-                  <p className={styles.iconText}>消息</p>
                 </div>
                 {
                   !otherPermissions?.canViewThreads ? <></> :
