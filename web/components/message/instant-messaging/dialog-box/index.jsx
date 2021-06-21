@@ -74,6 +74,37 @@ const DialogBox = (props) => {
     return dialogMsgList.list.filter(item => !!item.imageUrl).map(item => item.imageUrl).reverse();
   }, [dialogMsgList]);
 
+
+  const renderImage = (url) => {
+    // console.log(url);
+    // const urlObj = new URL(url);
+    // const width = urlObj.searchParams.get("width");
+    // const height = urlObj.searchParams.get("height");
+    let renderWidth = 200;
+
+    // if (width && height) {
+    //   if (width <= height) {
+    //     renderWidth = 70;
+    //   } else {
+    //     renderWidth = 130;
+    //   }
+    // }
+    return (
+      <img
+        className={styles.msgImage}
+        style={{ width: `${renderWidth}px` }}
+        src={url}
+        onClick={() => {
+          setDefaultImg(url);
+          setTimeout(() => {
+            setPreviewerVisibled(true);
+          }, 0);
+        }}
+        onLoad={scrollEnd}
+      />
+    );
+  };
+
   return (
     <div className={platform === 'pc' ? styles.pcDialogBox : (showEmoji ? styles['h5DialogBox-emoji'] : styles.h5DialogBox)} ref={dialogBoxRef}>
       <div className={styles.box__inner}>
@@ -87,18 +118,7 @@ const DialogBox = (props) => {
                 <Avatar image={userAvatar || '/favicon.ico'} circle={true} />
               </div>
               {imageUrl ? (
-                <img
-                  className={styles.msgImage}
-                  style={{ width: '200px' }}
-                  src={imageUrl}
-                  onClick={() => {
-                    setDefaultImg(imageUrl);
-                    setTimeout(() => {
-                      setPreviewerVisibled(true);
-                    }, 0);
-                  }}
-                  onLoad={scrollEnd}
-                />
+                renderImage(imageUrl)
               ) : (
                 <div className={styles.msgContent} dangerouslySetInnerHTML={{
                   __html: xss(s9e.parse(text)),
