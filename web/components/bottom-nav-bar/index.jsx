@@ -17,7 +17,7 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
   const { totalUnread, readUnreadCount } = message;
   const checkCurrActiveTab = useCallback((curr, target) => {
     return curr === target;
-  }, [curr])
+  }, [curr]);
 
   const [tabs, setTabs] = useState([
     { icon: 'HomeOutlined', text: '首页', active: checkCurrActiveTab(curr, 'home'), router: '/' },
@@ -35,7 +35,7 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
       readUnreadCount();
       updateUnreadMessage();
     }, unreadUpdateInterval);
-  }
+  };
 
   useEffect(() => {
     readUnreadCount();
@@ -95,4 +95,4 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
   );
 };
 
-export default inject('user', 'message')(observer(withRouter(BottomNavBar)));
+export default withRouter(inject('user', 'message')(observer(BottomNavBar)));
