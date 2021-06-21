@@ -37,6 +37,8 @@ const RenderThreadContent = inject('user')(
     // 是否附件付费帖
     const isAttachmentPay = threadStore?.threadData?.payType === 2 && threadStore?.threadData?.paid === false;
     const attachmentPrice = threadStore?.threadData?.attachmentPrice || 0;
+    // 是否需要附加付费
+    const needAttachmentPay = !canFreeViewPost && isAttachmentPay && !isSelf && !isPayed;
     // 是否付费帖子
     const isThreadPay = threadStore?.threadData?.payType === 1;
     const threadPrice = threadStore?.threadData?.price || 0;
@@ -92,7 +94,6 @@ const RenderThreadContent = inject('user')(
       typeof props.onClickUser === 'function' && props.onClickUser(e);
     };
 
-    console.log(parseContent.VIDEO)
     return (
       <div className={`${styles.container}`}>
         <div className={styles.header}>
@@ -142,7 +143,7 @@ const RenderThreadContent = inject('user')(
           )}
 
           {/* 付费附件 */}
-          {!canFreeViewPost && isAttachmentPay && !isSelf && !isPayed && (
+          {needAttachmentPay && (
             <div style={{ textAlign: 'center' }} onClick={onContentClick}>
               <Button className={styles.payButton} type="primary">
                 <Icon className={styles.payIcon} name="GoldCoinOutlined" size={16}></Icon>
@@ -152,7 +153,7 @@ const RenderThreadContent = inject('user')(
           )}
 
           {/* 图片 */}
-          {parseContent.IMAGE && <ImageDisplay imgData={parseContent.IMAGE} />}
+          {parseContent.IMAGE && <ImageDisplay platform="h5" imgData={parseContent.IMAGE} isPay={needAttachmentPay} onPay={onContentClick} />}
 
           {/* 视频 */}
           {parseContent.VIDEO && (
