@@ -162,4 +162,31 @@
       background-color: $warn-color;
     }
   }
+
+  .avatarWrapper {
+    position: relative;
+  }
+
+  .userIcon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: rem(-2);
+    right: rem(-4);
+    border-radius: 50%;
+    height: rem(20);
+    width: rem(20);
+    border: $white solid rem(1);
+    text-align: center;
+    line-height: rem(20);
+    color: $white;
+    &.like {
+      background-color: $error-color;
+    }
+    &.heart {
+      background-color: $warn-color;
+    }
+  }
+
 }
