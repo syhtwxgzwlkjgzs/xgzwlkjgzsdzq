@@ -35,7 +35,6 @@ function extendCache(instance) {
         ? instance._rowHeightCache[key]
         : instance.getDefaultHeight({ index, data });
 
-    console.log(index, height);
     return height;
   };
 }
