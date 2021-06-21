@@ -10,6 +10,7 @@ import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import threadPay from '@common/pay-bussiness/thread-pay';
 import ThreadCenterView from './ThreadCenterView';
+import { throttle } from '@common/utils/throttle-debounce';
 import { debounce } from './utils';
 import { noop } from '@components/thread/utils';
 
@@ -150,13 +151,7 @@ class Index extends React.Component {
         this.props.router.push(`/user/${user?.userId}`);
     }
 
-    onClick = (e) => {
-      e && e.stopPropagation();
-
-      const avatarPopup = e?.currentTarget.querySelector("#avatar-popup");
-      if( e && avatarPopup && avatarPopup.contains(e.target)) { // 处理来源于Avatar弹框的点击
-        return;
-      }
+    onClick = throttle(() => {
 
       const { threadId = '', ability } = this.props.data || {};
       const { canViewPost } = ability;
@@ -180,7 +175,7 @@ class Index extends React.Component {
       if (typeof(onClick) === 'function') {
         onClick(this.props.data);
       }
-    }
+    }, 1000);
 
     onClickHeaderIcon = (e) => {
       e && e.stopPropagation();
