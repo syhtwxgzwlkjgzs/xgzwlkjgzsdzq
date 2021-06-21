@@ -24,18 +24,16 @@
     .dzq-badge__circle {
       top: rem(8px);
       right: rem(2px);
-      border-radius: 8px/9px;
     }
   }
 
   .icon-badge {
     .dzq-badge__circle {
       top: 2px;
-      border-radius: 8px/9px;
     }
     &.special-badge {
       .dzq-badge__circle {
-        right: -5px;
+        right: -6px;
       }
     }
     &.large-badge {
@@ -48,12 +46,14 @@
   .special-badge {
     .dzq-badge__circle {
       width: 26px;
+      border-radius: 8px/50%;
     }
   }
 
   .large-badge {
     .dzq-badge__circle {
       width: 36px;
+      border-radius: 8px/50%;
     }
   }
 
