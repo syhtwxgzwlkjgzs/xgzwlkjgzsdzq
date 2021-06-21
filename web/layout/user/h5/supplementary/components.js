@@ -145,19 +145,18 @@ export function CreatePhotoUploader(field, layout) {
           data={data}
           limit={9}
           accept={ACCEPT_IMAGE_TYPES.join(',')}
-          onChange={(fileList) => {
-            field.value = fileList;
-          }}
           onComplete={
             (ret, file) => {
               const att = getAttachment(ret);
-              Object.assign(file, att);
+              if (att) {
+                field.value = field.value.concat([file]);
+              }
             }
           }
           beforeUpload={() => true}
           fileList={field.value}
+          className={layout['imgUpload-dom']}
         >
-          <div className={layout['imgUpload-dom']}>+</div>
         </ImageUpload>
       </div>
     </div>

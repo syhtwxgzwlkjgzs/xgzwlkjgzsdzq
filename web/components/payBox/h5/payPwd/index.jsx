@@ -92,19 +92,24 @@ class Index extends React.Component {
     }
   }
 
-  handleForgetPayPwd = () => {
+  handleForgetPayPwd = throttle(() => {
     if (!this.props.user.mobile) {
       Toast.error({
         content: '需要首先绑定手机号才能进行此操作',
         duration: 2000,
       });
+      setTimeout(() => {
+        // TODO: 回跳逻辑补充
+        this.props.payBox.visible = false;
+        Router.push({ url: '/user/bind-phone?from=paybox' });
+      }, 1000);
       return;
     }
     Router.push({ url: '/my/edit/find-paypwd?type=paybox' });
     this.initState();
     this.props.payBox.visible = false;
     this.props.payBox.step = null;
-  };
+  }, 1000);
 
   async submitPwa() {
     const { list = [] } = this.state;
@@ -178,7 +183,7 @@ class Index extends React.Component {
             {/* TODO: 忘记支付密码的链接添加 */}
 
             <div className={styles.forgetPasswordContainer} onClick={this.handleForgetPayPwd}>
-              {IS_MOBILE_SERVICE_OPEN && IS_USER_BIND_MOBILE && <span>忘记支付密码?</span>}
+              {IS_MOBILE_SERVICE_OPEN && <span>忘记支付密码?</span>}
             </div>
 
             {/* 关闭按钮 */}

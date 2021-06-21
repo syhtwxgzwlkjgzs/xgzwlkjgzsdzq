@@ -8,6 +8,7 @@ import goToLoginPage from '@common/utils/go-to-login-page';
 import Router from '@discuzq/sdk/dist/router';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import UnreadRedDot from '@components/unread-red-dot';
+import { unreadUpdateInterval } from '@common/constants/message';
 
 @inject('site')
 @inject('user')
@@ -29,19 +30,17 @@ class Header extends React.Component {
   //   value: ''
   // }
 
-  // 每20秒更新一次未读消息
+  // 轮询更新未读消息
   updateUnreadMessage() {
     if (!this.props.user.id) return;
     const { message: { readUnreadCount } } = this.props;
+    readUnreadCount();
     this.timeoutId = setTimeout(() => {
-      readUnreadCount();
       this.updateUnreadMessage();
-    }, 20000);
+    }, unreadUpdateInterval);
   }
 
   async componentDidMount() {
-    const { message: { readUnreadCount } } = this.props;
-    readUnreadCount();
     this.updateUnreadMessage();
     try {
       await this.props.forum.setOtherPermissions();
@@ -212,16 +211,18 @@ class Header extends React.Component {
                   <p className={styles.iconText}>首页</p>
                 </div>
                 <div className={styles.iconItem} onClick={() => this.handleRouter('/message')}>
-                  <UnreadRedDot type="icon" style={{width: '17px'}} unreadCount={totalUnread}>
-                    <Icon
-                      onClick={() => {
-                        this.iconClickHandle('home');
-                      }}
-                      name="MailOutlined"
-                      size={17}
-                    />
+                  <UnreadRedDot type="icon" unreadCount={totalUnread}>
+                    <div className={styles.message}>
+                      <Icon
+                        onClick={() => {
+                          this.iconClickHandle('home');
+                        }}
+                        name="MailOutlined"
+                        size={17}
+                      />
+                      <p className={styles.iconText}>消息</p>
+                    </div>
                   </UnreadRedDot>
-                  <p className={styles.iconText}>消息</p>
                 </div>
                 {
                   !otherPermissions?.canViewThreads ? <></> :

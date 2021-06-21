@@ -161,7 +161,7 @@ const RenderThreadContent = inject('user')(
           )}
 
           {/* 图片 */}
-          {parseContent.IMAGE && <ImageDisplay isPay={needAttachmentPay} onPay={onContentClick} platform="h5" imgData={parseContent.IMAGE} />}
+          {parseContent.IMAGE && <ImageDisplay flat isPay={needAttachmentPay} onPay={onContentClick} platform="h5" imgData={parseContent.IMAGE} />}
 
           {/* 视频 */}
           {parseContent.VIDEO && (

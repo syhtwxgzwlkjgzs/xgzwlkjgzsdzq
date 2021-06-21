@@ -105,7 +105,7 @@ class ThreadH5Page extends React.Component {
 
   componentDidMount() {
     // 当内容加载完成后，获取评论区所在的位置
-    //this.position = this.commentDataRef?.current?.offsetTop - 50;
+    // this.position = this.commentDataRef?.current?.offsetTop - 50;
     // 是否定位到评论位置
     if (this.props?.thread?.isPositionToComment) {
       // TODO:需要监听帖子内容加载完成事件
@@ -415,10 +415,10 @@ class ThreadH5Page extends React.Component {
   }
 
   // 点击发布按钮
-  async publishClick(val, imageList) {
+  async publishClick(val = '', imageList = []) {
     const valuestr = val.replace(/\s/g, '');
     // 如果内部为空，且只包含空格或空行
-    if (!valuestr) {
+    if (!valuestr && imageList.length === 0) {
       Toast.info({ content: '请输入内容' });
       return;
     }
@@ -571,8 +571,8 @@ class ThreadH5Page extends React.Component {
   }
 
   // 创建回复评论+回复回复接口
-  async createReply(val, imageList) {
-    if (!val) {
+  async createReply(val = '', imageList = []) {
+    if (!val && imageList.length === 0) {
       Toast.info({ content: '请输入内容!' });
       return;
     }
@@ -738,7 +738,7 @@ class ThreadH5Page extends React.Component {
       this.props.index.refreshHomeData({ categoryIds: [categoryId] });
     }
     Taro.redirectTo({
-      url: '/pages/index/index',
+      url: '/pages/home/index',
     });
   }
 
@@ -859,7 +859,7 @@ class ThreadH5Page extends React.Component {
                 <Input
                   className={footer.input}
                   placeholder="写评论"
-                  disabled={true}
+                  disabled
                   prefixIcon="EditOutlined"
                   placeholderClass={footer.inputPlaceholder}
                 ></Input>

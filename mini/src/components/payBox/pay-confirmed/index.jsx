@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './index.module.scss';
-import Taro from '@tarojs/taro';
+import Taro, { getCurrentInstance, eventCenter } from '@tarojs/taro';
 import { inject, observer } from 'mobx-react';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Radio from '@discuzq/design/dist/components/radio/index';
@@ -50,6 +50,8 @@ export default class PayBox extends React.Component {
     this.goSetPayPwa = this.goSetPayPwa.bind(this);
   }
 
+  $instance = getCurrentInstance();
+
   initState = () => {
     this.setState({
       isSubmit: false,
@@ -62,6 +64,18 @@ export default class PayBox extends React.Component {
   transMoneyToFixed = (num) => {
     return Number(num).toFixed(2);
   };
+
+  componentWillMount = () => {
+    const onShowEventId = this.$instance.router.onShow;
+    // 监听
+    eventCenter.on(onShowEventId, this.onShow);
+  }
+
+  componentWillUnmount = () => {
+    const onShowEventId = this.$instance.router.onShow;
+    // 卸载
+    eventCenter.off(onShowEventId, this.onShow);
+  }
 
   async componentDidMount() {
     const { id } = this.props?.user;
@@ -76,6 +90,12 @@ export default class PayBox extends React.Component {
     }
   }
 
+  onShow = async () => {
+    const { id } = this.props.user;
+    await this.props.payBox.getWalletInfo(id);
+    await this.props.user.updateUserInfo(id);
+  }
+
   walletPaySubText() {
     const canWalletPay = this.props.user?.canWalletPay;
     const { options = {} } = this.props.payBox;
@@ -87,9 +107,11 @@ export default class PayBox extends React.Component {
         </Text>
       );
     }
+
     if (Number(this.props.payBox?.walletAvaAmount) < Number(amount)) {
-      return <Text className={styles.subText}>余额不足</Text>;
+      return <View className={styles.subText}>余额不足</View>;
     }
+
     return (
       <>
         {this.props.payBox?.walletAvaAmount ? (
@@ -164,6 +186,7 @@ export default class PayBox extends React.Component {
     if (this.props.payBox.payWay === PAYWAY_MAP.WALLET && !canWalletPay) {
       disabled = true;
     }
+
     return (
       <View className={styles.payBox}>
         <View className={styles.title}>

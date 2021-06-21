@@ -1,7 +1,9 @@
-import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle, useMemo } from 'react';
 import { noop, isPromise } from '@components/thread/utils';
 import styles from './index.module.scss';
 import BottomView from './BottomView';
+import { inject, observer } from 'mobx-react';
+
 
 /**
  * 列表组件，集成上拉刷新能力
@@ -33,13 +35,15 @@ const List = forwardRef(({
   requestError = false,
   errorText='加载失败',
   platform="",
-  showLoadingInCenter = false
+  showLoadingInCenter = true,
+  site
 }, ref) => {
   const listWrapper = useRef(null);
   const currentScrollTop = useRef(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errText, setErrText] = useState(errorText);
+  const [isLoadingInCenter, setIsLoadingInCenter] = useState(false)
 
   useEffect(() => {
     if (noMore) {
@@ -55,6 +59,16 @@ const List = forwardRef(({
       onTouchMove({ isFirst: true });
     }
   }, []);
+
+  // 当list内容高度，没有超过list高度，则将loading居中显示
+  // useEffect(() => {
+  //   if (listWrapper.current && showLoadingInCenter && site?.platform === 'h5') {
+  //     const { clientHeight } = listWrapper.current;
+  //     const { scrollHeight } = listWrapper.current;
+      
+  //     setIsLoadingInCenter(scrollHeight <= clientHeight)
+  //   }
+  // }, [listWrapper.current, children])
 
   useEffect(() => {
     setIsError(requestError)
@@ -162,7 +176,7 @@ const List = forwardRef(({
   return (
     <div className={`${styles.container} ${className}`} style={{ height }}>
       <div
-        className={`${styles.wrapper} ${wrapperClass} ${platform !== 'pc' ? styles.hideScrollBar : ""} ${showLoadingInCenter ? styles.wrapperH5Center : ''}`}
+        className={`${styles.wrapper} ${wrapperClass} ${platform !== 'pc' ? styles.hideScrollBar : ""} ${isLoadingInCenter ? styles.wrapperH5Center : ''}`}
         ref={listWrapper}
         onScroll={onTouchMove}
       >
@@ -173,4 +187,6 @@ const List = forwardRef(({
   );
 });
 
-export default React.memo(List);
+// export default React.memo(List);
+export default inject('site')(observer(List));
+

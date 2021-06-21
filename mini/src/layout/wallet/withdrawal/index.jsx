@@ -91,6 +91,7 @@ class Withdrawal extends React.Component {
         this.initState();
       })
       .catch((err) => {
+        console.error(err);
         if (err.Code) {
           Toast.error({
             content: err.Msg || '申请提现失败，请重试',
@@ -140,9 +141,7 @@ class Withdrawal extends React.Component {
             })}
           >
             <Button type={'primary'} className={styles.button} onClick={this.moneyToWeixin} disabled={btnDisabled}>
-              <View className={styles.buttonContent}>
-                提现到微信钱包
-              </View>
+              <View className={styles.buttonContent}>提现到微信钱包</View>
             </Button>
           </View>
         </View>

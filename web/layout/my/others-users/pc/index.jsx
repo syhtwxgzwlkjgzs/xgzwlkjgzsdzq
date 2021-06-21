@@ -25,13 +25,16 @@ class PCMyPage extends React.Component {
     this.state = {
       showFansPopup: false, // 是否弹出粉丝框
       showFollowPopup: false, // 是否弹出关注框
-      fetchUserInfoLoading: true
+      fetchUserInfoLoading: true,
     };
   }
 
   componentDidMount = async () => {
     const { query } = this.props.router;
     const id = this.props.user?.id;
+    if (!query.id || query.id === 'undefined') {
+      Router.replace({ url: '/' })
+    }
     if (String(id) === query.id) {
       Router.replace({ url: '/my' });
       return;
@@ -114,7 +117,7 @@ class PCMyPage extends React.Component {
   };
 
   renderContent = () => {
-    const { fetchUserInfoLoading } = this.state
+    const { fetchUserInfoLoading } = this.state;
     const { user } = this.props;
     const { targetUserThreads, targetUserThreadsTotalCount, targetUserThreadsPage, targetUserThreadsTotalPage } = user;
     return (
@@ -127,19 +130,19 @@ class PCMyPage extends React.Component {
           isLoading={fetchUserInfoLoading}
           leftNum={`${targetUserThreadsTotalCount}个主题`}
           noData={!this.formatUserThreadsData(targetUserThreads)?.length}
-          mold='plane'
+          mold="plane"
         >
-          {this.formatUserThreadsData(targetUserThreads)
-            && this.formatUserThreadsData(targetUserThreads).length > 0 && (
+          {this.formatUserThreadsData(targetUserThreads) &&
+            this.formatUserThreadsData(targetUserThreads).length > 0 && (
               <UserCenterThreads data={this.formatUserThreadsData(targetUserThreads)} />
-          )}
+            )}
         </SidebarPanel>
       </div>
     );
   };
 
   render() {
-    const { fetchUserInfoLoading } = this.state
+    const { fetchUserInfoLoading } = this.state;
     const { user } = this.props;
     const { targetUserThreadsPage, targetUserThreadsTotalPage, targetUserThreads } = user;
     return (
@@ -154,6 +157,7 @@ class PCMyPage extends React.Component {
           right={this.renderRight}
           immediateCheck={true}
           showLayoutRefresh={!!this.formatUserThreadsData(targetUserThreads)?.length && !fetchUserInfoLoading}
+          showHeaderLoading={fetchUserInfoLoading}
         >
           {this.renderContent()}
         </UserBaseLaout>

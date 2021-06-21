@@ -31,25 +31,28 @@ export default class index extends Component {
   }
 
   onShow = async () => {
+    this.props.user.clearUserThreadsInfo();
+    this.setState({
+      isLoading: true
+    })
+
     if (this.props.user.id) {
       await this.props.user.updateUserInfo(this.props.user.id);
+
+      try {
+        await this.props.user.getUserThreads();
+      } catch (e) {
+        console.error(e);
+        if (e.Code) {
+          Toast.error({
+            content: e.Msg || '获取用户主题列表失败',
+            duration: 2000,
+          });
+        }
+      }
+      this.setState({ isLoading: false });
     }
   };
-
-  componentDidMount = async () => {
-    try {
-      await this.props.user.getUserThreads();
-    } catch (e) {
-      console.error(e);
-      if (e.Code) {
-        Toast.error({
-          content: e.Msg || '获取用户主题列表失败',
-          duration: 2000,
-        });
-      }
-    }
-    this.setState({ isLoading: false });
-  }
 
   // 处理页面栈退出后，数据没有重置
   componentWillUnmount() {

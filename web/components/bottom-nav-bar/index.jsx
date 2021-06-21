@@ -5,6 +5,7 @@ import { Icon, Toast } from '@discuzq/design';
 import { noop } from '@components/thread/utils';
 import { withRouter } from 'next/router';
 import UnreadRedDot from '@components/unread-red-dot';
+import { unreadUpdateInterval } from '@common/constants/message';
 
 /**
  * BottomNavBar组件
@@ -16,7 +17,7 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
   const { totalUnread, readUnreadCount } = message;
   const checkCurrActiveTab = useCallback((curr, target) => {
     return curr === target;
-  }, [curr])
+  }, [curr]);
 
   const [tabs, setTabs] = useState([
     { icon: 'HomeOutlined', text: '首页', active: checkCurrActiveTab(curr, 'home'), router: '/' },
@@ -26,18 +27,17 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
     { icon: 'ProfessionOutlined', text: '我的', active: checkCurrActiveTab(curr, 'my'), router: '/my' },
   ]);
 
-  // 每20秒更新一次未读消息
+  // 轮询更新未读消息
   const timeoutRef = useRef();
   const updateUnreadMessage = () => {
     if (!user.id) return;
+    readUnreadCount();
     timeoutRef.current = setTimeout(() => {
-      readUnreadCount();
       updateUnreadMessage();
-    }, 20000);
-  }
+    }, unreadUpdateInterval);
+  };
 
   useEffect(() => {
-    readUnreadCount();
     updateUnreadMessage();
     return () => clearTimeout(timeoutRef.current);
   }, []);
@@ -94,4 +94,4 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
   );
 };
 
-export default inject('user', 'message')(observer(withRouter(BottomNavBar)));
+export default withRouter(inject('user', 'message')(observer(BottomNavBar)));

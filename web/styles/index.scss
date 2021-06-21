@@ -23,10 +23,20 @@
 .dzq-avatar__img {
   vertical-align: baseline;
 }
-.dzq-br {
-  display: none;
-}
+
 .dzq-pre {
+  .dzq-br {
+    display: block;
+  }
+}
+
+.dzq-p {
+  .dzq-br {
+    display: block;
+  }
+}
+
+.dzq-comment{
   .dzq-br {
     display: block;
   }

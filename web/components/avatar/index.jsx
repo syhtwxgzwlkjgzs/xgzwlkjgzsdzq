@@ -21,6 +21,7 @@ function avatar(props) {
     userId = null,
     user: myself,
     search,
+    userType = -1,
   } = props;
 
   const userName = useMemo(() => {
@@ -237,11 +238,28 @@ function avatar(props) {
   }, [userInfo, isShowUserInfo, userId]);
 
 
+  const userTypeIcon =
+          (userType === 1) ? "LikeOutlined" :
+          (userType === 2) ? "HeartOutlined" :
+          (userType === 3) ? "HeartOutlined" : "",
+        bgClrBasedOnType =
+          (userType === 1) ? styles.like :
+          (userType === 2) ? styles.heart :
+          (userType === 3) ? styles.heart : "";
+
+
   if (image && image !== '') {
     return (
       <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler} >
-        <div onClick={onClick}>
+        <div className={styles.avatarWrapper} onClick={onClick}>
           <Avatar className={className} circle={circle} image={image} size={size}></Avatar>
+          {
+            userTypeIcon && (
+              <div className={`${styles.userIcon} ${bgClrBasedOnType}`}>
+                  <Icon name={userTypeIcon} size={12}/>
+              </div>
+            )
+          }
         </div>
         {isShow && userInfoBox}
       </div>
@@ -252,6 +270,13 @@ function avatar(props) {
     <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
       <div className={styles.cursor} onClick={onClick}>
         <Avatar className={className} circle={circle} text={userName} size={size} onClick={onClick}></Avatar>
+        {
+          userTypeIcon && (
+            <div className={`${styles.userIcon} ${bgClrBasedOnType}`}>
+                <Icon name={userTypeIcon} size={12}/>
+            </div>
+          )
+        }
       </div>
       {isShow && userInfoBox}
     </div>

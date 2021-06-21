@@ -11,13 +11,15 @@
     }
 
     .dzq-badge__circle {
-      height: 16px;
-      line-height: 16px;
-      font-size: $font-size-small;
+      width: 17px;
+      height: 17px;
+      font-size: 12px;
       font-weight: normal;
       color: $white !important;
       background: $error-color !important;
-      border-radius: $border-radius-8 !important;
+      display: block;
+      text-align: center;
+      line-height: 18px;
     }
   }
 
@@ -34,7 +36,7 @@
     }
     &.special-badge {
       .dzq-badge__circle {
-        right: -5px;
+        right: -6px;
       }
     }
     &.large-badge {
@@ -44,15 +46,34 @@
     }
   }
 
+  .text-badge {
+    .dzq-badge__circle {
+      top: 0;
+      right: -3px;
+    }
+    &.special-badge {
+      .dzq-badge__circle {
+        right: -6px;
+      }
+    }
+    &.large-badge {
+      .dzq-badge__circle {
+        right: -11px;
+      }
+    }
+  }
+
   .special-badge {
     .dzq-badge__circle {
       width: rem(26px);
+      border-radius: 8px/50%;
     }
   }
 
   .large-badge {
     .dzq-badge__circle {
-      width: rem(34px);
+      width: rem(36px);
+      border-radius: 8px/50%;
     }
   }
 

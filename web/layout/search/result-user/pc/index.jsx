@@ -93,13 +93,14 @@ class SearchResultUserPcPage extends React.Component {
       <BaseLayout
         onSearch={this.onSearch}
         right={ this.renderRight }
-        noMore={currentPage >= totalPage} 
+        noMore={currentPage >= totalPage}
         showRefresh={false}
         onRefresh={this.fetchMoreData}
         isShowLayoutRefresh={!!pageData?.length}
+        className="search-result-user"
       >
-        <SidebarPanel 
-          title="活跃用户" 
+        <SidebarPanel
+          title="活跃用户"
           type='normal'
           isShowMore={false}
           isLoading={!pageData}

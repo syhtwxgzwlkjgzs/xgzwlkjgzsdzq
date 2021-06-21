@@ -25,7 +25,7 @@ class Index extends Component {
     //   this.timer = setInterval(() => {
     //     if (commonLogin.statusCountDown === 0) {
     //       redirectTo({
-    //         url: `/pages/index/index`
+    //         url: `/pages/home/index`
     //       });
     //       clearInterval(this.timer);
     //       return;
@@ -48,12 +48,12 @@ class Index extends Component {
     clearLoginStatus();
     this.props.user.removeUserInfo();
     this.props.site.getSiteInfo();
-    Router.reLaunch({ url: '/pages/index/index' });
+    Router.reLaunch({ url: '/pages/home/index' });
   }
 
   gotoIndex() {
     redirectTo({
-      url: `/pages/index/index`
+      url: `/pages/home/index`
     });
   }
 

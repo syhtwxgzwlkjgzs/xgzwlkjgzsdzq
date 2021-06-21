@@ -12,6 +12,7 @@ import RichText from '@discuzq/design/dist/components/rich-text/index';
 import { handleLink } from '@components/thread/utils';
 import Router from '@discuzq/sdk/dist/router';
 import { debounce } from '@common/utils/throttle-debounce';
+import { urlToLink } from '@common/utils/replace-url-to-a';
 
 @observer
 export default class ReplyList extends React.Component {
@@ -48,6 +49,7 @@ export default class ReplyList extends React.Component {
     let newContent = this.props?.data?.content || '';
     newContent = s9e.parse(newContent);
     newContent = xss(newContent);
+    newContent = urlToLink(newContent);
 
     return newContent;
   }
