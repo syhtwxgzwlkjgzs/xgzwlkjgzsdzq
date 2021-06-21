@@ -69,8 +69,14 @@ class Index extends React.Component {
         return;
       }
 
-      const { data = {} } = this.props;
-      const { threadId = '' } = data;
+      const { threadId = '', ability } = this.props.data || {};
+      const { canViewPost } = ability;
+
+      if (!canViewPost) {
+        Toast.info({ content: '暂无权限查看详情，请联系管理员' });
+        return
+      }
+
       if (threadId !== '') {
         this.props.thread.positionToComment()
         this.props.router.push(`/thread/${threadId}`);
@@ -158,6 +164,7 @@ class Index extends React.Component {
 
       if (!canViewPost) {
         Toast.info({ content: '暂无权限查看详情，请联系管理员' });
+        return;
       }
 
       if (threadId !== '') {
