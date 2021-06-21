@@ -21,7 +21,8 @@ import {
   SITE_CLOSED,
   JUMP_TO_PAY_SITE,
   JUMP_TO_SUPPLEMENTARY,
-  SITE_NO_INSTALL
+  SITE_NO_INSTALL,
+  MINI_SITE_JOIN_WHITE_LIST
 } from '@common/constants/site';
 
 const PARTNER_INVITE_URL = '/subPages/forum/partner-invite/index';
@@ -172,8 +173,9 @@ class Index extends React.Component {
   // 检查是否满足渲染条件
   isPass() {
     const { site, user } = this.props;
-    
+    const { path } = Taro.getCurrentInstance().router;
     const siteMode = site?.webConfig?.setSite?.siteMode;
+    
     if (site?.webConfig) {
       // 关闭站点
       if (site.closeSiteConfig) {
@@ -184,9 +186,11 @@ class Index extends React.Component {
       // 付费模式处理
       if (siteMode === 'pay') {
         // 未付费用户访问非白名单页面，强制跳转付费页
-        if (!user.isLogin() || !user.paid) {
-          Router.redirect({ url: PARTNER_INVITE_URL });
-          return false;
+        if (!MINI_SITE_JOIN_WHITE_LIST.includes(path)) {
+          if (!user.isLogin() || !user.paid) {
+            Router.redirect({ url: PARTNER_INVITE_URL });
+            return false;
+          }
         }
       }
     } else {

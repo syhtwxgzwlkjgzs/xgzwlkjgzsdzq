@@ -59,6 +59,7 @@ export const WEB_SITE_JOIN_WHITE_LIST = [
 
 // mini端站点加入路由白名单
 export const MINI_SITE_JOIN_WHITE_LIST = [
+  '/pages/index/index', // 小程序进入页
   '/subPages/user/wx-auth/index', // 快捷登录
   '/subPages/user/wx-select/index', // 微信落地页
   '/subPages/user/bind-phone/index', // 绑定手机号
