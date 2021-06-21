@@ -165,7 +165,7 @@ const InteractionBox = (props) => {
       Toast.error({ content: ret.msg });
     }
     uploadRef.current.value = '';
-  }
+  };
 
   const recordCursor = (e) => {
     setCursorPosition(e.target.selectionStart);

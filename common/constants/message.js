@@ -13,7 +13,7 @@ export const sidebarData = [
     iconColor: '#7BA5F9',
     content: '我的私信',
     type: 'index',
-    unreadKeyName: '',
+    unreadKeyName: 'dialogMessageUnread',
     unreadCount: 0,
   },
   {

@@ -154,7 +154,7 @@ export default inject('user')(
                   </Dropdown>
                 </div>
               )}
-              <div className={topic.iconText} onClick={() => onDropdownChange('report')}>
+              <div className={classnames(topic.iconText, props?.user?.isAdmini && topic.disabled)} onClick={() => onDropdownChange('report')}>
                 <Icon className={topic.icon} name="WarnOutlinedThick"></Icon>
                 <span className={topic.text}>举报</span>
               </div>
