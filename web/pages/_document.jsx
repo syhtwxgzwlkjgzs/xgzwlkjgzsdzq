@@ -41,7 +41,7 @@ class MyDocument extends Document {
           {/* <!--腾讯地图定位组件--> */}
           <script async src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
           {/* 编辑器markdown依赖 */}
-          <script async src="https://cloudcache.tencentcs.com/operation/dianshi/other/lute.min.6cbcbfbacd9fa7cda638f1a6cfde011f7305a071.js?max_age=31536000" ></script>
+          <script async src="https://cloudcache.tencent-cloud.com/operation/dianshi/other/lute.min.6cbcbfbacd9fa7cda638f1a6cfde011f7305a071.js?max_age=31536000" ></script>
           {this.createMonitor()}
         </Head>
 
