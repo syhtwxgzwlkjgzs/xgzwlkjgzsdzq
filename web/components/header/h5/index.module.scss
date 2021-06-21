@@ -39,7 +39,7 @@
       justify-content: flex-end;
       .icon{
         &:not(:last-child) {
-          margin-right: rem($margin-4n);
+          margin-right: rem($margin-6n);
         }
         font-size: rem(18) !important;
         color: var(--color-text-secondary);
