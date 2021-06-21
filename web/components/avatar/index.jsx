@@ -35,6 +35,12 @@ function avatar(props) {
   const [blocking, changeBlockStatus] = useState(false);
   const [isSameWithMe, changeIsSameWithMe] = useState(false);
 
+  const onClickUserImage = (e) => {
+    if ((image && image !== '') ||  (userName !== '匿' && userName !== '')) {
+      onClick(e)
+    }
+  } 
+
   const onMouseEnterHandler = useCallback(async () => {
     if (!userId) return;
     changeIsShow(true);
@@ -52,7 +58,9 @@ function avatar(props) {
     changeUserInfo('padding');
   });
 
-  const followHandler = useCallback(async () => {
+  const followHandler = useCallback(async (e) => {
+
+    e && e.stopPropagation();
 
     // 对没有登录的先登录
     if (!myself.isLogin()) {
@@ -86,7 +94,9 @@ function avatar(props) {
     changeUserInfo({ ...userInfo });
   }, [userInfo]);
 
-  const messagingHandler = useCallback(() => {
+  const messagingHandler = useCallback((e) => {
+
+    e && e.stopPropagation();
 
     // 对没有登录的先登录
     if (!myself.isLogin()) {
@@ -103,8 +113,9 @@ function avatar(props) {
     }
   })
 
-  const blockingHandler = useCallback(async () => {
+  const blockingHandler = useCallback(async (e) => {
 
+    e && e.stopPropagation();
     // 对没有登录的先登录
     if (!myself.isLogin()) {
       Toast.info({ content: '请先登录!' });
@@ -170,7 +181,13 @@ function avatar(props) {
         <div className={styles.userInfoContent}>
           <div className={styles.header}>
             <div className={styles.left} onClick={onClick}>
-              <Avatar className={classNames(styles.customAvatar, styles.cursor)} circle={true} image={userInfo.avatarUrl} siz='primary'></Avatar>
+              <Avatar
+                className={classNames(styles.customAvatar, styles.cursor)}
+                circle={true}
+                image={userInfo.avatarUrl}
+                siz='primary'
+                text={userInfo.nickname && userInfo.nickname.substring(0, 1)}
+              ></Avatar>
             </div>
             <div className={styles.right}>
               <p className={classNames(styles.name, styles.cursor)} onClick={onClick}>{userInfo.nickname}</p>
@@ -199,7 +216,7 @@ function avatar(props) {
             !isSameWithMe &&
             <div className={styles.footer}>
               <Button
-                onClick={following ? () => {} : followHandler}
+                onClick={following ? () => {} : (e) => followHandler(e)}
                 loading={following}
                 className={[styles.btn, btnInfo.className]}
                 type='primary'>
@@ -209,13 +226,13 @@ function avatar(props) {
                   {btnInfo.text}
               </Button>
               <Button
-                onClick={messagingHandler}
+                onClick={(e) => messagingHandler(e)}
                 className={[styles.btn, styles.ghost]}
                 type='primary' ghost>
                   <Icon className={styles.icon} name="NewsOutlined" size={12}/>发私信
               </Button>
               <Button
-                onClick={blocking ? () => {} : blockingHandler}
+                onClick={blocking ? () => {} : (e) => blockingHandler(e)}
                 loading={blocking}
                 className={`${styles.btn} ${styles.blocked}`}
                 type='primary'
@@ -251,7 +268,7 @@ function avatar(props) {
   if (image && image !== '') {
     return (
       <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler} >
-        <div className={styles.avatarWrapper} onClick={onClick}>
+        <div className={styles.avatarWrapper} onClick={onClickUserImage}>
           <Avatar className={className} circle={circle} image={image} size={size}></Avatar>
           {
             userTypeIcon && (
@@ -268,8 +285,8 @@ function avatar(props) {
 
   return (
     <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
-      <div className={styles.cursor} onClick={onClick}>
-        <Avatar className={className} circle={circle} text={userName} size={size} onClick={onClick}></Avatar>
+      <div className={styles.cursor} onClick={onClickUserImage}>
+        <Avatar className={className} circle={circle} text={userName} size={size} onClick={onClickUserImage}></Avatar>
         {
           userTypeIcon && (
             <div className={`${styles.userIcon} ${bgClrBasedOnType}`}>
