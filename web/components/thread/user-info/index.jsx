@@ -44,7 +44,7 @@ export default function UserInfo(props) {
       <Avatar
         isShowUserInfo={!props.hideInfoPopip && props.platform === 'pc'}
         userId={props.userId}
-        className={classNames(styles.avatar, !props.hideInfoPopip && styles.cursor)}
+        className={classNames(styles.avatar, styles.cursor)}
         circle={true}
         image={props.avatar}
         name={props.name || ''}
@@ -53,7 +53,7 @@ export default function UserInfo(props) {
 
       <div className={styles.right}>
         <div className={styles.info}>
-          <div className={classNames(styles.name, props.platform === 'pc' && styles.pc, !props.hideInfoPopip && styles.cursor)} onClick={(e) => props.onClick(e)}>{props.name}</div>
+          <div className={classNames(styles.name, props.platform === 'pc' && styles.pc, styles.cursor)} onClick={(e) => props.onClick(e)}>{props.name}</div>
           {!props.isAnonymous && props.groupName && <div className={`${styles.groupName} ${tagsNumber > 3 ? styles.groupNameText : ''}`}>{props.groupName}</div>}
         </div>
 
