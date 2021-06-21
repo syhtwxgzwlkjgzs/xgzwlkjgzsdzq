@@ -662,6 +662,13 @@ class ThreadPCPage extends React.Component {
     Router.push({ url: `/message?page=chat&username=${username}&nickname=${nickname}` });
   }
 
+  // 点击跳转主页
+  onPersonalPage() {
+    const { authorInfo } = this.props.thread;
+    if(!authorInfo.id) return;
+    this.props.router.push(`/user/${authorInfo.id}`)
+  }
+
   renderContent() {
     const { thread: threadStore } = this.props;
     const { isReady, isCommentReady, isNoMore, totalCount, isCommentListError } = threadStore;
@@ -723,6 +730,7 @@ class ThreadPCPage extends React.Component {
                 onFollowClick={() => this.onFollowClick()}
                 onPrivateLetter={() => this.onPrivateLetter()}
                 isShowBtn={!isSelf}
+                onPersonalPage={() => this.onPersonalPage()}
               ></AuthorInfo>
             ) : (
               <LoadingTips type="init" isError={isAuthorInfoError}></LoadingTips>
