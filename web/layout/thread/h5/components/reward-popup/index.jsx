@@ -9,7 +9,8 @@ const InputPop = (props) => {
   const [value, setValue] = useState('');
 
   const onInputChange = (val) => {
-    setValue(val);
+    const arr = val.match(/([1-9]\d{0,6}|0)(\.\d{0,2})?/);
+    setValue( arr ? arr[0] : '');
   };
 
   const rewardList = [1, 2, 5, 10, 20, 50, 88, 128];
@@ -19,7 +20,7 @@ const InputPop = (props) => {
   };
 
   const onSubmitClick = async () => {
-    if (value === '' || Number(value) <= 0) return;
+    if (value === '' || Number(value) <= 0 || Number(value) > 1000000) return;
     if (typeof onOkClick === 'function') {
       try {
         const success = await onOkClick(value);
