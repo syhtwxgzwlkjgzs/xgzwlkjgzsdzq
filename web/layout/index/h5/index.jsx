@@ -64,8 +64,6 @@ class IndexH5Page extends React.Component {
         link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
         imgUrl, // 分享图标
       });
-
-      console.log(111);
     });
   };
 
@@ -181,7 +179,7 @@ class IndexH5Page extends React.Component {
     const { threads = {}, sticks } = index;
     const { currentPage, totalPage, pageData } = threads || {};
     // 是否开启虚拟滚动
-    const enableVlist = true;
+    const enableVlist = false;
 
     return (
       <BaseLayout

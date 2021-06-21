@@ -132,7 +132,7 @@ class CommentList extends React.Component {
     const { canDelete, canEdit, canLike, canHide } = this.generatePermissions(this.props.data);
 
     return (
-      <div className={styles.commentList}>
+      <div className={`${styles.commentList} dzq-comment`}>
         {this.props.data?.rewards || this.props.data?.redPacketAmount ? (
           <div className={styles.header}>
             {this.props.data?.rewards ? <RewardDisplay number={this.props.data.rewards}></RewardDisplay> : ''}

@@ -10,7 +10,7 @@ import styles from './index.module.scss';
 const DialogBox = (props) => {
   // const { shownMessages, dialogBoxRef } = props;
 
-  const { message, user, dialogId, showEmoji, keyboardHeight, inputBottom } = props;
+  const { message, user, dialogId, showEmoji, keyboardHeight, inputBottom, hideEmoji } = props;
   const { readDialogMsgList, dialogMsgList, dialogMsgListLength, updateDialog } = message;
 
 
@@ -49,7 +49,7 @@ const DialogBox = (props) => {
 
         const padding = (keyboardHeight && !showEmoji) ? inputBottom : 0
 
-        setPaddingBottom(clientHeight + padding);
+        setPaddingBottom(clientHeight);
         setTimeout(scrollEnd, 300);
       }).exec();
     }, 0);
@@ -99,6 +99,9 @@ const DialogBox = (props) => {
 
   return (
     <View
+      onClick={() => {
+        hideEmoji();
+      }}
       className={styles.dialogBox}
       style={{
         paddingBottom: `${paddingBottom}px`,

@@ -95,7 +95,7 @@ class CommentList extends React.Component {
   render() {
     const { canDelete, canEdit, canLike, canHide } = this.generatePermissions(this.props.data);
     return (
-      <div className={styles.commentList}>
+      <div className={`${styles.commentList} dzq-comment`}>
         <div className={styles.header}>
           <div className={styles.showGet}>
             <div></div>
