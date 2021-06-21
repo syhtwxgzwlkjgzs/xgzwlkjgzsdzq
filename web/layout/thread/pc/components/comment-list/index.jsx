@@ -226,13 +226,13 @@ class CommentList extends React.Component {
                           </div>
                         )} */}
                       {canHide && (
-                        <div className={styles.revise} onClick={() => this.deleteClick()}>
+                        <div className={styles.commentDelete} onClick={() => this.deleteClick()}>
                           <Icon className={styles.icon} name="DeleteOutlined"></Icon>
                           <span>删除</span>
                         </div>
                       )}
 
-                      <div className={styles.revise} onClick={() => this.reportClick()}>
+                      <div className={styles.commentReport} onClick={() => this.reportClick()}>
                         <Icon className={styles.icon} name="WarnOutlined"></Icon>
                         <span>举报</span>
                       </div>

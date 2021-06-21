@@ -24,7 +24,7 @@
                 display: inline-block !important;
                 flex-shrink: 0;
               }
-          
+
               .dzq-richText--mini {
                 font-size: $font-size-primary;
                 overflow: hidden;
@@ -32,7 +32,7 @@
                 max-width: 140px;
                 line-height: 20px;
                 @include text-ellipsis();
-          
+
                 .dzq-a {
                   display: inline;
                 }
