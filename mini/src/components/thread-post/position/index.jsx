@@ -5,12 +5,13 @@ import React, { memo, useState, useEffect } from 'react';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
 import Icon from '@discuzq/design/dist/components/icon/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Taro from '@tarojs/taro';
 
 const Index = (props) => {
-  const { currentPosition = {}, positionChange = () => { } } = props;
+  const { currentPosition = {}, positionChange = () => { }, canJumpToChoose = () => true } = props;
 
   // 是否已经选择定位
   const [isChose, setIsChose] = useState(false);
@@ -27,6 +28,7 @@ const Index = (props) => {
 
   // 选择定位
   const chooseLocation = () => {
+    if (!canJumpToChoose()) return;
     Taro.authorize({
       scope: 'scope.userLocation',
       success: function () {
@@ -43,6 +45,11 @@ const Index = (props) => {
             positionChange(_position);
           }
         });
+      },
+      fail: function (err) {
+        if (err?.errMsg?.indexOf('auth deny') > -1) {
+          Toast.info({ content: '请在小程序页面右上角 - 更多 - 设置里允许小程序使用定位权限~' });
+        }
       }
     });
   };
@@ -51,7 +58,7 @@ const Index = (props) => {
   const removeLocation = () => {
     setPosition({});
     setIsChose(false);
-    positionChange(position);
+    positionChange({});
   };
 
 
@@ -59,8 +66,11 @@ const Index = (props) => {
     <View onClick={chooseLocation} className={classNames(styles['position'], {
       [styles['chose']]: isChose,
     })}>
-      <Icon name='PositionOutlined' size={10} />
-      <Text className={styles['text']}>{position.location || '你在哪里？'}</Text>
+      <Icon className={styles['position-icon']} name='PositionOutlined' size={12} />
+      <Text
+        className={styles['text']}
+        style={position.location ? {} : { paddingRight: '8px' }}
+      >{position.location || '你在哪里？'}</Text>
       {isChose && <Icon className={styles['remove-icon']} name='CloseOutlined' size={10} onClick={(e) => {
         removeLocation();
         e.stopPropagation();

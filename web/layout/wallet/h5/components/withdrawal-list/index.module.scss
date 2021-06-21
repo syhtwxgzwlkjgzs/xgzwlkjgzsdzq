@@ -1,61 +1,63 @@
 @import '@common/styles/index.scss';
 
 .container {
-    padding: rem($padding-4n) rem($padding-4n) 0;
-    background: var(--color-white);
-    font-size: $font-size-middle;
+  padding: rem($padding-4n) rem($padding-4n) 0;
+  background: $white;
+  font-size: $font-size-middle;
 }
 
 .content {
-    display: flex;
-    justify-content: space-between;
-    font-weight: normal;
-    padding-bottom: rem($padding-4n);
-    color: var(--color-text-primary);
-    .text {
-        font-family: 'PingFangSC-Regular';
-        font-size: rem($font-size-primary);
-        text-align: left;
-        line-height: rem(16);
-    }
-    .money {
-        font-family: "PingFang SC";
-        font-weight: 600;
-        font-size: rem($font-size-middle);
-        text-align: left;
-    }
+  display: flex;
+  justify-content: space-between;
+  font-weight: normal;
+  padding-bottom: rem($padding-2n);
+  color: $text-color-primary;
+  height: rem(20);
+  line-height: rem(20);
+  .text {
+    font-family: 'PingFangSC-Regular';
+    font-size: rem($font-size-primary);
+    text-align: left;
+    // line-height: rem(16);
+  }
+  .money {
+    font-family: 'PingFang SC';
+    font-weight: 600;
+    font-size: rem($font-size-middle);
+    text-align: left;
+  }
 }
 
 .footer {
-    display: flex;
-    justify-content: space-between;
-    font-family: 'PingFangSC-Regular';
-    font-weight: normal;
-    font-size: rem($font-size-label);
-    .time {
-        text-align: left;
-        color: var(--color-text-secondary);
-    }
-    .withdrawalStatus1 {
-        color: var(--color-primary);
-    }
-    .withdrawalStatus2 {
-        color: $text-color-regular;
-    }
-    .withdrawalStatus3 {
-        color: var(--color-error);
-    }
-    .withdrawalStatus4 {
-        color: var(--color-success);
-    }
+  display: flex;
+  justify-content: space-between;
+  font-family: 'PingFangSC-Regular';
+  font-weight: normal;
+  font-size: rem($font-size-label);
+  .time {
+    text-align: left;
+    color: $text-color-secondary;
+  }
+  .withdrawalStatus1 {
+    color: $primary-color;
+  }
+  .withdrawalStatus2 {
+    color: $text-color-regular;
+  }
+  .withdrawalStatus3 {
+    color: $error-color;
+  }
+  .withdrawalStatus4 {
+    color: $success-color;
+  }
 }
 
 .serialNumber {
-    font-family: 'PingFangSC-Regular';
-    font-weight: normal;
-    font-size: rem($font-size-label);
-    text-align: left;
-    color: var(--color-text-secondary);
-    padding: rem($padding-4n) 0;
-    border-bottom: var(--border-border);
+  font-family: 'PingFangSC-Regular';
+  font-weight: normal;
+  font-size: rem($font-size-label);
+  text-align: left;
+  color: $text-color-secondary;
+  padding: rem($padding-4n) 0;
+  border-bottom: $border-solid-1;
 }

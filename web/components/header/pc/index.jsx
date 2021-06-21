@@ -8,6 +8,7 @@ import goToLoginPage from '@common/utils/go-to-login-page';
 import Router from '@discuzq/sdk/dist/router';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import UnreadRedDot from '@components/unread-red-dot';
+import { unreadUpdateInterval } from '@common/constants/message';
 
 @inject('site')
 @inject('user')
@@ -29,14 +30,14 @@ class Header extends React.Component {
   //   value: ''
   // }
 
-  // 每20秒更新一次未读消息
+  // 轮询更新未读消息
   updateUnreadMessage() {
     if (!this.props.user.id) return;
     const { message: { readUnreadCount } } = this.props;
     this.timeoutId = setTimeout(() => {
       readUnreadCount();
       this.updateUnreadMessage();
-    }, 20000);
+    }, unreadUpdateInterval);
   }
 
   async componentDidMount() {
@@ -94,8 +95,9 @@ class Header extends React.Component {
 
   renderHeaderLogo() {
     const { site } = this.props;
-    if (site.setSite && site.setSite.siteLogo && site.setSite.siteLogo !== '') {
-      return <img className={styles.siteLogo} src={site.setSite.siteLogo} onClick={() => this.handleRouter('/')} />;
+
+    if (site?.webConfig?.setSite?.siteHeaderLogo !== '') {
+      return <img className={styles.siteLogo} src={site?.webConfig?.setSite?.siteHeaderLogo} onClick={() => this.handleRouter('/')} />;
     }
     return <img className={styles.siteLogo} src="/dzq-img/admin-logo-pc.png" onClick={() => this.handleRouter('/')} />;
   }

@@ -18,7 +18,7 @@ import UserCenterFollowsPc from '../../../components/user-center/follows-pc';
 import Thread from '@components/thread';
 import SectionTitle from '@components/section-title';
 import BaseLayout from '../../../components/user-center-base-laout-pc';
-
+import { Toast } from '@discuzq/design';
 
 @inject('site')
 @inject('user')
@@ -29,13 +29,29 @@ class PCMyPage extends React.Component {
     this.state = {
       showFansPopup: false, // 是否弹出粉丝框
       showFollowPopup: false, // 是否弹出关注框
-      isLoading: true
+      isLoading: true,
     };
   }
   async componentDidMount() {
-    await this.props.user.getUserThreads();
+    await this.props.user.updateUserInfo(this.props.user.id);
 
-    this.setState({ isLoading: false })
+    try {
+      await this.props.user.getUserThreads();
+    } catch (err) {
+      console.error(err);
+      let errMessage = '加载用户列表失败';
+      if (err.Code && err.Code !== 0) {
+        errMessage = err.Msg;
+      }
+
+      Toast.error({
+        content: errMessage,
+        duration: 2000,
+        hasMask: false,
+      });
+    }
+
+    this.setState({ isLoading: false });
   }
 
   loginOut() {
@@ -81,14 +97,12 @@ class PCMyPage extends React.Component {
             Router.push({ url: '/my/edit' });
           }}
         >
-          {
-            this.props.site?.isSmsOpen && (
-              <div className={styles.userInfoWrapper}>
-                <div className={styles.userInfoKey}>手机号码</div>
-                <div className={styles.userInfoValue}>{this.props.user.mobile}</div>
-              </div>
-            )
-          }
+          {this.props.site?.isSmsOpen && (
+            <div className={styles.userInfoWrapper}>
+              <div className={styles.userInfoKey}>手机号码</div>
+              <div className={styles.userInfoValue}>{this.props.user.mobile || '未绑定'}</div>
+            </div>
+          )}
 
           {IS_WECHAT_ACCESSABLE && (
             <div className={styles.userInfoWrapper}>
@@ -120,7 +134,7 @@ class PCMyPage extends React.Component {
   };
 
   renderContent = () => {
-    const { isLoading } = this.state
+    const { isLoading } = this.state;
     const { user } = this.props;
     const { userThreads, userThreadsTotalCount } = user;
     const formattedUserThreads = this.formatUserThreadsData(userThreads);
@@ -136,25 +150,28 @@ class PCMyPage extends React.Component {
 
         <SidebarPanel
           title="主题"
-          type='normal'
+          type="normal"
           isShowMore={false}
           noData={!formattedUserThreads?.length}
           isLoading={isLoading}
           leftNum={`${userThreadsTotalCount}个主题`}
-          mold='plane'
+          mold="plane"
         >
-          {formattedUserThreads?.map((item, index) => <Thread data={item} key={index} className={index === 0 && styles.threadStyle} />)}
+          {formattedUserThreads?.map((item, index) => (
+            <Thread data={item} key={index} className={index === 0 && styles.threadStyle} />
+          ))}
         </SidebarPanel>
       </div>
     );
   };
 
   render() {
-    const { isLoading } = this.state
+    const { isLoading } = this.state;
     const { user } = this.props;
     const { userThreadsPage, userThreadsTotalPage, getUserThreads, userThreads } = user;
     const formattedUserThreads = this.formatUserThreadsData(userThreads);
-
+    // 判断用户信息loading状态
+    const IS_USER_INFO_LOADING = !this.props.user?.username;
     // store中，userThreadsPage会比真实页数多1
     let currentPageNum = userThreadsPage;
     if (userThreadsTotalPage > 1) {
@@ -171,6 +188,7 @@ class PCMyPage extends React.Component {
           noMore={userThreadsTotalPage <= currentPageNum}
           onRefresh={getUserThreads}
           showLayoutRefresh={!isLoading && !!formattedUserThreads?.length}
+          showHeaderLoading={IS_USER_INFO_LOADING}
         >
           {this.renderContent()}
         </BaseLayout>

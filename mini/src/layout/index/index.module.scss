@@ -2,9 +2,10 @@
 
 .homeContent {
   background: $white;
-  margin-bottom: 10px;
+  // margin-bottom: 10px;
   z-index: $zindex-backtotop;
   border-bottom: 1px solid $border-color;
+  // position: sticky;
   ::-webkit-scrollbar {
     width: 0;
     height: 0;
@@ -21,7 +22,7 @@
 .homeContentTop {
   padding: 0 $padding-4n;
   background: $white;
-  margin-bottom: 10px;
+  margin: 10px 0;
   ::-webkit-scrollbar {
     width: 0;
     height: 0;

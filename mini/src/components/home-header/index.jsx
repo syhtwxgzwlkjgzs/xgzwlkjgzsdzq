@@ -29,10 +29,10 @@ class HomeHeader extends React.Component {
 
   getBgHeaderStyle(bgColor) {
     const { site } = this.props;
-    const siteData = site.webConfig;
+    const siteData = site.webConfig || {};
 
-    if (siteData && siteData.setSite && siteData.setSite.bgHeadFullImg) {
-      return { backgroundImage: `url(${siteData.bgHeadFullImg})` };
+    if (siteData.setSite?.siteBackgroundImage) {
+      return { backgroundImage: `url(${siteData.setSite.siteBackgroundImage})` };
     }
     return bgColor ? { background: bgColor } : { background: '#2469f6' };
   }
@@ -45,9 +45,9 @@ class HomeHeader extends React.Component {
     }
 
     const { site } = this.props;
-    const siteData = site.webConfig;
-    if (siteData && siteData.setSite && siteData.setSite.siteLogo) {
-      return siteData.setSite.siteLogo;
+    const siteData = site.webConfig || {};
+    if (siteData.setSite?.siteHeaderLogo) {
+      return siteData.setSite.siteHeaderLogo;
     }
     return logoImg;
   }
@@ -83,18 +83,26 @@ class HomeHeader extends React.Component {
     this.setState({ visible: false });
   };
 
+  getStatusBarHeight() {
+    return wx?.getSystemInfoSync()?.statusBarHeight || 44;
+  }
+
   // 全屏状态下自定义左上角返回按钮位置
-  getCustomerStyle() {
-    let statusBarHeight = 44;
-
-    if (wx) {
-      statusBarHeight = wx.getSystemInfoSync().statusBarHeight;
-    }
-
+  getTopBarBtnStyle() {
     return {
       position: 'fixed',
-      top: `${statusBarHeight + 10}px`,
+      top: `${this.getStatusBarHeight()}px`,
       left: '12px',
+      transform: 'translate(0, 10px)',
+    };
+  }
+
+  getTopBarTitleStyle() {
+    return {
+      position: 'fixed',
+      top: `${this.getStatusBarHeight()}px`,
+      left: '50%',
+      transform: 'translate(-50%, 8px)',
     };
   }
 
@@ -108,12 +116,12 @@ class HomeHeader extends React.Component {
       bgColor,
       hideInfo = false,
       hideLogo = false,
-      hideMinibar = false,
       showToolbar = false,
       style = {},
       digest = null,
       mode = '',
       site,
+      fullScreenTitle = ''
     } = this.props;
     const { visible } = this.state;
     const { countUsers, countThreads, siteAuthor, createDays } = this.getSiteInfo();
@@ -123,13 +131,13 @@ class HomeHeader extends React.Component {
     };
 
     return (
-      <>
-        {hideMinibar ? <></> : <View className={styles.topBarForMini} style={this.getBgHeaderStyle(bgColor)}></View>}
         <View
           ref={this.domRef}
-          className={`${styles.container} ${mode ? styles[`container_mode_${mode}`] : ''} ${
-            hideLogo ? styles['hide_logo'] : ''
-          }`}
+          className={`
+            ${styles.container} 
+            ${mode ? styles[`container_mode_${mode}`] : ''} 
+            ${hideLogo ? styles['hide_logo'] : ''}
+          `}
           style={{ ...style, ...this.getBgHeaderStyle(bgColor) }}
         >
           {hideInfo && mode !== 'join' && (
@@ -150,9 +158,10 @@ class HomeHeader extends React.Component {
           )}
           {showToolbar && (
             <View className={styles.topBar}>
-              <View onClick={() => Router.back()} className={styles.customCapsule} style={this.getCustomerStyle()}>
+              <View onClick={() => Router.back()} className={styles.customCapsule} style={this.getTopBarBtnStyle()}>
                 <Icon name="LeftOutlined" />
               </View>
+              <View style={this.getTopBarTitleStyle()} className={styles.fullScreenTitle}>{ fullScreenTitle }</View>
             </View>
           )}
           {!hideLogo && (
@@ -200,7 +209,6 @@ class HomeHeader extends React.Component {
           )}
           {isWeiXin && <SharePopup visible={visible} onClose={this.onClose} />}
         </View>
-      </>
     );
   }
 }

@@ -10,7 +10,8 @@ import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import threadPay from '@common/pay-bussiness/thread-pay';
 import ThreadCenterView from './ThreadCenterView';
-import { debounce } from './utils'
+import { debounce } from './utils';
+import { noop } from '@components/thread/utils';
 
 @inject('site')
 @inject('index')
@@ -50,7 +51,8 @@ class Index extends React.Component {
           this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
           this.props.user.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
 
-          this.props.recomputeRowHeights();
+          const { recomputeRowHeights = noop } = this.props;
+          recomputeRowHeights();
         }
       });
     }, 2000)
@@ -101,7 +103,8 @@ class Index extends React.Component {
           this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
           this.props.user.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
 
-          this.props.recomputeRowHeights();
+          const { recomputeRowHeights = noop } = this.props;
+          recomputeRowHeights();
         }
         this.setState({isSendingLike: false});
       });
@@ -135,7 +138,8 @@ class Index extends React.Component {
           this.props.search.updatePayThreadInfo(thread?.threadId, data)
           this.props.topic.updatePayThreadInfo(thread?.threadId, data)
 
-          this.props.recomputeRowHeights();
+          const { recomputeRowHeights = noop } = this.props;
+          recomputeRowHeights();
         }
       }
     }, 1000)
@@ -189,6 +193,8 @@ class Index extends React.Component {
       const { data, className = '', site = {}, showBottomStyle = true ,  collect = '', isShowIcon = false } = this.props;
       const { platform = 'pc' } = site;
 
+      const { onContentHeightChange = noop, onImageReady = noop, onVideoReady = noop } = this.props;
+
       if (!data) {
         return <NoData />;
       }
@@ -205,12 +211,13 @@ class Index extends React.Component {
         threadId,
         displayTag,
         payType,
+        isAnonymous,
       } = data || {};
-      const { isEssence, isPrice, isRedPack, isReward } = displayTag;
+      const { isEssence, isPrice, isRedPack, isReward } = displayTag || {};
 
       return (
         <div className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`}>
-          <div className={styles.header}>
+          <div className={styles.header} onClick={this.onClick}>
               <UserInfo
                 name={user.nickname || ''}
                 avatar={user.avatar || ''}
@@ -222,6 +229,7 @@ class Index extends React.Component {
                 isPay={isPrice}
                 isRed={isRedPack}
                 isReward={isReward}
+                isAnonymous={isAnonymous}
                 userId={user?.userId}
                 platform={platform}
                 collect={collect}
@@ -231,7 +239,9 @@ class Index extends React.Component {
           </div>
 
           <ThreadCenterView
-            onContentHeightChange={this.props.onContentHeightChange}
+            onContentHeightChange={onContentHeightChange}
+            onImageReady={onImageReady}
+            onVideoReady={onVideoReady}
             data={data}
             onClick={this.onClick}
             onPay={this.onPay}

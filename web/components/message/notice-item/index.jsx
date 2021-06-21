@@ -47,15 +47,13 @@ class Index extends Component {
 
   // 获取头像背景色
   getBackgroundColor = (name) => {
-    const character = name?.charAt(0).toUpperCase() || 'a';
-    return stringToColor(character);
+    return name ? stringToColor(name.toUpperCase()[0]) : "#8590a6";
   };
-
-
 
   // 针对财务消息，获取后缀提示语
   getFinancialTips = (item) => {
     if (item.type === 'rewarded') {
+      if (item.orderType === 3 || item.orderType === 7) return '支付了你';
       return '打赏了你';
     }
     if (item.type === 'receiveredpacket') {
@@ -63,9 +61,6 @@ class Index extends Component {
     }
     if (item.type === 'threadrewarded') {
       return '悬赏了你';
-    }
-    if (item.type === 'withdrawal') {
-      return '获取提现';
     }
   };
 
@@ -107,28 +102,19 @@ class Index extends Component {
   // 跳转用户中心
   toUserCenter = (e, canJump, item) => {
     e.stopPropagation();
-    if (!item.userId) {
-      Toast.error({
-        content: '没有用户id',
-        hasMask: false,
-        duration: 1000,
-      });
-    } else {
-      // 后续用户中心做好后，需拼接用户id
-      canJump && Router.push({ url: `/user/${item.userId}` });
-    }
-
+    if (!canJump || !item.nickname || !item.userId) return;
+    Router.push({ url: `/user/${item.userId}` });
   };
 
   // 跳转主题详情or私信
   toDetailOrChat = (e, item) => {
     if (e.target.nodeName === 'A') return;
     const { type } = this.props;
-    if (type === 'financial' || type === 'account') {
+    if (item.threadId) {
       Router.push({ url: `/thread/${item.threadId}` });
     }
     if (type === 'chat') {
-      Router.push({ url: `/message?page=chat&dialogId=${item.dialogId}&nickname=${item.username}` });
+      Router.push({ url: `/message?page=chat&dialogId=${item.dialogId}&nickname=${item.nickname || ''}` });
     }
   };
 
@@ -144,7 +130,7 @@ class Index extends Component {
           {/* 头像 */}
           <div
             className={classNames(styles.avatar, {
-              [styles['unset-cursor']]: type === 'thread'
+              [styles['unset-cursor']]: type === 'thread' || !item.nickname || !item.userId
             })}
             onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
           >
@@ -156,10 +142,10 @@ class Index extends Component {
                   <Avatar image={avatarUrl} circle={true} />
                 ) : (
                   <Avatar
-                    text={item.username}
+                    text={item.nickname}
                     circle={true}
                     style={{
-                      backgroundColor: `#${this.getBackgroundColor(item.username)}`,
+                      backgroundColor: this.getBackgroundColor(item.nickname),
                     }}
                   />
                 )
@@ -183,12 +169,12 @@ class Index extends Component {
               <div
                 className={classNames(styles.name, {
                   [styles['single-line']]: true,
-                  [styles['unset-cursor']]: type === 'thread'
+                  [styles['unset-cursor']]: type === 'thread' || !item.nickname || !item.userId
                 })}
                 onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
               >
-                {/* 仅帖子通知没有username，使用title代替显示 */}
-                {item.username || this.filterTag(item.title)}
+                {/* 仅帖子通知没有nickname，使用title代替显示 */}
+                {item.nickname || this.filterTag(item.title) || "用户已删除"}
               </div>
               {['chat', 'thread'].includes(type) && (
                 <div className={styles.time}>{diffDate(item.createdAt)}</div>

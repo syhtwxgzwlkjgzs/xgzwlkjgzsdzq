@@ -30,6 +30,10 @@ class WeixinAuth extends React.Component {
     if (inviteCode) invite.setInviteCode(inviteCode);
 
     try {
+      this.target = Toast.loading({
+        content: '微信登录中...',
+        duration: 0,
+      });
       const res = await h5WechatCodeLogin({
         timeout: 10000,
         params: {
@@ -78,6 +82,8 @@ class WeixinAuth extends React.Component {
 
       // 跳转状态页
       if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
+        const uid = get(error, 'uid', '');
+        uid && this.props.user.updateUserInfo(uid);
         this.props.commonLogin.setStatusMessage(error.Code, error.Message);
         window.location.href = `/user/status?statusCode=${error.Code}&statusMsg=${error.Message}`;
         return;
@@ -93,6 +99,9 @@ class WeixinAuth extends React.Component {
         error,
       };
     }
+  }
+  componentWillUnmount() {
+    this?.target?.hide();
   }
 
 

@@ -2,6 +2,10 @@
  * 消息模块常量
  */
 
+// 全局未读消息轮询间隔时间(毫秒)
+export const unreadUpdateInterval = 60000;
+
+
 // 侧边栏常量
 export const sidebarData = [
   {
@@ -9,13 +13,13 @@ export const sidebarData = [
     iconColor: '#7BA5F9',
     content: '我的私信',
     type: 'index',
-    unreadKeyName: '',
+    unreadKeyName: 'dialogMessageUnread',
     unreadCount: 0,
   },
   {
     iconName: 'RemindOutlined',
     iconColor: '#3AC15F',
-    content: '帖子通知',
+    content: '账号消息',
     type: 'thread',
     unreadKeyName: 'threadUnread',
     unreadCount: 0,
@@ -31,7 +35,7 @@ export const sidebarData = [
   {
     iconName: 'LeaveWordOutlined',
     iconColor: '#E02433',
-    content: '账号消息',
+    content: '帖子通知',
     type: 'account',
     unreadKeyName: 'accountUnread',
     unreadCount: 0,

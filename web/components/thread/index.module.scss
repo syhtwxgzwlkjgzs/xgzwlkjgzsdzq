@@ -3,7 +3,7 @@
   box-sizing: border-box;
   padding: 0 rem($padding-4n);
   padding-bottom: 0;
-  background: var(--color-white);
+  background: $white;
 }
 // &:hover {
 //   background: rgba(229, 242, 255, 0.3);
@@ -14,8 +14,7 @@
   font-size: rem($font-size-middle);
   font-weight: bold;
   line-height: rem(22);
-  color: var(--color-text-primary);
-  margin-bottom: rem($margin-4n);
+  color: $text-color-primary;
   width: 100%;
 }
 
@@ -31,10 +30,12 @@
   justify-content: flex-end;
 }
 
-.content {
+.wrapper {
   position: relative;
-  >* {
-    margin-top: rem($margin-4n);
+  overflow: hidden;
+
+  > div:not(:last-child) {
+    margin-bottom: rem($margin-4n);
   }
 
   .cover {
@@ -57,7 +58,7 @@
   height: rem(52);
   display: flex;
   align-items: center;
-  border-top: var(--border-line-color) solid rem(1);
+  border-top: $border-color solid rem(1);
   margin-top: rem(12);
 }
 .pay {
@@ -67,17 +68,8 @@
   width: 100%;
   height: rem(36);
   font-size: rem($font-size-middle);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
   .payIcon {
     margin-right: rem($margin-2n);
-    margin-top: rem(1);
-  }
-  .payText{
-    display: inline;
-    margin-top: rem(1);
   }
 }
 
@@ -98,8 +90,4 @@
   .header {
     padding: rem($padding-4n) 0;
   }
-}
-
-.wrapper {
-  overflow: hidden;
 }

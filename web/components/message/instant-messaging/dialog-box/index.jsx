@@ -5,6 +5,7 @@ import { inject, observer } from 'mobx-react';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import styles from './index.module.scss';
+import Router from '@discuzq/sdk/dist/router';
 
 const DialogBox = (props) => {
   const { platform, message, user, dialogId, showEmoji } = props;
@@ -18,9 +19,7 @@ const DialogBox = (props) => {
   const timeoutId = useRef();
   useEffect(() => {
     document.addEventListener('focusin', () => {
-      setTimeout(() => {
-        scrollEnd();
-      }, 100);
+      setTimeout(scrollEnd, 0);
     });
     return () => clearTimeout(timeoutId.current);
   }, []);
@@ -34,7 +33,7 @@ const DialogBox = (props) => {
 
   useEffect(() => {
     if (showEmoji) {
-      scrollEnd();
+      setTimeout(scrollEnd, 0);
     }
   }, [showEmoji]);
 
@@ -67,6 +66,7 @@ const DialogBox = (props) => {
       text: item.messageTextHtml,
       ownedBy: user.id === item.userId ? 'myself' : 'itself',
       imageUrl: item.imageUrl,
+      userId: item.userId,
     })).reverse();
   }, [dialogMsgListLength]);
 
@@ -77,11 +77,13 @@ const DialogBox = (props) => {
   return (
     <div className={platform === 'pc' ? styles.pcDialogBox : (showEmoji ? styles['h5DialogBox-emoji'] : styles.h5DialogBox)} ref={dialogBoxRef}>
       <div className={styles.box__inner}>
-        {messagesHistory.map(({ timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl }, idx) => (
+        {messagesHistory.map(({ timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl, userId }, idx) => (
           <React.Fragment key={idx}>
             {displayTimePanel && <div className={styles.msgTime}>{diffDate(timestamp)}</div>}
             <div className={`${ownedBy === 'myself' ? `${styles.myself}` : `${styles.itself}`} ${styles.persona}`}>
-              <div className={styles.profileIcon}>
+              <div className={styles.profileIcon} onClick={() => {
+                userId && Router.push({ url: `/user/${userId}` });
+              }}>
                 <Avatar image={userAvatar || '/favicon.ico'} circle={true} />
               </div>
               {imageUrl ? (

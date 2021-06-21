@@ -2,59 +2,74 @@
 
 
 .container {
-    background: var(--color-primary);
-    padding: 14px 16px 16px;
+  padding: {
+    top: 90px;
+    bottom: 27px;
+    left: 16px;
+    right: 16px;
+  }
 }
 
 .totalAmount {
-    color: var(--color-white);
-    text-align: left;
-    .moneyTitle {
-        font-family: 'PingFangSC-Regular';
-        font-weight: normal;
-        font-size: 14px;
-        line-height: 16.8px;
-        padding-bottom: 8px;
-    }
-    .moneyNum {
-        font-family: "PingFang SC";
-        font-weight: 600;
-        font-size: 30px;
-        line-height: 30px;
-        padding: 8px 0 20px 0;
-    }
+  color: $white;
+  text-align: left;
+
+  .moneyTitle {
+    height: 20px;
+    font-family: 'PingFangSC-Regular';
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: $margin-1n;
+  }
+
+  .moneyNum {
+    height: 42px;
+    font-family: "PingFang SC";
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 42px;
+    margin-bottom: $margin-4n;
+  }
 }
+
 .amountStatus {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    color: var(--color-white);
-    text-align: left;
-    .statusTitle {
-        font-family: 'PingFangSC-Regular';
-        font-weight: normal;
-        font-size: 14px;
-        line-height: 24px;
-      
-    }
-    .statusNum {
-        font-family: 'PingFang SC';
-        font-weight: normal;
-        font-size: 20px;
-        line-height: 16.8px;
-        padding: 14px 0;
-    }
-    .withdrawalAmount {
-        margin-right: 40px;
-    }
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-white);
+  text-align: left;
+
+  .statusTitle {
+    height: 20px;
+    font-family: 'PingFangSC-Regular';
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 3px;
+  }
+
+  .statusNum {
+    height: 28px;
+    font-family: 'PingFang SC';
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  .withdrawalAmount {
+    margin-right: 40px;
+  }
 }
+
 .footer {
-    display: flex;
-    justify-content: center;
-    padding: 26px 0;
-    .button {
-        width: 282px;
-        height: 36px;
-        border-radius: 5px;
-    }
+  display: flex;
+  justify-content: center;
+  padding: 26px 0;
+
+  .button {
+    width: 282px;
+    height: 36px;
+    border-radius: 5px;
+  }
 }

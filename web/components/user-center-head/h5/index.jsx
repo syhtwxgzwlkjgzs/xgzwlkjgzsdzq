@@ -7,6 +7,8 @@ import clearLoginStatus from '@common/utils/clear-login-status';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import { numberFormat } from '@common/utils/number-format';
+import browser from '@common/utils/browser';
+
 @inject('user')
 @observer
 class index extends Component {
@@ -33,7 +35,7 @@ class index extends Component {
       Toast.success({
         content: '解除屏蔽成功',
         hasMask: false,
-        duration: 1000,
+        duration: 2000,
       });
     } else {
       this.props.user.denyUser(id);
@@ -41,7 +43,7 @@ class index extends Component {
       Toast.success({
         content: '屏蔽成功',
         hasMask: false,
-        duration: 1000,
+        duration: 2000,
       });
     }
   };
@@ -51,11 +53,39 @@ class index extends Component {
     const id = this.props.router.query?.id;
     if (id) {
       if (follow !== 0) {
-        await this.props.user.cancelFollow({ id, type: 1 });
-        await this.props.user.getTargetUserInfo(id);
+        try {
+          const cancelRes = await this.props.user.cancelFollow({ id: id, type: 1 });
+          if (!cancelRes.success) {
+            Toast.error({
+              content: cancelRes.msg || '取消关注失败',
+              duration: 2000,
+            });
+          }
+          await this.props.user.getTargetUserInfo(id);
+        } catch (error) {
+          console.error(error);
+          Toast.error({
+            content: '网络错误',
+            duration: 2000,
+          });
+        }
       } else {
-        await this.props.user.postFollow(id);
-        await this.props.user.getTargetUserInfo(id);
+        try {
+          const followRes = await this.props.user.postFollow(id);
+          if (!followRes.success) {
+            Toast.error({
+              content: followRes.msg || '关注失败',
+              duration: 2000,
+            });
+          }
+          await this.props.user.getTargetUserInfo(id);
+        } catch (error) {
+          console.error(error);
+          Toast.error({
+            content: '网络错误',
+            duration: 2000,
+          });
+        }
       }
     }
   };
@@ -92,8 +122,8 @@ class index extends Component {
 
   // 点击发送私信
   handleMessage = () => {
-    const { username } = this.props.user.targetUser;
-    Router.replace({ url: `/message?page=chat&username=${username}` });
+    const { username, nickname } = this.props.user.targetUser;
+    Router.replace({ url: `/message?page=chat&username=${username}&nickname=${nickname}` });
   };
 
   gotoLikeList = () => {
@@ -168,26 +198,36 @@ class index extends Component {
                   this.handleChangeAttention(user.follow);
                 }}
                 type="primary"
-                className={`${styles.btn} ${user.follow === 2 && styles.userFriendsBtn} ${user.follow === 1 && styles.userFollowedBtn}`}
+                className={`${styles.btn} ${user.follow === 2 && styles.userFriendsBtn} ${
+                  user.follow === 1 && styles.userFollowedBtn
+                }`}
                 full
               >
-                <Icon name={this.renderFollowedStatus(user.follow).icon} />
-                <span className={styles.userBtnText}>{this.renderFollowedStatus(user.follow).text}</span>
+                <div className={styles.actionButtonContentWrapper}>
+                  <Icon name={this.renderFollowedStatus(user.follow).icon} size={16} />
+                  <span className={styles.userBtnText}>{this.renderFollowedStatus(user.follow).text}</span>
+                </div>
               </Button>
               <Button full className={styles.btn} onClick={this.handleMessage}>
-                <Icon name="NewsOutlined" />
-                <span className={styles.userBtnText}>发私信</span>
+                <div className={styles.actionButtonContentWrapper}>
+                  <Icon name="NewsOutlined" size={16} />
+                  <span className={styles.userBtnText}>发私信</span>
+                </div>
               </Button>
             </>
           ) : (
             <>
               <Button full className={styles.btn} onClick={this.goToMyEditInfo} type="primary">
-                <Icon name="CompileOutlined" />
-                <span className={styles.userBtnText}>编辑资料</span>
+                <div className={styles.actionButtonContentWrapper}>
+                  <Icon name="CompileOutlined" size={browser.env('ios') ? 14 : 16} />
+                  <span className={styles.userBtnText}>编辑资料</span>
+                </div>
               </Button>
               <Button full className={styles.btn} onClick={this.logout}>
-                <Icon name="PoweroffOutlined" />
-                <span className={styles.userBtnText}>退出登录</span>
+                <div className={styles.actionButtonContentWrapper}>
+                  <Icon name="PoweroffOutlined" size={browser.env('ios') ? 14 : 16} />
+                  <span className={styles.userBtnText}>退出登录</span>
+                </div>
               </Button>
             </>
           )}

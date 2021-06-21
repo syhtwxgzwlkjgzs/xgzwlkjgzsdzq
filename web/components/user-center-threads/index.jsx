@@ -5,9 +5,9 @@ import styles from './index.module.scss';
 class UserCenterThreads extends React.Component {
   render() {
     return (
-      <div>
-        {this.props.data.map((itemInfo, index) => (
-          <Thread data={itemInfo} className={index === 0 ? styles.threadBorder : ''} />
+      <div className={styles.threadsContainer}>
+        {this.props.data.map((itemInfo, index, arr) => (
+          <Thread data={itemInfo} showBottomStyle={index !== arr.length - 1} />
         ))}
       </div>
     );

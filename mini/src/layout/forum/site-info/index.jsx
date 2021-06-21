@@ -13,9 +13,8 @@ class SiteInfo extends Component {
   render() {
     const { site, forum } = this.props;
     const { threadTotal, updataTime } = forum;
+    const { siteIntroduction } = site;
 
-    // 站点介绍
-    const siteIntroduction = get(site, 'webConfig.setSite.siteIntroduction', '');
     return (
       <View className={layout.site}>
         <SectionTitle
@@ -29,7 +28,8 @@ class SiteInfo extends Component {
           <View className={layout.site_status_list}>
             <View className={layout.site_status_label}>更新</View>
             <View className={layout.site_status_item}>
-              {updataTime && getSiteUpdateTime(updataTime)} {updataTime}
+              {/* {updataTime && getSiteUpdateTime(updataTime)} {updataTime} */}
+              刚刚
             </View>
           </View>
           <View className={layout.site_status_list}>

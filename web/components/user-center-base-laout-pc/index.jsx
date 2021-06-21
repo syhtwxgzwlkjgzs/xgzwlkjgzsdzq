@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Flex, Icon } from '@discuzq/design';
+import { Flex, Icon, Spin } from '@discuzq/design';
 import Header from '@components/header';
 import List from '@components/list';
 import RefreshView from '@components/list/RefreshView';
@@ -38,6 +38,7 @@ const Index = (props) => {
     onRefresh,
     isOtherPerson = false,
     showLayoutRefresh = true,
+    showHeaderLoading = true,
   } = props;
 
   const size = useRef('xl');
@@ -85,7 +86,9 @@ const Index = (props) => {
 
   const showLeft = useMemo(() => left && (size.current === 'xl' || size.current === 'xxl'), [size.current]);
 
-  const showRight = useMemo(() => right && (size.current === 'xl' || size.current === 'xxl' || size.current === 'lg'), [size.current]);
+  const showRight = useMemo(() => right && (size.current === 'xl' || size.current === 'xxl' || size.current === 'lg'), [
+    size.current,
+  ]);
 
   const [isUploadBackgroundUrl, setBackgroundUrl] = useState(false);
 
@@ -97,51 +100,54 @@ const Index = (props) => {
     <div className={styles.container}>
       {(header && header({ ...props })) || <Header onSearch={onSearch} />}
       <List {...props} className={styles.list} wrapperClass={styles.wrapper}>
-        {
-          (contentHeader && contentHeader({ ...props }))
-          || <div className={styles.headerbox}>
-              <div className={styles.userHeader}>
-                <div className={styles.headImgWrapper}>
-                  <UserCenterHeaderImage isOtherPerson={isOtherPerson} />
-                  {/* 背景图加载状态 */}
-                  {isUploadBackgroundUrl && (
-                    <div className={styles.uploadBgUrl}>
-                      <div className={styles.uploadCon}>
-                        <Icon name="UploadingOutlined" size={12} />
-                        <span className={styles.uploadText}>上传中...</span>
+        {(contentHeader && contentHeader({ ...props })) || (
+          <div className={styles.headerbox}>
+            <div className={styles.userHeader}>
+              {!showHeaderLoading && (
+                <>
+                  <div className={styles.headImgWrapper}>
+                    <UserCenterHeaderImage isOtherPerson={isOtherPerson} />
+                    {isUploadBackgroundUrl && (
+                      <div className={styles.uploadBgUrl}>
+                        <div className={styles.uploadCon}>
+                          <Icon name="UploadingOutlined" size={12} />
+                          <span className={styles.uploadText}>上传中...</span>
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
+                  <UserCenterHead
+                    handleSetBgLoadingStatus={handleSetBgLoadingStatus}
+                    platform="pc"
+                    isOtherPerson={isOtherPerson}
+                  />
+                </>
+              )}
+              {showHeaderLoading && (
+                <div className={styles.spinLoading}>
+                  <Spin type="spinner">加载中...</Spin>
                 </div>
-                <UserCenterHead handleSetBgLoadingStatus={handleSetBgLoadingStatus} platform='pc' isOtherPerson={isOtherPerson} />
-              </div>
+              )}
             </div>
-        }
+          </div>
+        )}
         <div className={styles.content}>
-          {
-            showLeft && (
-              <div className={styles.left}>
-                {typeof (left) === 'function' ? useCallback(left({ ...props }), []) : left}
-              </div>
-            )
-          }
+          {showLeft && (
+            <div className={styles.left}>{typeof left === 'function' ? useCallback(left({ ...props }), []) : left}</div>
+          )}
 
           <div className={styles.center}>
-            {typeof (children) === 'function' ? children({ ...props }) : children}
+            {typeof children === 'function' ? children({ ...props }) : children}
             {onRefresh && showLayoutRefresh && <RefreshView noMore={noMore} />}
           </div>
 
-          {
-            showRight && (
-              <div className={styles.right}>
-                {typeof (right) === 'function' ? right({ ...props }) : right}
-              </div>
-            )
-          }
+          {(right || showRight) && (
+            <div className={styles.right}>{typeof right === 'function' ? right({ ...props }) : right}</div>
+          )}
         </div>
       </List>
 
-      {typeof (footer) === 'function' ? footer({ ...props }) : footer}
+      {typeof footer === 'function' ? footer({ ...props }) : footer}
     </div>
   );
 };

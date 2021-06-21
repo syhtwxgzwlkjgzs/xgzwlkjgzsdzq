@@ -11,6 +11,7 @@ import Toast from '@discuzq/design/dist/components/toast/index';
 import InputPopup from '../components/input-popup';
 import ReportPopup from '../components/report-popup';
 import goToLoginPage from '@common/utils/go-to-login-page';
+import Taro from "@tarojs/taro";
 
 
 @inject('site')
@@ -48,6 +49,12 @@ class CommentH5Page extends React.Component {
     this.reportContent = ['广告垃圾', '违规内容', '恶意灌水', '重复发帖'];
     this.inputText = '其他理由...';
   }
+
+  componentWillUnmount() {
+    // 清空@ren数据
+    this.props.thread.setCheckUser([]);
+  }
+
   // 点击更多
   onMoreClick() {
     console.log('点击了更多');
@@ -117,14 +124,14 @@ class CommentH5Page extends React.Component {
     });
   }
 
-  //删除回复
+  // 删除回复
   async replyDeleteComment() {
     if (!this.replyData.id) return;
 
     const params = {}
     if (this.replyData && this.commentData) {
-      params.replyData = this.replyData;//本条回复信息
-      params.commentData = this.commentData;//回复对应的评论信息
+      params.replyData = this.replyData;// 本条回复信息
+      params.commentData = this.commentData;// 回复对应的评论信息
     }
     const { success, msg } = await this.props.comment.deleteReplyComment(params, this.props.thread);
     this.setState({
@@ -139,6 +146,25 @@ class CommentH5Page extends React.Component {
     Toast.error({
       content: msg,
     });
+  }
+
+  replyAvatarClick(reply,commentData,floor) {
+    if (floor === 2) {
+      const { userId } = reply;
+      if(!userId) return;
+      Router.push({url: `/subPages/user/index?id=${userId}`});
+    }
+    if (floor === 3) {
+      const { commentUserId } = reply;
+      if(!commentUserId) return;
+      Router.push({url: `/subPages/user/index?id=${commentUserId}`});
+    }
+  }
+
+  avatarClick(commentData) {
+    const { userId } = commentData;
+    if(!userId) return;
+    Router.push({url: `/subPages/user/index?id=${userId}`});
   }
 
   // 点击评论的赞
@@ -400,9 +426,11 @@ class CommentH5Page extends React.Component {
               likeClick={() => this.likeClick(commentData)}
               replyClick={() => this.replyClick(commentData)}
               deleteClick={() => this.deleteClick(commentData)}
+              avatarClick={() => this.avatarClick(commentData)}
               replyLikeClick={(reploy) => this.replyLikeClick(reploy, commentData)}
               replyReplyClick={(reploy) => this.replyReplyClick(reploy, commentData)}
               replyDeleteClick={(reply) => this.replyDeleteClick(reply, commentData)}
+              replyAvatarClick={(reply,floor) =>this.replyAvatarClick(reply,commentData,floor)}
               onMoreClick={() => this.onMoreClick()}
               isHideEdit={true}
             ></CommentList>
@@ -417,6 +445,8 @@ class CommentH5Page extends React.Component {
             onClose={() => this.setState({ showCommentInput: false })}
             onSubmit={(value, imageList) => this.createReply(value, imageList)}
             site={this.props.site}
+            checkUser={this.props?.thread?.checkUser || []}
+            thread={this.props?.thread}
           ></InputPopup>
 
           {/* 更多弹层 */}

@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useMemo, useState } from 'react';
 import { View, Image } from '@tarojs/components';
 import Avatar from '@discuzq/design/dist/components/avatar/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import { diffDate } from '@common/utils/diff-date';
 import { inject, observer } from 'mobx-react';
 import Taro from '@tarojs/taro';
@@ -9,8 +10,11 @@ import styles from './index.module.scss';
 const DialogBox = (props) => {
   // const { shownMessages, dialogBoxRef } = props;
 
-  const { message, user, dialogId, showEmoji } = props;
+  const { message, user, dialogId, showEmoji, keyboardHeight, inputBottom, hideEmoji } = props;
   const { readDialogMsgList, dialogMsgList, dialogMsgListLength, updateDialog } = message;
+
+
+  const [paddingBottom, setPaddingBottom] = useState(52);
 
   // const [previewerVisibled, setPreviewerVisibled] = useState(false);
   // const [defaultImg, setDefaultImg] = useState('');
@@ -30,24 +34,35 @@ const DialogBox = (props) => {
   }, [dialogId]);
 
   useEffect(() => {
-    if (showEmoji) {
-      scrollEnd();
+    if (showEmoji || keyboardHeight) {
+      setTimeout(scrollEnd, 300);
     }
-  }, [showEmoji]);
+
+    setTimeout(() => {
+      let query = Taro.createSelectorQuery();
+      query.select('#operation-box').boundingClientRect(rect => {
+        let clientHeight = rect.height;
+        // let clientWidth = rect.width;
+        // let ratio = 750 / clientWidth;
+        // let height = clientHeight * ratio;
+        console.log(clientHeight);
+
+        const padding = (keyboardHeight && !showEmoji) ? inputBottom : 0
+
+        setPaddingBottom(clientHeight);
+        setTimeout(scrollEnd, 300);
+      }).exec();
+    }, 0);
+
+  }, [showEmoji, keyboardHeight]);
 
   const scrollEnd = () => {
-    Taro.pageScrollTo({
-      scrollTop: 0,
-      duration: 300,
-      success: (a,b,c) => {
-        console.log(a,b,c);
-      }
-    });
-
-
-    // if (dialogBoxRef.current) {
-    //   dialogBoxRef.current.scrollTop = dialogBoxRef?.current?.scrollHeight;
-    // }
+    setTimeout(() => {
+      Taro.pageScrollTo({
+        scrollTop: 30000,
+        duration: 0
+      });
+    }, 0);
   };
 
   // 每5秒轮询一次
@@ -73,6 +88,7 @@ const DialogBox = (props) => {
       text: item.messageTextHtml,
       ownedBy: user.id === item.userId ? 'myself' : 'itself',
       imageUrl: item.imageUrl,
+      userId: item.userId,
     })).reverse();
   }, [dialogMsgListLength]);
 
@@ -82,13 +98,24 @@ const DialogBox = (props) => {
   }, [dialogMsgList]);
 
   return (
-    <View className={styles.dialogBox} style={{ bottom: showEmoji ? '385px' : '52px' }} ref={dialogBoxRef}>
+    <View
+      onClick={() => {
+        hideEmoji();
+      }}
+      className={styles.dialogBox}
+      style={{
+        paddingBottom: `${paddingBottom}px`,
+        // marginBottom: keyboardHeight ? 0 : '',
+      }}
+      ref={dialogBoxRef}>
       <View className={styles.box__inner}>
-        {messagesHistory.map(({ timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl }, idx) => (
+        {messagesHistory.map(({ timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl, userId }, idx) => (
           <React.Fragment key={idx}>
             {displayTimePanel && <View className={styles.msgTime}>{diffDate(timestamp)}</View>}
             <View className={(ownedBy === 'myself' ? `${styles.myself}` : `${styles.itself}`) + ` ${styles.persona}`}>
-              <View className={styles.profileIcon}>
+              <View className={styles.profileIcon} onClick={() => {
+                userId && Taro.navigateTo({ url: `/subPages/user/index?id=${userId}` });
+              }}>
                 <Avatar image={userAvatar || '/favicon.ico'} circle={true} />
               </View>
               {imageUrl ? (

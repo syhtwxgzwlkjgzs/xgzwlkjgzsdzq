@@ -10,6 +10,7 @@ import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import ImageDisplay from '@components/thread/image-display';
 import { debounce } from '@common/utils/throttle-debounce';
+import { urlToLink } from '@common/utils/replace-url-to-a';
 
 @observer
 export default class ReplyList extends React.Component {
@@ -30,7 +31,7 @@ export default class ReplyList extends React.Component {
     let newContent = this.props?.data?.content || '';
     newContent = s9e.parse(newContent);
     newContent = xss(newContent);
-
+    newContent = urlToLink(newContent);
     return newContent;
   }
 
@@ -55,13 +56,13 @@ export default class ReplyList extends React.Component {
       canApprove: data.canApprove || false,
       canDelete: data.canDelete || false,
       canEdit: data.canEdit || false,
-      canHide: data.canLike || false,
+      canHide: data.canHide || false,
       canLike: data.canLike || false,
     };
   }
 
   render() {
-    const { canLike, canDelete } = this.generatePermissions(this.props.data);
+    const { canLike, canDelete, canHide } = this.generatePermissions(this.props.data);
 
     return (
       <div className={styles.replyList}>
@@ -117,7 +118,7 @@ export default class ReplyList extends React.Component {
               )}
             </div>
           </div>
-          
+
           <div className={styles.replyListFooter}>
             <div className={styles.replyTime}>{diffDate(this.props.data.createdAt)}</div>
 
@@ -141,7 +142,7 @@ export default class ReplyList extends React.Component {
                   <Icon className={styles.icon} name="MessageOutlined"></Icon>
                   <span>回复</span>
                 </div>
-                {canDelete && (
+                {canHide && (
                   <div className={styles.replyDelete} onClick={() => this.deleteClick()}>
                     <Icon className={styles.icon} name="DeleteOutlined"></Icon>
                     <span>删除</span>

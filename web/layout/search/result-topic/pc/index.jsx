@@ -24,7 +24,7 @@ class SearchResultTopicPCPage extends React.Component {
       refreshing: false,
     };
   }
-  
+
   redirectToSearchResultUser = () => {
     this.props.router.push('/search/result-user');
   };
@@ -67,15 +67,16 @@ class SearchResultTopicPCPage extends React.Component {
 
     return (
       <BaseLayout
-        noMore={currentPage >= totalPage} 
-        onRefresh={this.fetchMoreData} 
+        noMore={currentPage >= totalPage}
+        onRefresh={this.fetchMoreData}
         showRefresh={false}
         isShowLayoutRefresh={!!pageData?.length}
         onSearch={this.onSearch}
-        right={ this.renderRight }
+        right={this.renderRight}
+        className="search-result-topic"
       >
-        <SidebarPanel 
-          title="潮流话题" 
+        <SidebarPanel
+          title="潮流话题"
           type='normal'
           isShowMore={false}
           noData={!pageData?.length}
@@ -86,10 +87,10 @@ class SearchResultTopicPCPage extends React.Component {
         >
           <div className={styles.topic}>
             {pageData?.map((item, index) => (
-              <TopicItem data={item} key={index} onClick={this.onTopicClick} />  
+              <TopicItem data={item} key={index} onClick={this.onTopicClick} />
             ))}
           </div>
-          
+
         </SidebarPanel>
       </BaseLayout>
     );

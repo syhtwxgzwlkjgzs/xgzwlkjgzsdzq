@@ -24,8 +24,15 @@ const Index = ({
   isLiked = false,
   isSendingLike = false,
   tipData,
+  data,
   platform,
   index,
+  shareThreadid,
+  shareNickname,
+  shareAvatar,
+  getShareData,
+  getShareContent,
+  shareContent,
   onShare = () => {},
   onComment = () => {},
   onPraise = () => {},
@@ -63,7 +70,6 @@ const Index = ({
   const onClose = () => {
     setShow(false)
   }
-
   const needHeight = useMemo(() => userImgs.length !== 0 || comment > 0 || sharing > 0, [userImgs, comment, sharing])
   const thread = index
   return (
@@ -71,7 +77,7 @@ const Index = ({
       <View className={needHeight ? styles.user : styles.users}>
         {userImgs.length !== 0 ? <View className={styles.userImg}>
           <View className={styles.portrait}>
-            <Tip tipData={tipData} imgs={userImgs} wholeNum={wholeNum}></Tip>
+            <Tip tipData={tipData} imgs={userImgs} wholeNum={wholeNum} showCount={5}></Tip>
           </View>
           {
             wholeNum !== 0 && (
@@ -87,7 +93,7 @@ const Index = ({
           {sharing > 0 && <Text className={styles.commentNum}>{`${sharing}次分享`}</Text>}
         </View>
       </View>
-          
+
       <View className={needHeight ? styles.operation : styles.operations}>
         {
           postList.map((item, index) => (
@@ -95,7 +101,7 @@ const Index = ({
                 <View key={index} className={styles.fabulous} onClick={handleClickShare}>
                  <View className={styles.fabulousIcon}>
                     <Icon
-                    className={`${styles.icon} ${item.type}`} 
+                    className={`${styles.icon} ${item.type}`}
                     name={item.icon}
                     size={16}>
                   </Icon>
@@ -108,7 +114,7 @@ const Index = ({
               (<View key={index} className={styles.fabulous} onClick={item.event}>
                  <View className={styles.fabulousIcon}>
                     <Icon
-                    className={`${styles.icon} ${item.type} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`} 
+                    className={`${styles.icon} ${item.type} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`}
                     name={item.icon}
                     size={16}>
                   </Icon>
@@ -126,7 +132,7 @@ const Index = ({
         visible={show}
         onClose={onClose}
       >
-        <ShareButton setShow={setShow} tipData={tipData} index={thread}></ShareButton>
+        <ShareButton data={data} setShow={setShow} tipData={tipData} index={thread} shareContent={shareContent} getShareContent={getShareContent} shareThreadid={shareThreadid} shareAvatar={shareAvatar} shareNickname={shareNickname} getShareData={getShareData}></ShareButton>
       </Popup>
     </View>
   );

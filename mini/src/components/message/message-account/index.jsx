@@ -40,11 +40,12 @@ const Index = ({ message, subPage }) => {
         isFirst: item.isFirst, // 标识消息主题来源于主题或评论
         createdAt: item.createdAt,
         threadId: item.threadId,
-        content: item.isFirst ? (item.threadTitle || item.replyPostContent) : item.postContent,
+        content: item.threadTitle || item.postContent,
         type: item.type,
         avatar: item.userAvatar,
         userId: item.userId,
         username: item.username,
+        nickname: item.nickname,
       })
     });
 

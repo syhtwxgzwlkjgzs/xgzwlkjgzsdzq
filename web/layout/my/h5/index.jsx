@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './index.module.scss';
-import { Divider, Spin } from '@discuzq/design';
+import { Divider, Spin, Toast } from '@discuzq/design';
 import UserCenterHeaderImage from '@components/user-center-header-images';
 import UserCenterHead from '@components/user-center-head';
 import { inject, observer } from 'mobx-react';
@@ -22,7 +22,23 @@ class H5MyPage extends React.Component {
   }
 
   componentDidMount = async () => {
-    await this.props.user.getUserThreads();
+    await this.props.user.updateUserInfo(this.props.user.id);
+
+    try {
+      await this.props.user.getUserThreads();
+    } catch (err) {
+      console.error(err);
+      let errMessage = '加载用户列表失败';
+      if (err.Code && err.Code !== 0) {
+        errMessage = err.Msg;
+      }
+
+      Toast.error({
+        content: errMessage,
+        duration: 2000,
+        hasMask: false,
+      });
+    }
     this.setState({
       firstLoading: false,
     });
@@ -47,6 +63,7 @@ class H5MyPage extends React.Component {
         onRefresh={user.getUserThreads}
         noMore={userThreadsTotalPage <= userThreadsPage}
         showRefresh={!this.state.firstLoading}
+        immediateCheck
       >
         <div className={styles.mobileLayout}>
           <UserCenterHeaderImage />
@@ -73,9 +90,7 @@ class H5MyPage extends React.Component {
                   <Spin type="spinner">加载中...</Spin>
                 </div>
               )}
-              {formattedUserThreads?.length > 0 && (
-                <UserCenterThreads data={formattedUserThreads} />
-              )}
+              {formattedUserThreads?.length > 0 && <UserCenterThreads data={formattedUserThreads} />}
             </div>
           </div>
         </div>

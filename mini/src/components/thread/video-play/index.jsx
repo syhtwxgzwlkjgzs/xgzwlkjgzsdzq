@@ -7,7 +7,7 @@ import { noop } from '../utils';
 import { View, Text } from '@tarojs/components'
 import { getElementRect, randomStr } from '../utils'
 import Taro from '@tarojs/taro';
-
+import calcVideoSize from '@common/utils/calc-video-size';
 
 /**
  * 视频
@@ -31,10 +31,13 @@ const Index = ({
   status = 0,
   onPay = noop,
   baselayout = {},
+  v_width = null,
+  v_height = null
 }) => {
   let player = null;
   const videoId = useRef(`video${randomStr()}`);
-  const [width, setWidth] = useState(378);
+  const [width, setWidth] = useState(null);
+  const [height, setHeight] = useState(null);
 
   const onReady = (ins) => {
     player = ins;
@@ -77,12 +80,21 @@ const Index = ({
 
   useEffect(() => {
     getElementRect(videoId.current).then(res => {
-      setWidth(res?.width || 378);
+      const info = Taro.getSystemInfoSync();
+
+      const { width, height } = calcVideoSize({
+        parentWidth: res?.width || 343,
+        v_width,
+        v_height,
+        viewHeight: info.windowHeight
+      });
+      setWidth(width);
+      setHeight(height);
     })
   }, []);
 
   return (
-    <View id={videoId.current} className={styles.container} style={{height: `${9 * (width) / 16 || '224'}px`}}>
+    <View id={videoId.current} className={styles.container} style={{width: `${width}px`, height: `${height}px`}}>
       {
         width && (
           <Video
@@ -91,8 +103,8 @@ const Index = ({
             onPlay={onPlay}
             onFullscreenChange={onFullscreenChange}
             src={url}
-            width={width}
-            height={9 * (width) / 16 || '224'}
+            width={`${width}px`}
+            height={`${height}px`}
             poster={coverUrl}
             duration={time}
           />

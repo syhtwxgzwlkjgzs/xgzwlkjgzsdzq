@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View } from '@tarojs/components';
+import { View, Textarea } from '@tarojs/components';
 import Button from '@discuzq/design/dist/components/button/index';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Input from '@discuzq/design/dist/components/input/index';
@@ -13,7 +13,7 @@ import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
 
 const InteractionBox = (props) => {
-  const { dialogId, threadPost, showEmoji, setShowEmoji, username, updateDialogId } = props;
+  const { dialogId, threadPost, showEmoji, setShowEmoji, username, updateDialogId, keyboardHeight, inputBottom } = props;
   const { readDialogMsgList, dialogMsgList, createDialogMsg, createDialog, readDialogIdByUsername } = props.message;
 
   // const [dialogId, setDialogId] = useState(propsDialogId);
@@ -23,6 +23,8 @@ const InteractionBox = (props) => {
   // const [showEmoji, setShowEmoji] = useState(false);
 
   const [isSubmiting, setIsSubmiting] = useState(false);
+
+  const [focus, setFocus] = useState(false);
 
   // const checkToShowCurrentMsgTime = (curTimestamp) => {
   //   const DISPLAY_GAP_IN_MINS = 3;
@@ -48,6 +50,7 @@ const InteractionBox = (props) => {
     if (!threadPost.emojis.length) {
       threadPost.fetchEmoji();
     }
+
     return () => {
       Taro.hideLoading();
     };
@@ -65,7 +68,7 @@ const InteractionBox = (props) => {
       setIsSubmiting(false);
       Taro.hideLoading();
       if (ret.code === 0) {
-        setTypingValue('');
+        if (!data.imageUrl) setTypingValue('');
         readDialogMsgList(dialogId);
       } else {
         Toast.error({ content: ret.msg });
@@ -81,7 +84,7 @@ const InteractionBox = (props) => {
       setIsSubmiting(false);
       Taro.hideLoading();
       if (ret.code === 0) {
-        setTypingValue('');
+        if (!data.imageUrl) setTypingValue('');
         updateDialogId(ret.data.dialogId);
       } else {
         Toast.error({ content: ret.msg });
@@ -153,12 +156,21 @@ const InteractionBox = (props) => {
         'type': 1
       },
       success(res) {
+        Taro.hideLoading();
         if (res.statusCode === 200) {
-          const data = JSON.parse(res.data).Data;
-          submit({ imageUrl: data.url });
+          const ret = JSON.parse(res.data);
+          const { Data: data, Code, Message: msg } = ret;
+          if (Code === 0) {
+            submit({
+              imageUrl: data.url,
+              width: data.fileWidth,
+              height: data.fileHeight,
+            });
+          } else {
+            Toast.error({ content: msg || '图片发送失败' });
+          }
         } else {
-          Taro.hideLoading();
-          Toast.error({ content: ret.msg });
+          Toast.error({ content: '网络发生错误' });
         }
       },
       fail(res) {
@@ -171,13 +183,29 @@ const InteractionBox = (props) => {
     const text = typingValue.slice(0, cursorPosition) + emoji.code + typingValue.slice(cursorPosition);
     setTypingValue(text);
     setCursorPosition(cursorPosition + emoji.code.length);
+    setTimeout(() => {
+      setFocus(false);
+      setTimeout(() => {
+        setFocus(true);
+      }, 0);
+    }, 0);
   };
 
   return (
-    <>
-      <View className={styles.interactionBox} style={{ bottom: showEmoji ? '333px' : 0 }}>
+    <View
+      id='operation-box'
+      className={styles.interactionBox}
+      style={{
+        // bottom: (keyboardHeight && !showEmoji) ? `${inputBottom}px` : 0,
+        // paddingBottom: keyboardHeight ? 0 : '',
+       }}>
+      <View className={styles.operationBox}>
         <View className={styles.inputWrapper}>
           <Input
+            placeholderClass={styles.placeholderClass}
+            cursorSpacing={16}
+            focus={focus}
+            cursor={cursorPosition}
             value={typingValue}
             placeholder=" 请输入内容"
             onChange={(e) => {
@@ -206,7 +234,7 @@ const InteractionBox = (props) => {
       <View className={styles['emoji-container']}>
         <Emoji show={showEmoji} onClick={insertEmoji} />
       </View>
-    </>
+    </View>
   );
 };
 

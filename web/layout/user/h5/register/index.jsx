@@ -81,6 +81,8 @@ class RegisterH5Page extends React.Component {
       }
 
       if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
+        const uid = get(e, 'uid', '');
+        uid && this.props.user.updateUserInfo(uid);
         this.props.commonLogin.setStatusMessage(e.Code, e.Message);
         this.props.router.push(`/user/status?statusCode=${e.Code}&statusMsg=${e.Message}`);
         return;
@@ -89,9 +91,18 @@ class RegisterH5Page extends React.Component {
       Toast.error({
         content: e.Message,
         hasMask: false,
+        duration: 3000,
       });
     }
   };
+  handlePasswordChange = (e) => {
+    const val = e?.target?.value?.replace(' ', '');
+    this.props.userRegister.password = val || '';
+  }
+  handlePasswordConfirmationChange = (e) => {
+    const val = e?.target?.value?.replace(' ', '');
+    this.props.userRegister.passwordConfirmation = val || '';
+  }
   render() {
     const { site, commonLogin } = this.props;
     const { platform } = site;
@@ -122,9 +133,7 @@ class RegisterH5Page extends React.Component {
             mode="password"
             value={this.props.userRegister.password}
             placeholder="输入您的登录密码"
-            onChange={(e) => {
-              this.props.userRegister.password = e.target.value;
-            }}
+            onChange={this.handlePasswordChange}
           />
           <Input
             clearable={false}
@@ -132,9 +141,7 @@ class RegisterH5Page extends React.Component {
             mode="password"
             value={this.props.userRegister.passwordConfirmation}
             placeholder="确认密码"
-            onChange={(e) => {
-              this.props.userRegister.passwordConfirmation = e.target.value;
-            }}
+            onChange={this.handlePasswordConfirmationChange}
           />
           <Input
             clearable={true}

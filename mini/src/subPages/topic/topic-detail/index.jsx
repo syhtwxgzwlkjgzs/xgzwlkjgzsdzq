@@ -6,6 +6,8 @@ import { readTopicsList } from '@server';
 import { getCurrentInstance } from '@tarojs/taro';
 import Page from '@components/page';
 import withShare from '@common/utils/withShare/withShare'
+import { priceShare } from '@common/utils/priceShare';
+
 @inject('search')
 @inject('topic')
 @inject('index')
@@ -13,10 +15,17 @@ import withShare from '@common/utils/withShare/withShare'
 @observer
 @withShare()
 class Index extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      fetchTopicInfoLoading: true,
+      isError: false,
+      errorText: '加载失败',
+    }
+  }
   page = 1;
   perPage = 10;
-  $getShareData (data) {
-    console.log(data);
+  getShareData (data) {
     const { topic } = this.props
     const topicId = topic.topicDetail?.pageData[0]?.topicId || ''
     const defalutTitle = topic.topicDetail?.pageData[0]?.content || ''
@@ -32,7 +41,7 @@ class Index extends React.Component {
         path:defalutPath
       }
     }
-    const { title, path, comeFrom, threadId } = data
+    const { title, path, comeFrom, threadId, isAnonymous, isPrice } = data
     if(comeFrom && comeFrom === 'thread') {
       const { user } = this.props
       this.props.index.updateThreadShare({ threadId }).then(result => {
@@ -43,7 +52,7 @@ class Index extends React.Component {
       }
     });
     }
-    return {
+    return priceShare({isPrice, isAnonymous, path}) || {
       title,
       path
     }
@@ -58,14 +67,24 @@ class Index extends React.Component {
     //   });
       topic.setTopicDetail(null)
       this.page = 1;
-      await topic.getTopicsDetail({ topicId: id });
-
+      try {
+        await topic.getTopicsDetail({ topicId: id });
+        this.setState({
+          fetchTopicInfoLoading:false,
+        })
+      }
+      catch (errMsg){
+        this.setState({
+          isError: true,
+          errorText: errMsg
+        })
+      }
       // this.toastInstance?.destroy();
     // }
 
   }
   render() {
-    return <Page><IndexPage dispatch={this.dispatch} /></Page>;
+    return <Page><IndexPage dispatch={this.dispatch} fetchTopicInfoLoading={this.state.fetchTopicInfoLoading} isError={this.state.isError} errorText={this.state.errorText}/></Page>;
   }
 }
 

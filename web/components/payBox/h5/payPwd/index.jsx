@@ -44,8 +44,7 @@ class Index extends React.Component {
     if (type == 'add') {
       let list_ = [...list];
       if (list.length >= 6) {
-        list_ = list_.join('').substring(0, 5)
-          .split('');
+        list_ = list_.join('').substring(0, 5).split('');
       }
       this.setState(
         {
@@ -93,18 +92,24 @@ class Index extends React.Component {
     }
   }
 
-  handleForgetPayPwd = () => {
+  handleForgetPayPwd = throttle(() => {
     if (!this.props.user.mobile) {
       Toast.error({
         content: '需要首先绑定手机号才能进行此操作',
-        duration: 2000
+        duration: 2000,
       });
+      setTimeout(() => {
+        // TODO: 回跳逻辑补充
+        this.props.payBox.visible = false;
+        Router.push({ url: '/user/bind-phone?from=paybox' });
+      }, 1000);
       return;
     }
-    Router.push({ url: '/my/edit/find-paypwd?type=payBox' });
-    this.initState()
+    Router.push({ url: '/my/edit/find-paypwd?type=paybox' });
+    this.initState();
     this.props.payBox.visible = false;
-  }
+    this.props.payBox.step = null;
+  }, 1000);
 
   async submitPwa() {
     const { list = [] } = this.state;
@@ -145,9 +150,17 @@ class Index extends React.Component {
   renderDialogPayment = () => {
     const { list = [], isShow } = this.state;
     const { options = {} } = this.props?.payBox;
+    const IS_MOBILE_SERVICE_OPEN = this.props.site.isSmsOpen;
+    const IS_USER_BIND_MOBILE = this.props.user?.mobile;
+
     return (
       <div>
-        <Dialog className={styles.paypwdDialogWrapper} visible={isShow} position="center" maskClosable={true}>
+        <Dialog
+          className={styles.paypwdDialogWrapper}
+          visible={this.props.payBox.step === STEP_MAP.WALLET_PASSWORD}
+          position="center"
+          maskClosable={true}
+        >
           <div className={styles.paypwdDialogContent}>
             <div className={styles.paypwdTitle}>立即支付</div>
             <div className={styles.paypwdAmount}>
@@ -168,9 +181,11 @@ class Index extends React.Component {
 
             <CommonPayoffPwd list={list} updatePwd={this.updatePwd} whetherIsShowPwdBox={true} />
             {/* TODO: 忘记支付密码的链接添加 */}
+
             <div className={styles.forgetPasswordContainer} onClick={this.handleForgetPayPwd}>
-              <span>忘记支付密码?</span>
+              {IS_MOBILE_SERVICE_OPEN && <span>忘记支付密码?</span>}
             </div>
+
             {/* 关闭按钮 */}
             <div className={styles.payBoxCloseIcon} onClick={this.handleCancel}>
               <Icon name="CloseOutlined" size={16} />
@@ -186,7 +201,7 @@ class Index extends React.Component {
     return (
       <div style={{ position: 'relative', zIndex: 1400 }}>
         {this.renderDialogPayment()}
-        <div style={{display:!isShow && 'none'}} className={styles.keyboard} onClick={this.keyboardClickHander}>
+        <div style={{ display: !isShow && 'none' }} className={styles.keyboard} onClick={this.keyboardClickHander}>
           <div className={styles.line}>
             <div data-key="1" className={styles.column}>
               1

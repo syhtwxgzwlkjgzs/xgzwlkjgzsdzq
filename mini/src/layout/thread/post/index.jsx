@@ -7,7 +7,7 @@ import { PluginToolbar, DefaultToolbar, GeneralUpload, Title, Content, ClassifyP
 import Toast from '@discuzq/design/dist/components/toast/index';
 import { Units } from '@components/common';
 import styles from './index.module.scss';
-import { THREAD_TYPE } from '@common/constants/thread-post';
+import { THREAD_TYPE, MAX_COUNT } from '@common/constants/thread-post';
 import { paidOption, draftOption } from '@common/constants/const';
 import { readYundianboSignature } from '@common/server';
 import VodUploader from 'vod-wx-sdk-v2';
@@ -16,6 +16,7 @@ import PayBox from '@components/payBox/index';
 import { ORDER_TRADE_TYPE } from '@common/constants/payBoxStoreConstants';
 import { get } from '@common/utils/get';
 
+@inject('payBox')
 @inject('index')
 @inject('site')
 @inject('user')
@@ -23,8 +24,8 @@ import { get } from '@common/utils/get';
 @inject('threadPost')
 @observer
 class Index extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       threadId: '', // 主题id
       postType: 'isFirst', // 发布状态 isFirst-首次，isEdit-再编辑，isDraft-草稿
@@ -34,11 +35,11 @@ class Index extends Component {
       maxLength: 5000, // 文本输入最大长度
       showClassifyPopup: false, // 切换分类弹框show
       operationType: 0,
-      contentTextLength: 5000,
+      contentTextLength: MAX_COUNT,
       showEmoji: false,
       showPaidOption: false, // 显示付费选项弹框
       showDraftOption: false, // 显示草稿选项弹框
-      bottomHeight: 0,
+      data: {},
     }
     this.timer = null;
     this.ticket = ''; // 腾讯云验证码返回票据
@@ -50,11 +51,6 @@ class Index extends Component {
 
   async componentDidMount() {
     this.getNavHeight();
-    // 监听键盘高度变化
-    Taro.onKeyboardHeightChange(res => {
-      this.setState({ bottomHeight: res?.height || 0 });
-    });
-
     this.redirectToHome();
     await this.fetchCategories(); // 请求分类
     const { params } = getCurrentInstance().router;
@@ -81,7 +77,6 @@ class Index extends Component {
     clearInterval(this.timer);
     Taro.eventCenter.off('captchaResult', this.handleCaptchaResult);
     Taro.eventCenter.off('closeChaReault', this.handleCloseChaReault);
-    // Taro.offKeyboardHeightChange(() => {});
     this.props.thread.reset();
   }
 
@@ -103,7 +98,7 @@ class Index extends Component {
     if (permissions && permissions.createThread && !permissions.createThread.enable) {
       this.postToast('暂无发帖权限, 即将回到首页');
       setTimeout(() => {
-        Taro.redirectTo({ url: '/pages/index/index' })
+        Taro.redirectTo({ url: '/pages/home/index' })
       }, 1000)
     }
   }
@@ -138,11 +133,20 @@ class Index extends Component {
         .replace(/<span.*?>(.*?)<\/span>/g, `$1`);
       ret.data.content.text = realText;
       threadPost.formatThreadDetailToPostData(ret.data);
-      const { postData: { redpacket, rewardQa } } = this.props.threadPost
+      // const { isThreadPaid } = this.props.threadPost
+      // if (isThreadPaid) {
+      //   this.postToast('已经支付的帖子不支持编辑');
+      //   const timer = setTimeout(() => {
+      //     clearTimeout(timer);
+      //     Taro.redirectTo({ url: `/subPages/thread/index?id=${id}` });
+      //   }, 1000);
+      //   return;
+      // }
+      // 更改交互：已发布帖子可以编辑内容，但是不能编辑红包或者悬赏属性
         this.setState({
           postType: isDraft ? 'isDraft' : 'isEdit',
-          canEditRedpacket: isDraft || !(redpacket.money > 0),
-          canEditReward: isDraft || !(rewardQa.money > 0),
+          canEditRedpacket: isDraft,
+          canEditReward: isDraft,
         });
       // isDraft && this.openSaveDraft(); // 现阶段，自动保存功能关闭
     } else {
@@ -178,12 +182,13 @@ class Index extends Component {
 
   // 处理文本框内容
   onContentChange = (contentText, maxLength) => {
+    console.log(contentText);
     const { setPostData } = this.props.threadPost;
     setPostData({ contentText });
     this.toHideTitle();
-    // this.setState({
-    //   contentTextLength: maxLength - contentText.length
-    // });
+    this.setState({
+      contentTextLength: maxLength - contentText.length
+    });
   }
 
   resetOperationType() {
@@ -194,7 +199,16 @@ class Index extends Component {
 
   // 点击发帖插件时回调，如上传图片、视频、附件或艾特、话题等
   handlePluginClick(item) {
-    console.log(`item`, item)
+    // 检查是否录音中
+    if (!this.checkAudioRecordStatus()) return;
+
+    // 再点击附件、图片、和录音图标时候，如果当时进行中的正式该操作，则进行重置
+    const { operationType } = this.state;
+    if ([THREAD_TYPE.file, THREAD_TYPE.image, THREAD_TYPE.voice].includes(item.type) && item.type === operationType) {
+      this.resetOperationType();
+      return;
+    }
+
     const { postData } = this.props.threadPost;
     // 匹配附件、图片、语音上传
     this.setState({
@@ -205,7 +219,7 @@ class Index extends Component {
       // }
     });
 
-    if (item.type !== 'emoji') {
+    if (item.type !== THREAD_TYPE.emoji) {
       this.setState({
         showEmoji: false
       });
@@ -226,11 +240,11 @@ class Index extends Component {
         this.resetOperationType();
         break;
       case THREAD_TYPE.redPacket:
+        this.resetOperationType();
         if (!this.state.canEditRedpacket) {
           return this.postToast('再编辑时不可操作红包');
         }
         nextRoute = '/subPages/thread/selectRedpacket/index';
-        this.resetOperationType();
         break;
       case THREAD_TYPE.paid:
         this.setState({ showPaidOption: true });
@@ -266,7 +280,7 @@ class Index extends Component {
         if (postData.anonymous) this.props.threadPost.setPostData({ anonymous: 0 });
         else this.props.threadPost.setPostData({ anonymous: 1 });
         break;
-      case 'emoji':
+      case THREAD_TYPE.emoji:
         this.setState({
           showEmoji: !this.state.showEmoji
         });
@@ -288,7 +302,7 @@ class Index extends Component {
         this.yundianboUpload('video', file);
       },
       fail: (res) => {
-        this.postToast(res.errMsg);
+        // this.postToast(res.errMsg);
       }
     });
   }
@@ -322,7 +336,7 @@ class Index extends Component {
         }
       },
       // 上传中回调，获取上传进度等信息
-      progress: function (result) {
+      progress (result) {
         console.log('progress');
         console.log(result);
       },
@@ -346,9 +360,10 @@ class Index extends Component {
             setPostData({
               audio: {
                 id: data?.id,
-                mediaUrl: mediaUrl,
+                mediaUrl,
               },
               audioSrc: mediaUrl,
+              audioRecordStatus: 'uploaded',
             });
           }
           this.resetOperationType();
@@ -362,7 +377,7 @@ class Index extends Component {
         // this.scrollerIntoView();
       },
       // 上传错误回调，处理异常
-      error: function (result) {
+      error (result) {
         Taro.showToast({
           title: '上传失败',
           icon: 'none',
@@ -408,13 +423,21 @@ class Index extends Component {
 
   handleSubmit = async (isDraft) => {
     // 1 校验
-    const { threadId } = this.state;
+    const { contentTextLength } = this.state;
     const { threadPost, site } = this.props;
     const { postData, redpacketTotalAmount } = threadPost;
     const { images, video, files, audio } = postData;
+    if (contentTextLength <= 0) {
+      this.postToast(`最多输入${MAX_COUNT}字`);
+      return;
+    }
+
+    // 判断录音状态
+    if (!this.checkAudioRecordStatus()) return;
+
     if (!(postData.contentText || video.id || audio.id || Object.values(images).length
       || Object.values(files).length)) {
-      this.postToast({ content: '请至少填写您要发布的内容或者上传图片、附件、视频、语音' });
+      this.postToast('请至少填写您要发布的内容或者上传图片、附件、视频、语音');
       return;
     }
     if (!this.checkAttachPrice()) {
@@ -449,13 +472,13 @@ class Index extends Component {
     const { rewardQa, redpacket } = postData;
 
     // 如果是编辑的悬赏帖子，则不用再次支付
-    const rewardAmount = (threadId && rewardQa.id) ? 0 : (Number(rewardQa.value) || 0);
+    const rewardAmount = threadPost.isThreadPaid ? 0 : (Number(rewardQa.value) || 0);
     // 如果是编辑的红包帖子，则不用再次支付
-    const redAmount = (threadId && redpacket.id) ? 0 : (Number(redpacketTotalAmount) || 0);
+    const redAmount = threadPost.isThreadPaid ? 0 : (Number(redpacketTotalAmount) || 0);
 
     const amount = rewardAmount + redAmount;
     const options = { amount };
-    if (!isDraft && amount) {
+    if (!isDraft && amount > 0) {
       let type = ORDER_TRADE_TYPE.RED_PACKET;
       let title = '支付红包';
       if (redAmount) {
@@ -472,22 +495,32 @@ class Index extends Component {
       }
 
       // 等待支付
-      await new Promise((resolve) => {
-        PayBox.createPayBox({
-          data: { ...options, title, type },
-          success: async (orderInfo) => {
-            const { orderSn } = orderInfo;
-            setPostData({ orderSn });
-            setTimeout(() => {
-              resolve();
-            }, 1200)
-          },
-        });
+      PayBox.createPayBox({
+        data: { ...options, title, type },
+        orderCreated: async (orderInfo) => {
+          const { orderSn } = orderInfo;
+          setPostData({ orderInfo });
+          if (orderSn) this.props.payBox.hide();
+          this.createThread(true, true);
+        },
+        success: async () => {
+          this.setIndexPageData();
+          if (this.state.threadId)
+            Taro.redirectTo({ url: `/subPages/thread/index?id=${this.state.threadId}` });
+        },
       });
+      return;
     }
+    return this.createThread(isDraft);
+  }
+
+  async createThread(isDraft, isPay) {
+    const { threadId } = this.state;
+    const { threadPost } = this.props;
+    const { setPostData } = threadPost;
     // 5 loading
     Taro.showLoading({
-      title: isDraft ? '保存草稿中...' : '发布中...',
+      title: isDraft && !isPay ? '保存草稿中...' : '发布中...',
       mask: true
     });
     // 6 根据是否存在主题id，选择更新主题、新建主题
@@ -497,37 +530,55 @@ class Index extends Component {
     } else {
       ret = await threadPost.createThread();
     }
+
     // 7 处理请求数据
     const { code, data, msg } = ret;
     if (code === 0) {
       if (!threadId) {
         this.setState({ threadId: data.threadId }); // 新帖首次保存草稿后，获取id
       }
+      this.setState({ data });
+      setPostData({ threadId: data.threadId });
+
       // 非草稿，跳转主题详情页
       Taro.hideLoading();
-      if (!isDraft) {
-        // 更新帖子到首页列表
-        if (threadId) {
-          this.props.index.updateAssignThreadAllData(threadId, data);
-        // 添加帖子到首页数据
-        } else {
-          const { categoryId = '' } = data
-          // 首页如果是全部或者是当前分类，则执行数据添加操作
-          if (this.props.index.isNeedAddThread(categoryId)) {
-            this.props.index.addThread(data);
-          }
-        }
-        this.postToast('发布成功', 'success');
-        Taro.redirectTo({ url: `/subPages/thread/index?id=${data.threadId}` });
-      }
-      return true;
-    } else {
-      Taro.hideLoading();
-      !isDraft && this.postToast(msg);
-      return false;
-    }
 
+      // 未支付的订单
+      if (isDraft && threadPost.postData.orderInfo.orderSn
+        && !threadPost.postData.orderInfo.status
+        && !threadPost.postData.draft) {
+        this.props.payBox.show();
+        return;
+      }
+
+      if (!isDraft) {
+        this.setIndexPageData();
+      }
+      this.postToast('发布成功', 'success');
+      Taro.redirectTo({ url: `/subPages/thread/index?id=${data.threadId}` });
+      // }
+      return true;
+    }
+    Taro.hideLoading();
+    (!isDraft || isPay) && this.postToast(msg);
+    return false;
   }
+
+  setIndexPageData = () => {
+    const { threadId, data } = this.state;
+    const { params } = getCurrentInstance().router;
+    // 更新帖子到首页列表
+    if (params && params.id) {
+      this.props.index.updateAssignThreadAllData(threadId, data);
+      // 添加帖子到首页数据
+    } else {
+      const { categoryId = '' } = data;
+      // 首页如果是全部或者是当前分类，则执行数据添加操作
+      if (this.props.index.isNeedAddThread(categoryId)) {
+        this.props.index.addThread(data);
+      }
+    }
+  };
 
   // 处理用户主动点击保存草稿
   handleSaveDraft = async () => {
@@ -539,7 +590,8 @@ class Index extends Component {
       this.postToast('保存成功', 'success');
       setTimeout(() => {
         Taro.hideLoading();
-        this.handlePageJump(true);
+        Taro.redirectTo({ url: `/subPages/my/draft/index` });
+        // this.handlePageJump(true);
       }, 1000);
     } else {
       this.postToast('保存失败');
@@ -560,15 +612,6 @@ class Index extends Component {
     }
   }
 
-  // 手动关闭键盘
-  hideKeyboard = () => {
-    Taro.hideKeyboard({
-      complete: res => {
-        this.setState({ bottomHeight: 0 });
-      }
-    })
-  }
-
   // 处理textarea聚焦
   // onContentFocus = () => {
   //   this.setState({
@@ -579,11 +622,29 @@ class Index extends Component {
 
   // 点击空白区域自动聚焦文本框
   handleContentFocus = () => {
-    this.contentRef && this.contentRef.current.focus();
+    if (this.contentRef && this.props.bottomHeight === 0) {
+      this.contentRef.current.focus();
+    }
+
     this.setState({
       showEmoji: false,
-      operationType: 0,
+      // operationType: 0,
     });
+  }
+
+  checkAudioRecordStatus() {
+    const { threadPost: { postData } } = this.props;
+    const { audioRecordStatus } = postData;
+    // 判断录音状态
+    if (audioRecordStatus === 'began') {
+      this.postToast('您有录制中的录音未处理，请先上传或撤销录音', 'none', 3000);
+      return false;
+    } else if (audioRecordStatus === 'completed') {
+      this.postToast('您有录制完成的录音未处理，请先上传或撤销录音', 'none', 3000);
+      return false;
+    }
+
+    return true;
   }
 
   // 处理左上角按钮点击跳路由
@@ -594,10 +655,12 @@ class Index extends Component {
       return Taro.redirectTo({ url: `/subPages/thread/index?id=${threadId}` });
     }
 
-    const { postData: { contentText } } = this.props.threadPost;
-    if (!canJump && contentText !== '') {
+    if (!this.checkAudioRecordStatus()) return;
+
+    const { postData: { contentText, images, video, files, audio } } = this.props.threadPost;
+    if (!canJump && (contentText || video.id || audio.id || Object.values(images).length || Object.values(files).length)) {
       this.setState({ showDraftOption: true });
-      return
+      return;
     }
 
     url ? Taro.redirectTo({ url }) : Taro.navigateBack();
@@ -623,6 +686,7 @@ class Index extends Component {
   // }
 
   render() {
+    const { bottomHeight } = this.props;
     const { permissions } = this.props.user;
     const { categories } = this.props.index;
     const { postData, setPostData, setCursorPosition, navInfo, cursorPosition } = this.props.threadPost;
@@ -635,7 +699,6 @@ class Index extends Component {
       showPaidOption,
       showEmoji,
       showDraftOption,
-      bottomHeight,
     } = this.state;
     const navStyle = {
       height: `${navInfo.navHeight}px`,
@@ -650,7 +713,7 @@ class Index extends Component {
     const headTitle = get(site, 'webConfig.setSite.siteName', '');
     return (
       <>
-        <View className={styles['container']}>
+        <View className={styles.container}>
           {/* 自定义顶部导航条 */}
           <View className={styles.topBar} style={navStyle}>
             <Icon name="RightOutlined" onClick={() => this.handlePageJump(false)} />
@@ -660,17 +723,16 @@ class Index extends Component {
           </View>
 
           {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
-          <View className={styles['content']} style={contentStyle} onClick={this.handleContentFocus}>
+          <View className={styles.content} style={contentStyle} onClick={this.handleContentFocus}>
             <View id="thread-post-content">
               <Title
                 value={postData.title}
                 show={isShowTitle}
                 onChange={this.onTitleChange}
-                onBlur={this.hideKeyboard}
                 onFocus={() => {
                   this.setState({
                     showEmoji: false,
-                    operationType: 0,
+                    // operationType: 0,
                   });
                 }}
               />
@@ -683,43 +745,46 @@ class Index extends Component {
                 onBlur={(e) => {
                   console.log('set', e.detail.cursor);
                   setCursorPosition(e.detail.cursor);
-                  this.hideKeyboard();
                 }}
               />
 
-            <View className={styles['plugin']} onClick={e => e.stopPropagation()}>
+              <View className={styles.plugin} onClick={e => e.stopPropagation()}>
+                <GeneralUpload type={operationType} audioUpload={(file) => { this.yundianboUpload('audio', file) }}>
+                  {video.thumbUrl && (
+                    <Units
+                      type='video'
+                      deleteShow
+                      src={video.thumbUrl}
+                      onDelete={() => setPostData({ video: {} })}
+                      onVideoLoaded={() => {
+                        Taro.pageScrollTo({
+                          scrollTop: 3000,
+                          // selector: '#thread-post-video',
+                          complete: (a,b,c) => {console.log(a,b,c)}
+                        });
+                      }}
+                    />
+                  )}
+                </GeneralUpload>
+                {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => setPostData({ product: {} })} />}
+              </View>
 
-              <GeneralUpload type={operationType} audioUpload={(file) => { this.yundianboUpload('audio', file) }}>
-                {video.thumbUrl && (
-                  <Units
-                    type='video'
-                    deleteShow
-                    src={video.thumbUrl}
-                    onDelete={() => setPostData({ video: {} })}
-                    onVideoLoaded={() => {
-                      Taro.pageScrollTo({
-                        scrollTop: 3000,
-                        // selector: '#thread-post-video',
-                        complete: (a,b,c) => {console.log(a,b,c)}
-                      });
-                    }}
-                  />
-                )}
-              </GeneralUpload>
-
-              {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => setPostData({ product: {} })} />}
-
-            </View>
             </View>
           </View>
 
           {/* 插入内容tag展示区 */}
-          <View className={styles['tags']} style={{ display: bottomHeight ? 'none' : 'block' }}>
+          <View className={styles.tags} style={{ display: bottomHeight ? 'none' : 'block' }}>
             {(permissions?.insertPosition?.enable) &&
               <View className={styles['location-bar']}>
-                <Position currentPosition={position} positionChange={(position) => {
-                  setPostData({ position });
-                }} />
+                <Position
+                  currentPosition={position}
+                  positionChange={(position) => {
+                    setPostData({ position });
+                  }}
+                  canJumpToChoose={() => {
+                    return this.checkAudioRecordStatus();
+                  }}
+                />
               </View>
             }
 
@@ -762,7 +827,7 @@ class Index extends Component {
                   <Units
                     type='tag'
                     style={{ marginTop: 0, paddingRight: '8px' }}
-                    tagContent={`悬赏金额${(rewardQa.value).toFixed(2)}元\\结束时间 ${rewardQa.times}`}
+                    tagContent={`悬赏金额${Number(rewardQa.value).toFixed(2)}元\\结束时间 ${rewardQa.times}`}
                     onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
                     isCloseShow={this.state.canEditReward}
                     onTagRemoveClick={() => { setPostData({ rewardQa: {} }) }}
@@ -788,13 +853,13 @@ class Index extends Component {
                 this.setState({
                   showClassifyPopup: true,
                   showEmoji: false,
-                  operationType: 0
+                  // operationType: 0
                 });
               }}
               onSetplugShow={() => {
                 showEmoji && this.setState({
                   showEmoji: false,
-                  operationType: 0
+                  // operationType: 0
                 });
               }}
             />
@@ -813,7 +878,7 @@ class Index extends Component {
               onHide={() => {
                 this.setState({
                   showEmoji: false,
-                  operationType: 0
+                  // operationType: 0
                 });
               }}
               onClick={(emoji) => {

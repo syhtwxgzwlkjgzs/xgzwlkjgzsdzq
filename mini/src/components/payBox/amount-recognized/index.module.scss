@@ -1,28 +1,27 @@
 @import '@common/styles/index.scss';
-@import '@common/styles/mixin/index.scss';
 
 // 外部容器
 .amountWrapper {
   background: var(--color-white);
   // height: 240px;
-  font-size: rem($font-size-large);
-  padding: {
-    left: rem($padding-4n);
-    right: rem($padding-4n);
-    top: rem($padding-4n);
-  }
-  // overflow-y: auto;
+  font-size: $font-size-large;
+  padding: $padding-4n;
   overflow-y: auto;
-  min-height: 337px;
+  min-height: calc(337px + constant(safe-area-inset-bottom));
+  min-height: calc(337px + env(safe-area-inset-bottom));
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  .btnBox{
-    margin-top: rem($margin-2n);
+  .btnBox {
     box-sizing: border-box;
-    padding-bottom: constant(safe-area-inset-bottom);  ///兼容 IOS<11.2/
-    padding-bottom: env(safe-area-inset-bottom);  ///兼容 IOS>11.2/
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: $padding-2n $padding-4n $padding-10;
+    padding-bottom: calc(16px + constant(safe-area-inset-bottom)); ///兼容 IOS<11.2/
+    padding-bottom: calc(16px + env(safe-area-inset-bottom)); ///兼容 IOS>11.2/
     &::before {
       content: '';
       display: block;
@@ -34,7 +33,7 @@
       margin: 0 rem(-$margin-4n);
     }
 
-    .btn{
+    .btn {
       height: 42px;
       font-size: $font-size-middle;
       border-radius: 5px;
@@ -42,6 +41,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      line-height: 42px;
     }
   }
   .giftInfo {
@@ -54,7 +54,7 @@
 // 金额确认标题
 .amountTitle {
   font-weight: var(--font-weight-regular);
-  font-size: rem($font-size-middle);
+  font-size: $font-size-middle;
   color: $text-color-primary;
 }
 // 金额确认主要内容
@@ -64,13 +64,14 @@
   justify-content: center;
   margin: $margin-4n 0 0;
   font-size: $font-size-primary;
+  padding-bottom: calc(58px + constant(safe-area-inset-bottom));
+  padding-bottom: calc(58px + env(safe-area-inset-bottom));
   // 交易内容item
   .acExplain {
     display: flex;
     align-items: center;
     line-height: var(--font-line-height-primary);
     margin: $margin-2n 0;
-    display: inline-block;
     font-size: $font-size-primary;
     color: $text-color-primary;
   }
@@ -78,7 +79,7 @@
     margin: $margin-2n 0;
   }
   // 交易类型label提示
-  .acExplainLabel{
+  .acExplainLabel {
     color: var(--color-text-regular);
     margin-right: $margin-4n;
     flex-shrink: 0;

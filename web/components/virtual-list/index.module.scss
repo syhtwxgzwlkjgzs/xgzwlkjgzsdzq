@@ -1,8 +1,9 @@
 @import '@common/styles/index.scss';
 
 .container {
-  overflow: hidden;
-  background: #eff1f3;
+  height: 100vh;
+  width: 100vw;
+  background: $white;
   // overflow: hidden;
   // padding-bottom: 65px;
 
@@ -62,13 +63,20 @@
 }
 
 .bottomViewBox {
-  height: 160px;
+  height: 40px;
+  padding-bottom: 100px;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+.listWrapper {
+  height: 100vh;
+  width: 100vw;
+}
+
 .list {
-  height: calc(100vh - 100px);
+  height: 100%;
+  width: 100%;
 }

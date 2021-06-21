@@ -7,6 +7,7 @@ import { readForum, readUser, readPermissions } from '@server';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import clearLoginStatus from '@common/utils/clear-login-status';
+import { REVIEWING } from '@common/store/login/util';
 import { Spin, Icon } from '@discuzq/design';
 import typeofFn from '@common/utils/typeof';
 import styles from './HOCFetchSiteData.module.scss';
@@ -14,13 +15,17 @@ import {
   WEB_SITE_JOIN_WHITE_LIST,
   JUMP_TO_404,
   INVALID_TOKEN,
+  TOKEN_FAIL,
   JUMP_TO_LOGIN,
   JUMP_TO_REGISTER,
   JUMP_TO_AUDIT,
+  JUMP_TO_REFUSE,
+  JUMP_TO_DISABLED,
   JUMP_TO_HOME_INDEX,
   SITE_CLOSED,
   JUMP_TO_PAY_SITE,
-  JUMP_TO_SUPPLEMENTARY
+  JUMP_TO_SUPPLEMENTARY,
+  REVIEWING_USER_WHITE_LIST_WEB,
 } from '@common/constants/site';
 
 // 获取全站数据
@@ -92,7 +97,6 @@ export default function HOCFetchSiteData(Component) {
     constructor(props) {
       super(props);
       let isNoSiteData;
-      const isPass = true;
       const { serverUser, serverSite, user, site } = props;
 
       serverSite && serverSite.platform && site.setPlatform(serverSite.platform);
@@ -117,7 +121,7 @@ export default function HOCFetchSiteData(Component) {
       }
       this.state = {
         isNoSiteData,
-        isPass,
+        isPass: false,
       };
     }
 
@@ -145,10 +149,7 @@ export default function HOCFetchSiteData(Component) {
       }
       // 判断是否有token
       if (siteConfig && siteConfig.user) {
-        if (
-          (!user || !user.userInfo)
-                  && (!serverUser || !serverUser.userInfo)
-        ) {
+        if ((!user || !user.userInfo) && (!serverUser || !serverUser.userInfo)) {
           const userInfo = await readUser({ params: { pid: siteConfig.user.userId } });
           const userPermissions = await readPermissions({});
 
@@ -163,6 +164,10 @@ export default function HOCFetchSiteData(Component) {
       } else {
         loginStatus = false;
       }
+
+      // 未登陆状态下，清空accessToken
+      !loginStatus && clearLoginStatus();
+
       user.updateLoginStatus(loginStatus);
       this.setState({ isPass: this.isPass() });
     }
@@ -176,7 +181,8 @@ export default function HOCFetchSiteData(Component) {
           site.setCloseSiteConfig(result.data);
           Router.redirect({ url: '/close' });
           break;
-        case INVALID_TOKEN:// token无效
+        case INVALID_TOKEN:// 没有权限,只能针对forum接口做此判断
+        case TOKEN_FAIL:// token无效
           clearLoginStatus();
           window.location.reload();
           break;
@@ -184,22 +190,30 @@ export default function HOCFetchSiteData(Component) {
           Router.redirect({ url: '/404' });
           break;
         case JUMP_TO_LOGIN:// 到登录页
-          Router.redirect({ url: '/user/login' });
+          clearLoginStatus();
+          window.location.replace('/user/login');
           break;
         case JUMP_TO_REGISTER:// 到注册页
-          Router.redirect({ url: '/user/register' });
+          clearLoginStatus();
+          window.location.replace('/user/register');
           break;
         case JUMP_TO_AUDIT:// 到审核页
-          Router.redirect({ url: '/user/status?statusCode=2' });
+          Router.push({ url: '/user/status?statusCode=2' });
+          break;
+        case JUMP_TO_REFUSE:// 到审核拒绝页
+          Router.push({ url: '/user/status?statusCode=-4007' });
+          break;
+        case JUMP_TO_DISABLED:// 到审核禁用页
+          Router.push({ url: '/user/status?statusCode=-4009' });
           break;
         case JUMP_TO_SUPPLEMENTARY:// 跳转到扩展字段页
-          Router.redirect({ url: '/user/supplementary' });
+          Router.push({ url: '/user/supplementary' });
           break;
         case JUMP_TO_HOME_INDEX:// 到首页
           Router.redirect({ url: '/' });
           break;
         case JUMP_TO_PAY_SITE:// 到付费加入页面
-          Router.redirect({ url: '/forum/partner-invite' });
+          Router.push({ url: '/forum/partner-invite' });
           break;
         default: Router.redirect({ url: '/500' });
           break;
@@ -247,9 +261,14 @@ export default function HOCFetchSiteData(Component) {
             Router.redirect({ url: '/user/bind-nickname' });
             return false;
           }
+          // 账号审核中的 用户只能访问 首页 + 帖子详情页，以及用户状态提示页
+          if (user.userStatus === REVIEWING) {
+            if (!REVIEWING_USER_WHITE_LIST_WEB.includes(router.pathname)) {
+              Router.replace({ url: `/user/status?statusCode=${user.userStatus}` });
+              return false;
+            }
+          }
         }
-        console.log(router.asPath);
-        console.log(router.pathname);
 
 
         if (site?.webConfig?.setSite?.siteMode !== 'pay') {

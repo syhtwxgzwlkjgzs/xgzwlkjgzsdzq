@@ -36,7 +36,7 @@ const BaseLayoutControl = forwardRef((props, ref) => {
   } = props;
 
   const [listRef, setListRef] = useState(null);
-  const [baseLayoutWhiteList, setBaseLayoutWhiteList] = useState(['home', 'search', 'detail']);
+  const [baseLayoutWhiteList, setBaseLayoutWhiteList] = useState(['home', 'search']);
   const layoutRef = useRef(null);
 
   useImperativeHandle(
@@ -55,15 +55,22 @@ const BaseLayoutControl = forwardRef((props, ref) => {
   }, [layoutRef]);
 
   useEffect(() => {
-    if (hasListChild && listRef?.current && pageName) {
+    if (hasListChild && listRef?.current && pageName && baseLayoutWhiteList.indexOf(pageName) !== -1) {
       if (jumpTo > 0) {
         baselayout[pageName] = jumpTo;
         listRef.current.jumpToScrollTop(jumpTo);
-      } else if (baselayout[pageName] > 0 && baseLayoutWhiteList.indexOf(pageName) !== -1) {
-        listRef.current.jumpToScrollTop(baselayout[pageName]);
+      } else {
+        if(baselayout[pageName] > 0) {
+          if (pageName !== 'search' || (pageName === 'search' && jumpTo !== -1)) {
+            listRef.current.jumpToScrollTop(baselayout[pageName]);
+          }
+        } else if(baselayout.isJumpingToTop) {
+          baselayout.removeJumpingToTop();
+          listRef.current.onBackTop();
+        }
       }
     }
-  }, [jumpTo, listRef, baselayout]);
+  }, [jumpTo, hasListChild, listRef?.current, pageName]);
 
 
   const quickScrolling = (e) => {
@@ -73,12 +80,7 @@ const BaseLayoutControl = forwardRef((props, ref) => {
       return;
     }
     const { scrollTop } = e;
-    if (baselayout.isJumpingToTop) {
-      baselayout.removeJumpingToTop();
-      listRef.current.onBackTop();
-    } else {
-      if (scrollTop && pageName) baselayout[pageName] = scrollTop;
-    }
+    if (scrollTop && pageName) baselayout[pageName] = scrollTop;
 
     const { playingVideoDom } = baselayout;
 

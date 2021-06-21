@@ -42,6 +42,13 @@
         :global {
             .dzq-input__inner {
                 cursor: pointer;
+                background-color: $body-bg-color;
+                border-color: $border-color;
+                padding-left: rem($padding-4n);
+            }
+            .input-placeholder {
+                color: var(--color-text-placeholder);
+                font-size: rem($font-size-primary);
             }
         }
     }

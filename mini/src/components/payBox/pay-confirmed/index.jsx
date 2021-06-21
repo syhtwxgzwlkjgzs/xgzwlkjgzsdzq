@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './index.module.scss';
-import Taro from '@tarojs/taro';
+import Taro, { getCurrentInstance, eventCenter } from '@tarojs/taro';
 import { inject, observer } from 'mobx-react';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Radio from '@discuzq/design/dist/components/radio/index';
@@ -9,7 +9,15 @@ import Spin from '@discuzq/design/dist/components/spin/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import { View, Text } from '@tarojs/components';
 import { PAY_MENT_MAP, PAYWAY_MAP, STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants.js';
-import { listenWXJsBridgeAndExecCallback, onBridgeReady, wxValidator, mode } from '../../../../../common/store/pay/weixin-miniprogram-backend.js';
+import {
+  listenWXJsBridgeAndExecCallback,
+  onBridgeReady,
+  wxValidator,
+  mode,
+} from '../../../../../common/store/pay/weixin-miniprogram-backend.js';
+import throttle from '@common/utils/thottle.js';
+
+@inject('site')
 @inject('user')
 @inject('payBox')
 @observer
@@ -24,37 +32,55 @@ export default class PayBox extends React.Component {
         paymentType: 'wallet',
       },
     ];
-    payConfig.unshift({
-      name: '微信支付',
-      icon: 'WechatPaymentOutlined',
-      color: '#09bb07',
-      paymentType: 'weixin',
-    });
+
+    // 判断是否微信支付开启
+    if (this.props.site.isWechatPayOpen) {
+      payConfig.unshift({
+        name: '微信支付',
+        icon: 'WechatPaymentOutlined',
+        color: '#09bb07',
+        paymentType: 'weixin',
+      });
+    }
 
     this.state = {
       payConfig,
-      paymentType: null
+      isSubmit: false,
     };
     this.goSetPayPwa = this.goSetPayPwa.bind(this);
   }
 
+  $instance = getCurrentInstance();
+
   initState = () => {
     this.setState({
-      paymentType: null
-    })
-    this.props.payBox.payWay = PAYWAY_MAP.WALLET
-    this.props.payBox.password = null
-  }
+      isSubmit: false,
+    });
+    this.props.payBox.payWay = PAYWAY_MAP.WALLET;
+    this.props.payBox.password = null;
+  };
 
   // 转换金额小数
   transMoneyToFixed = (num) => {
     return Number(num).toFixed(2);
   };
 
+  componentWillMount = () => {
+    const onShowEventId = this.$instance.router.onShow;
+    // 监听
+    eventCenter.on(onShowEventId, this.onShow);
+  }
+
+  componentWillUnmount = () => {
+    const onShowEventId = this.$instance.router.onShow;
+    // 卸载
+    eventCenter.off(onShowEventId, this.onShow);
+  }
+
   async componentDidMount() {
     const { id } = this.props?.user;
     try {
-      this.initState()
+      this.initState();
       await this.props.payBox.getWalletInfo(id);
     } catch (error) {
       Toast.error({
@@ -62,6 +88,12 @@ export default class PayBox extends React.Component {
         duration: 1000,
       });
     }
+  }
+
+  onShow = async () => {
+    const { id } = this.props.user;
+    await this.props.payBox.getWalletInfo(id);
+    await this.props.user.updateUserInfo(id);
   }
 
   walletPaySubText() {
@@ -75,21 +107,20 @@ export default class PayBox extends React.Component {
         </Text>
       );
     }
+
     if (Number(this.props.payBox?.walletAvaAmount) < Number(amount)) {
-      return <Text className={styles.subText}>余额不足</Text>;
+      return <View className={styles.subText}>余额不足</View>;
     }
+
     return (
       <>
-        {
-          this.props.payBox?.walletAvaAmount ? (
-            <Text className={styles.subText}>钱包余额：￥{this.props.payBox?.walletAvaAmount}</Text>
-          ) : (
-            <Spin type="spinner" size={14}></Spin>
-          )
-        }
+        {this.props.payBox?.walletAvaAmount ? (
+          <Text className={styles.subText}>钱包余额：￥{this.props.payBox?.walletAvaAmount}</Text>
+        ) : (
+          <Spin type="spinner" size={14}></Spin>
+        )}
       </>
-    )
-
+    );
   }
 
   goSetPayPwa() {
@@ -101,18 +132,18 @@ export default class PayBox extends React.Component {
    * 选择支付方式
    */
   handleChangePaymentType = (value) => {
-    this.props.payBox.payWay = value
+    this.props.payBox.payWay = value;
   };
 
   // 点击确认支付
-  handlePayConfirmed = async () => {
+  handlePayConfirmed = throttle(async () => {
     if (this.props.payBox.payWay === PAYWAY_MAP.WALLET) {
       const { options = {} } = this.props.payBox;
       const { amount = 0 } = options;
       if (Number(this.props.payBox?.walletAvaAmount) < Number(amount)) {
         Toast.error({
           content: '钱包余额不足',
-          duration: 1000,
+          duration: 2000,
         });
         return;
       }
@@ -120,32 +151,42 @@ export default class PayBox extends React.Component {
       this.props.payBox.walletPayEnsure();
     } else if (this.props.payBox.payWay === PAYWAY_MAP.WX) {
       try {
+        this.setState({
+          isSubmit: true,
+        });
         await this.props.payBox.wechatPayOrder({ listenWXJsBridgeAndExecCallback, onBridgeReady, wxValidator, mode });
+        this.setState({
+          isSubmit: false,
+        });
       } catch (error) {
-        console.error(e);
+        console.error(error);
         Toast.error({
-          content: '拉起微信支付失败',
-          duration: 1000,
+          content: error.Message || '拉起微信支付失败',
+          duration: 2000,
+        });
+        this.setState({
+          isSubmit: false,
         });
       }
     }
-  };
+  }, 300);
 
   // 点击取消
   handleCancel = () => {
     // 回到上一步
-    this.props.payBox.step = STEP_MAP.SURE
-    this.props.payBox.payWay = null
-  }
+    this.props.payBox.step = STEP_MAP.SURE;
+    this.props.payBox.payWay = null;
+  };
 
   render() {
     const { options = {} } = this.props.payBox;
-    const { payConfig, paymentType } = this.state;
+    const { payConfig, isSubmit } = this.state;
     const canWalletPay = this.props.user?.canWalletPay;
-    let disabled = !this.props.payBox.payWay;
+    let disabled = !this.props.payBox.payWay || isSubmit;
     if (this.props.payBox.payWay === PAYWAY_MAP.WALLET && !canWalletPay) {
       disabled = true;
     }
+
     return (
       <View className={styles.payBox}>
         <View className={styles.title}>
@@ -170,7 +211,10 @@ export default class PayBox extends React.Component {
                   </View>
                   <View className={styles.right}>
                     {item.paymentType === PAYWAY_MAP.WALLET && this.walletPaySubText()}
-                    {(item.paymentType === PAYWAY_MAP.WX || (canWalletPay && Number(this.props.payBox?.walletAvaAmount) >= Number(options.amount))) && <Radio name={item.paymentType} />}
+                    {(item.paymentType === PAYWAY_MAP.WX ||
+                      (canWalletPay && Number(this.props.payBox?.walletAvaAmount) >= Number(options.amount))) && (
+                      <Radio name={item.paymentType} />
+                    )}
                   </View>
                 </View>
               );
@@ -186,7 +230,7 @@ export default class PayBox extends React.Component {
             full
             onClick={this.handlePayConfirmed}
           >
-            确认支付
+            {isSubmit ? <Spin type="spinner">拉起支付中...</Spin> : '确认支付'}
           </Button>
         </View>
         {/* 关闭按钮 */}

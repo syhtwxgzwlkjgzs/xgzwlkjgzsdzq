@@ -20,6 +20,7 @@ import PayBox from '@components/payBox';
 import { simpleRequest } from '@common/utils/simple-request';
 import Router from '@discuzq/sdk/dist/router';
 import { getCurrentInstance } from '@tarojs/taro';
+import { readUser } from '@server';
 
 @inject('site')
 @inject('index')
@@ -40,10 +41,26 @@ class PartnerInviteH5Page extends React.Component {
   async componentDidMount() {
     try {
       const { forum, search, invite } = this.props;
+
       // 获取url上的inviteCode
       const { params } = getCurrentInstance().router;
       const { inviteCode } = params;
-      if (inviteCode) invite.setInviteCode(inviteCode);
+      if (inviteCode) {
+        invite.setInviteCode(inviteCode);
+        const inviteResp = await readUser({
+          params: {
+            pid: inviteCode.length === 32 ? 1 : inviteCode,
+          },
+        });
+
+        const nickname = get(inviteResp, 'data.nickname', '');
+        const avatar = get(inviteResp, 'data.avatarUrl', '');
+
+        this.setState({
+          invitorName: inviteCode.length === 32 ? '站长' : nickname,
+          invitorAvatar: avatar,
+        });
+      }
       
       const usersList = await simpleRequest('readUsersList', {
         params: {
@@ -57,22 +74,10 @@ class PartnerInviteH5Page extends React.Component {
           pay: 1,
         },
       });
-      const inviteResp = await inviteDetail({
-        params: {
-          code: inviteCode,
-        },
-      });
-      const nickname = get(inviteResp, 'data.user.nickname', '');
-      const avatar = get(inviteResp, 'data.user.avatar', '');
-      this.setState({
-        invitorName: nickname,
-        invitorAvatar: avatar,
-      });
 
       forum.setUsersPageData(usersList);
       forum.setThreadsPageData(threadList);
       forum.setIsLoading(false);
-
     } catch (e) {
       Toast.error({
         content: e?.Message || e,
@@ -83,13 +88,13 @@ class PartnerInviteH5Page extends React.Component {
   }
 
   gotoIndex = () => {
-    Router.push({ url: '/pages/index/index' });
+    Router.redirect({ url: '/pages/home/index' });
   };
 
   handleJoinSite = () => {
     const { user, site } = this.props;
     if (!user?.isLogin()) {
-      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+      Router.redirect({ url: '/subPages/user/wx-auth/index' });
       return;
     }
 
@@ -203,9 +208,11 @@ class PartnerInviteH5Page extends React.Component {
             ) : (
               <></>
             )}
-            <Button className={layout.bottom_button} onClick={this.handleJoinSite}>
-              {siteMode === 'pay' ? `¥${sitePrice}` : ''} 立即加入
-            </Button>
+            <View className={layout.bottom_button_wrap}>
+              <Button className={layout.bottom_button} onClick={this.handleJoinSite}>
+                {siteMode === 'pay' ? `¥${sitePrice}` : ''} 立即加入
+              </Button>
+            </View>
           </View>
         </View>
       </List>

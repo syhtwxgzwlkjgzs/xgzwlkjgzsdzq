@@ -1,66 +1,83 @@
 @import '@common/styles/index.scss';
 
-.contain{
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    .choice {
-        height: 125px;
-        width: 100%;
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        background-color: #fff;
-        Button {
-          margin: 0px;
-          padding: 0px;
-          border: 0px;
-        }
-        .fabulous {
-            @include cursor-on-pc;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: $padding-10 0;
-            //background-color: ;
-            .fabulousIcon {
-              height: 35px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-size: $font-size-primary ;
-            }
-            .fabulousPost {
-              font-size: $font-size-primary;
-              color: $text-color-secondary;
-              height: 35px;
-              display: flex;
-              align-items: center;
-            }
-            .icon {
-              color: $text-color-secondary;
-            }
-        }
+.container {
+  width: 100%;
+  background: $border-color;
+  overflow: hidden;
+  padding: 20px 20px 0 20px;
+  border-radius: $border-radius-big $border-radius-big 0 0;
+  box-sizing: border-box;
+
+  .more {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(5, 40px);
+    grid-row-gap: 16px;
+    justify-content: space-between;
+    padding-bottom: $padding-4n;
+    
+    Button{
+      margin: 0px;
+      padding: 0px;
+      border: 0px;
+      line-height: 17px;
+      overflow: inherit;
     }
-    .space {
-      width: 100%;
-      height: 5px;
-      background: var(--background-color-text2);
-    }
-    .bottom {
-      background-color: #fff;
-      height: 50px;
-      font-size: 15px;
-      line-height: 100rpx;
-      color: '#333';
-      text-align: center;
-      margin-bottom: 20px;
-      &::after {
-        display: block;
-        content: '';
-        width: 100%;
-        height: 20px;
-        background-color:var(--background-color-text2);
+
+    .moreItem {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .icon {
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        line-height: 40px;
+        background: $white;
+        border-radius: $border-radius-small;
+        color: $text-color-regular;
+
+        > View {
+          font-size: 26px !important;
+        }
+      }
+
+      .text {
+        width: 50px;
+        margin-top: $padding-2n;
+        text-align: center;
+        color: $text-color-regular;
+        font-size: $font-size-small;
+      }
+
+      &.actived {
+        .icon,
+        .text {
+          color: $primary-color;
+        }
       }
     }
+  }
+}
+
+.button {
+  padding: 12px 0;
+  width: 100%;
+  background: $white;
+  text-align: center;
+  .cancel {
+    border: none;
+    padding: 0;
+    width: 100%;
+    font-size: $font-size-base;
+    color: $text-color-regular;
+  }
+}
+
+
+.body {
+  border-radius: $border-radius-big $border-radius-big 0 0;
+  padding-bottom: constant(safe-area-inset-bottom); ///兼容 IOS<11.2/
+  padding-bottom: env(safe-area-inset-bottom); ///兼容 IOS>11.2/
+  background: $white;
 }

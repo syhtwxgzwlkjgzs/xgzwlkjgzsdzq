@@ -60,6 +60,9 @@ export class index extends Component {
             </View>
           </View>
           <View className={styles.footer}>
+            <View className={`${styles.cancel} ${styles.button}`} onClick={handleCancel}>
+              取消
+            </View>
             <Button
               className={styles.button}
               onClick={() => {
@@ -69,9 +72,6 @@ export class index extends Component {
             >
               确定
             </Button>
-            <View className={styles.footerBtn} onClick={handleCancel}>
-              取消
-            </View>
           </View>
         </View>
       </Popup>

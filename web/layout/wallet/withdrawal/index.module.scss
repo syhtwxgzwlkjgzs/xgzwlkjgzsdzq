@@ -5,6 +5,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    background: $body-bg-color;
 }
 
 .main {
@@ -16,24 +17,26 @@
         height: rem(167);
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-end;
         align-items: center;
-        color: var(--color-white);
+        color: $white;
         text-align: center;
-        background: var(--color-primary);
+        background:$primary-color url('/dzq-img/walletbackground.png') 100%  no-repeat padding-box;
+        background-size: 100% 100%;
         .moneyTitle {
+            height: rem(20);
             font-family: 'PingFangSC-Regular';
             font-weight: normal;
             font-size: rem($font-size-primary);
-            line-height: rem(16.8);
-            padding: rem($padding-2n) 0;
+            line-height: rem(20);
         }
         .moneyNum {
+            height: rem(42);
             font-family: "PingFang SC";
             font-weight: 600;
             font-size: rem(30);
-            line-height: rem($font-line-height-large);
-            padding: rem($padding-2n) 0 rem($padding-5n) 0;
+            line-height: rem(42);
+            margin: $margin-1n 0 rem(54);
         }
     }
 
@@ -41,8 +44,8 @@
         width: rem(343);
         height: rem(168);
         border-radius: rem($border-radius-small);
-        background: var(--color-white);
-        margin-top: rem(-34);
+        background: $white;
+        margin-top: rem(-38);
     }
 }
 
@@ -50,10 +53,14 @@
     display: flex;
     justify-content: center;
     padding: rem($padding-2n) 0;
+    padding-bottom: calc(8px + constant(safe-area-inset-bottom)); ///兼容 IOS<11.2/
+    padding-bottom: calc(8px + env(safe-area-inset-bottom)); ///兼容 IOS>11.2/
+    
     .button {
         width: rem(343);
         height: rem(42);
         border-radius: rem($border-radius-small);
+        font-size: $font-size-middle;
     }
 }
 

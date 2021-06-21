@@ -6,9 +6,10 @@ import withShare from '@common/utils/withShare/withShare';
 @withShare({})
 class Invite extends React.Component {
   // 配置邀请好友地址
-  $getShareData(data) {
+  getShareData(data) {
     return {
       path: data.path,
+      title: data.title,
     };
   }
 

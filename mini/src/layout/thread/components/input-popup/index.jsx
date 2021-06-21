@@ -9,13 +9,14 @@ import Toast from '@discuzq/design/dist/components/toast/index';
 import classnames from 'classnames';
 import { readEmoji } from '@common/server';
 import { THREAD_TYPE } from '@common/constants/thread-post';
+import { debounce } from '@common/utils/throttle-debounce';
 import Emoji from '@components/emoji';
 import AtSelect from '@components/thread-post/at-select';
 import styles from './index.module.scss';
 import ImageUpload from '../image-upload';
 
 const InputPop = (props) => {
-  const { visible, onSubmit, initValue, onClose, inputText = '写评论...', site } = props;
+  const { visible, onSubmit, onClose, initValue, inputText = '写评论...', site, thread, checkUser = [] } = props;
 
   const textareaRef = createRef();
   const [value, setValue] = useState('');
@@ -36,12 +37,12 @@ const InputPop = (props) => {
   };
 
   useEffect(() => {
-    setValue(initValue || '');
-  }, [initValue]);
+    setValue(initValue);
+  }, [initValue])
 
   // 监听键盘的高度
   Taro.onKeyboardHeightChange(res => {
-    setBottomHeight(res?.height || 0 );
+    setBottomHeight(res?.height || 0);
   })
 
   // 点击发布
@@ -53,10 +54,13 @@ const InputPop = (props) => {
         setLoading(true);
         const success = await onSubmit(value, imageList);
         if (success) {
-          setValue('');
+          setTimeout(() => {
+            setValue('');
+          });
           setShowPicture(false);
           setShowEmojis(false);
           setImageList([]);
+          thread.setCheckUser([]);
         }
       } catch (error) {
         console.log(error);
@@ -89,7 +93,10 @@ const InputPop = (props) => {
   };
 
   const onAtIconClick = () => {
-    setShowAt(!showAt);
+    // setShowAt(!showAt);
+    Taro.navigateTo({
+      url: '/subPages/thread/selectAt/index?type=thread',
+    });
     setShowEmojis(false);
     setShowPicture(false);
   };
@@ -112,15 +119,23 @@ const InputPop = (props) => {
   };
 
   // 完成@人员选择
-  const onAtListChange = (atList) => {
+  // const onAtListChange = (atList) => {
+  //   // 在光标位置插入
+  //   const atListStr = atList.map((atUser) => ` @${atUser} `).join('');
+  //   const insertPosition = cursorPos || 0;
+  //   const newValue = value.substr(0, insertPosition) + (atListStr || '') + value.substr(insertPosition);
+  //   setValue(newValue);
+
+  //   setShowEmojis(false);
+  // };
+  useEffect(() => {
     // 在光标位置插入
-    const atListStr = atList.map((atUser) => ` @${atUser} `).join('');
+    const atListStr = checkUser.map((atUser) => ` @${atUser} `).join('');
     const insertPosition = cursorPos || 0;
     const newValue = value.substr(0, insertPosition) + (atListStr || '') + value.substr(insertPosition);
     setValue(newValue);
 
-    setShowEmojis(false);
-  };
+  }, [checkUser]);
 
   const handleUploadChange = async (list) => {
     setImageList(list);
@@ -154,7 +169,8 @@ const InputPop = (props) => {
 
       let isAllLegal = true; // 状态：此次上传图片是否全部合法
       cloneList.forEach((item, index) => {
-        const imageType = item.path.match(/\.(.+)$/)[1].toLocaleLowerCase();
+        const arr = item.path.split('.').pop();
+        const imageType = arr.toLocaleLowerCase();
         const isLegalType = supportImgExt.toLocaleLowerCase().includes(imageType);
 
         // 存在不合法图片时，从上传图片列表删除
@@ -202,10 +218,10 @@ const InputPop = (props) => {
               onBlur={(e) => {
                 onChange(e);
               }}
-              onChange={(e) => {
+              onChange={debounce(e => {
                 onChange(e);
                 setValue(e.target.value);
-              }}
+              }, 100)}
               onFocus={() => setShowEmojis(false)}
               placeholder={inputText}
               disabled={loading}
@@ -213,6 +229,7 @@ const InputPop = (props) => {
               forwardedRef={textareaRef}
               fixed={true}
               adjustPosition={false}
+              autoHeight={true}
             ></Textarea>
           </ScrollView>
 
@@ -268,12 +285,12 @@ const InputPop = (props) => {
           </View>
         )}
       </Popup>
-
+      {/* 
       {showAt && (
         <View className={styles.atSelect}>
           <AtSelect visible={showAt} stateLess={true} getAtList={onAtListChange} onCancel={onAtIconClick} />
         </View>
-      )}
+      )} */}
 
     </View>
   );

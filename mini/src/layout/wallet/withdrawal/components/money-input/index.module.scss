@@ -2,10 +2,12 @@
 
 .container {
   // width: 100%;
-  padding: $padding-6n;
+  padding: $padding-6n $padding-6n $padding-4n;
 }
 
 .header {
+  height: 20px;
+  line-height: 20px;
   font-family: 'PingFangSC-Regular';
   font-weight: normal;
   font-size: $font-size-primary;
@@ -17,17 +19,19 @@
   display: flex;
   align-items: center;
   padding: $padding-4n 0;
-  border-bottom: var(--border-border);
+  border-bottom: $border-solid-1;
 
   :global {
     .dzq-input__inner {
-      height: 44px;
+      height: 42px;
+      line-height: 42px;
       border: none;
       font-family: 'PingFang SC';
       font-weight: 600;
       font-size: 30px;
       text-align: left;
       color: #c5c6ca;
+      padding: 0 $padding-2n;
     }
   }
 
@@ -62,10 +66,12 @@
 }
 
 .leastMoney {
-  font-family: PingFangSC-Regular;
+  height: 17px;
+  line-height: 17px;
+  font-family: 'PingFangSC-Regular';
   font-weight: normal;
   font-size: $font-size-label;
   text-align: left;
-  color: var(--color-text-secondary);
+  color: $text-color-secondary;
   padding: $padding-4n 0;
 }

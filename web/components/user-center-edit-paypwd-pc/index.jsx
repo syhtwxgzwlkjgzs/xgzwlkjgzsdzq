@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button, Dialog, Input, Toast, Icon } from '@discuzq/design';
+import { Button, Dialog, Input, Toast, Icon, Spin } from '@discuzq/design';
 import styles from './index.module.scss';
 import ResetPassword from './reset-paypwd/index';
 import FindPassword from './find-paypwd/index';
 import throttle from '@common/utils/thottle.js';
+import Router from '@discuzq/sdk/dist/router';
 
 @inject('site')
 @inject('user')
@@ -19,9 +20,9 @@ class index extends Component {
     };
   }
 
-  initState = () => {
+  initState = (type) => {
     this.setState({
-      step: 'set_password', // 步骤 set_password| reset_password | find_password
+      step: type ? type : 'set_password', // 步骤 set_password| reset_password | find_password
       isSubmit: false,
     });
   };
@@ -38,37 +39,43 @@ class index extends Component {
 
   // 点击去到下一步
   goToResetPayPwd = () => {
+    if (this.getDisabledWithButton()) return;
+    this.setState({
+      isSubmit: true,
+    });
     this.props.payBox
       .getPayPwdResetToken()
       .then((res) => {
-        this.setState({
-          step: 'reset_password',
-        });
+        this.initState('reset_password');
         this.props.payBox.oldPayPwd = null;
       })
       .catch((err) => {
         Toast.error({
           content: '密码错误',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
+        this.initState();
         this.props.payBox.oldPayPwd = null;
       });
   };
 
   // 点击忘记密码
-  handleGoToFindPayPwd = () => {
+  handleGoToFindPayPwd = throttle(() => {
     if (!this.props.user.mobile) {
       Toast.error({
         content: '需要首先绑定手机号才能进行此操作',
-        duration: 2000
+        duration: 2000,
       });
+      setTimeout(() => {
+        Router.push({ url: '/user/bind-phone?from=userCenter' });
+      }, 1000);
       return;
     }
     this.setState({
       step: 'find_password',
     });
-  };
+  }, 1000);
 
   // 初次设置密码
   handleSetPwd = (e) => {
@@ -86,8 +93,7 @@ class index extends Component {
 
   // 点击提交 ----> 设置密码password成功 ---> 清空 password状态
   handleSubmit = throttle(async () => {
-    const { isSubmit } = this.state;
-    if (isSubmit || this.getDisabledWithButton()) return;
+    if (this.getDisabledWithButton()) return;
     this.setState({
       isSubmit: true,
     });
@@ -98,7 +104,7 @@ class index extends Component {
         Toast.success({
           content: '设置密码成功',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
         this.props.payBox.password = null;
         this.props.user.userInfo.canWalletPay = true;
@@ -109,8 +115,9 @@ class index extends Component {
         Toast.error({
           content: '设置失败请重新设置',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
+        this.initState();
         this.props.payBox.password = null;
       });
   }, 500);
@@ -122,8 +129,11 @@ class index extends Component {
   getDisabledWithButton = () => {
     const payPassword = this.props.payBox?.password;
     const oldPayPwd = this.props.payBox?.oldPayPwd;
+    const { isSubmit } = this.state;
     let disabled = false;
-    if (this.props.user?.canWalletPay) {
+    if (isSubmit) {
+      disabled = isSubmit;
+    } else if (this.props.user?.canWalletPay) {
       disabled = !oldPayPwd || oldPayPwd.length !== 6;
     } else {
       disabled = !payPassword || payPassword.length !== 6;
@@ -174,7 +184,7 @@ class index extends Component {
   };
 
   renderContent = () => {
-    const { step, payPassword, oldPayPwd } = this.state;
+    const { step, isSubmit } = this.state;
     if (step === 'set_password') {
       return (
         <div className={styles.userMobileContent}>
@@ -191,7 +201,7 @@ class index extends Component {
                 type={'primary'}
                 className={styles.btn}
               >
-                下一步
+                {isSubmit ? <Spin type="spinner">加载中...</Spin> : '下一步'}
               </Button>
             ) : (
               <Button
@@ -200,7 +210,7 @@ class index extends Component {
                 type={'primary'}
                 className={styles.btn}
               >
-                设置支付密码
+                {isSubmit ? <Spin type="spinner">提交中...</Spin> : '设置支付密码'}
               </Button>
             )}
           </div>

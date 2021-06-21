@@ -1,7 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/search/result/h5';
-import IndexPCPage from '@layout/search/result/pc';
 import { readUsersList, readTopicsList, readThreadList } from '@server';
 import { Toast } from '@discuzq/design';
 import ViewAdapter from '@components/view-adapter';
@@ -65,7 +64,7 @@ class Index extends React.Component {
     return (
       <ViewAdapter
         h5={<IndexH5Page dispatch={this.dispatch} />}
-        pc={ <IndexPCPage dispatch={this.dispatch} />}
+        pc={<div></div>}
         title='发现结果'
       />
     );

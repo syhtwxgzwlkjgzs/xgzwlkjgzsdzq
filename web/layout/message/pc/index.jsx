@@ -13,10 +13,10 @@ import Stepper from '../../search/pc/components/stepper';
 import { sidebarData as sidebarDataOriginal } from '@common/constants/message';
 import UserCenterFollowsPc from '@components/user-center/follows-pc';
 
-const Index = ({ page, subPage, dialogId, username, message, user }) => {
+const Index = ({ page, subPage, dialogId, username, message, user, nickname }) => {
   const router = useRouter();
 
-  const { threadUnread, financialUnread, accountUnread } = message;
+  const { threadUnread, financialUnread, accountUnread, dialogMessageUnread } = message;
 
   const [sidebarData, setSidebarData] = useState(sidebarDataOriginal);
 
@@ -42,7 +42,7 @@ const Index = ({ page, subPage, dialogId, username, message, user }) => {
       case 'financial':
         return <MessageFinancial />;
       case 'chat':
-        return <MessageChat dialogId={dialogId} username={username} />;
+        return <MessageChat dialogId={dialogId} username={username} nickname={nickname} />;
     }
   }, [page, subPage, dialogId, username]);
 
@@ -54,7 +54,7 @@ const Index = ({ page, subPage, dialogId, username, message, user }) => {
       newItem.unreadCount = message[item.unreadKeyName] || 0;
       return newItem;
     }));
-  }, [threadUnread, financialUnread, accountUnread]);
+  }, [threadUnread, financialUnread, accountUnread, dialogMessageUnread]);
 
 
   const rightContent = () => (
@@ -62,7 +62,7 @@ const Index = ({ page, subPage, dialogId, username, message, user }) => {
       <div className={styles['stepper-container']}>
         <Stepper onItemClick={sidebarClick} selectIndex={sidebarIndex} data={sidebarData} />
       </div>
-      <UserCenterFollowsPc userId={user.id} />
+      <UserCenterFollowsPc userId={user.id} showMore={false} withLimit={100000} messageMode={true} />
       <Copyright />
     </div>
   );
@@ -74,6 +74,7 @@ const Index = ({ page, subPage, dialogId, username, message, user }) => {
   return (
     <BaseLayout
       right={rightContent}
+      className="mymessage-page"immediateCheck={false}
     >
       {mainContent}
     </BaseLayout>

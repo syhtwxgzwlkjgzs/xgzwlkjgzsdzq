@@ -2,7 +2,7 @@ import React, { Component, Suspense } from 'react';
 import Header from '@components/header';
 import UserCenterEditHeader from '../../user-center-edit-header/index';
 import BaseLaout from '@components/base-layout';
-import { Button, Icon, Input, Toast } from '@discuzq/design';
+import { Button, Spin, Input, Toast } from '@discuzq/design';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
 import { inject, observer } from 'mobx-react';
@@ -51,10 +51,11 @@ class index extends Component {
           ),
           onSave: async () => {
             try {
+              this.saveInputEditor('昵称');
               await this.props.user.updateEditedUserNickname();
               Toast.success({
                 content: '更新昵称成功',
-                duration: 1000,
+                duration: 2000,
               });
               this.closeInputEditor('昵称');
             } catch (e) {
@@ -62,9 +63,10 @@ class index extends Component {
               if (e.Code) {
                 Toast.error({
                   content: e.Message,
-                  duration: 1000,
+                  duration: 2000,
                 });
                 this.props.user.editNickName = '';
+                this.cancelInputConfirmEditor('昵称');
               }
             }
           },
@@ -98,10 +100,11 @@ class index extends Component {
           ),
           onSave: async () => {
             try {
+              this.saveInputEditor('用户名');
               await this.props.user.updateUsername();
               Toast.success({
                 content: '更新用户名成功',
-                duration: 1000,
+                duration: 2000,
               });
               this.closeInputEditor('用户名');
             } catch (e) {
@@ -109,10 +112,11 @@ class index extends Component {
               if (e.Code) {
                 Toast.error({
                   content: e.Msg,
-                  duration: 1000,
+                  duration: 2000,
                 });
               }
               this.props.user.editUserName = '';
+              this.cancelInputConfirmEditor('用户名');
             }
           },
           onCancel: () => {
@@ -140,10 +144,11 @@ class index extends Component {
           ),
           onSave: async () => {
             try {
+              this.saveInputEditor('个性签名');
               await this.props.user.updateEditedUserSignature();
               Toast.success({
                 content: '更新个性签名成功',
-                duration: 1000,
+                duration: 2000,
               });
               this.closeInputEditor('个性签名');
             } catch (e) {
@@ -151,9 +156,10 @@ class index extends Component {
               if (e.Code) {
                 Toast.error({
                   content: e.Message,
-                  duration: 1000,
+                  duration: 2000,
                 });
                 this.props.user.editSignature = '';
+                this.cancelInputConfirmEditor('个性签名');
               }
             }
           },
@@ -242,42 +248,63 @@ class index extends Component {
           ),
           inputEditor: () => null,
         },
-        // {
-        //   name: '微信',
-        //   display: 'show',
-        //   condition: () => {
-        //     // 条件都满足时才显示微信
-        //     const IS_WECHAT_ACCESSABLE = this.props.site.wechatEnv !== 'none' && !!this.user.wxNickname;
-        //     return IS_WECHAT_ACCESSABLE;
-        //   },
-        //   render: () => (
-        //     <div className={styles.pcEditNicknameImgs}>
-        //       <Avatar className={styles.pcEditNicknameImg} image={this.user.wxHeadImgUrl} name={this.user.wxNickname} />
-        //       <p className={styles.pcEditWeiName}>{this.user.wxNickname}</p>
-        //     </div>
-        //   ),
-        //   operation: () => (
-        //     <p
-        //       onClick={() => {
-        //         this.setState({
-        //           wechatRebindEditorVisible: true,
-        //         });
-        //       }}
-        //       className={styles.pcEditNicknameCallMsodify}
-        //     >
-        //       换绑
-        //     </p>
-        //   ),
-        //   inputEditor: () => null,
-        // },
+        {
+          name: '微信',
+          display: 'show',
+          condition: () => {
+            // 条件都满足时才显示微信
+            const IS_WECHAT_ACCESSABLE = this.props.site.wechatEnv !== 'none' && !!this.user.wxNickname;
+            return IS_WECHAT_ACCESSABLE;
+          },
+          render: () => (
+            <div className={styles.pcEditNicknameImgs}>
+              <Avatar className={styles.pcEditNicknameImg} image={this.user.wxHeadImgUrl} name={this.user.wxNickname} />
+              <p className={styles.pcEditWeiName}>{this.user.wxNickname}</p>
+            </div>
+          ),
+          // <p
+          //   onClick={() => {
+          //     this.setState({
+          //       wechatRebindEditorVisible: true,
+          //     });
+          //   }}
+          //   className={styles.pcEditNicknameCallMsodify}
+          // >
+          //   换绑
+          // </p>
+          operation: () => null,
+          inputEditor: () => null,
+        },
       ],
     };
     this.user = this.props.user || {};
   }
 
+  saveInputEditor = (name) => {
+    const { editorConfig } = this.state;
+    const targetConfig = editorConfig.filter((item) => item.name === name);
+    if (targetConfig.length) {
+      targetConfig[0].isConfirm = true;
+      this.setState({
+        editorConfig: [...editorConfig],
+      });
+    }
+  };
+
+  cancelInputConfirmEditor = (name) => {
+    const { editorConfig } = this.state;
+    const targetConfig = editorConfig.filter((item) => item.name === name);
+    if (targetConfig.length) {
+      targetConfig[0].isConfirm = false;
+      this.setState({
+        editorConfig: [...editorConfig],
+      });
+    }
+  };
+
   openInputEditor(name) {
     const { editorConfig } = this.state;
-    const targetConfig = editorConfig.filter(item => item.name === name);
+    const targetConfig = editorConfig.filter((item) => item.name === name);
     if (targetConfig.length) {
       targetConfig[0].display = 'edit';
       this.setState({
@@ -288,9 +315,10 @@ class index extends Component {
 
   closeInputEditor(name) {
     const { editorConfig } = this.state;
-    const targetConfig = editorConfig.filter(item => item.name === name);
+    const targetConfig = editorConfig.filter((item) => item.name === name);
     if (targetConfig.length) {
       targetConfig[0].display = 'show';
+      targetConfig[0].isConfirm = false;
       this.setState({
         editorConfig: [...editorConfig],
       });
@@ -317,8 +345,13 @@ class index extends Component {
               <div className={item.display === 'edit' ? styles.pcEditAutographCall : styles.pcEditAutographBox}>
                 {item.inputEditor()}
                 <div className={styles.preservation}>
-                  <Button className={styles.preservationButton} type="primary" onClick={() => item.onSave()}>
-                    保存
+                  <Button
+                    disabled={item.isConfirm}
+                    className={styles.preservationButton}
+                    type="primary"
+                    onClick={() => item.onSave()}
+                  >
+                    {item.isConfirm ? <Spin type="spinner">保存中...</Spin> : '保存'}
                   </Button>
                   <Button className={styles.preservationButton2} onClick={() => item.onCancel()}>
                     取消
@@ -334,15 +367,15 @@ class index extends Component {
 
   render() {
     const { editorConfig } = this.state;
-    let pcEditHeight = 'auto'// 减去60头部的高度
+    let pcEditHeight = 'auto'; // 减去60头部的高度
     if (!isServer()) {
-      pcEditHeight = getClientHeight() - 60 
+      pcEditHeight = getClientHeight() - 60;
     }
     return (
-      <div className={styles.pcEditBox}>
+      <div className={styles.pcEditBox} id={styles.pcEditContainer}>
         <Header className={styles.pcEditHeaser} />
         <div className={styles.pcEditContent}>
-          <div className={styles.pcEdit} style={{height: pcEditHeight}}>
+          <div className={styles.pcEdit} style={{ height: pcEditHeight }}>
             {/* 头部 */}
             <div>
               <UserCenterEditHeader />
@@ -353,7 +386,7 @@ class index extends Component {
             ))}
           </div>
           <div className={styles.bottomText}>
-            <Copyright center line/>
+            <Copyright center line />
           </div>
         </div>
 

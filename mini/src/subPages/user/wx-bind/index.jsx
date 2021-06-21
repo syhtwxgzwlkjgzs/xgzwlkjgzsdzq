@@ -6,9 +6,11 @@ import Button from '@discuzq/design/dist/components/button/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 // import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Page from '@components/page';
-import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus } from '@common/store/login/util';
+import { get } from '@common/utils/get';
+import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus, isExtFieldsOpen } from '@common/store/login/util';
 import layout from './index.module.scss';
-import { getParamCode, getUserProfile } from '../common/utils'
+import { getParamCode, getUserProfile } from '../common/utils';
+import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 
 // const MemoToastProvider = React.memo(ToastProvider);
 
@@ -19,7 +21,7 @@ import { getParamCode, getUserProfile } from '../common/utils'
 @observer
 class WXBind extends Component {
   getUserProfileCallback = async (params) => {
-    const { sessionToken } = getCurrentInstance().router.params;
+    const { scene: sessionToken } = getCurrentInstance().router.params;
 
     try {
       await getParamCode(this.props.commonLogin);
@@ -41,8 +43,21 @@ class WXBind extends Component {
         Message: res.msg,
       };
     } catch (error) {
+      // 注册信息补充
+      if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+        if (isExtFieldsOpen(this.props.site)) {
+          this.props.commonLogin.needToCompleteExtraInfo = true;
+          redirectTo({ url: '/subPages/user/supplementary/index' });
+          return;
+        }
+        redirectTo({ url: '/pages/home/index' });
+        return;
+      }
+
       // 跳转状态页
       if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
+        const uid = get(error, 'uid', '');
+        uid && this.props.user.updateUserInfo(uid);
         this.props.commonLogin.setStatusMessage(error.Code, error.Message);
         navigateTo({
           url: `/subPages/user/status/index?statusCode=${error.Code}&statusMsg=${error.Message}`

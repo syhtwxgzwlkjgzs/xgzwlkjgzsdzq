@@ -33,18 +33,29 @@
       padding-top: rem(6);
     }
 
-    .dzq-menu,
-    .dzq-menu-item,
-    .dzq-submenu__title,
-    .dzq-submenu {
+    .dzq-submenu__title.is-active,
+    .dzq-menu > li {
+      border-bottom: rem(1) solid $border-color;
       &:last-child {
         border-bottom: none;
       }
     }
 
+    .dzq-submenu > .dzq-menu > li {
+      border-bottom: none;
+    }
+
+    .dzq-menu,
+    .dzq-menu-item,
+    .dzq-submenu__title,
+    .dzq-submenu {
+      border-bottom: none;
+    }
+
     .dzq-submenu > .dzq-menu {
       padding-bottom: rem(6);
       padding-top: rem(6);
+      padding-left: rem(20);
       line-height: rem(20);
     }
   
@@ -64,6 +75,10 @@
       .dzq-submenu__title{
         line-height: 1;
       }
+    }
+    .dzq-submenu__icon {
+      font-size: rem(10) !important;
+      color: $text-color-secondary;
     }
   }
 }
@@ -92,6 +107,12 @@
   float: right;
   font-weight: normal;
   font-size: rem($font-size-base);
+}
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 70%;
 }
 
 .verticalScrollbar::-webkit-scrollbar {

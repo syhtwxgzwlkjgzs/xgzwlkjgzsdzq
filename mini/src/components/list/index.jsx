@@ -2,8 +2,7 @@ import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } f
 import { ScrollView } from '@tarojs/components';
 import { noop, isPromise } from '@components/thread/utils'
 import styles from './index.module.scss';
-import RefreshView from './RefreshView';
-import ErrorView from './ErrorView';
+import BottomView from './BottomView';
 
 /**
  * 列表组件，集成上拉刷新能力
@@ -21,11 +20,13 @@ const List = forwardRef(({
   noMore,
   onRefresh,
   onScroll = noop,
+  onScrollToUpper = noop,
   hasOnScrollToLower = false,
   showRefresh = true,
-  preload = 30,
+  preload = 1000,
   requestError = false,
   errorText = '加载失败',
+  showLoadingInCenter = false
 }, ref) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -93,6 +94,10 @@ const List = forwardRef(({
     onScroll(e);
   }
 
+  const handleScrollToUpper = (e) => {
+    onScrollToUpper(e);
+  }
+
     // 网络请求失败
     const handleError = () => {
       setIsLoading(false);
@@ -104,16 +109,17 @@ const List = forwardRef(({
   return (
     <ScrollView
       scrollY
-      className={`${styles.container} ${className}`}
+      className={`${styles.container} ${className} ${showLoadingInCenter ? styles.wrapperH5Center : ''}`}
       style={{ height }}
       onScrollToLower={hasOnScrollToLower ? onTouchMove : null}
-      lowerThreshold={80}
+      lowerThreshold={preload}
       onScroll={handleScroll}
       scrollTop={scrollTop}
+      onScrollToUpper={handleScrollToUpper}
+      upperThreshold={210}
     >
       {children}
-      {onRefresh && showRefresh && !isError && <RefreshView noMore={noMore} />}
-      {isError && <ErrorView text={errText} onClick={handleError} />}
+      {onRefresh && showRefresh && <BottomView isError={isError} errorText={errText} noMore={noMore} handleError={handleError} />}
     </ScrollView>
   );
 });

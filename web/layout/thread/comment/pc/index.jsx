@@ -287,9 +287,9 @@ class CommentPCPage extends React.Component {
       return;
     }
 
-    const { username } = this.props.comment?.authorInfo;
+    const { username, nickname } = this.props.comment?.authorInfo;
     if (!username) return;
-    Router.push({ url: `/message?page=chat&username=${username}` });
+    Router.push({ url: `/message?page=chat&username=${username}&nickname=${nickname}` });
   }
 
   render() {

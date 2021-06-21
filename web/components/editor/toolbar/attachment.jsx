@@ -58,7 +58,8 @@ function AttachmentToolbar(props) {
   function handleAttachClick(e, item) {
     let action = item.type;
     let actionItem = item;
-    if (currentAction === item.type && currentAction !== THREAD_TYPE.anonymity) {
+    const actionCurrent = props.currentSelectedToolbar;
+    if (actionCurrent === item.type && actionCurrent !== THREAD_TYPE.anonymity) {
       action = '';
       actionItem = { type: '' };
     }
@@ -94,6 +95,7 @@ function AttachmentToolbar(props) {
           toastInstance?.destroy();
         },
         onError: (err) => {
+          onUploadComplete(null, file, item.type);
           Toast.error({ content: err.message });
         },
       });
@@ -217,7 +219,7 @@ function AttachmentToolbar(props) {
             {props.category}
           </div>
           <div className={styles['dvditor-attachment-toolbar__right']} onClick={handleToggle}>
-            {currentIcon && <Icon name={currentIcon} size="20" />}
+            {currentIcon && props.permission[action] && <Icon name={currentIcon} size="20" />}
             <Icon name="MoreBOutlined" size="20" />
           </div>
         </>

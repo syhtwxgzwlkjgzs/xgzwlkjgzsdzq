@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import Avatar from '@discuzq/design/dist/components/avatar/index';
+import RichText from '@discuzq/design/dist/components/rich-text/index';
 import UnreadRedDot from '@components/unread-red-dot';
 import { inject, observer } from 'mobx-react';
 import classNames from 'classnames';
@@ -12,6 +13,7 @@ import styles from './index.module.scss';
 
 import stringToColor from '@common/utils/string-to-color';
 import { diffDate } from '@common/utils/diff-date';
+import { handleLink } from '@components/thread/utils';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import PropTypes from 'prop-types';
@@ -32,8 +34,7 @@ class Index extends Component {
 
   // 获取头像背景色
   getBackgroundColor = (name) => {
-    const character = name?.charAt(0).toUpperCase() || 'a';
-    return stringToColor(character);
+    return name ? stringToColor(name.toUpperCase()[0]) : "#8590a6";
   }
 
   // 未读消息数
@@ -44,6 +45,7 @@ class Index extends Component {
   // 针对财务消息，获取后缀提示语
   getFinancialTips = (item) => {
     if (item.type === 'rewarded') {
+      if (item.orderType === 3 || item.orderType === 7) return '支付了你';
       return '打赏了你';
     }
     if (item.type === 'receiveredpacket') {
@@ -51,9 +53,6 @@ class Index extends Component {
     }
     if (item.type === 'threadrewarded') {
       return '悬赏了你';
-    }
-    if (item.type === 'withdrawal') {
-      return '获取提现';
     }
   };
 
@@ -95,19 +94,30 @@ class Index extends Component {
   // 跳转用户中心
   toUserCenter = (e, canJump, item) => {
     e.stopPropagation();
-    // 后续用户中心做好后，再根据用户id设置对应路由
-    canJump && Taro.navigateTo({ url: `/subPages/user/index?id=${item.userId}` })
+    if (!canJump || !item.nickname || !item.userId) return;
+    Taro.navigateTo({ url: `/subPages/user/index?id=${item.userId}` })
   }
 
   // 跳转主题详情or私信
   toDetailOrChat = (e, item) => {
-    if (e.target.nodeName === 'A') return;
+    let url = "";
     const { type } = this.props;
-    if (type === 'financial' || type === 'account') {
-      Taro.navigateTo({ url: `/subPages/thread/index?id=${item.id}` })
+    if (item.threadId) {
+      url = `/subPages/thread/index?id=${item.threadId}`;
     }
     if (type === 'chat') {
-      Taro.navigateTo({ url: `/subPages/message/index?page=chat&dialogId=${item.dialogId}&nickname=${item.username}` });
+      url = `/subPages/message/index?page=chat&dialogId=${item.dialogId}&nickname=${item.nickname || ''}`;
+    }
+
+    url && Taro.navigateTo({ url });
+  }
+
+  handleContentClick = (e, node) => {
+    const { url } = handleLink(node)
+
+    if (url) {
+      e && e.stopPropagation();
+      Taro.navigateTo({ url })
     }
   }
 
@@ -129,10 +139,10 @@ class Index extends Component {
               {avatarUrl
                 ? <Avatar image={avatarUrl} circle={true} />
                 : <Avatar
-                  text={item.username}
+                  text={item.nickname}
                   circle={true}
                   style={{
-                    backgroundColor: `#${this.getBackgroundColor(item.username)}`
+                    backgroundColor: this.getBackgroundColor(item.nickname)
                   }}
                 />
               }
@@ -155,7 +165,7 @@ class Index extends Component {
                 })}
                 onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
               >
-                {item.username || this.filterTag(item.title)}
+                {item.nickname || this.filterTag(item.title) || "用户已删除"}
               </View>
               {['chat', 'thread'].includes(type) &&
                 <View className={styles.time}>{diffDate(item.createdAt)}</View>
@@ -185,15 +195,16 @@ class Index extends Component {
                   "中{this.getFinancialTips(item)}
                 </View>
               }
-              {/* 私信、帖子、账户 */}
-              {['chat', 'thread', 'account'].includes(type) &&
+              {/* 私信 */}
+              {type === 'chat' &&
                 <View
-                  className={classNames(styles['content-html'], {
-                    [styles['single-line']]: ['chat'].includes(type),
-                    [styles['multiple-line']]: ['account'].includes(type),
-                  })}
+                  className={classNames(styles['content-html'], styles['single-line'])}
                   dangerouslySetInnerHTML={{ __html: this.parseHTML() }}
                 />
+              }
+              {/* 帖子、账户 */}
+              {['thread', 'account'].includes(type) &&
+                <RichText content={this.parseHTML()} onClick={this.handleContentClick} />
               }
             </View>
 

@@ -8,6 +8,8 @@ import xss from '@common/utils/xss';
 import classnames from 'classnames';
 import ImageDisplay from '@components/thread/image-display';
 import { debounce } from '@common/utils/throttle-debounce';
+import { urlToLink } from '@common/utils/replace-url-to-a';
+
 @observer
 export default class ReplyList extends React.Component {
   // 跳转至评论详情
@@ -25,13 +27,17 @@ export default class ReplyList extends React.Component {
   deleteClick() {
     typeof this.props.deleteClick === 'function' && this.props.deleteClick();
   }
-  deleteClick1() {}
+
+  avatarClick(floor) {
+    typeof this.props.avatarClick === 'function' && this.props.avatarClick(floor);
+  }
+
   generatePermissions(data = {}) {
     return {
       canApprove: data.canApprove || false,
       canDelete: data.canDelete || false,
       canEdit: data.canEdit || false,
-      canHide: data.canLike || false,
+      canHide: data.canHide || false,
       canLike: data.canLike || false,
     };
   }
@@ -40,15 +46,15 @@ export default class ReplyList extends React.Component {
     let newContent = this.props?.data?.content || '';
     newContent = s9e.parse(newContent);
     newContent = xss(newContent);
-
+    newContent = urlToLink(newContent);
     return newContent;
   }
 
   render() {
-    const { canLike, canDelete } = this.generatePermissions(this.props.data);
+    const { canLike, canDelete, canHide } = this.generatePermissions(this.props.data);
     return (
       <div className={styles.replyList}>
-        <div className={styles.replyListAvatar} onClick={this.props.avatarClick('2')}>
+        <div className={styles.replyListAvatar} onClick={() => {this.avatarClick(2)}}>
           <Avatar
             image={this.props.data?.user?.avatar}
             name={this.props.data?.user?.nickname || this.props.data?.user?.userName || ''}
@@ -58,23 +64,23 @@ export default class ReplyList extends React.Component {
         </div>
         <div className={styles.replyListContent}>
           <div className={styles.replyListContentText}>
-            <div className={styles.replyListName}>
+            <div className={styles.replyListName} onClick={() => {this.avatarClick(2)}}>
             {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
             </div>
             <div className={styles.replyListText}>
               {this.props.data.commentUserId ? (
                 <div className={styles.commentUser}>
-                  <div className={styles.replyedAvatar} onClick={this.props.avatarClick('3')}>
+                  <div className={styles.replyedAvatar} onClick={() => {this.avatarClick(3)}}>
                     <Avatar
                       className={styles.avatar}
-                      image={this.props.data.replyUser.avatar}
-                      name={this.props.data.replyUser.nickname || this.props.data.replyUser.userName || ''}
+                      image={this.props.data.commentUser.avatar}
+                      name={this.props.data.commentUser.nickname || this.props.data.replyUser.userName || ''}
                       circle={true}
                       size="small"
                     ></Avatar>
                   </div>
-                  <span className={styles.replyedUserName}>
-                    {this.props.data.replyUser.nickname || this.props.data.replyUser.userName}
+                  <span className={styles.replyedUserName} onClick={() => {this.avatarClick(3)}}>
+                    {this.props.data.commentUser.nickname || this.props.data.commentUser.userName}
                   </span>
                 </div>
               ) : (
@@ -109,7 +115,7 @@ export default class ReplyList extends React.Component {
                 <div className={styles.replyReply}>
                   <span onClick={() => this.replyClick()}>回复</span>
                 </div>
-                {canDelete && (
+                {canHide && (
                   <div className={styles.replyDelete}>
                     <span onClick={() => this.deleteClick()}>删除</span>
                   </div>

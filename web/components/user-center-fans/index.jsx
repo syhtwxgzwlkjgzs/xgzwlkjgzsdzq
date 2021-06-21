@@ -1,7 +1,8 @@
 import React from 'react';
 import UserCenterFriends from '../user-center-friends';
-import { Spin, Toast } from '@discuzq/design';
+import { Spin, Toast, Avatar } from '@discuzq/design';
 import { followerAdapter } from './adapter';
+import friendsStyle from '@components/user-center/friend-pc/index.module.scss';
 import styles from './index.module.scss';
 import { createFollow, deleteFollow, getUserFans } from '@server';
 import { get } from '@common/utils/get';
@@ -9,7 +10,6 @@ import deepClone from '@common/utils/deep-clone';
 import NoData from '@components/no-data';
 import classnames from 'classnames';
 import { inject, observer } from 'mobx-react';
-
 
 @inject('user')
 @observer
@@ -72,7 +72,7 @@ class UserCenterFans extends React.Component {
       console.error(fansRes);
       Toast.error({
         content: fansRes.msg,
-        duration: 1000,
+        duration: 2000,
       });
       return;
     }
@@ -145,6 +145,11 @@ class UserCenterFans extends React.Component {
   followUser = async ({ id: userId }) => {
     const res = await createFollow({ data: { toUserId: userId } });
     if (res.code === 0 && res.data) {
+      Toast.success({
+        content: '操作成功',
+        hasMask: false,
+        duration: 2000,
+      });
       this.setFansBeFollowed({
         id: userId,
         isMutual: res.data.isMutual,
@@ -155,6 +160,11 @@ class UserCenterFans extends React.Component {
         success: true,
       };
     }
+    Toast.error({
+      content: res.msg || '关注失败',
+      hasMask: false,
+      duration: 2000,
+    });
     return {
       msg: res.msg,
       data: null,
@@ -165,6 +175,11 @@ class UserCenterFans extends React.Component {
   unFollowUser = async ({ id }) => {
     const res = await deleteFollow({ data: { id, type: 1 } });
     if (res.code === 0 && res.data) {
+      Toast.success({
+        content: '操作成功',
+        hasMask: false,
+        duration: 2000,
+      });
       this.setFansBeUnFollowed(id);
       return {
         msg: '操作成功',
@@ -172,6 +187,11 @@ class UserCenterFans extends React.Component {
         success: true,
       };
     }
+    Toast.error({
+      content: res.msg || '取消关注失败',
+      hasMask: false,
+      duration: 2000,
+    });
     return {
       msg: res.msg,
       data: null,
@@ -213,9 +233,9 @@ class UserCenterFans extends React.Component {
   // 清理，防止内存泄露
   componentWillUnmount() {
     if (!this.containerRef.current) return;
-    this.containerRef
-      && this.containerRef.current
-      && this.containerRef.current.removeEventListener('scroll', this.loadMore);
+    this.containerRef &&
+      this.containerRef.current &&
+      this.containerRef.current.removeEventListener('scroll', this.loadMore);
   }
 
   // 检查是否满足触底加载更多的条件
@@ -264,13 +284,11 @@ class UserCenterFans extends React.Component {
   };
 
   render() {
-
-    const isNoData = followerAdapter((this.props.dataSource) || this.state.fans).length === 0
-      && !this.state.loading;
+    const isNoData = followerAdapter(this.props.dataSource || this.state.fans).length === 0 && !this.state.loading;
 
     return (
       <div
-        className={this.props.className}
+        className={`${this.props.className} user-center-friends`}
         ref={this.containerRef}
         style={{
           height: '100%',
@@ -278,26 +296,46 @@ class UserCenterFans extends React.Component {
           ...this.props.styles,
         }}
       >
-        {followerAdapter((this.props.dataSource) || this.state.fans).map((user, index) => {
+        {followerAdapter(this.props.dataSource || this.state.fans).map((user, index) => {
           if (index + 1 > this.props.limit) return null;
           return (
-              <div key={user.id}>
-                <UserCenterFriends
-                  id={user.id}
-                  type={this.judgeFollowsStatus(user)}
-                  imgUrl={user.avatar}
-                  withHeaderUserInfo={this.props.isPc}
-                  onContainerClick={this.props.onContainerClick}
-                  userName={user.userName}
-                  userGroup={user.groupName}
-                  followHandler={this.followUser}
-                  itemStyle={this.props.itemStyle}
-                  unFollowHandler={this.unFollowUser}
-                />
-                {this.props.splitElement}
-              </div>
+            <div key={user.id} className="user-center-friends-item">
+              <UserCenterFriends
+                id={user.id}
+                type={this.judgeFollowsStatus(user)}
+                imgUrl={user.avatar}
+                withHeaderUserInfo={this.props.isPc}
+                onContainerClick={this.props.onContainerClick}
+                userName={user.nickName}
+                userGroup={user.groupName}
+                followHandler={this.followUser}
+                itemStyle={this.props.itemStyle}
+                unFollowHandler={this.unFollowUser}
+              />
+              {this.props.splitElement}
+            </div>
           );
         })}
+        <div className={`${friendsStyle.friendWrap} ${styles.friendWrap} ${styles['display-none']} user-center-friends-mini`}>
+          {followerAdapter(this.props.dataSource || this.state.fans).map((user, index) => {
+            if (index + 1 > this.props.limit) return null;
+            return (
+              <div key={user.id + index} className={friendsStyle.friendItem}>
+                <div className={friendsStyle.friendAvatar}>
+                  <Avatar
+                    image={user.avatar}
+                    userId={user.id}
+                    circle
+                    name={user.userName}
+                  />
+                </div>
+                <div className={friendsStyle.friendTextInfo}>
+                  {user.userName}
+                </div>
+              </div>
+            );
+          })}
+        </div>
         {isNoData && <NoData />}
         {this.state.loading && (
           <div className={classnames(styles.loadMoreContainer, this.props.loadingElementClass)}>

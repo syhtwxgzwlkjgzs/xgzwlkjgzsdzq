@@ -53,7 +53,6 @@
         }
       }
     }
-
   }
 
   .detail {
@@ -73,6 +72,7 @@
       height: 20px;
 
       .name {
+        max-width: 120px;
         font-weight: 600;
         font-size: $font-size-primary;
         text-align: left;
@@ -104,11 +104,18 @@
         .qq-emotion {
           width: 20px;
           height: 20px;
-          vertical-align: top;
+          vertical-align: text-top;
+          display: inline-block !important;
         }
 
-        a {
-          color: $primary-color;
+        .dzq-richText--mini {
+          overflow: hidden;
+          word-break: break-all;
+          line-height: 20px;
+
+          .dzq-a {
+            display: inline;
+          }
         }
       }
     }
@@ -133,7 +140,13 @@
     &.detail-thread {
       margin-left: $margin-2n;
       .middle {
-        line-height: 22px;
+
+        :global{
+          .dzq-richText--mini {
+            font-size: $font-size-primary;
+            line-height: 22px;
+          }
+        }
       }
     }
     /*财务详情*/
@@ -162,10 +175,16 @@
         line-height: 24px;
         background: $body-bg-color;
         border-radius: 0 0 5px 5px;
-        .content-html {
-          .tip {
-            color: $primary-color;
-            padding-right: $padding-5;
+
+        .tip {
+          color: $primary-color;
+          padding-right: $padding-5;
+          display: inline;
+        }
+
+        :global {
+          .dzq-richText--mini {
+            @include lamp-clamp(3);
           }
         }
       }

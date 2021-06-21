@@ -1,19 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styles from './index.module.scss';
 import { Menu } from '@discuzq/design';
 import { noop } from '@components/thread/utils'
 import filterData from './data';
 import deepClone from '@common/utils/deep-clone';
-import data from '../../../../search/pc/components/stepper/data';
+import { inject, observer } from 'mobx-react';
+
 /**
  * 顶部选择菜单
  * @prop {object} data 筛选数据
  * @prop {number} filterIndex 筛选选中项index
  */
-const orgFilter = {
-  
-}
-const Index = ({ onSubmit = noop, isShowDefault = false }) => {
+
+const Index = ({ index: indexStore, onSubmit = noop, isShowDefault = false }) => {
 
   const title = (name = '导航') => <span>{name}</span>;
   // 选中项index
@@ -28,15 +27,10 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
   
   const [dataSource, setDataSource] = useState(deepClone(newFilterData));
 
-  const onClickSubmenu = (subIndex, index) => {
-    // 点击二级菜单的头部，清空所有选项
-    newDataSource.map(item => {
-      item.isActive = false
-    })
-  }
-
   // 点击筛选项，获取目标值
   const onClick = (subIndex, index) => {
+    indexStore.topMenuIndex = subIndex
+
     const newDataSource = deepClone(newFilterData);
 
     // 清除「所有」选项选中状态
@@ -101,18 +95,39 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
     return result
   }
 
+  const resetLine = (subIndex) => {
+    dataSource.map((item, index) => {
+      if (`${index}` === `${subIndex}`) {
+        item.isActive = true
+      } else {
+        item.isActive = false
+      }
+    })
+  }
+
+  const subActiveIndex = useMemo(() => {
+    if (indexStore.topMenuIndex.indexOf('/') !== -1) {
+      const arr = indexStore.topMenuIndex.split('/')
+      const subIndex = arr[0]
+      resetLine(subIndex)
+      return subIndex
+    } else {
+      resetLine(indexStore.topMenuIndex)
+    }
+  }, [indexStore.topMenuIndex])
+
   return (
     <div className={styles.container}>
       {/* 菜单 */}
-      <Menu mode="horizontal" menuTrigger="hover" defaultActives={['0']}>
+      <Menu mode="horizontal" menuTrigger="hover" defaultActives={[`${indexStore.topMenuIndex}`]} defaultSubmenuActives={[`${subActiveIndex}`]}>
         {
           dataSource?.map((item, index) => (
             item.children ? (
                 <Menu.SubMenu 
                   key={index} 
-                  index={index} 
+                  index={`${index}`} 
                   title={title(item.label)} 
-                  style={{ padding: '3px 2%', height: '55px' }}
+                  style={{ padding: '3px 10px', height: '55px' }}
                 >
                   {
                     item.children.map((secondItem, secondIndex) => {
@@ -130,7 +145,7 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
                   }
                 </Menu.SubMenu>
             ) : (
-                <Menu.Item onClick={onClick} key={index} index={`${index}`} style={index === 0 ? {padding: '0 2% 0 0'} : { padding: '0 2%' }}>
+                <Menu.Item onClick={onClick} key={index} index={`${index}`} style={index === 0 ? {padding: '0 10px 0 0'} : { padding: '0 10px' }}>
                   <div className={styles.label}>
                     { item.label }
                     { item.isActive && <div className={styles.line}></div> }
@@ -144,4 +159,4 @@ const Index = ({ onSubmit = noop, isShowDefault = false }) => {
   );
 };
 
-export default React.memo(Index);
+export default inject('index')(observer(Index));

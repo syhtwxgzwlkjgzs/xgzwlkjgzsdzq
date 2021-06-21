@@ -2,10 +2,12 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import Button from '@discuzq/design/dist/components/button/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import { View } from '@tarojs/components';
 import classNames from 'classnames';
 import MoneyInput from './components/money-input';
 import styles from './index.module.scss';
+import Taro from '@tarojs/taro';
 
 @inject('wallet')
 @inject('site')
@@ -77,24 +79,32 @@ class Withdrawal extends React.Component {
       .createWalletCash({
         money: this.state.withdrawalAmount,
       })
-      .then((res) => {
+      .then(async () => {
         Toast.success({
-          content: res.Msg || '申请提现成功',
+          content: '申请提现成功',
           hasMask: false,
-          duration: 1000,
+          duration: 2000,
         });
+        const { getUserWalletInfo } = this.props.wallet;
+        await getUserWalletInfo();
+        Taro.navigateBack();
         this.initState();
       })
       .catch((err) => {
+        console.error(err);
         if (err.Code) {
           Toast.error({
             content: err.Msg || '申请提现失败，请重试',
-            duration: 1000,
+            duration: 2000,
           });
         }
         this.initState();
       });
-    // this.setState({ visible: !this.state.visible });
+  };
+
+  // 点击返回按钮
+  handlePageJump = () => {
+    Taro.navigateBack();
   };
 
   render() {
@@ -105,6 +115,10 @@ class Withdrawal extends React.Component {
       <>
         <View className={styles.container}>
           <View className={styles.main}>
+            {/* 自定义顶部返回 */}
+            <View className={styles.topBar}>
+              <Icon name="RightOutlined" onClick={() => this.handlePageJump()} />
+            </View>
             <View className={styles.totalAmount}>
               <View className={styles.moneyTitle}>可提现金额</View>
               <View className={styles.moneyNum}>{this.props.walletData?.availableAmount}</View>
@@ -127,7 +141,7 @@ class Withdrawal extends React.Component {
             })}
           >
             <Button type={'primary'} className={styles.button} onClick={this.moneyToWeixin} disabled={btnDisabled}>
-              提现到微信钱包
+              <View className={styles.buttonContent}>提现到微信钱包</View>
             </Button>
           </View>
         </View>

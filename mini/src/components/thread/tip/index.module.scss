@@ -8,27 +8,39 @@
 }
 .container {
   position: relative;
-  max-width: 44px;
+  max-width: 102px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
-
   .img {
-    border-right: 1px solid var(--color-white);
+    border-right: 1px solid $white;
     border-radius: 50%;
-    z-index: 1;
+    z-index: 5;
   }
-  .imgAfter {
+  .imgAfter2 {
     position: relative;
     left: -5px;
-    z-index: 0;
+    z-index: 4;
   }
-
-
+  .imgAfter3 {
+    position: relative;
+    left: -10px;
+    z-index: 3;
+  }
+  .imgAfter4 {
+    position: relative;
+    left: -15px;
+    z-index: 2;
+  }
+  .imgAfter5 {
+    position: relative;
+    left: -20px;
+    z-index: 1;
+  }
 
   .moreIcon {
     position: absolute;
-    right: 0;
+    right: 4px;
     bottom: 2.5px;
     transform: translateX(50%);
     color: $text-color-secondary;
@@ -41,7 +53,7 @@
     border-radius: 6px;
     border: $border-solid-1;
     box-sizing: border-box;
-
+    z-index: 5;
     .icon {
       transform: rotate(90deg);
     }

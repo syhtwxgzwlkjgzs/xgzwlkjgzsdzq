@@ -1,54 +1,206 @@
 import React from 'react';
-import IndexPage from '@layout/index';
-import Page from '@components/page';
-import withShare from '@common/utils/withShare/withShare'
 import { inject, observer } from 'mobx-react'
+import styles from './index.module.scss';
+import { View } from '@tarojs/components';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Toast from '@discuzq/design/dist/components/toast';
+import clearLoginStatus from '@common/utils/clear-login-status';
+import Router from '@discuzq/sdk/dist/router';
+import {readForum, readUser, readPermissions} from '@server';
+import Taro from '@tarojs/taro';
+import {
+  JUMP_TO_404,
+  INVALID_TOKEN,
+  TOKEN_FAIL,
+  JUMP_TO_LOGIN,
+  JUMP_TO_REGISTER,
+  JUMP_TO_AUDIT,
+  JUMP_TO_REFUSE,
+  JUMP_TO_DISABLED,
+  JUMP_TO_HOME_INDEX,
+  SITE_CLOSED,
+  JUMP_TO_PAY_SITE,
+  JUMP_TO_SUPPLEMENTARY,
+  SITE_NO_INSTALL
+} from '@common/constants/site';
+
+const PARTNER_INVITE_URL = '/subPages/forum/partner-invite/index';
+const CLOSE_URL = '/subPage/close/index';
+
 @inject('site')
-@inject('search')
-@inject('topic')
-@inject('index')
 @inject('user')
 @observer
-@withShare({
-  needLogin: true
-})
 class Index extends React.Component {
-  $getShareData(data) {
-    const { site } = this.props
-    const defalutTitle = site.webConfig?.setSite?.siteName || ''
-    const defalutPath = 'pages/index/index'
-    if (data.from === 'timeLine') {
-      return {
-        title: defalutTitle
-      }
+    
+    componentDidUpdate() {
+
     }
-    if (data.from === 'menu') {
-      return {
-        title: defalutTitle,
-        path: defalutPath
-      }
+
+    componentDidShow() {
+      this.initSiteData();
     }
-    const { title, path, comeFrom, threadId } = data
-    if (comeFrom && comeFrom === 'thread') {
-      const { user } = this.props
-      this.props.index.updateThreadShare({ threadId }).then(result => {
-        if (result.code === 0) {
-          this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
-          this.props.search.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
-          this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+
+    // 检查站点状态
+    setAppCommonStatus(result) {
+      const { site } = this.props;
+      switch (result.code) {
+        case 0:
+          break;
+        case SITE_CLOSED: site.setCloseSiteConfig(result.data);// 关闭站点
+          Router.redirect({
+            url: '/subPages/close/index'
+          });
+          return false;
+        case INVALID_TOKEN:// 没有权限,只能针对forum接口做此判断
+        case TOKEN_FAIL:// token无效
+          clearLoginStatus();
+          this.initSiteData(); // 重新获取数据
+          return false;
+        case JUMP_TO_404:// 资源不存在
+          Router.redirect({ url: '/subPages/404/index' });
+          break;
+        case JUMP_TO_LOGIN:// 到登录页
+          clearLoginStatus();
+          this.initSiteData(); // 重新获取数据
+          Router.reLaunch({ url: '/subPages/user/wx-auth/index' });
+          break;
+        case JUMP_TO_REGISTER:// 到注册页
+          clearLoginStatus();
+          this.initSiteData(); // 重新获取数据
+          Router.reLaunch({ url: '/subPages/user/wx-auth/index' });
+          break;
+        case JUMP_TO_AUDIT:// 到审核页
+          Router.push({ url: '/subPages/user/status/index?statusCode=2' });
+          break;
+        case JUMP_TO_REFUSE:// 到审核拒绝页
+          Router.push({ url: '/subPages/user/status/index?statusCode=-4007' });
+          break;
+        case JUMP_TO_DISABLED:// 到审核禁用页
+          Router.push({ url: '/subPages/user/status/index?statusCode=-4009' });
+          break;
+        case JUMP_TO_HOME_INDEX:// 到首页
+          Router.redirect({ url: '/pages/home/index' });
+          break;
+        case JUMP_TO_PAY_SITE:// 到付费加入页面
+          Router.push({ url: '/subPages/forum/partner-invite/index' });
+          break;
+        case JUMP_TO_SUPPLEMENTARY:// 跳转到扩展字段页
+          Router.push({ url: '/subPages/user/supplementary/index' });
+          break;
+        case SITE_NO_INSTALL:// 未安装站点
+          Router.push({ url: '/subPages/no-install/index' });
+          break;
+        default: 
+          Router.redirect({url: '/subPages/500/index'});
+          clearLoginStatus();
+          Toast.error({
+            content: result.msg || '未知错误'
+          })
+          break;
+      }
+      return true;
+    }
+
+    // 初始化站点数据
+    async initSiteData() {
+
+      const { site, user} = this.props;
+
+      let loginStatus = false;
+
+      site.setPlatform('mini');
+
+      let webConfig;
+      if ( !site.webConfig ) {
+        // 获取站点信息  
+        const siteResult = await readForum({});
+
+        // 检查站点状态
+        const isPass = this.setAppCommonStatus(siteResult);
+        if(!isPass) return;
+        site.setSiteConfig(siteResult.data);
+        webConfig = siteResult.data;
+      } else {
+        webConfig = site.webConfig;
+      }
+
+
+      if( webConfig && webConfig.user ) {
+
+        const userInfo = await readUser({ params: { pid: webConfig.user.userId } });
+        const userPermissions = await readPermissions({});
+
+        // 添加用户发帖权限
+        userPermissions.code === 0 && userPermissions.data && user.setUserPermissions(userPermissions.data);
+        // 当客户端无法获取用户信息，那么将作为没有登录处理
+        userInfo.code === 0 && userInfo.data && user.setUserInfo(userInfo.data);
+
+        loginStatus = !!userInfo.data && !!userInfo.data.id;
+      }
+
+      // 未登陆状态下，清空accessToken
+      !loginStatus && clearLoginStatus();
+
+      user.updateLoginStatus(loginStatus);
+
+      const isGoToHome = await this.isPass();
+      if (isGoToHome ) {
+        // 带有指定的路径，将不去首页。
+        const $instance = Taro.getCurrentInstance()
+        const router = $instance.router;
+        if (router.params && router.params.path) {
+          Router.redirect({
+            url: decodeURIComponent(router.params.path),
+            fail: () => {
+              Router.redirect({
+                url: '/pages/home/index'
+              });
+            }
+          });
+        } else {
+          Router.redirect({
+            url: '/pages/home/index'
+          });
         }
-      });
+      } else {
+        Router.redirect({
+          url: '/subPages/500/index'
+        });
+      }
     }
-    return {
-      title,
-      path
+
+  // 检查是否满足渲染条件
+  isPass() {
+    const { site, user } = this.props;
+    
+    const siteMode = site?.webConfig?.setSite?.siteMode;
+    if (site?.webConfig) {
+      // 关闭站点
+      if (site.closeSiteConfig) {
+        Router.redirect({ url: CLOSE_URL });
+        return false;
+      }
+
+      // 付费模式处理
+      if (siteMode === 'pay') {
+        // 未付费用户访问非白名单页面，强制跳转付费页
+        if (!user.isLogin() || !user.paid) {
+          Router.redirect({ url: PARTNER_INVITE_URL });
+          return false;
+        }
+      }
+    } else {
+      return false;
     }
+
+    return true;
   }
+
   render() {
     return (
-      <Page>
-        <IndexPage getThreadId={this.getThreadId} />
-      </Page>
+      <View className={styles.loadingBox}>
+        <Icon className={styles.loading} name="LoadingOutlined" size="large" />
+      </View>
     );
   }
 }

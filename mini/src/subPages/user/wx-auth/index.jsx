@@ -8,6 +8,7 @@ import { miniLogin } from '@server';
 import setAccessToken from '@common/utils/set-access-token';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus, isExtFieldsOpen } from '@common/store/login/util';
 import Page from '@components/page';
+import { get } from '@common/utils/get';
 import { getParamCode, getUserProfile } from '../common/utils'
 import layout from './index.module.scss';
 import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
@@ -54,16 +55,21 @@ class MiniAuth extends React.Component {
           inviteCode
         },
       });
-      checkUserStatus(resp);
+
       // 优先判断是否能登录
       if (resp.code === 0) {
         const { accessToken, uid } = resp.data;
         setAccessToken({
           accessToken,
         });
-        this.props.user.updateUserInfo(uid);
+        await this.props.user.updateUserInfo(uid);
+      }
+
+      // 检查正常登陆后的其它状态码，并重置code
+      checkUserStatus(resp);
+      if (resp.code === 0) {
         redirectTo({
-          url: `/pages/index/index`
+          url: `/pages/home/index`
         });
         return;
       }
@@ -75,21 +81,26 @@ class MiniAuth extends React.Component {
         });
         return;
       }
-      // 注册信息补充
-      // const { site } = this.props;
-      // if (isExtFieldsOpen(site) && resp.code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
-      //   this.props.commonLogin.needToCompleteExtraInfo = true;
-      //   redirectTo({ url: '/subPages/user/supplementary/index' });
-      //   return;
-      // }
 
       throw {
         Code: resp.code,
         Message: resp.msg,
       };
     } catch (error) {
+      // 注册信息补充
+      if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+        if (isExtFieldsOpen(this.props.site)) {
+          this.props.commonLogin.needToCompleteExtraInfo = true;
+          redirectTo({ url: '/subPages/user/supplementary/index' });
+          return;
+        }
+        redirectTo({ url: '/pages/home/index' });
+        return;
+      }
       // 跳转状态页
       if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
+        const uid = get(error, 'uid', '');
+        uid && this.props.user.updateUserInfo(uid);
         this.props.commonLogin.setStatusMessage(error.Code, error.Message);
         redirectTo({
           url: `/subPages/user/status/index?statusCode=${error.Code}&statusMsg=${error.Message}`

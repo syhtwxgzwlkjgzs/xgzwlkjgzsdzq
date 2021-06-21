@@ -18,7 +18,7 @@
   justify-content: space-between;
   align-items: center;
   padding: $padding-4n 0;
-  // border-bottom: 1px solid var(--border-line-color);
+  border-bottom: 1px solid var(--border-line-color);
   box-sizing: border-box;
   background-color: $white;
   height: rem(54);
@@ -37,6 +37,7 @@
   display: flex;
   align-items: center;
   height: $font-line-height-primary;
+  width: 80%;
 }
 .right {
   display: flex;

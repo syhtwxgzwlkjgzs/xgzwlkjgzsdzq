@@ -1,16 +1,17 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import Taro, { getCurrentInstance, navigateTo, redirectTo } from '@tarojs/taro';
+import Taro, { getCurrentInstance, navigateTo, redirectTo, navigateBack } from '@tarojs/taro';
 import Button from '@discuzq/design/dist/components/button/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import Input from '@discuzq/design/dist/components/input/index';
 import { View, Text } from '@tarojs/components';
 import Page from '@components/page';
-import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util';
+import { BANNED_USER, REVIEWING, REVIEW_REJECT, isExtFieldsOpen } from '@common/store/login/util';
 import { toTCaptcha } from '@common/utils/to-tcaptcha'
 import PhoneInput from '@components/login/phone-input'
 import { get } from '@common/utils/get';
 import layout from './index.module.scss';
+import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 
 
 @inject('site')
@@ -25,8 +26,11 @@ class BindPhoneH5Page extends React.Component {
     this.ticket = ''; // 腾讯云验证码返回票据
     this.randstr = ''; // 腾讯云验证码返回随机字符串
     this.onFocus = () => {}
+    const { from = '' } = getCurrentInstance()?.router?.params || {};
+    this.state = {
+      from
+    }
   }
-
 
   componentDidMount() {
     // 监听腾讯验证码事件
@@ -83,30 +87,55 @@ class BindPhoneH5Page extends React.Component {
       Toast.error({
         content: e.Message,
         hasMask: false,
-        duration: 1000,
+        duration: 2000,
       });
     }
   }
 
   handleBindButtonClick = async () => {
     try {
-      const { sessionToken } = getCurrentInstance().router.params;
+      const { sessionToken, from = '' } = getCurrentInstance().router.params;
       const resp = await this.props.mobileBind.bind(sessionToken);
       const uid = get(resp, 'uid', '');
-      this.props.user.updateUserInfo(uid);
+
+      const IS_FROM_BIND_SOURCE = from === 'paybox' || from === 'userCenter'
+
+      if (IS_FROM_BIND_SOURCE) {
+        this.props.user.updateUserInfo(this.props.user.id)
+      } else {
+        this.props.user.updateUserInfo(uid);
+      }
+
       Toast.success({
-        content: '登录成功',
+        content: IS_FROM_BIND_SOURCE ? '绑定成功' : '登录成功',
         hasMask: false,
-        duration: 1000,
+        duration: 2000,
         onClose: () => {
+          if (IS_FROM_BIND_SOURCE) {
+            navigateBack();
+            return;
+          }
           redirectTo({
-            url: `/pages/index/index`
+            url: `/pages/home/index`
           });
         }
       });
     } catch (e) {
+      // 注册信息补充
+      if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+        if (isExtFieldsOpen(this.props.site)) {
+          this.props.commonLogin.needToCompleteExtraInfo = true;
+          redirectTo({ url: '/subPages/user/supplementary/index' });
+          return;
+        }
+        redirectTo({ url: '/pages/home/index' });
+        return;
+      }
+
       // 跳转状态页
       if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
+        const uid = get(e, 'uid', '');
+        uid && this.props.user.updateUserInfo(uid);
         this.props.commonLogin.setStatusMessage(e.Code, e.Message);
         navigateTo({
           url: `/subPages/user/status/index?statusCode=${e.Code}&statusMsg=${e.Message}`
@@ -116,7 +145,7 @@ class BindPhoneH5Page extends React.Component {
       Toast.error({
         content: e.Message,
         hasMask: false,
-        duration: 1000,
+        duration: 2000,
       });
     }
   }
@@ -153,15 +182,20 @@ class BindPhoneH5Page extends React.Component {
             />
             {/* 输入框 end */}
             <Button className={layout.button} type="primary" onClick={this.handleBindButtonClick}>
-              下一步
+              {(this.state.from === 'userCenter' || this.state.from === 'paybox') ? '绑定' : '下一步'}
             </Button>
-            <View className={layout.functionalRegion}>
-              <Text className={layout.clickBtn} onClick={() => {
-                redirectTo({
-                  url: `/pages/index/index`
-                });
-              }} >跳过</Text>
-            </View>
+            {
+              (this.state.from !== 'userCenter' && this.state.from !== 'paybox')
+              && (
+                <View className={layout.functionalRegion}>
+                  <Text className={layout.clickBtn} onClick={() => {
+                    redirectTo({
+                      url: `/pages/home/index`
+                    });
+                  }} >跳过</Text>
+                </View>
+              )
+            }
           </View>
         </View>
       </Page>

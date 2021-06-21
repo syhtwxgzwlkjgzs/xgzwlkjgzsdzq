@@ -1,5 +1,5 @@
-import React, { createRef } from 'react';
-import { inject, observer } from 'mobx-react';
+import React, { createRef, Fragment } from 'react';
+import { inject, observer, Observer } from 'mobx-react';
 import { Icon, Tabs } from '@discuzq/design';
 import ThreadContent from '@components/thread';
 import HomeHeader from '@components/home-header';
@@ -8,8 +8,9 @@ import TopNew from './components/top-news';
 import FilterView from './components/filter-view';
 import BaseLayout from '@components/base-layout';
 import initJSSdk from '@common/utils/initJSSdk.js';
+import { getSelectedCategoryIds } from '@common/utils/handleCategory';
 import wxAuthorization from '../../user/h5/wx-authorization';
-import VList from '@components/virtual-list';
+import VList from '@components/virtual-list/example/index';
 
 @inject('site')
 @inject('user')
@@ -21,56 +22,41 @@ class IndexH5Page extends React.Component {
     super(props);
     this.state = {
       visible: false,
-      filter: {},
-      currentIndex: 'all',
       isFinished: true,
       fixedTab: false,
     };
     this.listRef = createRef();
     // 用于获取顶部视图的高度
     this.headerRef = createRef(null);
-    this.renderItem = this.renderItem.bind(this);
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     try {
       this.handleWeiXinShare();
     } catch (error) {}
 
-    const { filter = {} } = this.props.index;
-
-    const newFilter = { ...this.state.filter, ...filter };
-    const { categoryids = [] } = newFilter;
-
-    const currentIndex = this.resetCurrentIndex(categoryids[0] || 'all');
-
-    this.setState({ filter: newFilter, currentIndex });
-  }
-
-  componentWillUnmount() {
-    const { filter } = this.state;
-    this.props.index.setFilter(filter);
+    // 是否有推荐
+    const isDefault = this.props.site.checkSiteIsOpenDefautlThreadListData();
+    this.props.index.setNeedDefault(isDefault);
   }
 
   handleWeiXinShare = async () => {
-    await initJSSdk(['updateAppMessageShareData', 'updateTimelineShareData', 'checkJsApi']);
+    let { href } = window.location;
+    href = href.split('/');
+    href = [href[0], href[1], href[2]];
+    href = href.join('/');
     const { site } = this.props;
-    const title = site.webConfig.setSite.siteName || 'Discuz! Q';
-    const desc = site.webConfig.setSite.siteIntroduction || 'Discuz! Q官方论坛';
-    const imgUrl = site.webConfig.setSite.siteLogo;
-    const link = site.webConfig.setSite.siteUrl;
-    console.log({
-      title,
-      desc,
-      imgUrl,
-    });
+    const title = site.webConfig?.setSite?.siteName || 'Discuz! Q';
+    const desc = site.webConfig?.setSite?.siteUrl || href;
+    const imgUrl = site.webConfig?.setSite?.siteLogo;
+    const link = site.webConfig?.setSite?.siteUrl;
+    await initJSSdk(['updateAppMessageShareData', 'updateTimelineShareData']);
     wx.ready(() => {
       // 需在用户可能点击分享按钮前就先调用
       wx.updateAppMessageShareData({
         title, // 分享标题
         desc, // 分享描述
         link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        imgUrl, // 分享图标
       });
 
       wx.updateTimelineShareData({
@@ -78,26 +64,16 @@ class IndexH5Page extends React.Component {
         link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
         imgUrl, // 分享图标
       });
-
-      console.log(111);
     });
   };
-
-  checkIsOpenDefaultTab() {
-    return this.props.site.checkSiteIsOpenDefautlThreadListData();
-  }
 
   // 点击更多弹出筛选
   searchClick = () => {
-    this.setState({
-      visible: true,
-    });
+    this.setState({ visible: true });
   };
   // 关闭筛选框
   onClose = () => {
-    this.setState({
-      visible: false,
-    });
+    this.setState({ visible: false });
   };
 
   // 点击底部tabBar
@@ -105,86 +81,38 @@ class IndexH5Page extends React.Component {
     if (index !== 0) {
       return;
     }
-    const { dispatch = () => {} } = this.props;
-    const { filter } = this.state;
-    const requestFilter = Object.assign({}, filter);
-    dispatch('click-filter', requestFilter);
+    this.changeFilter();
   };
 
   onClickTab = (id = '') => {
-    const { dispatch = () => {} } = this.props;
-    const currentIndex = this.resetCurrentIndex(id);
-    const { categories = [] } = this.props.index;
-
-    // 若选中的一级标签，存在二级标签，则将一级id和所有二级id全都传给后台
-    let newCategoryIds = [currentIndex];
-    const tmp = categories.filter((item) => item.pid === currentIndex);
-    if (tmp.length && tmp[0]?.children?.length) {
-      newCategoryIds = [currentIndex];
-      tmp[0]?.children?.forEach((item) => {
-        newCategoryIds.push(item.pid);
-      });
-    }
-
-    const newFilter = { ...this.state.filter, categoryids: newCategoryIds, sequence: id === 'default' ? 1 : 0 };
-
-    dispatch('click-filter', newFilter);
-
-    this.props.index.setFilter(newFilter);
-
-    this.setState({
-      filter: newFilter,
-      currentIndex: id,
-      visible: false,
-    });
+    this.changeFilter({ categoryids: [id], sequence: id === 'default' ? 1 : 0 });
   };
 
-  // 筛选弹框点击筛选按钮后的回调：categoryids-版块 types-类型 essence-筛选
-  onClickFilter = ({ categoryids, types, essence, sequence }) => {
-    const { dispatch = () => {} } = this.props;
-    const requestCategoryids = categoryids.slice();
+  changeFilter = (params) => {
+    const { index, dispatch = () => {} } = this.props;
 
-    const newFilter = { ...this.state.filter, categoryids: requestCategoryids, types, essence, sequence };
-    dispatch('click-filter', newFilter);
+    if (params) {
+      const { categoryids } = params;
+      const categories = index.categories || [];
 
-    this.props.index.setFilter(newFilter);
+      // 获取处理之后的分类id
+      const id = categoryids[0];
+      const newCategoryIds = getSelectedCategoryIds(categories, id);
 
-    const newCurrentIndex = this.resetCurrentIndex(categoryids[0]);
-    this.setState({
-      filter: newFilter,
-      currentIndex: newCurrentIndex,
-      visible: false,
-    });
-  };
+      const newFilter = { ...index.filter, ...params, categoryids: newCategoryIds };
 
-  resetCategoryids(categoryids) {
-    return categoryids === 'all' || categoryids === 'default' ? '' : categoryids;
-  }
-
-  resetCurrentIndex = (id) => {
-    let newCurrentIndex = id;
-    const newId = this.resetCategoryids(id);
-    if (newId) {
-      const { categories = [] } = this.props.index;
-      categories.forEach((item) => {
-        if (item.children?.length) {
-          const tmp = item.children.filter((children) => children.pid === newId);
-          // TODO H5首页暂时不显示二级标题
-          if (tmp.length) {
-            newCurrentIndex = item.pid;
-          }
-        }
-      });
+      index.setFilter(newFilter);
     }
-    return newCurrentIndex;
+
+    dispatch('click-filter');
+
+    this.setState({ visible: false });
   };
 
   // 上拉加载更多
   onRefresh = () => {
     const { dispatch = () => {} } = this.props;
-    const { filter } = this.state;
-    const requestFilter = Object.assign({}, filter);
-    return dispatch('moreData', requestFilter);
+    return dispatch('moreData');
   };
 
   handleScroll = ({ scrollTop = 0 } = {}) => {
@@ -198,28 +126,9 @@ class IndexH5Page extends React.Component {
     }
   };
 
-  // 后台接口的分类数据不会包含「全部」，此处前端手动添加
-  handleCategories = () => {
-    const { categories = [] } = this.props.index || {};
-
-    if (!categories?.length) {
-      return categories;
-    }
-
-    const tmpCategories = [{ name: '全部', pid: 'all', children: [] }];
-
-    if (this.checkIsOpenDefaultTab()) {
-      tmpCategories.push({ name: '推荐', pid: 'default', children: [] });
-    }
-
-    return [...tmpCategories, ...categories];
-  };
-
   renderTabs = () => {
-    const { index } = this.props;
-    const { currentIndex, fixedTab } = this.state;
-    const { categories = [] } = index;
-    const newCategories = this.handleCategories();
+    const { fixedTab } = this.state;
+    const { categories = [], activeCategoryId, currentCategories } = this.props.index;
 
     return (
       <>
@@ -231,14 +140,14 @@ class IndexH5Page extends React.Component {
                 scrollable
                 type="primary"
                 onActive={this.onClickTab}
-                activeId={currentIndex}
+                activeId={activeCategoryId}
                 tabBarExtraContent={
                   <div onClick={this.searchClick} className={styles.tabIcon}>
                     <Icon name="SecondaryMenuOutlined" className={styles.buttonIcon} size={16} />
                   </div>
                 }
               >
-                {newCategories?.map((item, index) => (
+                {currentCategories?.map((item, index) => (
                   <Tabs.TabPanel key={index} id={item.pid} label={item.name} />
                 ))}
               </Tabs>
@@ -251,12 +160,11 @@ class IndexH5Page extends React.Component {
   };
 
   renderHeaderContent = () => {
-    const { index } = this.props;
-    const { sticks = [] } = index;
+    const { sticks = [] } = this.props.index || {};
 
     return (
       <>
-        {sticks && sticks.length > 0 && (
+        {sticks?.length > 0 && (
           <div className={styles.homeContentTop}>
             <TopNew data={sticks} itemMargin="1" />
           </div>
@@ -265,18 +173,13 @@ class IndexH5Page extends React.Component {
     );
   };
 
-  renderItem = ({ index, data }) => (
-    <div key={index}>
-      {index === 0 && this.renderHeaderContent()}
-      <ThreadContent data={data[index]} className={styles.listItem} />
-    </div>
-  );
   render() {
     const { index } = this.props;
-    const { filter, isFinished } = this.state;
-    const { threads = {} } = index;
+    const { filter, isFinished, currentCategories } = this.state;
+    const { threads = {}, sticks } = index;
     const { currentPage, totalPage, pageData } = threads || {};
-    const newCategories = this.handleCategories();
+    // 是否开启虚拟滚动
+    const enableVlist = true;
 
     return (
       <BaseLayout
@@ -289,36 +192,76 @@ class IndexH5Page extends React.Component {
         quickScroll={true}
         curr="home"
         pageName="home"
-        preload={1000}
         onClickTabBar={this.onClickTabBar}
         requestError={this.props.isError}
         errorText={this.props.errorText}
-        disabledList={true}
+        disabledList={enableVlist}
       >
-        <VList list={pageData} loadNextPage={this.onRefresh}>
-          {/* <HomeHeader ref={this.headerRef} /> */}
+        {enableVlist && (
+          <Fragment>
+            {this.state.fixedTab && this.renderTabs()}
 
-          {this.renderTabs()}
+            <VList
+              list={pageData}
+              sticks={sticks}
+              onScroll={this.handleScroll}
+              loadNextPage={this.onRefresh}
+              noMore={currentPage >= totalPage}
+              requestError={this.props.isError}
+              renderItem={(item, index, recomputeRowHeights, onContentHeightChange, measure) => (
+                <ThreadContent
+                  onContentHeightChange={measure}
+                  onImageReady={measure}
+                  onVideoReady={measure}
+                  key={index}
+                  // showBottomStyle={index !== pageData.length - 1}
+                  data={item}
+                  className={styles.listItem}
+                  recomputeRowHeights={measure}
+                />
 
-          {/* {this.renderHeaderContent()} */}
-        </VList>
+                // <ThreadContent
+                //   onContentHeightChange={(height) => onContentHeightChange(height, index)}
+                //   onImageReady={measure}
+                //   onVideoReady={measure}
+                //   key={index}
+                //   // showBottomStyle={index !== pageData.length - 1}
+                //   data={item}
+                //   className={styles.listItem}
+                //   recomputeRowHeights={recomputeRowHeights}
+                // />
+              )}
+            >
+              <HomeHeader ref={this.headerRef} />
+              <Observer>{() => this.renderTabs()}</Observer>
+              <Observer>{() => this.renderHeaderContent()}</Observer>
+            </VList>
+          </Fragment>
+        )}
 
-        {/* {pageData?.length > 0 &&
-          pageData.map((item, index) => (
-            <ThreadContent
-              key={index}
-              showBottomStyle={index !== pageData.length - 1}
-              data={item}
-              className={styles.listItem}
-            />
-          ))} */}
+        {!enableVlist && (
+          <Fragment>
+            <HomeHeader ref={this.headerRef} />
+            {this.renderTabs()}
+            {this.renderHeaderContent()}
+
+            {pageData?.map((item, index) => (
+              <ThreadContent
+                key={index}
+                showBottomStyle={index !== pageData.length - 1}
+                data={item}
+                className={styles.listItem}
+              />
+            ))}
+          </Fragment>
+        )}
 
         <FilterView
-          data={newCategories}
+          data={currentCategories}
           current={filter}
           onCancel={this.onClose}
           visible={this.state.visible}
-          onSubmit={this.onClickFilter}
+          onSubmit={this.changeFilter}
         />
       </BaseLayout>
     );

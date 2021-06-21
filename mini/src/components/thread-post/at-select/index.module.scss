@@ -28,8 +28,7 @@
       flex: 1;
       @include flex();
       padding: 0 $padding-2n;
-      background: $text-bg-color2;
-      opacity: 0.78;
+      background: $body-bg-color;
       border-radius: $border-radius-small;
 
       .icon-box {
@@ -44,7 +43,7 @@
       }
       .delete-icon {
         margin: auto;
-        color: $disabled-color;
+        color: $text-color-placeholder !important;
       }
     }
 
@@ -59,16 +58,14 @@
   :global {
     .dzq-input {
       width: 100%;
-      background: $text-bg-color2;
-      opacity: 0.78;
+      background: $body-bg-color;
 
       .dzq-input__inner {
         height: 36px;
         padding: 0;
         font-size: $font-size-middle;
         color: $text-color-primary;
-        background: $text-bg-color2;
-        opacity: 0.78;
+        background: $body-bg-color;
         border: none;
       }
 
@@ -93,6 +90,14 @@
       height: 70px;
       margin: 0 $margin-4n;
       border-top: $border-solid-1;
+
+      :global {
+        .dzq-checkbox-wrap.is-checked {
+          .dzq-checkbox {
+            border: none;
+          }
+        }
+      }
     }
     &:first-child .at-item__inner {
       border-top: none;
@@ -194,10 +199,10 @@
     :global {
       .dzq-button {
         width: 100%;
+        height: 42px;
         padding: $padding-10 0;
         font-size: $font-size-middle;
         color: $text-color-regular;
-        line-height: $font-line-height-small;
         border: none;
         border-radius: $border-radius-small;
         background: $text-bg-color2;

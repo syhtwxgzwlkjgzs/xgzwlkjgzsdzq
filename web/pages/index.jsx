@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import IndexH5Page from '@layout/index/h5';
 import IndexPCPage from '@layout/index/pc';
 import { readCategories, readStickList, readThreadList } from '@server';
-import { Toast } from '@discuzq/design';
+import { handleString2Arr } from '@common/utils/handleCategory';
 import HOCFetchSiteData from '../middleware/HOCFetchSiteData';
 import ViewAdapter from '@components/view-adapter';
 
@@ -15,8 +15,6 @@ import ViewAdapter from '@components/view-adapter';
 class Index extends React.Component {
 
   state = {
-    isError: false,
-    errorText: '',
     categoryError: false,
     categoryErrorText: '',
   }
@@ -51,13 +49,13 @@ class Index extends React.Component {
     // serverIndex && serverIndex.threads && index.setThreads(serverIndex.threads);
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const { index } = this.props;
     const { essence = 0, sequence = 0, attention = 0, sort = 1 } = index.filter;
 
-    let newTypes = this.handleString2Arr(index.filter, 'types');
+    let newTypes = handleString2Arr(index.filter, 'types');
 
-    let categoryIds = this.handleString2Arr(index.filter, 'categoryids');
+    let categoryIds = handleString2Arr(index.filter, 'categoryids');
 
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasCategoriesData = !!index.categories;
@@ -65,11 +63,7 @@ class Index extends React.Component {
     const hasThreadsData = !!index.threads;
 
     if (!hasCategoriesData) {
-      try {
-        await this.props.index.getReadCategories();
-      } catch (error) {
-        this.setState({ categoryError: true, categoryErrorText: error })
-      }
+      this.props.index.getReadCategories();
     }
 
     if (!hasSticksData) {
@@ -77,55 +71,30 @@ class Index extends React.Component {
     }
    
     if (!hasThreadsData) {
-      try {
-        await this.props.index.getReadThreadList({
-          sequence, 
-          filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort } 
-        });
-      } catch (error) {
-        this.setState({ isError: true, errorText: error })
-      }
+      this.props.index.getReadThreadList({
+        sequence, 
+        filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort } 
+      });
     } else {
       // 如果store中有值，则需要获取之前的分页数
       this.page = index.threads.currentPage || 1
     }
   }
 
-  // 将字符串转成数组，且过滤掉不必要的参数
-  handleString2Arr = (dic, key) => {
-    if (!dic || !dic[key]) {
-      return
-    }
-
-    const target = dic[key]
-    let arr = [];
-    if (target) {
-      if (!(target instanceof Array)) {
-        arr = [target];
-      } else {
-        arr = target;
-      }
-    }
-
-    return arr?.filter(item => item !== 'all' && item !== 'default' && item !== '') || []
-  }
-
   dispatch = async (type, data = {}) => {
-    const { index, baselayout } = this.props;
-    const { essence, sequence, attention, sort, page } = data;
+    const { index } = this.props;
+    const newData = {...index.filter, ...data}
+    const { essence, sequence, attention, sort, page } = newData;
 
-    let newTypes = this.handleString2Arr(data, 'types');
+    let newTypes = handleString2Arr(newData, 'types');
 
-    let categoryIds = this.handleString2Arr(data, 'categoryids');
+    let categoryIds = handleString2Arr(newData, 'categoryids');
 
     if (type === 'click-filter') { // 点击tab
       this.page = 1;
-      try {
-        await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
-      } catch (error) {
-        this.setState({ isError: true, errorText: error })
-      }
       this.props.baselayout.setJumpingToTop();
+
+      await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
     } else if (type === 'moreData') {
       this.page += 1;
       return await index.getReadThreadList({
@@ -147,8 +116,8 @@ class Index extends React.Component {
   render() {
     const { categoryName = '' } = this.props.index || {}
     return <ViewAdapter
-            h5={<IndexH5Page dispatch={this.dispatch} isError={this.state.isError} errorText={this.state.errorText} />}
-            pc={<IndexPCPage dispatch={this.dispatch} {...this.state} />}
+            h5={<IndexH5Page dispatch={this.dispatch} />}
+            pc={<IndexPCPage dispatch={this.dispatch} />}
             title={categoryName}
           />;
   }

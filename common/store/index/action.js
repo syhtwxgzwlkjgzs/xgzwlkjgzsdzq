@@ -3,6 +3,7 @@ import IndexStore from './store';
 import { readCategories, readStickList, readThreadList, updatePosts, createThreadShare, readRecommends } from '@server';
 import typeofFn from '@common/utils/typeof';
 import threadReducer from '../thread/reducer';
+import { getCategoryName, getActiveId, getCategories, handleString2Arr } from '@common/utils/handleCategory'
 
 class IndexAction extends IndexStore {
   constructor(props) {
@@ -13,50 +14,34 @@ class IndexAction extends IndexStore {
   @computed get categoryName() {
     const categories = this.categories || [];
     const { categoryids } = this.filter
+
+    return getCategoryName(categories, categoryids)
+  }
+
+  // 获取被点击一级分类的name
+  @computed get activeCategoryId() {
+    const categories = this.categories || [];
+    const { categoryids } = this.filter
     
-    if (categories?.length) {
-      const id = categoryids[0]
-      if (id !== 'all' && id !== 'default') {
-        let name = ''
-        categories.forEach(item => {
-          if (`${item.pid}` === `${id}`) {
-            name = item.name
-          } else {
-            if (item.children?.length) {
-              
-              item.children.forEach(children => {
-                if (`${children.pid}` === `${id}`) {
-                  name = children.name
-                }
-              })
-            }
-          }
-        })
-        return name
-      }
-    }
-    return ''
+    const [id, cid] = getActiveId(categories, categoryids)
+    return id
   }
 
-  resetCategoryids(categoryids) {
-    return categoryids === 'all' || categoryids === 'default' ? '' : categoryids;
+  // 获取被点击二级分类的name
+  @computed get activeChildCategoryId() {
+    const categories = this.categories || [];
+    const { categoryids } = this.filter
+    
+    const [id, cid] = getActiveId(categories, categoryids)
+    return cid
   }
 
-  resetCurrentIndex = (id) => {
-    let newCurrentIndex = id;
-    const newId = this.resetCategoryids(id);
-    if (newId) {
-      const categories = this.categories || [];
-      categories.forEach((item) => {
-        if (item.children?.length) {
-          const tmp = item.children.filter(children => children.pid === newId);
-          if (tmp.length) {
-            newCurrentIndex = item.pid;
-          }
-        }
-      });
-    }
-    return newCurrentIndex;
+  // 获取当前分类数据
+  @computed get currentCategories() {
+    const categories = this.categories || [];
+    const needDefault = this.needDefault
+
+    return getCategories(categories, needDefault)
   }
 
   /**
@@ -91,6 +76,30 @@ class IndexAction extends IndexStore {
     this.hasOnScrollToLower = data
   }
 
+  @action.bound
+  setNeedDefault(data) {
+    this.needDefault = data
+  }
+
+  @action
+  resetErrorInfo() {
+    this.threadError = {
+      isError: false,
+      errorText: ''
+    }
+    this.categoryError = {
+      isError: false,
+      errorText: ''
+    }
+  }
+
+  @action
+  resetHomeThreadData() {
+    this.threads = null;
+    this.sticks = null;
+    this.resetErrorInfo()
+  }
+
 /**
  * 详情页点击标签、置顶跳转首页操作
  * @param {array} categoryIds 分类Ids
@@ -101,9 +110,13 @@ class IndexAction extends IndexStore {
     if (categoryIds?.length) {
       this.threads = null;
       this.sticks = null;
+      this.resetErrorInfo()
+
       this.setFilter({ categoryids: categoryIds })
     } else {
-      const { categoryids = [], sequence = 0 } = this.filter
+      const { sequence = 0 } = this.filter
+      const categoryids = handleString2Arr(this.filter, 'categoryids')
+
       this.screenData({ filter: { categoryids }, sequence })
     }
   }
@@ -130,12 +143,19 @@ class IndexAction extends IndexStore {
    * @param {*} param0
    */
   @action
-  async screenData({ filter = {}, sequence = 0, perPage = 10, page = 1 } = {}) {
-    this.threads = null;
-    this.sticks = null;
+  async screenData({ filter = {}, sequence = 0, perPage = 10, page = 1, isMini = false } = {}) {
+    // 如果是小程序请求，先不把数据置空，以免导致页面提前渲染
+    if (!isMini) {
+      this.threads = null;
+      this.sticks = null;
+    }
+    
+    this.resetErrorInfo()
 
-    this.getRreadStickList(filter.categoryids);
-    this.getReadThreadList({ filter, sequence, perPage, page });
+    await this.getRreadStickList(filter.categoryids);
+    await this.getReadThreadList({ filter, sequence, perPage, page });
+
+    return
   }
 
   /**
@@ -184,9 +204,14 @@ class IndexAction extends IndexStore {
         }
       }
       return result.data;
-    }
+    } else {
+      this.threadError = {
+        isError: true,
+        errorText: result?.msg || ''
+      }
 
-    return Promise.reject(result?.msg || '');
+      return Promise.reject(result?.msg || '');
+    }
   }
 
   /**
@@ -200,9 +225,14 @@ class IndexAction extends IndexStore {
       const data = [...result.data];
       this.setCategories(data);
       return this.categories;
+    } else {
+      this.categoryError = {
+        isError: true,
+        errorText: result?.msg || '加载失败'
+      }
+
+      return Promise.reject(result?.msg || '加载失败');
     }
-    
-    return Promise.reject(result?.msg || '加载失败');
   }
 
   /**
@@ -212,9 +242,9 @@ class IndexAction extends IndexStore {
   @action
   async getRreadStickList(categoryIds = []) {
     const result = await readStickList({ params: { categoryIds } });
-    if (result.code === 0 && result.data) {
+    if (result.code === 0) {
       this.sticks = null;
-      this.setSticks(result.data);
+      this.setSticks(result.data || []);
       return this.sticks;
     }
     return null;
@@ -322,7 +352,7 @@ class IndexAction extends IndexStore {
    */
   @action
   updateAssignThreadAllData(threadId, threadInfo) {
-    if (!threadId) return false;
+    if (!threadId || !threadInfo || !Object.keys(threadInfo).length) return false;
     const targetThread = this.findAssignThread(typeofFn.isNumber(threadId) ? threadId : +threadId);
     if (!targetThread) return false;
     const { index, data } = targetThread;
@@ -392,10 +422,18 @@ class IndexAction extends IndexStore {
    */
   @action
   addThread(threadInfo) {
-    const { pageData } = this.threads || {};
-    if (pageData) {
-      pageData.unshift(threadInfo);
-      this.threads.pageData = this.threads.pageData.slice();
+    const { threadId = '' } = threadInfo
+    const targetThread = this.findAssignThread(threadId);
+
+    // 如果更新的数据不存在，则直接插入。若存在，则替代原有数据
+    if (!targetThread || targetThread.length === 0) {
+      const { pageData } = this.threads || {};
+      if (pageData) {
+        pageData.unshift(threadInfo);
+        this.threads.pageData = this.threads.pageData.slice();
+      }
+    } else {
+      this.updateAssignThreadAllData(threadId, threadInfo)
     }
   }
 
@@ -429,8 +467,8 @@ class IndexAction extends IndexStore {
     this.updateRecommendsStatus('loading');
     
     const result = await readRecommends({ params: { categoryIds } })
-    if (result.code === 0 && result.data) {
-      this.setRecommends(result.data);
+    if (result.code === 0) {
+      this.setRecommends(result.data || []);
       this.updateRecommendsStatus('none');
       return this.recommends;
     } else {

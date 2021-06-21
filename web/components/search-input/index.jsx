@@ -1,6 +1,5 @@
 import React from 'react';
 import { Input, Icon } from '@discuzq/design';
-import { debounce } from '@common/utils/throttle-debounce.js';
 
 
 import styles from './index.module.scss';
@@ -25,21 +24,40 @@ const SearchInput = ({
 }) => {
   const [value, setValue] = React.useState(defaultValue);
   const [isShow, setIsShow] = React.useState(false);
+  const [timeoutID, setTimeoutID] = React.useState(null);
+
   const inputChange = (e) => {
-    setValue(e.target.value);
-    if (e.target.value.length > 0) {
+    const val = e.target.value;
+    setValue(val);
+    if (val.length > 0) {
       setIsShow(true)
     }
-    if(searchWhileTyping && e.target.value.length >= searchWhileTypingStartsAt) {
-      debounce(() => {
-        onSearch(e.target.value);
-      }, 800)();
+    if(searchWhileTyping && val.length >= searchWhileTypingStartsAt) {
+      if(timeoutID !== null) { // 做一个防抖Debounce
+        clearTimeout(timeoutID);
+        setTimeoutID(null);
+      }
+      setTimeoutID(setTimeout(() => {
+        onSearch(val);
+      }, searchWhileTyping ? 1000 : 0));
     }
   }
+
+  const onEnter = (e) => {
+    if(timeoutID !== null) {
+      clearTimeout(timeoutID);
+      setTimeoutID(null);
+    }
+    setTimeoutID(setTimeout(() => {
+      onSearch(e.target.value);
+    }, 500));
+  }
+
   const clearInput = () => {
     setValue('');
     setIsShow(false)
   }
+
   return (
     <div className={`${styles.container} ${!isShowBottom && styles.hiddenBottom}`}>
       <div className={styles.inputWrapper}>
@@ -47,7 +65,7 @@ const SearchInput = ({
         <Input
           value={value}
           placeholder='请输入想要搜索的内容...'
-          onEnter={e => onSearch(e.target.value)}
+          onEnter={e => onEnter(e)}
           onChange={e => inputChange(e)}
           className={styles.input}
         />

@@ -8,8 +8,9 @@ import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
 import UserCenterUsers from '@components/user-center-users';
 import { get } from '@common/utils/get';
-import layout from './index.module.scss';
+import Router from '@discuzq/sdk/dist/router';
 import { simpleRequest } from '@common/utils/simple-request';
+import layout from './index.module.scss';
 
 @inject('site')
 @inject('forum')
@@ -39,15 +40,15 @@ class ForumH5Page extends React.Component {
   };
 
   // @TODO
-  onUserClick = (id) => {
-    // Router.push(`/user/${id}`);
+  onUserClick = ({ id }) => {
+    Router.push({ url: `/subPages/user/index?id=${id}` });
   };
 
   render() {
     const { site, forum } = this.props;
     const { usersPageData = [], isNoMore } = forum;
     // 站点介绍
-    const siteIntroduction = get(site, 'webConfig.setSite.siteIntroduction', '');
+    const { siteIntroduction } = site;
     // 创建时间
     const siteInstall = get(site, 'webConfig.setSite.siteInstall', '');
     // 站点模式
@@ -56,12 +57,12 @@ class ForumH5Page extends React.Component {
     const siteAuthor = get(site, 'webConfig.setSite.siteAuthor', '');
     return (
       <>
-        <HomeHeader showToolbar />
+        <HomeHeader showToolbar fullScreenTitle="站点信息" />
         <View className={layout.content}>
           {/* 站点介绍 start */}
           <View className={layout.list}>
             <View className={layout.label}>站点介绍</View>
-            <View className={layout.right}>{siteIntroduction}</View>
+            <View className={`${layout.right} ${layout.textEllipsis}`}>{siteIntroduction}</View>
           </View>
           {/* 站点介绍 end */}
           {/* 创建时间 start */}
@@ -119,7 +120,7 @@ class ForumH5Page extends React.Component {
           {/* 当前版本 start */}
           <View className={layout.list}>
             <View className={layout.label}>当前版本</View>
-            <View className={layout.right}>v2.1.20121231</View>
+            <View className={layout.right}>v3.20210610v1</View>
           </View>
           {/* 当前版本 end */}
         </View>
@@ -130,7 +131,7 @@ class ForumH5Page extends React.Component {
           onClose={() => forum.setIsPopup(false)}
           containerClassName={layout.forum_users_popup}
         >
-          <UserCenterUsers />
+          <UserCenterUsers onContainerClick={this.onUserClick} />
         </Popup>
       </>
     );

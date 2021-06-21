@@ -350,6 +350,25 @@ class CommentH5Page extends React.Component {
     });
   }
 
+  avatarClick(commentData) {
+    const { userId } = commentData;
+    if(!userId) return;
+    this.props.router.push(`/user/${userId}`);
+  }
+
+  replyAvatarClick(reply, comment, floor) {
+    if (floor === 2) {
+      const { userId } = reply;
+      if(!userId) return;
+      this.props.router.push(`/user/${userId}`)
+    }
+    if (floor === 3) {
+      const { commentUserId } = reply;
+      if(!commentUserId) return;
+      this.props.router.push(`/user/${commentUserId}`)
+    }
+  }
+
   render() {
     const { commentDetail: commentData, isReady } = this.props.comment;
 
@@ -401,9 +420,11 @@ class CommentH5Page extends React.Component {
               data={commentData}
               likeClick={() => this.likeClick(commentData)}
               replyClick={() => this.replyClick(commentData)}
+              avatarClick={() => this.avatarClick(commentData)}
               deleteClick={() => this.deleteClick(commentData)}
               replyLikeClick={(reply) => this.replyLikeClick(reply, commentData)}
               replyReplyClick={(reply) => this.replyReplyClick(reply, commentData)}
+              replyAvatarClick={(reply,floor) =>this.replyAvatarClick(reply,commentData,floor)}
               replyDeleteClick={(reply) => this.replyDeleteClick(reply, commentData)}
               onMoreClick={() => this.onMoreClick()}
               isHideEdit={true}

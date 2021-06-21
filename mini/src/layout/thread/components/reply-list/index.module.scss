@@ -4,25 +4,28 @@
   padding-top: $padding-4n;
   .replyListAvatar {
     margin-right: $margin-2n;
+    margin-top: $margin-1n;
   }
   .replyListContent {
     width: 100%;
     .replyListContentText {
-      padding: $padding-2n;
+      padding: $padding-2n rem($padding-3n);
       border-radius: $border-radius-small;
       background: $body-bg-color;
       .replyListName {
+        max-width: 100px;
         font-size: $font-size-primary;
         font-weight: bold;
         line-height: 20px;
         text-align: left;
-        color: var(--color-text-primary);
+        color: $text-color-primary;
+        @include text-ellipsis();
       }
       .replyListText {
         margin-top: $margin-1n;
         font-size: $font-size-middle;
         text-align: left;
-        color: var(--color-text-primary);
+        color: $text-color-primary;
         width: 100%;
         word-break: break-all;
         line-height: $font-line-height-middle;
@@ -46,7 +49,7 @@
 
           &.isShowOne {
             // @include lamp-clamp(3);
-  
+
             // p {
             //   @include lamp-clamp(3);
             // }
@@ -75,12 +78,14 @@
           height: 28px;
 
           .replyedUserName {
+            max-width: 100px;
             font-weight: bold;
             font-size: $font-size-primary;
             margin-right: $margin-2n;
             line-height: 18px;
             text-align: left;
-            color: var(--color-primary);
+            color: $primary-color;
+            @include text-ellipsis();
           }
           .replyedAvatar {
             display: inline-block;
@@ -107,7 +112,7 @@
       font-size: $font-size-primary;
       line-height: 16.8px;
       text-align: left;
-      color: var(--color-text-secondary);
+      color: $text-color-secondary;
       padding-top: $padding-2n;
       .replyTime {
         // flex: 1;
@@ -118,7 +123,7 @@
       }
       .replyLike {
         // flex: 1;
-        color: var(--color-primary);
+        color: $primary-color;
       }
       .replyReply {
         // flex: 1;

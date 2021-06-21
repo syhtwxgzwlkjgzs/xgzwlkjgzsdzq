@@ -27,6 +27,9 @@ class H5OthersPage extends React.Component {
   componentDidMount = async () => {
     const { query } = this.props.router;
     const id = this.props.user?.id;
+    if (!query.id || query.id === 'undefined') {
+      Router.replace({ url: '/' })
+    }
     if (String(id) === query.id) {
       Router.replace({ url: '/my' });
       return;
@@ -67,6 +70,7 @@ class H5OthersPage extends React.Component {
         immediateCheck={true}
         onRefresh={this.fetchTargetUserThreads}
         noMore={targetUserThreadsTotalPage < targetUserThreadsPage}
+        showRefresh={!this.state.fetchUserInfoLoading}
       >
         <div className={styles.mobileLayout}>
           {this.state.fetchUserInfoLoading && (
@@ -93,11 +97,9 @@ class H5OthersPage extends React.Component {
 
             <div className={styles.threadItemContainer}>
               {this.formatUserThreadsData(targetUserThreads)
-              && this.formatUserThreadsData(targetUserThreads).length > 0 ? (
+              && this.formatUserThreadsData(targetUserThreads).length > 0 &&
                 <UserCenterThreads data={this.formatUserThreadsData(targetUserThreads)} />
-                ) : (
-                <NoData />
-                )}
+              }
             </div>
           </div>
         </div>

@@ -92,6 +92,7 @@ const RenderThreadContent = inject('user')(
       typeof props.onClickUser === 'function' && props.onClickUser(e);
     };
 
+    console.log(parseContent.VIDEO)
     return (
       <div className={`${styles.container}`}>
         <div className={styles.header}>
@@ -151,22 +152,22 @@ const RenderThreadContent = inject('user')(
           )}
 
           {/* 图片 */}
-          {parseContent.IMAGE && <ImageDisplay imgData={parseContent.IMAGE} />}
+          {parseContent.IMAGE && <ImageDisplay flat imgData={parseContent.IMAGE} />}
 
           {/* 视频 */}
           {parseContent.VIDEO && (
             <VideoPlay
               url={parseContent.VIDEO.mediaUrl}
               coverUrl={parseContent.VIDEO.coverUrl}
-              width={400}
-              height={200}
+              v_height={parseContent.VIDEO.height || null}
+              v_width={parseContent.VIDEO.width || null}
               status={parseContent.VIDEO.status}
             />
           )}
           {/* 音频 */}
           {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
           {/* 附件 */}
-          {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
+          {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} threadId={threadStore?.threadData?.threadId} />}
           {/* 商品 */}
           {parseContent.GOODS && (
             <div>
@@ -273,7 +274,7 @@ const RenderThreadContent = inject('user')(
                 )}
               </div>
               <div className={styles.likeReward}>
-                <Tip tipData={tipData} imgs={threadStore?.threadData?.likeReward?.users || []} showMore={true}></Tip>
+                <Tip tipData={tipData} imgs={threadStore?.threadData?.likeReward?.users || []} showMore={true} showCount={5} platform="h5"></Tip>
               </div>
             </div>
             {threadStore?.threadData?.likeReward?.shareCount > 0 && (

@@ -6,38 +6,33 @@ import isServer from '../../../../../../common/utils/is-server';
 // import LoadingBox from '@components/loading-box';
 import BottomView from '@components/list/BottomView';
 
-const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, defaultFisrtIndex = -1, defaultSecondIndex = -1, isError = false, errorText }) => {
+const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, defaultFisrtIndex = 'all', defaultSecondIndex = 'all', isError = false, errorText }) => {
   const [fistIndex, setFistIndex] = useState(defaultFisrtIndex);
   const [secondIndex, setSecondIndex] = useState(defaultSecondIndex);
 
+  useEffect(() => {
+    setFistIndex(defaultFisrtIndex)
+    setSecondIndex(defaultSecondIndex)
+  }, [defaultFisrtIndex, defaultSecondIndex])
+
   const onClick = (subIndex, index) => {
     let categoryIds = subIndex.split('/')
-    let sequence = 0;
-
-    // 若是点击已选中的项，则不处理「更新：暂时不需要处理这里」
-    // if (fistIndex === categoryIds[0]) {
-    //   if (categoryIds[1] === '-1') {
-    //     return
-    //   } else {
-    //     if (secondIndex === categoryIds[1]) {
-    //       return
-    //     }
-    //   }
-    // }
-
-    setFistIndex(categoryIds[0]);
-    setSecondIndex(categoryIds[1]);
-    if (categoryIds[1] === '-1') {
-      if (categoryIds[0] !== '-1') { // 全部
+  
+    // 点击没有二级分类的一级分类，或者是二级分类
+    if (categoryIds.length !== 1) { 
+      setFistIndex(categoryIds[0]);
+      setSecondIndex(categoryIds[1]);
+      if (categoryIds[1] === 'all') {
         categoryIds = [categoryIds[0]]
       } else {
-        categoryIds = []
+        categoryIds = [categoryIds[1]]
       }
     } else {
-      categoryIds = [categoryIds[1]]
+      setFistIndex(categoryIds[0]);
+      setSecondIndex('all');
     }
 
-    onNavigationClick({ categoryIds, sequence })
+    onNavigationClick({ categoryIds })
   }
   const debounce = (fn, wait) => {
     let timer = null;
@@ -72,14 +67,14 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
 
   const renderMenuTitle = ({ name, threadCount }) => (
     <div className={styles.subMenuBox}>
-      <span>{name}</span>
+      <span className={styles.ellipsis}>{name}</span>
       {threadCount !== 0 && <span className={styles.span}>{name === '全部' ? totalThreads : threadCount}</span>}
     </div>
   );
 
   const renderSubMenuTitle = ({ name, threadCount }) => (
     <div>
-      <span>{name}</span>
+      <span className={styles.ellipsis}>{name}</span>
       {threadCount !== 0 && <span className={styles.subSpan}>{threadCount}</span>}
     </div>
   );
@@ -88,13 +83,13 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
     <Menu defaultOpeneds={[`${fistIndex}`]} defaultSubmenuActives={[`${fistIndex}`]} defaultActives={[`${fistIndex}/${secondIndex}`]}>
       {
         categories?.map((item, index) => (item?.children?.length > 0 ? (
-          <Menu.SubMenu key={index} index={`${item.pid}`} title={renderMenuTitle(item)}>
+          <Menu.SubMenu key={index} index={`${item.pid}`} title={renderMenuTitle(item)} onClick={onClick}>
             {item.children.map((child, subIndex) => (
               <Menu.Item index={`${item.pid}/${child.pid}`} key={subIndex} onClick={onClick}>{renderSubMenuTitle(child)}</Menu.Item>
             ))}
           </Menu.SubMenu>
         ) : (
-          <Menu.Item index={`${item.pid}/-1`} key={index} onClick={onClick}>{renderMenuTitle(item)}</Menu.Item>
+          <Menu.Item index={`${item.pid}/all`} key={index} onClick={onClick}>{renderMenuTitle(item)}</Menu.Item>
         )))
       }
     </Menu>
@@ -104,7 +99,7 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
     <Card className={`${styles.container} ${styles.verticalScrollbar}`} style={{
       /* stylelint-disable */
       background: '#fff', overflowY: 'auto',
-      maxHeight: (windowSize?.innerHeight - 80) || '600px'
+      maxHeight: (windowSize?.innerHeight - 95) || '600px'
     }} bordered={false}>
       {
         categories?.length ?

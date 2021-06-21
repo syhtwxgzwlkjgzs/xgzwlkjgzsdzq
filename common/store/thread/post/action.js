@@ -4,6 +4,7 @@ import { readEmoji, readFollow, readProcutAnalysis, readTopics, createThread, up
 import { LOADING_TOTAL_TYPE, THREAD_TYPE } from '@common/constants/thread-post';
 import { emojiFromEditFormat, emojiFormatForCommit } from '@common/utils/emoji-regexp';
 import { formatDate } from '@common/utils/format-date';
+import { initPostData } from './common';
 
 class ThreadPostAction extends ThreadPostStore {
   /**
@@ -178,24 +179,7 @@ class ThreadPostAction extends ThreadPostStore {
   // 重置发帖数据
   @action.bound
   resetPostData() {
-    this.postData = {
-      title: '',
-      categoryId: 0,
-      anonymous: 0,
-      draft: 0,
-      price: 0,
-      attachmentPrice: 0,
-      freeWords: 1,
-      position: {},
-      contentText: '',
-      audio: {},
-      rewardQa: {},
-      product: {},
-      redpacket: {},
-      video: {},
-      images: {},
-      files: {},
-    };
+    this.postData = { ...initPostData };
     this.setCategorySelected();
   }
 
@@ -204,7 +188,7 @@ class ThreadPostAction extends ThreadPostStore {
    */
   @action
   gettContentIndexes() {
-    const { images, video, files, product, audio, redpacket, rewardQa, orderSn, draft } = this.postData;
+    const { images, video, files, product, audio, redpacket, rewardQa, orderInfo = {} } = this.postData;
     const imageIds = Object.values(images).map(item => item.id);
     const docIds = Object.values(files).map(item => item.id);
     const contentIndexes = {};
@@ -239,19 +223,19 @@ class ThreadPostAction extends ThreadPostStore {
         body: { audioId: audio.id || audio.threadVideoId || '' },
       };
     }
-
-    const draftData = draft ? 1 : 0;
-    if (redpacket.price && !redpacket.id) {
+    // const draft = this.isThreadPaid ? 0 : 1;
+    // 红包和悬赏插件不需要传入草稿字段了，直接使用全局的即可
+    if (redpacket.price) { //  && !orderInfo.status 不管是否支付都传入
       contentIndexes[THREAD_TYPE.redPacket] = {
         tomId: THREAD_TYPE.redPacket,
-        body: { orderSn, ...redpacket, draft: draftData },
+        body: { orderSn: orderInfo.orderSn, ...redpacket },
       };
     }
 
-    if (rewardQa.value && !rewardQa.id) {
+    if (rewardQa.value) { //  && !orderInfo.status
       contentIndexes[THREAD_TYPE.reward] = {
         tomId: THREAD_TYPE.reward,
-        body: { expiredAt: rewardQa.times, price: rewardQa.value, type: 0, orderSn, draft: draftData },
+        body: { expiredAt: rewardQa.times, price: rewardQa.value, type: 0, orderSn: orderInfo.orderSn },
       };
     }
     return contentIndexes;
@@ -262,7 +246,8 @@ class ThreadPostAction extends ThreadPostStore {
    */
   @action
   getCreateThreadParams(isUpdate) {
-    const { title, categoryId, contentText, position, price, attachmentPrice, freeWords } = this.postData;
+    const { title, categoryId, contentText, position, price,
+      attachmentPrice, freeWords, redpacket, rewardQa } = this.postData;
     const params = {
       title, categoryId, content: {
         text: emojiFormatForCommit(contentText).replace(/\n/g, '<br />')
@@ -283,8 +268,14 @@ class ThreadPostAction extends ThreadPostStore {
     params.price = price || 0;
     params.freeWords = freeWords || 0;
     params.attachmentPrice = attachmentPrice || 0;
-    if (this.postData.draft) params.draft = this.postData.draft;
-    if (this.postData.anonymous) params.anonymous = this.postData.anonymous;
+    params.draft = this.postData.draft;
+    if (redpacket.price && !this.isThreadPaid) {
+      params.draft = 1;
+    }
+    if (rewardQa.value && !this.isThreadPaid) {
+      params.draft = 1;
+    }
+    params.anonymous = this.postData.anonymous;
     const contentIndexes = this.gettContentIndexes();
     if (Object.keys(contentIndexes).length > 0) params.content.indexes = contentIndexes;
     return params;
@@ -292,7 +283,7 @@ class ThreadPostAction extends ThreadPostStore {
 
   @action
   formatThreadDetailToPostData(detail) {
-    const { title, categoryId, content, freewords = 0, isDraft, isAnonymous } = detail || {};
+    const { title, categoryId, content, freewords = 0, isDraft, isAnonymous, orderInfo = {}, threadId } = detail || {};
     const price = Number(detail.price);
     const attachmentPrice = Number(detail.attachmentPrice);
     let position = {};
@@ -338,11 +329,17 @@ class ThreadPostAction extends ThreadPostStore {
         redpacket = { ...(contentindexes[index]?.body || {}), price };
       }
       // expiredAt: rewardQa.times, price: rewardQa.value, type: 0
-      if (tomId === THREAD_TYPE.reward) rewardQa = {
-        ...(contentindexes[index].body || {}),
-        times: formatDate(contentindexes[index].body.expiredAt?.replace(/-/g, '/'), 'yyyy/MM/dd hh:mm'),
-        value: contentindexes[index].body.money || '',
-      };
+      if (tomId === THREAD_TYPE.reward) {
+        const times = contentindexes[index].body.expiredAt
+          ? formatDate(contentindexes[index].body.expiredAt?.replace(/-/g, '/'), 'yyyy/MM/dd hh:mm')
+          : formatDate(new Date().getTime() + (25 * 3600 * 1000), 'yyyy/MM/dd hh:mm');
+        const value = contentindexes[index].body.money || '';
+        rewardQa = {
+          ...(contentindexes[index].body || {}),
+          times,
+          value,
+        };
+      }
     });
     const anonymous = isAnonymous ? 1 : 0;
     this.setPostData({
@@ -363,6 +360,8 @@ class ThreadPostAction extends ThreadPostStore {
       freeWords: freewords,
       isDraft,
       anonymous,
+      orderInfo,
+      threadId,
     });
   }
 

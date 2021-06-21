@@ -1,23 +1,10 @@
 import React, { Component } from 'react';
-import { inject, observer, Provider } from 'mobx-react';
+import { Provider } from 'mobx-react';
 import initializeStore from '@common/store';
-import {readForum, readUser, readPermissions} from '@server';
-import Router from '@discuzq/sdk/dist/router';
-import { View } from '@tarojs/components';
 import Taro from '@tarojs/taro'
-import clearLoginStatus from '@common/utils/clear-login-status';
+import Router from '@discuzq/sdk/dist/router';
 import setTitle from '@common/utils/setTitle';
-import {
-  JUMP_TO_404,
-  INVALID_TOKEN,
-  JUMP_TO_LOGIN,
-  JUMP_TO_REGISTER,
-  JUMP_TO_AUDIT,
-  JUMP_TO_HOME_INDEX,
-  SITE_CLOSED,
-  JUMP_TO_PAY_SITE,
-  JUMP_TO_SUPPLEMENTARY
-} from '@common/constants/site';
+
 import './app.scss';
 
 class App extends Component {
@@ -41,12 +28,40 @@ class App extends Component {
    * 注意：options 参数的字段在不同小程序中可能存在差异。所以具体使用的时候请看相关小程序的文档
    */
   async onLaunch(options) {
-    this.initSiteData();
     const { site } = this.store;
     const { envConfig } = site;
     const { TITLE } = envConfig;
     if (TITLE && TITLE !== '') {
       setTitle(TITLE);
+    }
+    // 如果启动页面不是pages/index/index，那么将保留路径，跳去启动页
+    // 暂时发现是小程序分享朋友圈无法设置url
+    const $instance = Taro.getCurrentInstance()
+    const router = $instance.router;
+    const {path, params} = router;
+    if (path.indexOf('pages/index/index') === -1) {
+      let targetUrl = path;
+      let targetParmas = '';
+      const paramsArr = [];
+      for (let key in params) {
+        paramsArr.push(`${key}=${params[key]}`);
+      }
+      if (paramsArr.length > 0) {
+        targetParmas = paramsArr.join('&');
+      }
+      if (targetParmas !== '') {
+        targetUrl = `${targetUrl}?${targetParmas}`;
+      }
+      if (targetUrl[0] !== '/') {
+        targetUrl = `/${targetUrl}`;
+      }
+      Router.redirect({
+        url: `/pages/index/index?path=${encodeURIComponent(targetUrl)}`,
+        fail: (err) => {
+          console.log(err,123132)
+        }
+      });
+      
     }
   }
 
@@ -78,81 +93,6 @@ class App extends Component {
     Router.redirect({
       url: '/subPages/404/index'
     });
-  }
-
-  // 初始化站点数据
-  async initSiteData() {
-
-    const { site, user} = this.store;
-
-    let loginStatus = false;
-
-    site.setPlatform('mini');
-
-    // 获取站点信息
-    const siteResult = await readForum({});
-
-    // 检查站点状态
-    const isPass = this.setAppCommonStatus(siteResult);
-    if(!isPass) return;
-
-    siteResult.data && site.setSiteConfig(siteResult.data);
-
-    if( siteResult && siteResult.data && siteResult.data.user ) {
-
-      const userInfo = await readUser({ params: { pid: siteResult.data.user.userId } });
-      const userPermissions = await readPermissions({});
-
-      // 添加用户发帖权限
-      userPermissions.code === 0 && userPermissions.data && user.setUserPermissions(userPermissions.data);
-      // 当客户端无法获取用户信息，那么将作为没有登录处理
-      userInfo.code === 0 && userInfo.data && user.setUserInfo(userInfo.data);
-
-      loginStatus = !!userInfo.data && !!userInfo.data.id;
-    }
-    user.updateLoginStatus(loginStatus);
-  }
-
-  // 检查站点状态
-  setAppCommonStatus(result) {
-    const { site } = this.store;
-    switch (result.code) {
-      case 0:
-        break;
-      case SITE_CLOSED: site.setCloseSiteConfig(result.data);// 关闭站点
-        Router.redirect({
-          url: '/subPages/close/index'
-        });
-        return false;
-      case INVALID_TOKEN:// token无效
-        clearLoginStatus();
-        this.initSiteData(); // 重新获取数据
-        return false;
-      case JUMP_TO_404:// 资源不存在
-        Router.redirect({ url: '/subPages/404/index' });
-        break;
-      case JUMP_TO_LOGIN:// 到登录页
-        Router.redirect({ url: '/subPages/user/wx-auth/index' });
-        break;
-      case JUMP_TO_REGISTER:// 到注册页
-        Router.redirect({ url: '/subPages/user/wx-auth/index' });
-        break;
-      case JUMP_TO_AUDIT:// 到审核页
-        Router.redirect({ url: '/subPages/user/status/index?statusCode=2' });
-        break;
-      case JUMP_TO_HOME_INDEX:// 到首页
-        Router.redirect({ url: '/pages/index/index' });
-        break;
-      case JUMP_TO_PAY_SITE:// 到付费加入页面
-        Router.redirect({ url: '/subPages/forum/partner-invite/index' });
-        break;
-      case JUMP_TO_SUPPLEMENTARY:// 跳转到扩展字段页
-        Router.redirect({ url: '/subPages/user/supplementary/index' });
-        break;
-      default: Router.redirect({url: '/subPages/500/index'});
-        break;
-    }
-    return true;
   }
 
   // 处理验证码捕获

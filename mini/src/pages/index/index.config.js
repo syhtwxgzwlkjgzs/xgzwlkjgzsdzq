@@ -1,7 +1,7 @@
 export default {
-  navigationBarTitleText: "首页",
+  navigationBarTitleText: "欢迎你",
   navigationStyle: 'custom',
-  enableShareAppMessage: true,
-  enableShareTimeline: true,
-  disableScroll: true
+  enableShareAppMessage: false,
+  enableShareTimeline: false,
+  disableScroll: true,
 };

@@ -27,8 +27,9 @@
         text-align: center;
         line-height: 40px;
         background: $white;
-        border-radius: var(--border-radius-small);
-        color: var(--color-text-regular);
+        border-radius: $border-radius-small;
+        color: $text-color-regular;
+        border: none;
 
         > View {
           font-size: 26px !important;
@@ -39,7 +40,7 @@
         width: 50px;
         margin-top: $padding-2n;
         text-align: center;
-        color: var(--color-text-regular);
+        color: $text-color-regular;
         font-size: $font-size-small;
       }
 
@@ -73,4 +74,11 @@
   padding-bottom: constant(safe-area-inset-bottom); ///兼容 IOS<11.2/
   padding-bottom: env(safe-area-inset-bottom); ///兼容 IOS>11.2/
   background: $white;
+}
+
+
+.share {
+  padding: 0;
+  border: none !important;
+  overflow: initial;
 }

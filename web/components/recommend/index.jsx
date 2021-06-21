@@ -73,11 +73,11 @@ class Index extends React.Component {
     return (
       <div className={style.recommend} style={{
         /* stylelint-disable */
-        maxHeight: (this.state.windowSize?.innerHeight - 80) || '600px'
+        // maxHeight: (this.state.windowSize?.innerHeight - 80) || '600px'
       }}>
         <div className={style.recommendContent}>推荐内容</div>
-        { (recommendsStatus === 'loading' || recommendsStatus === 'error') && (
-            <BottomView isBox isError={isError} errorText={errorText} noMore={false} loadingText='正在加载' /> 
+        { (recommendsStatus === 'loading' || recommendsStatus === 'error' || !recommends?.length) && (
+            <BottomView isBox isError={isError} errorText={errorText} noMore={recommendsStatus === 'none' && !recommends?.length} loadingText='正在加载' noMoreText='暂无数据' />
         )}
         {
           recommendsStatus === 'none' && recommends?.filter((_, index) => index < filterCount).map((item, index) => {
@@ -131,7 +131,7 @@ class Index extends React.Component {
               </div>
           )})
         }
-        {recommendsStatus === 'none' && <div className={style.recommendSwitch}>
+        {(recommendsStatus === 'none'|| recommendsStatus === 'error') && <div className={style.recommendSwitch}>
           <div className={style.switchBox} onClick={this.changeBatch}>
             <Icon name="RenovateOutlined" className={style.switchIcon} size={14}/>换一批
           </div>

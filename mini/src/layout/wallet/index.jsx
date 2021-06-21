@@ -7,6 +7,7 @@ import Toast from '@discuzq/design/dist/components/toast/index';
 import { View, Text } from '@tarojs/components';
 import classNames from 'classnames';
 import Router from '@discuzq/sdk/dist/router';
+import Taro from '@tarojs/taro';
 
 import Page from '@components/page';
 import List from '@components/list';
@@ -147,14 +148,15 @@ class WalletH5Page extends React.Component {
 
   // 点击确定后对时间选择的弹框的操作
   handleMoneyTime = (time) => {
-    const gapTime = new Date(time).getTime() - new Date().getTime();
+    // 获得的time是当前时间的一天后
+    const gapTime = new Date(time).getTime() - new Date().getTime() - 24 * 60 * 60 * 1000;
     if (gapTime < 0) {
       this.setState({ consumptionTime: time }, () => {
         this.initStateAndFetch();
       });
       this.setState({ consumptionTimeshow: false });
     } else {
-      Toast.warning({ content: '时间要小于当前时间' });
+      Toast.warning({ content: '时间要小于等于当前时间' });
       return;
     }
   };
@@ -224,7 +226,7 @@ class WalletH5Page extends React.Component {
       if (e.Code) {
         Toast.error({
           content: e.Msg,
-          duration: 1000,
+          duration: 2000,
         });
       }
     }
@@ -297,6 +299,11 @@ class WalletH5Page extends React.Component {
     }
   };
 
+  // 点击返回按钮
+  handlePageJump = () => {
+    Taro.navigateBack();
+  }
+
   render() {
     const tabList = [
       [
@@ -353,6 +360,10 @@ class WalletH5Page extends React.Component {
             className={layout.scroll}
           >
             <View className={layout.header}>
+              {/* 自定义顶部返回 */}
+              <View className={layout.topBar}>
+                <Icon name="RightOutlined" onClick={() => this.handlePageJump()} />
+              </View>
               <WalletInfo
                 walletData={walletInfo}
                 webPageType="h5"
@@ -380,26 +391,18 @@ class WalletH5Page extends React.Component {
                   <Tabs.TabPanel key={id} id={id} label={label} name={icon.name}></Tabs.TabPanel>
                 ))}
               </Tabs>
-              {this.state.tabsType === 'income' && (
+              {this.state.tabsType === 'income' &&
                 incomeData.map((value, index) => (
-                    <IncomeList key={value.id} incomeVal={value} itemKey={index} dataLength={incomeData.length} />
-                  ))
-              )}
-              {this.state.tabsType === 'pay' && (
+                  <IncomeList key={value.id} incomeVal={value} itemKey={index} dataLength={incomeData.length} />
+                ))}
+              {this.state.tabsType === 'pay' &&
                 expandData.map((value, index) => (
-                    <PayList key={value.id} payVal={value} itemKey={index} dataLength={expandData.length} />
-                  ))
-              )}
-              {this.state.tabsType === 'withdrawal' && (
+                  <PayList key={value.id} payVal={value} itemKey={index} dataLength={expandData.length} />
+                ))}
+              {this.state.tabsType === 'withdrawal' &&
                 cashData.map((value, index) => (
-                    <WithdrawalList
-                      key={value.id}
-                      withdrawalVal={value}
-                      itemKey={index}
-                      dataLength={cashData.length}
-                    />
-                  ))
-              )}
+                  <WithdrawalList key={value.id} withdrawalVal={value} itemKey={index} dataLength={cashData.length} />
+                ))}
             </View>
           </List>
 
@@ -427,6 +430,7 @@ class WalletH5Page extends React.Component {
             disabledTime={true}
             wrap-class="my-class"
             select-item-class="mySelector"
+            type='wallet'
           />
         </View>
       </Page>

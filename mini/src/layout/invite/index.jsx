@@ -18,7 +18,6 @@ class InviteH5Page extends React.Component {
   async componentDidMount() {
     try {
       await this.props.invite.getInviteUsersList();
-      await this.props.invite.createInviteLink();
     } catch (e) {
       Toast.error({
         content: e.Message,
@@ -27,10 +26,14 @@ class InviteH5Page extends React.Component {
   }
 
   render() {
-    const { inviteData, inviteCode } = this.props.invite;
+    const inviteCode = this.props.user?.userInfo?.id;
+    const siteName = this.props.site?.webConfig?.setSite?.siteName || '';
     const shareData = {
       path: `/subPages/forum/partner-invite/index?inviteCode=${inviteCode}`,
+      title: `邀请您加入 ${siteName}`,
     };
+    
+    const { inviteData } = this.props.invite;
 
     return (
       <>
@@ -39,7 +42,7 @@ class InviteH5Page extends React.Component {
           <Image src={bgImage} className={layout.top_bg_image} />
         </View>
         {/* 头部全屏的背景图片 end */}
-        <HomeHeader hideInfo hideLogo showToolbar />
+        <HomeHeader hideInfo hideLogo showToolbar fullScreenTitle="推广邀请" />
         <View className={layout.content}>
           {/* 用户信息 start */}
           <View className={layout.user_info}>

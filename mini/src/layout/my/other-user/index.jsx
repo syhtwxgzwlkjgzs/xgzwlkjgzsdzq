@@ -8,7 +8,7 @@ import UserCenterThreads from '@components/user-center-threads';
 import BaseLayout from '@components/base-layout';
 import Router from '@discuzq/sdk/dist/router';
 import { View, Text } from '@tarojs/components';
-import Taro, { getCurrentInstance } from '@tarojs/taro';
+import Taro, { getCurrentInstance, eventCenter } from '@tarojs/taro';
 import SectionTitle from '@components/section-title'
 import BottomView from '@components/list/BottomView'
 
@@ -22,6 +22,44 @@ class H5OthersPage extends React.Component {
     this.state = {
       fetchUserInfoLoading: true,
     };
+    // 因为这里的 onShow 的 flag 是路由，导致如果进入多个用户信息页面，重复触发了
+    // 一个页面只负责一个用户 id，用此 flag 来解决重复加载的问题
+    this.targetUserId = null;
+  }
+
+  $instance = getCurrentInstance()
+
+  componentWillMount () {
+    const onShowEventId = this.$instance.router.onShow
+    // 监听
+    eventCenter.on(onShowEventId, this.onShow)
+  }
+
+  onShow = async () => {
+    const { id = '' } = getCurrentInstance().router.params;
+    if (!id) {
+      Router.replace({ url: '/pages/home/index' });
+    }
+    if (!this.targetUserId) {
+      this.targetUserId = id;
+    }
+    // 仅当前激活 id 的事件会触发
+    if (this.targetUserId !== id) return;
+    const myId = this.props.user?.id;
+    if (String(myId) === this.targetUserId) {
+      Router.replace({ url: '/subPages/my/index' });
+      return;
+    }
+    if (this.targetUserId) {
+      this.setState({
+        fetchUserInfoLoading: true,
+      });
+      await this.props.user.getTargetUserInfo(this.targetUserId);
+      this.setState({
+        fetchUserInfoLoading: false,
+      });
+      await this.props.user.getTargetUserThreads(this.targetUserId);
+    }
   }
 
   componentDidMount = async () => {
@@ -31,17 +69,13 @@ class H5OthersPage extends React.Component {
       Router.replace({ url: '/subPages/my/index' });
       return;
     }
-    if (id) {
-      await this.props.user.getTargetUserInfo(id);
-      await this.props.user.getTargetUserThreads(id);
-      this.setState({
-        fetchUserInfoLoading: false,
-      });
-    }
   };
 
   componentWillUnmount() {
     this.props.user.removeTargetUserInfo();
+    const onShowEventId = this.$instance.router.onShow
+    // 卸载
+    eventCenter.off(onShowEventId, this.onShow)
   }
 
   fetchTargetUserThreads = async () => {
@@ -89,7 +123,7 @@ class H5OthersPage extends React.Component {
             </View> */}
 
             <View className={styles.threadHeader}>
-              <SectionTitle title='主题' isShowMore={false} leftNum={`${targetUserThreadsTotalCount}个主题`} />
+              <SectionTitle title='主题' isShowMore={false} leftNum={`${targetUserThreadsTotalCount || 0}个主题`} />
             </View>
 
             <View className={styles.threadItemContainer}>

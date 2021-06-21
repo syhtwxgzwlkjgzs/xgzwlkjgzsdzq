@@ -18,7 +18,7 @@
   justify-content: space-between;
   align-items: center;
   padding: rem($padding-4n) 0;
-  // border-bottom: 1px solid var(--border-line-color);
+  border-bottom: 1px solid var(--border-line-color);
   box-sizing: border-box;
   background-color: $white;
   .title {
@@ -30,11 +30,13 @@
   line-height: rem($font-line-height-primary);
   color: var(--color-text-primary);
   margin-left: rem($padding-2n);
+  @include lamp-clamp(1);
 }
 .left {
   display: flex;
   align-items: center;
   height: rem($font-line-height-primary);
+  width: 60%;
 }
 .right {
   display: flex;
@@ -75,11 +77,11 @@
   line-height: rem($font-line-height-primary);
 }
 .icon1 {
-  color: var(--color-success);
+  color: $success-color;
 }
 .icon2 {
-  color: var(--color-warn);
+  color: $warn-color;
 }
 .icon3 {
-  color: $primary-color;
+  color: $error-color;
 }

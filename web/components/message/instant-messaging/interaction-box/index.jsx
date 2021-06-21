@@ -10,7 +10,7 @@ import Router from '@discuzq/sdk/dist/router';
 import styles from './index.module.scss';
 
 const InteractionBox = (props) => {
-  const { onSubmit, dialogBoxRef, platform, dialogId, threadPost, showEmoji, setShowEmoji, username } = props;
+  const { onSubmit, dialogBoxRef, platform, dialogId, threadPost, showEmoji, setShowEmoji, username, nickname } = props;
   const { readDialogMsgList, dialogMsgList, createDialogMsg, createDialog, readDialogIdByUsername } = props.message;
 
   const [lastTimestamp, setLastTimestamp] = useState(0);
@@ -37,7 +37,7 @@ const InteractionBox = (props) => {
   //   }
   // };
   const replaceRouteWidthDialogId = (dialogId) => {
-    Router.replace({ url: `/message?page=chat&username=${username}&dialogId=${dialogId}` });
+    Router.replace({ url: `/message?page=chat&nickname=${nickname}&dialogId=${dialogId}` });
   };
 
 
@@ -74,7 +74,7 @@ const InteractionBox = (props) => {
       setIsSubmiting(false);
       toastInstance?.destroy();
       if (ret.code === 0) {
-        setTypingValue('');
+        if (!data.imageUrl) setTypingValue('');
         readDialogMsgList(dialogId);
       } else {
         Toast.error({ content: ret.msg });
@@ -89,7 +89,7 @@ const InteractionBox = (props) => {
       });
       setIsSubmiting(false);
       if (ret.code === 0) {
-        setTypingValue('');
+        if (!data.imageUrl) setTypingValue('');
         replaceRouteWidthDialogId(ret.data.dialogId);
       } else {
         Toast.error({ content: ret.msg });
@@ -156,12 +156,16 @@ const InteractionBox = (props) => {
     const ret = await createAttachment(formData);
     const { code, data } = ret;
     if (code === 0) {
-      await submit({ imageUrl: data.url });
+      await submit({
+        imageUrl: data.url,
+        width: data.fileWidth,
+        height: data.fileHeight,
+      });
     } else {
       Toast.error({ content: ret.msg });
     }
     uploadRef.current.value = '';
-  }
+  };
 
   const recordCursor = (e) => {
     setCursorPosition(e.target.selectionStart);

@@ -29,6 +29,8 @@ import RenderThreadContent from './detail/content';
 import RenderCommentList from './detail/comment-list';
 import classNames from 'classnames';
 import { debounce } from '@common/utils/throttle-debounce';
+import styles from "./post/index.module.scss";
+import Router from '@discuzq/sdk/dist/router';
 
 @inject('site')
 @inject('user')
@@ -37,6 +39,7 @@ import { debounce } from '@common/utils/throttle-debounce';
 @inject('index')
 @inject('topic')
 @inject('search')
+@inject('payBox')
 @observer
 class ThreadH5Page extends React.Component {
   constructor(props) {
@@ -133,6 +136,10 @@ class ThreadH5Page extends React.Component {
   componentWillUnmount() {
     // 清空数据
     this.props?.thread && this.props.thread.reset();
+    // 关闭付费弹窗盒子
+    this.props?.payBox?.hide();
+    // 清空@ren数据
+    this.props.thread.setCheckUser([]);
   }
 
   // 点击信息icon
@@ -281,16 +288,23 @@ class ThreadH5Page extends React.Component {
 
     // 生成海报
     if (type === 'posterShare') {
-      Toast.info({ content: '生成海报' });
-      // this.onShareClick();
-    }
-
-    // 微信分享
-    if (type === 'weixinShare') {
-      Toast.info({ content: '微信分享' });
-      // this.onShareClick();
+      this.onPosterShare();
     }
   };
+
+  // 生成海报
+  onPosterShare() {
+    const threadId = this.props.thread?.threadData?.id;
+    const threadData = this.props.thread?.threadData;
+    Taro.navigateTo({
+      url: `/subPages/create-card/index?threadId=${threadId}`,
+      success () {
+        Taro.eventCenter.once('page:init', () => {
+            Taro.eventCenter.trigger('message:detail', threadData);
+        })
+      }
+    })
+  }
 
   // 确定举报
   async onReportOk(val) {
@@ -403,10 +417,10 @@ class ThreadH5Page extends React.Component {
   }
 
   // 点击发布按钮
-  async publishClick(val, imageList) {
+  async publishClick(val = '', imageList = []) {
     const valuestr = val.replace(/\s/g, '');
     // 如果内部为空，且只包含空格或空行
-    if (!valuestr) {
+    if (!valuestr && imageList.length === 0) {
       Toast.info({ content: '请输入内容' });
       return;
     }
@@ -559,8 +573,8 @@ class ThreadH5Page extends React.Component {
   }
 
   // 创建回复评论+回复回复接口
-  async createReply(val, imageList) {
-    if (!val) {
+  async createReply(val = '', imageList = []) {
+    if (!val && imageList.length === 0) {
       Toast.info({ content: '请输入内容!' });
       return;
     }
@@ -615,6 +629,19 @@ class ThreadH5Page extends React.Component {
     Toast.error({
       content: msg,
     });
+  }
+
+  replyAvatarClick(reply, comment, floor) {
+    if (floor === 2) {
+      const { userId } = reply;
+      if(!userId) return;
+      Router.push({url: `/subPages/user/index?id=${userId}`});
+    }
+    if (floor === 3) {
+      const { commentUserId } = reply;
+      if(!commentUserId) return;
+      Router.push({url: `/subPages/user/index?id=${commentUserId}`});
+    }
   }
 
   // 弹出框关闭
@@ -713,7 +740,7 @@ class ThreadH5Page extends React.Component {
       this.props.index.refreshHomeData({ categoryIds: [categoryId] });
     }
     Taro.redirectTo({
-      url: '/pages/index/index',
+      url: '/pages/home/index',
     });
   }
 
@@ -724,9 +751,19 @@ class ThreadH5Page extends React.Component {
       moreClick: this.onMoreClick,
     };
 
+    // const isDraft = threadStore?.threadData?.isDraft;
+    // // 是否红包帖
+    // const isRedPack = threadStore?.threadData?.displayTag?.isRedPack;
+    // // 是否悬赏帖
+    // const isReward = threadStore?.threadData?.displayTag?.isReward;
+
     // 更多弹窗权限
     const morePermissions = {
-      canEdit: threadStore?.threadData?.ability?.canEdit,
+      // （不是草稿 && 有编辑权限 && 不是红包帖 && 不是悬赏帖） || （是草稿 && 有编辑权限）
+      // canEdit:
+      //   (!isDraft && threadStore?.threadData?.ability?.canEdit && !isRedPack && !isReward)
+      //   || (isDraft && threadStore?.threadData?.ability?.canEdit),
+      canEdit: threadStore?.threadData?.ability?.canEdit, // 更新：帖子都可以编辑，根据编辑的权限来处理即可
       canDelete: threadStore?.threadData?.ability?.canDelete,
       canEssence: threadStore?.threadData?.ability?.canEssence,
       canStick: threadStore?.threadData?.ability?.canStick,
@@ -798,6 +835,7 @@ class ThreadH5Page extends React.Component {
                       onEditClick={(comment) => this.onEditClick(comment)}
                       replyReplyClick={(reply, comment) => this.replyReplyClick(reply, comment)}
                       replyClick={(comment) => this.replyClick(comment)}
+                      replyAvatarClick={(comment, reply, floor) =>this.replyAvatarClick(comment, reply, floor)}
                     ></RenderCommentList>
                     {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
                     {isNoMore && (
@@ -872,10 +910,13 @@ class ThreadH5Page extends React.Component {
               initValue={this.state.inputValue}
               onSubmit={(value, imgList) => this.publishClick(value, imgList)}
               site={this.props.site}
+              checkUser={this.props?.thread?.checkUser || []}
+              thread={this.props?.thread}
             ></InputPopup>
 
             {/* 更多弹层 */}
             <MorePopup
+              shareData={this.shareData}
               permissions={morePermissions}
               statuses={moreStatuses}
               visible={this.state.showMorePopup}

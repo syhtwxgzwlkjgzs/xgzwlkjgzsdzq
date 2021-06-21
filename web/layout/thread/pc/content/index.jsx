@@ -154,7 +154,7 @@ export default inject('user')(
                   </Dropdown>
                 </div>
               )}
-              <div className={topic.iconText} onClick={() => onDropdownChange('report')}>
+              <div className={classnames(topic.iconText, props?.user?.isAdmini && topic.disabled)} onClick={() => onDropdownChange('report')}>
                 <Icon className={topic.icon} name="WarnOutlinedThick"></Icon>
                 <span className={topic.text}>举报</span>
               </div>
@@ -162,7 +162,7 @@ export default inject('user')(
           )}
         </div>
 
-        <Divider></Divider>
+        <Divider className={topic.divider}></Divider>
 
         {isApproved && (
           <div className={topic.body}>
@@ -185,15 +185,15 @@ export default inject('user')(
             )}
 
             {/* 图片 */}
-            {parseContent.IMAGE && <ImageDisplay platform="pc" imgData={parseContent.IMAGE} />}
+            {parseContent.IMAGE && <ImageDisplay flat platform="pc" imgData={parseContent.IMAGE} />}
 
             {/* 视频 */}
             {parseContent.VIDEO && (
               <VideoPlay
                 url={parseContent.VIDEO.mediaUrl}
                 coverUrl={parseContent.VIDEO.coverUrl}
-                width={400}
-                height={200}
+                v_width={parseContent.VIDEO.width || null}
+                v_height={parseContent.VIDEO.height || null}
                 status={parseContent.VIDEO.status}
               />
             )}
@@ -202,7 +202,7 @@ export default inject('user')(
             {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
 
             {/* 附件 */}
-            {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
+            {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} threadId={threadStore?.threadData?.threadId} />}
 
             {/* 商品 */}
             {parseContent.GOODS && (
@@ -297,7 +297,7 @@ export default inject('user')(
         <div className={topic.footer}>
           <div className={topic.thumbs}>
             <div className={topic.likeReward}>
-              <Tip tipData={tipData} imgs={threadStore?.threadData?.likeReward?.users || []}></Tip>
+              <Tip tipData={tipData} imgs={threadStore?.threadData?.likeReward?.users || []} showCount={10} platform="pc"></Tip>
             </div>
             <span>{threadStore?.threadData?.likeReward?.likePayCount || ''}</span>
           </div>

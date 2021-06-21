@@ -3,7 +3,7 @@ import Taro from '@tarojs/taro';
 import { inject, observer } from 'mobx-react';
 import { View } from '@tarojs/components';
 import styles from './index.module.scss';
-
+import { useDidShow } from '@tarojs/taro';
 import Notice from '@components/message/notice';
 import Card from '@components/message/message-card';
 import BottomNavBar from '@components/bottom-nav-bar';
@@ -14,16 +14,16 @@ const Index = ({ message, user }) => {
   console.log('message :>> ', message);
 
   // 初始化请求数据
-  useEffect(async () => {
+  useDidShow(async () => {
     await readDialogList(1);
-  }, [])
+  });
 
   // 更新未读消息
   const items = useMemo(() => {
     return [
       {
         iconName: 'RemindOutlined',
-        title: '帖子通知',
+        title: '账号消息',
         link: '/subPages/message/index?page=thread',
         totalCount: threadUnread || 0,
       },
@@ -35,7 +35,7 @@ const Index = ({ message, user }) => {
       },
       {
         iconName: 'LeaveWordOutlined',
-        title: '账号消息',
+        title: '帖子通知',
         link: '/subPages/message/index?page=account',
         totalCount: accountUnread || 0,
       },
@@ -60,8 +60,8 @@ const Index = ({ message, user }) => {
         content: dialogMessage?.imageUrl ? '[图片]' : dialogMessage?.messageTextHtml,
         avatar: chatPerson?.avatar,
         userId: chatPerson?.id,
-        username: chatPerson?.nickname,
-        unreadCount: unreadCount,
+        nickname: chatPerson?.nickname,
+        unreadCount: dialogMessage?.unreadCount,
       });
     });
 

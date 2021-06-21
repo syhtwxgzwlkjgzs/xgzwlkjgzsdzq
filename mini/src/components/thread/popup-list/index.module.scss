@@ -20,7 +20,7 @@
     display: flex;
     justify-content: space-between;
     box-shadow: none;
-    padding-left: 4px;
+    padding-left: $padding-1n;
     height: 48px;
   }
   :global {
@@ -70,5 +70,5 @@
 .spinner {
   height: 70vh;
   width: 100%;
-  color: var(--color-text-placeholder);
+  color: $text-color-placeholder;
 }

@@ -27,6 +27,30 @@
 
   .header {
     width: 100%;
+    background:$primary-color url('../../../../web/public/dzq-img/walletbackground.png') 100% no-repeat padding-box;
+    background-size: 100% 100%;
+
+    .topBar {
+      position: fixed;
+      top: 54px;
+      left: 0;
+      display: flex;
+      justify-content: flex-start;
+      width: 100%;
+            
+      :global {
+        .dzq-icon {
+          display: inline-flex;
+          align-items: center;
+          height: 100%;
+          width: 40px;
+          padding-left: $padding-10;
+          transform: rotate(180deg);
+          font-size: $font-size-middle;
+          color: $white;
+        }
+      }
+    }
   }
 
   .choiceTime {
@@ -51,7 +75,7 @@
 
   .tabs {
     width: 100%;
-    border-bottom: var(--border-border);
+    border-bottom: $border-solid-1;
 
     .tagbox {
       display: flex;
@@ -75,19 +99,20 @@
       }
 
       .dzq-tabs__label {
-        padding-bottom: $padding-2n !important;
+        padding-bottom: $padding-14 !important;
         font-family: 'PingFang SC';
         font-weight: 600;
         font-size: rem($font-size-primary);
+        line-height: 20px;
       }
 
       .dzq-tabs__item {
-        height: rem(50);
+        height: 52px;
         box-sizing: border-box;
         flex: 1;
 
         &::after {
-          width: rem(82);
+          width: 80px;
           margin: auto;
         }
       }
@@ -118,9 +143,9 @@
   padding: $padding-2n $padding-4n;
   background: var(--color-white);
   position: fixed;
-  bottom: 0;
-  padding-bottom: constant(safe-area-inset-bottom); ///兼容 IOS<11.2/
-  padding-bottom: env(safe-area-inset-bottom); ///兼容 IOS>11.2/
+  bottom: $padding-2n;
+  bottom: constant(safe-area-inset-bottom); ///兼容 IOS<11.2/
+  bottom: env(safe-area-inset-bottom); ///兼容 IOS>11.2/
 
   .button {
     width: 100%;
@@ -130,8 +155,8 @@
     justify-content: center;
     height: rem(42);
     border-radius: rem($border-radius-small);
-    color: var(--color-white);
-    background: var(--color-primary);
+    color: $white;
+    background: $primary-color;
     font-family: 'PingFang SC';
     font-weight: normal;
     font-size: rem($font-size-middle);

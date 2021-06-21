@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState }from 'react';
 import { inject, observer } from 'mobx-react';
-import { Icon, Toast } from '@discuzq/design';
+import { Icon, Toast, Spin } from '@discuzq/design';
 import { extensionList, isPromise, noop } from '../utils';
-import { copyToClipboard } from '@common/utils/copyToClipboard';
+import { throttle } from '@common/utils/throttle-debounce.js';
+import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 
 import styles from './index.module.scss';
 
@@ -34,44 +35,71 @@ const Index = ({
     return `${fileSize} B`;
   };
 
-  const onDownLoad = (item) => {
-    if(!item || !threadId) return;
+  const fetchDownloadUrl = (threadId, attachmentId, callback) => {
+    if(!threadId || !attachmentId) return;
+
+    let toastInstance = Toast.loading({
+      duration: 0,
+    });
+
+    thread.fetchThreadAttachmentUrl(threadId, attachmentId).then((res) => {
+      if(res?.code === 0 && res?.data) {
+        const { url } = res.data;
+        if(!url) {
+          Toast.info({ content: '获取下载链接失败' });
+        }
+        callback(url);
+      } else {
+        Toast.info({ content: res?.msg });
+      }
+    }).catch((error) => {
+      Toast.info({ content: '获取下载链接失败' });
+      console.error(error);
+      return;
+    }).finally(() => {
+      toastInstance?.destroy();
+    });
+  }
+
+  const [downloading, setDownloading] =
+        useState(Array.from({length: attachments.length}, () => false));
+
+  const onDownLoad = (item, index) => {
 
     if (!isPay) {
-      let toastInstance = Toast.loading({
-        duration: 0,
-      });
+      if(!item || !threadId) return;
+
+      downloading[index] = true;
+      setDownloading([...downloading]);
 
       const attachmentId = item.id;
-      thread.fetchThreadAttachmentUrl(threadId, attachmentId).then((res) => {
-
-        if(res?.code === 0 && res?.data) {
-          const { url } = res.data;
-          if(url) window.open(url);
-          Toast.info({ content: '下载成功' });
-        } else {
-          Toast.info({ content: res?.msg });
-        }
-      }).catch((error) => {
-        Toast.info({ content: '获取下载链接失败' });
-        console.error(error);
-        return;
-      }).finally(() => {
-        toastInstance?.destroy();
+      fetchDownloadUrl(threadId, attachmentId, (url) => {
+        window.location.href = url;
+        Toast.info({ content: '下载成功' });
       });
+
+      downloading[index] = false;
+      setDownloading([...downloading]);
+
     } else {
       onPay();
     }
   };
 
-  const onLinkShare = (item) => {
+  const onLinkShare = (item, e) => {
     if (!isPay) {
-      if(!item?.url) return;
-      copyToClipboard(item.url);
-      Toast.success({
-        content: '链接复制成功',
-        duration: 1000,
+      if(!item || !threadId) return;
+
+      const attachmentId = item.id;
+      fetchDownloadUrl(threadId, attachmentId, async (url) => {
+        setTimeout(() => {
+          h5Share({url: url});
+          Toast.success({
+            content: '链接复制成功',
+          });
+        }, 300);
       });
+
     } else {
       onPay();
     }
@@ -106,9 +134,12 @@ const Index = ({
           </div>
 
           <div className={styles.right}>
-            <span className={styles.span} onClick={() => onLinkShare(item)}>链接</span>
+            <span className={styles.span} onClick={throttle(() => onLinkShare(item), 1000)}>链接</span>
             <div className={styles.label}>
-              <span className={styles.span} onClick={() => onDownLoad(item)}>下载</span>
+              { downloading[index] ?
+                  <Spin className={styles.spinner} type="spinner" /> :
+                  <span className={styles.span} onClick={throttle(() => onDownLoad(item, index), 1000)}>下载</span>
+              }
             </div>
           </div>
         </div>
@@ -127,7 +158,7 @@ const Index = ({
   };
 
   return (
-    <div>
+    <div className={styles.wrapper}>
         {
           attachments.map((item, index) => {
             // 获取文件类型

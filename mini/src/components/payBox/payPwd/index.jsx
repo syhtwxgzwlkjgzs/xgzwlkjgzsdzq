@@ -7,6 +7,8 @@ import Divider from '@discuzq/design/dist/components/divider/index';
 import { inject, observer } from 'mobx-react';
 import { View, Text } from '@tarojs/components';
 import { STEP_MAP } from '../../../../../common/constants/payBoxStoreConstants';
+import Taro from '@tarojs/taro';
+import throttle from '@common/utils/thottle.js';
 
 @inject('site')
 @inject('user')
@@ -17,7 +19,7 @@ class PayPassword extends React.Component {
     super(props);
     this.state = {
       list: [],
-      isShow: false
+      isShow: false,
     };
     this.keyboardClickHander = this.keyboardClickHander.bind(this);
     this.renderPwdItem = this.renderPwdItem.bind(this);
@@ -26,18 +28,18 @@ class PayPassword extends React.Component {
   initState = () => {
     this.setState({
       list: [],
-      isShow: false
-    })
-  }
+      isShow: false,
+    });
+  };
 
   componentDidMount() {
     this.setState({
-      isShow: true
-    })
+      isShow: true,
+    });
   }
 
   componentWillUnmount() {
-    this.initState()
+    this.initState();
   }
 
   keyboardClickHander(e) {
@@ -50,7 +52,7 @@ class PayPassword extends React.Component {
 
     if (key === '-1') {
       if (list.length === 0) {
-        this.handleCancel()
+        this.handleCancel();
       } else {
         this.setState({
           list: list.slice(0, list.length - 1),
@@ -72,9 +74,29 @@ class PayPassword extends React.Component {
 
   // 点击取消或者关闭---回到上个页面
   handleCancel = () => {
-    this.props.payBox.step = STEP_MAP.PAYWAY
-    this.initState()
-  }
+    this.props.payBox.step = STEP_MAP.PAYWAY;
+    this.initState();
+  };
+
+  handleForgetPayPwd = throttle(() => {
+    if (!this.props.user.mobile) {
+      Toast.error({
+        content: '需要首先绑定手机号才能进行此操作',
+        duration: 2000,
+      });
+      setTimeout(() => {
+        // TODO: 回跳逻辑补充
+        this.props.payBox.visible = false;
+        Taro.navigateTo({ url: '/subPages/user/bind-phone/index?from=paybox' });
+      }, 1000);
+      return;
+    }
+    Taro.navigateTo({
+      url: '/subPages/my/edit/find/paypwd/index?type=paybox',
+    });
+    this.props.payBox.step = null;
+    this.props.payBox.visible = false;
+  }, 1000);
 
   async submitPwa() {
     let { list = [] } = this.state;
@@ -91,7 +113,7 @@ class PayPassword extends React.Component {
         });
         setTimeout(() => {
           this.props.payBox.clear();
-        }, 500)
+        }, 500);
       } catch (error) {
         Toast.error({
           content: error.Message || '支付失败，请重新输入',
@@ -141,10 +163,17 @@ class PayPassword extends React.Component {
   // 渲染弹窗形式支付
   renderDialogPayment = () => {
     const { isShow } = this.state;
-    const { options = {} } = this.props?.payBox
+    const { options = {} } = this.props?.payBox;
+    const IS_MOBILE_SERVICE_OPEN = this.props.site.isSmsOpen;
+    const IS_USER_BIND_MOBILE = this.props.user?.mobile;
     return (
       <View>
-        <Dialog className={styles.paypwdDialogWrapper} visible={isShow} position="center" maskClosable={true}>
+        <Dialog
+          className={styles.paypwdDialogWrapper}
+          visible={this.props.payBox.step === STEP_MAP.WALLET_PASSWORD}
+          position="center"
+          maskClosable={true}
+        >
           <View className={styles.paypwdDialogContent}>
             <>
               <View className={styles.paypwdTitle}>立即支付</View>
@@ -155,20 +184,21 @@ class PayPassword extends React.Component {
               <Divider className={styles.paypwdDivider} />
               <View className={styles.paypwdMesg}>
                 <Text className={styles.payText}>支付方式</Text>
-                <Text>
+                <View>
                   <Icon className={styles.walletIcon} name="PurseOutlined" />
                   <Text style={{ verticalAlign: 'middle' }}>钱包支付</Text>
-                </Text>
+                </View>
               </View>
               <View className={styles.paypwdMesg}>
                 <Text className={styles.payText}>支付密码</Text>
               </View>
               <View className={styles.payList}>{this.renderPwdItem()}</View>
             </>
-            {/* TODO: 忘记支付密码的链接添加 */}
-            <View className={styles.forgetPasswordContainer}>
-              <Text>忘记支付密码?</Text>
+
+            <View className={styles.forgetPasswordContainer} onClick={this.handleForgetPayPwd}>
+              {IS_MOBILE_SERVICE_OPEN && <Text>忘记支付密码?</Text>}
             </View>
+
             {/* 关闭按钮 */}
             <View className={styles.payBoxCloseIcon} onClick={this.handleCancel}>
               <Icon name="CloseOutlined" size={12} />
@@ -180,7 +210,7 @@ class PayPassword extends React.Component {
   };
 
   render() {
-    const { list = [] } = this.state
+    const { list = [] } = this.state;
     return (
       <View style={{ position: 'relative', zIndex: 1400 }}>
         {this.renderDialogPayment()}

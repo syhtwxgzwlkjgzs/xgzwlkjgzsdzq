@@ -9,7 +9,6 @@ class UserCenterThreads extends React.Component {
       <View
         onRefresh={() => new Promise((resolve) => {
           setTimeout(() => {
-            console.log('123');
             resolve(123);
           }, 2000);
         })

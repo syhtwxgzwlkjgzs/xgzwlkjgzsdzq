@@ -112,7 +112,7 @@
 .footer {
   background-color: $white;
   text-align: center;
-  height: 132px;
+  height: 110px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -120,10 +120,9 @@
   .button {
     width: 290px;
     height: 42px;
-    margin-bottom: 24px;
+    margin: $padding-2n 0;
     font-size: $font-size-middle;
     display: inline-block;
-    margin-top: $padding-3n;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -145,6 +144,9 @@
       height: 1px;
       top: 0;
       background-color: $border-color;
+    }
+    .footerBtnText {
+      padding: $padding-4n 0;
     }
   }
 }

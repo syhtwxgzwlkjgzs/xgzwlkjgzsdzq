@@ -19,11 +19,16 @@ const typeHeight = {
   shareLike: 16 + 24 + 8, // 分享点赞
   footer: 16 + 52, // 底部
   footerMarginTop: 16,
+  payButton: 16 + 36,
 };
 
 // 获取不可变的类型高度
 export const getImmutableTypeHeight = (data) => {
   let height = 0;
+
+  if (!data) return height;
+
+  const needPay = data.payType !== 0 && !data.paid;
 
   height = height + typeHeight.header;
   height = height + typeHeight.footer;
@@ -36,6 +41,10 @@ export const getImmutableTypeHeight = (data) => {
   // 分享点赞
   if (data.likeReward?.postCount || data.likeReward?.shareCount || data.likeReward?.likePayCount) {
     height = height + typeHeight.shareLike - typeHeight.footerMarginTop;
+  }
+
+  if (needPay) {
+    height = height + typeHeight.payButton;
   }
 
   const content = data.content;
@@ -73,4 +82,8 @@ export const getImmutableTypeHeight = (data) => {
     }
   });
   return height;
+};
+
+export const getSticksHeight = (list) => {
+  return (list?.length || 0) * 37;
 };
