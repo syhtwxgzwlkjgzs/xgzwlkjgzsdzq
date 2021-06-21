@@ -5,6 +5,7 @@ import styles from './index.module.scss';
 const InputPop = (props) => {
   const { visible, onOkClick, onCancel, inputText, reportContent = [] } = props;
 
+  const [radioValue, setRadioValue] = useState('');
   const [value, setValue] = useState('');
   const [res, setRes] = useState('');
   const [showInput, setShowInput] = useState(false);
@@ -14,6 +15,7 @@ const InputPop = (props) => {
       setValue('');
       setRes('');
     } else {
+      setRadioValue(e);
       setRes(reportContent[Number(e)]);
     }
   };
@@ -29,6 +31,8 @@ const InputPop = (props) => {
       try {
         const success = await onOkClick(res);
         if (success) {
+          setShowInput(false);
+          setRadioValue('');
           setValue('');
           setRes('');
         }
@@ -57,26 +61,28 @@ const InputPop = (props) => {
           </div>
         </div>
         <div className={styles.body}>
-          <Radio.Group defaultValue="5" onChange={(e) => onChoiceChange(e)}>
-            <div className={styles.radioGroup}>
-              {reportContent.map((val, index) => (
-                <div className={styles.reportTitle} key={index}>
-                  <Radio name={`${index}`}></Radio>
-                  <div className={styles.content}>{val}</div>
-                </div>
-              ))}
-            </div>
-            <div className={styles.other}>
-              <div className={styles.reportTitle} onClick={toggleOther} style={{cursor:'pointer'}}>
-                <div className={styles.content}>其他理由</div>
-                <Icon
-                  className={styles.reportIcon}
-                  size={12}
-                  name={showInput ? 'UpwardOutlined' : 'UnderOutlined'}
-                ></Icon>
+          {visible && (
+            <Radio.Group value={radioValue} onChange={(e) => onChoiceChange(e)}>
+              <div className={styles.radioGroup}>
+                {reportContent.map((val, index) => (
+                  <div className={styles.reportTitle} key={index}>
+                    <Radio name={`${index}`}></Radio>
+                    <div className={styles.content}>{val}</div>
+                  </div>
+                ))}
               </div>
-            </div>
-          </Radio.Group>
+              <div className={styles.other}>
+                <div className={styles.reportTitle} onClick={toggleOther} style={{ cursor: 'pointer' }}>
+                  <div className={styles.content}>其他理由</div>
+                  <Icon
+                    className={styles.reportIcon}
+                    size={12}
+                    name={showInput ? 'UpwardOutlined' : 'UnderOutlined'}
+                  ></Icon>
+                </div>
+              </div>
+            </Radio.Group>
+          )}
           {showInput && (
             <div className={styles.textarea}>
               <Textarea
