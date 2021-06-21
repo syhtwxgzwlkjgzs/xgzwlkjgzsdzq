@@ -36,18 +36,26 @@ const RenderThreadContent = inject('user')(
     // 是否免费帖
     const isFree = threadStore?.threadData?.payType === 0;
 
+    // 是否可以免费查看付费帖子
+    const canFreeViewPost = threadStore?.threadData?.ability.canFreeViewPost;
+
+    // 是否已经付费
+    const isPayed = threadStore?.threadData?.paid === true;
+
+    // 是否作者自己
+    const isSelf = props.user?.userInfo?.id && props.user?.userInfo?.id === threadStore?.threadData?.userId;
+
     // 是否附件付费帖
     const isAttachmentPay = threadStore?.threadData?.payType === 2 && threadStore?.threadData?.paid === false;
     const attachmentPrice = threadStore?.threadData?.attachmentPrice || 0;
+    // 是否需要附加付费
+    const needAttachmentPay = !canFreeViewPost && isAttachmentPay && !isSelf && !isPayed;
     // 是否付费帖子
     const isThreadPay = threadStore?.threadData?.payType === 1;
     const threadPrice = threadStore?.threadData?.price || 0;
-    // 是否已经付费
-    const isPayed = threadStore?.threadData?.paid === true;
     // 当前用户是否需要付费
     const isNeedPay = threadStore?.threadData?.payType === 1 && threadStore?.threadData?.paid === false;
-    // 是否作者自己
-    const isSelf = props.user?.userInfo?.id && props.user?.userInfo?.id === threadStore?.threadData?.userId;
+    
 
     // 是否红包帖
     const isRedPack = threadStore?.threadData?.displayTag?.isRedPack;
@@ -60,9 +68,6 @@ const RenderThreadContent = inject('user')(
     const canBeReward = isFree && threadStore?.threadData?.ability.canBeReward && !isRedPack && !isReward;
     // 是否已打赏
     const isRewarded = threadStore?.threadData?.isReward;
-
-    // 是否可以免费查看付费帖子
-    const canFreeViewPost = threadStore?.threadData?.ability.canFreeViewPost;
 
     const parseContent = parseContentData(indexes);
 
@@ -146,7 +151,7 @@ const RenderThreadContent = inject('user')(
           )}
 
           {/* 付费附件 */}
-          {!canFreeViewPost && isAttachmentPay && !isSelf && !isPayed && (
+          {needAttachmentPay && (
             <View style={{ textAlign: 'center' }} onClick={onContentClick}>
               <Button className={styles.payButton} type="primary">
                 <Icon className={styles.payIcon} name="GoldCoinOutlined" size={16}></Icon>
@@ -156,7 +161,7 @@ const RenderThreadContent = inject('user')(
           )}
 
           {/* 图片 */}
-          {parseContent.IMAGE && <ImageDisplay flat platform="h5" imgData={parseContent.IMAGE} />}
+          {parseContent.IMAGE && <ImageDisplay flat isPay={needAttachmentPay} onPay={onContentClick} platform="h5" imgData={parseContent.IMAGE} />}
 
           {/* 视频 */}
           {parseContent.VIDEO && (

@@ -8,7 +8,7 @@
 
 .container {
     box-sizing: border-box;
-    padding: 25px 16px 0 16px;
+    padding: 16px 16px 0 16px;
     padding-bottom: constant(safe-area-inset-bottom); ///兼容 IOS<11.2/
     padding-bottom: env(safe-area-inset-bottom); ///兼容 IOS>11.2/
     background-color: $white;
@@ -78,7 +78,7 @@
     justify-content: space-between;
 
     .button {
-        width: 167px;
+        width: 163.5px;
         height: 42px;
         font-size: $font-size-middle;
         display: flex;

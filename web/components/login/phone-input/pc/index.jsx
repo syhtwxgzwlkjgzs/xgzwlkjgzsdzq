@@ -6,12 +6,12 @@ import '@discuzq/design/dist/styles/index.scss';
 class PhoneInputPC extends React.Component {
   setCaptcha = (e) => {
     const { phoneCodeCallback = () => {} } = this.props;
-    const val = e.target.value;
+    const val = e?.target?.value?.match(/\d+/g)?.join('') || '';
     phoneCodeCallback(val);
   };
   setPhoneNum = (e) => {
     const { phoneNumCallback = () => {} } = this.props;
-    const val = e.target.value;
+    const val = e?.target?.value?.match(/\d+/g)?.join('') || '';
     phoneNumCallback(val);
   };
 
