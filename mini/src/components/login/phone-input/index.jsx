@@ -14,11 +14,12 @@ class PhoneInput extends React.Component {
   }
   setCaptcha = (code) => {
     const { phoneCodeCallback = () => {} } = this.props;
-    phoneCodeCallback(code);
+    const val = code?.match(/\d+/g)?.join('') || '';
+    phoneCodeCallback(val);
   };
   setPhoneNum = (e) => {
     const { phoneNumCallback = () => {} } = this.props;
-    const val = e.target.value;
+    const val = e?.target?.value?.match(/\d+/g)?.join('') || '';
     phoneNumCallback(val);
   };
 
@@ -45,6 +46,7 @@ class PhoneInput extends React.Component {
         <View className={layout.phoneInput}>
           <Input
             miniType="number"
+            mode="number"
             maxLength={11}
             className={layout.input}
             value={phoneNum}

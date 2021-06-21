@@ -297,11 +297,11 @@ class ThreadH5Page extends React.Component {
     const threadId = this.props.thread?.threadData?.id;
     const threadData = this.props.thread?.threadData;
     Taro.eventCenter.once('page:init', () => {
-      Taro.eventCenter.trigger('message:detail', threadData);
-  })
+      Taro.eventCenter.trigger('message:detail', threadData)
+    });
     Taro.navigateTo({
-      url: `/subPages/create-card/index?threadId=${threadId}`,
-    })
+        url: `/subPages/create-card/index?threadId=${threadId}`,
+    });
   }
 
   // 确定举报
