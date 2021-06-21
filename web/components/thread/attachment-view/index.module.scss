@@ -1,7 +1,7 @@
 @import '@common/styles/index.scss';
 .wrapper {
-  > div:not(:last-child) {
-    margin-bottom: rem(8);
+  :last-child {
+    margin-bottom: 0;
   }
 }
 .container {
@@ -13,6 +13,7 @@
   height: rem(50);
   border-radius: rem($border-radius-small);
   background: $body-bg-color;
+  margin-bottom: rem(8);
 
   .wrapper {
     width: 100%;

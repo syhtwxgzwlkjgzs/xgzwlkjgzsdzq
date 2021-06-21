@@ -142,6 +142,9 @@ class SearchPCPage extends React.Component {
         this.setState({stepIndex: 2});
       }
     }
+
+    // 滑动之后，重置position
+    this.setState({position: -1});
   }
 
   // 中间 -- 潮流话题 活跃用户 热门内容
@@ -217,8 +220,8 @@ class SearchPCPage extends React.Component {
           onScroll={ this.handleScroll }
           jumpTo={this.state.position}
           pageName="search"
-        showRefresh={false}
-        className="search-page"
+          showRefresh={false}
+          className="search-page"
         >
           { this.renderContent() }
         </BaseLayout>
