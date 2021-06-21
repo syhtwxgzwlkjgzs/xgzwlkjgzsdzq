@@ -8,6 +8,7 @@ import DeletePopup from '@components/thread-detail-pc/delete-popup';
 import { Icon, Toast } from '@discuzq/design';
 import classnames from 'classnames';
 import goToLoginPage from '@common/utils/go-to-login-page';
+import Router from '@discuzq/sdk/dist/router';
 
 const typeMap = {
   101: 'IMAGE',
@@ -344,6 +345,11 @@ class RenderCommentList extends React.Component {
     this.setState({ showAboptPopup: false });
   }
 
+  onUserClick(userId) {
+    if (!userId) return;
+    Router.push({ url: `/user/${userId}` });
+  }
+
   // 举报
   reportClick(comment) {
     typeof this.props.onReportClick === 'function' && this.props.onReportClick(comment);
@@ -407,6 +413,7 @@ class RenderCommentList extends React.Component {
               <CommentList
                 data={val}
                 key={val.id}
+                avatarClick={(userId) => this.onUserClick(userId)}
                 likeClick={() => this.likeClick(val)}
                 replyClick={() => this.replyClick(val)}
                 deleteClick={() => this.deleteClick(val)}

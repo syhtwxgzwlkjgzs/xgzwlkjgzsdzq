@@ -47,7 +47,7 @@ class CommentList extends React.Component {
 
   // 点击头像
   avatarClick() {
-    typeof this.props?.avatarClick === 'function' && this.props.avatarClick();
+    typeof this.props?.avatarClick === 'function' && this.props.avatarClick(this.props.data?.user?.id);
   }
 
   // 点击评论赞
@@ -156,6 +156,7 @@ class CommentList extends React.Component {
               circle={true}
               userId={this.props.data?.user?.id}
               isShowUserInfo={this.props.isShowOne}
+              className={styles.avatar}
             ></Avatar>
           </div>
           <div className={styles.commentListContent}>
