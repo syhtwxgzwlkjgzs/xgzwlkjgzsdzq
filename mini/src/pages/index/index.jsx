@@ -31,6 +31,8 @@ const CLOSE_URL = '/subPage/close/index';
 @inject('user')
 @observer
 class Index extends React.Component {
+
+    $instance = Taro.getCurrentInstance()
     
     componentDidUpdate() {
 
@@ -146,9 +148,23 @@ class Index extends React.Component {
       const isGoToHome = await this.isPass();
       if (isGoToHome ) {
         // 带有指定的路径，将不去首页。
-        const $instance = Taro.getCurrentInstance()
-        const router = $instance.router;
-        if (router.params && router.params.path) {
+        const {router} = this.$instance;
+        const { path } = router;
+        // 如果扫码进来，参数path需要兼容，当前的路由会变为参数的path地址
+        if (path.indexOf('pages/index/index') === -1) {
+          const {path: targetPath, params} = router;
+          Router.redirect({
+            url: targetPath,
+            params,
+            fail: () => {
+              Router.redirect({
+                url: '/pages/home/index'
+              });
+            }
+          });
+        }
+        else if (router.params && router.params.path) {
+          console.log(router.params.path)
           Router.redirect({
             url: decodeURIComponent(router.params.path),
             fail: () => {
