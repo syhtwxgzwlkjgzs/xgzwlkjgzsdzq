@@ -191,7 +191,7 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
   // 录音并上传
   const audioRecord = (type === THREAD_TYPE.voice && !audio.id) && (
     <AudioRecord
-      duration={60}
+      duration={60.4}
       onUpload={(file) => {
         audioUpload(file);
       }}
