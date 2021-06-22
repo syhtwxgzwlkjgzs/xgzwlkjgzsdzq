@@ -101,6 +101,7 @@ class index extends Component {
             onChange={this.handleChangeNewPwd}
             mode="password"
             placeholder="请输入新密码"
+            type="number"
           />
         </div>
         <div className={styles.inputItem}>
@@ -111,6 +112,7 @@ class index extends Component {
             onChange={this.handleChangeRepeatPwd}
             mode="password"
             placeholder="请重复输入新密码"
+            type="number"
           />
         </div>
         <div className={styles.bottom}>
