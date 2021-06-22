@@ -38,7 +38,6 @@ export default function UserInfo(props) {
   props.isRed && (tagsNumber = tagsNumber + 1);
 
   const isPc = props.platform === 'pc';
-
   return (
     <div className={styles.contianer}>
       <Avatar

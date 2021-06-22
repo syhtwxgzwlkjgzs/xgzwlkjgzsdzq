@@ -181,6 +181,9 @@ class MessageAction extends MessageStore {
 
   // 从store数据中删除消息
   deleteListItem(key, id) {
+    // 每次删除消息后更新一下未读消息
+    this.readUnreadCount();
+
     const data = this[key];
     const list = [].concat(...data.list)
     try {
