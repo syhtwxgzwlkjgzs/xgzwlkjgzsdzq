@@ -146,7 +146,12 @@
 .container_mode_join {
   height: 169px;
 }
-
+.container_mode_supplementary{
+  height: 160px;
+  .logoBox {
+    margin-top: 60px;
+  }
+}
 .hide_logo {
   height: 40px;
 }
