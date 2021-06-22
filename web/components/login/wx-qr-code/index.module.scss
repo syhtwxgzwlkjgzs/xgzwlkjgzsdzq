@@ -47,6 +47,10 @@
       align-items: center;
       color: $white;
       cursor: pointer;
+      margin-left: $margin-5;
+    }
+    .miniCodeMask {
+      border-radius: $border-radius-circle;
     }
   }
   .pc_orCode__img {
@@ -55,6 +59,7 @@
     box-sizing: border-box;
     text-align: center;
     border: $border-solid-1;
+    margin-left: $margin-5;
     img {
       width: 100%;
       height: 100%;
