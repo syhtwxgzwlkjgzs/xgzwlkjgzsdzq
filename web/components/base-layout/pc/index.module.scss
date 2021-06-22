@@ -270,7 +270,10 @@
       }
     }
     .mymessage-page {
-      @include heightMedia(590px) {
+      // 这里暂时这样处理。等消息系列页面一起调整
+      min-height: 940px;
+      @include heightMedia(940px) {
+        padding-top: 70px;
         .baselayout-right {
           position: static;
         }
