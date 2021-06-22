@@ -10,6 +10,8 @@ class IndexStore {
 
   @observable drafts = null;
 
+  @observable latestReq = 0;
+
   // 是否出现推荐选项
   @observable needDefault = false
 
