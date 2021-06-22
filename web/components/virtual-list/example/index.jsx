@@ -177,10 +177,23 @@ function Home(props, ref) {
                   registerChild(ref);
                 }}
                 onScroll={onScroll}
+                overscanIndicesGetter={({
+                  cellCount, 
+                  overscanCellsCount, 
+                  startIndex,
+                  stopIndex,
+                }) => {
+                  return {
+                    overscanStartIndex: Math.max(0, startIndex - overscanCellsCount),
+                    overscanStopIndex: Math.min(cellCount - 1, stopIndex + overscanCellsCount),
+                  };
+                }}
                 deferredMeasurementCache={cache}
                 height={height}
                 overscanRowCount={5}
-                onRowsRendered={onRowsRendered}
+                onRowsRendered={(...props) => {
+                  onRowsRendered(...props)
+                }}
                 rowCount={rowCount}
                 rowHeight={getRowHeight}
                 rowRenderer={rowRenderer}
