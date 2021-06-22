@@ -165,9 +165,6 @@ export default function HOCFetchSiteData(Component) {
         loginStatus = false;
       }
 
-      // 未登陆状态下，清空accessToken
-      !loginStatus && clearLoginStatus();
-
       user.updateLoginStatus(loginStatus);
       this.setState({ isPass: this.isPass() });
     }
