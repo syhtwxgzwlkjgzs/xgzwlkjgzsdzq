@@ -25,7 +25,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
   const [likes, setLikes] = useState(null);
   const [tips, setTips] = useState(null);
   const [requestError, setRequestError] = useState(false);
-  const [errorText, setErrorText] = useState("加载失败");
+  const [errorText, setErrorText] = useState("暂无数据");
 
   const [current, setCurrent] = useState(0);
 
@@ -48,7 +48,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
         setAll(res?.data);
       } else {
         setRequestError(true);
-        setErrorText(res?.msg);
+        // setErrorText(res?.msg); TODO: 传回来的是"加载失败"
       }
       return res;
   };
@@ -61,7 +61,7 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
       setAll(res?.data);
     } else {
       setRequestError(true);
-      setErrorText(res.msg);
+      // setErrorText(res.msg);
     }
 
     const data = res?.data || {};
