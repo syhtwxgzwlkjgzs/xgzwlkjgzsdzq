@@ -1,15 +1,14 @@
-import React, {useState, useEffect, useCallback, useRef} from 'react';
+import React, {useState, useEffect, useCallback, useRef, useMemo} from 'react';
 import isServer from '@common/utils/is-server';
 import styles from './index.module.scss';
 import {isLongImage} from '@common/utils/calc-image-type';
 import calcImageQuality from '@common/utils/calc-image-quality';
 const SmartImg = ({level, type, src, onClick, noSmart = false}) => {
 
-    const [imgSrc, changeImgSrc] = useState(null);
     const [isLong, changeIsLong] = useState(false);
     const img = useRef(null);
 
-    const calcImgSrc = useCallback(() => {
+    const imgSrc = useMemo(() => {
         if (noSmart) return src;
         const [path, param] = src.split('?');
         let newSrc = src;
@@ -28,7 +27,7 @@ const SmartImg = ({level, type, src, onClick, noSmart = false}) => {
         }
 
         return newSrc;
-    }, [src, type])
+    }, [noSmart, src, type])
 
     const imgOnload = useCallback(() => {
         if (img && img.current) {
@@ -38,11 +37,6 @@ const SmartImg = ({level, type, src, onClick, noSmart = false}) => {
         }
         
     }, [img])
-
-    useEffect(() => {
-        const newSrc = calcImgSrc();
-        changeImgSrc(newSrc);
-    });
     
     return (
         <div className={styles.box}>
