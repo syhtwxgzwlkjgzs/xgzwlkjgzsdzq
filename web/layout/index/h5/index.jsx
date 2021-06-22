@@ -179,8 +179,8 @@ class IndexH5Page extends React.Component {
 
   render() {
     const { index } = this.props;
-    const { filter, isFinished, currentCategories } = this.state;
-    const { threads = {}, sticks } = index;
+    const { isFinished } = this.state;
+    const { threads = {}, currentCategories, filter, threadError, sticks } = index;
     const { currentPage, totalPage, pageData } = threads || {};
 
     return (
@@ -194,6 +194,8 @@ class IndexH5Page extends React.Component {
         quickScroll={true}
         curr="home"
         pageName="home"
+        requestError={threadError.isError}
+        errorText={threadError.errorText}
         onClickTabBar={this.onClickTabBar}
         requestError={this.props.isError}
         errorText={this.props.errorText}

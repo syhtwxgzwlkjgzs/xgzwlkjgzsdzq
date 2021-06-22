@@ -31,14 +31,13 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
   const timeoutRef = useRef();
   const updateUnreadMessage = () => {
     if (!user.id) return;
+    readUnreadCount();
     timeoutRef.current = setTimeout(() => {
-      readUnreadCount();
       updateUnreadMessage();
     }, unreadUpdateInterval);
   };
 
   useEffect(() => {
-    readUnreadCount();
     updateUnreadMessage();
     return () => clearTimeout(timeoutRef.current);
   }, []);
@@ -69,7 +68,7 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
             <div key={idx} className={styles.item + (i.active ? ` ${styles.active}` : '')} onClick={() => handleClick(i, idx)}>
               {
                 i.icon === 'MailOutlined' ? (
-                  <UnreadRedDot type="icon" style={{width: '22px', margin: '0 auto'}} unreadCount={totalUnread}>
+                  <UnreadRedDot dotStyle={{top: "-6px"}} unreadCount={totalUnread}>
                     <Icon name={i.icon} size={22} />
                   </UnreadRedDot>
                 ) : (

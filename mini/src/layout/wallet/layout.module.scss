@@ -37,7 +37,7 @@
       display: flex;
       justify-content: flex-start;
       width: 100%;
-            
+
       :global {
         .dzq-icon {
           display: inline-flex;
@@ -54,7 +54,7 @@
   }
 
   .choiceTime {
-    height: rem(52);
+    height: 53px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -99,7 +99,7 @@
       }
 
       .dzq-tabs__label {
-        padding-bottom: $padding-14 !important;
+        padding-bottom: 15px !important;
         font-family: 'PingFang SC';
         font-weight: 600;
         font-size: rem($font-size-primary);
@@ -107,9 +107,10 @@
       }
 
       .dzq-tabs__item {
-        height: 52px;
+        height: 53px;
         box-sizing: border-box;
         flex: 1;
+        padding: 0 $padding-4n;
 
         &::after {
           width: 80px;

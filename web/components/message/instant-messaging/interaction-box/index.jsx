@@ -11,7 +11,7 @@ import styles from './index.module.scss';
 
 const InteractionBox = (props) => {
   const { onSubmit, dialogBoxRef, platform, dialogId, threadPost, showEmoji, setShowEmoji, username, nickname } = props;
-  const { readDialogMsgList, dialogMsgList, createDialogMsg, createDialog, readDialogIdByUsername } = props.message;
+  const { readDialogMsgList, dialogMsgList, createDialogMsg, createDialog, readDialogIdByUsername, clearMessage } = props.message;
 
   const [lastTimestamp, setLastTimestamp] = useState(0);
   const [typingValue, setTypingValue] = useState('');
@@ -40,8 +40,8 @@ const InteractionBox = (props) => {
     Router.replace({ url: `/message?page=chat&nickname=${nickname}&dialogId=${dialogId}` });
   };
 
-
   useEffect(async () => {
+    clearMessage();
     if (username && !dialogId) {
       const res = await readDialogIdByUsername(username);
       const { code, data: { dialogId } } = res;
@@ -49,7 +49,7 @@ const InteractionBox = (props) => {
         replaceRouteWidthDialogId(dialogId);
       }
     }
-  }, []);
+  }, [username, dialogId]);
 
 
   useEffect(() => {
@@ -60,7 +60,6 @@ const InteractionBox = (props) => {
       toastInstance?.destroy();
     };
   }, []);
-
 
   const submit = async (data) => {
     if (isSubmiting) return;
@@ -157,9 +156,8 @@ const InteractionBox = (props) => {
     const { code, data } = ret;
     if (code === 0) {
       await submit({
+        attachmentId: data.id,
         imageUrl: data.url,
-        width: data.fileWidth,
-        height: data.fileHeight,
       });
     } else {
       Toast.error({ content: ret.msg });

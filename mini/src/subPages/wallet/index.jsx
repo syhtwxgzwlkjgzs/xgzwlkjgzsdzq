@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject } from 'mobx-react';
-import { getCurrentInstance } from '@tarojs/taro';
+import Taro, { getCurrentInstance } from '@tarojs/taro';
 import Wallet from '../../layout/wallet/index';
 import { readWalletUser } from '@server';
 import Toast from '@discuzq/design/dist/components/toast/index';
@@ -13,8 +13,16 @@ class WalletPage extends React.Component {
     };
   }
 
+  setNavigationBarStyle = () => {
+    Taro.setNavigationBarColor({
+      frontColor: '#ffffff',
+      backgroundColor: '#ffffff'
+    })
+  }
+
   componentDidMount() {
     this.getWallet();
+    this.setNavigationBarStyle();
   }
 
   getWallet = async () => {

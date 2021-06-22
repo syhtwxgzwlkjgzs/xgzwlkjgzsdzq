@@ -109,7 +109,7 @@ function Home(props, ref) {
       case 'footer':
         return <BottomView noMore={props.noMore} isError={props.requestError}></BottomView>;
       default:
-        return <Item data={data} measure={measure} />;
+        return <Item data={data} measure={measure} recomputeRowHeights={() => recomputeRowHeights(index)} />;
     }
   };
 
@@ -123,14 +123,21 @@ function Home(props, ref) {
     return (
       <CellMeasurer cache={cache} columnIndex={0} key={key} rowIndex={index} parent={parent}>
         {({ measure, registerChild }) => (
-          <div ref={registerChild} key={key} style={style} data-index={index} data-key={key} data-id={data.threadId}>
+          <div
+            ref={registerChild}
+            key={key}
+            style={style}
+            data-index={index}
+            data-key={key}
+            data-id={data.threadId}
+            data-height={immutableHeightMap[index]}
+          >
             {renderListItem(data.type, data, flag ? measure : () => {}, {
               index,
               key,
               parent,
               style,
             })}
-            {/* <div style={dividerStyle}></div> */}
           </div>
         )}
       </CellMeasurer>
@@ -240,7 +247,7 @@ function Home(props, ref) {
                 rowHeight={getRowHeight}
                 rowRenderer={rowRenderer}
                 width={width}
-                overscanIndicesGetter={overscanIndicesGetter}
+                // overscanIndicesGetter={overscanIndicesGetter}
               />
             )}
           </AutoSizer>

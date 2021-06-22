@@ -1,39 +1,27 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import ThreadContent from '@components/thread';
 import { observer } from 'mobx-react';
 
-@observer
-export default class Item extends React.Component {
-  constructor(props) {
-    super(props);
-    this._measure = this._measure.bind(this);
-  }
+export default observer((props) => {
+  const { data } = props;
+  const ref = useRef(null);
 
-  componentDidMount() {
-    this.props.measure();
-  }
+  useEffect(() => {
+    props.measure();
+  }, [ref?.current?.clientHeight]);
 
-  componentDidMount() {
-    this.props.measure();
-  }
-
-  _measure() {
-    this.props.measure();
-  }
-
-  render() {
-    const { data: item } = this.props;
-    return (
-        <ThreadContent
-          onContentHeightChange={this._measure}
-          onImageReady={this._measure}
-          onVideoReady={this._measure}
-          key={item.threadId}
-          // showBottomStyle={index !== pageData.length - 1}
-          data={item}
-          // className={styles.listItem}
-          recomputeRowHeights={this._measure}
-        />
-    );
-  }
-}
+  return (
+    <div ref={ref}>
+      <ThreadContent
+        onContentHeightChange={props.measure}
+        onImageReady={props.measure}
+        onVideoReady={props.measure}
+        key={data.threadId}
+        // showBottomStyle={index !== pageData.length - 1}
+        data={data}
+        // className={styles.listItem}
+        recomputeRowHeights={props.measure}
+      />
+    </div>
+  );
+});
