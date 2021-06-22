@@ -662,6 +662,11 @@ class ThreadPCPage extends React.Component {
     Router.push({ url: `/message?page=chat&username=${username}&nickname=${nickname}` });
   }
 
+  onUserClick(userId) {
+    if (!userId) return;
+    Router.push({ url: `/user/${userId}` });
+  }
+
   renderContent() {
     const { thread: threadStore } = this.props;
     const { isReady, isCommentReady, isNoMore, totalCount, isCommentListError } = threadStore;
@@ -678,6 +683,7 @@ class ThreadPCPage extends React.Component {
             onRewardClick={() => this.onRewardClick()}
             onTagClick={() => this.onTagClick()}
             onPayClick={() => this.onPayClick()}
+            onUserClick={() => this.onUserClick(this.props.thread?.threadData?.user?.userId)}
           ></RenderThreadContent>
         ) : (
           <LoadingTips type="init"></LoadingTips>
@@ -722,6 +728,7 @@ class ThreadPCPage extends React.Component {
                 user={threadStore.authorInfo}
                 onFollowClick={() => this.onFollowClick()}
                 onPrivateLetter={() => this.onPrivateLetter()}
+                onPersonalPage={() => this.onUserClick(this.props.thread?.threadData?.user?.userId)}
                 isShowBtn={!isSelf}
               ></AuthorInfo>
             ) : (

@@ -555,7 +555,7 @@ class Index extends Component {
         this.setIndexPageData();
       }
       this.postToast('发布成功', 'success');
-      Taro.redirectTo({ url: `/subPages/thread/index?id=${data.threadId}` });
+      if (!isDraft) Taro.redirectTo({ url: `/subPages/thread/index?id=${data.threadId}` });
       // }
       return true;
     }
