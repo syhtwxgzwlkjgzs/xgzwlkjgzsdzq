@@ -92,12 +92,12 @@ class ThreadAction extends ThreadStore {
   }
 
   @action
-  reset() {
+  reset({ isPositionToComment = false }) {
     this.threadData = null; // 帖子信息
     this.commentList = null; // 评论列表数据
     this.totalCount = 0; // 评论列表总条数
     this.authorInfo = null; // 作者信息
-    this.isPositionToComment = false; // 是否定位到评论位置
+    this.isPositionToComment = isPositionToComment; // 是否定位到评论位置
     this.isCommentListError = false;
     this.isAuthorInfoError = false;
     this.scrollDistance = 0;
@@ -123,7 +123,7 @@ class ThreadAction extends ThreadStore {
   @action
   setCheckUser = (data) => {
     this.checkUser = data;
-  }
+  };
 
   /**
    * 更新帖子详情的点赞数据
