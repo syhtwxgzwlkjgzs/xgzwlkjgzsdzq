@@ -5,7 +5,6 @@ import withShare from '@common/utils/withShare/withShare'
 import { inject, observer } from 'mobx-react'
 import { handleString2Arr } from '@common/utils/handleCategory';
 import { priceShare } from '@common/utils/priceShare';
-import Router from '@discuzq/sdk/dist/router';
 
 @inject('site')
 @inject('search')

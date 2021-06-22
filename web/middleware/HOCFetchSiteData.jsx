@@ -245,7 +245,6 @@ export default function HOCFetchSiteData(Component) {
     isPass() {
       const { site, router, user } = this.props;
       const { isNoSiteData } = this.state;
-
       if (site && site.webConfig) {
         isNoSiteData && this.setState({
           isNoSiteData: false,
@@ -316,7 +315,6 @@ export default function HOCFetchSiteData(Component) {
           if (initialPage) {
             const urlObj = new URL(initialPage);
             if (urlObj.pathname !== router.asPath) {
-              console.log('Redirect to initital page, from', window.location.href, 'to', initialPage);
               site.clearInitialPage();
               Router.redirect({
                 url: initialPage,
