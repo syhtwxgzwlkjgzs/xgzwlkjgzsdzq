@@ -171,7 +171,7 @@ class UserCenterFans extends React.Component {
       data: null,
       success: false,
     };
-  }, 2000);
+  }, 1000);
 
   unFollowUser = throttle(async ({ id }) => {
     const res = await deleteFollow({ data: { id, type: 1 } });
@@ -198,7 +198,7 @@ class UserCenterFans extends React.Component {
       data: null,
       success: false,
     };
-  }, 2000);
+  }, 1000);
 
   async componentDidMount() {
     // 第一次加载完后，才允许加载更多页面
@@ -286,7 +286,6 @@ class UserCenterFans extends React.Component {
 
   render() {
     const isNoData = followerAdapter(this.props.dataSource || this.state.fans).length === 0 && !this.state.loading;
-
     return (
       <div
         className={`${this.props.className} user-center-friends`}

@@ -11,6 +11,7 @@ import NoData from '@components/no-data';
 import { inject, observer } from 'mobx-react';
 import { debounce } from '@common/utils/throttle-debounce';
 import Router from '@discuzq/sdk/dist/router';
+import throttle from '@common/utils/thottle.js';
 
 @inject('user')
 @observer
@@ -157,7 +158,7 @@ class UserCenterFollows extends React.Component {
     });
   }
 
-  followUser = async ({ id: userId }) => {
+  followUser = throttle(async ({ id: userId }) => {
     try {
       const res = await createFollow({ data: { toUserId: userId } });
       if (res.code === 0 && res.data) {
@@ -194,9 +195,9 @@ class UserCenterFollows extends React.Component {
         duration: 2000,
       });
     }
-  };
+  }, 1000);
 
-  unFollowUser = async ({ id }) => {
+  unFollowUser = throttle(async ({ id }) => {
     try {
       const res = await deleteFollow({ data: { id, type: 1 } });
       if (res.code === 0 && res.data) {
@@ -231,7 +232,7 @@ class UserCenterFollows extends React.Component {
         duration: 2000,
       });
     }
-  };
+  }, 1000);
 
   async componentDidMount() {
     // 第一次加载完后，才允许加载更多页面
@@ -323,8 +324,8 @@ class UserCenterFollows extends React.Component {
       loading: true,
     });
     this.setState({
-      follows: []
-    })
+      follows: [],
+    });
     if (this.props.setDataSource) {
       this.props.setDataSource({});
     }
@@ -336,7 +337,7 @@ class UserCenterFollows extends React.Component {
 
   handleSearchValueChange = async (e) => {
     this.setState({
-      searchValue: e.target.value
+      searchValue: e.target.value,
     });
 
     if (this.props.updateSourcePage) {
@@ -396,7 +397,9 @@ class UserCenterFollows extends React.Component {
                       type={'primary'}
                       onClick={(e) => {
                         e.stopPropagation();
-                        Router.replace({ url: `/message?page=chat&username=${user.userName}&nickname=${user.nickName}` });
+                        Router.replace({
+                          url: `/message?page=chat&username=${user.userName}&nickname=${user.nickName}`,
+                        });
                       }}
                     >
                       <div className={styles.messageButtonContent}>
@@ -411,22 +414,17 @@ class UserCenterFollows extends React.Component {
             </div>
           );
         })}
-        <div className={`${friendsStyle.friendWrap} ${styles.friendWrap} ${styles['display-none']} user-center-follow-mini`}>
+        <div
+          className={`${friendsStyle.friendWrap} ${styles.friendWrap} ${styles['display-none']} user-center-follow-mini`}
+        >
           {followerAdapter(this.props.dataSource || this.state.follows).map((user, index) => {
             if (index + 1 > this.props.limit) return null;
             return (
               <div key={user.id + index} className={friendsStyle.friendItem}>
                 <div className={friendsStyle.friendAvatar}>
-                  <Avatar
-                    image={user.avatar}
-                    userId={user.id}
-                    circle
-                    name={user.userName}
-                  />
+                  <Avatar image={user.avatar} userId={user.id} circle name={user.userName} />
                 </div>
-                <div className={friendsStyle.friendTextInfo}>
-                  {user.userName}
-                </div>
+                <div className={friendsStyle.friendTextInfo}>{user.userName}</div>
               </div>
             );
           })}
