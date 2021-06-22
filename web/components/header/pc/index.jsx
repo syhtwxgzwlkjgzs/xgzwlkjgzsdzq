@@ -211,7 +211,7 @@ class Header extends React.Component {
                   <p className={styles.iconText}>首页</p>
                 </div>
                 <div className={styles.iconItem} onClick={() => this.handleRouter('/message')}>
-                  <UnreadRedDot type="icon" unreadCount={totalUnread}>
+                  <UnreadRedDot unreadCount={totalUnread}>
                     <div className={styles.message}>
                       <Icon
                         onClick={() => {
