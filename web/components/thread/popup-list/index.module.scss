@@ -159,6 +159,16 @@ $overlay-container-max-width: 572;
   }
 }
 
+.bottomView {
+  height: rem($tabs-list-min-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  div {
+    padding: 0;
+  }
+}
+
 .spinnerPC {
   height: rem($tabs-list-min-height);
   width: 100%;
