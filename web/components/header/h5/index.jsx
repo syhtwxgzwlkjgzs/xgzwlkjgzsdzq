@@ -58,7 +58,7 @@ const H5Header = (props) => {
             onClick={() => iconClickHandle('/')}
             name="HomeOutlined"
           />
-          <UnreadRedDot type="icon" style={{ width: "18px", marginRight: "24px" }} unreadCount={totalUnread}>
+          <UnreadRedDot style={{ margin: "0 24px" }} unreadCount={totalUnread}>
             <Icon
               className={styles.icon}
               onClick={() => iconClickHandle('/message')}
