@@ -14,7 +14,7 @@ class IndexStore {
   @observable needDefault = false
 
   @computed get categoriesNoAll() {
-    return (this.categories || []).filter(item => item.name !== '全部');
+    return (this.categories || []).filter(item => item.name !== '全部' && item.canCreateThread);
   }
 
   @computed get categoriesNames () {
