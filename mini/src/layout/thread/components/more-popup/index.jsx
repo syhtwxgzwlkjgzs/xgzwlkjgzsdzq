@@ -95,8 +95,9 @@ const InputPop = (props) => {
                   className={className(styles.icon)}
                   openType="share"
                   data-shareData={shareData}
+                  onClick={onClose}
                 >
-                  <Icon className={styles.icon} size="20" name="WechatOutlined"></Icon>
+                  <Icon className={styles.icon} size="20" name="WeChatOutlined"></Icon>
                 </Button>
                 <View className={styles.text}>微信分享</View>
               </View>

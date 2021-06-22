@@ -49,6 +49,4 @@ export default class supplementaryStore {
 
     @observable fields = [];
     @observable values = [];
-
-
 }

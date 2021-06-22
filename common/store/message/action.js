@@ -174,9 +174,9 @@ class MessageAction extends MessageStore {
     if (code === 0) this.deleteListItem(storeKey, id);
   }
 
-  @action
+  @action.bound
   clearMessage() {
-    this.dialogMsgList = this.initList
+    this.dialogMsgList = this.initList;
   }
 
   // 从store数据中删除消息

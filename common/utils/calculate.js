@@ -18,8 +18,8 @@ export const plus = (num1, num2) => {
 
   const p = p1 > p2 ? p1 : p2;
 
-  const n1 = num1 * Math.pow(10, p);
-  const n2 = num2 * Math.pow(10, p);
+  const n1 = (num1 * Math.pow(10, p)) | 0;
+  const n2 = (num2 * Math.pow(10, p)) | 0;
 
   const result = (n1 + n2) / Math.pow(10, p);
 
@@ -42,10 +42,10 @@ export const minus = (num1, num2) => {
 
   const p = p1 > p2 ? p1 : p2;
 
-  const n1 = num1 * Math.pow(10, p);
-  const n2 = num2 * Math.pow(10, p);
+  const n1 = (num1 * Math.pow(10, p)) | 0;
+  const n2 = (num2 * Math.pow(10, p)) | 0;
 
   const result = (n1 - n2) / Math.pow(10, p);
 
-  return result;
+  return result.toFixed(2);
 };

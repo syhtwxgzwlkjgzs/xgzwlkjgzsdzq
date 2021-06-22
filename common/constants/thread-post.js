@@ -71,13 +71,5 @@ export const ACCEPT_VIDEO_TYPES = [
 
 // 附件类型
 export const ACCEPT_FILE_TYPES = [
-  '.zip',
-  '.doc',
-  '.ppt',
-  '.pdf',
-  '.docx',
-  '.xls',
-  '.rar',
-  '.txt',
   '*/*',
 ];
