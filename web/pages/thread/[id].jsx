@@ -89,7 +89,8 @@ class Detail extends React.Component {
     // 获取帖子数据
     if (!this.props?.thread?.threadData || !this.hasMaybeCache()) {
       // TODO:这里可以做精细化重置
-      this.props.thread.reset();
+      const isPositionToComment = this.props.thread?.isPositionToComment || false;
+      this.props.thread.reset({ isPositionToComment });
 
       const res = await this.props.thread.fetchThreadDetail(id);
       if (res.code !== 0) {
