@@ -1,6 +1,7 @@
 @import '@common/styles/index.scss';
 
 $tabs-list-min-height: 70vh;
+$overlay-container-max-width: 572;
 
 .list {
   overflow-y: auto;
@@ -23,7 +24,7 @@ $tabs-list-min-height: 70vh;
 }
 
 .tabs {
-  max-width: rem(572);
+  max-width: rem($overlay-container-max-width);
   margin: 0 auto;
   border-top-left-radius: rem($border-radius-big);
   border-top-right-radius: rem($border-radius-big);
@@ -124,6 +125,11 @@ $tabs-list-min-height: 70vh;
   :global(.dzq-tabs__item) {
     padding: 0 rem(16);
   }
+}
+
+:global(.dzq-popup__container.center) {
+  max-width: rem($overlay-container-max-width);
+  margin: 0 auto;
 }
 
 .tabIcon {

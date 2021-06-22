@@ -15,7 +15,6 @@ import { withRouter } from 'next/router';
  */
 
 const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) => {
-  const isClickTab = useRef(false);
 
   const allPageNum = useRef(1);
   const likePageNum = useRef(1);
@@ -74,10 +73,6 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
   };
 
   const loadMoreData = () => {
-    if (isClickTab.current) {
-      isClickTab.current = false;
-      return;
-    }
 
     if (current === 0) {
       allPageNum.current += 1;
@@ -96,9 +91,6 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
     const hasAll = id === 0 && !all;
     const hasLikes = id === 1 && !likes;
     const hasTips = (id === 2 || id === 3) && !tips;
-
-    // TODO 临时解决点击tab时，导致list组件触发上拉刷新的问题
-    isClickTab.current = true;
 
     if (hasAll || hasLikes || hasTips) {
       singleLoadData({ type: id, page: 1 });
