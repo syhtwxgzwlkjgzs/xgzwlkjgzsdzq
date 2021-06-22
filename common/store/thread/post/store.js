@@ -75,6 +75,9 @@ class ThreadPostStore {
     navHeight: 40, // 默认的导航栏高度
     menubtnWidth: 80, // 胶囊按钮的宽度
   }
+
+  // 发帖的种类信息和查看帖子的分类不一样。所属权限不一样。所以发帖的类型单独处理
+  categories = [];
 }
 
 export default ThreadPostStore;

@@ -63,7 +63,7 @@ const ClassifyPopup = (props) => {
       setPostData({ categoryId: category[0].pid });
       setCategorySelected({ parent: category[0], child: {} });
     }
-  }, []);
+  }, [category?.length]);
 
   useEffect(() => { // 回显分类
     const { parent: storeParent, child: storeChild } = categorySelected;
@@ -87,30 +87,26 @@ const ClassifyPopup = (props) => {
       {/* 父类 */}
       <View className={`${styles.content} ${styles['content-parent']}`}>
         {(category?.slice() || []).map(item => (
-          item.canCreateThread
-            ? <Button
-              key={item.pid}
-              className={`${parent.pid === item.pid ? styles.active : ''}`}
-              onClick={() => { handleParentClick(item) }}
-            >
-              {item.name}
-            </Button>
-            : null
+          <Button
+            key={item.pid}
+            className={`${parent.pid === item.pid ? styles.active : ''}`}
+            onClick={() => { handleParentClick(item) }}
+          >
+            {item.name}
+          </Button>
         ))}
       </View>
       {/* 子类 */}
       {subCategory.length > 0 && (
         <View className={`${styles.content} ${styles['content-child']}`}>
           {(subCategory || []).map(item => (
-            item.canCreateThread
-              ? <Button
-                key={item.pid}
-                className={`${child.pid === item.pid ? styles.active : ''}`}
-                onClick={() => { handleChildClick(item) }}
-              >
-                {item.name}
-              </Button>
-              : null
+            <Button
+              key={item.pid}
+              className={`${child.pid === item.pid ? styles.active : ''}`}
+              onClick={() => { handleChildClick(item) }}
+            >
+              {item.name}
+            </Button>
           ))}
         </View>
       )}
