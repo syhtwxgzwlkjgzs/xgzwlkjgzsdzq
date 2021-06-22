@@ -138,7 +138,7 @@ class IndexH5Page extends React.Component {
       <>
         {categories?.length > 0 && (
           <>
-            <div ref={this.listRef} className={`${styles.homeContent} ${this.enableVlist && fixedTab && styles.fixed}`}>
+            <div ref={this.listRef} className={`${styles.homeContent} ${!this.enableVlist && fixedTab && styles.fixed}`}>
               <Tabs
                 className={styles.tabsBox}
                 scrollable
@@ -156,7 +156,7 @@ class IndexH5Page extends React.Component {
                 ))}
               </Tabs>
             </div>
-            {this.enableVlist && fixedTab && <div className={styles.tabPlaceholder}></div>}
+            {!this.enableVlist && fixedTab && <div className={styles.tabPlaceholder}></div>}
           </>
         )}
       </>
