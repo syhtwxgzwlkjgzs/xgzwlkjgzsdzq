@@ -7,6 +7,7 @@ import { ACCEPT_IMAGE_TYPES } from '@common/constants/thread-post';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import { fixImageOrientation } from '@common/utils/exif';
+import { get } from '@common/utils/get';
 
 @inject('user')
 @observer
@@ -28,6 +29,7 @@ class index extends Component {
     this.avatarUploaderRef.current.click();
   };
   onAvatarChange = async (fileList) => {
+    if (!fileList.target.files[0]) return;
     this.setState({
       isUploadAvatarUrl: true,
     });
@@ -65,6 +67,7 @@ class index extends Component {
     this.backgroundUploaderRef.current.click();
   };
   onBackgroundChange = async (fileList) => {
+    if (!fileList.target.files[0]) return;
     this.props.handleSetBgLoadingStatus(true);
     const fixedImg = await fixImageOrientation(fileList.target.files[0]);
     this.props.user
