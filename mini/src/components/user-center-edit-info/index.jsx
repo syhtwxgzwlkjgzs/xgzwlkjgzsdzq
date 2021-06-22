@@ -107,8 +107,8 @@ class index extends Component {
   handleGoToEditUserName = () => {
     if (!this.props.user.canEditUsername) {
       Toast.error({
-        content: '用户名一年只能修改一次',
-        duration: 1000,
+        content: '暂无法修改（一年一次）',
+        duration: 2000,
       });
       return;
     }

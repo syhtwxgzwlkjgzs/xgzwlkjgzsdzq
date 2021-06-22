@@ -4,11 +4,13 @@ import Avatar from '@components/avatar';
 import Button from '@discuzq/design/dist/components/button/index';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
+import Spin from '@discuzq/design/dist/components/spin/index';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import Router from '@discuzq/sdk/dist/router';
 import { getCurrentInstance } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
+import throttle from '@common/utils/thottle.js';
 
 @inject('site')
 @inject('user')
@@ -16,7 +18,9 @@ import styles from './index.module.scss';
 class index extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      isFollowedLoading: false, // 是否点击关注
+    };
   }
 
   static defaultProps = {
@@ -24,7 +28,7 @@ class index extends Component {
   };
 
   // 点击屏蔽
-  handleChangeShield = (isDeny) => {
+  handleChangeShield = throttle((isDeny) => {
     const { id } = getCurrentInstance().router.params;
     if (isDeny) {
       this.props.user.undenyUser(id);
@@ -43,49 +47,87 @@ class index extends Component {
         duration: 1000,
       });
     }
-  };
+  }, 1000);
 
   // 点击关注
-  handleChangeAttention = async (follow) => {
+  handleChangeAttention = throttle(async (follow) => {
     const { id } = getCurrentInstance().router.params;
     if (id) {
       if (follow !== 0) {
         try {
+          this.setState({
+            isFollowedLoading: true,
+          });
           const cancelRes = await this.props.user.cancelFollow({ id: id, type: 1 });
           if (!cancelRes.success) {
             Toast.error({
               content: cancelRes.msg || '取消关注失败',
               duration: 2000,
             });
+            this.setState({
+              isFollowedLoading: false,
+            });
           }
           await this.props.user.getTargetUserInfo(id);
+          Toast.success({
+            content: '操作成功',
+            hasMask: false,
+            duration: 2000,
+          });
+          setTimeout(() => {
+            this.setState({
+              isFollowedLoading: false,
+            });
+          }, 200);
         } catch (error) {
           console.error(error);
           Toast.error({
             content: '网络错误',
             duration: 2000,
           });
+          this.setState({
+            isFollowedLoading: false,
+          });
         }
       } else {
         try {
+          this.setState({
+            isFollowedLoading: true,
+          });
           const followRes = await this.props.user.postFollow(id);
           if (!followRes.success) {
             Toast.error({
               content: followRes.msg || '关注失败',
               duration: 2000,
             });
+            this.setState({
+              isFollowedLoading: false,
+            });
           }
           await this.props.user.getTargetUserInfo(id);
+          Toast.success({
+            content: '操作成功',
+            hasMask: false,
+            duration: 2000,
+          });
+          setTimeout(() => {
+            this.setState({
+              isFollowedLoading: false,
+            });
+          }, 200);
         } catch (error) {
           console.error(error);
           Toast.error({
             content: '网络错误',
             duration: 2000,
           });
+          this.setState({
+            isFollowedLoading: false,
+          });
         }
       }
     }
-  };
+  }, 1000);
 
   logout = () => {
     clearLoginStatus();
@@ -196,6 +238,7 @@ class index extends Component {
           {this.props.isOtherPerson ? (
             <>
               <Button
+                disabled={this.state.isFollowedLoading}
                 onClick={() => {
                   this.handleChangeAttention(user.follow);
                 }}
@@ -206,7 +249,11 @@ class index extends Component {
                 full
               >
                 <View className={styles.actionButtonContentWrapper}>
-                  <Icon name={this.renderFollowedStatus(user.follow).icon} size={16} />
+                  {this.state.isFollowedLoading ? (
+                    <Spin size={16} type="spinner"></Spin>
+                  ) : (
+                    <Icon name={this.renderFollowedStatus(user.follow).icon} size={16} />
+                  )}
                   <Text className={styles.userBtnText}>{this.renderFollowedStatus(user.follow).text}</Text>
                 </View>
               </Button>
