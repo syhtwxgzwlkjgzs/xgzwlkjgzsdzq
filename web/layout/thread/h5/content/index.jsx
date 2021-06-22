@@ -91,8 +91,10 @@ const RenderThreadContent = inject('user')(
     };
 
     const onClickUser = (e) => {
-      typeof props.onClickUser === 'function' && props.onClickUser(e);
+      typeof props.onUserClick === 'function' && props.onUserClick(e);
     };
+
+    console.log(props.userId)
 
     return (
       <div className={`${styles.container}`}>
@@ -110,6 +112,7 @@ const RenderThreadContent = inject('user')(
               isReward={isReward}
               isRed={isRedPack}
               onClick={onClickUser}
+              userId={threadStore?.threadData?.user?.userId}
             ></UserInfo>
           </div>
           {props?.user?.isLogin() && isApproved && (
