@@ -57,13 +57,6 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
     const { postId = '', threadId = '' } = tipData;
     type = (type === TYPE_PAID) ? TYPE_REWARD : type;
     const res = await readLikedUsers({ params: { threadId, postId, page, type } });
-    if(res.code === 0) {
-      setAll(res?.data);
-    } else {
-      setRequestError(true);
-      // setErrorText(res.msg);
-    }
-
     const data = res?.data || {};
 
     if (type === TYPE_ALL) {
@@ -215,6 +208,8 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
       );
     }).filter(item => item !== null)
   );
+
+  console.log(`requestError`, requestError)
 
   return (
     <Popup
