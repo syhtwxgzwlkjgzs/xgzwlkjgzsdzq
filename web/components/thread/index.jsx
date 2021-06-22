@@ -29,7 +29,8 @@ class Index extends React.Component {
     // 分享
     onShare = (e) => {
       e && e.stopPropagation();
-      this.handleShare()
+      Toast.info({ content: '复制链接成功' });
+      this.handleShare();
     }
     handleShare = debounce(() => {
       // 对没有登录的先登录
@@ -38,8 +39,6 @@ class Index extends React.Component {
         goToLoginPage({ url: '/user/login' });
         return;
       }
-
-      Toast.info({ content: '复制链接成功' });
 
       const { title = '', threadId = '', user } = this.props.data || {};
 
@@ -55,7 +54,7 @@ class Index extends React.Component {
           recomputeRowHeights();
         }
       });
-    }, 2000)
+    }, 500)
 
     // 评论
     onComment = (e) => {
@@ -71,20 +70,20 @@ class Index extends React.Component {
       const { data = {} } = this.props;
       const { threadId = '' } = data;
       if (threadId !== '') {
-        this.props.thread.positionToComment()
+        this.props.thread.positionToComment();
         this.props.router.push(`/thread/${threadId}`);
       } else {
         console.log('帖子不存在');
       }
     }
-  
+
     // 点赞
     onPraise = (e) => {
       e && e.stopPropagation();
       this.handlePraise()
     }
     handlePraise = debounce(() => {
-      
+
       if(this.state.isSendingLike) return;
 
       // 对没有登录的先登录
@@ -109,7 +108,7 @@ class Index extends React.Component {
         this.setState({isSendingLike: false});
       });
     }, 1000)
-  
+
     // 支付
     onPay = (e) => {
       e && e.stopPropagation();
