@@ -5,6 +5,7 @@ import Page from '@components/page';
 import withShare from '@common/utils/withShare/withShare';
 import { priceShare } from '@common/utils/priceShare';
 import Taro from '@tarojs/taro';
+
 @inject('site')
 @inject('search')
 @inject('topic')
@@ -18,7 +19,6 @@ class Index extends React.Component {
 
   constructor(props) {
     super(props);
-    Taro.hideShareMenu();
   }
 
   async componentDidMount() {

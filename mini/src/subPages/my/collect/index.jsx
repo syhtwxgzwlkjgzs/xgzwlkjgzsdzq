@@ -19,7 +19,6 @@ class Index extends React.Component {
 
   constructor(props) {
     super(props);
-    Taro.hideShareMenu();
   }
 
   async componentDidMount() {
