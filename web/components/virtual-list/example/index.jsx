@@ -10,6 +10,8 @@ import { inject, observer } from 'mobx-react';
 
 const immutableHeightMap = {}; // 不可变的高度
 
+let preScrollTop = 0;
+let scrollTimer;
 // 增强cache实例
 function extendCache(instance) {
   instance.getDefaultHeight = ({ index, data }) => {
@@ -56,6 +58,8 @@ function Home(props, ref) {
   let listRef = useRef(null);
   let loadData = false;
   const rowCount = list.length;
+
+  const [flag, setFlag] = useState(true);
 
   // 监听list列表
   useEffect(() => {
@@ -120,7 +124,12 @@ function Home(props, ref) {
       <CellMeasurer cache={cache} columnIndex={0} key={key} rowIndex={index} parent={parent}>
         {({ measure, registerChild }) => (
           <div ref={registerChild} key={key} style={style} data-index={index} data-key={key} data-id={data.threadId}>
-            {renderListItem(data.type, data, measure, { index, key, parent, style })}
+            {renderListItem(data.type, data, flag ? measure : () => {}, {
+              index,
+              key,
+              parent,
+              style,
+            })}
             {/* <div style={dividerStyle}></div> */}
           </div>
         )}
@@ -131,6 +140,13 @@ function Home(props, ref) {
   // 滚动事件
   const onScroll = ({ scrollTop, clientHeight, scrollHeight }) => {
     // scrollToPosition = scrollTop;
+    setFlag(!(scrollTop < preScrollTop));
+    preScrollTop = scrollTop;
+
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => {
+      setFlag(true);
+    }, 100);
 
     props.onScroll && props.onScroll({ scrollTop, clientHeight, scrollHeight });
     if (scrollTop !== 0) {
@@ -175,6 +191,22 @@ function Home(props, ref) {
     cache.clearAll();
   };
 
+  // 自定义扫描数据范围
+  const overscanIndicesGetter = ({ cellCount, scrollDirection, overscanCellsCount, startIndex, stopIndex }) => {
+    // 往回滚动
+    if (scrollDirection === -1) {
+      return {
+        overscanStartIndex: Math.max(0, startIndex - overscanCellsCount),
+        overscanStopIndex: Math.min(cellCount - 1, stopIndex + overscanCellsCount),
+      };
+    }
+
+    return {
+      overscanStartIndex: Math.max(0, startIndex - overscanCellsCount),
+      overscanStopIndex: Math.min(cellCount - 1, stopIndex),
+    };
+  };
+
   return (
     <div className="page">
       <InfiniteLoader isRowLoaded={isRowLoaded} loadMoreRows={loadMoreRows} rowCount={rowCount}>
@@ -195,6 +227,7 @@ function Home(props, ref) {
                 rowHeight={getRowHeight}
                 rowRenderer={rowRenderer}
                 width={width}
+                overscanIndicesGetter={overscanIndicesGetter}
               />
             )}
           </AutoSizer>
