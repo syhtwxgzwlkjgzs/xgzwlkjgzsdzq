@@ -156,6 +156,13 @@ function avatar(props) {
     return { text: '关注', icon: 'PlusOutlined', className: styles.follow }
   }, [userInfo.follow])
 
+  const clickAvatar = useCallback((e) => {
+    e.stopPropagation();
+
+    if (!userId) return;
+    onClick && onClick(e);
+  }, [userId])
+
 
   const userInfoBox = useMemo(() => {
     if (!isShowUserInfo || !userId) return null;
@@ -174,7 +181,7 @@ function avatar(props) {
       <div id="avatar-popup" className={`${styles.userInfoBox} ${direction}`} style={direction === 'left' ? {right: 0} : {left: 0}}>
         <div className={styles.userInfoContent}>
           <div className={styles.header}>
-            <div className={styles.left} onClick={onClick}>
+            <div className={styles.left} onClick={clickAvatar}>
               <Avatar
                 className={classNames(styles.customAvatar, styles.cursor)}
                 circle={true}
@@ -184,7 +191,7 @@ function avatar(props) {
               ></Avatar>
             </div>
             <div className={styles.right}>
-              <p className={classNames(styles.name, styles.cursor)} onClick={onClick}>{userInfo.nickname}</p>
+              <p className={classNames(styles.name, styles.cursor)} onClick={clickAvatar}>{userInfo.nickname}</p>
               <p className={styles.text}>{userInfo.signature && userInfo.signature !== '' ? userInfo.signature : '暂无签名'}</p>
             </div>
           </div>
@@ -262,7 +269,7 @@ function avatar(props) {
   if (image && image !== '') {
     return (
       <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler} >
-        <div className={styles.avatarWrapper} onClick={onClick}>
+        <div className={styles.avatarWrapper} onClick={clickAvatar}>
           <Avatar className={className} circle={circle} image={image} size={size}></Avatar>
           {
             userTypeIcon && (
@@ -279,8 +286,8 @@ function avatar(props) {
 
   return (
     <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
-      <div className={styles.cursor} onClick={onClick}>
-        <Avatar className={className} circle={circle} text={userName} size={size} onClick={onClick}></Avatar>
+      <div className={styles.cursor} onClick={clickAvatar}>
+        <Avatar className={className} circle={circle} text={userName} size={size} onClick={clickAvatar}></Avatar>
         {
           userTypeIcon && (
             <div className={`${styles.userIcon} ${bgClrBasedOnType}`}>
