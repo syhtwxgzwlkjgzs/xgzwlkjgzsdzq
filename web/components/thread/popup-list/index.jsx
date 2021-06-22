@@ -209,8 +209,6 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
     }).filter(item => item !== null)
   );
 
-  console.log(`requestError`, requestError)
-
   return (
     <Popup
         position={tipData?.platform === 'h5' ? 'bottom' : 'center'}
