@@ -64,8 +64,6 @@ class IndexH5Page extends React.Component {
         link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
         imgUrl, // 分享图标
       });
-
-      console.log(111);
     });
   };
 
@@ -177,11 +175,11 @@ class IndexH5Page extends React.Component {
 
   render() {
     const { index } = this.props;
-    const { filter, isFinished, currentCategories } = this.state;
-    const { threads = {}, sticks } = index;
+    const { isFinished } = this.state;
+    const { threads = {}, currentCategories, filter, threadError, sticks } = index;
     const { currentPage, totalPage, pageData } = threads || {};
     // 是否开启虚拟滚动
-    const enableVlist = true;
+    const enableVlist = false;
 
     return (
       <BaseLayout
@@ -194,6 +192,8 @@ class IndexH5Page extends React.Component {
         quickScroll={true}
         curr="home"
         pageName="home"
+        requestError={threadError.isError}
+        errorText={threadError.errorText}
         onClickTabBar={this.onClickTabBar}
         requestError={this.props.isError}
         errorText={this.props.errorText}

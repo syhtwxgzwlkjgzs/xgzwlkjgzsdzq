@@ -48,6 +48,8 @@ export default inject('user')(
     // 是否附件付费
     const isAttachmentPay = threadStore?.threadData?.payType === 2 && threadStore?.threadData?.paid === false;
     const attachmentPrice = threadStore?.threadData?.attachmentPrice || 0;
+    // 是否需要附加付费
+    const needAttachmentPay = !canFreeViewPost && isAttachmentPay && !isSelf && !isPayed;
     // 是否帖子付费
     const isThreadPay = threadStore?.threadData?.payType === 1;
     const threadPrice = threadStore?.threadData?.price || 0;
@@ -105,6 +107,11 @@ export default inject('user')(
       typeof props.onTagClick === 'function' && props.onTagClick();
     };
 
+    const onUserClick = (e) => {
+      e && e.stopPropagation();
+      typeof props.onUserClick === 'function' && props.onUserClick();
+    };
+
     return (
       <div className={`${topic.container}`}>
         <div className={topic.header}>
@@ -123,6 +130,7 @@ export default inject('user')(
               isRed={isRedPack}
               hideInfoPopip={true}
               platform="pc"
+              onClick={onUserClick}
             ></UserInfo>
           </div>
           {props?.user?.isLogin() && (
@@ -154,7 +162,10 @@ export default inject('user')(
                   </Dropdown>
                 </div>
               )}
-              <div className={topic.iconText} onClick={() => onDropdownChange('report')}>
+              <div
+                className={classnames(topic.iconText, props?.user?.isAdmini && topic.disabled)}
+                onClick={() => onDropdownChange('report')}
+              >
                 <Icon className={topic.icon} name="WarnOutlinedThick"></Icon>
                 <span className={topic.text}>举报</span>
               </div>
@@ -173,7 +184,7 @@ export default inject('user')(
             {text && <PostContent useShowMore={false} content={text || ''} usePointer={false} />}
 
             {/* 付费附件：不能免费查看付费帖 && 需要付费 && 不是作者 && 没有付费 */}
-            {!canFreeViewPost && isAttachmentPay && !isSelf && !isPayed && (
+            {needAttachmentPay && (
               <div style={{ textAlign: 'center' }} onClick={onContentClick}>
                 <Button className={topic.payButton} type="primary" size="large">
                   <div className={topic.pay}>
@@ -185,7 +196,15 @@ export default inject('user')(
             )}
 
             {/* 图片 */}
-            {parseContent.IMAGE && <ImageDisplay flat platform="pc" imgData={parseContent.IMAGE} />}
+            {parseContent.IMAGE && (
+              <ImageDisplay
+                flat
+                platform="pc"
+                isPay={needAttachmentPay}
+                onPay={onContentClick}
+                imgData={parseContent.IMAGE}
+              />
+            )}
 
             {/* 视频 */}
             {parseContent.VIDEO && (
@@ -202,7 +221,9 @@ export default inject('user')(
             {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
 
             {/* 附件 */}
-            {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} />}
+            {parseContent.VOTE && (
+              <AttachmentView attachments={parseContent.VOTE} threadId={threadStore?.threadData?.threadId} />
+            )}
 
             {/* 商品 */}
             {parseContent.GOODS && (
@@ -297,7 +318,12 @@ export default inject('user')(
         <div className={topic.footer}>
           <div className={topic.thumbs}>
             <div className={topic.likeReward}>
-              <Tip tipData={tipData} imgs={threadStore?.threadData?.likeReward?.users || []} showCount={10} platform="pc"></Tip>
+              <Tip
+                tipData={tipData}
+                imgs={threadStore?.threadData?.likeReward?.users || []}
+                showCount={10}
+                platform="pc"
+              ></Tip>
             </div>
             <span>{threadStore?.threadData?.likeReward?.likePayCount || ''}</span>
           </div>

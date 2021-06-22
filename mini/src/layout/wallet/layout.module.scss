@@ -37,7 +37,7 @@
       display: flex;
       justify-content: flex-start;
       width: 100%;
-            
+
       :global {
         .dzq-icon {
           display: inline-flex;
@@ -99,7 +99,7 @@
       }
 
       .dzq-tabs__label {
-        padding-bottom: $padding-14 !important;
+        padding-bottom: $padding-4n !important;
         font-family: 'PingFang SC';
         font-weight: 600;
         font-size: rem($font-size-primary);

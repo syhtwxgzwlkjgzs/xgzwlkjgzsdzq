@@ -1,7 +1,7 @@
 @import '@common/styles/index.scss';
 .wrapper {
-  > View:not(:last-child) {
-    margin-bottom: 8px;
+  :last-child {
+    margin-bottom: 0;
   }
 }
 .container {
@@ -13,6 +13,7 @@
   height: 50px;
   border-radius: $border-radius-small;
   background: $body-bg-color;
+  margin-bottom: 8px;
 
   .wrapper {
     width: 100%;
@@ -48,6 +49,7 @@
     white-space: nowrap;
     margin-left: 8px;
     margin-right: 8px;
+    margin-top: 2px;
     flex: 1;
   }
   .size {

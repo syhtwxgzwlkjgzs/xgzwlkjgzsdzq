@@ -239,6 +239,14 @@ http.interceptors.response.use((res) => {
       }
   }
 
+  if (status === 200) {
+    return Promise.resolve({
+      code: data.Code,
+      data: reasetData(data.Data),
+      msg: data.Message,
+    });
+  }
+
   return Promise.resolve({
     code: status,
     data: null,

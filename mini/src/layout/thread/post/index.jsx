@@ -199,9 +199,16 @@ class Index extends Component {
 
   // 点击发帖插件时回调，如上传图片、视频、附件或艾特、话题等
   handlePluginClick(item) {
+    // 检查是否录音中
     if (!this.checkAudioRecordStatus()) return;
 
-    console.log(`item`, item)
+    // 再点击附件、图片、和录音图标时候，如果当时进行中的正式该操作，则进行重置
+    const { operationType } = this.state;
+    if ([THREAD_TYPE.file, THREAD_TYPE.image, THREAD_TYPE.voice].includes(item.type) && item.type === operationType) {
+      this.resetOperationType();
+      return;
+    }
+
     const { postData } = this.props.threadPost;
     // 匹配附件、图片、语音上传
     this.setState({
@@ -548,7 +555,7 @@ class Index extends Component {
         this.setIndexPageData();
       }
       this.postToast('发布成功', 'success');
-      Taro.redirectTo({ url: `/subPages/thread/index?id=${data.threadId}` });
+      if (!isDraft) Taro.redirectTo({ url: `/subPages/thread/index?id=${data.threadId}` });
       // }
       return true;
     }
@@ -621,7 +628,7 @@ class Index extends Component {
 
     this.setState({
       showEmoji: false,
-      operationType: 0,
+      // operationType: 0,
     });
   }
 
@@ -725,7 +732,7 @@ class Index extends Component {
                 onFocus={() => {
                   this.setState({
                     showEmoji: false,
-                    operationType: 0,
+                    // operationType: 0,
                   });
                 }}
               />
@@ -741,29 +748,27 @@ class Index extends Component {
                 }}
               />
 
-            <View className={styles.plugin} onClick={e => e.stopPropagation()}>
+              <View className={styles.plugin} onClick={e => e.stopPropagation()}>
+                <GeneralUpload type={operationType} audioUpload={(file) => { this.yundianboUpload('audio', file) }}>
+                  {video.thumbUrl && (
+                    <Units
+                      type='video'
+                      deleteShow
+                      src={video.thumbUrl}
+                      onDelete={() => setPostData({ video: {} })}
+                      onVideoLoaded={() => {
+                        Taro.pageScrollTo({
+                          scrollTop: 3000,
+                          // selector: '#thread-post-video',
+                          complete: (a,b,c) => {console.log(a,b,c)}
+                        });
+                      }}
+                    />
+                  )}
+                </GeneralUpload>
+                {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => setPostData({ product: {} })} />}
+              </View>
 
-              <GeneralUpload type={operationType} audioUpload={(file) => { this.yundianboUpload('audio', file) }}>
-                {video.thumbUrl && (
-                  <Units
-                    type='video'
-                    deleteShow
-                    src={video.thumbUrl}
-                    onDelete={() => setPostData({ video: {} })}
-                    onVideoLoaded={() => {
-                      Taro.pageScrollTo({
-                        scrollTop: 3000,
-                        // selector: '#thread-post-video',
-                        complete: (a,b,c) => {console.log(a,b,c)}
-                      });
-                    }}
-                  />
-                )}
-              </GeneralUpload>
-
-              {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => setPostData({ product: {} })} />}
-
-            </View>
             </View>
           </View>
 
@@ -771,9 +776,15 @@ class Index extends Component {
           <View className={styles.tags} style={{ display: bottomHeight ? 'none' : 'block' }}>
             {(permissions?.insertPosition?.enable) &&
               <View className={styles['location-bar']}>
-                <Position currentPosition={position} positionChange={(position) => {
-                  setPostData({ position });
-                }} />
+                <Position
+                  currentPosition={position}
+                  positionChange={(position) => {
+                    setPostData({ position });
+                  }}
+                  canJumpToChoose={() => {
+                    return this.checkAudioRecordStatus();
+                  }}
+                />
               </View>
             }
 
@@ -842,13 +853,13 @@ class Index extends Component {
                 this.setState({
                   showClassifyPopup: true,
                   showEmoji: false,
-                  operationType: 0
+                  // operationType: 0
                 });
               }}
               onSetplugShow={() => {
                 showEmoji && this.setState({
                   showEmoji: false,
-                  operationType: 0
+                  // operationType: 0
                 });
               }}
             />
@@ -867,7 +878,7 @@ class Index extends Component {
               onHide={() => {
                 this.setState({
                   showEmoji: false,
-                  operationType: 0
+                  // operationType: 0
                 });
               }}
               onClick={(emoji) => {

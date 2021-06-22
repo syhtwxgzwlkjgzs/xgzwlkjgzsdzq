@@ -16,12 +16,8 @@ export default function ErrorPage(props) {
 
   return (
     <View className={styles.page}>
-      {/* <Header></Header> */}
-
-      <View className={styles.body}>
         <Image className={styles.icon} src={error} />
         <Text className={styles.text}>{text}</Text>
-      </View>
 
       <View className={styles.footer}>
         <Button onClick={onReflush} className={styles.button} type="primary">

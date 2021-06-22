@@ -21,7 +21,8 @@ import {
   SITE_CLOSED,
   JUMP_TO_PAY_SITE,
   JUMP_TO_SUPPLEMENTARY,
-  SITE_NO_INSTALL
+  SITE_NO_INSTALL,
+  MINI_SITE_JOIN_WHITE_LIST
 } from '@common/constants/site';
 
 const PARTNER_INVITE_URL = '/subPages/forum/partner-invite/index';
@@ -31,6 +32,8 @@ const CLOSE_URL = '/subPage/close/index';
 @inject('user')
 @observer
 class Index extends React.Component {
+
+    $instance = Taro.getCurrentInstance()
     
     componentDidUpdate() {
 
@@ -52,6 +55,7 @@ class Index extends React.Component {
           });
           return false;
         case INVALID_TOKEN:// 没有权限,只能针对forum接口做此判断
+          break;
         case TOKEN_FAIL:// token无效
           clearLoginStatus();
           this.initSiteData(); // 重新获取数据
@@ -146,9 +150,23 @@ class Index extends React.Component {
       const isGoToHome = await this.isPass();
       if (isGoToHome ) {
         // 带有指定的路径，将不去首页。
-        const $instance = Taro.getCurrentInstance()
-        const router = $instance.router;
-        if (router.params && router.params.path) {
+        const {router} = this.$instance;
+        const { path } = router;
+        // 如果扫码进来，参数path需要兼容，当前的路由会变为参数的path地址
+        if (path.indexOf('pages/index/index') === -1) {
+          const {path: targetPath, params} = router;
+          Router.redirect({
+            url: targetPath,
+            params,
+            fail: () => {
+              Router.redirect({
+                url: '/pages/home/index'
+              });
+            }
+          });
+        }
+        else if (router.params && router.params.path) {
+          console.log(router.params.path)
           Router.redirect({
             url: decodeURIComponent(router.params.path),
             fail: () => {
@@ -172,8 +190,9 @@ class Index extends React.Component {
   // 检查是否满足渲染条件
   isPass() {
     const { site, user } = this.props;
-    
+    const { path } = Taro.getCurrentInstance().router;
     const siteMode = site?.webConfig?.setSite?.siteMode;
+    
     if (site?.webConfig) {
       // 关闭站点
       if (site.closeSiteConfig) {
@@ -184,9 +203,11 @@ class Index extends React.Component {
       // 付费模式处理
       if (siteMode === 'pay') {
         // 未付费用户访问非白名单页面，强制跳转付费页
-        if (!user.isLogin() || !user.paid) {
-          Router.redirect({ url: PARTNER_INVITE_URL });
-          return false;
+        if (!MINI_SITE_JOIN_WHITE_LIST.includes(path)) {
+          if (!user.isLogin() || !user.paid) {
+            Router.redirect({ url: PARTNER_INVITE_URL });
+            return false;
+          }
         }
       }
     } else {

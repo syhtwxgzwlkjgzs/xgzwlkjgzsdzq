@@ -46,14 +46,24 @@ class InstantMessaging extends React.Component {
 
     return (
       <View className={styles.container}>
-        <DialogBox dialogId={dialogId} showEmoji={showEmoji} keyboardHeight={keyboardHeight} inputBottom={inputBottom} />
+        <DialogBox
+          dialogId={dialogId}
+          showEmoji={showEmoji}
+          hideEmoji={() => {
+            this.setState({
+              showEmoji: false,
+            });
+          }}
+          keyboardHeight={keyboardHeight}
+          inputBottom={inputBottom}
+        />
         <InteractionBox
           username={username}
           keyboardHeight={keyboardHeight}
           inputBottom={inputBottom}
           showEmoji={showEmoji}
           dialogId={dialogId}
-          showEmoji={showEmoji}
+          // showEmoji={showEmoji}
           setShowEmoji={(show) => {
             this.setState({
               showEmoji: show,

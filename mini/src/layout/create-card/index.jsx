@@ -14,7 +14,7 @@ class Index extends React.Component {
         Taro.eventCenter.trigger('page:init')
     }
     async componentDidMount(){
-        const {threadId} = this
+        const {threadId} = this.thread
         const data = {
             path: `/subPages/thread/index?id=${threadId}`
         }

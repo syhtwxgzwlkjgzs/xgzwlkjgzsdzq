@@ -74,6 +74,13 @@
             display: flex;
             align-items: center;
             cursor: pointer;
+
+            .message{
+              display: flex;
+              flex-wrap: nowrap;
+              align-items: center;
+            }
+
             &:hover{
 
               p,div{
@@ -119,7 +126,7 @@
           cursor: pointer;
           display: flex;
           align-items: center;
-         
+
           .userName{
             margin-left: rem(8);
             color: $text-color-regular;

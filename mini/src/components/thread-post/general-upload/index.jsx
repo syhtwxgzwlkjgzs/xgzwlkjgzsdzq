@@ -191,7 +191,7 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
   // 录音并上传
   const audioRecord = (type === THREAD_TYPE.voice && !audio.id) && (
     <AudioRecord
-      duration={60}
+      duration={60.4}
       onUpload={(file) => {
         audioUpload(file);
       }}
@@ -209,7 +209,9 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
 
   // 录音音频
   const audioPlayer = (audio?.mediaUrl) && (
-    <Audio src={audio.mediaUrl} onDelete={() => { setPostData({ audio: {} }); }} />
+    <View className={styles['audio-container']}>
+      <Audio src={audio.mediaUrl} onDelete={() => { setPostData({ audio: {} }); }} />
+    </View>
   );
 
 

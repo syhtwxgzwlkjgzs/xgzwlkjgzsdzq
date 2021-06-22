@@ -105,7 +105,7 @@ class ThreadH5Page extends React.Component {
 
   componentDidMount() {
     // 当内容加载完成后，获取评论区所在的位置
-    //this.position = this.commentDataRef?.current?.offsetTop - 50;
+    // this.position = this.commentDataRef?.current?.offsetTop - 50;
     // 是否定位到评论位置
     if (this.props?.thread?.isPositionToComment) {
       // TODO:需要监听帖子内容加载完成事件
@@ -296,14 +296,12 @@ class ThreadH5Page extends React.Component {
   onPosterShare() {
     const threadId = this.props.thread?.threadData?.id;
     const threadData = this.props.thread?.threadData;
+    Taro.eventCenter.once('page:init', () => {
+      Taro.eventCenter.trigger('message:detail', threadData)
+    });
     Taro.navigateTo({
-      url: `/subPages/create-card/index?threadId=${threadId}`,
-      success () {
-        Taro.eventCenter.once('page:init', () => {
-            Taro.eventCenter.trigger('message:detail', threadData);
-        })
-      }
-    })
+        url: `/subPages/create-card/index?threadId=${threadId}`,
+    });
   }
 
   // 确定举报
@@ -861,7 +859,7 @@ class ThreadH5Page extends React.Component {
                 <Input
                   className={footer.input}
                   placeholder="写评论"
-                  disabled={true}
+                  disabled
                   prefixIcon="EditOutlined"
                   placeholderClass={footer.inputPlaceholder}
                 ></Input>

@@ -28,6 +28,12 @@ function Home(props, ref) {
     setList([{ type: 'header' }, ...(props.list || []), { type: 'footer' }]);
   }, [props.list]);
 
+  useEffect(() => {
+    if (listRef) {
+      listRef.scrollToPosition(props.vlist.home || 0);
+    }
+  }, [listRef?.Grid?.getTotalRowsHeight()]);
+
   // componentDidMount() {
   //   setTimeout(() => {
   //     if (listRef) {
@@ -91,6 +97,9 @@ function Home(props, ref) {
     // scrollToPosition = scrollTop;
 
     props.onScroll && props.onScroll({ scrollTop, clientHeight, scrollHeight });
+    if (scrollTop !== 0) {
+      props.vlist.setPosition(scrollTop);
+    }
 
     if (scrollTop + clientHeight + 50 >= scrollHeight && !loadData) {
       loadData = true;
@@ -159,4 +168,4 @@ function Home(props, ref) {
   );
 }
 
-export default forwardRef(Home);
+export default observer(inject('vlist')(forwardRef(Home)));

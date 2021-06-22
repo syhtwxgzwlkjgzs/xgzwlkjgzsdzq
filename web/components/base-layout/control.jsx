@@ -55,20 +55,22 @@ const BaseLayoutControl = forwardRef((props, ref) => {
   }, [layoutRef]);
 
   useEffect(() => {
-    if (hasListChild && listRef?.current && pageName) {
+    if (hasListChild && listRef?.current && pageName && baseLayoutWhiteList.indexOf(pageName) !== -1) {
       if (jumpTo > 0) {
         baselayout[pageName] = jumpTo;
         listRef.current.jumpToScrollTop(jumpTo);
-      } else if (baseLayoutWhiteList.indexOf(pageName) !== -1) {
+      } else {
         if(baselayout[pageName] > 0) {
-          listRef.current.jumpToScrollTop(baselayout[pageName]);
+          if (pageName !== 'search' || (pageName === 'search' && jumpTo !== -1)) {
+            listRef.current.jumpToScrollTop(baselayout[pageName]);
+          }
         } else if(baselayout.isJumpingToTop) {
           baselayout.removeJumpingToTop();
           listRef.current.onBackTop();
         }
       }
     }
-  });
+  }, [jumpTo, hasListChild, listRef?.current, pageName]);
 
 
   const quickScrolling = (e) => {

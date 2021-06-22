@@ -52,7 +52,7 @@ class WXLoginH5Page extends React.Component {
       // 在h5浏览器中，且公众号设置打开
       const params = {
         type: 'mobile_browser_login',
-        redirectUri: encodeURIComponent(`${window.location.origin}/user/wx-authorization?type=${platform}${inviteCode}`),
+        redirectUri: encodeURIComponent(`${window.location.origin}/user/${platform === 'h5' ? 'wx-auth' : 'wx-authorization'}?type=${platform}${inviteCode}`),
       };
 
       // pc端打开

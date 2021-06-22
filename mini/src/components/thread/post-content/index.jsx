@@ -10,6 +10,7 @@ import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import { View, Text, Image } from '@tarojs/components'
 import styles from './index.module.scss';
+import { urlToLink } from '@common/utils/replace-url-to-a';
 
 /**
  * 帖子内容展示
@@ -73,7 +74,7 @@ const Index = ({
     if(isExternaLink) return
 
     if (url) {
-      Router.push({url}) 
+      Router.push({url})
     } else {
       onRedirectToDetail()
     }
@@ -89,7 +90,7 @@ const Index = ({
     ctnSubstring = ctnSubstring.substring(0, cutPoint)
     setCutContentForDisplay(ctnSubstring);
   }
-  
+
   useEffect(() => {
     const lengthInLine = parseInt((contentWrapperRef.current.offsetWidth || 704) / 16);
     const length = fuzzyCalcContentLength(filterContent, lengthInLine);
@@ -116,7 +117,7 @@ const Index = ({
         onClick={!showMore ? onShowMore : handleClick}
       >
         <View className={styles.content}>
-          <RichText content={(useShowMore && cutContentForDisplay) ? cutContentForDisplay : filterContent} onClick={handleClick} />
+          <RichText content={(useShowMore && cutContentForDisplay) ? cutContentForDisplay : urlToLink(filterContent)} onClick={handleClick} />
         </View>
       </View>
       {!loading && useShowMore && !showMore && (

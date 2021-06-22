@@ -21,16 +21,17 @@ class MessageAction extends MessageStore {
     const ret = await readUnreadCount();
     const { code, data } = ret;
     if (code === 0) {
-      const { unreadNotifications, typeUnreadNotifications } = data;
+      const { unreadNotifications, typeUnreadNotifications, dialogNotifications } = data;
       const { threadrewardedexpired = 0, receiveredpacket = 0, related = 0, replied = 0, system = 0, withdrawal = 0, liked = 0, rewarded = 0, threadrewarded = 0 } = typeUnreadNotifications;
       // threadrewardedexpired, withdrawal, 悬赏过期、提现不在消息中心展示，未读总数需要减去此类型消息的未读数
-      this.totalUnread = unreadNotifications - threadrewardedexpired - withdrawal;
+      this.totalUnread = unreadNotifications - threadrewardedexpired - withdrawal + dialogNotifications;
       this.threadUnread = system;
       this.financialUnread = receiveredpacket + rewarded + threadrewarded;
       this.accountUnread = related + replied + liked;
       this.atUnread = related;
       this.replyUnread = replied;
       this.likeUnread = liked;
+      this.dialogMessageUnread = dialogNotifications;
     }
   }
 
@@ -173,9 +174,9 @@ class MessageAction extends MessageStore {
     if (code === 0) this.deleteListItem(storeKey, id);
   }
 
-  @action
+  @action.bound
   clearMessage() {
-    this.dialogMsgList = this.initList
+    this.dialogMsgList = this.initList;
   }
 
   // 从store数据中删除消息

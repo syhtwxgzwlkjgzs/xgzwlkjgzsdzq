@@ -16,7 +16,7 @@ import UserCenterFollowsPc from '@components/user-center/follows-pc';
 const Index = ({ page, subPage, dialogId, username, message, user, nickname }) => {
   const router = useRouter();
 
-  const { threadUnread, financialUnread, accountUnread } = message;
+  const { threadUnread, financialUnread, accountUnread, dialogMessageUnread } = message;
 
   const [sidebarData, setSidebarData] = useState(sidebarDataOriginal);
 
@@ -54,7 +54,7 @@ const Index = ({ page, subPage, dialogId, username, message, user, nickname }) =
       newItem.unreadCount = message[item.unreadKeyName] || 0;
       return newItem;
     }));
-  }, [threadUnread, financialUnread, accountUnread]);
+  }, [threadUnread, financialUnread, accountUnread, dialogMessageUnread]);
 
 
   const rightContent = () => (

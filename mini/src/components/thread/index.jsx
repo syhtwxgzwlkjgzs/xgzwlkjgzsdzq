@@ -133,8 +133,13 @@ class Index extends React.Component {
 
     onUser = (e) => {
       e && e.stopPropagation();
-      const { user = {} } = this.props.data || {};
-      Router.push({url: `/subPages/user/index?id=${user?.userId}`});
+
+      const { user = {}, isAnonymous } = this.props.data || {};
+      if (!!isAnonymous) {
+        this.onClick()
+      } else {
+        Router.push({url: `/subPages/user/index?id=${user?.userId}`});
+      }
     }
 
     onClickHeaderIcon = (e) => {
@@ -213,6 +218,7 @@ class Index extends React.Component {
             shareContent = {shareContent}
             getShareContent = {getShareContent}
             data={data}
+            user={this.props.user}
           />
         </View>
       );
