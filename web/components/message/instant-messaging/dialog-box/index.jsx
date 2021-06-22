@@ -8,17 +8,17 @@ import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
 
 const DialogBox = (props) => {
-  const { platform, message, user, dialogId, showEmoji, username } = props;
+  const { platform, message, user, dialogId, showEmoji, username, ref } = props;
   const { readDialogMsgList, dialogMsgList, dialogMsgListLength, updateDialog } = message;
   const [previewerVisibled, setPreviewerVisibled] = useState(false);
   const [defaultImg, setDefaultImg] = useState('');
   // const router = useRouter();
   // const dialogId = router.query.dialogId;
-  const dialogBoxRef = useRef();
+  // const dialogBoxRef = useRef();
   const timeoutId = useRef();
   useEffect(() => {
     document.addEventListener('focusin', () => {
-      setTimeout(scrollEnd, 0);
+      // setTimeout(scrollEnd, 0);
     });
     return () => clearTimeout(timeoutId.current);
   }, []);
@@ -34,30 +34,10 @@ const DialogBox = (props) => {
     }
   }, [dialogId]);
 
-  useEffect(() => {
-    if (showEmoji) {
-      setTimeout(scrollEnd, 0);
-    }
-  }, [showEmoji]);
-
-  const scrollEnd = () => {
-    if (dialogBoxRef.current) {
-      dialogBoxRef.current.scrollTop = dialogBoxRef?.current?.scrollHeight;
-    }
-  };
-
-  // 每5秒轮询一次
-  const updateMsgList = () => {
-    readDialogMsgList(dialogId);
-    clearTimeout(timeoutId.current);
-    timeoutId.current = setTimeout(() => {
-      updateMsgList();
-    }, 5000);
-  };
 
   const messagesHistory = useMemo(() => {
     setTimeout(() => {
-      scrollEnd();
+      // scrollEnd();
       // 把消息状态更新为已读
       updateDialog(dialogId);
     }, 100);
@@ -104,13 +84,13 @@ const DialogBox = (props) => {
             setPreviewerVisibled(true);
           }, 0);
         }}
-        onLoad={scrollEnd}
+        // onLoad={scrollEnd}
       />
     );
   };
 
   return (
-    <div className={platform === 'pc' ? styles.pcDialogBox : (showEmoji ? styles['h5DialogBox-emoji'] : styles.h5DialogBox)} ref={dialogBoxRef}>
+    <div className={platform === 'pc' ? styles.pcDialogBox : (showEmoji ? styles['h5DialogBox-emoji'] : styles.h5DialogBox)} ref={ref}>
       <div className={styles.box__inner}>
         {messagesHistory.map(({ timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl, userId, nickname }, idx) => (
           <React.Fragment key={idx}>
