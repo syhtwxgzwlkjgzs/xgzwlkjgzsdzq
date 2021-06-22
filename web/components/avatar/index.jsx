@@ -21,6 +21,7 @@ function avatar(props) {
     userId = null,
     user: myself,
     search,
+    userType = -1,
   } = props;
 
   const userName = useMemo(() => {
@@ -51,7 +52,9 @@ function avatar(props) {
     changeUserInfo('padding');
   });
 
-  const followHandler = useCallback(async () => {
+  const followHandler = useCallback(async (e) => {
+
+    e && e.stopPropagation();
 
     // 对没有登录的先登录
     if (!myself.isLogin()) {
@@ -85,7 +88,9 @@ function avatar(props) {
     changeUserInfo({ ...userInfo });
   }, [userInfo]);
 
-  const messagingHandler = useCallback(() => {
+  const messagingHandler = useCallback((e) => {
+
+    e && e.stopPropagation();
 
     // 对没有登录的先登录
     if (!myself.isLogin()) {
@@ -102,8 +107,9 @@ function avatar(props) {
     }
   })
 
-  const blockingHandler = useCallback(async () => {
+  const blockingHandler = useCallback(async (e) => {
 
+    e && e.stopPropagation();
     // 对没有登录的先登录
     if (!myself.isLogin()) {
       Toast.info({ content: '请先登录!' });
@@ -169,7 +175,13 @@ function avatar(props) {
         <div className={styles.userInfoContent}>
           <div className={styles.header}>
             <div className={styles.left} onClick={onClick}>
-              <Avatar className={classNames(styles.customAvatar, styles.cursor)} circle={true} image={userInfo.avatarUrl} siz='primary'></Avatar>
+              <Avatar
+                className={classNames(styles.customAvatar, styles.cursor)}
+                circle={true}
+                image={userInfo.avatarUrl}
+                siz='primary'
+                text={userInfo.nickname && userInfo.nickname.substring(0, 1)}
+              ></Avatar>
             </div>
             <div className={styles.right}>
               <p className={classNames(styles.name, styles.cursor)} onClick={onClick}>{userInfo.nickname}</p>
@@ -198,7 +210,7 @@ function avatar(props) {
             !isSameWithMe &&
             <div className={styles.footer}>
               <Button
-                onClick={following ? () => {} : followHandler}
+                onClick={following ? () => {} : (e) => followHandler(e)}
                 loading={following}
                 className={[styles.btn, btnInfo.className]}
                 type='primary'>
@@ -208,13 +220,13 @@ function avatar(props) {
                   {btnInfo.text}
               </Button>
               <Button
-                onClick={messagingHandler}
+                onClick={(e) => messagingHandler(e)}
                 className={[styles.btn, styles.ghost]}
                 type='primary' ghost>
                   <Icon className={styles.icon} name="NewsOutlined" size={12}/>发私信
               </Button>
               <Button
-                onClick={blocking ? () => {} : blockingHandler}
+                onClick={blocking ? () => {} : (e) => blockingHandler(e)}
                 loading={blocking}
                 className={`${styles.btn} ${styles.blocked}`}
                 type='primary'
@@ -237,11 +249,28 @@ function avatar(props) {
   }, [userInfo, isShowUserInfo, userId]);
 
 
+  const userTypeIcon =
+          (userType === 1) ? "LikeOutlined" :
+          (userType === 2) ? "HeartOutlined" :
+          (userType === 3) ? "HeartOutlined" : "",
+        bgClrBasedOnType =
+          (userType === 1) ? styles.like :
+          (userType === 2) ? styles.heart :
+          (userType === 3) ? styles.heart : "";
+
+
   if (image && image !== '') {
     return (
       <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler} >
-        <div onClick={onClick}>
+        <div className={styles.avatarWrapper} onClick={onClick}>
           <Avatar className={className} circle={circle} image={image} size={size}></Avatar>
+          {
+            userTypeIcon && (
+              <div className={`${styles.userIcon} ${bgClrBasedOnType}`}>
+                  <Icon name={userTypeIcon} size={12}/>
+              </div>
+            )
+          }
         </div>
         {isShow && userInfoBox}
       </div>
@@ -252,6 +281,13 @@ function avatar(props) {
     <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
       <div className={styles.cursor} onClick={onClick}>
         <Avatar className={className} circle={circle} text={userName} size={size} onClick={onClick}></Avatar>
+        {
+          userTypeIcon && (
+            <div className={`${styles.userIcon} ${bgClrBasedOnType}`}>
+                <Icon name={userTypeIcon} size={12}/>
+            </div>
+          )
+        }
       </div>
       {isShow && userInfoBox}
     </div>
