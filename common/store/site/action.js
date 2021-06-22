@@ -87,6 +87,19 @@ class SiteAction extends SiteStore {
   _initialPage = '';
   @action
   setInitialPage(pageUrl) {
+    // 不带参数的首页地址，不做记录
+    if (process.env.DISCUZ_ENV === 'web') {
+      const { pathname, hash, search } = new URL(pageUrl);
+      if (pathname === '/' && !hash && !search) {
+        return;
+      }
+    } else {
+      if (['pages/index/index', 'pages/home/index'].includes(pageUrl)) {
+        return;
+      }
+    }
+
+    // 区分web记录地址
     if (process.env.DISCUZ_ENV === 'web' && window?.sessionStorage) {
       window.sessionStorage.setItem(INITIAL_PAGE_LABEL, pageUrl);
     } else {
