@@ -128,6 +128,7 @@ const Index = ({
             // onImgsLoaded={onImgsLoaded}
             content={useShowMore && cutContentForDisplay ? cutContentForDisplay : urlToLink(filterContent)}
             onClick={handleClick}
+            onParse={onContentHeightChange}
           />
         </div>
       </div>

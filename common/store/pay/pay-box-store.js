@@ -268,7 +268,9 @@ class PayBoxStore {
         clearInterval(this.timer);
 
         if (mode === PAY_MENT_MAP.WX_H5) {
-          console.log(payRes);
+          listenWXJsBridgeAndExecCallback(() => {
+            onBridgeReady(get(payRes, 'data.wechatPayResult.wechatH5Link'))
+          });
           return;
         }
         listenWXJsBridgeAndExecCallback(() => {

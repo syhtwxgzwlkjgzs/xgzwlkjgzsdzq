@@ -29,6 +29,12 @@ export const onBridgeReady = data => new Promise((resolve, reject) => {
   });
 }).catch((e) => {console.log(e)});
 
+export const onBridgeReadyH5 = data => new Promise((resolve, reject) => {
+  const link = data += '&redirect_url=' + encodeURIComponent(window.location.href);
+  window.location.href = link;
+  resolve()
+})
+
 export const listenWXJsBridgeAndExecCallback = (callback) => {
   if (typeof WeixinJSBridge === 'undefined') {
     if (document.addEventListener) {
@@ -41,6 +47,10 @@ export const listenWXJsBridgeAndExecCallback = (callback) => {
     callback();
   }
 };
+
+export const listenWXJsBridgeAndExecCallbackH5 = (callback) => {
+  callback()
+}
 
 export const wxValidator = () => {
   // #ifdef H5
