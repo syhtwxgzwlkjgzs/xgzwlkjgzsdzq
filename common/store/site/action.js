@@ -1,9 +1,10 @@
-import { action, observable } from 'mobx';
+import { action } from 'mobx';
 import { readUserLoginDisplay, readForum, getMiniCode } from '@server';
 import SiteStore from './store';
 import { get } from '../../utils/get';
 
 const INITIAL_PAGE_LABEL = '_initialPage';
+
 class SiteAction extends SiteStore {
   constructor(props) {
     super(props);
@@ -104,9 +105,9 @@ class SiteAction extends SiteStore {
   getInitialPage() {
     let url = '';
 
-    if (process.env.DISCUZ_ENV === 'web' && window?.sessionStorage) {
-      url = window.sessionStorage.getItem(INITIAL_PAGE_LABEL);
-    } else {
+    if (process.env.DISCUZ_ENV === 'web') {
+      url = window?.sessionStorage ? window.sessionStorage.getItem(INITIAL_PAGE_LABEL) : this._initialPage;
+    } else if (this._initialPage) {
       url = `/${this._initialPage}`;
     }
 

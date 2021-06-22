@@ -3,14 +3,13 @@ import styles from './index.module.scss';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import { inject, observer } from 'mobx-react';
 import { View, Text, Image, Button } from '@tarojs/components';
-import Taro from '@tarojs/taro';
+import Router from '@discuzq/sdk/dist/router';
 import SharePopup from '../thread/share-popup';
 import isWeiXin from '@common/utils/is-weixin';
 import { get } from '@common/utils/get';
 import logoImg from '../../../../web/public/dzq-img/admin-logo-x2.png';
 import joinLogoImg from '../../../../web/public/dzq-img/join-banner-bg.png';
 import { numberFormat } from '@common/utils/number-format';
-import Router from '@discuzq/sdk/dist/router';
 
 /**
  * 帖子头部
