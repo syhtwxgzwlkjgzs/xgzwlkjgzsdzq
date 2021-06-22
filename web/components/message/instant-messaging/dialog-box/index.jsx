@@ -70,6 +70,7 @@ const DialogBox = (props) => {
       ownedBy: user.id === item.userId ? 'myself' : 'itself',
       imageUrl: item.imageUrl,
       userId: item.userId,
+      nickname: item.user.username,
     })).reverse();
   }, [dialogMsgListLength]);
 
@@ -111,14 +112,19 @@ const DialogBox = (props) => {
   return (
     <div className={platform === 'pc' ? styles.pcDialogBox : (showEmoji ? styles['h5DialogBox-emoji'] : styles.h5DialogBox)} ref={dialogBoxRef}>
       <div className={styles.box__inner}>
-        {messagesHistory.map(({ timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl, userId }, idx) => (
+        {messagesHistory.map(({ timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl, userId, nickname }, idx) => (
           <React.Fragment key={idx}>
             {displayTimePanel && <div className={styles.msgTime}>{diffDate(timestamp)}</div>}
             <div className={`${ownedBy === 'myself' ? `${styles.myself}` : `${styles.itself}`} ${styles.persona}`}>
               <div className={styles.profileIcon} onClick={() => {
                 userId && Router.push({ url: `/user/${userId}` });
               }}>
-                <Avatar image={userAvatar || '/favicon.ico'} circle={true} />
+                {userAvatar
+                  ? <Avatar image={userAvatar} circle={true} />
+                  : <Avatar text={nickname && nickname.toUpperCase()[0]} circle={true} style={{
+                    backgroundColor: "#8590a6",
+                  }} />
+                }
               </div>
               {imageUrl ? (
                 renderImage(imageUrl)
