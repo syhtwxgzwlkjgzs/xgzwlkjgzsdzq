@@ -88,7 +88,7 @@ function Home(props, ref) {
 
     // 头部
     if (data.type === 'header') {
-      return 165 + 56 + 16 + getSticksHeight(props.sticks);
+      return 165 + 54 + 10 + getSticksHeight(props.sticks);
     }
 
     // 底部
