@@ -66,7 +66,7 @@ class UserCenterAction extends React.Component {
           <View className={styles.userCenterActionItemContainer}>
             <View onClick={this.handleMyMessage} className={styles.userCenterActionItem}>
               <View className={styles.userCenterActionItemIcon}>
-                <UnreadRedDot type="icon" unreadCount={totalUnread}>
+                <UnreadRedDot unreadCount={totalUnread}>
                   <Icon name={'MailOutlined'} color={'#4F5A70'} size={20} />
                 </UnreadRedDot>
               </View>
