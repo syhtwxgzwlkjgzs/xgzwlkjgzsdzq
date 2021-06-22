@@ -1,10 +1,12 @@
 import React from 'react';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Button from '@discuzq/design/dist/components/button/index';
+import Spin from '@discuzq/design/dist/components/spin/index';
 import { View } from '@tarojs/components';
 import { inject, observer } from 'mobx-react';
 import Avatar from '@components/avatar';
 import styles from './index.module.scss';
+import throttle from '@common/utils/thottle.js';
 
 @inject('user')
 @observer
@@ -23,8 +25,49 @@ class UserCenterFriends extends React.Component {
     onContainerClick: async ({ id }) => {},
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      isFollowedLoading: false, // 是否点击关注
+      isUnFollowedLoading: false, // 是否取消关注
+    };
+  }
+
+  followUser = throttle(async ({ e, id }) => {
+    e.stopPropagation();
+    if (this.state.isFollowedLoading) return;
+    this.setState({
+      isFollowedLoading: true,
+    });
+    await this.props.followHandler({
+      id,
+    });
+    setTimeout(() => {
+      this.setState({
+        isFollowedLoading: false,
+      });
+    }, 1000);
+  }, 200);
+
+  unFollowUser = throttle(async ({ e, id }) => {
+    e.stopPropagation();
+    if (this.state.isUnFollowedLoading) return;
+    this.setState({
+      isUnFollowedLoading: true,
+    });
+    await this.props.unFollowHandler({
+      id,
+    });
+    setTimeout(() => {
+      this.setState({
+        isUnFollowedLoading: false,
+      });
+    }, 1000);
+  }, 200);
+
   render() {
     const myid = this.props.user.id;
+    const { isFollowedLoading, isUnFollowedLoading } = this.state;
     return (
       <View
         style={{
@@ -59,34 +102,39 @@ class UserCenterFriends extends React.Component {
           </View>
 
           {this.props.id != myid && (
-            <View className={styles.friendAction}>
+            <View className={styles.friendAction} onClick={(e) => e.stopPropagation()}>
               {this.props.type === 'follow' && (
                 <Button
+                  disabled={isFollowedLoading}
                   type={'primary'}
                   className={styles.friendActionFollow}
-                  onClick={async (e) => {
-                    e.stopPropagation();
-                    await this.props.followHandler({
-                      id: this.props.id,
-                    });
+                  onClick={(e) => {
+                    this.followUser({ e, id: this.props.id });
                   }}
                 >
-                  <View>+ 关注</View>
+                  {isFollowedLoading ? (
+                    <Spin size={12} type="spinner"></Spin>
+                  ) : (
+                    <Icon size={10} name={'PlusOutlined'} className={styles.iconScale} />
+                  )}
+                  <View>关注</View>
                 </Button>
               )}
 
               {this.props.type === 'friend' && (
                 <Button
                   type={'primary'}
+                  disabled={isUnFollowedLoading}
                   className={styles.friendActionFriend}
-                  onClick={async (e) => {
-                    e.stopPropagation();
-                    await this.props.unFollowHandler({
-                      id: this.props.id,
-                    });
+                  onClick={(e) => {
+                    this.unFollowUser({ e, id: this.props.id });
                   }}
                 >
-                  <Icon size={10} name={'WithdrawOutlined'} />
+                  {isUnFollowedLoading ? (
+                    <Spin size={12} type="spinner"></Spin>
+                  ) : (
+                    <Icon size={10} name={'WithdrawOutlined'} className={styles.iconScale} />
+                  )}
                   <View>互关</View>
                 </Button>
               )}
@@ -94,15 +142,17 @@ class UserCenterFriends extends React.Component {
               {this.props.type === 'followed' && (
                 <Button
                   type={'primary'}
+                  disabled={isUnFollowedLoading}
                   className={styles.friendActionFollowed}
-                  onClick={async (e) => {
-                    e.stopPropagation();
-                    await this.props.unFollowHandler({
-                      id: this.props.id,
-                    });
+                  onClick={(e) => {
+                    this.unFollowUser({ e, id: this.props.id });
                   }}
                 >
-                  <Icon size={10} name={'CheckOutlined'} />
+                  {isUnFollowedLoading ? (
+                    <Spin size={12} type="spinner"></Spin>
+                  ) : (
+                    <Icon size={10} name={'CheckOutlined'} className={styles.iconScale} />
+                  )}
                   <View>已关注</View>
                 </Button>
               )}
