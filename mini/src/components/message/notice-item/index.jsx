@@ -69,7 +69,7 @@ class Index extends Component {
   };
 
   filterTag(html) {
-    return html?.replace(/<(\/)?([beprt]|br|div)[^>]*>|[\r\n]/gi, '')
+    return html?.replace(/<(\/)?([beprt]|br|div|h\d)[^>]*>|[\r\n]/gi, '')
       .replace(/<img[^>]+>/gi, $1 => {
         return $1.includes('qq-emotion') ? $1 : "[图片]";
       });
