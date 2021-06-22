@@ -15,7 +15,7 @@
         font-size: $font-size-primary;
         text-align: left;
         color: $text-color-primary;
-        line-height: 16px;
+        line-height: 20px;
 
         :global {
             .qq-emotion {
@@ -24,15 +24,15 @@
                 display: inline-block !important;
                 flex-shrink: 0;
               }
-          
+
               .dzq-richText--mini {
                 font-size: $font-size-primary;
                 overflow: hidden;
                 word-break: break-all;
                 max-width: 140px;
-                line-height: 16px;
+                line-height: 20px;
                 @include text-ellipsis();
-          
+
                 .dzq-a {
                   display: inline;
                 }
@@ -44,6 +44,7 @@
         font-size: $font-size-middle;
         text-align: left;
         color: $error-color;
+        line-height: 20px;
     }
 }
 
@@ -55,4 +56,5 @@
     color: $text-color-secondary;
     padding-bottom: $padding-4n;
     border-bottom: solid 1px $border-color;
+    line-height: 17px;
 }

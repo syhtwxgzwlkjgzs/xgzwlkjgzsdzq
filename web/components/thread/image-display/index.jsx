@@ -187,7 +187,7 @@ const One = ({ type, bigImages, onClick, style }) => {
   const item = bigImages[0];
   return (
     <div className={`${styles[style]} ${styles[type]}`}>
-      <SmartImg type={item.fileType} src={item.thumbUrl} onClick={() => onClick(item.id)} />
+      <SmartImg level={1} type={item.fileType} src={item.thumbUrl} onClick={() => onClick(item.id)} />
     </div>
   );
 };
@@ -196,7 +196,7 @@ const Two = ({ type, bigImages, onClick, style }) => (
   <Row gutter={4} className={`${styles[style]} ${styles[type]} ${styles.row}`}>
     {bigImages.map((item, index) => (
       <Col span={6} className={styles.col} key={index}>
-        <SmartImg type={item.fileType} src={item.thumbUrl} onClick={() => onClick(item.id)} />
+        <SmartImg level={1} type={item.fileType} src={item.thumbUrl} onClick={() => onClick(item.id)} />
       </Col>
     ))}
   </Row>
@@ -208,13 +208,13 @@ const Three = ({ type, bigImages, smallImages, onClick, style }) => {
       <div className={`${styles[style]} ${styles[type]}`}>
         <Row gutter={4}>
           <Col span={8} className={styles.col}>
-            <SmartImg type={bigImages[0].fileType} src={bigImages[0].thumbUrl} onClick={() => onClick(bigImages[0].id)} />
+            <SmartImg level={1} type={bigImages[0].fileType} src={bigImages[0].thumbUrl} onClick={() => onClick(bigImages[0].id)} />
           </Col>
           <Col span={4} className={styles.col}>
             <Row gutter={4} className={styles.smallRow}>
               {smallImages.map((item, index) => (
                 <Col span={12} key={index} className={styles.smallCol}>
-                  <SmartImg type={item.fileType} src={item.thumbUrl} onClick={() => onClick(item.id)} />
+                  <SmartImg level={2} type={item.fileType} src={item.thumbUrl} onClick={() => onClick(item.id)} />
                 </Col>
               ))}
             </Row>
@@ -227,12 +227,12 @@ const Three = ({ type, bigImages, smallImages, onClick, style }) => {
   return (
     <div className={`${styles[style]} ${styles[type]}`}>
       <div className={styles.bigImages}>
-        <SmartImg type={bigImages[0].fileType} src={bigImages[0].thumbUrl} onClick={() => onClick(bigImages[0].id)} />
+        <SmartImg level={1} type={bigImages[0].fileType} src={bigImages[0].thumbUrl} onClick={() => onClick(bigImages[0].id)} />
       </div>
       <Row gutter={4} className={styles.smallImages}>
         {smallImages.map((item, index) => (
           <Col span={6} className={styles.col} key={index}>
-            <SmartImg type={item.fileType} src={item.thumbUrl} onClick={() => onClick(item.id)} />
+            <SmartImg level={2} type={item.fileType} src={item.thumbUrl} onClick={() => onClick(item.id)} />
           </Col>
         ))}
       </Row>
@@ -243,13 +243,13 @@ const Three = ({ type, bigImages, smallImages, onClick, style }) => {
 const Four = ({ type, bigImages, smallImages, onClick, style }) => (
   <Row gutter={4} className={styles[style]}>
     <Col span={8} className={styles.col}>
-      <SmartImg type={bigImages[0].fileType} src={bigImages[0].thumbUrl} onClick={() => onClick(bigImages[0].id)} />
+      <SmartImg level={1} type={bigImages[0].fileType} src={bigImages[0].thumbUrl} onClick={() => onClick(bigImages[0].id)} />
     </Col>
     <Col span={4} className={styles.col}>
       <Row gutter={4} className={styles.smallRow}>
         {smallImages.map((item, index) => (
           <Col span={12} key={index} className={styles.smallCol}>
-            <SmartImg type={item.fileType} src={item.thumbUrl} onClick={() => onClick(item.id)} />
+            <SmartImg level={3} type={item.fileType} src={item.thumbUrl} onClick={() => onClick(item.id)} />
           </Col>
         ))}
       </Row>
@@ -263,14 +263,14 @@ const Five = ({ type, bigImages, smallImages, onClick, style, imgData = [], onCl
     <Row gutter={4} className={styles.bigImages}>
       {bigImages.map((item, index) => (
         <Col span={6} className={styles.col} key={index}>
-          <SmartImg type={item.fileType} src={item.thumbUrl} onClick={() => onClick(item.id)} />
+          <SmartImg level={2} type={item.fileType} src={item.thumbUrl} onClick={() => onClick(item.id)} />
         </Col>
       ))}
     </Row>
     <Row gutter={4} className={styles.smallImages}>
       {smallImages.map((item, index) => (
         <Col span={4} className={styles.col} key={index}>
-          <SmartImg type={item.fileType} src={item.thumbUrl} onClick={() => onClick(item.id)} />
+          <SmartImg level={3} type={item.fileType} src={item.thumbUrl} onClick={() => onClick(item.id)} />
           {imgData?.length > 5 && index === smallImages.length - 1 && (
             <div className={styles.modalBox} onClick={onClickMore}>{`+${imgData.length - 5}`}</div>
           )}

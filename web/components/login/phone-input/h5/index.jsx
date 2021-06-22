@@ -11,7 +11,7 @@ class PhoneInputH5 extends React.Component {
   };
   setPhoneNum = (e) => {
     const { phoneNumCallback = () => {} } = this.props;
-    const val = e.target.value;
+    const val = e?.target?.value?.match(/\d+/g)?.join('') || '';
     phoneNumCallback(val);
   };
 
