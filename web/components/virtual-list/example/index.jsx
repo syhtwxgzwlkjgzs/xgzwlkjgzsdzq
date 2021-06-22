@@ -62,11 +62,21 @@ function Home(props, ref) {
     setList([{ type: 'header' }, ...(props.list || []), { type: 'footer' }]);
   }, [props.list]);
 
+  // 监听置顶列表
+  useEffect(() => {
+    recomputeRowHeights(0);
+  }, [props.sticks]);
+
   useEffect(() => {
     if (listRef) {
       listRef.scrollToPosition(props.vlist.home || 0);
     }
   }, [listRef?.Grid?.getTotalRowsHeight()]);
+
+  // 重新计算指定的行高
+  const recomputeRowHeights = (index) => {
+    listRef?.recomputeRowHeights(index);
+  };
 
   // 获取每一行元素的高度
   const getRowHeight = ({ index }) => {
@@ -78,7 +88,7 @@ function Home(props, ref) {
 
     // 头部
     if (data.type === 'header') {
-      return 165 + 56 + 16 + getSticksHeight(props.sticks);
+      return 165 + 54 + 10 + getSticksHeight(props.sticks);
     }
 
     // 底部

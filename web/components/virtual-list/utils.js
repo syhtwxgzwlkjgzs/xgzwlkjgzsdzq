@@ -85,5 +85,6 @@ export const getImmutableTypeHeight = (data) => {
 };
 
 export const getSticksHeight = (list) => {
-  return (list?.length || 0) * 37;
+  const height = (list?.length || 0) * 37;
+  return height ? height + 10 : 0;
 };
