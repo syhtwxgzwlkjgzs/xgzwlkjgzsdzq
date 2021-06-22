@@ -38,6 +38,7 @@ import classNames from 'classnames';
 @inject('index')
 @inject('topic')
 @inject('search')
+@inject('vlist')
 @observer
 class ThreadH5Page extends React.Component {
   constructor(props) {
@@ -513,16 +514,16 @@ class ThreadH5Page extends React.Component {
     // 判断是否在微信浏览器
     if (isWeiXin()) {
       this.setState({ isShowWeiXinShare: true });
-    } else {      
+    } else {
       Toast.info({ content: '复制链接成功' });
-  
+
       const { title = '' } = this.props.thread?.threadData || {};
       h5Share({ title, path: `thread/${this.props.thread?.threadData?.threadId}` });
-  
+
       const id = this.props.thread?.threadData?.id;
-  
+
       const { success, msg } = await this.props.thread.shareThread(id);
-  
+
       if (!success) {
         Toast.error({
           content: msg,
@@ -595,6 +596,7 @@ class ThreadH5Page extends React.Component {
     if (categoryId || typeof categoryId === 'number') {
       this.props.index.refreshHomeData({ categoryIds: [categoryId] });
     }
+    this.props.vlist.resetPosition();
     this.props.router.push('/');
   }
 
@@ -789,7 +791,7 @@ class ThreadH5Page extends React.Component {
               onCancel={() => this.setState({ showRewardPopup: false })}
               onOkClick={(value) => this.onRewardSubmit(value)}
             ></RewardPopup>
-            
+
             {/* 微信浏览器内分享弹窗 */}
             {this.state.loadWeiXin && (
               <SharePopup
