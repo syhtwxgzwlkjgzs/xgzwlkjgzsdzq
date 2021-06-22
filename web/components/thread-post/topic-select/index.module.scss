@@ -86,6 +86,7 @@
 
   .topic-item {
     background: $white;
+    cursor: pointer;
 
     .topic-item__inner {
       @include flex();

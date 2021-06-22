@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
+import Router from '@discuzq/sdk/dist/router';
 
 import layout from './layout.module.scss';
 import footer from './footer.module.scss';
@@ -207,6 +208,11 @@ class ThreadH5Page extends React.Component {
     this.setState({
       showCommentInput: true,
     });
+  }
+
+  onUserClick(userId) {
+    if (!userId) return;
+    Router.push({ url: `/user/${userId}` });
   }
 
   // 点击更多icon
@@ -680,6 +686,7 @@ class ThreadH5Page extends React.Component {
               onTagClick={() => this.onTagClick()}
               onPayClick={() => this.onPayClick()}
               onPayClick={() => this.onPayClick()}
+              onUserClick={() => this.onUserClick(this.props.thread?.threadData?.user?.userId)}
             ></RenderThreadContent>
           ) : (
             <LoadingTips type="init"></LoadingTips>

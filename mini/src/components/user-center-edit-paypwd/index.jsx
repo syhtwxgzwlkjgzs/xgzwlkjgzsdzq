@@ -193,13 +193,13 @@ class index extends Component {
           <View className={styles.labelValue}>
             <Input
               className={styles.input}
-              miniType="number"
               maxLength={6}
               value={this.props.payBox?.oldPayPwd}
               mode="password"
               placeholder="请输入旧密码"
               onChange={this.handleChangeOldPwd}
               trim
+              type="number"
             />
           </View>
           {this.props.site?.isSmsOpen && (

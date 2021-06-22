@@ -110,7 +110,6 @@ export class MessageIndex extends Component {
           totalCount={totalCount}
           withBottomBar={!isPC}
           noMore={currentPage >= totalPage}
-          showHeader={!isPC}
           topCard={isPC ? null : card}
           list={this.formatChatDialogList(list)}
           type='chat'

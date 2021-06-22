@@ -15,6 +15,7 @@ import layout from './layout.module.scss';
 
 import ReportPopup from './components/report-popup';
 import ShowTop from './components/show-top';
+import IsApproved from './components/isApproved';
 import DeletePopup from '@components/thread-detail-pc/delete-popup';
 
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
@@ -662,6 +663,11 @@ class ThreadPCPage extends React.Component {
     Router.push({ url: `/message?page=chat&username=${username}&nickname=${nickname}` });
   }
 
+  onUserClick(userId) {
+    if (!userId) return;
+    Router.push({ url: `/user/${userId}` });
+  }
+
   renderContent() {
     const { thread: threadStore } = this.props;
     const { isReady, isCommentReady, isNoMore, totalCount, isCommentListError } = threadStore;
@@ -678,6 +684,7 @@ class ThreadPCPage extends React.Component {
             onRewardClick={() => this.onRewardClick()}
             onTagClick={() => this.onTagClick()}
             onPayClick={() => this.onPayClick()}
+            onUserClick={() => this.onUserClick(this.props.thread?.threadData?.user?.userId)}
           ></RenderThreadContent>
         ) : (
           <LoadingTips type="init"></LoadingTips>
@@ -722,6 +729,7 @@ class ThreadPCPage extends React.Component {
                 user={threadStore.authorInfo}
                 onFollowClick={() => this.onFollowClick()}
                 onPrivateLetter={() => this.onPrivateLetter()}
+                onPersonalPage={() => this.onUserClick(this.props.thread?.threadData?.user?.userId)}
                 isShowBtn={!isSelf}
               ></AuthorInfo>
             ) : (
@@ -744,11 +752,17 @@ class ThreadPCPage extends React.Component {
 
   render() {
     const { isCommentReady, isNoMore } = this.props.thread;
+    const { thread: threadStore } = this.props;
+    const { isReady } = threadStore;
+
+    // 是否审核通过
+    const isApproved = (threadStore?.threadData?.isApproved || 0) === 1;
 
     return (
       <div>
         <ShowTop showContent={this.props.thread?.threadData?.isStick} setTop={this.state.setTop}></ShowTop>
-
+        <IsApproved isShow={isReady && !isApproved}></IsApproved>
+        
         <BaseLayout
           onRefresh={() => this.handleOnRefresh()}
           onScroll={() => this.handleOnScroll()}
