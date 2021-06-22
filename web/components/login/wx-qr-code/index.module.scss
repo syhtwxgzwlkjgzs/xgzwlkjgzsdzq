@@ -2,11 +2,11 @@
 .orCode{
   width: rem(327);
   height: rem(220);
-  margin-top: rem(10);
+  margin-top: $margin-2n;
   position: relative;
   text-align: center;
   .orCode__img {
-    margin-top: rem(20);
+    margin-top: $margin-5n;
     width: rem(150);
     height: rem(150);
     display: inline-block;
@@ -19,17 +19,36 @@
   }
   .orCode__text {
     font-size: rem($font-size-small);
-    padding: rem(20) rem(20) 0;
+    padding: $padding-5n $padding-5n 0;
     text-align: center;
-    line-height: rem(22);
+    line-height: $font-line-height-small;
   }
 }
 
 // ----------------------PC
 .pc_orCode {
-  width: 198px;
+  width: 210px;
   text-align: center;
   margin: 0 auto;
+  position: relative;
+
+  &.invalid {
+    .pc_orCode__img {
+      filter: blur(4px);
+    }
+    .codeMask {
+      position: absolute;
+      top: 0;
+      width: 198px;
+      height: 198px;
+      background-color: $mask-bg-color;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: $white;
+      cursor: pointer;
+    }
+  }
   .pc_orCode__img {
     width: 198px;
     height: 198px;
@@ -44,14 +63,14 @@
   }
   .pc_orCode__text {
     padding-top: $padding-6n;
-    font-weight: normal;
+    font-weight: $font-weight-light;
     font-size: $font-size-middle;
     line-height: $font-line-height-middle;
-    color: #0b0b37;
+    color: $text-color-primary;
   }
 }
 .pc_orCode_mini {
   overflow: hidden;
-  border-radius: 50%;
-  padding: 16px;
+  border-radius: $border-radius-circle;
+  padding: $padding-4n;
 }
