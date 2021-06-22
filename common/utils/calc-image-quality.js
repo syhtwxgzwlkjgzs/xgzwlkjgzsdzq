@@ -40,17 +40,7 @@ function _conversion(conversion) {
 
 function _level_1_quality(viewWidth, conversion) {
     let zoom = QUALITY_3;
-    if ( viewWidth >= 667 && viewWidth < 1080 ){
-        zoom = QUALITY_8;
-    } else if ( viewWidth >= 1080  ){
-        zoom = QUALITY_10;
-    }
-    return `${IMAGEMOGR2}${conversion ? _conversion(conversion) : ''}${QUALITY_NAME}${zoom}${INTERLACE}`;
-}
-
-function _level_2_quality(viewWidth, conversion) {
-    let zoom = QUALITY_3;
-    if ( viewWidth >= 667 && viewWidth < 1080 ){
+    if ( viewWidth > 667 && viewWidth < 1080 ){
         zoom = QUALITY_6;
     } else if ( viewWidth >= 1080  ){
         zoom = QUALITY_8;
@@ -58,12 +48,22 @@ function _level_2_quality(viewWidth, conversion) {
     return `${IMAGEMOGR2}${conversion ? _conversion(conversion) : ''}${QUALITY_NAME}${zoom}${INTERLACE}`;
 }
 
-function _level_3_quality(viewWidth, conversion) {
+function _level_2_quality(viewWidth, conversion) {
     let zoom = QUALITY_2;
-    if ( viewWidth >= 667 && viewWidth < 1080 ){
-        zoom = QUALITY_5;
+    if ( viewWidth > 667 && viewWidth < 1080 ){
+        zoom = QUALITY_4;
     } else if ( viewWidth >= 1080  ){
-        zoom = QUALITY_7;
+        zoom = QUALITY_6;
+    }
+    return `${IMAGEMOGR2}${conversion ? _conversion(conversion) : ''}${QUALITY_NAME}${zoom}${INTERLACE}`;
+}
+
+function _level_3_quality(viewWidth, conversion) {
+    let zoom = QUALITY_1;
+    if ( viewWidth > 667 && viewWidth < 1080 ){
+        zoom = QUALITY_2;
+    } else if ( viewWidth >= 1080  ){
+        zoom = QUALITY_3;
     }
     return `${IMAGEMOGR2}${conversion ? _conversion(conversion) : ''}${QUALITY_NAME}${zoom}${INTERLACE}`;
 }
