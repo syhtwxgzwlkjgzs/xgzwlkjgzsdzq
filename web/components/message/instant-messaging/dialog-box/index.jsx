@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState, forwardRef } from 'react';
-import { Avatar, ImagePreviewer } from '@discuzq/design';
+import { Avatar, ImagePreviewer, Icon } from '@discuzq/design';
 import { diffDate } from '@common/utils/diff-date';
 import { inject, observer } from 'mobx-react';
 import s9e from '@common/utils/s9e';
@@ -18,7 +18,7 @@ const DialogBox = (props, ref) => {
   }, [dialogMsgList]);
 
 
-  const renderImage = (url) => {
+  const renderImage = (url, isImageLoading) => {
     // console.log(url);
     // const urlObj = new URL(url);
     // const width = urlObj.searchParams.get("width");
@@ -33,25 +33,32 @@ const DialogBox = (props, ref) => {
     //   }
     // }
     return (
-      <img
-        className={styles.msgImage}
-        style={{ width: `${renderWidth}px` }}
-        src={url}
-        onClick={() => {
-          setDefaultImg(url);
-          setTimeout(() => {
-            setPreviewerVisibled(true);
-          }, 0);
-        }}
-        onLoad={scrollEnd}
-      />
+      <div className={styles['msgImage-container']}>
+        {isImageLoading && (
+          <div className={styles['msgImage-uploading']}>
+            <Icon className={styles.loading} name="LoadingOutlined" size={40} />
+          </div>
+        )}
+        <img
+          className={styles.msgImage}
+          style={{ width: `${renderWidth}px` }}
+          src={url}
+          onClick={() => {
+            setDefaultImg(url);
+            setTimeout(() => {
+              setPreviewerVisibled(true);
+            }, 0);
+          }}
+          onLoad={scrollEnd}
+        />
+      </div>
     );
   };
 
   return (
     <div className={platform === 'pc' ? styles.pcDialogBox : (showEmoji ? styles['h5DialogBox-emoji'] : styles.h5DialogBox)} ref={ref}>
       <div className={styles.box__inner}>
-        {messagesList.map(({ timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl, userId, nickname }, idx) => (
+        {messagesList.map(({ timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl, userId, nickname, isImageLoading }, idx) => (
           <React.Fragment key={idx}>
             {displayTimePanel && <div className={styles.msgTime}>{diffDate(timestamp)}</div>}
             <div className={`${ownedBy === 'myself' ? `${styles.myself}` : `${styles.itself}`} ${styles.persona}`}>
@@ -66,7 +73,7 @@ const DialogBox = (props, ref) => {
                 }
               </div>
               {imageUrl ? (
-                renderImage(imageUrl)
+                renderImage(imageUrl, isImageLoading)
               ) : (
                 <div className={styles.msgContent} dangerouslySetInnerHTML={{
                   __html: xss(s9e.parse(text)),

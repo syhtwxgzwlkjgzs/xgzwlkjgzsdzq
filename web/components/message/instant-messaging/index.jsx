@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Toast } from '@discuzq/design';
@@ -20,6 +21,10 @@ const Index = (props) => {
   const [isSubmiting, setIsSubmiting] = useState(false);
 
   let toastInstance = null;
+  let uploadingImages = [];
+
+  const uploadingImagesRef = useRef([]);
+  console.log(uploadingImagesRef);
 
   // 消息框滚动条滚动到底部
   const scrollEnd = () => {
@@ -34,7 +39,7 @@ const Index = (props) => {
     clearPolling();
     timeoutId.current = setTimeout(() => {
       updateMsgList();
-    }, 5000);
+    }, 20000);
   };
 
   // 清除轮询
@@ -79,12 +84,10 @@ const Index = (props) => {
     }
   };
 
-  const submitEmptyImage = () => {
-    return createDialogMsg({
-      dialogId,
-      isImage: true,
-    });
-  };
+  const submitEmptyImage = () => createDialogMsg({
+    dialogId,
+    isImage: true,
+  });
 
   // 触发图片选择
   const uploadImage = () => {
@@ -127,28 +130,38 @@ const Index = (props) => {
     //   content: '图片发送中...',
     //   duration: 0,
     // });
-    await Promise.all([...files].map(() => submitEmptyImage())).then((results) => {
-      console.log(results);
-      readDialogMsgList(dialogId);
-      // debugger;
+    const fileList = [...files];
+    await Promise.all(fileList.map(() => submitEmptyImage())).then((results) => {
+      results.sort((a, b) => b.data.dialogMessageId - a.data.dialogMessageId);
+      fileList.map(async (file, i) => {
+        const { code, data: { dialogMessageId } } = results[i];
+        if (code === 0) {
+          file.dialogMessageId = dialogMessageId;
+          setTimeout(async () => {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('type', 1);
+            formData.append('dialogMessageId', dialogMessageId);
+            const ret = await createAttachment(formData);
+            readDialogMsgList(dialogId);
+          }, i * 5000);
 
-      // results.map
-    });
-
-    const formData = new FormData();
-    formData.append('file', files[0]);
-    formData.append('type', 1);
-    const ret = await createAttachment(formData);
-    const { code, data } = ret;
-    if (code === 0) {
-      await submit({
-        imageUrl: data.url,
-        isImage: true,
+          // const { code, data } = ret;
+          // if (code === 0) {
+          //   // await submit({
+          //   //   imageUrl: data.url,
+          //   //   isImage: true,
+          //   // });
+          // } else {
+          //   // Toast.error({ content: ret.msg });
+          // }
+        }
+        return file;
       });
-    } else {
-      Toast.error({ content: ret.msg });
-    }
-    uploadRef.current.value = '';
+      uploadingImagesRef.current = uploadingImagesRef.current.concat(fileList);
+      readDialogMsgList(dialogId);
+      console.log(fileList);
+    });
   };
 
   const doSubmitClick = async () => {
@@ -162,18 +175,32 @@ const Index = (props) => {
       // 把消息状态更新为已读
       updateDialog(dialogId);
     }, 100);
-    return dialogMsgList.list.filter(item => !item.isImageLoading).map(item => ({
-      timestamp: item.createdAt,
-      userAvatar: item.user.avatar,
-      displayTimePanel: true,
-      textType: 'string',
-      text: item.messageTextHtml,
-      ownedBy: user.id === item.userId ? 'myself' : 'itself',
-      imageUrl: item.imageUrl,
-      userId: item.userId,
-      nickname: item.user.username,
-    })).reverse();
-  }, [dialogMsgListLength]);
+    return dialogMsgList.list.map(item => {
+      if (item.isImageLoading && uploadingImagesRef.current.length) {
+        uploadingImagesRef.current.forEach(file => {
+          debugger;
+          if (file.dialogMessageId === item.id) {
+            debugger;
+            item.imageUrl = URL.createObjectURL(file);
+          }
+        });
+      }
+
+      return {
+        timestamp: item.createdAt,
+        userAvatar: item.user.avatar,
+        displayTimePanel: true,
+        textType: 'string',
+        text: item.messageTextHtml,
+        ownedBy: user.id === item.userId ? 'myself' : 'itself',
+        imageUrl: item.imageUrl,
+        userId: item.userId,
+        nickname: item.user.username,
+        isImageLoading: item.isImageLoading,
+      };
+    }).filter(item => item.imageUrl || item.text).reverse();
+  // }, [dialogMsgListLength]);
+  });
 
   useEffect(async () => {
     clearMessage();

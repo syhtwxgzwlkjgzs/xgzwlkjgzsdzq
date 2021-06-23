@@ -118,9 +118,42 @@
   border-radius: rem($border-radius-small);
 }
 
+.msgImage-container {
+  position: relative;
+}
+
+.msgImage-uploading {
+  content: ' ';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: red;
+  opacity: 0.5;
+  border-radius: rem($border-radius-small);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading {
+  animation: loading 2s linear infinite;
+}
+
+@keyframes loading {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .myself {
   flex-direction: row-reverse;
-  .msgImage {
+  .msgImage-container {
     margin-left: $im-msg-space-aside;
     margin-right: $im-gap-btw-icon-and-msg;
   }
@@ -138,7 +171,7 @@
 
 .itself {
   flex-direction: row;
-  .msgImage {
+  .msgImage-container {
     margin-right: $im-msg-space-aside;
     margin-left: $im-gap-btw-icon-and-msg;
   }
