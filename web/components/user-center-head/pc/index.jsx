@@ -227,7 +227,10 @@ class index extends Component {
             <div className={styles.userNameOrTeam}>
               <div className={styles.username}>{user.nickname}</div>
               <div className={styles.groupName}>{user.group?.groupName}</div>
-              <p className={`${styles.text} ${this.props.router.query?.id && styles.otherText}`}>
+              <p
+                title={user.signature || '这个人很懒，什么也没留下~'}
+                className={`${styles.text} ${this.props.router.query?.id && styles.otherText}`}
+              >
                 {user.signature || '这个人很懒，什么也没留下~'}
               </p>
             </div>
