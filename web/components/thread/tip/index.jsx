@@ -2,6 +2,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 import PopupList from '../popup-list';
 import Avatar from '../../avatar';
 import { Icon } from '@discuzq/design';
+import { debounce } from '@common/utils/throttle-debounce.js';
 
 import styles from './index.module.scss';
 
@@ -16,11 +17,11 @@ import styles from './index.module.scss';
 const Index = ({ imgs = [], tipData = {}, wholeNum = 1, showMore= false, showCount = 5, platform = 'h5' }) => {
   const [visible, setVisible] = useState(false);
 
-  const onClick = (e) => {
+  const onClick = debounce((e) => {
     e.stopPropagation();
-
     setVisible(true);
-  };
+  }, 200);
+
   const onHidden = () => {
     setVisible(false);
   };
