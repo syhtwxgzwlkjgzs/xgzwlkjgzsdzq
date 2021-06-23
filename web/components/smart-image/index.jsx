@@ -11,7 +11,6 @@ const SmartImg = ({level, type, src, onClick, noSmart = false}) => {
     const imgSrc = useMemo(() => {
         if (noSmart) return src;
         const [path, param] = src.split('?');
-        console.log(param);
         let newSrc = src;
         let newParam = '';
         if ( !isServer() ) {

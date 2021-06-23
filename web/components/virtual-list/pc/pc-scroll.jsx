@@ -3,7 +3,7 @@ import './index.scss';
 import Item from './item';
 import BottomView from '../BottomView';
 
-import { getImmutableTypeHeight, getSticksHeight } from '../utils';
+import { getImmutableTypeHeight, getSticksHeight, getTabsHeight, getLogHeight } from '../utils';
 
 import { List, CellMeasurer, CellMeasurerCache, AutoSizer, InfiniteLoader } from 'react-virtualized';
 import { inject, observer } from 'mobx-react';
@@ -43,6 +43,8 @@ function extendCache(instance) {
 
 function Home(props, ref) {
   let cache = props.vlist.cache;
+
+  const { platform='h5' } = props;
 
   if (!cache) {
     cache = new CellMeasurerCache({
@@ -92,7 +94,7 @@ function Home(props, ref) {
 
     // 头部
     if (data.type === 'header') {
-      return 165 + 54 + 10 + getSticksHeight(props.sticks);
+      return getLogHeight(platform) + getTabsHeight(platform) + getSticksHeight(props.sticks, platform);
     }
 
     // 底部
@@ -107,7 +109,7 @@ function Home(props, ref) {
       case 'header':
         return props.children;
       case 'footer':
-        return <BottomView noMore={props.noMore} isError={props.requestError} errorText={props.errorText}></BottomView>;
+        return <BottomView noMore={props.noMore} isError={props.requestError}></BottomView>;
       default:
         return <Item data={data} measure={measure} recomputeRowHeights={() => recomputeRowHeights(index)} />;
     }
@@ -154,13 +156,13 @@ function Home(props, ref) {
     scrollTimer = setTimeout(() => {
       setFlag(true);
     }, 100);
+
     props.onScroll && props.onScroll({ scrollTop, clientHeight, scrollHeight });
     if (scrollTop !== 0) {
       props.vlist.setPosition(scrollTop);
     }
 
-    // if (scrollTop + (clientHeight * 4) >= scrollHeight && !loadData) {
-    if ( scrollHeight / 4 <= scrollTop && !loadData) {
+    if (scrollTop + clientHeight + (clientHeight / 2) >= scrollHeight && !loadData) {
       loadData = true;
       props.loadNextPage().finally(() => {
         loadData = false;
@@ -171,7 +173,7 @@ function Home(props, ref) {
   const isRowLoaded = ({ index }) => !!list[index];
 
   const loadMoreRows = () => {
-    return Promise.resolve();
+    return Promise.resolve()
   };
 
   const clearAllCache = () => {
@@ -208,7 +210,7 @@ function Home(props, ref) {
                 onScroll={onScroll}
                 deferredMeasurementCache={cache}
                 height={height}
-                overscanRowCount={20}
+                overscanRowCount={10}
                 onRowsRendered={(...props) => {
                   onRowsRendered(...props);
                 }}

@@ -61,7 +61,6 @@ class CommentDetail extends React.Component {
 
     if (!this.props.serverData && id) {
       const res = await this.props.comment.fetchCommentDetail(id);
-      console.log(res);
       // 异常处理
       if (res.code !== 0) {
         // 404

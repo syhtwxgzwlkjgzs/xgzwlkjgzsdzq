@@ -111,7 +111,7 @@ class Index extends Component {
     const categories = this.props.threadPost?.getCurrentCategories();
     if (params.id
       || !categories || (categories && categories.length === 0)
-      || (!params.id && categories.length && categories[0].canCreateThread)) {
+      || (!params.id && categories.length && !categories[0].canCreateThread)) {
       await readPostCategory(params.id);
     }
   }
@@ -190,7 +190,6 @@ class Index extends Component {
 
   // 处理文本框内容
   onContentChange = (contentText, maxLength) => {
-    console.log(contentText);
     const { setPostData } = this.props.threadPost;
     setPostData({ contentText });
     this.toHideTitle();
@@ -345,8 +344,6 @@ class Index extends Component {
       },
       // 上传中回调，获取上传进度等信息
       progress (result) {
-        console.log('progress');
-        console.log(result);
       },
       // 上传完成回调，获取上传后的视频 URL 等信息
       finish: async (result) => {
