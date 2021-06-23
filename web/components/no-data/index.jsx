@@ -6,6 +6,7 @@ import styles from './index.module.scss';
 
 /**
  * 空数据页面
+ * @prop {boolean} defaultShow 是否有展示延时
  * @prop {function} text 文字
  * @param {string} icon 图标
  * @prop {function} onClick 点击刷新按钮，触发事件
@@ -13,9 +14,10 @@ import styles from './index.module.scss';
  * @prop {string} btnText 自定义刷新按钮文字
  */
 
-const NoData = ({ className = '', text = '暂无数据', icon = '', onClick = noop, isShowBtn = false, btnText = '点击刷新' }) => {
+const NoData = ({ defaultShow = false, className = '', text = '暂无数据', icon = '', onClick = noop, isShowBtn = false, btnText = '点击刷新' }) => {
   // 为了防止已进入页面，就出现暂无数据
-  const [isHidden, setIsHidden] = useState(true);
+  const [isHidden, setIsHidden] = useState(!defaultShow);
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       clearTimeout(timer);
