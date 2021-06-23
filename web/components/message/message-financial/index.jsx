@@ -23,7 +23,7 @@ const Index = ({ site, message }) => {
   const formatFinancialList = (list = []) => {
     const newList = [];
     list.forEach(({
-      amount, cashActualAmount, content, createdAt, id, threadId, threadTitle, type, userAvatar, userId, username, nickname, orderType
+      amount, cashActualAmount, content, createdAt, id, threadId, threadTitle, type, userAvatar, userId, username, nickname, orderType, threadUserAvatar, threadUsername, threadUserNickname
     }) => {
       newList.push({
         amount: amount || cashActualAmount || 0,
@@ -32,10 +32,10 @@ const Index = ({ site, message }) => {
         id,
         threadId,
         type,
-        avatar: userAvatar,
+        avatar: type === "threadrewarded" ? threadUserAvatar : userAvatar,
         userId,
-        username,
-        nickname,
+        username: type === "threadrewarded" ? threadUsername : username,
+        nickname: type === "threadrewarded" ? threadUserNickname : nickname,
         orderType,
       });
     });
