@@ -1,0 +1,35 @@
+* {
+  box-sizing: border-box;
+}
+
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.infWrapper {
+  margin-top: 120px;
+}
+
+.count {
+  font-size: 40px;
+  color: tomato;
+  background-color: white;
+  height: auto;
+  padding: 30px 0;
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.row {
+  min-height: 300px;
+  padding: 30px;
+}
+
+.tweetImage {
+  max-width: 100%;
+  height: auto;
+}

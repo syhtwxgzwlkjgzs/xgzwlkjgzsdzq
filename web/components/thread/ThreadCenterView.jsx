@@ -23,7 +23,8 @@ const Index = (props) => {
         payType,
         price,
         paid,
-        attachmentPrice
+        attachmentPrice,
+        openedMore,
     } = props.data || {};
 
     const needPay = useMemo(() => {
@@ -32,7 +33,8 @@ const Index = (props) => {
 
     const {
       onClick,
-      onPay
+      onPay,
+      onOpen,
     } = props
 
     // 标题显示37个字符
@@ -59,7 +61,14 @@ const Index = (props) => {
 
         return (
           <>
-              {text && <PostContent onContentHeightChange={props.onContentHeightChange} content={text} onPay={onPay} onRedirectToDetail={onClick} />}
+              {text && <PostContent
+                onContentHeightChange={props.onContentHeightChange}
+                content={text}
+                onPay={onPay}
+                useShowMore={!openedMore}
+                onRedirectToDetail={onClick}
+                onOpen={onOpen}/>
+              }
 
               {videoData && (
                 <VideoPlay
