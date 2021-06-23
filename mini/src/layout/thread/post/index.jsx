@@ -7,7 +7,7 @@ import { PluginToolbar, DefaultToolbar, GeneralUpload, Title, Content, ClassifyP
 import Toast from '@discuzq/design/dist/components/toast/index';
 import { Units } from '@components/common';
 import styles from './index.module.scss';
-import { THREAD_TYPE, MAX_COUNT } from '@common/constants/thread-post';
+import { THREAD_TYPE, MAX_COUNT, THREAD_STATUS } from '@common/constants/thread-post';
 import { paidOption, draftOption } from '@common/constants/const';
 import { readYundianboSignature } from '@common/server';
 import VodUploader from 'vod-wx-sdk-v2';
@@ -59,6 +59,8 @@ class Index extends Component {
       this.setState({ threadId: id })
       this.setPostDataById(id);
     } else {
+      this.props.threadPost.setThreadStatus(THREAD_STATUS.create);
+      this.setCategory();
       // this.openSaveDraft(); // 现阶段，自动保存功能关闭
     }
     // 监听腾讯验证码事件
@@ -104,9 +106,13 @@ class Index extends Component {
   }
 
   async fetchCategories() { // 若当前store内分类列表数据为空，则主动请求分类
-    const { categories, getReadCategories } = this.props.index;
-    if (!categories || (categories && categories?.length === 0)) {
-      await getReadCategories();
+    const { readPostCategory } = this.props.threadPost;
+    const { params } = getCurrentInstance().router;
+    const categories = this.props.threadPost?.getCurrentCategories();
+    if (params.id
+      || !categories || (categories && categories.length === 0)
+      || (!params.id && categories.length && !categories[0].canCreateThread)) {
+      await readPostCategory(params.id);
     }
   }
 
@@ -125,14 +131,12 @@ class Index extends Component {
     if (ret.code === 0) {
       // 请求成功，设置分类，发帖数据,发帖状态，草稿状态开启自动保存
       const { categoryId, isDraft } = ret.data;
-      this.setCategory(categoryId);
       const { content: { text } } = ret.data;
       // 小程序编辑帖子，要把内容中的img标签去掉。/todo: 防止把其他有效的img标签也去掉
       const realText = text.replace(/<img.*?alt="(\w+)".*?>/g, `:$1:`)
         .replace(/<br \/>/g, '\n')
         .replace(/<span.*?>(.*?)<\/span>/g, `$1`);
       ret.data.content.text = realText;
-      threadPost.formatThreadDetailToPostData(ret.data);
       // const { isThreadPaid } = this.props.threadPost
       // if (isThreadPaid) {
       //   this.postToast('已经支付的帖子不支持编辑');
@@ -148,6 +152,10 @@ class Index extends Component {
           canEditRedpacket: isDraft,
           canEditReward: isDraft,
         });
+      const status = isDraft ? THREAD_STATUS.draft : THREAD_STATUS.edit;
+      threadPost.setThreadStatus(status);
+      threadPost.formatThreadDetailToPostData(ret.data);
+      this.setCategory(categoryId);
       // isDraft && this.openSaveDraft(); // 现阶段，自动保存功能关闭
     } else {
       // 请求失败，弹出错误消息
@@ -156,7 +164,7 @@ class Index extends Component {
   }
 
   setCategory(categoryId) { // 设置当前主题已选分类
-    const categorySelected = this.props.index.getCategorySelectById(categoryId);
+    const categorySelected = this.props.threadPost.getCategorySelectById(categoryId);
     this.props.threadPost.setCategorySelected(categorySelected);
   }
 
@@ -688,7 +696,8 @@ class Index extends Component {
   render() {
     const { bottomHeight } = this.props;
     const { permissions } = this.props.user;
-    const { categories } = this.props.index;
+    // const { categories } = this.props.threadPost;
+    const categories = this.props.threadPost?.getCurrentCategories();
     const { postData, setPostData, setCursorPosition, navInfo, cursorPosition } = this.props.threadPost;
     const { rewardQa, redpacket, video, product, position, contentText = '' } = postData;
     const {

@@ -34,6 +34,8 @@ class UsernameH5Login extends React.Component {
   loginErrorHandler = async (e) => {
     // 跳转补充信息页
     if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+      const uid = get(e, 'uid', '');
+      uid && this.props.user.updateUserInfo(uid);
       if (isExtFieldsOpen(this.props.site)) {
         this.props.commonLogin.needToCompleteExtraInfo = true;
         return this.props.router.push('/user/supplementary');

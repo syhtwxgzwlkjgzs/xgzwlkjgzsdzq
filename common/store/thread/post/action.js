@@ -1,7 +1,7 @@
 import { action } from 'mobx';
 import ThreadPostStore from './store';
-import { readEmoji, readFollow, readProcutAnalysis, readTopics, createThread, updateThread, createThreadVideoAudio } from '@common/server';
-import { LOADING_TOTAL_TYPE, THREAD_TYPE } from '@common/constants/thread-post';
+import { readEmoji, readFollow, readProcutAnalysis, readTopics, createThread, updateThread, createThreadVideoAudio, readPostCategories } from '@common/server';
+import { LOADING_TOTAL_TYPE, THREAD_TYPE, THREAD_STATUS } from '@common/constants/thread-post';
 import { emojiFromEditFormat, emojiFormatForCommit } from '@common/utils/emoji-regexp';
 import { formatDate } from '@common/utils/format-date';
 import { initPostData } from './common';
@@ -26,6 +26,14 @@ class ThreadPostAction extends ThreadPostStore {
   async updateThread(id) {
     const params = this.getCreateThreadParams(true);
     const ret = await updateThread({ ...params, threadId: Number(id) });
+    return ret;
+  }
+
+  @action.bound
+  async readPostCategory(id) {
+    const params = id ? { threadId: id } : {};
+    const ret = await readPostCategories({ params });
+    if (ret.code === 0) this.categories = ret.data || [];
     return ret;
   }
 
@@ -378,6 +386,94 @@ class ThreadPostAction extends ThreadPostStore {
   @action
   setNavInfo(info) {
     if (info) this.navInfo = info;
+  }
+
+  /**
+   * 根据 ID 获取当前选中的类别
+   * @param {number} id 帖子类别id
+   * @returns 选中的帖子详细信息
+   */
+  @action
+  getCategorySelectById(id) {
+    let parent = {};
+    let child = {};
+    let currentId = id;
+    const categories = this.getCurrentCategories();
+    // 如果没有传入id，则取默认第一个
+    if (!id && categories && categories.length) currentId = categories[0].pid;
+    if (categories && categories.length && currentId) {
+      categories.forEach((item) => {
+        const { children } = item;
+        if (item.pid === currentId) {
+          parent = item;
+          if (children && children.length > 0) [child] = children;
+        } else {
+          if (children && children.length > 0) {
+            children.forEach((elem) => {
+              if (elem.pid === currentId) {
+                child = elem;
+                parent = item;
+              }
+            });
+          }
+        }
+      });
+    }
+    // 如果有 id，但是没有设置选中的种类，说明可能是编辑没有发帖权限的分类帖子，这时也展示第一个帖子
+    if (id && !parent.pid && categories && categories.length) {
+      currentId = categories[0].pid;
+      return this.getCategorySelectById(currentId);
+    }
+    return { parent, child };
+  }
+
+  @action
+  getCategoriesCanCreate() {
+    const len = this.categories.length;
+    if (!len) return;
+    const result = [];
+    for (let i = 0; i < len; i++) {
+      const { canCreateThread, children } = this.categories[i];
+      let item = {};
+      if (canCreateThread) {
+        item = this.categories[i];
+        if (children && children.length) {
+          item.children = [...children.filter(elem => elem.canCreateThread)];
+        }
+        result.push(item);
+      }
+    }
+    return result;
+  }
+
+  @action
+  getCategoriesCanEdit() {
+    const len = this.categories.length;
+    if (!len) return;
+    const result = [];
+    for (let i = 0; i < len; i++) {
+      const { canEditThread, children } = this.categories[i];
+      let item = {};
+      if (canEditThread) {
+        item = this.categories[i];
+        if (children && children.length) {
+          item.children = [...children.filter(elem => elem.canEditThread)];
+        }
+        result.push(item);
+      }
+    }
+    return result;
+  }
+
+  @action
+  getCurrentCategories() {
+    if (this.threadStatus === THREAD_STATUS.edit) return this.getCategoriesCanEdit();
+    return this.getCategoriesCanCreate();
+  }
+
+  @action
+  setThreadStatus(status) {
+    this.threadStatus = status || THREAD_STATUS.create;
   }
 }
 

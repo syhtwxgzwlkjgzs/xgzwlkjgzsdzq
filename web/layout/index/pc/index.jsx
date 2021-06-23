@@ -15,6 +15,8 @@ import { readThreadList } from '@server';
 import { Button } from '@discuzq/design';
 import deepClone from '@common/utils/deep-clone';
 import { handleString2Arr, getSelectedCategoryIds } from '@common/utils/handleCategory';
+import WindowVList from '@components/virtual-list/pc/pc-window-scroll';
+import VList from '@components/virtual-list/pc/pc-scroll';
 
 @inject('site')
 @inject('user')
@@ -29,15 +31,18 @@ class IndexPCPage extends React.Component {
       // visibility: 'hidden',
       isShowDefault: this.checkIsOpenDefaultTab(),
     };
+
+    this.enabledVList = false; // 开启虚拟列表
+    this.enabledWindowScroll = false; // 开启window滚动
   }
 
   // 轮询定时器
-  timer = null
+  timer = null;
 
   // List组件ref
-  listRef = React.createRef()
+  listRef = React.createRef();
   // 存储最新的数据，以便于点击刷新时，可以直接赋值
-  newThread = {}
+  newThread = {};
 
   componentDidMount() {
     if (this.timer) {
@@ -45,7 +50,7 @@ class IndexPCPage extends React.Component {
     }
 
     this.timer = setInterval(() => {
-      this.handleIntervalRequest()
+      this.handleIntervalRequest();
     }, 30000);
   }
 
@@ -56,7 +61,7 @@ class IndexPCPage extends React.Component {
   }
 
   handleIntervalRequest = () => {
-    const { filter } = this.props.index
+    const { filter } = this.props.index;
 
     const { essence, attention, sort, sequence } = filter;
 
@@ -66,7 +71,14 @@ class IndexPCPage extends React.Component {
     let categoryIds = handleString2Arr(filter, 'categoryids');
 
     if (nowTotal !== -1) {
-      readThreadList({ params: { perPage: 10, page: 1, filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence } }).then((res) => {
+      readThreadList({
+        params: {
+          perPage: 10,
+          page: 1,
+          filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort },
+          sequence,
+        },
+      }).then((res) => {
         const { totalCount = 0 } = res?.data || {};
         if (totalCount > nowTotal) {
           this.setState({
@@ -74,66 +86,71 @@ class IndexPCPage extends React.Component {
             conNum: totalCount - nowTotal,
           });
           // 缓存新数据
-          this.newThread = res?.data
+          this.newThread = res?.data;
         }
       });
     }
-  }
+  };
 
   onSearch = (value) => {
     if (value) {
       this.props.router.push(`/search?keyword=${value || ''}`);
     }
-  }
+  };
 
-   // 上拉加载更多
-   onPullingUp = () => {
-     const { dispatch = () => {} } = this.props;
-     return dispatch('moreData');
-   }
+  // 上拉加载更多
+  onPullingUp = () => {
+    const { dispatch = () => {} } = this.props;
+    return dispatch('moreData');
+  };
 
   onFilterClick = (result) => {
-    const { sequence, filter: { types, sort, essence, attention, } } = result;
+    const {
+      sequence,
+      filter: { types, sort, essence, attention },
+    } = result;
 
-    this.changeFilter({ types, sort, essence, attention, sequence })
-  }
+    this.changeFilter({ types, sort, essence, attention, sequence });
+  };
 
   onNavigationClick = ({ categoryIds }) => {
     const categories = this.props.index.categories || [];
     // 获取处理之后的分类id
-    const id = categoryIds[0]
-    const newCategoryIds = getSelectedCategoryIds(categories, id)
+    const id = categoryIds[0];
+    const newCategoryIds = getSelectedCategoryIds(categories, id);
 
-    this.changeFilter({ categoryids: newCategoryIds })
-  }
+    this.changeFilter({ categoryids: newCategoryIds });
+  };
 
   changeFilter = (params) => {
-      const { index, dispatch = () => {} } = this.props
+    const { index, dispatch = () => {} } = this.props;
 
-      if (params) {
-        const newFilter = { ...index.filter, ...params };
+    if (params) {
+      const newFilter = { ...index.filter, ...params };
 
-        index.setFilter(newFilter);
-      }
+      index.setFilter(newFilter);
+    }
 
-      dispatch('click-filter');
+    dispatch('click-filter');
 
-      this.setState({ visible: false });
-  }
+    this.setState({ visible: false });
+  };
 
-   goRefresh = () => {
+  goRefresh = () => {
     const { dispatch = () => {} } = this.props;
 
-    if (this.newThread?.pageData?.length) { // 若有缓存值，就取缓存值
-      dispatch('update-page', { page: 1 })
-      this.props.index.setThreads(deepClone(this.newThread))
+    if (this.newThread?.pageData?.length) {
+      // 若有缓存值，就取缓存值
+      dispatch('update-page', { page: 1 });
+      this.props.index.setThreads(deepClone(this.newThread));
       // 清空缓存
-      this.newThread = {}
+      this.newThread = {};
       this.setState({
         visible: false,
         conNum: 0,
       });
-    } else { // 没有缓存值，直接请求网络
+    } else {
+      // 没有缓存值，直接请求网络
       dispatch('refresh-thread').then((res) => {
         this.setState({
           visible: false,
@@ -141,12 +158,12 @@ class IndexPCPage extends React.Component {
         });
       });
     }
-   }
+  };
 
   // 发帖
   onPostThread = () => {
     this.props.router.push('/thread/post');
-  }
+  };
 
   // 左侧 -- 分类
   renderLeft = (countThreads = 0) => {
@@ -167,17 +184,17 @@ class IndexPCPage extends React.Component {
         </div>
       </div>
     );
-  }
+  };
   // 右侧 -- 二维码 推荐内容
-  renderRight = data => (
+  renderRight = (data) => (
     <div className={styles.indexRight}>
       <QcCode />
       <div className={styles.indexRightCon}>
         <Recommend />
       </div>
-      <Copyright/>
+      <Copyright />
     </div>
-  )
+  );
 
   checkIsOpenDefaultTab() {
     return this.props.site.checkSiteIsOpenDefautlThreadListData();
@@ -190,34 +207,140 @@ class IndexPCPage extends React.Component {
     const { pageData } = threads || {};
     return (
       <div className={styles.indexContent}>
-        <TopFilterView onFilterClick={this.onFilterClick} onPostThread={this.onPostThread} isShowDefault={isShowDefault} />
+        <TopFilterView
+          onFilterClick={this.onFilterClick}
+          onPostThread={this.onPostThread}
+          isShowDefault={isShowDefault}
+        />
 
         <div className={styles.contnetTop}>
-          {sticks?.length > 0 && <div className={`${styles.TopNewsBox} ${!visible && styles.noBorder}`}>
-            <TopNews data={sticks} platform="pc" isShowBorder={false}/>
-          </div>}
-          {
-            visible && (
-              <div className={styles.topNewContent}>
-                <NewContent visible={visible} conNum={conNum} goRefresh={this.goRefresh} />
-              </div>
-            )
-          }
+          {sticks?.length > 0 && (
+            <div className={`${styles.TopNewsBox} ${!visible && styles.noBorder}`}>
+              <TopNews data={sticks} platform="pc" isShowBorder={false} />
+            </div>
+          )}
+          {visible && (
+            <div className={styles.topNewContent}>
+              <NewContent visible={visible} conNum={conNum} goRefresh={this.goRefresh} />
+            </div>
+          )}
         </div>
         <div className={styles.themeBox}>
           <div className={styles.themeItem}>
-            {pageData?.map((item, index) => <ThreadContent className={styles.threadContent} key={index} data={item}/>)}
+            {pageData?.map((item, index) => (
+              <ThreadContent className={styles.threadContent} key={index} data={item} />
+            ))}
           </div>
         </div>
       </div>
     );
-  }
+  };
+
+  renderVlist = (data) => {
+    const { visible, conNum, isShowDefault } = this.state;
+    const { sticks, threads } = data;
+    const { pageData } = threads || {};
+    const { index, site } = this.props;
+    const { countThreads = 0 } = site?.webConfig?.other || {};
+
+    return this.enabledWindowScroll ? (
+      <WindowVList
+        list={pageData}
+        sticks={sticks}
+        platform="pc"
+        pageName="home"
+        // onScroll={this.handleScroll}
+        loadNextPage={this.onPullingUp}
+        // noMore={currentPage >= totalPage}
+        // requestError={this.props.isError}
+        left={this.renderLeft(countThreads)}
+        right={this.renderRight()}
+        renderItem={(item, index, recomputeRowHeights, onContentHeightChange, measure) => (
+          <ThreadContent
+            onContentHeightChange={measure}
+            onImageReady={measure}
+            onVideoReady={measure}
+            key={index}
+            data={item}
+            className={styles.listItem}
+            recomputeRowHeights={measure}
+          />
+        )}
+      >
+        <div className={styles.indexContent}>
+          <TopFilterView
+            onFilterClick={this.onFilterClick}
+            onPostThread={this.onPostThread}
+            isShowDefault={isShowDefault}
+          />
+
+          <div className={styles.contnetTop}>
+            {sticks?.length > 0 && (
+              <div className={`${styles.TopNewsBox} ${!visible && styles.noBorder}`}>
+                <TopNews data={sticks} platform="pc" isShowBorder={false} />
+              </div>
+            )}
+            {visible && (
+              <div className={styles.topNewContent}>
+                <NewContent visible={visible} conNum={conNum} goRefresh={this.goRefresh} />
+              </div>
+            )}
+          </div>
+        </div>
+      </WindowVList>
+    ) : (
+      <VList
+        list={pageData}
+        sticks={sticks}
+        platform="pc"
+        pageName="home"
+        // onScroll={this.handleScroll}
+        loadNextPage={this.onPullingUp}
+        // noMore={currentPage >= totalPage}
+        // requestError={this.props.isError}
+        left={this.renderLeft(countThreads)}
+        right={this.renderRight()}
+        renderItem={(item, index, recomputeRowHeights, onContentHeightChange, measure) => (
+          <ThreadContent
+            onContentHeightChange={measure}
+            onImageReady={measure}
+            onVideoReady={measure}
+            key={index}
+            data={item}
+            className={styles.listItem}
+            recomputeRowHeights={measure}
+          />
+        )}
+      >
+        <div className={styles.indexContent}>
+          <TopFilterView
+            onFilterClick={this.onFilterClick}
+            onPostThread={this.onPostThread}
+            isShowDefault={isShowDefault}
+          />
+
+          <div className={styles.contnetTop}>
+            {sticks?.length > 0 && (
+              <div className={`${styles.TopNewsBox} ${!visible && styles.noBorder}`}>
+                <TopNews data={sticks} platform="pc" isShowBorder={false} />
+              </div>
+            )}
+            {visible && (
+              <div className={styles.topNewContent}>
+                <NewContent visible={visible} conNum={conNum} goRefresh={this.goRefresh} />
+              </div>
+            )}
+          </div>
+        </div>
+      </VList>
+    );
+  };
 
   render() {
     const { index, site } = this.props;
     const { countThreads = 0 } = site?.webConfig?.other || {};
     const { currentPage, totalPage } = index.threads || {};
-    const { threadError } = index
+    const { threadError } = index;
 
     return (
       <BaseLayout
@@ -227,14 +350,16 @@ class IndexPCPage extends React.Component {
         onScroll={this.onScroll}
         quickScroll={true}
         showRefresh={false}
-        left={ this.renderLeft(countThreads) }
-        right={ this.renderRight() }
-        pageName='home'
+        left={this.renderLeft(countThreads)}
+        right={this.renderRight()}
+        pageName="home"
         requestError={threadError.isError}
         errorText={threadError.errorText}
         className="home"
+        disabledList={this.enabledVList}
+        enabledWindowScroll={this.enabledWindowScroll}
       >
-        {this.renderContent(index)}
+        {this.enabledVList ? this.renderVlist(index) : this.renderContent(index)}
       </BaseLayout>
     );
   }
@@ -242,11 +367,11 @@ class IndexPCPage extends React.Component {
 
 export default withRouter(IndexPCPage);
 
-const TopFilterView = ({onFilterClick, isShowDefault, onPostThread}) => {
+const TopFilterView = ({ onFilterClick, isShowDefault, onPostThread }) => {
   return (
     <div className={styles.topWrapper}>
       <div className={styles.topBox}>
-        <TopMenu onSubmit={onFilterClick} isShowDefault={isShowDefault}/>
+        <TopMenu onSubmit={onFilterClick} isShowDefault={isShowDefault} />
         <div className={styles.PostTheme}>
           <Button type="primary" className={styles.publishBtn} onClick={onPostThread}>
             发布
@@ -254,5 +379,5 @@ const TopFilterView = ({onFilterClick, isShowDefault, onPostThread}) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

@@ -205,7 +205,7 @@ class Index extends Component {
                 <p
                   className={classNames(styles['content-html'], {
                     [styles['single-line']]: ['chat'].includes(type),
-                    [styles['multiple-line']]: ['account'].includes(type),
+                    [styles['multiple-line']]: ['thread', 'account'].includes(type),
                   })}
                   style={isPC ? { paddingRight: '20px' } : {}}
                   dangerouslySetInnerHTML={{ __html: this.parseHTML() }}

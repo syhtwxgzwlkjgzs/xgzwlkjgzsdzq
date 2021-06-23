@@ -46,6 +46,9 @@ export function CreateInput(field, layout) {
           onChange={(e) => {
             field.value = e.target.value;
           }}
+          onBlur={(e) => {
+            field.value = e.target.value.trim();
+          }}
         />
       </div>
     </div>
@@ -71,6 +74,9 @@ export function CreateTextArea(field, layout) {
           rows={3}
           onChange={(e) => {
             field.value = e.target.value;
+          }}
+          onBlur={(e) => {
+            field.value = e.target.value.trim();
           }}
         />
       </div>
