@@ -239,7 +239,7 @@ function Home(props, ref) {
                 }}
                 deferredMeasurementCache={cache}
                 height={height}
-                overscanRowCount={5}
+                overscanRowCount={10}
                 onRowsRendered={(...props) => {
                   onRowsRendered(...props)
                 }}
