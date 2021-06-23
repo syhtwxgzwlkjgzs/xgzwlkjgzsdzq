@@ -8,6 +8,7 @@ import PropTypes from 'prop-types'; // 类型拦截
 import typeofFn from '@common/utils/typeof';
 import classNames from 'classnames';
 import { inject, observer } from 'mobx-react';
+import { withRouter } from 'next/router';
 
 const ClassifyPopup = (props) => {
   const { pc, show, onVisibleChange } = props;
@@ -43,7 +44,7 @@ const ClassifyPopup = (props) => {
 
   const setSeletedCategory = () => {
     const id = props?.threadPost?.postData?.categoryId || '';
-    const categorySelected = props?.index?.getCategorySelectById(id);
+    const categorySelected = props?.threadPost?.getCategorySelectById(id);
     const { parent, child } = categorySelected;
     if (!parent?.pid) return;
     props?.threadPost?.setCategorySelected(categorySelected);
@@ -52,15 +53,19 @@ const ClassifyPopup = (props) => {
   };
 
   useEffect(() => {
-    const { index } = props;
-    const { categories } = index;
-    if (!categories || (categories && categories.length === 0)) {
+    const { threadPost } = props;
+    const { query } = props.router;
+    const categories = props.threadPost?.getCurrentCategories();
+    // 编辑帖子需要根据id获取对应的帖子信息
+    if (query.id
+      || !categories || (categories && categories.length === 0)
+      || (!query.id && categories.length && categories[0].canCreateThread)) {
       (async function () {
-        await index.getReadCategories();
+        await threadPost.readPostCategory(query.id);
         setSeletedCategory();
       }());
     }
-  }, []);
+  }, [props.threadPost.categories?.length]);
 
   useEffect(() => {
     setSeletedCategory(props?.threadPost?.postData?.categoryId);
@@ -72,7 +77,7 @@ const ClassifyPopup = (props) => {
 
   const clsWrapper = pc ? classNames(styles.pc, styles.wrapper) : styles.wrapper;
 
-  const category = props.index?.categoriesNoAll || [];
+  const category = props.threadPost?.getCurrentCategories();
 
   const content = (
     <div className={clsWrapper}>
@@ -82,40 +87,36 @@ const ClassifyPopup = (props) => {
       </div>
       <div className={styles['popup-content']} key={1}>
         {(category || []).map(item => (
-          item.canCreateThread
-            ? <Button
-              key={item.pid}
-              className={classNames({
-                active:
-                  selected.pid === item.pid,
-                'is-pc': pc,
-              })}
-              onClick={() => {
-                handleClick(item);
-              }}
-            >
-              {item.name}
-            </Button>
-            : null
+          <Button
+            key={item.pid}
+            className={classNames({
+              active:
+                selected.pid === item.pid,
+              'is-pc': pc,
+            })}
+            onClick={() => {
+              handleClick(item);
+            }}
+          >
+            {item.name}
+          </Button>
         ))}
       </div>
       {categoryChildren.length > 0 && (
         <div className={classNames(styles['popup-content'], styles['popup-content__children'])}>
           {(categoryChildren || []).map(item => (
-            item.canCreateThread
-              ? <Button
-                key={item.pid}
-                className={classNames({
-                  active: selectedChild.pid === item.pid,
-                  'is-pc': pc,
-                })}
-                onClick={() => {
-                  handleChildClick(item);
-                }}
-              >
-                {item.name}
-              </Button>
-              : null
+            <Button
+              key={item.pid}
+              className={classNames({
+                active: selectedChild.pid === item.pid,
+                'is-pc': pc,
+              })}
+              onClick={() => {
+                handleChildClick(item);
+              }}
+            >
+              {item.name}
+            </Button>
           ))}
         </div>
       )}
@@ -164,4 +165,4 @@ ClassifyPopup.defaultProps = {
   onChange: () => {},
 };
 
-export default inject('index', 'threadPost')(observer(ClassifyPopup));
+export default inject('threadPost')(observer(withRouter(ClassifyPopup)));

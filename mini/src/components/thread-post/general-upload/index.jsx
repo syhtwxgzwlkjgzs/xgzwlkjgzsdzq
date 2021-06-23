@@ -125,6 +125,8 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
             }
           } else {
             console.log(res);
+            const msg = res.statusCode === 413 ? '上传大小超过了服务器限制' : res.msg;
+            Toast.error({ content: `上传失败：${msg}` });
           }
           resolve(res);
         },

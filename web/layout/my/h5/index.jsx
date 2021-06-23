@@ -44,6 +44,10 @@ class H5MyPage extends React.Component {
     });
   };
 
+  componentWillUnmount = () => {
+    this.props.user.clearUserThreadsInfo();
+  }
+
   formatUserThreadsData = (userThreads) => {
     if (Object.keys(userThreads).length === 0) return [];
     return Object.values(userThreads).reduce((fullData, pageData) => [...fullData, ...pageData]);
