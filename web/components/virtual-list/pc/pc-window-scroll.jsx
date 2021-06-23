@@ -150,7 +150,6 @@ function Home(props, ref) {
 
   // 滚动事件
   const onScroll = ({ scrollTop, clientHeight, scrollHeight }) => {
-    console.log({ scrollTop });
     // scrollToPosition = scrollTop;
     setFlag(!(scrollTop < preScrollTop));
     preScrollTop = scrollTop;
@@ -225,17 +224,18 @@ function Home(props, ref) {
 
   return (
     <div className="page">
-      <WindowScroller>
-        {({ height, isScrolling, registerChild, onChildScroll, scrollTop }) => (
+      
           <InfiniteLoader isRowLoaded={isRowLoaded} loadMoreRows={loadMoreRows} rowCount={rowCount}>
             {({ onRowsRendered }) => (
+              <WindowScroller>
+              {({ height, isScrolling, registerChild, onChildScroll, scrollTop }) => {
+              return (
               <AutoSizer disableHeight>
                 {({ width }) => (
                   <div className={styles.center} ref={registerChild}>
                     <List
                       ref={(ref) => {
                         listRef = ref;
-                        // registerChild(ref);
                       }}
                       onScroll={onScroll}
                       deferredMeasurementCache={cache}
@@ -251,15 +251,18 @@ function Home(props, ref) {
                       rowRenderer={rowRenderer}
                       scrollTop={scrollTop}
                       width={width}
-                      // overscanIndicesGetter={overscanIndicesGetter}
+                      overscanIndicesGetter={overscanIndicesGetter}
                     />
-                  </div>
+                  // </div>
                 )}
               </AutoSizer>
+              
             )}
+            }
+                  </WindowScroller>
+                          )}
           </InfiniteLoader>
-        )}
-      </WindowScroller>
+
     </div>
   );
 }
