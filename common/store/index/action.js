@@ -172,7 +172,12 @@ class IndexAction extends IndexStore {
         delete newFilter.categoryids;
       }
     }
+    this.latestReq += 1;
+    const currentReq = this.latestReq;
     const result = await readThreadList({ params: { perPage, page, filter: newFilter, sequence } });
+    if (currentReq !== this.latestReq) {
+      return;
+    }
     if (result.code === 0 && result.data) {
       if (isDraft) {
         if (this.drafts && result.data.pageData && page !== 1) {

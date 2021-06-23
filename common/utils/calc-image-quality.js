@@ -1,3 +1,14 @@
+import isServer from '@common/utils/is-server';
+
+let isSupportWebp = false;
+if (!isServer()) {
+    try {
+        const img = document.createElement('canvas').toDataURL('image/webp', 0.5);
+        isSupportWebp = img.indexOf('data:image/webp') === 0;
+    } catch(err) {
+        isSupportWebp = false;
+    }
+}
 
 const QUALITY_1 = '30';
 const QUALITY_2 = '35';
@@ -58,13 +69,13 @@ export default function calcImageQuality(viewWidth, type, level) {
     // 根据图片类型判断使用何种方式
     if (/(jpg|jpeg|webp)/.test(type)) {
         switch (level) {
-            case LEVEL_1: param = _level_1_quality(viewWidth);
+            case LEVEL_1: param = _level_1_quality(viewWidth, isSupportWebp ? 'webp' : null);
             break;
-            case LEVEL_2: param = _level_2_quality(viewWidth);
+            case LEVEL_2: param = _level_2_quality(viewWidth, isSupportWebp ? 'webp' : null);
             break;
-            case LEVEL_3: param = _level_3_quality(viewWidth);
+            case LEVEL_3: param = _level_3_quality(viewWidth, isSupportWebp ? 'webp' : null);
             break;
-            default: param = _level_1_quality(viewWidth);
+            default: param = _level_1_quality(viewWidth, isSupportWebp ? 'webp' : null);
         }
     } else if(/(gif)/.test(type)) {
         let frame = 5;
@@ -76,13 +87,13 @@ export default function calcImageQuality(viewWidth, type, level) {
         return `${IMAGEMOGR2}${CGIF}/${frame}`;
     } else {
         switch (level) {
-            case LEVEL_1: param = _level_1_quality(viewWidth, 'jpg');
+            case LEVEL_1: param = _level_1_quality(viewWidth, isSupportWebp ? 'webp' : 'jpg');
             break;
-            case LEVEL_2: param = _level_2_quality(viewWidth, 'jpg');
+            case LEVEL_2: param = _level_2_quality(viewWidth, isSupportWebp ? 'webp' : 'jpg');
             break;
-            case LEVEL_3: param = _level_3_quality(viewWidth, 'jpg');
+            case LEVEL_3: param = _level_3_quality(viewWidth, isSupportWebp ? 'webp' : 'jpg');
             break;
-            default: param = _level_1_quality(viewWidth, 'jpg');
+            default: param = _level_1_quality(viewWidth, isSupportWebp ? 'webp' : 'jpg');
         }
     }
     return param;
