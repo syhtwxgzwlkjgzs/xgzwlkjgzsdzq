@@ -159,7 +159,8 @@ function Home(props, ref) {
       props.vlist.setPosition(scrollTop);
     }
 
-    if (scrollTop + clientHeight + clientHeight >= scrollHeight && !loadData) {
+    // if (scrollTop + (clientHeight * 4) >= scrollHeight && !loadData) {
+    if ( scrollHeight / 4 <= scrollTop && !loadData) {
       loadData = true;
       props.loadNextPage().finally(() => {
         loadData = false;
