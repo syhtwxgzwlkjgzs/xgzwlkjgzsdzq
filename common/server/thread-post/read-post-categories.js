@@ -6,7 +6,7 @@ export default async function readPostCategories(opt = {}) {
   try {
     const { params = {}, data = {}, ...others } = opt;
     const options = {
-      url: '/apiv3/categories.createthread', // 请求地址
+      url: '/apiv3/categories.thread', // 请求地址
       method: 'GET',
       params,
       data,

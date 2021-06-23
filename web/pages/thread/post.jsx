@@ -64,6 +64,7 @@ class PostPage extends React.Component {
   }
 
   componentDidMount() {
+    this.props.threadPost.setThreadStatus(THREAD_STATUS.create);
     this.redirectToHome();
     this.props.router.events.on('routeChangeStart', this.handleRouteChange);
     this.fetchPermissions();
@@ -476,7 +477,6 @@ class PostPage extends React.Component {
     if (vditor) {
       this.vditor = vditor;
       const htmlString = vditor.getHTML();
-      console.log(vditor.getHTML(), 'vditorchange');
       this.setPostData({ contentText: htmlString });
       if (!this.props.threadPost.postData.title) {
         if (!this.state.isTitleShow || this.props.site.platform === 'pc' || !event) return;

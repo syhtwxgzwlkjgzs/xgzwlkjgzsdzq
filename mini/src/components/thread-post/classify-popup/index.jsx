@@ -59,11 +59,13 @@ const ClassifyPopup = (props) => {
   // hook
   useEffect(() => { // 初始化
     if (category?.length > 0) {
-      setParent(category[0]);
-      setPostData({ categoryId: category[0].pid });
-      setCategorySelected({ parent: category[0], child: {} });
+      if (!props.threadPost.postData.categoryId) {
+        setParent(category[0]);
+        setPostData({ categoryId: category[0].pid });
+        setCategorySelected({ parent: category[0], child: {} });
+      }
     }
-  }, [category?.length]);
+  }, [category]);
 
   useEffect(() => { // 回显分类
     const { parent: storeParent, child: storeChild } = categorySelected;

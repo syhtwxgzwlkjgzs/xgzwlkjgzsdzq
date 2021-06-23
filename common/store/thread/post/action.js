@@ -1,7 +1,7 @@
 import { action } from 'mobx';
 import ThreadPostStore from './store';
 import { readEmoji, readFollow, readProcutAnalysis, readTopics, createThread, updateThread, createThreadVideoAudio, readPostCategories } from '@common/server';
-import { LOADING_TOTAL_TYPE, THREAD_TYPE } from '@common/constants/thread-post';
+import { LOADING_TOTAL_TYPE, THREAD_TYPE, THREAD_STATUS } from '@common/constants/thread-post';
 import { emojiFromEditFormat, emojiFormatForCommit } from '@common/utils/emoji-regexp';
 import { formatDate } from '@common/utils/format-date';
 import { initPostData } from './common';
@@ -30,8 +30,9 @@ class ThreadPostAction extends ThreadPostStore {
   }
 
   @action.bound
-  async readPostCategory() {
-    const ret = await readPostCategories();
+  async readPostCategory(id) {
+    const params = id ? { threadId: id } : {};
+    const ret = await readPostCategories({ params });
     if (ret.code === 0) this.categories = ret.data || [];
     return ret;
   }
@@ -397,10 +398,11 @@ class ThreadPostAction extends ThreadPostStore {
     let parent = {};
     let child = {};
     let currentId = id;
+    const categories = this.getCurrentCategories();
     // 如果没有传入id，则取默认第一个
-    if (!id && this.categories && this.categories.length) currentId = this.categories[0].pid;
-    if (this.categories && this.categories.length && currentId) {
-      this.categories.forEach((item) => {
+    if (!id && categories && categories.length) currentId = categories[0].pid;
+    if (categories && categories.length && currentId) {
+      categories.forEach((item) => {
         const { children } = item;
         if (item.pid === currentId) {
           parent = item;
@@ -418,11 +420,60 @@ class ThreadPostAction extends ThreadPostStore {
       });
     }
     // 如果有 id，但是没有设置选中的种类，说明可能是编辑没有发帖权限的分类帖子，这时也展示第一个帖子
-    if (id && !parent.pid && this.categories && this.categories.length) {
-      currentId = this.categories[0].pid;
+    if (id && !parent.pid && categories && categories.length) {
+      currentId = categories[0].pid;
       return this.getCategorySelectById(currentId);
     }
     return { parent, child };
+  }
+
+  @action
+  getCategoriesCanCreate() {
+    const len = this.categories.length;
+    if (!len) return;
+    const result = [];
+    for (let i = 0; i < len; i++) {
+      const { canCreateThread, children } = this.categories[i];
+      let item = {};
+      if (canCreateThread) {
+        item = this.categories[i];
+        if (children && children.length) {
+          item.children = [...children.filter(elem => elem.canCreateThread)];
+        }
+        result.push(item);
+      }
+    }
+    return result;
+  }
+
+  @action
+  getCategoriesCanEdit() {
+    const len = this.categories.length;
+    if (!len) return;
+    const result = [];
+    for (let i = 0; i < len; i++) {
+      const { canEditThread, children } = this.categories[i];
+      let item = {};
+      if (canEditThread) {
+        item = this.categories[i];
+        if (children && children.length) {
+          item.children = [...children.filter(elem => elem.canEditThread)];
+        }
+        result.push(item);
+      }
+    }
+    return result;
+  }
+
+  @action
+  getCurrentCategories() {
+    if (this.threadStatus === THREAD_STATUS.edit) return this.getCategoriesCanEdit();
+    return this.getCategoriesCanCreate();
+  }
+
+  @action
+  setThreadStatus(status) {
+    this.threadStatus = status || THREAD_STATUS.create;
   }
 }
 

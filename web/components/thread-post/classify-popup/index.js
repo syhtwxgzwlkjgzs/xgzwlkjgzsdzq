@@ -8,6 +8,7 @@ import PropTypes from 'prop-types'; // 类型拦截
 import typeofFn from '@common/utils/typeof';
 import classNames from 'classnames';
 import { inject, observer } from 'mobx-react';
+import { withRouter } from 'next/router';
 
 const ClassifyPopup = (props) => {
   const { pc, show, onVisibleChange } = props;
@@ -53,10 +54,14 @@ const ClassifyPopup = (props) => {
 
   useEffect(() => {
     const { threadPost } = props;
-    const { categories } = threadPost;
-    if (!categories || (categories && categories.length === 0)) {
+    const { query } = props.router;
+    const categories = props.threadPost?.getCurrentCategories();
+    // 编辑帖子需要根据id获取对应的帖子信息
+    if (query.id
+      || !categories || (categories && categories.length === 0)
+      || (!query.id && categories.length && categories[0].canCreateThread)) {
       (async function () {
-        await threadPost.readPostCategory();
+        await threadPost.readPostCategory(query.id);
         setSeletedCategory();
       }());
     }
@@ -72,7 +77,7 @@ const ClassifyPopup = (props) => {
 
   const clsWrapper = pc ? classNames(styles.pc, styles.wrapper) : styles.wrapper;
 
-  const category = props.threadPost?.categories || [];
+  const category = props.threadPost?.getCurrentCategories();
 
   const content = (
     <div className={clsWrapper}>
@@ -160,4 +165,4 @@ ClassifyPopup.defaultProps = {
   onChange: () => {},
 };
 
-export default inject('threadPost')(observer(ClassifyPopup));
+export default inject('threadPost')(observer(withRouter(ClassifyPopup)));
