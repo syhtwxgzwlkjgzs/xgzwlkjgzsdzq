@@ -80,19 +80,10 @@ const Index = (props) => {
     }
   };
 
-  const submitEmptyImage = () => {
-    if (dialogId) {
-      return createDialogMsg({
-        dialogId,
-        isImage: true,
-      });
-    } else if (!dialogId && username) {
-      return createDialog({
-        recipientUsername: username,
-        isImage: true,
-      });
-    }
-  };
+  const submitEmptyImage = (dialogId) => createDialogMsg({
+    dialogId,
+    isImage: true,
+  });
 
   // 触发图片选择
   const uploadImage = () => {
@@ -130,15 +121,25 @@ const Index = (props) => {
     //   uploadRef.current.value = '';
     //   return; // 图片上传前校验
     // }
+    let localDialogId = 0;
+    if (!dialogId) {
+      const ret = await createDialog({
+        recipientUsername: username,
+        isImage: true,
+      });
+      const { code, data } = ret;
+      if (code === 0) {
+        localDialogId = data.dialogId;
+      }
+    }
 
     const fileList = [...files];
-    await Promise.all(fileList.map(() => submitEmptyImage())).then((results) => {
+    await Promise.all(fileList.map(() => submitEmptyImage(dialogId || localDialogId))).then((results) => {
       results.sort((a, b) => b.data.dialogMessageId - a.data.dialogMessageId);
       fileList.map(async (file, i) => {
-        const { code, data: { dialogMessageId, dialogId } } = results[i];
+        const { code, data: { dialogMessageId } } = results[i];
         if (code === 0) {
           file.dialogMessageId = dialogMessageId;
-          file.dialogId = dialogId;
           setTimeout(async () => {
             const formData = new FormData();
             formData.append('file', file);
@@ -162,8 +163,8 @@ const Index = (props) => {
       });
       uploadingImagesRef.current = uploadingImagesRef.current.concat(fileList);
 
-      if (fileList[0].dialogId) {
-        replaceRouteWidthDialogId(fileList[0].dialogId);
+      if (!dialogId) {
+        replaceRouteWidthDialogId(localDialogId);
       } else {
         readDialogMsgList(dialogId);
       }
