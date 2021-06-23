@@ -158,7 +158,7 @@ class UserCenterFollows extends React.Component {
     });
   }
 
-  followUser = throttle(async ({ id: userId }) => {
+  followUser = async ({ id: userId }) => {
     try {
       const res = await createFollow({ data: { toUserId: userId } });
       if (res.code === 0 && res.data) {
@@ -195,9 +195,9 @@ class UserCenterFollows extends React.Component {
         duration: 2000,
       });
     }
-  }, 1000);
+  }
 
-  unFollowUser = throttle(async ({ id }) => {
+  unFollowUser = async ({ id }) => {
     try {
       const res = await deleteFollow({ data: { id, type: 1 } });
       if (res.code === 0 && res.data) {
@@ -232,7 +232,7 @@ class UserCenterFollows extends React.Component {
         duration: 2000,
       });
     }
-  }, 1000);
+  };
 
   async componentDidMount() {
     // 第一次加载完后，才允许加载更多页面
