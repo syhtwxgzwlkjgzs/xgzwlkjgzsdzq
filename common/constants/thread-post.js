@@ -73,3 +73,12 @@ export const ACCEPT_VIDEO_TYPES = [
 export const ACCEPT_FILE_TYPES = [
   '*/*',
 ];
+
+export const THREAD_STATUS = {
+  // 新建
+  create: 'create',
+  // 编辑
+  edit: 'edit',
+  // 草稿
+  draft: 'draft',
+};
