@@ -17,9 +17,11 @@ const DialogBox = (props) => {
   const dialogBoxRef = useRef();
   const timeoutId = useRef();
   useEffect(() => {
-    document.addEventListener('focusin', () => {
-      setTimeout(scrollEnd, 0);
-    });
+    if (platform !== 'pc') {
+      document.addEventListener('focusin', () => {
+        setTimeout(scrollEnd, 0);
+      });
+    }
     return () => clearTimeout(timeoutId.current);
   }, []);
 
