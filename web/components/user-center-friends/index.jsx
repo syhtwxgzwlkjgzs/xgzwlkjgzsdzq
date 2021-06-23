@@ -158,6 +158,7 @@ class UserCenterFriends extends React.Component {
                 isShowUserInfo={this.props.withHeaderUserInfo}
                 circle
                 name={this.props.userName}
+                withStopPropagation={false}
               />
             </div>
             <div className={styles.friendTextInfo}>
