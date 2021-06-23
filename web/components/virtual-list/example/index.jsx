@@ -154,13 +154,12 @@ function Home(props, ref) {
     scrollTimer = setTimeout(() => {
       setFlag(true);
     }, 100);
-
     props.onScroll && props.onScroll({ scrollTop, clientHeight, scrollHeight });
     if (scrollTop !== 0) {
       props.vlist.setPosition(scrollTop);
     }
 
-    if (scrollTop + clientHeight + 50 >= scrollHeight && !loadData) {
+    if (scrollTop + clientHeight + clientHeight >= scrollHeight && !loadData) {
       loadData = true;
       props.loadNextPage().finally(() => {
         loadData = false;
@@ -170,28 +169,8 @@ function Home(props, ref) {
 
   const isRowLoaded = ({ index }) => !!list[index];
 
-  const loadMoreRows = ({ startIndex, stopIndex }) => {
-    console.log(!loadData);
-    // if (!loadData) return;
-
-    // let promiseResolver;
-
-    // loadData = true;
-
-    // props
-    //   .loadNextPage()
-    //   .then(() => {
-    //     loadData = false;
-    //     promiseResolver();
-    //   })
-    //   .finally(() => {
-    //     console.log(loadData);
-    //     loadData = false;
-    //   });
-
-    return new Promise((res) => {
-      // promiseResolver = res;
-    });
+  const loadMoreRows = () => {
+    return Promise.resolve();
   };
 
   const clearAllCache = () => {
@@ -226,22 +205,11 @@ function Home(props, ref) {
                   registerChild(ref);
                 }}
                 onScroll={onScroll}
-                overscanIndicesGetter={({
-                  cellCount, 
-                  overscanCellsCount, 
-                  startIndex,
-                  stopIndex,
-                }) => {
-                  return {
-                    overscanStartIndex: Math.max(0, startIndex - overscanCellsCount),
-                    overscanStopIndex: Math.min(cellCount - 1, stopIndex + overscanCellsCount),
-                  };
-                }}
                 deferredMeasurementCache={cache}
                 height={height}
-                overscanRowCount={5}
+                overscanRowCount={10}
                 onRowsRendered={(...props) => {
-                  onRowsRendered(...props)
+                  onRowsRendered(...props);
                 }}
                 rowCount={rowCount}
                 rowHeight={getRowHeight}
