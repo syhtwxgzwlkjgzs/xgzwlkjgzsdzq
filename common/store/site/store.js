@@ -20,7 +20,6 @@ class SiteStore {
   @observable platform = null;
   @observable closeSiteConfig = null;
   @observable theme = APP_THEME.light;
-  @observable miniCode = null
   @observable isUserLoginVisible = null;
   @computed get isRegister() {
     return !this.isSmsOpen && this.wechatEnv === 'none';

@@ -4,6 +4,7 @@ import { Icon, Toast, Spin } from '@discuzq/design';
 import { extensionList, isPromise, noop } from '../utils';
 import { throttle } from '@common/utils/throttle-debounce.js';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
+import isWeiXin from '@common/utils/is-weixin';
 
 import styles from './index.module.scss';
 
@@ -72,11 +73,17 @@ const Index = ({
       downloading[index] = true;
       setDownloading([...downloading]);
 
-      const attachmentId = item.id;
-      fetchDownloadUrl(threadId, attachmentId, (url) => {
-        window.location.href = url;
+
+      if(isWeiXin()) {
+        window.location.href = item.url;
         Toast.info({ content: '下载成功' });
-      });
+      } else {
+        const attachmentId = item.id;
+        fetchDownloadUrl(threadId, attachmentId, (url) => {
+          window.location.href = url;
+          Toast.info({ content: '下载成功' });
+        });
+      }
 
       downloading[index] = false;
       setDownloading([...downloading]);

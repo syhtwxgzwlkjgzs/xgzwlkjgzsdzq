@@ -5,6 +5,7 @@ import { View, Text, Image } from '@tarojs/components';
 import Icon from '@discuzq/design/dist/components/icon/index'
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
+import { debounce } from '@common/utils/throttle-debounce.js';
 
 /**
  * 帖子点赞、打赏视图
@@ -15,12 +16,12 @@ import { inject, observer } from 'mobx-react';
   observer(({ imgs = [], tipData = {}, wholeNum = 1,showMore=false, index, showCount = 5 }) => {
   const [visible, setVisible] = useState(false);
 
-  const onClick = (e) => {
+  const onClick = debounce((e) => {
     e.stopPropagation();
     index.setHiddenTabBar(true)
     index.setHasOnScrollToLower(false)
     setVisible(true);
-  };
+  }, 200);
 
   const onHidden = () => {
     index.setHiddenTabBar(false)
