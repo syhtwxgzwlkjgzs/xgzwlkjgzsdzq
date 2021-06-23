@@ -536,7 +536,7 @@ class UserAction extends SiteStore {
     });
 
     if (updateUserInfoRes.code === 0) {
-      this.userInfo.signature = this.editSignature;
+      this.userInfo.signature = get(updateUserInfoRes, 'data.signature');
       return updateUserInfoRes.data;
     }
 

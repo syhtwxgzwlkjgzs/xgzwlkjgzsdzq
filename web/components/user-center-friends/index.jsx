@@ -40,11 +40,9 @@ class UserCenterFriends extends React.Component {
     await this.props.followHandler({
       id,
     });
-    setTimeout(() => {
-      this.setState({
-        isFollowedLoading: false,
-      });
-    }, 1000);
+    this.setState({
+      isFollowedLoading: false,
+    });
   }, 200);
 
   unFollowUser = throttle(async ({ e, id }) => {
@@ -56,11 +54,9 @@ class UserCenterFriends extends React.Component {
     await this.props.unFollowHandler({
       id,
     });
-    setTimeout(() => {
-      this.setState({
-        isUnFollowedLoading: false,
-      });
-    }, 1000);
+    this.setState({
+      isUnFollowedLoading: false,
+    });
   }, 200);
 
   // 渲染操作区域
@@ -75,9 +71,9 @@ class UserCenterFriends extends React.Component {
             disabled={isFollowedLoading}
             type={'primary'}
             className={styles.friendActionFollow}
-            onClick={(e) => {
+            onClick={async (e) => {
               e.stopPropagation();
-              this.followUser({ e, id: this.props.id });
+              await this.followUser({ e, id: this.props.id });
             }}
           >
             {/* <span>+</span> */}
@@ -95,9 +91,9 @@ class UserCenterFriends extends React.Component {
             disabled={isUnFollowedLoading}
             type={'primary'}
             className={styles.friendActionFriend}
-            onClick={(e) => {
+            onClick={async (e) => {
               e.stopPropagation();
-              this.unFollowUser({ e, id: this.props.id });
+              await this.unFollowUser({ e, id: this.props.id });
             }}
           >
             {isUnFollowedLoading ? (
@@ -114,9 +110,9 @@ class UserCenterFriends extends React.Component {
             disabled={isUnFollowedLoading}
             type={'primary'}
             className={styles.friendActionFollowed}
-            onClick={(e) => {
+            onClick={async (e) => {
               e.stopPropagation();
-              this.unFollowUser({ e, id: this.props.id });
+              await this.unFollowUser({ e, id: this.props.id });
             }}
           >
             {isUnFollowedLoading ? (
