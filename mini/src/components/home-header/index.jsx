@@ -10,7 +10,6 @@ import { get } from '@common/utils/get';
 import logoImg from '../../../../web/public/dzq-img/admin-logo-x2.png';
 import joinLogoImg from '../../../../web/public/dzq-img/join-banner-bg.png';
 import { numberFormat } from '@common/utils/number-format';
-
 /**
  * 帖子头部
  * @prop {string} bgColor 背景颜色
@@ -51,16 +50,6 @@ class HomeHeader extends React.Component {
       return siteData.setSite.siteHeaderLogo;
     }
     return logoImg;
-  }
-
-  goBack() {
-    Router.back({
-      fail: () => {
-        Router.redirect({
-          url: '/pages/home/index'
-        });
-      }
-    });
   }
 
   getSiteInfo() {
@@ -154,7 +143,7 @@ class HomeHeader extends React.Component {
           {hideInfo && mode !== 'join' && (
             <View className={styles.topBar}>
               {mode === 'login' ? (
-                <View onClick={() => this.goBack()} className={styles.left}>
+                <View onClick={() => Router.back()} className={styles.left}>
                   <Icon name="LeftOutlined" />
                 </View>
               ) : (
@@ -169,7 +158,7 @@ class HomeHeader extends React.Component {
           )}
           {showToolbar && (
             <View className={styles.topBar}>
-              <View onClick={() => this.goBack()} className={styles.customCapsule} style={this.getTopBarBtnStyle()}>
+              <View onClick={() => Router.back()} className={styles.customCapsule} style={this.getTopBarBtnStyle()}>
                 <Icon name="LeftOutlined" />
               </View>
               <View style={this.getTopBarTitleStyle()} className={styles.fullScreenTitle}>{ fullScreenTitle }</View>
