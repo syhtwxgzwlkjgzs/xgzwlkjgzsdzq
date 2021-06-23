@@ -107,6 +107,11 @@ class CommentList extends React.Component {
     typeof this.props.reportClick === 'function' && this.props.reportClick(data);
   }
 
+  // 点击评论列表用户头像
+  replyAvatarClick(data,floor) {
+    typeof this.props.replyAvatarClick === 'function' && this.props.replyAvatarClick(data,floor);
+  }
+
   async onSubmit(value, imageList) {
     if (typeof this.props.onSubmit === 'function') {
       const success = await this.props.onSubmit(value, imageList);
@@ -268,7 +273,7 @@ class CommentList extends React.Component {
                         data={this.needReply[0]}
                         key={this.needReply[0].id}
                         isShowOne={true}
-                        avatarClick={() => this.reployAvatarClick(this.needReply[0])}
+                        avatarClick={(floor) => this.replyAvatarClick(this.needReply[0],floor)}
                         likeClick={() => this.replyLikeClick(this.needReply[0])}
                         replyClick={() => this.replyReplyClick(this.needReply[0])}
                         deleteClick={() => this.replyDeleteClick(this.needReply[0])}
@@ -281,7 +286,7 @@ class CommentList extends React.Component {
                         <ReplyList
                           data={val}
                           key={val.id || index}
-                          avatarClick={() => this.reployAvatarClick(val)}
+                          avatarClick={(floor) => this.replyAvatarClick(val,floor)}
                           likeClick={() => this.replyLikeClick(val)}
                           replyClick={() => this.replyReplyClick(val)}
                           deleteClick={() => this.replyDeleteClick(val)}
