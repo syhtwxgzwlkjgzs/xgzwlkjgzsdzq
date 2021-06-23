@@ -8,7 +8,7 @@ import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import HOCWithLogin from '@middleware/HOCWithLogin';
 import * as localData from '@layout/thread/post/common';
 import { Toast } from '@discuzq/design';
-import { THREAD_TYPE, MAX_COUNT } from '@common/constants/thread-post';
+import { THREAD_TYPE, MAX_COUNT, THREAD_STATUS } from '@common/constants/thread-post';
 import Router from '@discuzq/sdk/dist/router';
 import PayBox from '@components/payBox/index';
 import { ORDER_TRADE_TYPE } from '@common/constants/payBoxStoreConstants';
@@ -143,7 +143,6 @@ class PostPage extends React.Component {
         ret.code = 0;
       } else ret = await thread.fetchThreadDetail(id);
       if (ret.code === 0) {
-        threadPost.formatThreadDetailToPostData(ret.data);
         // 设置主题状态、是否能操作红包和悬赏
         // const { postData, isThreadPaid } = this.props.threadPost;
         const { postData } = this.props.threadPost;
@@ -162,6 +161,9 @@ class PostPage extends React.Component {
           canEditRedpacket: isDraft,
           canEditReward: isDraft,
         });
+        const status = isDraft ? THREAD_STATUS.draft : THREAD_STATUS.edit;
+        threadPost.setThreadStatus(status);
+        threadPost.formatThreadDetailToPostData(ret.data);
       } else {
         Toast.error({ content: ret.msg });
       }
@@ -474,6 +476,7 @@ class PostPage extends React.Component {
     if (vditor) {
       this.vditor = vditor;
       const htmlString = vditor.getHTML();
+      console.log(vditor.getHTML(), 'vditorchange');
       this.setPostData({ contentText: htmlString });
       if (!this.props.threadPost.postData.title) {
         if (!this.state.isTitleShow || this.props.site.platform === 'pc' || !event) return;
