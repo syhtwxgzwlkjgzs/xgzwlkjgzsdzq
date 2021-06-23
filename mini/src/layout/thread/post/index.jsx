@@ -111,7 +111,7 @@ class Index extends Component {
     const categories = this.props.threadPost?.getCurrentCategories();
     if (params.id
       || !categories || (categories && categories.length === 0)
-      || (!params.id && categories.length && categories[0].canCreateThread)) {
+      || (!params.id && categories.length && !categories[0].canCreateThread)) {
       await readPostCategory(params.id);
     }
   }
