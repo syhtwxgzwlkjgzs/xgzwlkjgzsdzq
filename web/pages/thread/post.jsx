@@ -24,6 +24,8 @@ import ViewAdapter from '@components/view-adapter';
 @inject('thread')
 @inject('user')
 @inject('payBox')
+@inject('vlist')
+@inject('baselayout')
 @observer
 class PostPage extends React.Component {
   toastInstance = null;
@@ -677,6 +679,8 @@ class PostPage extends React.Component {
       const { categoryId = '' } = data;
       // 首页如果是全部或者是当前分类，则执行数据添加操作
       if (this.props.index.isNeedAddThread(categoryId)) {
+        this.props.vlist.resetPosition();
+        this.props.baselayout.setJumpingToTop();
         this.props.index.addThread(data);
       }
     }

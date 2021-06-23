@@ -1,39 +1,32 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useMemo} from 'react';
 import { View, Image, Text } from '@tarojs/components'
 import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
 import {isLongImage} from '@common/utils/calc-image-type';
+import calcImageQuality from '@common/utils/calc-image-quality';
 
-const SmartImg = ({autoSize = false, type, src, onClick, mode = '', noSmart = false}) => {
+const SmartImg = ({level, autoSize = false, type, src, onClick, mode = '', noSmart = false}) => {
     const [isLong, changeIsLong] = useState(false);
-    
-    let newSrc = src;
 
-    if ( !noSmart ) {
-        newSrc = src.split('?')[0];
+    const imgSrc = useMemo(() => {
+        if (noSmart) return src;
+        const [path, param] = src.split('?');
+        let newSrc = src;
+        let newParam = '';
         const info = Taro.getSystemInfoSync();
         const viewWidth = info.windowWidth;
-        // 根据图片类型判断使用何种方式
-        if (/(jpg|jpeg|webp)/.test(type)) {
-            let d = 'imageMogr2/quality/';
-            let zoom = '60';
-            if ( viewWidth >= 667 && viewWidth < 1080 ){
-                zoom = '75';
-            } else if ( viewWidth >= 1080  ){
-                zoom = '85';
-            }
-            newSrc = `${src}?${d}${zoom}`;
+        newParam = calcImageQuality(viewWidth, type, level);
+
+        if ( param && param !== '' ) {
+            const paramArr = param.split('&');
+            paramArr.push(newParam);
+            newSrc = `${newSrc}&${paramArr.join('&')}`;
         } else {
-            let d = 'imageMogr2/thumbnail/';
-            let zoom = '!30p';
-            if ( viewWidth >= 667 && viewWidth < 1080 ){
-            zoom = '!40p';
-            } else if ( viewWidth >= 1080  ){
-            zoom = '!60p';
-            }
-            newSrc = `${src}?${d}${zoom}`;
+            newParam = `${newParam}?${newParam}`;
         }
-    } 
+
+        return newSrc;
+    }, [noSmart, src, type])
     
 
     const imgOnload = useCallback((data) => {
@@ -46,7 +39,7 @@ const SmartImg = ({autoSize = false, type, src, onClick, mode = '', noSmart = fa
     
     return (
         <View className={styles.box}>
-            <Image src={newSrc}  onLoad={imgOnload} mode={mode} onClick={onClick}/>
+            <Image src={imgSrc}  onLoad={imgOnload} mode={mode} onClick={onClick}/>
             {isLong && <View className={styles.longImgBox}>长图</View>}
         </View>
     );

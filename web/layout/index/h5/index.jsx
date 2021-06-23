@@ -11,6 +11,7 @@ import initJSSdk from '@common/utils/initJSSdk.js';
 import { getSelectedCategoryIds } from '@common/utils/handleCategory';
 import wxAuthorization from '../../user/h5/wx-authorization';
 import VList from '@components/virtual-list/example/index';
+import classnames from 'classnames';
 
 @inject('site')
 @inject('user')
@@ -28,6 +29,9 @@ class IndexH5Page extends React.Component {
     this.listRef = createRef();
     // 用于获取顶部视图的高度
     this.headerRef = createRef(null);
+
+    // 是否开启虚拟滚动
+    this.enableVlist = true;
   }
 
   componentDidMount() {
@@ -134,7 +138,7 @@ class IndexH5Page extends React.Component {
       <>
         {categories?.length > 0 && (
           <>
-            <div ref={this.listRef} className={`${styles.homeContent} ${fixedTab && styles.fixed}`}>
+            <div ref={this.listRef} className={`${styles.homeContent} ${!this.enableVlist && fixedTab && styles.fixed}`}>
               <Tabs
                 className={styles.tabsBox}
                 scrollable
@@ -152,7 +156,7 @@ class IndexH5Page extends React.Component {
                 ))}
               </Tabs>
             </div>
-            {fixedTab && <div className={styles.tabPlaceholder}></div>}
+            {!this.enableVlist && fixedTab && <div className={styles.tabPlaceholder}></div>}
           </>
         )}
       </>
@@ -178,8 +182,6 @@ class IndexH5Page extends React.Component {
     const { isFinished } = this.state;
     const { threads = {}, currentCategories, filter, threadError, sticks } = index;
     const { currentPage, totalPage, pageData } = threads || {};
-    // 是否开启虚拟滚动
-    const enableVlist = false;
 
     return (
       <BaseLayout
@@ -197,11 +199,13 @@ class IndexH5Page extends React.Component {
         onClickTabBar={this.onClickTabBar}
         requestError={this.props.isError}
         errorText={this.props.errorText}
-        disabledList={enableVlist}
+        disabledList={this.enableVlist}
       >
-        {enableVlist && (
+        {this.enableVlist && (
           <Fragment>
-            {this.state.fixedTab && this.renderTabs()}
+            <div className={classnames(styles.vTabs, 'text', this.state.fixedTab && styles.vFixed)}>
+              {this.renderTabs()}
+            </div>
 
             <VList
               list={pageData}
@@ -241,7 +245,7 @@ class IndexH5Page extends React.Component {
           </Fragment>
         )}
 
-        {!enableVlist && (
+        {!this.enableVlist && (
           <Fragment>
             <HomeHeader ref={this.headerRef} />
             {this.renderTabs()}

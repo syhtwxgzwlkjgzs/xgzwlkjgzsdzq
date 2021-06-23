@@ -10,11 +10,13 @@ class IndexStore {
 
   @observable drafts = null;
 
+  @observable latestReq = 0;
+
   // 是否出现推荐选项
   @observable needDefault = false
 
   @computed get categoriesNoAll() {
-    return (this.categories || []).filter(item => item.name !== '全部');
+    return (this.categories || []).filter(item => item.name !== '全部' && item.canCreateThread);
   }
 
   @computed get categoriesNames () {

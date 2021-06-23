@@ -85,7 +85,7 @@ class Index extends React.Component {
             titleString = replaceStringInRegex(titleString, "emoj", '[表情]');
             titleString = replaceStringInRegex(titleString, "img", '[图片]');
             return (
-              <div key={index} className={style.recommendBox} onClick={() => {this.recommendDetails(item)}}>
+              <div key={index} className={`${style.recommendBox} right-recommend-item`} onClick={() => {this.recommendDetails(item)}}>
                 <div className={style.recommendTitle}>
                   <p className={`${style.recommendSort} ${style[`itemIndex${index+1}`]}`}>{index + 1}</p>
                   <p className={style.recommenText}>{`${titleString}`}</p>
