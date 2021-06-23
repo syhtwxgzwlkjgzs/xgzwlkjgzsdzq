@@ -22,7 +22,7 @@ const SmartImg = ({level, autoSize = false, type, src, onClick, mode = '', noSma
             paramArr.push(newParam);
             newSrc = `${newSrc}&${paramArr.join('&')}`;
         } else {
-            newParam = `${newParam}?${newParam}`;
+            newSrc = `${newSrc}?${newParam}`;
         }
 
         return newSrc;
