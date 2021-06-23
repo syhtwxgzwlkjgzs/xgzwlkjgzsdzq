@@ -3,6 +3,7 @@ import { View, Image } from '@tarojs/components';
 import Avatar from '@discuzq/design/dist/components/avatar/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import { diffDate } from '@common/utils/diff-date';
+import { getMessageImageSize } from '@common/utils/get-message-image-size';
 import { inject, observer } from 'mobx-react';
 import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
@@ -80,17 +81,23 @@ const DialogBox = (props) => {
       // 把消息状态更新为已读
       updateDialog(dialogId);
     }, 100);
-    return dialogMsgList.list.map(item => ({
-      timestamp: item.createdAt,
-      userAvatar: item.user.avatar,
-      displayTimePanel: true,
-      textType: 'string',
-      text: item.messageTextHtml,
-      ownedBy: user.id === item.userId ? 'myself' : 'itself',
-      imageUrl: item.imageUrl,
-      userId: item.userId,
-      nickname: item.user.username,
-    })).reverse();
+
+    return dialogMsgList.list.map(item => {
+      const [width, height] = getMessageImageSize(item.imageUrl); // 计算图片显示尺寸
+      return {
+        timestamp: item.createdAt,
+        userAvatar: item.user.avatar,
+        displayTimePanel: true,
+        textType: 'string',
+        text: item.messageTextHtml,
+        ownedBy: user.id === item.userId ? 'myself' : 'itself',
+        imageUrl: item.imageUrl,
+        width: width,
+        height: height,
+        userId: item.userId,
+        nickname: item.user.username,
+      }
+    }).reverse();
   }, [dialogMsgListLength]);
 
   const [previewImageUrls, setPreviewImageUrls] = useState([]);
@@ -110,7 +117,7 @@ const DialogBox = (props) => {
       }}
       ref={dialogBoxRef}>
       <View className={styles.box__inner}>
-        {messagesHistory.map(({ timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl, userId, nickname }, idx) => (
+        {messagesHistory.map(({ timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl, userId, nickname, width, height }, idx) => (
           <React.Fragment key={idx}>
             {displayTimePanel && <View className={styles.msgTime}>{diffDate(timestamp)}</View>}
             <View className={(ownedBy === 'myself' ? `${styles.myself}` : `${styles.itself}`) + ` ${styles.persona}`}>
@@ -127,8 +134,8 @@ const DialogBox = (props) => {
               {imageUrl ? (
                 <Image
                   className={styles.msgImage}
-                  mode='widthFix'
-                  style='width: 200px;'
+                  mode="aspectFill"
+                  style={{ width: width, height: height }}
                   src={imageUrl}
                   onClick={() => {
                     Taro.previewImage({
