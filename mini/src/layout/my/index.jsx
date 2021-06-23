@@ -31,15 +31,14 @@ export default class index extends Component {
   }
 
   onShow = async () => {
-    this.props.user.clearUserThreadsInfo();
-    this.setState({
-      isLoading: true
-    })
-
     if (this.props.user.id) {
       await this.props.user.updateUserInfo(this.props.user.id);
 
       try {
+        this.props.user.userThreadsPage = 1;
+        this.props.user.userThreadsTotalCount = 0;
+        this.props.user.userThreadsTotalPage = 1;
+
         await this.props.user.getUserThreads();
       } catch (e) {
         console.error(e);
@@ -104,7 +103,7 @@ export default class index extends Component {
 
           <View className={`${styles.unit} ${styles.threadBackgroundColor}`}>
             <View className={styles.threadHeader}>
-              <SectionTitle title="主题" isShowMore={false} leftNum={`${userThreadsTotalCount}个主题`} />
+              <SectionTitle title="主题" isShowMore={false} leftNum={`${userThreadsTotalCount || formattedUserThreads.length}个主题`} />
             </View>
         
             {!isLoading && formattedUserThreads?.map((item, index) => <Thread data={item} key={index} />)}
