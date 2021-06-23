@@ -157,7 +157,6 @@ function avatar(props) {
   }, [userInfo.follow])
 
   const clickAvatar = useCallback((e) => {
-    e.stopPropagation();
     if (!userId) return;
     onClick && onClick(e);
   }, [userId])
