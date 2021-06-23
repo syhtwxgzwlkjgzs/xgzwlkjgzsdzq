@@ -106,6 +106,16 @@ class HomeHeader extends React.Component {
     };
   }
 
+  goBack() {
+    Router.back({
+      fail: () => {
+        Router.redirect({
+          url: '/pages/home/index'
+        });
+      }
+    });
+  }
+
   componentDidMount() {
     if (this.domRef.current) {
       this.setState({ height: this.domRef.current.clientHeight });
@@ -143,7 +153,7 @@ class HomeHeader extends React.Component {
           {hideInfo && mode !== 'join' && (
             <View className={styles.topBar}>
               {mode === 'login' ? (
-                <View onClick={() => Router.back()} className={styles.left}>
+                <View onClick={() => this.goBack()} className={styles.left}>
                   <Icon name="LeftOutlined" />
                 </View>
               ) : (
@@ -158,7 +168,7 @@ class HomeHeader extends React.Component {
           )}
           {showToolbar && (
             <View className={styles.topBar}>
-              <View onClick={() => Router.back()} className={styles.customCapsule} style={this.getTopBarBtnStyle()}>
+              <View onClick={() => this.goBack()} className={styles.customCapsule} style={this.getTopBarBtnStyle()}>
                 <Icon name="LeftOutlined" />
               </View>
               <View style={this.getTopBarTitleStyle()} className={styles.fullScreenTitle}>{ fullScreenTitle }</View>
