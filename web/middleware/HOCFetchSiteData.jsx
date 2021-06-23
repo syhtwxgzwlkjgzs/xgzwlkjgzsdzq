@@ -165,9 +165,6 @@ export default function HOCFetchSiteData(Component) {
         loginStatus = false;
       }
 
-      // 未登陆状态下，清空accessToken
-      !loginStatus && clearLoginStatus();
-
       user.updateLoginStatus(loginStatus);
       this.setState({ isPass: this.isPass() });
     }
@@ -182,6 +179,7 @@ export default function HOCFetchSiteData(Component) {
           Router.redirect({ url: '/close' });
           break;
         case INVALID_TOKEN:// 没有权限,只能针对forum接口做此判断
+          break;
         case TOKEN_FAIL:// token无效
           clearLoginStatus();
           window.location.reload();

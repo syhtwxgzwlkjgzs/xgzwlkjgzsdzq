@@ -89,6 +89,7 @@ const DialogBox = (props) => {
       ownedBy: user.id === item.userId ? 'myself' : 'itself',
       imageUrl: item.imageUrl,
       userId: item.userId,
+      nickname: item.user.username,
     })).reverse();
   }, [dialogMsgListLength]);
 
@@ -109,14 +110,19 @@ const DialogBox = (props) => {
       }}
       ref={dialogBoxRef}>
       <View className={styles.box__inner}>
-        {messagesHistory.map(({ timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl, userId }, idx) => (
+        {messagesHistory.map(({ timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl, userId, nickname }, idx) => (
           <React.Fragment key={idx}>
             {displayTimePanel && <View className={styles.msgTime}>{diffDate(timestamp)}</View>}
             <View className={(ownedBy === 'myself' ? `${styles.myself}` : `${styles.itself}`) + ` ${styles.persona}`}>
               <View className={styles.profileIcon} onClick={() => {
                 userId && Taro.navigateTo({ url: `/subPages/user/index?id=${userId}` });
               }}>
-                <Avatar image={userAvatar || '/favicon.ico'} circle={true} />
+                {userAvatar
+                  ? <Avatar image={userAvatar} circle={true} />
+                  : <Avatar text={nickname && nickname.toUpperCase()[0]} circle={true} style={{
+                    backgroundColor: "#8590a6",
+                  }} />
+                }
               </View>
               {imageUrl ? (
                 <Image

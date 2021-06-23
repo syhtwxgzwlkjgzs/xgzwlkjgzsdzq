@@ -93,6 +93,9 @@
       right: 0;
       @include text-ellipsis();
     }
+    .otherText {
+      right: rem(280);
+    }
   }
   .upload {
     cursor: pointer;

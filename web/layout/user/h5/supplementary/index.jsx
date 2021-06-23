@@ -54,8 +54,8 @@ class SupplementaryH5Page extends React.Component {
 
 
   processData =() => {
-    const { fields, values } = this.props.supplementary;
-    return values.map((v, index) => {
+    const { fields, values = [] } = this.props.supplementary;
+    return values?.map((v, index) => {
       if (v.required === 1) {
         if (v.value.length === 0
           || (v.value.trim && v.value.trim().length === 0)) {

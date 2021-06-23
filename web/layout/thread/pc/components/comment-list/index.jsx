@@ -47,7 +47,7 @@ class CommentList extends React.Component {
 
   // 点击头像
   avatarClick() {
-    typeof this.props?.avatarClick === 'function' && this.props.avatarClick();
+    typeof this.props?.avatarClick === 'function' && this.props.avatarClick(this.props.data?.user?.id);
   }
 
   // 点击评论赞
@@ -156,6 +156,7 @@ class CommentList extends React.Component {
               circle={true}
               userId={this.props.data?.user?.id}
               isShowUserInfo={this.props.isShowOne}
+              className={styles.avatar}
             ></Avatar>
           </div>
           <div className={styles.commentListContent}>
@@ -225,13 +226,13 @@ class CommentList extends React.Component {
                           </div>
                         )} */}
                       {canHide && (
-                        <div className={styles.revise} onClick={() => this.deleteClick()}>
+                        <div className={styles.commentDelete} onClick={() => this.deleteClick()}>
                           <Icon className={styles.icon} name="DeleteOutlined"></Icon>
                           <span>删除</span>
                         </div>
                       )}
 
-                      <div className={styles.revise} onClick={() => this.reportClick()}>
+                      <div className={styles.commentReport} onClick={() => this.reportClick()}>
                         <Icon className={styles.icon} name="WarnOutlined"></Icon>
                         <span>举报</span>
                       </div>

@@ -21,11 +21,10 @@ const Index = ({ isPay = false, url, onPay = noop, baselayout }) => {
     const audioContext = audioRef?.current?.getState()?.audioCtx;
     if(audioContext && baselayout && audioRef && audioWrapperRef) {
       // 音频在帖子中间，要找到音频相对于BaseLayout的具体地址
-      const positionInThread = audioWrapperRef?.current?.parentNode?.offsetTop || 0;
-      const threadTextHeight = audioWrapperRef?.current?.parentNode?.parentNode?.previousElementSibling?.offsetHeight || 0;
-      const userInfoHeight = audioWrapperRef?.current?.parentNode?.parentNode?.parentNode?.previousElementSibling?.offsetHeight || 0;
-      const threadPosition = audioWrapperRef?.current?.parentNode?.parentNode?.parentNode?.parentNode?.offsetTop || 0;
-      const position = positionInThread + threadTextHeight + threadPosition + userInfoHeight;
+      const threadTextHeight = audioWrapperRef?.current?.parentNode?.previousElementSibling?.offsetHeight || 0;
+      const userInfoHeight = audioWrapperRef?.current?.parentNode?.parentNode?.previousElementSibling?.offsetHeight || 0;
+      const threadPosition = audioWrapperRef?.current?.parentNode?.parentNode?.parentNode?.offsetTop || 0;
+      const position = threadTextHeight + threadPosition + userInfoHeight;
 
       // 暂停之前正在播放的音视频
       if(baselayout.playingVideoDom) {

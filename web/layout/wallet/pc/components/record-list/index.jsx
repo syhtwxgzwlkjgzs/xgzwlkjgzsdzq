@@ -57,7 +57,7 @@ class WalletInfo extends React.Component {
         key: 'detail',
         render: item => (
           <span title={item.title} className={styles.normalText}>
-            <RichText content={this.parseHTML(item.title) || '暂无内容'} />
+            <RichText content={this.parseHTML(item.title) || item.changeDesc || '暂无内容'} />
           </span>
         ),
       },
@@ -100,7 +100,7 @@ class WalletInfo extends React.Component {
         key: 'detail',
         render: item => (
           <span title={item.title || '暂无内容'} className={styles.normalText}>
-            <RichText content={this.parseHTML(item.title) || '暂无内容'} />
+            <RichText content={this.parseHTML(item.title) || item.changeDesc || '暂无内容'} />
           </span>
         ),
       },

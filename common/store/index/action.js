@@ -172,7 +172,12 @@ class IndexAction extends IndexStore {
         delete newFilter.categoryids;
       }
     }
+    this.latestReq += 1;
+    const currentReq = this.latestReq;
     const result = await readThreadList({ params: { perPage, page, filter: newFilter, sequence } });
+    if (currentReq !== this.latestReq) {
+      return;
+    }
     if (result.code === 0 && result.data) {
       if (isDraft) {
         if (this.drafts && result.data.pageData && page !== 1) {
@@ -193,14 +198,14 @@ class IndexAction extends IndexStore {
           this.threads.pageData.push(...result.data.pageData);
           const newPageData = this.threads.pageData.slice();
           this.setThreads({
-            ...result.data,
+            ...(this.adapterList(result.data)),
             currentPage: result.data.currentPage,
             pageData: newPageData
           });
         } else {
           // 首次加载
           this.threads = null;
-          this.setThreads(result.data);
+          this.setThreads(this.adapterList(result.data));
         }
       }
       return result.data;
@@ -372,7 +377,7 @@ class IndexAction extends IndexStore {
     if (!targetThread || targetThread.length === 0) return;
 
     const { index, data } = targetThread;
-    const { updateType, updatedInfo, user } = obj;
+    const { updateType, updatedInfo, user, openedMore } = obj;
 
     // 更新整个帖子内容
     if ( data && updateType === 'content' ) {
@@ -413,6 +418,10 @@ class IndexAction extends IndexStore {
 
     if (this.threads?.pageData) {
       this.threads.pageData[index] = data;
+    }
+
+    if (updateType === 'openedMore') {
+      data.openedMore = openedMore;
     }
   }
 
@@ -490,6 +499,21 @@ class IndexAction extends IndexStore {
     this.recommendsStatus = status;
   }
 
+
+  adapterList(data = {}) {
+    const { pageData = [], ...others } = data;
+
+    const newpageData =  pageData.map(item => {
+      item.openedMore = false;
+
+      return item;
+    });
+
+    return {
+      pageData: newpageData,
+      ...others
+    };
+  }
 }
 
 export default IndexAction;

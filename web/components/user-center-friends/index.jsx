@@ -1,8 +1,9 @@
 import React from 'react';
-import { Input, Icon, Button, Divider } from '@discuzq/design';
+import { Input, Icon, Button, Divider, Spin } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import Avatar from '@components/avatar';
 import styles from './index.module.scss';
+import throttle from '@common/utils/thottle.js';
 
 @inject('user')
 @observer
@@ -22,57 +23,103 @@ class UserCenterFriends extends React.Component {
     customActionArea: null,
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      isFollowedLoading: false, // 是否点击关注
+      isUnFollowedLoading: false, // 是否取消关注
+    };
+  }
+
+  followUser = throttle(async ({ e, id }) => {
+    e.stopPropagation();
+    if (this.state.isFollowedLoading) return;
+    this.setState({
+      isFollowedLoading: true,
+    });
+    await this.props.followHandler({
+      id,
+    });
+    this.setState({
+      isFollowedLoading: false,
+    });
+  }, 200);
+
+  unFollowUser = throttle(async ({ e, id }) => {
+    e.stopPropagation();
+    if (this.state.isUnFollowedLoading) return;
+    this.setState({
+      isUnFollowedLoading: true,
+    });
+    await this.props.unFollowHandler({
+      id,
+    });
+    this.setState({
+      isUnFollowedLoading: false,
+    });
+  }, 200);
+
   // 渲染操作区域
   renderActionArea() {
     if (this.props.id === this.props.user.id) return null;
     if (this.props.customActionArea) return this.props.customActionArea;
+    const { isFollowedLoading, isUnFollowedLoading } = this.state;
     return (
-      <div className={styles.friendAction}>
+      <div className={styles.friendAction} onClick={(e) => e.stopPropagation()}>
         {this.props.type === 'follow' && (
           <Button
+            disabled={isFollowedLoading}
             type={'primary'}
             className={styles.friendActionFollow}
             onClick={async (e) => {
               e.stopPropagation();
-              await this.props.followHandler({
-                id: this.props.id,
-              });
+              await this.followUser({ e, id: this.props.id });
             }}
           >
             {/* <span>+</span> */}
-            <Icon size={10} name={'PlusOutlined'} className={styles.iconScale} />
+            {isFollowedLoading ? (
+              <Spin size={12} type="spinner"></Spin>
+            ) : (
+              <Icon size={10} name={'PlusOutlined'} className={styles.iconScale} />
+            )}
             <span>关注</span>
           </Button>
         )}
 
         {this.props.type === 'friend' && (
           <Button
+            disabled={isUnFollowedLoading}
             type={'primary'}
             className={styles.friendActionFriend}
             onClick={async (e) => {
               e.stopPropagation();
-              await this.props.unFollowHandler({
-                id: this.props.id,
-              });
+              await this.unFollowUser({ e, id: this.props.id });
             }}
           >
-            <Icon size={10} name={'WithdrawOutlined'} className={styles.iconScale} />
+            {isUnFollowedLoading ? (
+              <Spin size={12} type="spinner"></Spin>
+            ) : (
+              <Icon size={10} name={'WithdrawOutlined'} className={styles.iconScale} />
+            )}
             <span>互关</span>
           </Button>
         )}
 
         {this.props.type === 'followed' && (
           <Button
+            disabled={isUnFollowedLoading}
             type={'primary'}
             className={styles.friendActionFollowed}
             onClick={async (e) => {
               e.stopPropagation();
-              await this.props.unFollowHandler({
-                id: this.props.id,
-              });
+              await this.unFollowUser({ e, id: this.props.id });
             }}
           >
-            <Icon size={10} name={'CheckOutlined'} className={styles.iconScale} />
+            {isUnFollowedLoading ? (
+              <Spin size={12} type="spinner"></Spin>
+            ) : (
+              <Icon size={10} name={'CheckOutlined'} className={styles.iconScale} />
+            )}
             <span>已关注</span>
           </Button>
         )}

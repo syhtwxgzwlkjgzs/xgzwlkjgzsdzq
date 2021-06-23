@@ -30,17 +30,15 @@ const Index = ({
   itemStyle = {},
   className = '',
 }) => {
+
   const handleClick = (e) => {
     e.stopPropagation();
+    const avatarPopup = e?.currentTarget.querySelector("#avatar-popup");
+    if( e && avatarPopup && avatarPopup.contains(e.target)) { // 处理来源于Avatar弹框的点击
+      return;
+    }
     onClick(userId);
   };
-
-  const icon =  (type === 1) ? "LikeOutlined" :
-                (type === 2) ? "HeartOutlined" :
-                (type === 3) ? "HeartOutlined" : "",
-        bgClrBasedOnType =  (type === 1) ? styles.like :
-                            (type === 2) ? styles.heart :
-                            (type === 3) ? styles.heart : "";
 
   const classString = `${styles.listItem} ${className}`;
 
@@ -54,14 +52,8 @@ const Index = ({
                 name={title} 
                 isShowUserInfo={platform === 'pc'}
                 userId={userId}
+                userType={type}
               />
-              {
-                icon && (
-                  <div className={`${styles.icon} ${bgClrBasedOnType}`}>
-                      <Icon name={icon} size={12}/>
-                  </div>
-                )
-              }
           </div>
 
           <div className={styles.content}>

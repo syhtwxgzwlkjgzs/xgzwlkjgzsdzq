@@ -11,6 +11,7 @@ import NoData from '@components/no-data';
 import { inject, observer } from 'mobx-react';
 import { debounce } from '@common/utils/throttle-debounce';
 import Router from '@discuzq/sdk/dist/router';
+import throttle from '@common/utils/thottle.js';
 
 @inject('user')
 @observer
@@ -194,7 +195,7 @@ class UserCenterFollows extends React.Component {
         duration: 2000,
       });
     }
-  };
+  }
 
   unFollowUser = async ({ id }) => {
     try {
@@ -319,26 +320,6 @@ class UserCenterFollows extends React.Component {
   };
 
   searchDispatch = debounce(async () => {
-    this.setState({
-      loading: true,
-    });
-    this.setState({
-      follows: []
-    })
-    if (this.props.setDataSource) {
-      this.props.setDataSource({});
-    }
-    await this.fetchFollows();
-    this.setState({
-      loading: false,
-    });
-  }, 300);
-
-  handleSearchValueChange = async (e) => {
-    this.setState({
-      searchValue: e.target.value
-    });
-
     if (this.props.updateSourcePage) {
       this.props.updateSourcePage(1);
     }
@@ -348,6 +329,28 @@ class UserCenterFollows extends React.Component {
 
     this.page = 1;
     this.totalPage = 1;
+
+    this.setState({
+      loading: true,
+    });
+
+    this.setState({
+      follows: [],
+    });
+    if (this.props.setDataSource) {
+      this.props.setDataSource({});
+    }
+    await this.fetchFollows();
+
+    this.setState({
+      loading: false,
+    });
+  }, 500);
+
+  handleSearchValueChange = async (e) => {
+    this.setState({
+      searchValue: e.target.value,
+    });
     this.searchDispatch();
   };
 
@@ -396,7 +399,9 @@ class UserCenterFollows extends React.Component {
                       type={'primary'}
                       onClick={(e) => {
                         e.stopPropagation();
-                        Router.replace({ url: `/message?page=chat&username=${user.userName}&nickname=${user.nickName}` });
+                        Router.replace({
+                          url: `/message?page=chat&username=${user.userName}&nickname=${user.nickName}`,
+                        });
                       }}
                     >
                       <div className={styles.messageButtonContent}>
@@ -411,27 +416,22 @@ class UserCenterFollows extends React.Component {
             </div>
           );
         })}
-        <div className={`${friendsStyle.friendWrap} ${styles.friendWrap} ${styles['display-none']} user-center-follow-mini`}>
+        <div
+          className={`${friendsStyle.friendWrap} ${styles.friendWrap} ${styles['display-none']} user-center-follow-mini`}
+        >
           {followerAdapter(this.props.dataSource || this.state.follows).map((user, index) => {
             if (index + 1 > this.props.limit) return null;
             return (
               <div key={user.id + index} className={friendsStyle.friendItem}>
                 <div className={friendsStyle.friendAvatar}>
-                  <Avatar
-                    image={user.avatar}
-                    userId={user.id}
-                    circle
-                    name={user.userName}
-                  />
+                  <Avatar image={user.avatar} userId={user.id} circle name={user.userName} />
                 </div>
-                <div className={friendsStyle.friendTextInfo}>
-                  {user.userName}
-                </div>
+                <div className={friendsStyle.friendTextInfo}>{user.userName}</div>
               </div>
             );
           })}
         </div>
-        {followerAdapter(this.props.dataSource || this.state.follows).length === 0 && !this.state.loading && <NoData />}
+        {followerAdapter(this.props.dataSource || this.state.follows).length === 0 && !this.state.loading && <NoData defaultShow={true} />}
         {this.state.loading && (
           <div className={styles.loadMoreContainer}>
             <Spin type={'spinner'}>加载中 ...</Spin>
