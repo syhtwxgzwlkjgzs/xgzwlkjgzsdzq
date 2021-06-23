@@ -32,7 +32,7 @@ class IndexPCPage extends React.Component {
       isShowDefault: this.checkIsOpenDefaultTab(),
     };
 
-    this.enabledVList = true; // 开启虚拟列表
+    this.enabledVList = false; // 开启虚拟列表
     this.enabledWindowScroll = false; // 开启window滚动
   }
 
