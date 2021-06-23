@@ -31,7 +31,7 @@ class IndexH5Page extends React.Component {
     this.headerRef = createRef(null);
 
     // 是否开启虚拟滚动
-    this.enableVlist = true;
+    this.enableVlist = false;
   }
 
   componentDidMount() {
