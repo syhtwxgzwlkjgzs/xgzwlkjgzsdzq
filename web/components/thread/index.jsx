@@ -61,19 +61,14 @@ class Index extends React.Component {
     onComment = (e) => {
       e && e.stopPropagation();
 
-      // 对没有登录的先登录
-      if (!this.props.user.isLogin()) {
-        Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/user/login' });
-        return;
-      }
-
       const { threadId = '', ability } = this.props.data || {};
       const { canViewPost } = ability;
 
-      if (!canViewPost) {
-        Toast.info({ content: '暂无权限查看详情，请联系管理员' });
-        return
+      // 没有查看权限，且未登录，需要去登录
+      if (!canViewPost && !this.props.user.isLogin()) {
+        Toast.info({ content: '请先登录!' });
+        goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+        return;
       }
 
       if (threadId !== '') {
