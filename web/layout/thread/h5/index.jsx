@@ -611,6 +611,12 @@ class ThreadH5Page extends React.Component {
     }
   }
 
+  onUserClick(e) {
+    e && e.stopPropagation();
+    const { threadData } = this.props.thread || {};
+    this.props.router.push(`/user/${threadData?.userId}`);
+  }
+
   render() {
     const { thread: threadStore } = this.props;
     const { isReady, isCommentReady, isNoMore, totalCount, isCommentListError } = threadStore;
@@ -680,6 +686,7 @@ class ThreadH5Page extends React.Component {
               onTagClick={() => this.onTagClick()}
               onPayClick={() => this.onPayClick()}
               onPayClick={() => this.onPayClick()}
+              onUserClick={(e) => this.onUserClick(e)}
             ></RenderThreadContent>
           ) : (
             <LoadingTips type="init"></LoadingTips>

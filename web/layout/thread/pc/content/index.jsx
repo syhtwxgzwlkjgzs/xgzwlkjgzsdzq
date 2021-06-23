@@ -140,7 +140,7 @@ export default inject('user')(
                 <Divider mode="vertical" className={topic.moreDivider}></Divider>
               )}
 
-              {(canEdit || canStick || canEssence || canDelete) && (
+              {isApproved && (canEdit || canStick || canEssence || canDelete) && (
                 <div className={topic.iconText}>
                   <Dropdown
                     menu={
@@ -175,7 +175,6 @@ export default inject('user')(
 
         <Divider className={topic.divider}></Divider>
 
-        {isApproved && (
           <div className={topic.body}>
             {/* 标题 */}
             {threadStore?.threadData?.title && <div className={topic.title}>{threadStore?.threadData?.title}</div>}
@@ -312,7 +311,6 @@ export default inject('user')(
               </Button>
             )}
           </div>
-        )}
 
         {/* 点赞分享 */}
         <div className={topic.footer}>

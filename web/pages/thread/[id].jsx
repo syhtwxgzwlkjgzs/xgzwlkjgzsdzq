@@ -9,6 +9,7 @@ import Router from '@discuzq/sdk/dist/router';
 import ErrorPCPage from '@layout/error/pc';
 import ErrorH5Page from '@layout/error/h5';
 import ViewAdapter from '@components/view-adapter';
+import { Toast } from '@discuzq/design';
 
 @inject('site')
 @inject('thread')
@@ -119,6 +120,7 @@ class Detail extends React.Component {
         const userId = this.props.thread?.threadData?.user?.userId; // 帖子作者
         // 不是作者自己。跳回首页
         if (!currentUserId || !userId || currentUserId !== userId) {
+          Toast.info({ content: '内容正在审核中，审核通过后才能正常显示!' });
           Router.redirect({ url: '/' });
           return;
         }
