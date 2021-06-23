@@ -19,9 +19,9 @@ class WeixinQrCode extends React.Component {
               : <></>
           }
         </div>
-        { platform === 'pc' && !isValid ? 
+        { !isValid ? 
           <div onClick={() => refresh()} className={`${layout.codeMask} ${wechatEnv === 'miniProgram' ? layout.miniCodeMask : ''}`}>
-            <Icon name='RenovateOutlined' size='64' />
+            <Icon name='RenovateOutlined' size='40' />
           </div>
           : ''
         }

@@ -79,6 +79,10 @@ class WXLoginH5Page extends React.Component {
 
       if (platform === 'pc') {
         this.queryLoginState(params.type);
+      } else {
+        setTimeout(() => {
+          this.props.h5QrCode.countDown = 0;
+        }, this.props.h5QrCode.countDownOfSeconds * 1000);
       }
     } catch (e) {
       console.log(e);

@@ -5,7 +5,7 @@ import { get } from '../../utils/get';
 import { checkUserStatus } from '@common/store/login/util';
 
 const WAITING_FOR_SCANNING = -7002;
-const COUNT_DOWN_OF_SECONDS = 120;
+const COUNT_DOWN_OF_SECONDS = 4 * 60; // 默认4min
 
 export default class H5Qrcode {
   @observable qrCode = '';
@@ -14,6 +14,7 @@ export default class H5Qrcode {
   @observable loginTitle = '你确定要授权登录Discuz!Q吗？';
   @observable bindTitle = '请绑定您的微信';
   @observable isBtn = true;
+  countDownOfSeconds = COUNT_DOWN_OF_SECONDS; // 有效期，单位s
 
   // 二维码是否有效
   @computed get isQrCodeValid() {
@@ -22,7 +23,7 @@ export default class H5Qrcode {
 
   @action
   resetCountDown() {
-    this.countDown = COUNT_DOWN_OF_SECONDS;
+    this.countDown = this.countDownOfSeconds;
   }
 
   @action

@@ -32,27 +32,6 @@
   margin: 0 auto;
   position: relative;
 
-  &.invalid {
-    .pc_orCode__img {
-      filter: blur(4px);
-    }
-    .codeMask {
-      position: absolute;
-      top: 0;
-      width: 198px;
-      height: 198px;
-      background-color: $mask-bg-color;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: $white;
-      cursor: pointer;
-      margin-left: $margin-5;
-    }
-    .miniCodeMask {
-      border-radius: $border-radius-circle;
-    }
-  }
   .pc_orCode__img {
     width: 198px;
     height: 198px;
@@ -78,4 +57,36 @@
   overflow: hidden;
   border-radius: $border-radius-circle;
   padding: $padding-4n;
+}
+
+.invalid {
+  .pc_orCode__img,
+  .orCode__img {
+    filter: blur(1px);
+  }
+  .codeMask {
+    position: absolute;
+    top: 0;
+    width: 198px;
+    height: 198px;
+    background-color: $mask-bg-color;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $white;
+    cursor: pointer;
+    margin-left: $margin-5;
+  }
+  .miniCodeMask {
+    border-radius: $border-radius-circle;
+  }
+  &.orCode {
+    .codeMask {
+      width: rem(150);
+      height: rem(150);
+      margin-top: $margin-5n;
+      margin-left: 50%;
+      transform: translate(-50%, 0);
+    }
+  }
 }
