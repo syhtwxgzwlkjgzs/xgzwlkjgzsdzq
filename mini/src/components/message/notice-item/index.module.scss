@@ -109,8 +109,7 @@
         }
 
         .dzq-richText--mini {
-          overflow: hidden;
-          word-break: break-all;
+          @include lamp-clamp(3);
           line-height: 20px;
 
           .dzq-a {
@@ -182,11 +181,6 @@
           display: inline;
         }
 
-        :global {
-          .dzq-richText--mini {
-            @include lamp-clamp(3);
-          }
-        }
       }
     }
   }
