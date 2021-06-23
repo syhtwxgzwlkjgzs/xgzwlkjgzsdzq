@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState, forwardRef } from 'react';
 import { Avatar, ImagePreviewer } from '@discuzq/design';
 import { diffDate } from '@common/utils/diff-date';
 import { inject, observer } from 'mobx-react';
@@ -7,52 +7,11 @@ import xss from '@common/utils/xss';
 import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
 
-const DialogBox = (props) => {
-  const { platform, message, user, dialogId, showEmoji, username, ref } = props;
-  const { readDialogMsgList, dialogMsgList, dialogMsgListLength, updateDialog } = message;
+const DialogBox = (props, ref) => {
+  const { platform, message, showEmoji, scrollEnd, messagesList } = props;
+  const { dialogMsgList } = message;
   const [previewerVisibled, setPreviewerVisibled] = useState(false);
   const [defaultImg, setDefaultImg] = useState('');
-  // const router = useRouter();
-  // const dialogId = router.query.dialogId;
-  // const dialogBoxRef = useRef();
-  const timeoutId = useRef();
-  useEffect(() => {
-    document.addEventListener('focusin', () => {
-      // setTimeout(scrollEnd, 0);
-    });
-    return () => clearTimeout(timeoutId.current);
-  }, []);
-
-  useEffect(() => {
-    clearTimeout(timeoutId.current);
-  }, [username]);
-
-  useEffect(() => {
-    if (dialogId) {
-      clearTimeout(timeoutId.current);
-      updateMsgList();
-    }
-  }, [dialogId]);
-
-
-  const messagesHistory = useMemo(() => {
-    setTimeout(() => {
-      // scrollEnd();
-      // 把消息状态更新为已读
-      updateDialog(dialogId);
-    }, 100);
-    return dialogMsgList.list.map(item => ({
-      timestamp: item.createdAt,
-      userAvatar: item.user.avatar,
-      displayTimePanel: true,
-      textType: 'string',
-      text: item.messageTextHtml,
-      ownedBy: user.id === item.userId ? 'myself' : 'itself',
-      imageUrl: item.imageUrl,
-      userId: item.userId,
-      nickname: item.user.username,
-    })).reverse();
-  }, [dialogMsgListLength]);
 
   const imagePreviewerUrls = useMemo(() => {
     return dialogMsgList.list.filter(item => !!item.imageUrl).map(item => item.imageUrl).reverse();
@@ -84,7 +43,7 @@ const DialogBox = (props) => {
             setPreviewerVisibled(true);
           }, 0);
         }}
-        // onLoad={scrollEnd}
+        onLoad={scrollEnd}
       />
     );
   };
@@ -92,7 +51,7 @@ const DialogBox = (props) => {
   return (
     <div className={platform === 'pc' ? styles.pcDialogBox : (showEmoji ? styles['h5DialogBox-emoji'] : styles.h5DialogBox)} ref={ref}>
       <div className={styles.box__inner}>
-        {messagesHistory.map(({ timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl, userId, nickname }, idx) => (
+        {messagesList.map(({ timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl, userId, nickname }, idx) => (
           <React.Fragment key={idx}>
             {displayTimePanel && <div className={styles.msgTime}>{diffDate(timestamp)}</div>}
             <div className={`${ownedBy === 'myself' ? `${styles.myself}` : `${styles.itself}`} ${styles.persona}`}>
@@ -129,4 +88,4 @@ const DialogBox = (props) => {
   );
 };
 
-export default inject('message', 'user')(observer(DialogBox));
+export default inject('message', 'user')(observer(forwardRef(DialogBox)));
