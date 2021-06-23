@@ -30,14 +30,17 @@ const ClassifyPopup = (props) => {
   };
 
   const setChildren = (item) => {
+    let categoryId = item.pid;
     if (item.children && typeofFn.isArray(item.children.slice()) && item.children.length > 0) {
       setCategoryChildren(item.children);
-      if (!selectedChild?.pid) setSelectedChild(item.children[0]);
+      if (!selectedChild?.pid) {
+        setSelectedChild(item.children[0]);
+        categoryId = item.children[0]?.pid;
+      }
     } else {
       setCategoryChildren([]);
       setSelectedChild({});
     }
-    const categoryId = selected.pid || selectedChild.pid;
     if (!categoryId) return;
     props?.threadPost.setPostData({ categoryId });
   };
@@ -59,13 +62,13 @@ const ClassifyPopup = (props) => {
     // 编辑帖子需要根据id获取对应的帖子信息
     if (query.id
       || !categories || (categories && categories.length === 0)
-      || (!query.id && categories.length && categories[0].canCreateThread)) {
+      || (!query.id && categories.length && !categories[0].canCreateThread)) {
       (async function () {
         await threadPost.readPostCategory(query.id);
         setSeletedCategory();
       }());
     }
-  }, [props.threadPost.categories?.length]);
+  }, [props.threadPost.categories]);
 
   useEffect(() => {
     setSeletedCategory(props?.threadPost?.postData?.categoryId);
