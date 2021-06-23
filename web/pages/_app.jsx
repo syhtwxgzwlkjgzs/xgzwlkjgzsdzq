@@ -14,7 +14,6 @@ import CustomHead from '@components/custom-head';
 import Head from 'next/head';
 import monitor from '@common/utils/monitor';
 
-
 if (!isServer()) {
   process.env.NODE_ENV === 'production' && sentry();
 }
@@ -45,6 +44,7 @@ class DzqApp extends App {
   }
 
   componentDidMount() {
+    console.log('3.21.623');
     if ( window.performance ) {
       monitor.call('reportTime', {
         eventName: 'fist-render',
