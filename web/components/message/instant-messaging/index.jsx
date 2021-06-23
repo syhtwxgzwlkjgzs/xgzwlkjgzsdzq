@@ -1,3 +1,4 @@
+/* eslint-disable no-else-return */
 /* eslint-disable no-param-reassign */
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { inject, observer } from 'mobx-react';
@@ -16,15 +17,11 @@ const Index = (props) => {
   const dialogBoxRef = useRef();
   const timeoutId = useRef();
   const uploadRef = useRef();
+  const uploadingImagesRef = useRef([]);
+
   const [showEmoji, setShowEmoji] = useState(false);
   const [typingValue, setTypingValue] = useState('');
   const [isSubmiting, setIsSubmiting] = useState(false);
-
-  let toastInstance = null;
-  let uploadingImages = [];
-
-  const uploadingImagesRef = useRef([]);
-  console.log(uploadingImagesRef);
 
   // 消息框滚动条滚动到底部
   const scrollEnd = () => {
@@ -59,7 +56,6 @@ const Index = (props) => {
         ...data,
       });
       setIsSubmiting(false);
-      toastInstance?.destroy();
       if (ret.code === 0) {
         if (!data.imageUrl) setTypingValue('');
         readDialogMsgList(dialogId);
@@ -84,10 +80,19 @@ const Index = (props) => {
     }
   };
 
-  const submitEmptyImage = () => createDialogMsg({
-    dialogId,
-    isImage: true,
-  });
+  const submitEmptyImage = () => {
+    if (dialogId) {
+      return createDialogMsg({
+        dialogId,
+        isImage: true,
+      });
+    } else if (!dialogId && username) {
+      return createDialog({
+        recipientUsername: username,
+        isImage: true,
+      });
+    }
+  };
 
   // 触发图片选择
   const uploadImage = () => {
@@ -126,17 +131,14 @@ const Index = (props) => {
     //   return; // 图片上传前校验
     // }
 
-    // toastInstance = Toast.loading({
-    //   content: '图片发送中...',
-    //   duration: 0,
-    // });
     const fileList = [...files];
     await Promise.all(fileList.map(() => submitEmptyImage())).then((results) => {
       results.sort((a, b) => b.data.dialogMessageId - a.data.dialogMessageId);
       fileList.map(async (file, i) => {
-        const { code, data: { dialogMessageId } } = results[i];
+        const { code, data: { dialogMessageId, dialogId } } = results[i];
         if (code === 0) {
           file.dialogMessageId = dialogMessageId;
+          file.dialogId = dialogId;
           setTimeout(async () => {
             const formData = new FormData();
             formData.append('file', file);
@@ -159,8 +161,12 @@ const Index = (props) => {
         return file;
       });
       uploadingImagesRef.current = uploadingImagesRef.current.concat(fileList);
-      readDialogMsgList(dialogId);
-      console.log(fileList);
+
+      if (fileList[0].dialogId) {
+        replaceRouteWidthDialogId(fileList[0].dialogId);
+      } else {
+        readDialogMsgList(dialogId);
+      }
     });
   };
 
@@ -178,9 +184,7 @@ const Index = (props) => {
     return dialogMsgList.list.map(item => {
       if (item.isImageLoading && uploadingImagesRef.current.length) {
         uploadingImagesRef.current.forEach(file => {
-          debugger;
           if (file.dialogMessageId === item.id) {
-            debugger;
             item.imageUrl = URL.createObjectURL(file);
           }
         });
@@ -218,9 +222,6 @@ const Index = (props) => {
     if (!threadPost.emojis.length) {
       threadPost.fetchEmoji();
     }
-    return () => {
-      toastInstance?.destroy();
-    };
   }, []);
 
   useEffect(() => {
