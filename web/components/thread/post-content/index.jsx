@@ -18,6 +18,7 @@ import styles from './index.module.scss';
  * @prop {number}   payAmount 查看隐藏内容支付金额
  * @prop {function} onPay 付款点击事件
  * @prop {function} onRedirectToDetail 跳转到详情页面，当点击内容或查看更多内容超出屏幕时跳转到详情页面
+ * @prop {function} onOpen 内容展开事件
  * @prop {boolean}  loading
  */
 
@@ -33,6 +34,7 @@ const Index = ({
   usePointer = true,
   customHoverBg = false,
   onContentHeightChange = noop,
+  onOpen = noop,
   ...props
 }) => {
   // 内容是否超出屏幕高度
@@ -63,6 +65,7 @@ const Index = ({
         // 内容过长直接跳转到详情页面
         onRedirectToDetail && onRedirectToDetail();
       } else {
+        onOpen();
         setHiddenMore(true);
       }
     },
