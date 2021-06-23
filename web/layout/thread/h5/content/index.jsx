@@ -94,6 +94,8 @@ const RenderThreadContent = inject('user')(
       typeof props.onUserClick === 'function' && props.onUserClick(e);
     };
 
+    console.log(props.userId)
+
     return (
       <div className={`${styles.container}`}>
         <div className={styles.header}>

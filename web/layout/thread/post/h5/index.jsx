@@ -262,7 +262,7 @@ class ThreadCreate extends React.Component {
             && (
               <div className={styles['audio-record']} id="dzq-post-audio-record" onClick={e => e.stopPropagation()}>
                 <AudioRecord
-                  duration={60}
+                  duration={60.4}
                   onUpload={(blob) => {
                     this.props.handleAudioUpload(blob);
                   }}

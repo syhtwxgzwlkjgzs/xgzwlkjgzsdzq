@@ -11,6 +11,7 @@ import Toast from '@discuzq/design/dist/components/toast/index';
 import UserCenterFriends from '../user-center-friends';
 import styles from './index.module.scss';
 import { followerAdapter } from './adapter';
+import throttle from '@common/utils/thottle.js';
 
 class UserCenterFans extends React.Component {
   firstLoaded = false;
@@ -132,7 +133,7 @@ class UserCenterFans extends React.Component {
     });
   }
 
-  followUser = async ({ id: userId }) => {
+  followUser = throttle(async ({ id: userId }) => {
     const res = await createFollow({ data: { toUserId: userId } });
     if (res.code === 0 && res.data) {
       Toast.success({
@@ -160,9 +161,9 @@ class UserCenterFans extends React.Component {
       data: null,
       success: false,
     };
-  };
+  }, 1000);
 
-  unFollowUser = async ({ id }) => {
+  unFollowUser = throttle(async ({ id }) => {
     const res = await deleteFollow({ data: { id, type: 1 } });
     if (res.code === 0 && res.data) {
       Toast.success({
@@ -187,7 +188,7 @@ class UserCenterFans extends React.Component {
       data: null,
       success: false,
     };
-  };
+  }, 1000);
 
   async componentDidMount() {
     // 第一次加载完后，才允许加载更多页面

@@ -22,7 +22,7 @@ class IndexAction extends IndexStore {
   @computed get activeCategoryId() {
     const categories = this.categories || [];
     const { categoryids } = this.filter
-    
+
     const [id, cid] = getActiveId(categories, categoryids)
     return id
   }
@@ -31,7 +31,7 @@ class IndexAction extends IndexStore {
   @computed get activeChildCategoryId() {
     const categories = this.categories || [];
     const { categoryids } = this.filter
-    
+
     const [id, cid] = getActiveId(categories, categoryids)
     return cid
   }
@@ -149,7 +149,7 @@ class IndexAction extends IndexStore {
       this.threads = null;
       this.sticks = null;
     }
-    
+
     this.resetErrorInfo()
 
     await this.getRreadStickList(filter.categoryids);
@@ -172,7 +172,12 @@ class IndexAction extends IndexStore {
         delete newFilter.categoryids;
       }
     }
+    this.latestReq += 1;
+    const currentReq = this.latestReq;
     const result = await readThreadList({ params: { perPage, page, filter: newFilter, sequence } });
+    if (currentReq !== this.latestReq) {
+      return;
+    }
     if (result.code === 0 && result.data) {
       if (isDraft) {
         if (this.drafts && result.data.pageData && page !== 1) {
@@ -193,14 +198,14 @@ class IndexAction extends IndexStore {
           this.threads.pageData.push(...result.data.pageData);
           const newPageData = this.threads.pageData.slice();
           this.setThreads({
-            ...result.data,
+            ...(this.adapterList(result.data)),
             currentPage: result.data.currentPage,
             pageData: newPageData
           });
         } else {
           // 首次加载
           this.threads = null;
-          this.setThreads(result.data);
+          this.setThreads(this.adapterList(result.data));
         }
       }
       return result.data;
@@ -272,38 +277,6 @@ class IndexAction extends IndexStore {
     this.categories = data;
   }
 
-  /**
-   * 根据 ID 获取当前选中的类别
-   * @param {number} id 帖子类别id
-   * @returns 选中的帖子详细信息
-   */
-  @action
-  getCategorySelectById(id) {
-    let parent = {};
-    let child = {};
-    let currentId = id;
-    if (!id && this.categoriesNoAll && this.categoriesNoAll.length) currentId = this.categoriesNoAll[0].pid;
-    if (this.categoriesNoAll && this.categoriesNoAll.length && currentId) {
-      this.categoriesNoAll.forEach((item) => {
-        const { children } = item;
-        if (item.pid === currentId) {
-          parent = item;
-          if (children && children.length > 0) [child] = children;
-        } else {
-          if (children && children.length > 0) {
-            children.forEach((elem) => {
-              if (elem.pid === currentId) {
-                child = elem;
-                parent = item;
-              }
-            });
-          }
-        }
-      });
-    }
-    return { parent, child };
-  }
-
   /* 写入置顶数据
    * @param {Object} data
    */
@@ -372,7 +345,7 @@ class IndexAction extends IndexStore {
     if (!targetThread || targetThread.length === 0) return;
 
     const { index, data } = targetThread;
-    const { updateType, updatedInfo, user } = obj;
+    const { updateType, updatedInfo, user, openedMore } = obj;
 
     // 更新整个帖子内容
     if ( data && updateType === 'content' ) {
@@ -413,6 +386,10 @@ class IndexAction extends IndexStore {
 
     if (this.threads?.pageData) {
       this.threads.pageData[index] = data;
+    }
+
+    if (updateType === 'openedMore') {
+      data.openedMore = openedMore;
     }
   }
 
@@ -465,7 +442,7 @@ class IndexAction extends IndexStore {
    @action
    async getRecommends({ categoryIds = [] } = {}) {
     this.updateRecommendsStatus('loading');
-    
+
     const result = await readRecommends({ params: { categoryIds } })
     if (result.code === 0) {
       this.setRecommends(result.data || []);
@@ -490,6 +467,21 @@ class IndexAction extends IndexStore {
     this.recommendsStatus = status;
   }
 
+
+  adapterList(data = {}) {
+    const { pageData = [], ...others } = data;
+
+    const newpageData =  pageData.map(item => {
+      item.openedMore = false;
+
+      return item;
+    });
+
+    return {
+      pageData: newpageData,
+      ...others
+    };
+  }
 }
 
 export default IndexAction;

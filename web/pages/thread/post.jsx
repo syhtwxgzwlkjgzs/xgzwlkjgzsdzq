@@ -8,7 +8,7 @@ import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import HOCWithLogin from '@middleware/HOCWithLogin';
 import * as localData from '@layout/thread/post/common';
 import { Toast } from '@discuzq/design';
-import { THREAD_TYPE, MAX_COUNT } from '@common/constants/thread-post';
+import { THREAD_TYPE, MAX_COUNT, THREAD_STATUS } from '@common/constants/thread-post';
 import Router from '@discuzq/sdk/dist/router';
 import PayBox from '@components/payBox/index';
 import { ORDER_TRADE_TYPE } from '@common/constants/payBoxStoreConstants';
@@ -24,6 +24,8 @@ import ViewAdapter from '@components/view-adapter';
 @inject('thread')
 @inject('user')
 @inject('payBox')
+@inject('vlist')
+@inject('baselayout')
 @observer
 class PostPage extends React.Component {
   toastInstance = null;
@@ -64,6 +66,7 @@ class PostPage extends React.Component {
   }
 
   componentDidMount() {
+    this.props.threadPost.setThreadStatus(THREAD_STATUS.create);
     this.redirectToHome();
     this.props.router.events.on('routeChangeStart', this.handleRouteChange);
     this.fetchPermissions();
@@ -143,7 +146,6 @@ class PostPage extends React.Component {
         ret.code = 0;
       } else ret = await thread.fetchThreadDetail(id);
       if (ret.code === 0) {
-        threadPost.formatThreadDetailToPostData(ret.data);
         // 设置主题状态、是否能操作红包和悬赏
         // const { postData, isThreadPaid } = this.props.threadPost;
         const { postData } = this.props.threadPost;
@@ -162,6 +164,9 @@ class PostPage extends React.Component {
           canEditRedpacket: isDraft,
           canEditReward: isDraft,
         });
+        const status = isDraft ? THREAD_STATUS.draft : THREAD_STATUS.edit;
+        threadPost.setThreadStatus(status);
+        threadPost.formatThreadDetailToPostData(ret.data);
       } else {
         Toast.error({ content: ret.msg });
       }
@@ -442,7 +447,8 @@ class PostPage extends React.Component {
     this.imageList = this.imageList.filter(item => item.uid !== file.uid);
     this.fileList = this.fileList.filter(item => item.uid !== file.uid);
     if (ret.code !== 0) {
-      Toast.error({ content: `${ret.msg} 上传失败` });
+      const msg = ret.code === 413 ? '上传大小超过了服务器限制' : ret.msg;
+      Toast.error({ content: `上传失败：${msg}` });
       return false;
     }
     const { uid } = file;
@@ -677,6 +683,8 @@ class PostPage extends React.Component {
       const { categoryId = '' } = data;
       // 首页如果是全部或者是当前分类，则执行数据添加操作
       if (this.props.index.isNeedAddThread(categoryId)) {
+        this.props.vlist.resetPosition();
+        this.props.baselayout.setJumpingToTop();
         this.props.index.addThread(data);
       }
     }

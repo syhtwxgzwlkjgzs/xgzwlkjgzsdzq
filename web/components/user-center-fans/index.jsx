@@ -10,6 +10,7 @@ import deepClone from '@common/utils/deep-clone';
 import NoData from '@components/no-data';
 import classnames from 'classnames';
 import { inject, observer } from 'mobx-react';
+import throttle from '@common/utils/thottle.js';
 
 @inject('user')
 @observer
@@ -170,7 +171,7 @@ class UserCenterFans extends React.Component {
       data: null,
       success: false,
     };
-  };
+  }
 
   unFollowUser = async ({ id }) => {
     const res = await deleteFollow({ data: { id, type: 1 } });
@@ -197,7 +198,7 @@ class UserCenterFans extends React.Component {
       data: null,
       success: false,
     };
-  };
+  }
 
   async componentDidMount() {
     // 第一次加载完后，才允许加载更多页面
@@ -285,7 +286,6 @@ class UserCenterFans extends React.Component {
 
   render() {
     const isNoData = followerAdapter(this.props.dataSource || this.state.fans).length === 0 && !this.state.loading;
-
     return (
       <div
         className={`${this.props.className} user-center-friends`}
@@ -316,22 +316,17 @@ class UserCenterFans extends React.Component {
             </div>
           );
         })}
-        <div className={`${friendsStyle.friendWrap} ${styles.friendWrap} ${styles['display-none']} user-center-friends-mini`}>
+        <div
+          className={`${friendsStyle.friendWrap} ${styles.friendWrap} ${styles['display-none']} user-center-friends-mini`}
+        >
           {followerAdapter(this.props.dataSource || this.state.fans).map((user, index) => {
             if (index + 1 > this.props.limit) return null;
             return (
               <div key={user.id + index} className={friendsStyle.friendItem}>
                 <div className={friendsStyle.friendAvatar}>
-                  <Avatar
-                    image={user.avatar}
-                    userId={user.id}
-                    circle
-                    name={user.userName}
-                  />
+                  <Avatar image={user.avatar} userId={user.id} circle name={user.userName} />
                 </div>
-                <div className={friendsStyle.friendTextInfo}>
-                  {user.userName}
-                </div>
+                <div className={friendsStyle.friendTextInfo}>{user.userName}</div>
               </div>
             );
           })}

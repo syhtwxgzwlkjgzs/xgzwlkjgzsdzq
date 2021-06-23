@@ -2,7 +2,7 @@
  * 创建帖子页面的 Store
  */
 import { observable, computed } from 'mobx';
-import { LOADING_TOTAL_TYPE } from '@common/constants/thread-post';
+import { LOADING_TOTAL_TYPE, THREAD_STATUS } from '@common/constants/thread-post';
 import { plus } from '@common/utils/calculate';
 import { initPostData } from './common';
 
@@ -75,6 +75,11 @@ class ThreadPostStore {
     navHeight: 40, // 默认的导航栏高度
     menubtnWidth: 80, // 胶囊按钮的宽度
   }
+
+  // 发帖的种类信息和查看帖子的分类不一样。所属权限不一样。所以发帖的类型单独处理
+  @observable categories = [];
+
+  @observable threadStatus = THREAD_STATUS.create;
 }
 
 export default ThreadPostStore;

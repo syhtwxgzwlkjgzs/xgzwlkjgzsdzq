@@ -133,8 +133,13 @@ class Index extends React.Component {
 
     onUser = (e) => {
       e && e.stopPropagation();
-      const { user = {} } = this.props.data || {};
-      Router.push({url: `/subPages/user/index?id=${user?.userId}`});
+
+      const { user = {}, isAnonymous } = this.props.data || {};
+      if (!!isAnonymous) {
+        this.onClick()
+      } else {
+        Router.push({url: `/subPages/user/index?id=${user?.userId}`});
+      }
     }
 
     onClickHeaderIcon = (e) => {

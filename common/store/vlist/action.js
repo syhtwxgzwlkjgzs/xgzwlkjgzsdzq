@@ -13,6 +13,19 @@ class IndexAction extends IndexStore {
   setPosition(position) {
     this.home = position;
   }
+
+  @action
+  setCache(cache) {
+    this.cache = cache;
+  }
+
+  /**
+   * 设置跳回页面头部
+   */
+  @action
+  resetPosition() {
+    this.home = -1;
+  }
 }
 
 export default IndexAction;

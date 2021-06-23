@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
+import Router from '@discuzq/sdk/dist/router';
 
 import layout from './layout.module.scss';
 import footer from './footer.module.scss';
@@ -38,6 +39,7 @@ import classNames from 'classnames';
 @inject('index')
 @inject('topic')
 @inject('search')
+@inject('vlist')
 @observer
 class ThreadH5Page extends React.Component {
   constructor(props) {
@@ -207,6 +209,11 @@ class ThreadH5Page extends React.Component {
     this.setState({
       showCommentInput: true,
     });
+  }
+
+  onUserClick(userId) {
+    if (!userId) return;
+    Router.push({ url: `/user/${userId}` });
   }
 
   // 点击更多icon
@@ -513,16 +520,16 @@ class ThreadH5Page extends React.Component {
     // 判断是否在微信浏览器
     if (isWeiXin()) {
       this.setState({ isShowWeiXinShare: true });
-    } else {      
+    } else {
       Toast.info({ content: '复制链接成功' });
-  
+
       const { title = '' } = this.props.thread?.threadData || {};
       h5Share({ title, path: `thread/${this.props.thread?.threadData?.threadId}` });
-  
+
       const id = this.props.thread?.threadData?.id;
-  
+
       const { success, msg } = await this.props.thread.shareThread(id);
-  
+
       if (!success) {
         Toast.error({
           content: msg,
@@ -595,6 +602,7 @@ class ThreadH5Page extends React.Component {
     if (categoryId || typeof categoryId === 'number') {
       this.props.index.refreshHomeData({ categoryIds: [categoryId] });
     }
+    this.props.vlist.resetPosition();
     this.props.router.push('/');
   }
 
@@ -685,7 +693,7 @@ class ThreadH5Page extends React.Component {
               onRewardClick={() => this.onRewardClick()}
               onTagClick={() => this.onTagClick()}
               onPayClick={() => this.onPayClick()}
-              onPayClick={() => this.onPayClick()}
+              // onPayClick={() => this.onPayClick()}
               onUserClick={(e) => this.onUserClick(e)}
             ></RenderThreadContent>
           ) : (
@@ -796,7 +804,7 @@ class ThreadH5Page extends React.Component {
               onCancel={() => this.setState({ showRewardPopup: false })}
               onOkClick={(value) => this.onRewardSubmit(value)}
             ></RewardPopup>
-            
+
             {/* 微信浏览器内分享弹窗 */}
             {this.state.loadWeiXin && (
               <SharePopup

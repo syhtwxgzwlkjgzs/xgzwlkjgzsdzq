@@ -31,12 +31,14 @@ export default class PayBox extends React.Component {
 
     // 判断是否微信支付开启
     if (this.props.site.isWechatPayOpen) {
-      payConfig.unshift({
-        name: '微信支付',
-        icon: 'WechatPaymentOutlined',
-        color: '#09bb07',
-        paymentType: 'weixin',
-      });
+      if (isWeixin()) {
+        payConfig.unshift({
+          name: '微信支付',
+          icon: 'WechatPaymentOutlined',
+          color: '#09bb07',
+          paymentType: 'weixin',
+        });
+      }
     }
 
     this.state = {
@@ -64,7 +66,7 @@ export default class PayBox extends React.Component {
         duration: 2000,
       });
     }
-  }
+  };
 
   walletPaySubText() {
     const canWalletPay = this.props.user?.canWalletPay;
