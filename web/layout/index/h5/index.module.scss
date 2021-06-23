@@ -64,3 +64,17 @@
   width: 100%;
   height: rem(58);
 }
+
+.vTabs {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: rem(58);
+  width: 100%;
+  visibility: hidden;
+}
+
+.vFixed {
+  visibility: visible;
+  z-index: 1;
+}

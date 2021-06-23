@@ -195,6 +195,12 @@ class Index extends React.Component {
       onClickIcon(e)
     }
 
+    onOpen = () => {
+      const { threadId = '' } = this.props.data || {};
+
+      this.props.index.updateAssignThreadInfo(threadId, { updateType: 'openedMore', openedMore: true });
+    }
+
     render() {
       const { data, className = '', site = {}, showBottomStyle = true ,  collect = '', isShowIcon = false } = this.props;
       const { platform = 'pc' } = site;
@@ -252,6 +258,7 @@ class Index extends React.Component {
             onClick={this.onClick}
             onPay={this.onPay}
             platform={platform}
+            onOpen={this.onOpen}
           />
 
           <BottomEvent

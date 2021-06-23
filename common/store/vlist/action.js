@@ -14,6 +14,11 @@ class IndexAction extends IndexStore {
     this.home = position;
   }
 
+  @action
+  setCache(cache) {
+    this.cache = cache;
+  }
+
   /**
    * 设置跳回页面头部
    */
