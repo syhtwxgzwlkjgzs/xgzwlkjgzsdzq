@@ -30,7 +30,5 @@ export const getMessageImageSize = (imageUrl, isPC = false) => {
     width = 510;
   }
 
-  console.log('object :>> ', [`${parseInt(width / scale)}px`, `${parseInt(height / scale)}px`]);
-
   return [`${parseInt(width / scale)}px`, `${parseInt(height / scale)}px`]
 }
