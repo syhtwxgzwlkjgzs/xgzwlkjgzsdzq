@@ -208,7 +208,7 @@ class IndexPCPage extends React.Component {
           <div className={styles.themeItem}>
             {pageData?.map((item, index) => (
               <ThreadContent 
-                key={item?.threadId || index} 
+                key={`${item.threadId}-${new Date().getTime()}-${index}`}
                 className={styles.threadContent} 
                 data={item}
               />
