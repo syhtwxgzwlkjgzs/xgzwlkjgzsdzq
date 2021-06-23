@@ -80,7 +80,7 @@ const Index = (props) => {
     }
   };
 
-  const submitEmptyImage = (dialogId) => createDialogMsg({
+  const submitEmptyImage = dialogId => createDialogMsg({
     dialogId,
     isImage: true,
   });
@@ -140,14 +140,34 @@ const Index = (props) => {
         const { code, data: { dialogMessageId } } = results[i];
         if (code === 0) {
           file.dialogMessageId = dialogMessageId;
-          setTimeout(async () => {
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('type', 1);
-            formData.append('dialogMessageId', dialogMessageId);
-            const ret = await createAttachment(formData);
-            readDialogMsgList(dialogId);
-          }, i * 5000);
+
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = (e) => {
+            const src = e.target.result;
+            const img = new Image();
+            img.src = src;
+            img.onload = async () => {
+              file.localUrl = src;
+              file.width = img.width;
+              file.height = img.height;
+              const formData = new FormData();
+              formData.append('file', file);
+              formData.append('type', 1);
+              formData.append('dialogMessageId', dialogMessageId);
+              const ret = await createAttachment(formData);
+              readDialogMsgList(dialogId);
+            };
+          };
+
+          // setTimeout(async () => {
+          //   const formData = new FormData();
+          //   formData.append('file', file);
+          //   formData.append('type', 1);
+          //   formData.append('dialogMessageId', dialogMessageId);
+          //   const ret = await createAttachment(formData);
+          //   readDialogMsgList(dialogId);
+          // }, i * 5000);
 
           // const { code, data } = ret;
           // if (code === 0) {
@@ -186,7 +206,9 @@ const Index = (props) => {
       if (item.isImageLoading && uploadingImagesRef.current.length) {
         uploadingImagesRef.current.forEach(file => {
           if (file.dialogMessageId === item.id) {
-            item.imageUrl = URL.createObjectURL(file);
+            item.imageUrl = file.localUrl;
+            item.imageWidth = file.width;
+            item.imageHeight = file.height;
           }
         });
       }
@@ -202,6 +224,8 @@ const Index = (props) => {
         userId: item.userId,
         nickname: item.user.username,
         isImageLoading: item.isImageLoading,
+        imageWidth: item.imageWidth,
+        imageHeight: item.imageHeight,
       };
     }).filter(item => item.imageUrl || item.text).reverse();
   // }, [dialogMsgListLength]);

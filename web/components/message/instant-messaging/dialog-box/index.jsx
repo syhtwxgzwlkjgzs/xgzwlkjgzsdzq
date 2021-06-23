@@ -4,6 +4,7 @@ import { diffDate } from '@common/utils/diff-date';
 import { inject, observer } from 'mobx-react';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
+import { getMessageImageSize } from '@common/utils/get-message-image-size';
 import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
 
@@ -18,22 +19,19 @@ const DialogBox = (props, ref) => {
   }, [dialogMsgList]);
 
 
-  const renderImage = (url, isImageLoading) => {
-    // console.log(url);
-    // const urlObj = new URL(url);
-    // const width = urlObj.searchParams.get("width");
-    // const height = urlObj.searchParams.get("height");
-    let renderWidth = 200;
-
-    // if (width && height) {
-    //   if (width <= height) {
-    //     renderWidth = 70;
-    //   } else {
-    //     renderWidth = 130;
-    //   }
-    // }
+  const renderImage = (data) => {
+    const { isImageLoading, imageUrl, imageWidth, imageHeight } = data;
+    let [width, height] = [200, 0];
+    if (isImageLoading) {
+      [width, height] = getMessageImageSize(imageWidth, imageHeight, true);
+    } else {
+      const size = imageUrl.match(/\?width=(\d+)&height=(\d+)$/);
+      if (size) {
+        [width, height] = getMessageImageSize(size[1], size[2], true);
+      }
+    }
     return (
-      <div className={styles['msgImage-container']}>
+      <div className={styles['msgImage-container']} style={{ width: `${width}px`, height: height ? `${height}px` : 'auto' }}>
         {isImageLoading && (
           <div className={styles['msgImage-uploading']}>
             <Icon className={styles.loading} name="LoadingOutlined" size={40} />
@@ -41,10 +39,9 @@ const DialogBox = (props, ref) => {
         )}
         <img
           className={styles.msgImage}
-          style={{ width: `${renderWidth}px` }}
-          src={url}
+          src={imageUrl}
           onClick={() => {
-            setDefaultImg(url);
+            setDefaultImg(imageUrl);
             setTimeout(() => {
               setPreviewerVisibled(true);
             }, 0);
@@ -58,30 +55,33 @@ const DialogBox = (props, ref) => {
   return (
     <div className={platform === 'pc' ? styles.pcDialogBox : (showEmoji ? styles['h5DialogBox-emoji'] : styles.h5DialogBox)} ref={ref}>
       <div className={styles.box__inner}>
-        {messagesList.map(({ timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl, userId, nickname, isImageLoading }, idx) => (
-          <React.Fragment key={idx}>
-            {displayTimePanel && <div className={styles.msgTime}>{diffDate(timestamp)}</div>}
-            <div className={`${ownedBy === 'myself' ? `${styles.myself}` : `${styles.itself}`} ${styles.persona}`}>
-              <div className={styles.profileIcon} onClick={() => {
-                userId && Router.push({ url: `/user/${userId}` });
-              }}>
-                {userAvatar
-                  ? <Avatar image={userAvatar} circle={true} />
-                  : <Avatar text={nickname && nickname.toUpperCase()[0]} circle={true} style={{
-                    backgroundColor: "#8590a6",
-                  }} />
-                }
+        {messagesList.map((item, idx) => {
+          const { timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl, userId, nickname, isImageLoading } = item;
+          return (
+            <React.Fragment key={idx}>
+              {displayTimePanel && <div className={styles.msgTime}>{diffDate(timestamp)}</div>}
+              <div className={`${ownedBy === 'myself' ? `${styles.myself}` : `${styles.itself}`} ${styles.persona}`}>
+                <div className={styles.profileIcon} onClick={() => {
+                  userId && Router.push({ url: `/user/${userId}` });
+                }}>
+                  {userAvatar
+                    ? <Avatar image={userAvatar} circle={true} />
+                    : <Avatar text={nickname && nickname.toUpperCase()[0]} circle={true} style={{
+                      backgroundColor: "#8590a6",
+                    }} />
+                  }
+                </div>
+                {imageUrl ? (
+                  renderImage(item)
+                ) : (
+                  <div className={styles.msgContent} dangerouslySetInnerHTML={{
+                    __html: xss(s9e.parse(text)),
+                  }}></div>
+                )}
               </div>
-              {imageUrl ? (
-                renderImage(imageUrl, isImageLoading)
-              ) : (
-                <div className={styles.msgContent} dangerouslySetInnerHTML={{
-                  __html: xss(s9e.parse(text)),
-                }}></div>
-              )}
-            </div>
-          </React.Fragment>
-        ))}
+            </React.Fragment>
+          );
+        })}
       </div>
       <ImagePreviewer
         visible={previewerVisibled}
