@@ -79,6 +79,13 @@ const Index = (props) => {
     }
   };
 
+  const submitEmptyImage = () => {
+    return createDialogMsg({
+      dialogId,
+      isImage: true,
+    });
+  };
+
   // 触发图片选择
   const uploadImage = () => {
     uploadRef.current.click();
@@ -110,16 +117,24 @@ const Index = (props) => {
   };
 
   const onImgChange = async (e) => {
-    const files = e.target.files;
-    if (!beforeUpload(files)) {
-      uploadRef.current.value = '';
-      return; // 图片上传前校验
-    }
+    const { files } = e.target;
+    // if (!beforeUpload(files)) {
+    //   uploadRef.current.value = '';
+    //   return; // 图片上传前校验
+    // }
 
-    toastInstance = Toast.loading({
-      content: '图片发送中...',
-      duration: 0,
+    // toastInstance = Toast.loading({
+    //   content: '图片发送中...',
+    //   duration: 0,
+    // });
+    await Promise.all([...files].map(() => submitEmptyImage())).then((results) => {
+      console.log(results);
+      readDialogMsgList(dialogId);
+      // debugger;
+
+      // results.map
     });
+
     const formData = new FormData();
     formData.append('file', files[0]);
     formData.append('type', 1);
@@ -147,7 +162,7 @@ const Index = (props) => {
       // 把消息状态更新为已读
       updateDialog(dialogId);
     }, 100);
-    return dialogMsgList.list.map(item => ({
+    return dialogMsgList.list.filter(item => !item.isImageLoading).map(item => ({
       timestamp: item.createdAt,
       userAvatar: item.user.avatar,
       displayTimePanel: true,
@@ -214,8 +229,9 @@ const Index = (props) => {
   return (
     <div className={platform === 'h5' ? styles.h5Page : styles.pcPage}>
       <input
-        style={{display: 'none'}}
+        style={{ display: 'none' }}
         type="file"
+        multiple="multiple"
         ref={uploadRef}
         onChange={onImgChange}
         accept={ACCEPT_IMAGE_TYPES.join(',')}
