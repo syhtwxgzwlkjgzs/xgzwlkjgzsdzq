@@ -37,6 +37,14 @@
     }
   }
 
+  &.with-bottom {
+    :global {
+      .dzq-pull-refresh__loading {
+        top: -40px !important;
+      }
+    }
+  }
+
   .list {
     height: 100% !important;
   }

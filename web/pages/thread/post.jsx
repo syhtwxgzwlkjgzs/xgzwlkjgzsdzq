@@ -24,6 +24,8 @@ import ViewAdapter from '@components/view-adapter';
 @inject('thread')
 @inject('user')
 @inject('payBox')
+@inject('vlist')
+@inject('baselayout')
 @observer
 class PostPage extends React.Component {
   toastInstance = null;
@@ -442,7 +444,8 @@ class PostPage extends React.Component {
     this.imageList = this.imageList.filter(item => item.uid !== file.uid);
     this.fileList = this.fileList.filter(item => item.uid !== file.uid);
     if (ret.code !== 0) {
-      Toast.error({ content: `${ret.msg} 上传失败` });
+      const msg = ret.code === 413 ? '上传大小超过了服务器限制' : ret.msg;
+      Toast.error({ content: `上传失败：${msg}` });
       return false;
     }
     const { uid } = file;
@@ -677,6 +680,8 @@ class PostPage extends React.Component {
       const { categoryId = '' } = data;
       // 首页如果是全部或者是当前分类，则执行数据添加操作
       if (this.props.index.isNeedAddThread(categoryId)) {
+        this.props.vlist.resetPosition();
+        this.props.baselayout.setJumpingToTop();
         this.props.index.addThread(data);
       }
     }

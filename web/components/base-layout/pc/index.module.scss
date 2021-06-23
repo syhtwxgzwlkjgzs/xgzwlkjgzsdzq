@@ -270,7 +270,10 @@
       }
     }
     .mymessage-page {
-      @include heightMedia(590px) {
+      // 这里暂时这样处理。等消息系列页面一起调整
+      min-height: 940px;
+      @include heightMedia(940px) {
+        padding-top: 70px;
         .baselayout-right {
           position: static;
         }
@@ -312,17 +315,17 @@
       }
     }
     .mydraft {
-      @include heightMedia(955px, 900px) {
+      @include heightMedia(1000px, 945px) {
         .user-center-friends-item:nth-last-child(-n + 2) {
           display: none;
         }
       }
-      @include heightMedia(900px, 845px) {
+      @include heightMedia(945px, 890px) {
         .user-center-friends-item:nth-last-child(-n + 3) {
           display: none;
         }
       }
-      @include heightMedia(900px) {
+      @include heightMedia(890px) {
         .user-center-friends-mini {
           display: flex !important;
         }

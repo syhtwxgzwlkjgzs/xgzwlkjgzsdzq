@@ -1,5 +1,6 @@
 import React from 'react';
 import Spin from '@discuzq/design/dist/components/spin/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import { createFollow, deleteFollow, getUserFollow } from '@server';
 import { get } from '@common/utils/get';
 import deepClone from '@common/utils/deep-clone';
@@ -10,6 +11,7 @@ import List from '@components/list';
 import UserCenterFriends from '../user-center-friends';
 import styles from './index.module.scss';
 import { followerAdapter } from './adapter';
+import throttle from '@common/utils/thottle.js';
 
 class UserCenterFollows extends React.Component {
   firstLoaded = false;
@@ -131,7 +133,7 @@ class UserCenterFollows extends React.Component {
     });
   }
 
-  followUser = async ({ id: userId }) => {
+  followUser = throttle(async ({ id: userId }) => {
     const res = await createFollow({ data: { toUserId: userId } });
     if (res.code === 0 && res.data) {
       Toast.success({
@@ -159,9 +161,9 @@ class UserCenterFollows extends React.Component {
       data: null,
       success: false,
     };
-  };
+  }, 1000);
 
-  unFollowUser = async ({ id }) => {
+  unFollowUser = throttle(async ({ id }) => {
     const res = await deleteFollow({ data: { id, type: 1 } });
     if (res.code === 0 && res.data) {
       Toast.success({
@@ -186,7 +188,7 @@ class UserCenterFollows extends React.Component {
       data: null,
       success: false,
     };
-  };
+  }, 1000);
 
   async componentDidMount() {
     // 第一次加载完后，才允许加载更多页面

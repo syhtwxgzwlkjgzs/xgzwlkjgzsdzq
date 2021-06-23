@@ -418,6 +418,7 @@ class UserAction extends SiteStore {
    */
   @action
   async updateAvatar(file) {
+    if (!file) return;
     const param = new FormData();
     param.append('avatar', file);// 通过append向form对象添加数据
     param.append('pid', this.id);
@@ -449,6 +450,7 @@ class UserAction extends SiteStore {
    */
   @action
   async updateBackground(file) {
+    if (!file) return;
     const param = new FormData();
     param.append('background', file);// 通过append向form对象添加数据
     const updateBackgroundRes = await updateBackground({

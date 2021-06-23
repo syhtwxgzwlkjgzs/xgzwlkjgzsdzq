@@ -92,7 +92,8 @@ class ThreadAction extends ThreadStore {
   }
 
   @action
-  reset({ isPositionToComment = false }) {
+  reset(params) {
+    const { isPositionToComment = false } = params || {};
     this.threadData = null; // 帖子信息
     this.commentList = null; // 评论列表数据
     this.totalCount = 0; // 评论列表总条数
