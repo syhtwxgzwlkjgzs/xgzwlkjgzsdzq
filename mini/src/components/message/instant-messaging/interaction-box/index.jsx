@@ -163,8 +163,7 @@ const InteractionBox = (props) => {
           if (Code === 0) {
             submit({
               imageUrl: data.url,
-              width: data.fileWidth,
-              height: data.fileHeight,
+              attachmentId: data.id,
             });
           } else {
             Toast.error({ content: msg || '图片发送失败' });
