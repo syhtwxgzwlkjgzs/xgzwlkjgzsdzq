@@ -94,7 +94,9 @@
       span {
         display: none !important;
       }
-      span[aria-label^="语言"] {
+      span[aria-label^="语言"],
+      span[aria-label^="链接"],
+      span[aria-label^="图片地址"] {
         display: inline-block !important;
         &::before,
         &::after {
