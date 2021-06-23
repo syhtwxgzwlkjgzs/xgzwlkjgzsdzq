@@ -83,7 +83,14 @@ const DialogBox = (props) => {
     }, 100);
 
     return dialogMsgList.list.map(item => {
-      const [width, height] = getMessageImageSize(item.imageUrl); // 计算图片显示尺寸
+      let [width, height] = [200, 0]; // 兼容没有返回图片尺寸的旧图片
+      if (item.imageUrl) {
+        const size = item.imageUrl.match(/\?width=(\d+)&height=(\d+)$/);
+        if (size) {
+          [width, height] = getMessageImageSize(size[1], size[2]); // 计算图片显示尺寸
+        }
+      }
+
       return {
         timestamp: item.createdAt,
         userAvatar: item.user.avatar,
@@ -134,8 +141,8 @@ const DialogBox = (props) => {
               {imageUrl ? (
                 <Image
                   className={styles.msgImage}
-                  mode="aspectFill"
-                  style={{ width: width, height: height }}
+                  mode={height ? "aspectFill" : "widthFix"}
+                  style={{ width: `${width}px`, height: height ? `${height}px` : "auto" }}
                   src={imageUrl}
                   onClick={() => {
                     Taro.previewImage({
