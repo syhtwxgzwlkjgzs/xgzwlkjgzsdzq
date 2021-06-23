@@ -150,7 +150,6 @@ function Home(props, ref) {
 
   // 滚动事件
   const onScroll = ({ scrollTop, clientHeight, scrollHeight }) => {
-    console.log({ scrollTop });
     // scrollToPosition = scrollTop;
     setFlag(!(scrollTop < preScrollTop));
     preScrollTop = scrollTop;
@@ -176,7 +175,6 @@ function Home(props, ref) {
   const isRowLoaded = ({ index }) => !!list[index];
 
   const loadMoreRows = ({ startIndex, stopIndex }) => {
-    console.log(!loadData);
     // if (!loadData) return;
 
     // let promiseResolver;
@@ -220,7 +218,6 @@ function Home(props, ref) {
   };
 
   const onScrollWindow = (params) => {
-    console.log(params);
   };
 
   return (

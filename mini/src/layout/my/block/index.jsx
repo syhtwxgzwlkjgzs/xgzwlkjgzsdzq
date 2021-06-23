@@ -50,7 +50,6 @@ class Index extends React.Component {
 
   // 加载更多函数
   loadMore = async () => {
-    console.log('触发啦');
     await this.props.user.getUserShieldList();
     return;
   };
