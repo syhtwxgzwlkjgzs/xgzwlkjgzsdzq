@@ -61,6 +61,13 @@
   margin-bottom: $margin-6n;
 }
 
+.redPacketLikeNum {
+  text-align: center;
+  margin-top: $margin-5n;
+  font-size: rem($font-size-label);
+  color: $text-color-secondary;
+}
+
 .rewardButton {
   margin: 0 auto;
   padding: 0;

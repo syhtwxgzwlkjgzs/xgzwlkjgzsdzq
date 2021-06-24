@@ -650,7 +650,7 @@ class PostPage extends React.Component {
     const { code, data, msg } = ret;
     if (code === 0) {
       this.setState({ data });
-      thread.reset();
+      thread.reset({});
       this.toastInstance?.destroy();
       this.setPostData({ threadId: data.threadId });
       // 防止被清除
