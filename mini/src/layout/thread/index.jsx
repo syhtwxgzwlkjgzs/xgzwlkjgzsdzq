@@ -808,10 +808,10 @@ class ThreadH5Page extends React.Component {
           id="hreadBodyId"
           scrollY
           scrollTop={this.position}
-          lowerThreshold={50}
+          lowerThreshold={1000}
           onScrollToLower={() => this.scrollToLower()}
           scrollIntoView={this.state.toView}
-          onScroll={(e) => throttle(this.handleOnScroll(e), 500)}
+          onScroll={(e) => throttle(this.handleOnScroll(e), 200)}
         >
           <View className={layout['view-inner']}>
             <ShowTop showContent={this.state.showContent} setTop={this.state.setTop}></ShowTop>
