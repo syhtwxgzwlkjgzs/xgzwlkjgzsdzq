@@ -65,7 +65,7 @@ const List = forwardRef(({
   //   if (listWrapper.current && showLoadingInCenter && site?.platform === 'h5') {
   //     const { clientHeight } = listWrapper.current;
   //     const { scrollHeight } = listWrapper.current;
-      
+
   //     setIsLoadingInCenter(scrollHeight <= clientHeight)
   //   }
   // }, [listWrapper.current, children])
@@ -107,8 +107,15 @@ const List = forwardRef(({
   };
 
   const onBackTop = () => {
-    listWrapper.current.scrollTop = 0;
-    currentScrollTop.current = 0;
+    if (currentScrollTop.current > 0) {
+      const top = currentScrollTop.current -  currentScrollTop.current / 5;
+      window.requestAnimationFrame(onBackTop)
+      listWrapper.current.scrollTop = top;
+      currentScrollTop.current = top;
+    } else {
+      listWrapper.current.scrollTop = 0;
+      currentScrollTop.current = 0;
+    }
   };
 
   const jumpToScrollTop = (scrollTop) => {
