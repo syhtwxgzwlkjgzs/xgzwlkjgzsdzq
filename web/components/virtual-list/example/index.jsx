@@ -160,7 +160,7 @@ function Home(props, ref) {
     }
 
     // if (scrollTop + (clientHeight * 4) >= scrollHeight && !loadData) {
-    if ( scrollHeight / 4 <= scrollTop && !loadData) {
+    if (scrollHeight/scrollTop <= 1.5 && !loadData) {
       loadData = true;
       props.loadNextPage().finally(() => {
         loadData = false;

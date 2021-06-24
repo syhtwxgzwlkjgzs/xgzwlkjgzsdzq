@@ -1,20 +1,35 @@
 # Discuz! Q 项目
 
 ## 使用
-> 说明：
-> 1. 目前 `@discuzq/cli` 安装没有发布包，所以本地测试的时候，`discuz-core` 项目中的 `discuz-cli` 目录下面使用 `npm link` 进行关联
-> 2. 目前 `@discuzq/sdk` 安装没有发布包，所以本地测试的时候，`discuz-core` 项目中的 `discuz-sdk` 目录下面使用 `npm link` 进行关联
-> 3. 目前 `@discuzq/design` 安装没有发布包，所以本地测试的时候，`discuz-core` 项目中的 `discuz-design` 目录下面使用 `npm link` 进行关联
 
 ```bash
-# 安装依赖
-$ npm install
-
 # web 端本地开发
+$ cd ./web
+$ npm install
 $ npm run dev:web
 
 # 小程序端本地开发
+$ cd ./mini
+$ npm install
 $ npm run dev:mini
+```
+
+## 小程序构建
+
+- 修改`project.config.json`文件中的appid为自己的appid
+- 修改`prod.js`中的域名指向
+
+```js
+module.exports = {
+  TITLE: 'Discuz!Q',
+  COMMON_BASE_URL: process.env.DISCUZ_ENV === 'web' ? '' : '你的网站域名',
+};
+```
+- 进行小程序编译
+
+```bash
+$ cd ./mini
+$ npm run build:weapp
 ```
 
 ## 目录结构

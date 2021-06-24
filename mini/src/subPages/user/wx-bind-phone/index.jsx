@@ -153,7 +153,7 @@ class Index extends Component {
         {/* <MemoToastProvider> */}
         <View className={layout.container}>
           <View className={layout.content}>
-            <View className={layout.title}>手机号登陆，并绑定微信账号</View>
+            <View className={layout.title}>手机号登录，并绑定微信账号</View>
             <View className={layout.tips}>
               <View style={{display: 'flex' }}>hi， 微信用户<Avatar style={{margin: '0 8px'}} circle size='small' image={commonLogin.avatarUrl}/>{nickname}</View>
               <View>请您登录，即可完成微信号和用户名的绑定</View>

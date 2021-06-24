@@ -50,9 +50,16 @@
     font-size: $font-size-label;
     color: $text-color-secondary;
     margin-bottom: $margin-2n;
-    view {
+    .tips {
       color: $primary-color;
+    }
+    View {
       display: inline;
+    }
+    .expire {
+      margin-left: $margin-2n;
+      padding-left: $padding-2n;
+      border-left: $border-solid-1;
     }
   }
   .bottom_button_wrap {

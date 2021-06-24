@@ -8,6 +8,7 @@ import Router from '@discuzq/sdk/dist/router';
 import { getCurrentInstance } from '@tarojs/taro';
 import Page from '@components/page';
 import styles from './index.module.scss';
+import Taro from '@tarojs/taro';
 
 @inject('user')
 @observer
@@ -20,6 +21,7 @@ class index extends Component {
     };
     this.props.user.cleanUserFans();
     this.props.user.cleanTargetUserFans();
+    Taro.hideShareMenu();
   }
 
   componentDidMount() {

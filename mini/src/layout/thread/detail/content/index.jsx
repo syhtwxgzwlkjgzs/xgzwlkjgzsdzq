@@ -220,13 +220,18 @@ const RenderThreadContent = inject('user')(
               )}
               {/* 红包 */}
               {parseContent.RED_PACKET && (
-                <PostRewardProgressBar
-                  remaining={Number(parseContent.RED_PACKET.remainNumber || 0)}
-                  received={
-                    Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remainNumber || 0)
-                  }
-                  condition={parseContent.RED_PACKET.condition}
-                />
+                <View>     
+                  <PostRewardProgressBar
+                    remaining={Number(parseContent.RED_PACKET.remainNumber || 0)}
+                    received={
+                      Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remainNumber || 0)
+                    }
+                    condition={parseContent.RED_PACKET.condition}
+                  />
+                  {!!parseContent.RED_PACKET.condition && (
+                    <View className={styles.redPacketLikeNum}>评论集{parseContent.RED_PACKET.likenum}赞领红包</View>
+                  )}
+                </View>
               )}
             </View>
           )}

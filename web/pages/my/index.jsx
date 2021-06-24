@@ -16,11 +16,7 @@ class MyCenter extends React.Component {
   };
 
   render() {
-    return <ViewAdapter 
-      h5={<MyH5Page />}
-      pc={<MyPCPage />} 
-      title={`个人中心 - ${this.props.site?.siteName}`}
-    />
+    return <ViewAdapter h5={<MyH5Page />} pc={<MyPCPage />} title={`个人中心`} />;
   }
 }
 

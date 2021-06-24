@@ -55,7 +55,7 @@ class ThreadPCPage extends React.Component {
     this.likedLoading = false;
     this.collectLoading = false;
 
-    this.perPage = 5;
+    this.perPage = 20;
     this.page = 1; // 页码
     this.commentDataSort = true;
 
@@ -377,7 +377,7 @@ class ThreadPCPage extends React.Component {
     const params = {
       id,
       content: val,
-      postId: this.props.thread?.threadData?.postId,
+      // postId: this.props.thread?.threadData?.postId,
       sort: this.commentDataSort, // 目前的排序
       isNoMore: this.props?.thread?.isNoMore,
       attachments: [],

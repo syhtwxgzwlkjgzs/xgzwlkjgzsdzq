@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './index.module.scss';
 import Spin from '@discuzq/design/dist/components/spin/index';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import UserCenterHeaderImage from '@components/user-center-header-images';
 import UserCenterHead from '@components/user-center-head';
 import { inject, observer } from 'mobx-react';
@@ -9,8 +10,8 @@ import BaseLayout from '@components/base-layout';
 import Router from '@discuzq/sdk/dist/router';
 import { View, Text } from '@tarojs/components';
 import Taro, { getCurrentInstance, eventCenter } from '@tarojs/taro';
-import SectionTitle from '@components/section-title'
-import BottomView from '@components/list/BottomView'
+import SectionTitle from '@components/section-title';
+import BottomView from '@components/list/BottomView';
 
 @inject('site')
 @inject('user')
@@ -27,12 +28,12 @@ class H5OthersPage extends React.Component {
     this.targetUserId = null;
   }
 
-  $instance = getCurrentInstance()
+  $instance = getCurrentInstance();
 
-  componentWillMount () {
-    const onShowEventId = this.$instance.router.onShow
+  componentWillMount() {
+    const onShowEventId = this.$instance.router.onShow;
     // 监听
-    eventCenter.on(onShowEventId, this.onShow)
+    eventCenter.on(onShowEventId, this.onShow);
   }
 
   onShow = async () => {
@@ -60,7 +61,7 @@ class H5OthersPage extends React.Component {
       });
       await this.props.user.getTargetUserThreads(this.targetUserId);
     }
-  }
+  };
 
   componentDidMount = async () => {
     const { id = '' } = getCurrentInstance().router.params;
@@ -73,9 +74,9 @@ class H5OthersPage extends React.Component {
 
   componentWillUnmount() {
     this.props.user.removeTargetUserInfo();
-    const onShowEventId = this.$instance.router.onShow
+    const onShowEventId = this.$instance.router.onShow;
     // 卸载
-    eventCenter.off(onShowEventId, this.onShow)
+    eventCenter.off(onShowEventId, this.onShow);
   }
 
   fetchTargetUserThreads = async () => {
@@ -91,6 +92,48 @@ class H5OthersPage extends React.Component {
     return Object.values(targetUserThreads).reduce((fullData, pageData) => [...fullData, ...pageData]);
   };
 
+  getStatusBarHeight() {
+    return wx?.getSystemInfoSync()?.statusBarHeight || 44;
+  }
+
+  // 全屏状态下自定义左上角返回按钮位置
+  getTopBarBtnStyle() {
+    return {
+      position: 'fixed',
+      top: `${this.getStatusBarHeight()}px`,
+      left: '12px',
+      transform: 'translate(0, 10px)',
+    };
+  }
+
+  getTopBarTitleStyle() {
+    return {
+      position: 'fixed',
+      top: `${this.getStatusBarHeight()}px`,
+      left: '50%',
+      transform: 'translate(-50%, 8px)',
+    };
+  }
+
+  handleBack = () => {
+    Taro.navigateBack();
+  };
+
+  // 渲染顶部title
+  renderTitleContent = () => {
+    const { user } = this.props;
+    return (
+      <View className={styles.topBar}>
+        <View onClick={this.handleBack} className={styles.customCapsule} style={this.getTopBarBtnStyle()}>
+          <Icon size={18} name="LeftOutlined" />
+        </View>
+        <View style={this.getTopBarTitleStyle()} className={styles.fullScreenTitle}>
+          {user.targetUser?.nickname}的主页
+        </View>
+      </View>
+    );
+  };
+
   render() {
     const { site, user } = this.props;
     const { platform } = site;
@@ -104,7 +147,8 @@ class H5OthersPage extends React.Component {
         noMore={targetUserThreadsTotalPage < targetUserThreadsPage}
       >
         <View className={styles.mobileLayout}>
-          {this.state.fetchUserInfoLoading && <BottomView isBox loadingText='加载中...' />}
+          {this.renderTitleContent()}
+          {this.state.fetchUserInfoLoading && <BottomView isBox loadingText="加载中..." />}
           {!this.state.fetchUserInfoLoading && (
             <>
               <UserCenterHeaderImage isOtherPerson={true} />
@@ -123,14 +167,14 @@ class H5OthersPage extends React.Component {
             </View> */}
 
             <View className={styles.threadHeader}>
-              <SectionTitle title='主题' isShowMore={false} leftNum={`${targetUserThreadsTotalCount || 0}个主题`} />
+              <SectionTitle title="主题" isShowMore={false} leftNum={`${targetUserThreadsTotalCount || 0}个主题`} />
             </View>
 
             <View className={styles.threadItemContainer}>
-              {this.formatUserThreadsData(targetUserThreads)
-              && this.formatUserThreadsData(targetUserThreads).length > 0 && (
-                <UserCenterThreads data={this.formatUserThreadsData(targetUserThreads)} />
-              )}
+              {this.formatUserThreadsData(targetUserThreads) &&
+                this.formatUserThreadsData(targetUserThreads).length > 0 && (
+                  <UserCenterThreads data={this.formatUserThreadsData(targetUserThreads)} />
+                )}
             </View>
           </View>
         </View>

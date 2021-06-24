@@ -2,16 +2,14 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import { View, Text } from '@tarojs/components';
-import Divider from '@discuzq/design/dist/components/divider/index';
 import UserCenterHeaderImage from '@components/user-center-header-images';
 import UserCenterHead from '@components/user-center-head';
 import UserCenterAction from '@components/user-center-action';
 import Thread from '@components/thread';
-import BaseLayout from '@components/base-layout'
+import BaseLayout from '@components/base-layout';
 import UserCenterPost from '../../components/user-center-post';
 import SectionTitle from '@components/section-title';
 import Taro, { getCurrentInstance, eventCenter } from '@tarojs/taro';
-
 @inject('user')
 @observer
 export default class index extends Component {
@@ -22,12 +20,12 @@ export default class index extends Component {
     };
   }
 
-  $instance = getCurrentInstance()
+  $instance = getCurrentInstance();
 
-  componentWillMount () {
-    const onShowEventId = this.$instance.router.onShow
+  componentWillMount() {
+    const onShowEventId = this.$instance.router.onShow;
     // 监听
-    eventCenter.on(onShowEventId, this.onShow)
+    eventCenter.on(onShowEventId, this.onShow);
   }
 
   onShow = async () => {
@@ -56,9 +54,9 @@ export default class index extends Component {
   // 处理页面栈退出后，数据没有重置
   componentWillUnmount() {
     this.props.user.clearUserThreadsInfo();
-    const onShowEventId = this.$instance.router.onShow
+    const onShowEventId = this.$instance.router.onShow;
     // 卸载
-    eventCenter.off(onShowEventId, this.onShow)
+    eventCenter.off(onShowEventId, this.onShow);
   }
 
   formatUserThreadsData = (userThreads) => {
@@ -76,6 +74,30 @@ export default class index extends Component {
     return Promise.resolve();
   };
 
+  getStatusBarHeight() {
+    return wx?.getSystemInfoSync()?.statusBarHeight || 44;
+  }
+
+  getTopBarTitleStyle() {
+    return {
+      position: 'fixed',
+      top: `${this.getStatusBarHeight()}px`,
+      left: '50%',
+      transform: 'translate(-50%, 8px)',
+    };
+  }
+
+  // 渲染顶部title
+  renderTitleContent = () => {
+    return (
+      <View className={styles.topBar}>
+        <View style={this.getTopBarTitleStyle()} className={styles.fullScreenTitle}>
+          我的主页
+        </View>
+      </View>
+    );
+  };
+
   render() {
     const { isLoading } = this.state;
     const { user } = this.props;
@@ -91,6 +113,7 @@ export default class index extends Component {
         curr="my"
       >
         <View className={styles.mobileLayout}>
+          {this.renderTitleContent()}
           <UserCenterHeaderImage />
           <UserCenterHead />
           <View className={styles.unit}>
@@ -103,9 +126,13 @@ export default class index extends Component {
 
           <View className={`${styles.unit} ${styles.threadBackgroundColor}`}>
             <View className={styles.threadHeader}>
-              <SectionTitle title="主题" isShowMore={false} leftNum={`${userThreadsTotalCount || formattedUserThreads.length}个主题`} />
+              <SectionTitle
+                title="主题"
+                isShowMore={false}
+                leftNum={`${userThreadsTotalCount || formattedUserThreads.length}个主题`}
+              />
             </View>
-        
+
             {!isLoading && formattedUserThreads?.map((item, index) => <Thread data={item} key={index} />)}
           </View>
         </View>
