@@ -90,7 +90,7 @@ const RenderThreadContent = inject('user')(
       typeof props.onRewardClick === 'function' && props.onRewardClick();
     };
 
-    const onClickUser = (e) => {
+    const onUserClick = (e) => {
       typeof props.onUserClick === 'function' && props.onUserClick(e);
     };
 
@@ -109,8 +109,7 @@ const RenderThreadContent = inject('user')(
               isPay={!isFree}
               isReward={isReward}
               isRed={isRedPack}
-              onClick={onClickUser}
-              userId={threadStore?.threadData?.user?.userId}
+              onClick={onUserClick}
             ></UserInfo>
           </div>
           {props?.user?.isLogin() && isApproved && (
@@ -213,13 +212,18 @@ const RenderThreadContent = inject('user')(
               )}
               {/* 红包 */}
               {parseContent.RED_PACKET && (
-                <PostRewardProgressBar
-                  remaining={Number(parseContent.RED_PACKET.remainNumber || 0)}
-                  received={
-                    Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remainNumber || 0)
-                  }
-                  condition={parseContent.RED_PACKET.condition}
-                />
+                <div>
+                  <PostRewardProgressBar
+                    remaining={Number(parseContent.RED_PACKET.remainNumber || 0)}
+                    received={
+                      Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remainNumber || 0)
+                    }
+                    condition={parseContent.RED_PACKET.condition}
+                  />
+                  {!!parseContent.RED_PACKET.condition && (
+                    <div className={styles.redPacketLikeNum}>评论集{parseContent.RED_PACKET.likenum}赞领红包</div>
+                  )}
+                </div>
               )}
             </div>
           )}

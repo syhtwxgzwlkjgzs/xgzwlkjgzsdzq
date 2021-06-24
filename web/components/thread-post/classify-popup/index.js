@@ -58,17 +58,13 @@ const ClassifyPopup = (props) => {
   useEffect(() => {
     const { threadPost } = props;
     const { query } = props.router;
-    const categories = props.threadPost?.getCurrentCategories();
+    // const categories = props.threadPost?.getCurrentCategories();
     // 编辑帖子需要根据id获取对应的帖子信息
-    if (query.id
-      || !categories || (categories && categories.length === 0)
-      || (!query.id && categories.length && !categories[0].canCreateThread)) {
-      (async function () {
-        await threadPost.readPostCategory(query.id);
-        setSeletedCategory();
-      }());
-    }
-  }, [props.threadPost.categories]);
+    (async function () {
+      await threadPost.readPostCategory(query.id);
+      setSeletedCategory();
+    }());
+  }, [props.threadPost.categories.length, props.router.query.id]);
 
   useEffect(() => {
     setSeletedCategory(props?.threadPost?.postData?.categoryId);

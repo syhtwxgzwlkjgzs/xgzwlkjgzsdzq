@@ -93,6 +93,8 @@ $border-color-hover: $text-color-placeholder;
 $border-shadow-color: var(--shadow-color);
 $border-shadow-color2: var(--shadow-color2);
 
+$shadow-color2: 0 0 8px var(--shadow-color2);
+
 $border-shadow-color-8: 0 0 8px 0 var(--shadow-color2);
 
 // ---- mask color ----
@@ -173,3 +175,6 @@ $zindex-toast: 1800;
 // ------  paybox ------------
 $paybox-pay-text-font-size: 30px;
 $paybox-border-line-color: var(--border-line-color);
+
+
+$box-color-placeholder: var(--color-box-placeholder);
