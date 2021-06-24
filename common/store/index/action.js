@@ -22,7 +22,7 @@ class IndexAction extends IndexStore {
   @computed get activeCategoryId() {
     const categories = this.categories || [];
     const { categoryids } = this.filter
-    
+
     const [id, cid] = getActiveId(categories, categoryids)
     return id
   }
@@ -31,7 +31,7 @@ class IndexAction extends IndexStore {
   @computed get activeChildCategoryId() {
     const categories = this.categories || [];
     const { categoryids } = this.filter
-    
+
     const [id, cid] = getActiveId(categories, categoryids)
     return cid
   }
@@ -130,7 +130,7 @@ class IndexAction extends IndexStore {
    async deleteThreadsData({ id } = {}) {
      if (id && this.threads) {
         const { pageData = [] } = this.threads;
-        const newPageData = pageData.filter(item => item.threadId !== id)
+        const newPageData = pageData.filter(item => `${item.threadId}` !== `${id}`)
 
         if (this.threads?.pageData) {
           this.threads.pageData = newPageData;
@@ -149,7 +149,7 @@ class IndexAction extends IndexStore {
       this.threads = null;
       this.sticks = null;
     }
-    
+
     this.resetErrorInfo()
 
     await this.getRreadStickList(filter.categoryids);
@@ -465,7 +465,7 @@ class IndexAction extends IndexStore {
    @action
    async getRecommends({ categoryIds = [] } = {}) {
     this.updateRecommendsStatus('loading');
-    
+
     const result = await readRecommends({ params: { categoryIds } })
     if (result.code === 0) {
       this.setRecommends(result.data || []);
