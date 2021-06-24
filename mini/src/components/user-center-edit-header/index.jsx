@@ -170,7 +170,6 @@ export default class index extends Component {
       });
       try {
         const parsedData = JSON.parse(uploadRes.data);
-        console.log(parsedData);
         if (parsedData.Code === 0) {
           Toast.success({
             content: '上传头像成功',
@@ -228,7 +227,6 @@ export default class index extends Component {
         name: 'background',
       });
       try {
-        console.log(uploadRes)
         const parsedData = JSON.parse(uploadRes.data);
         if (parsedData.Code === 0) {
           Toast.success({

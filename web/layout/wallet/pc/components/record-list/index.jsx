@@ -42,8 +42,6 @@ class WalletInfo extends React.Component {
 
   // parse content
   parseHTML = (content) => {
-    console.log('content', content);
-    console.log('1111', content);
     let t = xss(s9e.parse(this.filterTag(content)));
     t = (typeof t === 'string') ? t : '';
     return t;

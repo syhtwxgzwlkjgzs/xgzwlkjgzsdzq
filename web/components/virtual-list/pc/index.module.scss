@@ -11,30 +11,24 @@
   overflow-x: hidden;
 }
 
-
-.autoHeight {
-  min-height: 100vh;;
-  height: auto !important;
-}
-
 .body{
   width: 100%;
   min-width: rem(800);
   padding-top: rem($padding-5n);
   height: 100%;
   display: flex;
-  flex-direction: column;
+  // flex-direction: column;
   justify-content: center;
-  flex-direction: column;
+  // flex-direction: column;
   flex-direction: row;
   background: $body-bg-color;
   overflow-y: auto;
   border-radius: rem(5);
-  // scrollbar-width: none; /* Firefox */
-  // scrollbar-color: transparent transparent; /* Firefox */
-  // ::-webkit-scrollbar {
-  //   display: none; /* Chrome Safari */
-  // }
+  scrollbar-width: none; /* Firefox */
+  scrollbar-color: transparent transparent; /* Firefox */
+  ::-webkit-scrollbar {
+    display: none; /* Chrome Safari */
+  }
   // 不需要限制最大宽度。这个会影响鼠标的滚动区域，所以改成padding
   &.col-1{
     .wrapper {

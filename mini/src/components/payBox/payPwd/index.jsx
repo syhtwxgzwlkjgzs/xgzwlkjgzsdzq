@@ -83,12 +83,12 @@ class PayPassword extends React.Component {
       Toast.error({
         content: '需要首先绑定手机号才能进行此操作',
         duration: 2000,
+        onClose: () => {
+          // TODO: 回跳逻辑补充
+          this.props.payBox.visible = false;
+          Taro.navigateTo({ url: '/subPages/user/bind-phone/index?from=paybox' });
+        }
       });
-      setTimeout(() => {
-        // TODO: 回跳逻辑补充
-        this.props.payBox.visible = false;
-        Taro.navigateTo({ url: '/subPages/user/bind-phone/index?from=paybox' });
-      }, 1000);
       return;
     }
     Taro.navigateTo({

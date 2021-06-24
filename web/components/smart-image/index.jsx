@@ -22,7 +22,7 @@ const SmartImg = ({level, type, src, onClick, noSmart = false}) => {
                 paramArr.push(newParam);
                 newSrc = `${newSrc}&${paramArr.join('&')}`;
             } else {
-                newParam = `${newParam}?${newParam}`;
+                newSrc = `${newSrc}?${newParam}`;
             }
         }
 
