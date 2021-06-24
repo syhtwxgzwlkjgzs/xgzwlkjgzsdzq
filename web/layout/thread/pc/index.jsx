@@ -377,7 +377,7 @@ class ThreadPCPage extends React.Component {
     const params = {
       id,
       content: val,
-      postId: this.props.thread?.threadData?.postId,
+      // postId: this.props.thread?.threadData?.postId,
       sort: this.commentDataSort, // 目前的排序
       isNoMore: this.props?.thread?.isNoMore,
       attachments: [],
