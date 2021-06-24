@@ -14,7 +14,7 @@ class Index extends Component {
       <ViewAdapter
         h5={<H5OthersUserCenter />}
         pc={<PCOthersUserCenter />}
-        title={`${this.props.user?.targetUserNickname || '他人' + '的'}首页`}
+        title={this.props.user?.targetUserNickname ? `${this.props.user?.targetUserNickname}的首页` : '他人首页'}
       />
     );
   }

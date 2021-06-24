@@ -157,13 +157,8 @@ function avatar(props) {
     if (index === 1) {
       return { text: '已关注', icon: 'CheckOutlined', className: styles.isFollow };
     }
-    return { text: '关注', icon: 'PlusOutlined', className: styles.follow }
-  }, [userInfo.follow])
-
-  const clickAvatar = useCallback((e) => {
-    if (!userId) return;
-    onClick && onClick(e);
-  }, [userId])
+    return { text: '关注', icon: 'PlusOutlined', className: styles.follow };
+  }, [userInfo.follow]);
 
   const clickAvatar = useCallback(
     (e) => {
