@@ -43,7 +43,6 @@ const BaseLayout = forwardRef((props, ref) => {
     rightClassName = '',
     disabledList = false,
     onRefreshPlaceholder = null,
-    screensForBottom = 3
   } = props;
 
   // List组件相关，参考List组件props注释
@@ -109,7 +108,6 @@ const BaseLayout = forwardRef((props, ref) => {
       wrapperClass={styles.wrapper}
       ref={listRef}
       onError={onError}
-      screensForBottom={screensForBottom}
       onScroll={({ scrollTop }) => {
         setScrollTop(scrollTop);
         onScroll();

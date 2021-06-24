@@ -36,7 +36,6 @@ const List = forwardRef(({
   errorText='加载失败',
   platform="",
   showLoadingInCenter = true,
-  screensForBottom = 3,
   site
 }, ref) => {
   const listWrapper = useRef(null);
@@ -146,7 +145,7 @@ const List = forwardRef(({
     if (!isFirst) {
       allowHandleRefresh = (scrollTop !== 0);
     }
-    if (((scrollTop + (clientHeight*screensForBottom)) >= scrollHeight) && !isLoading && allowHandleRefresh) {
+    if ((scrollHeight/scrollTop <= 1.5) && !isLoading && allowHandleRefresh) {
       setIsLoading(true);
       if (typeof(onRefresh) === 'function') {
         const promise = onRefresh();

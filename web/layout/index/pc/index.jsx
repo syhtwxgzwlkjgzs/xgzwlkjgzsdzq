@@ -373,7 +373,6 @@ class IndexPCPage extends React.Component {
 
     return (
       <BaseLayout
-        screensForBottom={4}
         onSearch={this.onSearch}
         onRefresh={this.onPullingUp}
         noMore={currentPage >= totalPage}
