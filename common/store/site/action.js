@@ -116,8 +116,9 @@ class SiteAction extends SiteStore {
     if (process.env.DISCUZ_ENV === 'web') {
       url = window?.sessionStorage ? window.sessionStorage.getItem(INITIAL_PAGE_LABEL) : this._initialPage;
     } else if (this._initialPage) {
-      url = `/${this._initialPage}`;
+      url = `${this._initialPage.startsWith('/')  ? '' : '/'}${this._initialPage}`
     }
+
 
     return url;
   }

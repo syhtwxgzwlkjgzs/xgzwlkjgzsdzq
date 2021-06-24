@@ -28,9 +28,6 @@ class App extends Component {
    * 注意：options 参数的字段在不同小程序中可能存在差异。所以具体使用的时候请看相关小程序的文档
    */
   async onLaunch(options) {
-    // 初始进入页，保留初始页信息
-    this.initInitialPath(options);
-
     const { site } = this.store;
     const { envConfig } = site;
     const { TITLE } = envConfig;
@@ -67,19 +64,6 @@ class App extends Component {
     }
   }
 
-  // 记录用户访问的地址，用于登陆、付费等处理后，正确跳回目的地址
-  initInitialPath(options) {
-    console.log('Enter Page: ', options)
-    const {path, query} = options;
-    const { site } = this.store;
-
-    let url = path;
-    if (Object.keys(query).length > 0) {
-      url = `${url}?${Object.entries(query).map(([key, value]) => `${key}=${value}`).join('&')}`
-    }
-    site.setInitialPage(url);
-  }
-
   /**
    * 程序启动，或切前台时触发，和 onLaunch 生命周期一样
    * @param {object} options 程序初始化参数
@@ -90,12 +74,29 @@ class App extends Component {
   componentDidShow(options) {
     // 捕获从其它小程序返回的验证码result
     this.onCaptchaResult(options);
+
+    // 记录跳转的目的页。目前分享地址统一格式为；/pages/index/index?path={targetUrl}
+    try {
+      const { path, query} = options;
+      let targetUrl = path;
+      if (Object.keys(query).length > 0) {
+        targetUrl = `${path}?${Object.entries(query).map(([key, value])=> `${key}=${value}`).join('&')}`;
+      }
+      const { site } = this.store;
+      site.setInitialPage(targetUrl);
+    } catch(err) {
+      console.log('savePageJump', err);
+    }
   }
 
   /**
    * 程序切后台时触发
    */
-  componentDidHide() {}
+  componentDidHide() {
+    // 关闭小程序，清空跳转
+    const { site } = this.store;
+    site.clearInitialPage();
+  }
 
   /**
    * 程序要打开的页面不存在时触发
