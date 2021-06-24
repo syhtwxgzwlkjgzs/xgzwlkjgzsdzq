@@ -59,7 +59,7 @@ class ThreadH5Page extends React.Component {
       // inputValue: '', // 评论内容
     };
 
-    this.perPage = 5;
+    this.perPage = 20;
     this.page = 1; // 页码
     this.commentDataSort = true;
 

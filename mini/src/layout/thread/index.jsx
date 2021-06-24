@@ -58,7 +58,7 @@ class ThreadH5Page extends React.Component {
       toView: '', // 接收元素id用来滚动定位
     };
 
-    this.perPage = 5;
+    this.perPage = 20;
     this.page = 1; // 页码
     this.commentDataSort = true;
 

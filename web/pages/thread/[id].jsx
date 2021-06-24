@@ -40,7 +40,7 @@ class Detail extends React.Component {
           },
           sort: 'createdAt',
           page: 1,
-          perPage: 5,
+          perPage: 20,
         },
       });
 
