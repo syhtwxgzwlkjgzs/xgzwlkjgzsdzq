@@ -44,8 +44,6 @@ export default (payData) => {
     title,
   };
 
-  console.log(data);
-
   return new Promise((resolve, reject) => {
     PayBox.createPayBox({
       data,

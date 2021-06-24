@@ -11,7 +11,6 @@ import BottomNavBar from '@components/bottom-nav-bar';
 const Index = ({ message, user }) => {
   const { readDialogList, dialogList, threadUnread, financialUnread, accountUnread, deleteDialog } = message;
   const { currentPage, totalPage, list } = dialogList;
-  console.log('message :>> ', message);
 
   // 初始化请求数据
   useDidShow(async () => {

@@ -45,7 +45,6 @@ const Index = (props) => {
 
 
   const onPositionChange = (val) => { // 根据选择地址，存储最新位置
-    console.log(`val`, val)
     if (val.latitude === position.latitude) return;
 
     const newPosition = { ...val };
