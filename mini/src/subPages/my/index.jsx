@@ -21,8 +21,7 @@ class Index extends React.Component {
   getShareData(data) {
     const { site } = this.props;
     const id = this.props.user?.id;
-    const defalutTitle =
-      this.props.user.nickname || this.props.user.username || site.webConfig?.setSite?.siteName || '我' + '的主页';
+    const defalutTitle = this.props.user.nickname || this.props.user.username + '的主页';
     const defalutPath = `/subPages/user/index?id=${id}`;
     if (data.from === 'menu') {
       return {
