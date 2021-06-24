@@ -30,7 +30,8 @@ const VirtualList = forwardRef(({
   preload = 1000,
   requestError = false,
   errorText = '加载失败',
-  showLoadingInCenter = false
+  showLoadingInCenter = false,
+  currentPage
 }, ref) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -43,6 +44,8 @@ const VirtualList = forwardRef(({
   const windowHeight = useRef(667)
   const originalDataSource = useRef([])
   const heights = useRef([])
+
+  const isLoadingRef = useRef(false);
 
   useEffect(() => {
       setIsLoading(noMore);
@@ -141,20 +144,24 @@ const VirtualList = forwardRef(({
             wholePageIndex.current += 1
             // 解决因promise和react渲染不同执行顺序导致重复触发加载数据的问题
             setTimeout(() => {
+              isLoadingRef.current = false;
               setIsLoading(false);
               if (noMore) {
+                isLoadingRef.current = true;
                 setIsLoading(true);
               }
             }, 0);
           })
           .catch((err) => {
             setIsLoading(false);
+            isLoadingRef.current = false;
             setIsError(true);
             setErrText(err || '加载失败')
           })
           .finally(() => {
             if (noMore) {
               setIsLoading(true);
+              isLoadingRef.current = true;
             }
           });
       } else {
@@ -167,7 +174,25 @@ const VirtualList = forwardRef(({
     onScroll(e);
 
     const { scrollTop = 0 } = e?.detail || {}
+    handlePreFetch(e)
     handleCurrentIndex(scrollTop)
+  }
+
+  const handlePreFetch = async (e) => {
+    const currentIndex = currentRenderIndex.current;
+    if (wholePageIndex.current - currentIndex === 0 && !noMore && !isLoadingRef.current) {
+      isLoadingRef.current = true;
+      setIsLoading(true);
+      try {
+        await onRefresh();
+        wholePageIndex.current += 1
+      } catch (e) {
+        setIsError(true);
+        setErrText(e || '加载失败');
+      }
+      setIsLoading(false);
+      isLoadingRef.current = false;
+    }
   }
 
   const handleScrollToUpper = (e) => {
@@ -201,7 +226,7 @@ const VirtualList = forwardRef(({
               }
             </View>
           ) : (
-            <View style={{ height: `${item.height}px` }}></View>
+            <View style={{ height: `${item ? item.height : 300}px` }}></View>
           )
         ))
       }

@@ -259,6 +259,8 @@ class IndexH5Page extends React.Component {
         onRefresh={this.onRefresh}
         requestError={threadError.isError}
         errorText={threadError.errorText}
+        currentPage={currentPage}
+        totalPage={totalPage}
         noMore={!isClickTab && currentPage >= totalPage}
       ></VirtualList>
     );
