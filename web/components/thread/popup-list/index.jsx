@@ -43,14 +43,14 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
   const loadData = async ({ type }) => {
     const { postId = '', threadId = '' } = tipData;
 
-      const res = await readLikedUsers({ params: { threadId, postId, type, page: 1 } });
-      if(res?.code === 0) {
-        setAll(res?.data);
-      } else {
-        setRequestError(true);
-        // setErrorText(res?.msg); TODO: 传回来的是"加载失败"
-      }
-      return res;
+    const res = await readLikedUsers({ params: { threadId, postId, type, page: 1 } });
+    if(res?.code === 0) {
+      setAll(res?.data);
+    } else {
+      setRequestError(true);
+      setErrorText(res?.msg);
+    }
+    return res;
   };
 
   const singleLoadData = async ({ page = 1, type = 1 } = {}) => {

@@ -36,33 +36,40 @@ const openConfirm = function () {
   });
 }
 
+const savaImg = (shareImage) => {
+  Taro.saveImageToPhotosAlbum({
+    filePath: shareImage,
+    success: (res) => {
+      if (res.errMsg === 'saveImageToPhotosAlbum:ok') {
+        Toast.info({
+          content: '保存图片成功',
+          icon: 'success',
+          duration: 2000,
+        });
+      }
+    },
+    fail: () => {
+      Toast.error({
+        content: '保存图片失败',
+        icon: 'none',
+        duration: 2000,
+      });
+    }
+  })
+}
+
 export const saveToAlbum = (shareImage) => () => {
   Taro.getSetting().then(mes => {
     if (mes.authSetting['scope.writePhotosAlbum']) {
-      Taro.saveImageToPhotosAlbum({
-        filePath: shareImage,
-        success: (res) => {
-          if (res.errMsg === 'saveImageToPhotosAlbum:ok') {
-            Toast.info({
-              content: '保存图片成功',
-              icon: 'success',
-              duration: 2000,
-            });
-          }
-        },
-        fail: () => {
-          Toast.error({
-            content: '保存图片失败',
-            icon: 'none',
-            duration: 2000,
-          });
-        }
-      })
+      savaImg(shareImage)
     } else {
       Taro.authorize({
         scope: 'scope.writePhotosAlbum',
         fail: () => {
           openConfirm()
+        },
+        success: () => {
+          savaImg(shareImage)
         }
       })
     }

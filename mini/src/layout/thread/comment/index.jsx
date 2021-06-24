@@ -57,7 +57,6 @@ class CommentH5Page extends React.Component {
 
   // 点击更多
   onMoreClick() {
-    console.log('点击了更多');
     this.setState({ showMorePopup: true });
   }
 
@@ -73,7 +72,6 @@ class CommentH5Page extends React.Component {
 
     // 编辑
     if (type === 'edit') {
-      console.log('点击了编辑', this.props.comment.commentDetail);
       // this.onEditClick(this.props.comment.commentDetail);
     }
 
