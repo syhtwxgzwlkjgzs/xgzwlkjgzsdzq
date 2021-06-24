@@ -98,7 +98,7 @@ const InteractionBox = (props) => {
 
   const doSubmitClick = async () => {
     if (!typingValue.trim()) return;
-    submit({ messageText: typingValue });
+    submit({ messageText: typingValue, isImage: false });
   };
 
   const doPressEnter = (e) => {
@@ -158,6 +158,7 @@ const InteractionBox = (props) => {
       await submit({
         attachmentId: data.id,
         imageUrl: data.url,
+        isImage: true,
       });
     } else {
       Toast.error({ content: ret.msg });

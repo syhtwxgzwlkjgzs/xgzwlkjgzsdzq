@@ -4,6 +4,7 @@ import Avatar from '@discuzq/design/dist/components/avatar/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import { diffDate } from '@common/utils/diff-date';
 import { getMessageImageSize } from '@common/utils/get-message-image-size';
+import { getMessageTimestamp } from '@common/utils/get-message-timestamp';
 import { inject, observer } from 'mobx-react';
 import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
@@ -81,7 +82,7 @@ const DialogBox = (props) => {
       updateDialog(dialogId);
     }, 100);
 
-    return dialogMsgList.list.map(item => {
+    const _list = dialogMsgList.list.map((item) => {
       let [width, height] = [200, 0]; // 兼容没有返回图片尺寸的旧图片
       if (item.imageUrl) {
         const size = item.imageUrl.match(/\?width=(\d+)&height=(\d+)$/);
@@ -103,7 +104,9 @@ const DialogBox = (props) => {
         userId: item.userId,
         nickname: item.user.username,
       }
-    }).reverse();
+    });
+
+    return getMessageTimestamp(_list.reverse());
   }, [dialogMsgListLength]);
 
   const [previewImageUrls, setPreviewImageUrls] = useState([]);
@@ -125,7 +128,7 @@ const DialogBox = (props) => {
       <View className={styles.box__inner}>
         {messagesHistory.map(({ timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl, userId, nickname, width, height }, idx) => (
           <React.Fragment key={idx}>
-            {displayTimePanel && <View className={styles.msgTime}>{diffDate(timestamp)}</View>}
+            {displayTimePanel && timestamp && <View className={styles.msgTime}>{timestamp}</View>}
             <View className={(ownedBy === 'myself' ? `${styles.myself}` : `${styles.itself}`) + ` ${styles.persona}`}>
               <View className={styles.profileIcon} onClick={() => {
                 userId && Taro.navigateTo({ url: `/subPages/user/index?id=${userId}` });
