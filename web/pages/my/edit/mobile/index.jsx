@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import UserCenterEditMobile from '../../../../components/user-center-edit-mobile/index';
 import HOCUserInfo from '@middleware/HOCUserInfo';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
@@ -10,15 +10,17 @@ import { inject, observer } from 'mobx-react';
 @observer
 class EditMobilePage extends React.Component {
   render() {
-    return <ViewAdapter
-      h5={(
-        <div>
-          <UserCenterEditMobile {...this.props} />
-        </div>
-      )}
-      pc={null}
-      title={`修改手机 - ${this.props.site?.siteName}`}
-    />
+    return (
+      <ViewAdapter
+        h5={
+          <div>
+            <UserCenterEditMobile {...this.props} />
+          </div>
+        }
+        pc={null}
+        title={`修改手机`}
+      />
+    );
   }
 }
 
