@@ -12,7 +12,7 @@
   "dependencies": {
     "@discuzq/design": "1.0.20",
     "@discuzq/sdk": "1.0.20",
-    "@discuzq/vditor": "0.0.1-alpha.17",
+    "@discuzq/vditor": "1.0.20",
     "@sandstreamdev/react-swipeable-list": "^1.0.1",
     "@sentry/browser": "^6.4.1",
     "@sentry/react": "^6.4.1",
