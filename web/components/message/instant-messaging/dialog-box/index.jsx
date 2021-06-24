@@ -49,7 +49,7 @@ const DialogBox = (props, ref) => {
   };
 
   const renderImageStatus = (data) => {
-    const { isImageFail, isImageLoading, file } = data;
+    const { isImageFail, isImageLoading, file, failMsg } = data;
     const size = isPC ? 30 : 20;
 
     if (isImageLoading) {
@@ -61,8 +61,9 @@ const DialogBox = (props, ref) => {
           {isImageFail ? (
             <>
               <Icon className={styles.failIcon} name="PictureOutlinedBig" size={size} />
+              {failMsg && <span className={styles.failMsg}>{failMsg}</span>}
               <div className={styles.redDot} onClick={() => {
-                sendImageAttachment(file, '', true);
+                sendImageAttachment(file, data.dialogId, true);
               }}>!</div>
             </>
           ) : (

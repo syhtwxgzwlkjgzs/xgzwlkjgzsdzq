@@ -90,12 +90,11 @@ const Index = (props) => {
     uploadRef.current.click();
   };
 
-  // 图片上传之前，true-允许上传，false-取消上传
-  const beforeUpload = (cloneList) => {
+  // 检查文件类型和体积
+  const checkFile = (file) => {
     const { webConfig } = props.site;
     if (!webConfig) return false;
 
-    const file = cloneList[0];
     const { supportImgExt, supportMaxSize } = webConfig.setAttach;
     const imageType = file.name.match(/\.([^\.]+)$/)[1].toLocaleLowerCase();
     const imageSize = file.size;
@@ -103,24 +102,19 @@ const Index = (props) => {
     const isLegalSize = imageSize > 0 && imageSize < supportMaxSize * 1024 * 1024;
 
     if (!isLegalType) {
-      Toast.info({ content: `仅支持${supportImgExt}类型的图片` });
-      return false;
+      return '格式错误';
     }
 
     if (!isLegalSize) {
-      Toast.info({ content: `仅支持0 ~ ${supportMaxSize}MB的图片` });
-      return false;
+      // Toast.info({ content: `仅支持0 ~ ${supportMaxSize}MB的图片` });
+      return '体积过大';
     }
 
-    return true;
+    return false;
   };
 
   const onImgChange = async (e) => {
     const { files } = e.target;
-    // if (!beforeUpload(files)) {
-    //   uploadRef.current.value = '';
-    //   return; // 图片上传前校验
-    // }
     let localDialogId = 0;
     if (!dialogId) {
       const ret = await createDialog({
@@ -145,9 +139,10 @@ const Index = (props) => {
           const img = new Image();
           img.src = src;
           img.onload = () => {
-            file.localUrl = src;
-            file.width = img.width;
-            file.height = img.height;
+            file.imageUrl = src;
+            file.imageWidth = img.width;
+            file.imageHeight = img.height;
+            file.failMsg = checkFile(file);
             resolve();
           };
         };
@@ -159,7 +154,7 @@ const Index = (props) => {
       results.sort((a, b) => b.data.dialogMessageId - a.data.dialogMessageId);
 
       // 把本地图片和消息id对应起来
-      fileList.map((file, i) => {
+      fileList.forEach((file, i) => {
         const { code, data: { dialogMessageId } } = results[i];
         if (code === 0) {
           file.dialogMessageId = dialogMessageId;
@@ -183,7 +178,8 @@ const Index = (props) => {
     });
   };
 
-  const sendImageAttachment = async (file, dialogId = dialogId, isResend) => {
+  const sendImageAttachment = async (file, dialogId, isResend) => {
+    if (file.failMsg) return;
     if (isResend) {
       uploadingImagesRef.current.forEach((item) => {
         if (item.dialogMessageId === file.dialogMessageId) {
@@ -213,21 +209,17 @@ const Index = (props) => {
       updateDialog(dialogId);
     }, 100);
     return dialogMsgList.list.map((item) => {
-      console.log(uploadingImagesRef.current);
       if (item.isImageLoading && uploadingImagesRef.current.length) {
         uploadingImagesRef.current.forEach((file) => {
           if (file.dialogMessageId === item.id) {
-            console.log(file);
-            item.imageUrl = file.localUrl;
-            item.imageWidth = file.width;
-            item.imageHeight = file.height;
-            item.isImageFail = file.isImageFail;
-            item.file = file;
-            item.dialogId = dialogId;
+            item = {
+              ...item,
+              ...file,
+              file,
+            };
           }
         });
       }
-
       return {
         ...item,
         timestamp: item.createdAt,

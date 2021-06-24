@@ -134,6 +134,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
   }
 
   .uploading {
@@ -143,6 +144,12 @@
 
   .fail {
     background: $disabled-color;
+  }
+
+  .failMsg {
+    font-size: 12px;
+    line-height: 26px;
+    color: $white;
   }
 
   .failIcon {
