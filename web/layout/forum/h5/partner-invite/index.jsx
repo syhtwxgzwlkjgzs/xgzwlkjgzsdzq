@@ -4,7 +4,7 @@ import { withRouter } from 'next/router';
 import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
 import List from '@components/list';
-import { Button, Toast, Avatar, Spin } from '@discuzq/design';
+import { Button, Toast, Avatar, Spin, Icon } from '@discuzq/design';
 import { get } from '@common/utils/get';
 import PopularContents from '../../../search/h5/components/popular-contents';
 import SiteInfo from './site-info';
@@ -19,6 +19,8 @@ import PartnerInviteHot from './partner-invite-hot';
 import PartnerInviteUser from './partner-invite-user';
 import pclayout from './pc.module.scss';
 import mlayout from './index.module.scss';
+import browser from '@common/utils/browser';
+import clearLoginStatus from '@common/utils/clear-login-status';
 
 @inject('site')
 @inject('index')
@@ -92,6 +94,12 @@ class PartnerInviteH5Page extends React.Component {
       return;
     }
     window.location.href = '/';
+  }
+
+  logout = () => {
+    clearLoginStatus();
+    this.props.user.removeUserInfo();
+    goToLoginPage({ url: '/user/login' });
   }
 
   // 右侧 - 潮流话题 粉丝 版权信息
@@ -201,30 +209,40 @@ class PartnerInviteH5Page extends React.Component {
             src='/dzq-img/join-banner-bg.png'
         />
         <ul className={pclayout.joinInfo}>
-            <li className={pclayout.item}>
-              <span className={pclayout.text}>站长</span>
-              <span className={pclayout.content}>{siteAuthor || '--'}</span>
-            </li>
-            <li className={pclayout.item}>
-              <span className={pclayout.text}>已创建</span>
-              <span className={pclayout.content}>{createDays || 0}天</span>
-            </li>
-          </ul>
+          <li className={pclayout.item}>
+            <span className={pclayout.text}>站长</span>
+            <span className={pclayout.content}>{siteAuthor || '--'}</span>
+          </li>
+          <li className={pclayout.item}>
+            <span className={pclayout.text}>已创建</span>
+            <span className={pclayout.content}>{createDays || 0}天</span>
+          </li>
+        </ul>
       </div>
     );
   };
 
   render() {
-    const { site: { platform, webConfig = {} }, forum: { updataTime } } = this.props;
+    const { site: { platform, webConfig = {} }, forum: { updataTime }, user } = this.props;
     const { inviteCode } = this.props.router.query;
     const { setSite: { siteMode, siteExpire, sitePrice, siteMasterScale } = {} } = webConfig;
     const { invitorName, invitorAvatar } = this.state;
     const layout = platform === 'h5' ? mlayout : pclayout;
     // 内容数
     const countThreads = get(webConfig, 'other.countThreads', '');
+    const isShowLogout = platform === 'h5' && user.isLogin() && !(browser.env('weixin') && site.isOffiaccountOpen); // h5下非微信浏览器访问时，若用户已登陆，展示退出按钮
+
     return (
       <PartnerInviteWrap renderRight={this.renderRight} contentHeader={this.contentHeader}>
         <div className={layout.content}>
+          {/* 站点加入页退出按钮 */}
+          {
+            isShowLogout ? (
+              <div className={layout.logout} onClick={this.logout}>
+                <Icon name="SignOutOutlined" size={20} className={layout.logoutBtn} />
+              </div>
+            ) : <></>
+          }
           {/* 站点信息 start */}
           <SiteInfo threadTotal={countThreads} updataTime={ updataTime }/>
           {/* 站点信息 end */}
@@ -265,7 +283,7 @@ class PartnerInviteH5Page extends React.Component {
               )
               : <></>
           }
-        <div className={layout.maskLayer}></div>
+          <div className={layout.maskLayer}></div>
         </div>
       </PartnerInviteWrap>
     );
