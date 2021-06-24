@@ -4,7 +4,8 @@ import UserItem from '../user-item';
 import styles from './index.module.scss';
 
 import { readLikedUsers } from '@server';
-import List from '../../list';
+import List from '@components/list';
+import BottomView from '@components/list/BottomView';
 import { withRouter } from 'next/router';
 
 
@@ -15,7 +16,6 @@ import { withRouter } from 'next/router';
  */
 
 const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) => {
-  const isClickTab = useRef(false);
 
   const allPageNum = useRef(1);
   const likePageNum = useRef(1);
@@ -24,6 +24,8 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
   const [all, setAll] = useState(null);
   const [likes, setLikes] = useState(null);
   const [tips, setTips] = useState(null);
+  const [requestError, setRequestError] = useState(false);
+  const [errorText, setErrorText] = useState("暂无数据");
 
   const [current, setCurrent] = useState(0);
 
@@ -40,10 +42,14 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
 
   const loadData = async ({ type }) => {
     const { postId = '', threadId = '' } = tipData;
+
     const res = await readLikedUsers({ params: { threadId, postId, type, page: 1 } });
-
-    setAll(res?.data);
-
+    if(res?.code === 0) {
+      setAll(res?.data);
+    } else {
+      setRequestError(true);
+      setErrorText(res?.msg);
+    }
     return res;
   };
 
@@ -74,10 +80,6 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
   };
 
   const loadMoreData = () => {
-    if (isClickTab.current) {
-      isClickTab.current = false;
-      return;
-    }
 
     if (current === 0) {
       allPageNum.current += 1;
@@ -96,9 +98,6 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
     const hasAll = id === 0 && !all;
     const hasLikes = id === 1 && !likes;
     const hasTips = (id === 2 || id === 3) && !tips;
-
-    // TODO 临时解决点击tab时，导致list组件触发上拉刷新的问题
-    isClickTab.current = true;
 
     if (hasAll || hasLikes || hasTips) {
       singleLoadData({ type: id, page: 1 });
@@ -183,6 +182,8 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
                   wrapperClass={styles.listWrapper}
                   onRefresh={loadMoreData}
                   noMore={dataSource.data?.currentPage >= dataSource.data?.totalPage}
+                  requestError = {requestError}
+                  errorText = {errorText}
                 >
                   {
                     arr.map((item, index) => (
@@ -221,7 +222,11 @@ const Index = ({ visible = false, onHidden = () => {}, tipData = {}, router }) =
             className={`${styles.tabs} ${tipData?.platform === 'pc' && styles.tabsPC}`}
           >
             <Tabs.TabPanel key={0} id={0}>
-              <Spin className={`${tipData?.platform === 'pc' ? styles.spinnerPC : styles.spinner}`} type="spinner" />
+              {
+                requestError ?
+                <BottomView className={styles.bottomView} isError={requestError} errorText={errorText}/> :
+                <Spin className={`${tipData?.platform === 'pc' ? styles.spinnerPC : styles.spinner}`} type="spinner" />
+              }
             </Tabs.TabPanel>
           </Tabs>
         :        <Tabs

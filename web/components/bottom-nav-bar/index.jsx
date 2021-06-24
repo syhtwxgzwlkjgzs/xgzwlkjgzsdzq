@@ -17,7 +17,7 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
   const { totalUnread, readUnreadCount } = message;
   const checkCurrActiveTab = useCallback((curr, target) => {
     return curr === target;
-  }, [curr])
+  }, [curr]);
 
   const [tabs, setTabs] = useState([
     { icon: 'HomeOutlined', text: '首页', active: checkCurrActiveTab(curr, 'home'), router: '/' },
@@ -31,14 +31,13 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
   const timeoutRef = useRef();
   const updateUnreadMessage = () => {
     if (!user.id) return;
+    readUnreadCount();
     timeoutRef.current = setTimeout(() => {
-      readUnreadCount();
       updateUnreadMessage();
     }, unreadUpdateInterval);
-  }
+  };
 
   useEffect(() => {
-    readUnreadCount();
     updateUnreadMessage();
     return () => clearTimeout(timeoutRef.current);
   }, []);
@@ -69,7 +68,7 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
             <div key={idx} className={styles.item + (i.active ? ` ${styles.active}` : '')} onClick={() => handleClick(i, idx)}>
               {
                 i.icon === 'MailOutlined' ? (
-                  <UnreadRedDot type="icon" style={{width: '22px', margin: '0 auto'}} unreadCount={totalUnread}>
+                  <UnreadRedDot dotStyle={{top: "-6px"}} unreadCount={totalUnread}>
                     <Icon name={i.icon} size={22} />
                   </UnreadRedDot>
                 ) : (
@@ -95,4 +94,4 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
   );
 };
 
-export default inject('user', 'message')(observer(withRouter(BottomNavBar)));
+export default withRouter(inject('user', 'message')(observer(BottomNavBar)));

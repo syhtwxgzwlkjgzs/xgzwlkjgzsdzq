@@ -51,7 +51,7 @@ class Index extends React.Component {
   getShareData(data) {
     const { site } = this.props
     const defalutTitle = site.webConfig?.setSite?.siteName || ''
-    const defalutPath = 'subPages/my/collect/index'
+    const defalutPath = '/subPages/my/collect/index'
     if (data.from === 'menu') {
       return {
         title: defalutTitle,

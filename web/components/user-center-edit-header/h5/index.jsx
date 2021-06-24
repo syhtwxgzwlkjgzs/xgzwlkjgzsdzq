@@ -39,6 +39,7 @@ export default class index extends Component {
   };
 
   onAvatarChange = async (fileList) => {
+    if (!fileList.target.files[0]) return;
     this.setState({
       isUploadAvatarUrl: true,
     });
@@ -75,6 +76,7 @@ export default class index extends Component {
   };
 
   onBackgroundChange = async (fileList) => {
+    if (!fileList.target.files[0]) return;
     this.setState({
       isUploadBackgroundUrl: true,
     });

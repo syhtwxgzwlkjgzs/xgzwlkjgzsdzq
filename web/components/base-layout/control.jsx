@@ -102,8 +102,8 @@ const BaseLayoutControl = forwardRef((props, ref) => {
       const playingAudioBottom = playingAudioHeight + playingAudioTop;
 
       if (playingAudioTop > 0
-        && (playingAudioBottom < scrollTop // 视频在视窗下面
-          || playingAudioTop > window.innerHeight + scrollTop)) { // 视频在视窗上面
+        && (playingAudioBottom < scrollTop // 音频在视窗下面
+          || playingAudioTop > window.innerHeight + scrollTop)) { // 音频在视窗上面
 
         baselayout.pauseWebPlayingAudio();
       }

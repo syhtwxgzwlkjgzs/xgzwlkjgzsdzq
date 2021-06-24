@@ -2,31 +2,74 @@ import React, { useRef, forwardRef, useState, useEffect } from 'react';
 import './index.scss';
 import Item from './item';
 import BottomView from '../BottomView';
-import styles from '../index.module.scss';
-import { getSticksHeight } from '../utils';
+
+import { getImmutableTypeHeight, getSticksHeight } from '../utils';
 
 import { List, CellMeasurer, CellMeasurerCache, AutoSizer, InfiniteLoader } from 'react-virtualized';
 import { inject, observer } from 'mobx-react';
 
-// @observer
-// @inject('index')
-// @inject('vlist')
+const immutableHeightMap = {}; // 不可变的高度
+
+let preScrollTop = 0;
+let scrollTimer;
+// 增强cache实例
+function extendCache(instance) {
+  instance.getDefaultHeight = ({ index, data }) => {
+    if (!data) {
+      return 0;
+    }
+
+    // 获取不可变的元素高度
+    const immutableHeight = getImmutableTypeHeight(data);
+    immutableHeightMap[index] = immutableHeight;
+
+    const variableHeight = 0;
+
+    const rowHeight = immutableHeight + variableHeight + 10;
+
+    return rowHeight;
+  };
+
+  instance.rowHeight = ({ index, data }) => {
+    const key = instance._keyMapper(index, 0);
+    const height =
+      instance._rowHeightCache[key] !== undefined
+        ? instance._rowHeightCache[key]
+        : instance.getDefaultHeight({ index, data });
+
+    return height;
+  };
+}
 
 function Home(props, ref) {
-  const cache = new CellMeasurerCache({
-    fixedWidth: true,
-    minHeight: 150,
-    show: false,
-  });
+  let cache = props.vlist.cache;
+
+  if (!cache) {
+    cache = new CellMeasurerCache({
+      fixedWidth: true,
+      show: false,
+    });
+
+    extendCache(cache);
+    props.vlist.setCache(cache);
+  }
 
   const [list, setList] = useState([{ type: 'header' }, ...(props.list || []), { type: 'footer' }]);
   let listRef = useRef(null);
   let loadData = false;
   const rowCount = list.length;
 
+  const [flag, setFlag] = useState(true);
+
+  // 监听list列表
   useEffect(() => {
     setList([{ type: 'header' }, ...(props.list || []), { type: 'footer' }]);
   }, [props.list]);
+
+  // 监听置顶列表
+  useEffect(() => {
+    recomputeRowHeights(0);
+  }, [props.sticks]);
 
   useEffect(() => {
     if (listRef) {
@@ -34,13 +77,10 @@ function Home(props, ref) {
     }
   }, [listRef?.Grid?.getTotalRowsHeight()]);
 
-  // componentDidMount() {
-  //   setTimeout(() => {
-  //     if (listRef) {
-  //       listRef.scrollToPosition(props.vlist.home || 0);
-  //     }
-  //   }, 1000);
-  // }
+  // 重新计算指定的行高
+  const recomputeRowHeights = (index) => {
+    listRef?.recomputeRowHeights(index);
+  };
 
   // 获取每一行元素的高度
   const getRowHeight = ({ index }) => {
@@ -52,14 +92,14 @@ function Home(props, ref) {
 
     // 头部
     if (data.type === 'header') {
-      return 165 + 56 + 16 + getSticksHeight(props.sticks);
+      return 165 + 54 + 10 + getSticksHeight(props.sticks);
     }
 
     // 底部
     if (data.type === 'footer') {
       return 60;
     }
-    return cache.rowHeight({ index });
+    return cache.rowHeight({ index, data });
   };
 
   const renderListItem = (type, data, measure, { index, key, parent, style }) => {
@@ -67,9 +107,9 @@ function Home(props, ref) {
       case 'header':
         return props.children;
       case 'footer':
-        return <BottomView noMore={props.noMore} isError={props.requestError}></BottomView>;
+        return <BottomView noMore={props.noMore} isError={props.requestError} errorText={props.errorText}></BottomView>;
       default:
-        return <Item data={data} measure={measure} />;
+        return <Item data={data} measure={measure} recomputeRowHeights={() => recomputeRowHeights(index)} />;
     }
   };
 
@@ -83,9 +123,21 @@ function Home(props, ref) {
     return (
       <CellMeasurer cache={cache} columnIndex={0} key={key} rowIndex={index} parent={parent}>
         {({ measure, registerChild }) => (
-          <div ref={registerChild} key={key} style={style} data-index={index} data-key={key} data-id={data.threadId}>
-            {renderListItem(data.type, data, measure, { index, key, parent, style })}
-            {/* <div style={dividerStyle}></div> */}
+          <div
+            ref={registerChild}
+            key={key}
+            style={style}
+            data-index={index}
+            data-key={key}
+            data-id={data.threadId}
+            data-height={immutableHeightMap[index]}
+          >
+            {renderListItem(data.type, data, flag ? measure : () => {}, {
+              index,
+              key,
+              parent,
+              style,
+            })}
           </div>
         )}
       </CellMeasurer>
@@ -95,13 +147,20 @@ function Home(props, ref) {
   // 滚动事件
   const onScroll = ({ scrollTop, clientHeight, scrollHeight }) => {
     // scrollToPosition = scrollTop;
+    setFlag(!(scrollTop < preScrollTop));
+    preScrollTop = scrollTop;
 
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => {
+      setFlag(true);
+    }, 100);
     props.onScroll && props.onScroll({ scrollTop, clientHeight, scrollHeight });
     if (scrollTop !== 0) {
       props.vlist.setPosition(scrollTop);
     }
 
-    if (scrollTop + clientHeight + 50 >= scrollHeight && !loadData) {
+    // if (scrollTop + (clientHeight * 4) >= scrollHeight && !loadData) {
+    if ( scrollHeight / 4 <= scrollTop && !loadData) {
       loadData = true;
       props.loadNextPage().finally(() => {
         loadData = false;
@@ -111,32 +170,28 @@ function Home(props, ref) {
 
   const isRowLoaded = ({ index }) => !!list[index];
 
-  const loadMoreRows = ({ startIndex, stopIndex }) => {
-    console.log(!loadData);
-    // if (!loadData) return;
-
-    // let promiseResolver;
-
-    // loadData = true;
-
-    // props
-    //   .loadNextPage()
-    //   .then(() => {
-    //     loadData = false;
-    //     promiseResolver();
-    //   })
-    //   .finally(() => {
-    //     console.log(loadData);
-    //     loadData = false;
-    //   });
-
-    return new Promise((res) => {
-      // promiseResolver = res;
-    });
+  const loadMoreRows = () => {
+    return Promise.resolve();
   };
 
   const clearAllCache = () => {
     cache.clearAll();
+  };
+
+  // 自定义扫描数据范围
+  const overscanIndicesGetter = ({ cellCount, scrollDirection, overscanCellsCount, startIndex, stopIndex }) => {
+    // 往回滚动
+    if (scrollDirection === -1) {
+      return {
+        overscanStartIndex: Math.max(0, startIndex - overscanCellsCount),
+        overscanStopIndex: Math.min(cellCount - 1, stopIndex + overscanCellsCount),
+      };
+    }
+
+    return {
+      overscanStartIndex: Math.max(0, startIndex - overscanCellsCount),
+      overscanStopIndex: Math.min(cellCount - 1, stopIndex),
+    };
   };
 
   return (
@@ -153,12 +208,15 @@ function Home(props, ref) {
                 onScroll={onScroll}
                 deferredMeasurementCache={cache}
                 height={height}
-                overscanRowCount={5}
-                onRowsRendered={onRowsRendered}
+                overscanRowCount={20}
+                onRowsRendered={(...props) => {
+                  onRowsRendered(...props);
+                }}
                 rowCount={rowCount}
                 rowHeight={getRowHeight}
                 rowRenderer={rowRenderer}
                 width={width}
+                // overscanIndicesGetter={overscanIndicesGetter}
               />
             )}
           </AutoSizer>

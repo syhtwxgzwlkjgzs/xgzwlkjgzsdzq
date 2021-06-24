@@ -10,6 +10,7 @@ import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import threadPay from '@common/pay-bussiness/thread-pay';
 import ThreadCenterView from './ThreadCenterView';
+import { throttle } from '@common/utils/throttle-debounce';
 import { debounce } from './utils';
 import { noop } from '@components/thread/utils';
 
@@ -29,7 +30,8 @@ class Index extends React.Component {
     // 分享
     onShare = (e) => {
       e && e.stopPropagation();
-      this.handleShare()
+      Toast.info({ content: '复制链接成功' });
+      this.handleShare();
     }
     handleShare = debounce(() => {
       // 对没有登录的先登录
@@ -38,8 +40,6 @@ class Index extends React.Component {
         goToLoginPage({ url: '/user/login' });
         return;
       }
-
-      Toast.info({ content: '复制链接成功' });
 
       const { title = '', threadId = '', user } = this.props.data || {};
 
@@ -55,36 +55,37 @@ class Index extends React.Component {
           recomputeRowHeights();
         }
       });
-    }, 2000)
+    }, 500)
 
     // 评论
     onComment = (e) => {
       e && e.stopPropagation();
 
-      // 对没有登录的先登录
-      if (!this.props.user.isLogin()) {
+      const { threadId = '', ability } = this.props.data || {};
+      const { canViewPost } = ability;
+
+      // 没有查看权限，且未登录，需要去登录
+      if (!canViewPost && !this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/user/login' });
+        goToLoginPage({ url: '/subPages/user/wx-auth/index' });
         return;
       }
 
-      const { data = {} } = this.props;
-      const { threadId = '' } = data;
       if (threadId !== '') {
-        this.props.thread.positionToComment()
+        this.props.thread.positionToComment();
         this.props.router.push(`/thread/${threadId}`);
       } else {
         console.log('帖子不存在');
       }
     }
-  
+
     // 点赞
     onPraise = (e) => {
       e && e.stopPropagation();
       this.handlePraise()
     }
     handlePraise = debounce(() => {
-      
+
       if(this.state.isSendingLike) return;
 
       // 对没有登录的先登录
@@ -109,7 +110,7 @@ class Index extends React.Component {
         this.setState({isSendingLike: false});
       });
     }, 1000)
-  
+
     // 支付
     onPay = (e) => {
       e && e.stopPropagation();
@@ -137,6 +138,7 @@ class Index extends React.Component {
           this.props.index.updatePayThreadInfo(thread?.threadId, data)
           this.props.search.updatePayThreadInfo(thread?.threadId, data)
           this.props.topic.updatePayThreadInfo(thread?.threadId, data)
+          this.props.user.updatePayThreadInfo(thread?.threadId, data)
 
           const { recomputeRowHeights = noop } = this.props;
           recomputeRowHeights();
@@ -145,24 +147,24 @@ class Index extends React.Component {
     }, 1000)
 
     onClickUser = (e) => {
-        e && e.stopPropagation()
-        const { user = {} } = this.props.data || {};
+      e && e.stopPropagation()
+
+      const { user = {}, isAnonymous } = this.props.data || {};
+      if (!!isAnonymous) {
+        this.onClick()
+      } else {
         this.props.router.push(`/user/${user?.userId}`);
+      }
     }
 
-    onClick = (e) => {
-      e && e.stopPropagation();
-
-      const avatarPopup = e?.currentTarget.querySelector("#avatar-popup");
-      if( e && avatarPopup && avatarPopup.contains(e.target)) { // 处理来源于Avatar弹框的点击
-        return;
-      }
+    onClick = throttle(() => {
 
       const { threadId = '', ability } = this.props.data || {};
       const { canViewPost } = ability;
 
       if (!canViewPost) {
         Toast.info({ content: '暂无权限查看详情，请联系管理员' });
+        return;
       }
 
       if (threadId !== '') {
@@ -180,13 +182,19 @@ class Index extends React.Component {
       if (typeof(onClick) === 'function') {
         onClick(this.props.data);
       }
-    }
+    }, 1000);
 
     onClickHeaderIcon = (e) => {
       e && e.stopPropagation();
 
       const { onClickIcon = noop } = this.props;
       onClickIcon(e)
+    }
+
+    onOpen = () => {
+      const { threadId = '' } = this.props.data || {};
+
+      this.props.index.updateAssignThreadInfo(threadId, { updateType: 'openedMore', openedMore: true });
     }
 
     render() {
@@ -246,6 +254,7 @@ class Index extends React.Component {
             onClick={this.onClick}
             onPay={this.onPay}
             platform={platform}
+            onOpen={this.onOpen}
           />
 
           <BottomEvent

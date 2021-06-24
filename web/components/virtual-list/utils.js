@@ -84,6 +84,22 @@ export const getImmutableTypeHeight = (data) => {
   return height;
 };
 
-export const getSticksHeight = (list) => {
-  return (list?.length || 0) * 37;
+export const getSticksHeight = (list, platform = 'h5') => {
+  let height = (list?.length || 0) * 37;
+  height = height ? height + 10 : 0;
+
+  if (platform === 'pc') {
+    height = (list?.length || 0) * 38;
+    height = height ? 8 + height + 8 : 0;
+  }
+
+  return height;
+};
+
+export const getTabsHeight = (platform = 'h5') => {
+  return platform === 'h5' ? 54 + 10 : 68;
+};
+
+export const getLogHeight = (platform = 'h5') => {
+  return platform === 'h5' ? 165 : 10;
 };

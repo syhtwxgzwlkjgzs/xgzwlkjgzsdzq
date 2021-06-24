@@ -80,7 +80,7 @@ class index extends Component {
           condition: () => true,
           render: () => this.props.user.username,
           operation: () => {
-            if (this.props.user.canEditUsername) {
+            if (!this.props.user.canEditUsername) {
               return <p className={styles.pcEditNicknameCallMsodifyDisable}>暂无法修改（一年一次）</p>;
             }
             return (

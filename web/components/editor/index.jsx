@@ -113,7 +113,7 @@ export default function DVditor(props) {
       } catch (error) {
         console.log(error);
         errorNum += 1;
-        if (errorNum <= 3) setEditorInitValue();
+        if (errorNum <= 5) setEditorInitValue();
       }
     }, 300);
   };
@@ -195,7 +195,7 @@ export default function DVditor(props) {
     const editor = new Vditor(
       vditorId,
       {
-        _lutePath: 'https://cloudcache.tencentcs.com/operation/dianshi/other/lute.min.6cbcbfbacd9fa7cda638f1a6cfde011f7305a071.js?max_age=31536000',
+        _lutePath: 'https://cloudcache.tencent-cloud.com/operation/dianshi/other/lute.min.6cbcbfbacd9fa7cda638f1a6cfde011f7305a071.js?max_age=31536000',
         ...baseOptions,
         minHeight: 44,
         // 编辑器初始化值
@@ -206,7 +206,6 @@ export default function DVditor(props) {
           onInit(editor);
           editor.setValue('');
           setEditorInitValue();
-          editor.vditor[editor.vditor.currentMode].element.blur();
           // 去掉异步渲染之后的光标focus
           if (getSelection().rangeCount > 0) getSelection().removeAllRanges();
         },

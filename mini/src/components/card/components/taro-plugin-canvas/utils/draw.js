@@ -96,7 +96,9 @@ export function _drawSingleText(drawData, drawOptions) {
                 line++;
             }
         }
-        textArr.push(fillText);
+        if(line <= lineNum) {
+            textArr.push(fillText);
+        }
     }
     textArr.forEach((item, index) => {
         ctx.fillText(item, toPx(x), toPx(y + (lineHeight || fontSize) * index));

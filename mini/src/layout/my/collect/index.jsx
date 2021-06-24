@@ -31,6 +31,7 @@ class Index extends React.Component {
       });
       pageData.splice(pageData.indexOf(item), 1);
       this.props.index.setThreads({ pageData: [...pageData] });
+      this.props.dispatch();
     }
   };
 
@@ -38,7 +39,7 @@ class Index extends React.Component {
     const { index } = this.props;
     const { pageData = [], currentPage, totalPage, totalCount } = index.threads || {};
     return (
-      <BaseLayout showHeader={false} noMore={currentPage >= totalPage} onRefresh={this.props.dispatch}>
+      <BaseLayout showLoadingInCenter={true} showHeader={false} noMore={currentPage >= totalPage} onRefresh={this.props.dispatch}>
         {pageData?.length !== 0 && (
           <View className={styles.titleBox}>
             <Text className={styles.num}>{`${totalCount || 0}`}</Text>

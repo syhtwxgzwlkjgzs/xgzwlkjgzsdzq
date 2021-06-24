@@ -54,7 +54,7 @@ class Index extends Component {
   getFinancialTips = (item) => {
     if (item.type === 'rewarded') {
       if (item.orderType === 3 || item.orderType === 7) return '支付了你';
-      return '打赏了你'
+      return '打赏了你';
     }
     if (item.type === 'receiveredpacket') {
       return '获取红包';
@@ -77,7 +77,7 @@ class Index extends Component {
   };
 
   filterTag(html) {
-    return html?.replace(/<(\/)?([beprt]|br|div)[^>]*>|[\r\n]/gi, '')
+    return html?.replace(/<(\/)?([beprt]|br|div|h\d)[^>]*>|[\r\n]/gi, '')
       .replace(/<img[^>]+>/gi, $1 => {
         return $1.includes('qq-emotion') ? $1 : "[图片]";
       });
@@ -205,7 +205,7 @@ class Index extends Component {
                 <p
                   className={classNames(styles['content-html'], {
                     [styles['single-line']]: ['chat'].includes(type),
-                    [styles['multiple-line']]: ['account'].includes(type),
+                    [styles['multiple-line']]: ['thread', 'account'].includes(type),
                   })}
                   style={isPC ? { paddingRight: '20px' } : {}}
                   dangerouslySetInnerHTML={{ __html: this.parseHTML() }}

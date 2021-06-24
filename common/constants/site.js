@@ -59,6 +59,7 @@ export const WEB_SITE_JOIN_WHITE_LIST = [
 
 // mini端站点加入路由白名单
 export const MINI_SITE_JOIN_WHITE_LIST = [
+  '/pages/index/index', // 小程序进入页
   '/subPages/user/wx-auth/index', // 快捷登录
   '/subPages/user/wx-select/index', // 微信落地页
   '/subPages/user/bind-phone/index', // 绑定手机号
@@ -81,6 +82,7 @@ export const REVIEWING_USER_WHITE_LIST = [
   '/subPages/thread/index', // 帖子详情页
   '/subPages/user/status/index', // 用户状态提示页
   '/subPages/forum/partner-invite/index', // 站点加入
+  '/subPages/user/supplementary/index', // 补充信息
 ];
 
 // web端站点，用户账号审核中可以访问的路由白名单
@@ -89,6 +91,8 @@ export const REVIEWING_USER_WHITE_LIST_WEB = [
   '/thread/[id]', // 帖子详情页
   '/user/status', // 用户状态提示页
   '/forum/partner-invite', // 站点加入
+  '/user/bind-nickname', // 绑定昵称
+  '/user/supplementary', // 补充信息
 ];
 
 export const PERMISSION_PLATE = [

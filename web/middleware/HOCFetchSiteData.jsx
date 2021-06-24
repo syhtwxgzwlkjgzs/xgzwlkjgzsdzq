@@ -67,8 +67,6 @@ export default function HOCFetchSiteData(Component) {
             userData = (userInfo && userInfo.code === 0) ? userInfo.data : null;
             userPermissions = (userPermissions && userPermissions.code === 0) ? userPermissions.data : null;
           }
-
-          console.log(Component.getInitialProps);
           // 传入组件的私有数据
           if (siteConfig && siteConfig.code === 0 && Component.getInitialProps) {
             __props = await Component.getInitialProps(ctx, { user: userData, site: serverSite });
@@ -165,9 +163,6 @@ export default function HOCFetchSiteData(Component) {
         loginStatus = false;
       }
 
-      // 未登陆状态下，清空accessToken
-      !loginStatus && clearLoginStatus();
-
       user.updateLoginStatus(loginStatus);
       this.setState({ isPass: this.isPass() });
     }
@@ -182,6 +177,7 @@ export default function HOCFetchSiteData(Component) {
           Router.redirect({ url: '/close' });
           break;
         case INVALID_TOKEN:// 没有权限,只能针对forum接口做此判断
+          break;
         case TOKEN_FAIL:// token无效
           clearLoginStatus();
           window.location.reload();

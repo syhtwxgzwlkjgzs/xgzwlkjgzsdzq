@@ -125,6 +125,8 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
             }
           } else {
             console.log(res);
+            const msg = res.statusCode === 413 ? '上传大小超过了服务器限制' : res.msg;
+            Toast.error({ content: `上传失败：${msg}` });
           }
           resolve(res);
         },
@@ -191,7 +193,7 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
   // 录音并上传
   const audioRecord = (type === THREAD_TYPE.voice && !audio.id) && (
     <AudioRecord
-      duration={60}
+      duration={60.4}
       onUpload={(file) => {
         audioUpload(file);
       }}

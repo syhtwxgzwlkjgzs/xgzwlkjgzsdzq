@@ -14,7 +14,6 @@ import PcBodyWrap from '../components/pc-body-wrap';
 import { genMiniScheme } from '@common/server';
 import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 
-
 @inject('site')
 @inject('user')
 @inject('h5QrCode')
@@ -22,10 +21,20 @@ import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-stor
 @inject('invite')
 @observer
 class WXLoginH5Page extends React.Component {
+  
   timer = null;
+
   async componentDidMount() {
+    await this.generateQrCode();
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
+  async generateQrCode() {
     try {
-      const { site, invite, router } = this.props;
+      const { site, invite, router, h5QrCode } = this.props;
 
       if (site?.wechatEnv === 'none') return;
 
@@ -52,7 +61,7 @@ class WXLoginH5Page extends React.Component {
       // 在h5浏览器中，且公众号设置打开
       const params = {
         type: 'mobile_browser_login',
-        redirectUri: encodeURIComponent(`${window.location.origin}/user/wx-authorization?type=${platform}${inviteCode}`),
+        redirectUri: encodeURIComponent(`${window.location.origin}/user/${platform === 'h5' ? 'wx-auth' : 'wx-authorization'}?type=${platform}${inviteCode}`),
       };
 
       // pc端打开
@@ -66,10 +75,14 @@ class WXLoginH5Page extends React.Component {
         }
       }
 
-      await this.props.h5QrCode.generate({ params });
+      await h5QrCode.generate({ params });
 
       if (platform === 'pc') {
         this.queryLoginState(params.type);
+      } else {
+        setTimeout(() => {
+          this.props.h5QrCode.countDown = 0;
+        }, this.props.h5QrCode.countDownOfSeconds * 1000);
       }
     } catch (e) {
       console.log(e);
@@ -79,10 +92,6 @@ class WXLoginH5Page extends React.Component {
         duration: 1000,
       });
     }
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timer);
   }
 
   queryLoginState(type) {
@@ -98,14 +107,18 @@ class WXLoginH5Page extends React.Component {
         // FIXME: 使用 window 跳转用来解决，获取 forum 在登录前后不同的问题，后续需要修改 store 完成
         window.location.href = '/';
       } catch (e) {
-        if (this.props.h5QrCode.countDown) {
+        // 从store中提取最长轮询时间，到期后终止轮询，并提示刷新二维码
+        if (this.props.h5QrCode.countDown > 0) {
           this.props.h5QrCode.countDown = this.props.h5QrCode.countDown - 3;
         } else {
           clearInterval(this.timer);
         }
+
         const { site } = this.props;
         // 跳转补充信息页
         if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+          const uid = get(e, 'uid', '');
+          uid && this.props.user.updateUserInfo(uid);
           if (isExtFieldsOpen(site)) {
             this.props.commonLogin.needToCompleteExtraInfo = true;
             this.props.router.push('/user/supplementary');
@@ -142,6 +155,8 @@ class WXLoginH5Page extends React.Component {
           <div className={platform === 'h5' ? layout.title : layout.pc_title}>微信登录</div>
           {/* 二维码 start */}
           <WeixinQrCode
+            refresh={() => {this.generateQrCode()}}
+            isValid={this.props.h5QrCode.isQrCodeValid}
             orCodeImg={this.props.h5QrCode.qrCode}
             orCodeTips={platform === 'h5' ? '长按保存二维码，并在微信中识别此二维码，即可完成登录' : '请使用微信，扫码登录'}
           />

@@ -28,15 +28,16 @@ class Index extends React.Component {
     onComment = (e) => {
       e && e.stopPropagation();
 
-      // 对没有登录的先登录
-      if (!this.props.user.isLogin()) {
+      const { threadId = '', ability } = this.props.data || {};
+      const { canViewPost } = ability;
+
+      // 没有查看权限，且未登录，需要去登录
+      if (!canViewPost && !this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
         goToLoginPage({ url: '/subPages/user/wx-auth/index' });
         return;
       }
 
-      const { data = {} } = this.props;
-      const { threadId = '' } = data;
       if (threadId !== '') {
         this.props.thread.positionToComment()
         Router.push({url: `/subPages/thread/index?id=${threadId}`})
@@ -112,6 +113,7 @@ class Index extends React.Component {
 
       if (!canViewPost) {
         Toast.info({ content: '暂无权限查看详情，请联系管理员' });
+        return
       }
 
       if (threadId !== '') {
@@ -133,8 +135,13 @@ class Index extends React.Component {
 
     onUser = (e) => {
       e && e.stopPropagation();
-      const { user = {} } = this.props.data || {};
-      Router.push({url: `/subPages/user/index?id=${user?.userId}`});
+
+      const { user = {}, isAnonymous } = this.props.data || {};
+      if (!!isAnonymous) {
+        this.onClick()
+      } else {
+        Router.push({url: `/subPages/user/index?id=${user?.userId}`});
+      }
     }
 
     onClickHeaderIcon = (e) => {
@@ -213,6 +220,7 @@ class Index extends React.Component {
             shareContent = {shareContent}
             getShareContent = {getShareContent}
             data={data}
+            user={this.props.user}
           />
         </View>
       );

@@ -140,7 +140,6 @@ function VList({ hasNextPage, isNextPageLoading, list = [], sticks = [], loadNex
     onScroll({ scrollTop, clientHeight, scrollHeight });
     // onListScroll({ scrollTop, clientHeight, scrollHeight });
     if (scrollTop + clientHeight + 50 >= scrollHeight && !isLoading) {
-      console.log('加载下一页');
       setIsLoading(true);
       loadNextPage().finally(() => {
         setIsLoading(false);
@@ -156,7 +155,7 @@ function VList({ hasNextPage, isNextPageLoading, list = [], sticks = [], loadNex
           ref={(ref) => (listRef = ref)}
           width={width}
           onScroll={onChildScroll}
-          overscanRowCount={12}
+          overscanRowCount={10}
           rowCount={rowCount}
           rowRenderer={rowRenderer}
           rowHeight={getRowHeight}
