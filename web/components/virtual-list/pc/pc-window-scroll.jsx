@@ -77,13 +77,13 @@ function Home(props, ref) {
 
   useEffect(() => {
     if (listRef) {
-      listRef.scrollToPosition(props.vlist.home || 0);
+      listRef.scrollToPosition && listRef.scrollToPosition(props.vlist.home || 0);
     }
   }, [listRef?.Grid?.getTotalRowsHeight()]);
 
   // 重新计算指定的行高
   const recomputeRowHeights = (index) => {
-    listRef?.recomputeRowHeights(index);
+    listRef?.recomputeRowHeights && listRef?.recomputeRowHeights(index);
   };
 
   // 获取每一行元素的高度
@@ -150,7 +150,7 @@ function Home(props, ref) {
 
   // 滚动事件
   const onScroll = ({ scrollTop, clientHeight, scrollHeight }) => {
-    // scrollToPosition = scrollTop;
+    //  && // scrollToPosition = scrollTop;
     setFlag(!(scrollTop < preScrollTop));
     preScrollTop = scrollTop;
 
@@ -164,7 +164,7 @@ function Home(props, ref) {
       props.vlist.setPosition(scrollTop);
     }
 
-    if (scrollTop + clientHeight + (clientHeight / 2) >= scrollHeight && !loadData) {
+    if (scrollTop + clientHeight + clientHeight >= scrollHeight && !loadData) {
       loadData = true;
       props.loadNextPage().finally(() => {
         loadData = false;
@@ -174,29 +174,7 @@ function Home(props, ref) {
 
   const isRowLoaded = ({ index }) => !!list[index];
 
-  const loadMoreRows = ({ startIndex, stopIndex }) => {
-    console.log(!loadData);
-    // if (!loadData) return;
-
-    // let promiseResolver;
-
-    // loadData = true;
-
-    // props
-    //   .loadNextPage()
-    //   .then(() => {
-    //     loadData = false;
-    //     promiseResolver();
-    //   })
-    //   .finally(() => {
-    //     console.log(loadData);
-    //     loadData = false;
-    //   });
-
-    return new Promise((res) => {
-      // promiseResolver = res;
-    });
-  };
+  const loadMoreRows = ({ startIndex, stopIndex }) => Promise.resolve();
 
   const clearAllCache = () => {
     cache.clearAll();
@@ -218,53 +196,94 @@ function Home(props, ref) {
     };
   };
 
-  const onScrollWindow = (params) => {
-    console.log(params);
-  };
+  const [scrollElement, setElement] = useState(null);
+  useEffect(() => {
+    setElement(document.querySelector('.home'));
+  }, []);
 
   return (
     <div className="page">
-      
-          <InfiniteLoader isRowLoaded={isRowLoaded} loadMoreRows={loadMoreRows} rowCount={rowCount}>
-            {({ onRowsRendered }) => (
-              <WindowScroller>
-              {({ height, isScrolling, registerChild, onChildScroll, scrollTop }) => {
-              return (
-              <AutoSizer disableHeight>
-                {({ width }) => (
-                  <div className={styles.center} ref={registerChild}>
-                    <List
-                      ref={(ref) => {
-                        listRef = ref;
-                      }}
-                      onScroll={onScroll}
-                      deferredMeasurementCache={cache}
-                      height={height}
-                      autoHeight={true}
-                      isScrolling={false}
-                      overscanRowCount={20}
-                      onRowsRendered={(...props) => {
-                        onRowsRendered(...props);
-                      }}
-                      rowCount={rowCount}
-                      rowHeight={getRowHeight}
-                      rowRenderer={rowRenderer}
-                      scrollTop={scrollTop}
-                      width={width}
-                      overscanIndicesGetter={overscanIndicesGetter}
-                    />
-                  // </div>
-                )}
-              </AutoSizer>
-              
-            )}
-            }
-                  </WindowScroller>
-                          )}
-          </InfiniteLoader>
-
+      {scrollElement && (
+        <WindowScroller scrollElement={scrollElement}>
+          {({ height, isScrolling, registerChild, onChildScroll, scrollTop }) => (
+            <InfiniteLoader isRowLoaded={isRowLoaded} loadMoreRows={loadMoreRows} rowCount={rowCount}>
+              {({ onRowsRendered }) => (
+                <AutoSizer disableHeight>
+                  {({ width }) => (
+                    <div className={styles.center} ref={registerChild}>
+                      <List
+                        ref={(ref) => {
+                          listRef = ref;
+                          // registerChild(ref);
+                        }}
+                        onScroll={onScroll}
+                        deferredMeasurementCache={cache}
+                        height={height}
+                        autoHeight={true}
+                        isScrolling={false}
+                        overscanRowCount={20}
+                        onRowsRendered={(...props) => {
+                          onRowsRendered(...props);
+                        }}
+                        rowCount={rowCount}
+                        rowHeight={getRowHeight}
+                        rowRenderer={rowRenderer}
+                        scrollTop={scrollTop}
+                        width={width}
+                        // overscanIndicesGetter={overscanIndicesGetter}
+                      />
+                    </div>
+                  )}
+                </AutoSizer>
+              )}
+            </InfiniteLoader>
+          )}
+        </WindowScroller>
+      )}
     </div>
   );
+
+  // return (
+  //   <div className="page">
+  //     <InfiniteLoader isRowLoaded={isRowLoaded} loadMoreRows={loadMoreRows} rowCount={rowCount}>
+  //       {({ onRowsRendered }) => (
+  //         <WindowScroller>
+  //           {({ height, isScrolling, registerChild, onChildScroll, scrollTop }) => {
+  //             return (
+  //               <AutoSizer disableHeight>
+  //                 {({ width }) => (
+  //                   <div className={styles.center} ref={registerChild}>
+  //                     <List
+  //                       ref={(ref) => {
+  //                         listRef = ref;
+  //                       }}
+  //                       onScroll={onScroll}
+  //                       deferredMeasurementCache={cache}
+  //                       height={height}
+  //                       autoHeight={true}
+  //                       isScrolling={false}
+  //                       overscanRowCount={20}
+  //                       onRowsRendered={(...props) => {
+  //                         onRowsRendered(...props);
+  //                       }}
+  //                       rowCount={rowCount}
+  //                       rowHeight={getRowHeight}
+  //                       rowRenderer={rowRenderer}
+  //                       scrollTop={scrollTop}
+  //                       width={width}
+  //                       overscanIndicesGetter={overscanIndicesGetter}
+  //                     />
+  //                     //{' '}
+  //                   </div>
+  //                 )}
+  //               </AutoSizer>
+  //             );
+  //           }}
+  //         </WindowScroller>
+  //       )}
+  //     </InfiniteLoader>
+  //   </div>
+  // );
 }
 
 export default inject('vlist')(observer(forwardRef(Home)));
