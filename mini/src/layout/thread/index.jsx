@@ -45,6 +45,7 @@ class ThreadH5Page extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isShowShare: false, // 更多弹框是否显示分享
       showReportPopup: false, // 是否弹出举报弹框
       showDeletePopup: false, // 是否弹出删除弹框
       showCommentInput: false, // 是否弹出评论框
@@ -58,7 +59,7 @@ class ThreadH5Page extends React.Component {
       toView: '', // 接收元素id用来滚动定位
     };
 
-    this.perPage = 5;
+    this.perPage = 20;
     this.page = 1; // 页码
     this.commentDataSort = true;
 
@@ -241,8 +242,19 @@ class ThreadH5Page extends React.Component {
     // this.setState({
     //   text: !this.state.text,
     // });
-    this.setState({ showMorePopup: true });
+    this.setState({
+      isShowShare: false,
+      showMorePopup: true
+    });
   };
+
+  // 点击分享
+  onShareClick = () => {
+    this.setState({
+      isShowShare: true,
+      showMorePopup: true,
+    });
+  }
 
   onOperClick = (type) => {
     if (!this.props.user.isLogin()) {
@@ -796,10 +808,10 @@ class ThreadH5Page extends React.Component {
           id="hreadBodyId"
           scrollY
           scrollTop={this.position}
-          lowerThreshold={50}
+          lowerThreshold={1000}
           onScrollToLower={() => this.scrollToLower()}
           scrollIntoView={this.state.toView}
-          onScroll={(e) => throttle(this.handleOnScroll(e), 500)}
+          onScroll={(e) => throttle(this.handleOnScroll(e), 200)}
         >
           <View className={layout['view-inner']}>
             <ShowTop showContent={this.state.showContent} setTop={this.state.setTop}></ShowTop>
@@ -886,13 +898,12 @@ class ThreadH5Page extends React.Component {
                 ></Icon>
 
                 {/* 分享button */}
-                <Button
+                <View
                   className={classNames(footer.share, footer.icon)}
-                  openType="share"
-                  data-shareData={this.shareData}
+                  onClick={() => this.onShareClick()}
                 >
                   <Icon className={footer.icon} size="20" name="ShareAltOutlined"></Icon>
-                </Button>
+                </View>
               </View>
             </View>
           </View>
@@ -921,6 +932,7 @@ class ThreadH5Page extends React.Component {
               onClose={() => this.setState({ showMorePopup: false })}
               onSubmit={() => this.setState({ showMorePopup: false })}
               onOperClick={(type) => this.onOperClick(type)}
+              isShowShare={this.state.isShowShare}
             ></MorePopup>
 
             {/* 删除弹层 */}

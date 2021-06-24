@@ -261,6 +261,13 @@
   color: $text-color-secondary;
 }
 
+.redPacketLikeNum {
+  text-align: center;
+  margin-top: $margin-5n;
+  font-size: rem($font-size-label);
+  color: $text-color-secondary;
+}
+
 .browseCategory {
   display: flex;
   p {

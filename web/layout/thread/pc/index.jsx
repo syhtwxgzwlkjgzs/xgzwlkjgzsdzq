@@ -55,7 +55,7 @@ class ThreadPCPage extends React.Component {
     this.likedLoading = false;
     this.collectLoading = false;
 
-    this.perPage = 5;
+    this.perPage = 20;
     this.page = 1; // 页码
     this.commentDataSort = true;
 
