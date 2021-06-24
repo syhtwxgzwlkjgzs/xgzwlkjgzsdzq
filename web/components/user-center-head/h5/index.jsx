@@ -11,6 +11,7 @@ import browser from '@common/utils/browser';
 import throttle from '@common/utils/thottle.js';
 
 @inject('user')
+@inject('site')
 @observer
 class index extends Component {
   constructor(props) {
@@ -197,8 +198,10 @@ class index extends Component {
   };
 
   render() {
+    const { site } = this.props;
     const { targetUser } = this.props.user;
     const user = this.props.router.query?.id ? targetUser || {} : this.props.user;
+    const isHideLogout = site.platform === 'h5' && browser.env('weixin') && site.isOffiaccountOpen; // h5下非微信浏览器访问时，若用户已登陆，展示退出按钮
     return (
       <div className={styles.h5box}>
         {/* 上 */}
@@ -269,12 +272,16 @@ class index extends Component {
                   <span className={styles.userBtnText}>编辑资料</span>
                 </div>
               </Button>
-              <Button full className={styles.btn} onClick={this.logout}>
-                <div className={styles.actionButtonContentWrapper}>
-                  <Icon name="PoweroffOutlined" size={browser.env('ios') ? 14 : 16} />
-                  <span className={styles.userBtnText}>退出登录</span>
-                </div>
-              </Button>
+              {
+                isHideLogout ? '' : (
+                  <Button full className={styles.btn} onClick={this.logout}>
+                    <div className={styles.actionButtonContentWrapper}>
+                      <Icon name="PoweroffOutlined" size={browser.env('ios') ? 14 : 16} />
+                      <span className={styles.userBtnText}>退出登录</span>
+                    </div>
+                  </Button>
+                )
+              }
             </>
           )}
         </div>

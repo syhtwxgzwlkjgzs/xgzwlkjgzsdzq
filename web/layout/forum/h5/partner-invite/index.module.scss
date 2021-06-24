@@ -49,8 +49,13 @@
     font-size: rem($font-size-label);
     color: $text-color-secondary;
     margin-bottom: rem($margin-2n);
-    span {
+    .tips {
       color: $primary-color;
+    }
+    .expire {
+      margin-left: $margin-2n;
+      padding-left: $padding-2n;
+      border-left: $border-solid-1;
     }
   }
   .bottom_button{

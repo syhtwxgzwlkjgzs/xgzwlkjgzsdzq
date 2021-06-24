@@ -104,11 +104,9 @@ class PartnerInviteH5Page extends React.Component {
 
   // 右侧 - 潮流话题 粉丝 版权信息
   renderRight = () => {
-    const { inviteData } = this.props.invite;
-    const { site: { platform, webConfig = {} }, forum } = this.props;
+    const { site: { platform, webConfig = {} }, forum, user } = this.props;
     const { invitorName, invitorAvatar } = this.state;
     const { setSite: { siteMode, sitePrice, siteMasterScale, siteExpire } = {} } = webConfig;
-    const { updataTime } = forum;
     const layout = platform === 'h5' ? mlayout : pclayout;
     const { inviteCode } = this.props.router.query;
     // 内容数
@@ -181,8 +179,15 @@ class PartnerInviteH5Page extends React.Component {
               </div>
               : <></>
           }
-          <div className={layout.user_card_button} onClick={this.handleJoinSite}>{siteMode === 'pay' ? `¥ ${sitePrice}` : ''} 立即加入</div>
-          {(siteMode === 'pay' && siteExpire) ? <div className={layout.bottom_title}>有效期：<span>{siteExpire}天</span></div> : <></>}
+          <div className={layout.user_card_button} onClick={this.handleJoinSite}>
+            {siteMode === 'pay' ? (user.isLogin() ? `¥ ${sitePrice} 立即加入` : '登录浏览更多内容') : '立即加入' }
+          </div>
+          {siteMode === 'pay' ? (
+            <div className={layout.bottom_title}>
+              { user.isLogin() ? <></> : <span>新用户加入 <span className={layout.tips}>¥{sitePrice}</span></span> }
+              { siteExpire ? <span className={!user.isLogin() && siteExpire ? layout.expire : ''}>有效期{ user.isLogin() ? '：' : ' '}<span className={layout.tips}>{siteExpire}天 </span></span> : <></> }
+            </div>
+          ) : <></>}
         </div>
         <Copyright/>
       </>
@@ -276,11 +281,12 @@ class PartnerInviteH5Page extends React.Component {
                   }
                   {siteMode === 'pay' ? (
                     <div className={layout.bottom_title}>
-                      新用户加入 <span>¥{sitePrice}{ siteExpire ? `/${siteExpire}天` : ''}</span>
+                      { user.isLogin() ? <></> : <span>新用户加入 <span className={layout.tips}>¥{sitePrice}</span></span> }
+                      { siteExpire ? <span className={!user.isLogin() && siteExpire ? layout.expire : ''}>有效期{ user.isLogin() ? '：' : ' '}<span className={layout.tips}>{siteExpire}天 </span></span> : <></> }
                     </div>
                   ) : <></>}
                   <Button className={layout.bottom_button} onClick={this.handleJoinSite}>
-                    登陆浏览更多内容
+                    { user.isLogin() ? `${siteMode === 'pay' ? `¥${sitePrice} ` : ''}立即加入` : `${siteMode === 'pay' ? '登录浏览更多内容' : '立即加入'}` }
                   </Button>
                 </div>
                 </>
