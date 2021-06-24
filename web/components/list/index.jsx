@@ -106,16 +106,32 @@ const List = forwardRef(({
     };
   };
 
-  const onBackTop = () => {
-    if (currentScrollTop.current > 0) {
-      const top = currentScrollTop.current -  currentScrollTop.current / 5;
-      window.requestAnimationFrame(onBackTop)
-      listWrapper.current.scrollTop = top;
-      currentScrollTop.current = top;
-    } else {
-      listWrapper.current.scrollTop = 0;
-      currentScrollTop.current = 0;
+  const onBackTop = () => {;
+    let step = listWrapper.current.scrollTop > 30000 ? 0 : listWrapper.current.scrollTop > 5000 ? 6 : 12;
+    const count = 8;
+    function fn() {
+      
+      if (step === 0) {
+        listWrapper.current.scrollTop = 0;
+        currentScrollTop.current = 0;
+      } else if ( step > 0 ) {
+        const top = currentScrollTop.current - currentScrollTop.current / count;
+        listWrapper.current.scrollTop = top;
+        currentScrollTop.current = top;
+        window.requestAnimationFrame(fn);
+      }
+      step--;
     }
+    fn();
+    // if (currentScrollTop.current > 0) {
+    //   const top = currentScrollTop.current -  currentScrollTop.current / 5;
+    //   window.requestAnimationFrame(onBackTop)
+    //   listWrapper.current.scrollTop = top;
+    //   currentScrollTop.current = top;
+    // } else {
+    //   listWrapper.current.scrollTop = 0;
+    //   currentScrollTop.current = 0;
+    // }
   };
 
   const jumpToScrollTop = (scrollTop) => {
