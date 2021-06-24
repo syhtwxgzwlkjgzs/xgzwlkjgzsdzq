@@ -12,7 +12,7 @@ export default function avatar(props) {
   }, [name]);
 
   const clickHandle = useCallback((e) => {
-    e.stopPropagation();
+    // e.stopPropagation();
     if (!userId) return;
     onClick && onClick(e);
   }, [userId]);
