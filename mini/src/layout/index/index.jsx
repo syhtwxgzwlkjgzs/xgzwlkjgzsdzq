@@ -13,6 +13,7 @@ import { getSelectedCategoryIds } from '@common/utils/handleCategory';
 import Taro from '@tarojs/taro';
 import { debounce } from '@common/utils/throttle-debounce.js';
 import styles from './index.module.scss';
+import VirtualList from '@components/virtual-list';
 @inject('site')
 @inject('user')
 @inject('index')
@@ -212,47 +213,54 @@ class IndexH5Page extends React.Component {
     const { currentPage, totalPage, pageData } = threads || {};
 
     return (
-      <BaseLayout
-        showHeader={false}
-        showTabBar
+      // <BaseLayout
+      //   showHeader={false}
+      //   showTabBar
+      //   onRefresh={this.onRefresh}
+      //   noMore={!isClickTab && currentPage >= totalPage}
+      //   isFinished={isFinished}
+      //   onScroll={this.handleScroll}
+      //   onScrollToUpper={this.handleScrollToUpper}
+      //   curr='home'
+      //   pageName='home'
+      //   preload={3000}
+      //   requestError={threadError.isError}
+      //   errorText={threadError.errorText}
+      //   onClickTabBar={this.handleClickTabBar}
+      // >
+      //   <HomeHeader ref={this.headerRef} />
+
+      //   {this.renderTabs()}
+
+      //   <View style={{display: isClickTab ? 'none' : 'block'}}>
+      //     {this.renderHeaderContent()}
+       
+      //     {pageData?.map((item, index) => (
+      //         <ThreadContent
+      //           key={item.threadId}
+      //           showBottomStyle={index !== pageData.length - 1}
+      //           data={item}
+      //           className={styles.listItem}
+      //         />
+      //       ))}
+      //   </View>
+
+      //   <FilterView
+      //     data={currentCategories}
+      //     current={filter}
+      //     onCancel={this.onClose}
+      //     visible={this.state.visible}
+      //     onSubmit={this.changeFilter}
+      //     permissions={user.threadExtendPermissions}
+      //   />
+      // </BaseLayout>
+      <VirtualList
+        data={pageData}
         onRefresh={this.onRefresh}
-        noMore={!isClickTab && currentPage >= totalPage}
-        isFinished={isFinished}
-        onScroll={this.handleScroll}
-        onScrollToUpper={this.handleScrollToUpper}
-        curr='home'
-        pageName='home'
-        preload={3000}
         requestError={threadError.isError}
         errorText={threadError.errorText}
-        onClickTabBar={this.handleClickTabBar}
-      >
-        <HomeHeader ref={this.headerRef} />
-
-        {this.renderTabs()}
-
-        <View style={{display: isClickTab ? 'none' : 'block'}}>
-          {this.renderHeaderContent()}
-       
-          {pageData?.map((item, index) => (
-              <ThreadContent
-                key={item.threadId}
-                showBottomStyle={index !== pageData.length - 1}
-                data={item}
-                className={styles.listItem}
-              />
-            ))}
-        </View>
-
-        <FilterView
-          data={currentCategories}
-          current={filter}
-          onCancel={this.onClose}
-          visible={this.state.visible}
-          onSubmit={this.changeFilter}
-          permissions={user.threadExtendPermissions}
-        />
-      </BaseLayout>
+        noMore={!isClickTab && currentPage >= totalPage}
+      ></VirtualList>
     );
   }
 }
