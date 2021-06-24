@@ -96,7 +96,7 @@ class ThreadCreate extends React.Component {
     }
     this.moneyboxDisplay(false);
     // 阻止页面上拉带动操作栏位置变化。放这里便于本地开发调试
-    if (window.innerHeight === winHeight && isIOS()) return;
+    // if (window.innerHeight === winHeight && isIOS()) return;
     this.setPostBox(action, event, y);
   }
 
@@ -174,7 +174,7 @@ class ThreadCreate extends React.Component {
       this.setPostBox('clear');
       postBottombar.style.top = 'auto';
       postBottombar.style.bottom = '0px';
-    }, 200);
+    }, 300);
   }
 
   // 分类
