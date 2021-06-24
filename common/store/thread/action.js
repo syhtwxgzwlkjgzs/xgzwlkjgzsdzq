@@ -431,14 +431,14 @@ class ThreadAction extends ThreadStore {
    * 加载评论列表
    * @param {object} parmas * 参数
    * @param {number} parmas.id * 帖子id
-   * @param {number} parmas.page 页码
+   * @param {number} parmas.page 页数
    * @param {number} parmas.perPage 页码
    * @param {string} params.sort 'createdAt' | '-createdAt' 排序条件
    * @returns {object} 处理结果
    */
   @action
   async loadCommentList(params) {
-    const { id, page = 1, perPage = 5, sort = 'createdAt' } = params;
+    const { id, page = 1, perPage = 20, sort = 'createdAt' } = params;
     if (!id) {
       return {
         msg: '帖子id不存在',

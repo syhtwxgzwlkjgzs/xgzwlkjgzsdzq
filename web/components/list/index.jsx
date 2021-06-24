@@ -65,7 +65,7 @@ const List = forwardRef(({
   //   if (listWrapper.current && showLoadingInCenter && site?.platform === 'h5') {
   //     const { clientHeight } = listWrapper.current;
   //     const { scrollHeight } = listWrapper.current;
-      
+
   //     setIsLoadingInCenter(scrollHeight <= clientHeight)
   //   }
   // }, [listWrapper.current, children])
@@ -107,8 +107,15 @@ const List = forwardRef(({
   };
 
   const onBackTop = () => {
-    listWrapper.current.scrollTop = 0;
-    currentScrollTop.current = 0;
+    if (currentScrollTop.current > 0) {
+      const top = currentScrollTop.current -  currentScrollTop.current / 5;
+      window.requestAnimationFrame(onBackTop)
+      listWrapper.current.scrollTop = top;
+      currentScrollTop.current = top;
+    } else {
+      listWrapper.current.scrollTop = 0;
+      currentScrollTop.current = 0;
+    }
   };
 
   const jumpToScrollTop = (scrollTop) => {
@@ -117,7 +124,6 @@ const List = forwardRef(({
       currentScrollTop.current = scrollTop;
     }
   };
-
   const onTouchMove = throttle(({ isFirst = false }) => {
     if (!listWrapper || !listWrapper.current) {
       onScroll();
@@ -139,7 +145,9 @@ const List = forwardRef(({
     if (!isFirst) {
       allowHandleRefresh = (scrollTop !== 0);
     }
-    if ((scrollHeight - preload <= clientHeight + scrollTop) && !isLoading && allowHandleRefresh) {
+
+    if (((scrollTop + clientHeight) >= scrollHeight / 2) && !isLoading && allowHandleRefresh) {
+    // if ((scrollHeight/scrollTop <= 1.5) && !isLoading && allowHandleRefresh) {
       setIsLoading(true);
       if (typeof(onRefresh) === 'function') {
         const promise = onRefresh();

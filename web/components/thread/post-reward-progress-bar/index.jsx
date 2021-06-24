@@ -11,7 +11,7 @@ import styles from './index.module.scss';
  */
 
 const Index = ({ type = POST_TYPE.RED_PACK, remaining = 0, received = 0, condition = 0 }) => {
-  const percent = useMemo(() => (received > 0 ? (received / (received + remaining)) * 100 : 0), [remaining, received]);
+  const percent = useMemo(() => (Number(received) > 0 ? (Number(received) / (Number(received) + Number(remaining))) * 100 : 0), [remaining, received]);
   let texts = {};
   let className = '';
   let progressTheme = '';

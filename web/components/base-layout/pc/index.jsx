@@ -3,6 +3,7 @@ import { Flex } from '@discuzq/design';
 import Header from '@components/header';
 import List from '@components/list';
 import BottomView from '@components/list/BottomView';
+import BacktoTop from '@components/list/backto-top';
 import { noop } from '@components/thread/utils';
 
 import styles from './index.module.scss';
@@ -41,6 +42,7 @@ const BaseLayout = forwardRef((props, ref) => {
     footer = null,
     rightClassName = '',
     disabledList = false,
+    onRefreshPlaceholder = null,
   } = props;
 
   // List组件相关，参考List组件props注释
@@ -58,6 +60,7 @@ const BaseLayout = forwardRef((props, ref) => {
   const listRef = useRef(null);
   const [isError, setIsError] = useState(false);
   const [isErrorText, setIsErrorText] = useState('加载失败');
+  const [scrollTop, setScrollTop] = useState(0);
 
   const debounce = (fn, wait) => {
     let timer = null;
@@ -67,6 +70,10 @@ const BaseLayout = forwardRef((props, ref) => {
       }
       timer = setTimeout(fn, wait);
     };
+  };
+
+  const handleBacktoTop = () => {
+    listRef && listRef.current.onBackTop();
   };
 
   useImperativeHandle(ref, () => ({
@@ -101,7 +108,10 @@ const BaseLayout = forwardRef((props, ref) => {
       wrapperClass={styles.wrapper}
       ref={listRef}
       onError={onError}
-      onScroll={onScroll}
+      onScroll={({ scrollTop }) => {
+        setScrollTop(scrollTop);
+        onScroll();
+      }}
     >
       {(pageName === 'home' || left) && (
         <div className={styles.left}>{typeof left === 'function' ? left({ ...props }) : left}</div>
@@ -109,7 +119,7 @@ const BaseLayout = forwardRef((props, ref) => {
 
       <div className={styles.center}>
         {typeof children === 'function' ? children({ ...props }) : children}
-        {isShowLayoutRefresh && onRefresh && <BottomView isError={isError} errorText={isErrorText} noMore={noMore} />}
+        {isShowLayoutRefresh && onRefresh && <BottomView onRefreshPlaceholder={onRefreshPlaceholder} isError={isError} errorText={isErrorText} noMore={noMore} />}
       </div>
 
       {(pageName === 'home' || right) && (
@@ -152,7 +162,10 @@ const BaseLayout = forwardRef((props, ref) => {
     <div className={`${styles.container} ${props.enabledWindowScroll && styles.autoHeight}`}>
       {(header && header({ ...props })) || <Header onSearch={onSearch} />}
 
-      <div className={`${styles.body} ${cls} ${props.className}`}>{content}</div>
+      <div className={`${styles.body} ${cls} ${props.className}`}>
+        {content}
+        {scrollTop > 100 && <BacktoTop onClick={handleBacktoTop} />}
+      </div>
 
       {typeof footer === 'function' ? footer({ ...props }) : footer}
     </div>

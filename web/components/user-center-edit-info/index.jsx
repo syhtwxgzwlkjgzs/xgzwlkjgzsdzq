@@ -16,15 +16,8 @@ class index extends Component {
   }
 
   render() {
-    return  (
-      <ViewAdapter 
-        h5={<H5UserCenterEditInfo />}
-        pc={<PcUserCenterEditInfo />}
-        title={`编辑资料 - ${this.props.site?.siteName}`}
-      />
-    )
+    return <ViewAdapter h5={<H5UserCenterEditInfo />} pc={<PcUserCenterEditInfo />} title={`编辑资料`} />;
   }
 }
 
 export default index;
-

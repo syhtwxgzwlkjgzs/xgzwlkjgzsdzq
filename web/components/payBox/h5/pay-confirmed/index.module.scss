@@ -1,7 +1,7 @@
 @import '@common/styles/index.scss';
 @import '@common/styles/mixin/index.scss';
 
-.payBox{
+.payBox {
   background: var(--color-white);
   padding: rem($padding-6n) rem($padding-4n) rem($padding-4n) rem($padding-4n);
   height: rem(337);
@@ -11,16 +11,15 @@
     font-size: $font-size-large;
   }
 
-
-  .title{
+  .title {
     text-align: center;
-    p{
+    p {
       font-size: rem($paybox-pay-text-font-size);
       font-weight: 600;
     }
   }
 
-  .list{
+  .list {
     margin-top: rem($margin-2n);
 
     :global {
@@ -37,61 +36,61 @@
       }
     }
 
-    .listItem{
+    .listItem {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: rem($padding-4n) 0;
+
+      &:first-child {
+        border-bottom: 1px solid $paybox-border-line-color;
+      }
+
+      .left {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        padding: rem($padding-4n) 0;
-
-        &:first-child {
-          border-bottom: 1px solid $paybox-border-line-color;
+        justify-content: flex-start;
+        // width: 50%;
+        flex-shrink: 0;
+        .icon {
+          margin-right: rem($margin-2n);
         }
-
-        .left{
-          display: flex;
-          align-items: center;
-          justify-content: flex-start;
-          // width: 50%;
-          flex-shrink: 0;
-          .icon{
-            margin-right: rem($margin-2n);
-          }
-          .text{
-            font-size: rem($font-size-primary);
-            color: var(--color-text-primary)
-          }
+        .text {
+          font-size: rem($font-size-primary);
+          color: var(--color-text-primary);
         }
-        .right{
-          display: flex;
-          align-items: center;
-          justify-content: flex-end;
-          // width: 50%;
-          flex: 1;
-          word-break: break-all;
-          .subText{
-            font-size: rem($font-size-label);
-            color: var(--color-text-secondary);
-            margin-right: rem($margin-4n);
-          }
-          :global {
-            .dzq-checkbox--radio {
+      }
+      .right {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        // width: 50%;
+        flex: 1;
+        word-break: break-all;
+        .subText {
+          font-size: rem($font-size-label);
+          color: var(--color-text-secondary);
+          margin-right: rem($margin-4n);
+        }
+        :global {
+          .dzq-checkbox--radio {
+            border-radius: rem(var(--border-radius-small));
+            &::after {
               border-radius: rem(var(--border-radius-small));
-              &::after {
-                border-radius: rem(var(--border-radius-small));
-              }
             }
           }
         }
+      }
     }
   }
-  .tips{
+  .tips {
     padding: rem($padding-2n) 0;
     text-align: center;
     font-size: rem($font-size-primary);
     color: var(--color-text-secondary);
   }
 
-  .btnBox{
+  .btnBox {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -101,8 +100,8 @@
     box-sizing: border-box;
     padding-left: rem($padding-4n);
     padding-right: rem($padding-4n);
-    padding-bottom: constant(safe-area-inset-bottom);  ///兼容 IOS<11.2/
-    padding-bottom: env(safe-area-inset-bottom);  ///兼容 IOS>11.2/
+    padding-bottom: constant(safe-area-inset-bottom); ///兼容 IOS<11.2/
+    padding-bottom: env(safe-area-inset-bottom); ///兼容 IOS>11.2/
 
     &::before {
       content: '';
@@ -115,11 +114,13 @@
       margin: 0 rem(-$margin-4n);
     }
 
-    .btn{
+    .btn {
       height: rem(42);
       font-size: rem($font-size-base);
       line-height: rem($font-line-height-base);
       border-radius: 5px;
+      padding: 0;
+      line-height: rem(42);
     }
   }
 }
@@ -136,4 +137,3 @@
   color: $text-color-secondary;
   cursor: pointer;
 }
-
