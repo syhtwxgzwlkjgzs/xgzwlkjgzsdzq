@@ -84,13 +84,15 @@
     width: rem(248);
     height: rem(36);
     border-radius: rem(5);
+    line-height: rem(36);
+    padding: 0;
   }
 }
 
 .bgBtnColor {
   :global {
     .dzq-button--primary.is-mouseenter {
-      @include button-primary()
+      @include button-primary();
     }
   }
 }

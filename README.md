@@ -2,16 +2,10 @@
 
 ## 使用
 
-```bash
-# web 端本地开发
-$ cd ./web
-$ npm install
-$ npm run dev:web
+建议使用git clone命令进行下载，方便后续更新。
 
-# 小程序端本地开发
-$ cd ./mini
-$ npm install
-$ npm run dev:mini
+```bash
+$ git clone https://gitee.com/Discuz/discuz-fe.git
 ```
 
 ## 小程序构建
@@ -30,6 +24,20 @@ module.exports = {
 ```bash
 $ cd ./mini
 $ npm run build:weapp
+```
+
+## 本地开发
+
+```bash
+# web 端本地开发
+$ cd ./web
+$ npm install
+$ npm run dev:web
+
+# 小程序端本地开发
+$ cd ./mini
+$ npm install
+$ npm run dev:mini
 ```
 
 ## 目录结构
