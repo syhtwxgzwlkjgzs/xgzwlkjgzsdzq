@@ -691,7 +691,7 @@ class PostPage extends React.Component {
     } else {
       const { categoryId = '' } = data;
       // 首页如果是全部或者是当前分类，则执行数据添加操作
-      if (this.props.index.isNeedAddThread(categoryId)) {
+      if (this.props.index.isNeedAddThread(categoryId) && data?.isApproved) {
         this.props.vlist.resetPosition();
         this.props.baselayout.setJumpingToTop();
         this.props.index.addThread(data);
