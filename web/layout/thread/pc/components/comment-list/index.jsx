@@ -154,7 +154,7 @@ class CommentList extends React.Component {
           ''
         )}
         <div className={styles.content}>
-          <div className={styles.commentListAvatar} onClick={() => this.avatarClick()}>
+          <div className={styles.commentListAvatar} >
             <Avatar
               image={this.props.data?.user?.avatar}
               name={this.props.data?.user?.nickname || this.props.data?.user?.userName || ''}
@@ -162,6 +162,7 @@ class CommentList extends React.Component {
               userId={this.props.data?.user?.id}
               isShowUserInfo={this.props.isShowOne}
               className={styles.avatar}
+              onClick={() => this.avatarClick()}
             ></Avatar>
           </div>
           <div className={styles.commentListContent}>

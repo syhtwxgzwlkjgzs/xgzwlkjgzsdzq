@@ -284,6 +284,9 @@ export default inject('user')(
                       }
                       condition={parseContent.RED_PACKET.condition}
                     />
+                    {!!parseContent.RED_PACKET.condition && (
+                      <div className={topic.redPacketLikeNum}>评论集{parseContent.RED_PACKET.likenum}赞领红包</div>
+                    )}
                   </div>
                 )}
               </div>
