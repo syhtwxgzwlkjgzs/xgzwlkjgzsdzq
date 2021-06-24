@@ -1,11 +1,15 @@
 import Page from '@components/page';
-import React from 'react';
+import React, { useEffect } from 'react';
 import UserCenterEditInfo from '@components/user-center-edit-info';
 
 export default function index() {
+  useEffect(() => {
+    Taro.hideShareMenu();
+  });
+
   return (
     <Page>
       <UserCenterEditInfo />
     </Page>
-  )
+  );
 }

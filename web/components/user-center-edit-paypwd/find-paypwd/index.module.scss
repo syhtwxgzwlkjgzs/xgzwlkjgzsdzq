@@ -58,6 +58,8 @@
       height: rem(42);
       font-size: $font-size-middle;
       border-radius: $border-radius-small;
+      line-height: rem(42);
+      padding: 0;
     }
   }
 }
@@ -65,7 +67,7 @@
 .bgBtnColor {
   :global {
     .dzq-button--primary.is-mouseenter {
-      @include button-primary()
+      @include button-primary();
     }
   }
 }
@@ -87,7 +89,6 @@
       @include input;
       @include passwordInput;
     }
-
   }
 }
 
@@ -96,5 +97,3 @@
     bottom: rem(200);
   }
 }
-
-

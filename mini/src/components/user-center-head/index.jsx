@@ -74,11 +74,9 @@ class index extends Component {
             hasMask: false,
             duration: 2000,
           });
-          setTimeout(() => {
-            this.setState({
-              isFollowedLoading: false,
-            });
-          }, 200);
+          this.setState({
+            isFollowedLoading: false,
+          });
         } catch (error) {
           console.error(error);
           Toast.error({
@@ -110,11 +108,9 @@ class index extends Component {
             hasMask: false,
             duration: 2000,
           });
-          setTimeout(() => {
-            this.setState({
-              isFollowedLoading: false,
-            });
-          }, 200);
+          this.setState({
+            isFollowedLoading: false,
+          });
         } catch (error) {
           console.error(error);
           Toast.error({
