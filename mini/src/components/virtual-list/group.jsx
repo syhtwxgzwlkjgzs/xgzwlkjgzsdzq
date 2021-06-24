@@ -4,9 +4,10 @@ import { noop, isPromise } from '@components/thread/utils'
 import styles from './index.module.scss';
 import BottomView from './BottomView';
 import Thread from '@components/thread';
-import { getElementRect, arrTrans, getWindowHeight } from './utils';
+import { getElementRect, arrTrans, getWindowHeight, randomStr } from './utils';
 import Taro from '@tarojs/taro';
 import { throttle } from '@common/utils/throttle-debounce.js';
+import BottomNavBar from '@components/bottom-nav-bar'
 
 /**
  * 列表组件，集成上拉刷新能力
@@ -31,7 +32,9 @@ const VirtualList = forwardRef(({
   requestError = false,
   errorText = '加载失败',
   showLoadingInCenter = false,
-  currentPage
+  currentPage,
+  curr,
+  onClickTabBar,
 }, ref) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -44,6 +47,8 @@ const VirtualList = forwardRef(({
   const windowHeight = useRef(667)
   const originalDataSource = useRef([])
   const heights = useRef([])
+  const childrenHeightId = useRef(`home-header-${randomStr()}`)
+  const childrenHeight = useRef(262)
 
   const isLoadingRef = useRef(false);
 
@@ -68,19 +73,27 @@ const VirtualList = forwardRef(({
 
   // 处理分组数据
   useEffect(() => {
-    const arr = arrTrans(10, data)
-    const length = arr.length
-    if (arr.length) {
-      const newArr = dataSource.slice()
-      newArr.push(arr[length - 1]) 
-      setDataSource(newArr)
-    }
-    originalDataSource.current = arr
+      if (!data?.length) {
+        resetAllData()
+      } else {
+        const arr = arrTrans(10, data)
+        const length = arr.length
+        if (arr.length) {
+          const newArr = dataSource.slice()
+          newArr.push(arr[length - 1]) 
+          setDataSource(newArr)
+        }
+        originalDataSource.current = arr
+      }
+    
   }, [data?.length])
 
   // 缓存所有的分组高度
   useEffect(() => {
-    handleHeight()
+      if (dataSource.length) {
+        handleHeight()
+      }
+    getChildrenHeight()
   }, [dataSource])
 
   // 获取屏幕高度
@@ -88,7 +101,24 @@ const VirtualList = forwardRef(({
     getWindowHeight().then((res) => {
       windowHeight.current = res
     })
+    getChildrenHeight()
   }, [])
+
+    //   当源数据为空时，重置组件数据
+    const resetAllData = () => {
+        setDataSource([])
+        originalDataSource.current = []
+        wholePageIndex.current = 0
+        currentRenderIndex.current = 0
+        heights.current = []
+    }
+
+    // 获取children的高度
+    const getChildrenHeight = () => {
+        getElementRect(childrenHeightId.current).then((res) => {
+            childrenHeight.current = res.height || 262
+        })
+    }
 
   // 获取元素高度
   const handleHeight = async () => {
@@ -106,16 +136,14 @@ const VirtualList = forwardRef(({
     let tempScrollTop = 0;
     for(let i = 0; i < heights.current.length; i++) {
       tempScrollTop = tempScrollTop + heights.current[i];
-      if(tempScrollTop > realScrollTop + windowHeight.current) {
-       
+      if(tempScrollTop > realScrollTop + windowHeight.current + childrenHeight.current) {
         computedCurrentIndex = i;
         break;
       } 
     }
-    
-    const currentIndex = currentRenderIndex.current
-    if (currentRenderIndex !== currentIndex) {
 
+    const currentIndex = currentRenderIndex.current
+    if (computedCurrentIndex !== currentIndex) {
       const newDataSource = dataSource.map((item, index, arr) => {
         if(computedCurrentIndex-1 <= index && index <= computedCurrentIndex+1) {
           return originalDataSource.current[index];
@@ -128,10 +156,8 @@ const VirtualList = forwardRef(({
     }
   }
 
-  const jumpToScrollTop = (scrollTop) => {
-    if (scrollTop && scrollTop > 0) {
-      setScrollTop(scrollTop);
-    }
+  const jumpToScrollTop = (scrollTop = 0) => {
+    setScrollTop(scrollTop);
   };
 
   const onTouchMove = (e) => {
@@ -203,7 +229,7 @@ const VirtualList = forwardRef(({
   const handleError = () => {
     setIsLoading(false);
     setTimeout(() => {
-      onTouchMove();
+    //   onTouchMove();
     }, 0)
   }
 
@@ -217,20 +243,28 @@ const VirtualList = forwardRef(({
       onScrollToUpper={handleScrollToUpper}
       upperThreshold={210}
     >
-      {
-        dataSource?.map((item, index) => (
-          item?.length > 0 ? (
-            <View id={`virtual-list-${index}`}>
-              {
-                item?.map((subItem, subIndex) => (<Thread data={subItem} key={subIndex} />))
-              }
-            </View>
-          ) : (
-            <View style={{ height: `${item ? item.height : 300}px` }}></View>
-          )
-        ))
-      }
-      {onRefresh && showRefresh && <BottomView isError={isError} errorText={errText} noMore={noMore} handleError={handleError} />}
+        <View id={childrenHeightId.current}>
+            {children}
+        </View>
+
+        {
+            dataSource?.map((item, index) => (
+                item?.length > 0 ? 
+                    (
+                        <View id={`virtual-list-${index}`}>
+                        {
+                            item?.map((subItem, subIndex) => (<Thread data={subItem} key={subIndex} />))
+                        }
+                        </View>
+                    ) : (
+                        <View style={{ height: `${item ? item.height : 300}px` }}></View>
+                    )
+            ))
+        }
+        
+        {onRefresh && showRefresh && <BottomView isError={isError} errorText={errText} noMore={noMore} handleError={handleError} />}
+
+        <BottomNavBar onClick={onClickTabBar} placeholder curr={curr} />
     </ScrollView>
   );
 });

@@ -34,6 +34,7 @@ class IndexH5Page extends React.Component {
     };
     this.tabsRef = createRef();
     this.headerRef = createRef(null);
+    this.list = createRef(null);
   }
 
   setNavigationBarStyle = () => {
@@ -94,6 +95,7 @@ class IndexH5Page extends React.Component {
   }
 
   changeFilter = (params) => {
+    this.list?.current?.jumpToScrollTop(0)
     this.props.index.resetErrorInfo()
     this.setState({ isClickTab: true })
 
@@ -228,33 +230,35 @@ class IndexH5Page extends React.Component {
       //   errorText={threadError.errorText}
       //   onClickTabBar={this.handleClickTabBar}
       // >
-      //   <HomeHeader ref={this.headerRef} />
+        // <HomeHeader ref={this.headerRef} />
 
-      //   {this.renderTabs()}
+        // {this.renderTabs()}
 
-      //   <View style={{display: isClickTab ? 'none' : 'block'}}>
-      //     {this.renderHeaderContent()}
+        // <View style={{display: isClickTab ? 'none' : 'block'}}>
+        //   {this.renderHeaderContent()}
        
-      //     {pageData?.map((item, index) => (
-      //         <ThreadContent
-      //           key={item.threadId}
-      //           showBottomStyle={index !== pageData.length - 1}
-      //           data={item}
-      //           className={styles.listItem}
-      //         />
-      //       ))}
-      //   </View>
+        //   {pageData?.map((item, index) => (
+        //       <ThreadContent
+        //         key={item.threadId}
+        //         showBottomStyle={index !== pageData.length - 1}
+        //         data={item}
+        //         className={styles.listItem}
+        //       />
+        //     ))}
+        // </View>
 
-      //   <FilterView
-      //     data={currentCategories}
-      //     current={filter}
-      //     onCancel={this.onClose}
-      //     visible={this.state.visible}
-      //     onSubmit={this.changeFilter}
-      //     permissions={user.threadExtendPermissions}
-      //   />
+        // <FilterView
+        //   data={currentCategories}
+        //   current={filter}
+        //   onCancel={this.onClose}
+        //   visible={this.state.visible}
+        //   onSubmit={this.changeFilter}
+        //   permissions={user.threadExtendPermissions}
+        // />
       // </BaseLayout>
+      <>
       <VirtualList
+        ref={this.list}
         data={pageData}
         onRefresh={this.onRefresh}
         requestError={threadError.isError}
@@ -262,7 +266,23 @@ class IndexH5Page extends React.Component {
         currentPage={currentPage}
         totalPage={totalPage}
         noMore={!isClickTab && currentPage >= totalPage}
-      ></VirtualList>
+        onScroll={this.handleScroll}
+        curr='home'
+        onClickTabBar={this.handleClickTabBar}
+      >
+        <HomeHeader ref={this.headerRef} />
+        {this.renderTabs()}
+        {this.renderHeaderContent()}
+      </VirtualList>
+      <FilterView
+        data={currentCategories}
+        current={filter}
+        onCancel={this.onClose}
+        visible={this.state.visible}
+        onSubmit={this.changeFilter}
+        permissions={user.threadExtendPermissions}
+      />
+    </>
     );
   }
 }
