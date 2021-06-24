@@ -73,7 +73,7 @@
         height: rem(44);
       }
       .dzq-icon {
-        line-height: rem(44)
+        line-height: rem(44);
       }
     }
   }
@@ -96,10 +96,12 @@
     width: rem(248);
     height: rem(36);
     border-radius: $border-radius-small;
+    padding: 0;
+    line-height: rem(36);
   }
   .tips {
     text-align: right;
     color: $primary-color;
     cursor: pointer;
   }
-} 
+}

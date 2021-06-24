@@ -2,8 +2,9 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import IndexH5Page from '../../../layout/my/collect';
 import Page from '@components/page';
-import withShare from '@common/utils/withShare/withShare'
+import withShare from '@common/utils/withShare/withShare';
 import { priceShare } from '@common/utils/priceShare';
+import Taro from '@tarojs/taro';
 
 @inject('site')
 @inject('search')
@@ -21,6 +22,7 @@ class Index extends React.Component {
   }
 
   async componentDidMount() {
+    Taro.hideShareMenu();
     const { index } = this.props;
     index.setThreads(null);
     await index.getReadThreadList({
@@ -39,7 +41,7 @@ class Index extends React.Component {
   dispatch = async () => {
     const { index } = this.props;
 
-    this.page += 1
+    this.page += 1;
     return await index.getReadThreadList({
       filter: {
         complex: 3,
@@ -49,35 +51,49 @@ class Index extends React.Component {
     });
   };
   getShareData(data) {
-    const { site } = this.props
-    const defalutTitle = site.webConfig?.setSite?.siteName || ''
-    const defalutPath = '/subPages/my/collect/index'
+    const { site } = this.props;
+    const defalutTitle = site.webConfig?.setSite?.siteName || '';
+    const defalutPath = '/subPages/my/collect/index';
     if (data.from === 'menu') {
       return {
         title: defalutTitle,
-        path: defalutPath
-      }
+        path: defalutPath,
+      };
     }
-    const { title, path, comeFrom, threadId, isAnonymous, isPrice } = data
+    const { title, path, comeFrom, threadId, isAnonymous, isPrice } = data;
     if (comeFrom && comeFrom === 'thread') {
-      const { user } = this.props
-      this.props.index.updateThreadShare({ threadId }).then(result => {
+      const { user } = this.props;
+      this.props.index.updateThreadShare({ threadId }).then((result) => {
         if (result.code === 0) {
-          this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
-          this.props.search.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
-          this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
+          this.props.index.updateAssignThreadInfo(threadId, {
+            updateType: 'share',
+            updatedInfo: result.data,
+            user: user.userInfo,
+          });
+          this.props.search.updateAssignThreadInfo(threadId, {
+            updateType: 'share',
+            updatedInfo: result.data,
+            user: user.userInfo,
+          });
+          this.props.topic.updateAssignThreadInfo(threadId, {
+            updateType: 'share',
+            updatedInfo: result.data,
+            user: user.userInfo,
+          });
         }
       });
     }
-    return priceShare({path, isAnonymous, isPrice}) || {
-      title,
-      path
-    }
+    return (
+      priceShare({ path, isAnonymous, isPrice }) || {
+        title,
+        path,
+      }
+    );
   }
   render() {
     return (
       <Page>
-        <IndexH5Page dispatch={this.dispatch}/>
+        <IndexH5Page dispatch={this.dispatch} />
       </Page>
     );
   }
