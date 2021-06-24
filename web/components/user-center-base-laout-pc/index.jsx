@@ -1,8 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState, useImperativeHandle, forwardRef } from 'react';
 import { Flex, Icon, Spin } from '@discuzq/design';
 import Header from '@components/header';
 import List from '@components/list';
 import RefreshView from '@components/list/RefreshView';
+import BacktoTop from '@components/list/backto-top';
 
 import UserCenterHeaderImage from '@components/user-center-header-images';
 import UserCenterHead from '@components/user-center-head';
@@ -25,7 +26,7 @@ import styles from './index.module.scss';
       </BaseLayout>
 */
 
-const Index = (props) => {
+const Index = forwardRef((props, ref) => {
   const {
     header = null,
     left = null,
@@ -41,7 +42,16 @@ const Index = (props) => {
     showHeaderLoading = true,
   } = props;
 
+  const [scrollTop, setScrollTop] = useState(0);
   const size = useRef('xl');
+  const listRef = useRef(null);
+  const handleBacktoTop = () => {
+    listRef && listRef.current.onBackTop();
+  };
+
+  useImperativeHandle(ref, () => ({
+    listRef,
+  }));
 
   const debounce = (fn, wait) => {
     let timer = null;
@@ -99,7 +109,12 @@ const Index = (props) => {
   return (
     <div className={styles.container}>
       {(header && header({ ...props })) || <Header onSearch={onSearch} />}
-      <List {...props} className={styles.list} wrapperClass={styles.wrapper}>
+      <List {...props} platform="pc" className={styles.list} wrapperClass={styles.wrapper}
+        ref={listRef}
+        onScroll={({ scrollTop }) => {
+          setScrollTop(scrollTop);
+        }}
+      >
         {(contentHeader && contentHeader({ ...props })) || (
           <div className={styles.headerbox}>
             <div className={styles.userHeader}>
@@ -147,9 +162,12 @@ const Index = (props) => {
         </div>
       </List>
 
+      {scrollTop > 100 && <BacktoTop onClick={handleBacktoTop} />}
       {typeof footer === 'function' ? footer({ ...props }) : footer}
     </div>
   );
-};
+});
+
+Index.displayName = 'BaseLayout';
 
 export default Index;
