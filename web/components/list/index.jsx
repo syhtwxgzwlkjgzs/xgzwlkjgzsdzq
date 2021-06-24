@@ -65,7 +65,7 @@ const List = forwardRef(({
   //   if (listWrapper.current && showLoadingInCenter && site?.platform === 'h5') {
   //     const { clientHeight } = listWrapper.current;
   //     const { scrollHeight } = listWrapper.current;
-
+  //
   //     setIsLoadingInCenter(scrollHeight <= clientHeight)
   //   }
   // }, [listWrapper.current, children])
@@ -205,7 +205,7 @@ const List = forwardRef(({
         onScroll={onTouchMove}
       >
         {children}
-        {onRefresh && showRefresh && <BottomView isError={isError} errorText={errText} noMore={noMore} handleError={handleError} />}
+        {onRefresh && showRefresh && <BottomView isError={isError} errorText={errText} noMore={noMore} handleError={handleError} type = 'line' platform={platform} />}
       </div>
     </div>
   );

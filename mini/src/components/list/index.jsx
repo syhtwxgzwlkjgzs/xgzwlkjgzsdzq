@@ -119,7 +119,7 @@ const List = forwardRef(({
       upperThreshold={210}
     >
       {children}
-      {onRefresh && showRefresh && <BottomView isError={isError} errorText={errText} noMore={noMore} handleError={handleError} />}
+      {onRefresh && showRefresh && <BottomView isError={isError} errorText={errText} noMore={noMore} handleError={handleError} type = 'line' />}
     </ScrollView>
   );
 });
