@@ -3,6 +3,7 @@ import { Input, Checkbox, Radio, Icon, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import { ATTACHMENT_TYPE, ACCEPT_FILE_TYPES, ACCEPT_IMAGE_TYPES } from '@common/constants/thread-post';
 import DZQUpload from '@components/upload';
+import beforeUpload from '@common/utils/before-upload';
 import ImageUpload from '../../../../components/thread-post/image-upload';
 import FileUpload from '../../../../components/thread-post/file-upload';
 import { toJS, set } from 'mobx';
@@ -135,7 +136,7 @@ const getAttachment = (ret) => {
   return { url, id };
 };
 
-export function CreatePhotoUploader(field, layout, beforeUpload) {
+export function CreatePhotoUploader(field, layout, site) {
   const { name, required } = field;
   const data = { type: ATTACHMENT_TYPE.image };
   return (
@@ -155,11 +156,12 @@ export function CreatePhotoUploader(field, layout, beforeUpload) {
             (ret, file) => {
               const att = getAttachment(ret);
               if (att) {
+                Object.assign(file, att);
                 field.value = field.value.concat([file]);
               }
             }
           }
-          beforeUpload={(cloneList, showFileList) => beforeUpload(cloneList, showFileList, InputType.PHOTO)}
+          beforeUpload={(cloneList, showFileList) => beforeUpload(cloneList, showFileList, 'image', site)}
           fileList={field.value}
           className={layout['imgUpload-dom']}
         >
@@ -169,7 +171,7 @@ export function CreatePhotoUploader(field, layout, beforeUpload) {
   );
 }
 
-export function CreateFileUploader(field, layout, beforeUpload) {
+export function CreateFileUploader(field, layout, site) {
   const { name, required } = field;
   const data = { type: ATTACHMENT_TYPE.file };
   return (
@@ -196,7 +198,7 @@ export function CreateFileUploader(field, layout, beforeUpload) {
               Object.assign(file, att);
             }
           }
-          beforeUpload={(cloneList, showFileList) => beforeUpload(cloneList, showFileList, InputType.FILE)}
+          beforeUpload={(cloneList, showFileList) => beforeUpload(cloneList, showFileList, 'file', site)}
           fileList={field.value}
           isCustomUploadIcon={true}
         >

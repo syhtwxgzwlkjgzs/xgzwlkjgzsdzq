@@ -43,9 +43,10 @@ class SupplementaryH5Page extends React.Component {
   }
 
   createComponent(field) {
+    const { site } = this.props;
     const f = CreateFunctions[field.type];
     if (!f) return <></>;
-    return f(field, layout);
+    return f(field, layout, site);
   }
 
   processData = () => {
