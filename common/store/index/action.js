@@ -130,7 +130,7 @@ class IndexAction extends IndexStore {
    async deleteThreadsData({ id } = {}) {
      if (id && this.threads) {
         const { pageData = [] } = this.threads;
-        const newPageData = pageData.filter(item => item.threadId !== id)
+        const newPageData = pageData.filter(item => `${item.threadId}` !== `${id}`)
 
         if (this.threads?.pageData) {
           this.threads.pageData = newPageData;
