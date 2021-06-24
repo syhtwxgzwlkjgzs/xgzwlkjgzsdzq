@@ -45,11 +45,12 @@ class SupplementaryH5Page extends React.Component {
   }
 
   createComponent(field) {
-    const { site: { platform } } = this.props;
+    const { site } = this.props;
+    const { platform } = site;
     const layout = platform === 'h5' ? h5layout : pclayout;
     const f = CreateFunctions[field.type];
     if (!f) return (<></>);
-    return f(field, layout);
+    return f(field, layout, site);
   }
 
 
