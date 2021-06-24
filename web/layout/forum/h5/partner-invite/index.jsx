@@ -235,7 +235,7 @@ class PartnerInviteH5Page extends React.Component {
     const layout = platform === 'h5' ? mlayout : pclayout;
     // 内容数
     const countThreads = get(webConfig, 'other.countThreads', '');
-    const isShowLogout = platform === 'h5' && user.isLogin() && !(browser.env('weixin') && site.isOffiaccountOpen); // h5下非微信浏览器访问时，若用户已登陆，展示退出按钮
+    const isShowLogout = platform === 'h5' && user.isLogin() && !(browser.env('weixin') && this.props.site.isOffiaccountOpen); // h5下非微信浏览器访问时，若用户已登陆，展示退出按钮
 
     return (
       <PartnerInviteWrap renderRight={this.renderRight} contentHeader={this.contentHeader}>
