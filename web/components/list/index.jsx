@@ -124,7 +124,6 @@ const List = forwardRef(({
       currentScrollTop.current = scrollTop;
     }
   };
-
   const onTouchMove = throttle(({ isFirst = false }) => {
     if (!listWrapper || !listWrapper.current) {
       onScroll();
@@ -146,8 +145,7 @@ const List = forwardRef(({
     if (!isFirst) {
       allowHandleRefresh = (scrollTop !== 0);
     }
-
-    if ((scrollHeight / 2 <= scrollTop) && !isLoading && allowHandleRefresh) {
+    if ((scrollHeight/scrollTop <= 1.5) && !isLoading && allowHandleRefresh) {
       setIsLoading(true);
       if (typeof(onRefresh) === 'function') {
         const promise = onRefresh();

@@ -164,4 +164,53 @@
   }
 }
 
+.placeholder {
+  width: 100%;
+  background: $white;
+  border-radius: $border-radius-small;
+  margin-bottom: $margin-10;
+  padding: 0 rem($padding-6n);
+  box-sizing: border-box;
+  .header{
+    padding: $padding-4n 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    .avatar{
+      width: rem(38);
+      height: rem(38);
+      border-radius: 50%;
+      background: $box-color-placeholder;
+      flex-shrink: 0;
+    }
+    .box {
+      height: rem(38);
+      background: $box-color-placeholder;
+      margin-left: rem($margin-2n);
+      flex: 1;
+      border-radius: $border-radius-small;
+    }
+  }
+  .content{
+    height: rem(24);
+    background: $box-color-placeholder;
+    border-radius: $border-radius-small;
+    margin-top: rem($margin-4n);
+  }
+  .footer{
+    margin-top: rem($margin-4n);
+    border-top: 1px solid $box-color-placeholder;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: rem(52);
+    .box {
+      height: rem(24);
+      width: rem(50);
+      background: $box-color-placeholder;
+      border-radius: $border-radius-small;
+    }
+  }
+}
+
 
