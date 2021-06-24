@@ -135,7 +135,7 @@ const getAttachment = (ret) => {
   return { url, id };
 };
 
-export function CreatePhotoUploader(field, layout) {
+export function CreatePhotoUploader(field, layout, beforeUpload) {
   const { name, required } = field;
   const data = { type: ATTACHMENT_TYPE.image };
   return (
@@ -159,7 +159,7 @@ export function CreatePhotoUploader(field, layout) {
               }
             }
           }
-          beforeUpload={() => true}
+          beforeUpload={(cloneList, showFileList) => beforeUpload(cloneList, showFileList, InputType.PHOTO)}
           fileList={field.value}
           className={layout['imgUpload-dom']}
         >
@@ -169,7 +169,7 @@ export function CreatePhotoUploader(field, layout) {
   );
 }
 
-export function CreateFileUploader(field, layout) {
+export function CreateFileUploader(field, layout, beforeUpload) {
   const { name, required } = field;
   const data = { type: ATTACHMENT_TYPE.file };
   return (
@@ -196,7 +196,7 @@ export function CreateFileUploader(field, layout) {
               Object.assign(file, att);
             }
           }
-          beforeUpload={() => true}
+          beforeUpload={(cloneList, showFileList) => beforeUpload(cloneList, showFileList, InputType.FILE)}
           fileList={field.value}
           isCustomUploadIcon={true}
         >
