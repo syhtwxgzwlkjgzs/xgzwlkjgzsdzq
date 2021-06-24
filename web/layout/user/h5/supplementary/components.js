@@ -161,6 +161,13 @@ export function CreatePhotoUploader(field, layout, site) {
               }
             }
           }
+          onChange={(fileList) => {
+            const file = fileList[fileList.length - 1];
+            if (file?.status === 'error') {
+              fileList.splice(fileList.length - 1);
+            }
+            field.value = fileList;
+          }}
           beforeUpload={(cloneList, showFileList) => beforeUpload(cloneList, showFileList, 'image', site)}
           fileList={field.value}
           className={layout['imgUpload-dom']}
@@ -184,6 +191,10 @@ export function CreateFileUploader(field, layout, site) {
         limit={9}
         accept={ACCEPT_FILE_TYPES.join(',')}
         onChange={(fileList) => {
+          const file = fileList[fileList.length - 1];
+          if (file?.status === 'error') {
+            fileList.splice(fileList.length - 1);
+          }
           field.value = fileList;
         }}
         onComplete={
