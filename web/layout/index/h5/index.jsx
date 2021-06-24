@@ -218,7 +218,7 @@ class IndexH5Page extends React.Component {
                   onContentHeightChange={measure}
                   onImageReady={measure}
                   onVideoReady={measure}
-                  key={index}
+                  key={`${item.threadId}-${item.updatedAt}`}
                   // showBottomStyle={index !== pageData.length - 1}
                   data={item}
                   className={styles.listItem}
