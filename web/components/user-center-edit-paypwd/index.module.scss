@@ -51,6 +51,8 @@
       font-size: $font-size-middle;
       margin: auto;
       border-radius: $border-radius-small;
+      padding: 0;
+      line-height: rem(42);
     }
   }
 }
@@ -58,7 +60,7 @@
 .bgBtnColor {
   :global {
     .dzq-button--primary.is-mouseenter {
-      @include button-primary()
+      @include button-primary();
     }
   }
 }
