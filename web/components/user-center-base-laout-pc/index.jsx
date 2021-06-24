@@ -99,7 +99,7 @@ const Index = (props) => {
   return (
     <div className={styles.container}>
       {(header && header({ ...props })) || <Header onSearch={onSearch} />}
-      <List {...props} className={styles.list} wrapperClass={styles.wrapper}>
+      <List {...props} platform="pc" className={styles.list} wrapperClass={styles.wrapper}>
         {(contentHeader && contentHeader({ ...props })) || (
           <div className={styles.headerbox}>
             <div className={styles.userHeader}>
