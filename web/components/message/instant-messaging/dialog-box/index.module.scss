@@ -123,26 +123,53 @@
 
 .msgImage-container {
   position: relative;
+
+  .status {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: rem($border-radius-small);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .uploading {
+    background: $black;
+    opacity: 0.5;
+  }
+
+  .fail {
+    background: $disabled-color;
+  }
+
+  .failIcon {
+    color: $white;
+  }
+
+  .loadingIcon {
+    animation: loading 2s linear infinite;
+    color: $white;
+  }
+
+  .redDot {
+    width: 16px;
+    height: 16px;
+    background: $error-color;
+    position: absolute;
+    left: -24px;
+    bottom: 0;
+    border-radius: 50%;
+    color: $white;
+    text-align: center;
+    line-height: 16px;
+    cursor: pointer;
+  }
 }
 
-.msgImage-uploading {
-  content: ' ';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: red;
-  opacity: 0.5;
-  border-radius: rem($border-radius-small);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
-.loading {
-  animation: loading 2s linear infinite;
-}
 
 @keyframes loading {
   from {

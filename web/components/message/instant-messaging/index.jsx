@@ -134,53 +134,45 @@ const Index = (props) => {
     }
 
     const fileList = [...files];
+
+    // 先获取图片本地的路径（base64）、再异步获取图片的宽高
+    await Promise.all(fileList.map(file => (
+      new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (e) => {
+          const src = e.target.result;
+          const img = new Image();
+          img.src = src;
+          img.onload = () => {
+            file.localUrl = src;
+            file.width = img.width;
+            file.height = img.height;
+            resolve();
+          };
+        };
+      })
+    )));
+
     await Promise.all(fileList.map(() => submitEmptyImage(dialogId || localDialogId))).then((results) => {
+      // 把消息从大到小排序
       results.sort((a, b) => b.data.dialogMessageId - a.data.dialogMessageId);
-      fileList.map(async (file, i) => {
+
+      // 把本地图片和消息id对应起来
+      fileList.map((file, i) => {
         const { code, data: { dialogMessageId } } = results[i];
         if (code === 0) {
           file.dialogMessageId = dialogMessageId;
-
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = (e) => {
-            const src = e.target.result;
-            const img = new Image();
-            img.src = src;
-            img.onload = async () => {
-              file.localUrl = src;
-              file.width = img.width;
-              file.height = img.height;
-              const formData = new FormData();
-              formData.append('file', file);
-              formData.append('type', 1);
-              formData.append('dialogMessageId', dialogMessageId);
-              const ret = await createAttachment(formData);
-              readDialogMsgList(dialogId);
-            };
-          };
-
-          // setTimeout(async () => {
-          //   const formData = new FormData();
-          //   formData.append('file', file);
-          //   formData.append('type', 1);
-          //   formData.append('dialogMessageId', dialogMessageId);
-          //   const ret = await createAttachment(formData);
-          //   readDialogMsgList(dialogId);
-          // }, i * 5000);
-
-          // const { code, data } = ret;
-          // if (code === 0) {
-          //   // await submit({
-          //   //   imageUrl: data.url,
-          //   //   isImage: true,
-          //   // });
-          // } else {
-          //   // Toast.error({ content: ret.msg });
-          // }
         }
-        return file;
       });
+      readDialogMsgList(dialogId || localDialogId);
+
+      // 开始上传图片
+      fileList.map(async (file) => {
+        sendImageAttachment(file, dialogId || localDialogId);
+      });
+
+      // 维护本地图片队列
       uploadingImagesRef.current = uploadingImagesRef.current.concat(fileList);
 
       if (!dialogId) {
@@ -189,6 +181,24 @@ const Index = (props) => {
         readDialogMsgList(dialogId);
       }
     });
+  };
+
+  const sendImageAttachment = async (file, dialogId = dialogId, isResend) => {
+    if (isResend) {
+      uploadingImagesRef.current.forEach((item) => {
+        if (item.dialogMessageId === file.dialogMessageId) {
+          item.isImageFail = false;
+          readDialogMsgList(dialogId);
+        }
+      });
+    }
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('type', 1);
+    formData.append('dialogMessageId', file.dialogMessageId);
+    const ret = await createAttachment(formData);
+    if (ret.code !== 0) file.isImageFail = true;
+    readDialogMsgList(dialogId);
   };
 
   const doSubmitClick = async () => {
@@ -202,30 +212,31 @@ const Index = (props) => {
       // 把消息状态更新为已读
       updateDialog(dialogId);
     }, 100);
-    return dialogMsgList.list.map(item => {
+    return dialogMsgList.list.map((item) => {
+      console.log(uploadingImagesRef.current);
       if (item.isImageLoading && uploadingImagesRef.current.length) {
-        uploadingImagesRef.current.forEach(file => {
+        uploadingImagesRef.current.forEach((file) => {
           if (file.dialogMessageId === item.id) {
+            console.log(file);
             item.imageUrl = file.localUrl;
             item.imageWidth = file.width;
             item.imageHeight = file.height;
+            item.isImageFail = file.isImageFail;
+            item.file = file;
+            item.dialogId = dialogId;
           }
         });
       }
 
       return {
+        ...item,
         timestamp: item.createdAt,
         userAvatar: item.user.avatar,
         displayTimePanel: true,
         textType: 'string',
         text: item.messageTextHtml,
         ownedBy: user.id === item.userId ? 'myself' : 'itself',
-        imageUrl: item.imageUrl,
-        userId: item.userId,
         nickname: item.user.username,
-        isImageLoading: item.isImageLoading,
-        imageWidth: item.imageWidth,
-        imageHeight: item.imageHeight,
       };
     }).filter(item => item.imageUrl || item.text).reverse();
   // }, [dialogMsgListLength]);
@@ -300,6 +311,7 @@ const Index = (props) => {
         showEmoji={showEmoji}
         username={username}
         scrollEnd={scrollEnd}
+        sendImageAttachment={sendImageAttachment}
       />
       <InteractionBox
         typingValue={typingValue}

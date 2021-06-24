@@ -7,9 +7,10 @@ import xss from '@common/utils/xss';
 import { getMessageImageSize } from '@common/utils/get-message-image-size';
 import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
+import classnames from 'classnames';
 
 const DialogBox = (props, ref) => {
-  const { platform, message, showEmoji, scrollEnd, messagesList } = props;
+  const { site: { isPC }, message, showEmoji, scrollEnd, messagesList, sendImageAttachment } = props;
   const { dialogMsgList } = message;
   const [previewerVisibled, setPreviewerVisibled] = useState(false);
   const [defaultImg, setDefaultImg] = useState('');
@@ -18,25 +19,20 @@ const DialogBox = (props, ref) => {
     return dialogMsgList.list.filter(item => !!item.imageUrl).map(item => item.imageUrl).reverse();
   }, [dialogMsgList]);
 
-
   const renderImage = (data) => {
     const { isImageLoading, imageUrl, imageWidth, imageHeight } = data;
     let [width, height] = [200, 0];
     if (isImageLoading) {
-      [width, height] = getMessageImageSize(imageWidth, imageHeight, true);
+      [width, height] = getMessageImageSize(imageWidth, imageHeight, isPC);
     } else {
       const size = imageUrl.match(/\?width=(\d+)&height=(\d+)$/);
       if (size) {
-        [width, height] = getMessageImageSize(size[1], size[2], true);
+        [width, height] = getMessageImageSize(size[1], size[2], isPC);
       }
     }
     return (
       <div className={styles['msgImage-container']} style={{ width: `${width}px`, height: height ? `${height}px` : 'auto' }}>
-        {isImageLoading && (
-          <div className={styles['msgImage-uploading']}>
-            <Icon className={styles.loading} name="LoadingOutlined" size={40} />
-          </div>
-        )}
+        {renderImageStatus(data)}
         <img
           className={styles.msgImage}
           src={imageUrl}
@@ -52,13 +48,39 @@ const DialogBox = (props, ref) => {
     );
   };
 
+  const renderImageStatus = (data) => {
+    const { isImageFail, isImageLoading, file } = data;
+    const size = isPC ? 30 : 20;
+
+    if (isImageLoading) {
+      return (
+        <div className={classnames(styles.status, {
+          [styles.fail]: isImageFail,
+          [styles.uploading]: !isImageFail,
+        })}>
+          {isImageFail ? (
+            <>
+              <Icon className={styles.failIcon} name="PictureOutlinedBig" size={size} />
+              <div className={styles.redDot} onClick={() => {
+                sendImageAttachment(file, '', true);
+              }}>!</div>
+            </>
+          ) : (
+            <Icon className={styles.loadingIcon} name="LoadingOutlined" size={size} />
+          )}
+        </div>
+      );
+    }
+  }
+
   return (
-    <div className={platform === 'pc' ? styles.pcDialogBox : (showEmoji ? styles['h5DialogBox-emoji'] : styles.h5DialogBox)} ref={ref}>
+    <div className={isPC ? styles.pcDialogBox : (showEmoji ? styles['h5DialogBox-emoji'] : styles.h5DialogBox)} ref={ref}>
       <div className={styles.box__inner}>
-        {messagesList.map((item, idx) => {
-          const { timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl, userId, nickname, isImageLoading } = item;
+        {messagesList.map((item) => {
+          console.log(imageUrl);
+          const { id, timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl, userId, nickname, isImageLoading } = item;
           return (
-            <React.Fragment key={idx}>
+            <React.Fragment key={id}>
               {displayTimePanel && <div className={styles.msgTime}>{diffDate(timestamp)}</div>}
               <div className={`${ownedBy === 'myself' ? `${styles.myself}` : `${styles.itself}`} ${styles.persona}`}>
                 <div className={styles.profileIcon} onClick={() => {
@@ -95,4 +117,4 @@ const DialogBox = (props, ref) => {
   );
 };
 
-export default inject('message', 'user')(observer(forwardRef(DialogBox)));
+export default inject('message', 'user', 'site')(observer(forwardRef(DialogBox)));
