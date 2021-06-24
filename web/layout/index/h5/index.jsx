@@ -197,8 +197,6 @@ class IndexH5Page extends React.Component {
         requestError={threadError.isError}
         errorText={threadError.errorText}
         onClickTabBar={this.onClickTabBar}
-        requestError={this.props.isError}
-        errorText={this.props.errorText}
         disabledList={this.enableVlist}
       >
         {this.enableVlist && (
@@ -213,7 +211,8 @@ class IndexH5Page extends React.Component {
               onScroll={this.handleScroll}
               loadNextPage={this.onRefresh}
               noMore={currentPage >= totalPage}
-              requestError={this.props.isError}
+              requestError={threadError.isError}
+              errorText={threadError.errorText}
               renderItem={(item, index, recomputeRowHeights, onContentHeightChange, measure) => (
                 <ThreadContent
                   onContentHeightChange={measure}
@@ -225,17 +224,6 @@ class IndexH5Page extends React.Component {
                   className={styles.listItem}
                   recomputeRowHeights={measure}
                 />
-
-                // <ThreadContent
-                //   onContentHeightChange={(height) => onContentHeightChange(height, index)}
-                //   onImageReady={measure}
-                //   onVideoReady={measure}
-                //   key={index}
-                //   // showBottomStyle={index !== pageData.length - 1}
-                //   data={item}
-                //   className={styles.listItem}
-                //   recomputeRowHeights={recomputeRowHeights}
-                // />
               )}
             >
               <HomeHeader ref={this.headerRef} />

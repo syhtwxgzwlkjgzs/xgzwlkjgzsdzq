@@ -166,7 +166,6 @@ class Index extends React.Component {
           });
         }
         else if (router.params && router.params.path) {
-          console.log(router.params.path)
           Router.redirect({
             url: decodeURIComponent(router.params.path),
             fail: () => {

@@ -2,6 +2,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 import PopupList from '../popup-list';
 import Avatar from '../../avatar';
 import { Icon } from '@discuzq/design';
+import { debounce } from '@common/utils/throttle-debounce.js';
 
 import styles from './index.module.scss';
 
@@ -16,11 +17,11 @@ import styles from './index.module.scss';
 const Index = ({ imgs = [], tipData = {}, wholeNum = 1, showMore= false, showCount = 5, platform = 'h5' }) => {
   const [visible, setVisible] = useState(false);
 
-  const onClick = (e) => {
+  const onClick = debounce((e) => {
     e.stopPropagation();
-
     setVisible(true);
-  };
+  }, 200);
+
   const onHidden = () => {
     setVisible(false);
   };
@@ -38,7 +39,9 @@ const Index = ({ imgs = [], tipData = {}, wholeNum = 1, showMore= false, showCou
 
   // 点赞头像的总宽度
   const sty = useMemo(() => {
-    return { width: `${0.2*(renderUsers.length)+0.04}rem` }
+    const imgsLength = renderUsers.length;
+    // TODO 宽度需要动态计算，这里无法使用rem()进行转换
+    return { width: `${16*imgsLength+4*(imgsLength+1)}px` }
   }, [renderUsers]);
 
   // 点赞头像的相对位置以及层级
@@ -49,7 +52,7 @@ const Index = ({ imgs = [], tipData = {}, wholeNum = 1, showMore= false, showCou
 
   return (
     <>
-        <div className={`${styles.container} ${ platform === 'pc' ? styles.maxWidth200 : styles.maxWidth104 }`}  onClick={onClick} style={sty}>
+        <div className={`${styles.container} ${ platform === 'pc' ? styles.maxWidth204 : styles.maxWidth104 }`}  onClick={onClick} style={sty}>
             {
                 wholeNum !== 0 && renderUsers?.filter((_, index) => index < showCount).map((item, index) => (
                   <div key={index} className={imgAfterArr[index]}>

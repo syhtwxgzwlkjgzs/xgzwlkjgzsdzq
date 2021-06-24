@@ -65,7 +65,7 @@ const List = forwardRef(({
   //   if (listWrapper.current && showLoadingInCenter && site?.platform === 'h5') {
   //     const { clientHeight } = listWrapper.current;
   //     const { scrollHeight } = listWrapper.current;
-      
+
   //     setIsLoadingInCenter(scrollHeight <= clientHeight)
   //   }
   // }, [listWrapper.current, children])
@@ -107,8 +107,15 @@ const List = forwardRef(({
   };
 
   const onBackTop = () => {
-    listWrapper.current.scrollTop = 0;
-    currentScrollTop.current = 0;
+    if (currentScrollTop.current > 0) {
+      const top = currentScrollTop.current -  currentScrollTop.current / 5;
+      window.requestAnimationFrame(onBackTop)
+      listWrapper.current.scrollTop = top;
+      currentScrollTop.current = top;
+    } else {
+      listWrapper.current.scrollTop = 0;
+      currentScrollTop.current = 0;
+    }
   };
 
   const jumpToScrollTop = (scrollTop) => {
@@ -139,7 +146,8 @@ const List = forwardRef(({
     if (!isFirst) {
       allowHandleRefresh = (scrollTop !== 0);
     }
-    if ((scrollHeight - preload <= clientHeight + scrollTop) && !isLoading && allowHandleRefresh) {
+
+    if ((scrollHeight / 2 <= scrollTop) && !isLoading && allowHandleRefresh) {
       setIsLoading(true);
       if (typeof(onRefresh) === 'function') {
         const promise = onRefresh();

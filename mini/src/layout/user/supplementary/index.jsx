@@ -132,7 +132,7 @@ class SupplementaryH5Page extends React.Component {
 
     return (
       <View className={layout.container}>
-        <HomeHeader hideInfo hideMinibar />
+        <HomeHeader hideInfo hideMinibar mode="supplementary"/>
         <View className={layout.content}>
           {values?.map((field) => this.createComponent(field))}
           <Button type="primary" className={layout.button} onClick={() => this.submit()}>

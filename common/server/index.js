@@ -38,6 +38,8 @@ export { default as readFollow } from './thread-post/read-follow';
 export { default as readProcutAnalysis } from './thread-post/read-product-analysis';
 export { default as readTopics } from './thread-post/read-topic';
 export { default as createThreadVideoAudio } from './thread-post/create-video-audio';
+export { default as readPostCategories } from './thread-post/read-post-categories';
+
 export { default as smsVerify } from './smsVerify';
 export { default as smsResetPwd } from './smsResetPassword';
 export { default as createAttachment } from './thread-post/create-attachment';

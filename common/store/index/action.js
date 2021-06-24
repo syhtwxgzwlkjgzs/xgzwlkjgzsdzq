@@ -22,7 +22,7 @@ class IndexAction extends IndexStore {
   @computed get activeCategoryId() {
     const categories = this.categories || [];
     const { categoryids } = this.filter
-    
+
     const [id, cid] = getActiveId(categories, categoryids)
     return id
   }
@@ -31,7 +31,7 @@ class IndexAction extends IndexStore {
   @computed get activeChildCategoryId() {
     const categories = this.categories || [];
     const { categoryids } = this.filter
-    
+
     const [id, cid] = getActiveId(categories, categoryids)
     return cid
   }
@@ -130,7 +130,7 @@ class IndexAction extends IndexStore {
    async deleteThreadsData({ id } = {}) {
      if (id && this.threads) {
         const { pageData = [] } = this.threads;
-        const newPageData = pageData.filter(item => item.threadId !== id)
+        const newPageData = pageData.filter(item => `${item.threadId}` !== `${id}`)
 
         if (this.threads?.pageData) {
           this.threads.pageData = newPageData;
@@ -149,7 +149,7 @@ class IndexAction extends IndexStore {
       this.threads = null;
       this.sticks = null;
     }
-    
+
     this.resetErrorInfo()
 
     await this.getRreadStickList(filter.categoryids);
@@ -275,38 +275,6 @@ class IndexAction extends IndexStore {
   @action.bound
   setCategories(data) {
     this.categories = data;
-  }
-
-  /**
-   * 根据 ID 获取当前选中的类别
-   * @param {number} id 帖子类别id
-   * @returns 选中的帖子详细信息
-   */
-  @action
-  getCategorySelectById(id) {
-    let parent = {};
-    let child = {};
-    let currentId = id;
-    if (!id && this.categoriesNoAll && this.categoriesNoAll.length) currentId = this.categoriesNoAll[0].pid;
-    if (this.categoriesNoAll && this.categoriesNoAll.length && currentId) {
-      this.categoriesNoAll.forEach((item) => {
-        const { children } = item;
-        if (item.pid === currentId) {
-          parent = item;
-          if (children && children.length > 0) [child] = children;
-        } else {
-          if (children && children.length > 0) {
-            children.forEach((elem) => {
-              if (elem.pid === currentId) {
-                child = elem;
-                parent = item;
-              }
-            });
-          }
-        }
-      });
-    }
-    return { parent, child };
   }
 
   /* 写入置顶数据
@@ -474,7 +442,7 @@ class IndexAction extends IndexStore {
    @action
    async getRecommends({ categoryIds = [] } = {}) {
     this.updateRecommendsStatus('loading');
-    
+
     const result = await readRecommends({ params: { categoryIds } })
     if (result.code === 0) {
       this.setRecommends(result.data || []);
