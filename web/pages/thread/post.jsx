@@ -531,7 +531,16 @@ class PostPage extends React.Component {
   // 发布提交
   handleSubmit = async (isDraft) => {
     if (!isDraft) this.setPostData({ draft: 0 });
-    if (this.state.count >= MAX_COUNT) return;
+    if (this.state.count >= MAX_COUNT) {
+      this.postToast(`不能超过${MAX_COUNT}字`);
+      return;
+    }
+    if (this.vditor && !this.vditor.getValue().replace(/```/g, '')
+      .replace(/\n/g, '')
+      .trim()) {
+      this.postToast('不要全部输入空格或换行');
+      return;
+    }
     const { postData } = this.props.threadPost;
     if (!this.props.user.threadExtendPermissions.createThread) {
       Toast.info({ content: '您没有发帖权限' });

@@ -147,7 +147,6 @@ function VList(
     scrollToPosition = scrollTop;
     onScroll({ scrollTop, clientHeight, scrollHeight });
     if (scrollTop + clientHeight + (clientHeight / 2) >= scrollHeight && !isLoading) {
-      console.log('加载下一页');
       setIsLoading(true);
       loadNextPage().finally(() => {
         setIsLoading(false);

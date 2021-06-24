@@ -107,7 +107,7 @@ function Home(props, ref) {
       case 'header':
         return props.children;
       case 'footer':
-        return <BottomView noMore={props.noMore} isError={props.requestError}></BottomView>;
+        return <BottomView noMore={props.noMore} isError={props.requestError} errorText={props.errorText}></BottomView>;
       default:
         return <Item data={data} measure={measure} recomputeRowHeights={() => recomputeRowHeights(index)} />;
     }
@@ -159,7 +159,8 @@ function Home(props, ref) {
       props.vlist.setPosition(scrollTop);
     }
 
-    if (scrollTop + clientHeight + clientHeight >= scrollHeight && !loadData) {
+    // if (scrollTop + (clientHeight * 4) >= scrollHeight && !loadData) {
+    if ( scrollHeight / 4 <= scrollTop && !loadData) {
       loadData = true;
       props.loadNextPage().finally(() => {
         loadData = false;

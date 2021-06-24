@@ -108,12 +108,8 @@ class Index extends Component {
   async fetchCategories() { // 若当前store内分类列表数据为空，则主动请求分类
     const { readPostCategory } = this.props.threadPost;
     const { params } = getCurrentInstance().router;
-    const categories = this.props.threadPost?.getCurrentCategories();
-    if (params.id
-      || !categories || (categories && categories.length === 0)
-      || (!params.id && categories.length && !categories[0].canCreateThread)) {
-      await readPostCategory(params.id);
-    }
+    // const categories = this.props.threadPost?.getCurrentCategories();
+    await readPostCategory(params.id);
   }
 
   async setPostDataById(id) {
@@ -190,7 +186,6 @@ class Index extends Component {
 
   // 处理文本框内容
   onContentChange = (contentText, maxLength) => {
-    console.log(contentText);
     const { setPostData } = this.props.threadPost;
     setPostData({ contentText });
     this.toHideTitle();
@@ -345,8 +340,6 @@ class Index extends Component {
       },
       // 上传中回调，获取上传进度等信息
       progress (result) {
-        console.log('progress');
-        console.log(result);
       },
       // 上传完成回调，获取上传后的视频 URL 等信息
       finish: async (result) => {
