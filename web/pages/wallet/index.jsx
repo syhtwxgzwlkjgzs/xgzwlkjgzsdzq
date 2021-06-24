@@ -41,11 +41,13 @@ class WalletPage extends React.Component {
   render() {
     const { site, wallet } = this.props;
     const { walletInfo } = wallet;
-    return <ViewAdapter 
-      h5={<WalletH5Page walletData={walletInfo} />}
-      pc={<WalletPCPage walletData={walletInfo} />} 
-      title={`我的钱包 - ${this.props.site?.siteName}`}
-    />
+    return (
+      <ViewAdapter
+        h5={<WalletH5Page walletData={walletInfo} />}
+        pc={<WalletPCPage walletData={walletInfo} />}
+        title={`我的钱包`}
+      />
+    );
   }
 }
 
