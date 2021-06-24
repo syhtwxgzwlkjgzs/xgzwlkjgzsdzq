@@ -30,11 +30,11 @@
   background: $body-bg-color;
   overflow-y: auto;
   border-radius: rem(5);
-  scrollbar-width: none; /* Firefox */
-  scrollbar-color: transparent transparent; /* Firefox */
-  ::-webkit-scrollbar {
-    display: none; /* Chrome Safari */
-  }
+  // scrollbar-width: none; /* Firefox */
+  // scrollbar-color: transparent transparent; /* Firefox */
+  // ::-webkit-scrollbar {
+  //   display: none; /* Chrome Safari */
+  // }
   // 不需要限制最大宽度。这个会影响鼠标的滚动区域，所以改成padding
   &.col-1{
     .wrapper {
