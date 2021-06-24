@@ -1,5 +1,5 @@
 import { action } from 'mobx';
-import { readUserLoginDisplay, readForum, getMiniCode } from '@server';
+import { readUserLoginDisplay, readForum } from '@server';
 import SiteStore from './store';
 import { get } from '../../utils/get';
 
@@ -21,11 +21,6 @@ class SiteAction extends SiteStore {
   async getSiteInfo() {
     const siteResult = await readForum({});
     siteResult.data && this.setSiteConfig(siteResult.data);
-  }
-
-  @action.bound
-  async getMiniCode(data) {
-    this.miniCode = await getMiniCode(data);
   }
 
   @action

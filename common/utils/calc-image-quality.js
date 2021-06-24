@@ -3,8 +3,13 @@ import isServer from '@common/utils/is-server';
 let isSupportWebp = false;
 if (!isServer()) {
     try {
-        const img = document.createElement('canvas').toDataURL('image/webp', 0.5);
-        isSupportWebp = img.indexOf('data:image/webp') === 0;
+        if (process.env.DISCUZ_ENV === 'web') {
+            const img = document.createElement('canvas').toDataURL('image/webp', 0.5);
+            isSupportWebp = img.indexOf('data:image/webp') === 0;
+        } else {
+            // TODO 需要区分小程序打包判断当前平台是安卓和ios
+            isSupportWebp = false;
+        }
     } catch(err) {
         isSupportWebp = false;
     }

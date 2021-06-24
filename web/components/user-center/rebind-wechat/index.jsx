@@ -20,7 +20,6 @@ class WechatRebindDialog extends Component {
       content: '换绑成功',
       duration: 1000,
     });
-    console.log('scan success');
   };
 
   handleScanFail = async () => {
@@ -28,7 +27,6 @@ class WechatRebindDialog extends Component {
       content: '换绑失败',
       duration: 1000,
     });
-    console.log('scan fail');
   };
 
   render() {

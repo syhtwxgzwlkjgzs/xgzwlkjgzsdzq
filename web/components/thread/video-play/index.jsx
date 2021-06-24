@@ -90,6 +90,7 @@ const Index = ({
             height={height}
             poster={coverUrl}
             duration={time}
+            playsinline={true}
           />
         )
       }

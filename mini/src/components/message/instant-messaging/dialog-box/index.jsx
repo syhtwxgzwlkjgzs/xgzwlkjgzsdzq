@@ -46,7 +46,6 @@ const DialogBox = (props) => {
         // let clientWidth = rect.width;
         // let ratio = 750 / clientWidth;
         // let height = clientHeight * ratio;
-        console.log(clientHeight);
 
         const padding = (keyboardHeight && !showEmoji) ? inputBottom : 0
 
