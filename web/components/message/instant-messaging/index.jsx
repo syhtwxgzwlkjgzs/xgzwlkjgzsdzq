@@ -11,13 +11,16 @@ import { ACCEPT_IMAGE_TYPES } from '@common/constants/thread-post';
 import styles from './index.module.scss';
 
 const Index = (props) => {
-  const { site: { platform }, dialogId, username, nickname, message, threadPost, user } = props;
+  const { site: { isPC }, dialogId, username, nickname, message, threadPost, user } = props;
   const { clearMessage, readDialogMsgList, createDialogMsg, createDialog, readDialogIdByUsername, dialogMsgList, dialogMsgListLength, updateDialog } = message;
 
   const dialogBoxRef = useRef();
   const timeoutId = useRef();
   const uploadRef = useRef();
   const uploadingImagesRef = useRef([]);
+  const listDataLengthRef = useRef(0);
+
+  let toastInstance = null;
 
   const [showEmoji, setShowEmoji] = useState(false);
   const [typingValue, setTypingValue] = useState('');
@@ -36,7 +39,7 @@ const Index = (props) => {
     clearPolling();
     timeoutId.current = setTimeout(() => {
       updateMsgList();
-    }, 20000);
+    }, 5000);
   };
 
   // 清除轮询
@@ -85,6 +88,10 @@ const Index = (props) => {
     isImage: true,
   });
 
+  const clearToast = () => {
+    toastInstance?.destroy();
+  };
+
   // 触发图片选择
   const uploadImage = () => {
     uploadRef.current.click();
@@ -129,6 +136,10 @@ const Index = (props) => {
 
     const fileList = [...files];
 
+    toastInstance = Toast.loading({
+      content: '图片压缩中...',
+    });
+
     // 先获取图片本地的路径（base64）、再异步获取图片的宽高
     await Promise.all(fileList.map(file => (
       new Promise((resolve) => {
@@ -161,6 +172,7 @@ const Index = (props) => {
         }
       });
       readDialogMsgList(dialogId || localDialogId);
+      clearToast();
 
       // 开始上传图片
       fileList.map(async (file) => {
@@ -203,12 +215,7 @@ const Index = (props) => {
   };
 
   const messagesList = useMemo(() => {
-    setTimeout(() => {
-      scrollEnd();
-      // 把消息状态更新为已读
-      updateDialog(dialogId);
-    }, 100);
-    return dialogMsgList.list.map((item) => {
+    const listData = dialogMsgList.list.map((item) => {
       if (item.isImageLoading && uploadingImagesRef.current.length) {
         uploadingImagesRef.current.forEach((file) => {
           if (file.dialogMessageId === item.id) {
@@ -231,7 +238,18 @@ const Index = (props) => {
         nickname: item.user.username,
       };
     }).filter(item => item.imageUrl || item.text).reverse();
-  // }, [dialogMsgListLength]);
+
+    // 消息数有变化，即有新消息，此时把滚动条滚动到底部
+    if (listData.length > listDataLengthRef.current) {
+      listDataLengthRef.current = listData.length;
+      setTimeout(() => {
+        scrollEnd();
+        // 把消息状态更新为已读
+        updateDialog(dialogId);
+      }, 100);
+    }
+
+    return listData;
   });
 
   useEffect(async () => {
@@ -253,7 +271,7 @@ const Index = (props) => {
   }, []);
 
   useEffect(() => {
-    if (platform !== 'pc') {
+    if (!isPC) {
       document.addEventListener('focusin', () => {
         setTimeout(scrollEnd, 0);
       });
@@ -261,6 +279,7 @@ const Index = (props) => {
     return () => {
       clearPolling();
       clearMessage();
+      clearToast();
     };
   }, []);
 
@@ -285,7 +304,7 @@ const Index = (props) => {
   }, [showEmoji]);
 
   return (
-    <div className={platform === 'h5' ? styles.h5Page : styles.pcPage}>
+    <div className={!isPC ? styles.h5Page : styles.pcPage}>
       <input
         style={{ display: 'none' }}
         type="file"
@@ -297,11 +316,7 @@ const Index = (props) => {
       <DialogBox
         ref={dialogBoxRef}
         messagesList={messagesList}
-        nickname={nickname}
-        platform={platform}
-        dialogId={dialogId}
         showEmoji={showEmoji}
-        username={username}
         scrollEnd={scrollEnd}
         sendImageAttachment={sendImageAttachment}
       />
@@ -310,10 +325,6 @@ const Index = (props) => {
         setTypingValue={setTypingValue}
         uploadImage={uploadImage}
         doSubmitClick={doSubmitClick}
-        nickname={nickname}
-        username={username}
-        platform={platform}
-        dialogId={dialogId}
         showEmoji={showEmoji}
         setShowEmoji={setShowEmoji}
       />

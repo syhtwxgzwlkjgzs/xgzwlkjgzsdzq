@@ -6,7 +6,6 @@ import styles from './index.module.scss';
 
 const InteractionBox = (props) => {
   const {
-    platform,
     threadPost,
     showEmoji,
     setShowEmoji,
@@ -14,6 +13,7 @@ const InteractionBox = (props) => {
     uploadImage,
     doSubmitClick,
     typingValue,
+    site: { isPC },
   } = props;
 
   const [cursorPosition, setCursorPosition] = useState(0);
@@ -35,7 +35,7 @@ const InteractionBox = (props) => {
 
   return (
     <>
-      {platform === 'h5' && (
+      {!isPC && (
         <>
           <div className={styles.h5InteractionBox} style={{ bottom: showEmoji ? '200px' : 0 }}>
             <div className={styles.inputWrapper}>
@@ -80,7 +80,7 @@ const InteractionBox = (props) => {
           </div>
         </>
       )}
-      {platform === 'pc' && (
+      {isPC && (
         <div className={styles.pcInteractionBox}>
           <div className={styles.tools}>
             <Emoji
@@ -127,4 +127,4 @@ const InteractionBox = (props) => {
   );
 };
 
-export default inject('threadPost')(observer(InteractionBox));
+export default inject('threadPost', 'site')(observer(InteractionBox));

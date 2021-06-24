@@ -42,7 +42,7 @@ const DialogBox = (props, ref) => {
               setPreviewerVisibled(true);
             }, 0);
           }}
-          onLoad={scrollEnd}
+          // onLoad={scrollEnd}
         />
       </div>
     );
@@ -55,10 +55,10 @@ const DialogBox = (props, ref) => {
     if (isImageLoading) {
       return (
         <div className={classnames(styles.status, {
-          [styles.fail]: isImageFail,
-          [styles.uploading]: !isImageFail,
+          [styles.fail]: isImageFail || failMsg,
+          [styles.uploading]: !isImageFail && !failMsg,
         })}>
-          {isImageFail ? (
+          {isImageFail || failMsg ? (
             <>
               <Icon className={styles.failIcon} name="PictureOutlinedBig" size={size} />
               {failMsg && <span className={styles.failMsg}>{failMsg}</span>}
@@ -78,8 +78,7 @@ const DialogBox = (props, ref) => {
     <div className={isPC ? styles.pcDialogBox : (showEmoji ? styles['h5DialogBox-emoji'] : styles.h5DialogBox)} ref={ref}>
       <div className={styles.box__inner}>
         {messagesList.map((item) => {
-          console.log(imageUrl);
-          const { id, timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl, userId, nickname, isImageLoading } = item;
+          const { id, timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl, userId, nickname } = item;
           return (
             <React.Fragment key={id}>
               {displayTimePanel && <div className={styles.msgTime}>{diffDate(timestamp)}</div>}
