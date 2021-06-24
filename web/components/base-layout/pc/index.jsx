@@ -41,6 +41,8 @@ const BaseLayout = forwardRef((props, ref) => {
     footer = null,
     rightClassName = '',
     disabledList = false,
+    onRefreshPlaceholder = null,
+    screensForBottom = 3
   } = props;
 
   // List组件相关，参考List组件props注释
@@ -102,6 +104,7 @@ const BaseLayout = forwardRef((props, ref) => {
       ref={listRef}
       onError={onError}
       onScroll={onScroll}
+      screensForBottom={screensForBottom}
     >
       {(pageName === 'home' || left) && (
         <div className={styles.left}>{typeof left === 'function' ? left({ ...props }) : left}</div>
@@ -109,7 +112,7 @@ const BaseLayout = forwardRef((props, ref) => {
 
       <div className={styles.center}>
         {typeof children === 'function' ? children({ ...props }) : children}
-        {isShowLayoutRefresh && onRefresh && <BottomView isError={isError} errorText={isErrorText} noMore={noMore} />}
+        {isShowLayoutRefresh && onRefresh && <BottomView onRefreshPlaceholder={onRefreshPlaceholder} isError={isError} errorText={isErrorText} noMore={noMore} />}
       </div>
 
       {(pageName === 'home' || right) && (

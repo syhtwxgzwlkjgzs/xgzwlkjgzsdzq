@@ -20,12 +20,13 @@ const Index = ({
     errorText = '加载失败', 
     handleError = noop,
     isBox = false,
-    className=''
+    className='',
+    onRefreshPlaceholder = null
 }) => {
     return (
         <div className={`${styles.bottomView} ${className} ${isBox ? styles.bottomViewBox : ''}`}>
             {!isError ? (
-                loadingView || <RefreshView noMore={noMore} loadText={loadingText} noMoreText={noMoreText} />
+                loadingView || <RefreshView onRefreshPlaceholder={onRefreshPlaceholder} noMore={noMore} loadText={loadingText} noMoreText={noMoreText} />
             ) : (
                 errorView || <ErrorView text={errorText || '加载失败'} onClick={handleError} />
             )}

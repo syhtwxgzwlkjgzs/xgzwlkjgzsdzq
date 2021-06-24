@@ -34,6 +34,7 @@ class IndexPCPage extends React.Component {
 
     this.enabledVList = false; // 开启虚拟列表
     this.enabledWindowScroll = false; // 开启window滚动
+    this.onRefreshPlaceholder = this.onRefreshPlaceholder.bind(this);
   }
 
   // 轮询定时器
@@ -340,6 +341,30 @@ class IndexPCPage extends React.Component {
     );
   };
 
+  RefreshPlaceholderBox(key) {
+    return (
+      <div key={key} className={styles.placeholder}>
+        <div className={styles.header}>
+          <div className={styles.avatar}/>
+          <div className={styles.box}/>
+        </div>
+        <div className={styles.content}/>
+        <div className={styles.content}/>
+        <div className={styles.footer}>
+          <div className={styles.box}/>
+          <div className={styles.box}/>
+          <div className={styles.box}/>
+        </div>
+      </div>
+    )
+  }
+
+  onRefreshPlaceholder() {
+      return [1,2].map((item, key) => {
+        return this.RefreshPlaceholderBox(key);
+      });
+  }
+
   render() {
     const { index, site } = this.props;
     const { countThreads = 0 } = site?.webConfig?.other || {};
@@ -348,6 +373,7 @@ class IndexPCPage extends React.Component {
 
     return (
       <BaseLayout
+        screensForBottom={4}
         onSearch={this.onSearch}
         onRefresh={this.onPullingUp}
         noMore={currentPage >= totalPage}
@@ -362,6 +388,7 @@ class IndexPCPage extends React.Component {
         className="home"
         disabledList={this.enabledVList}
         enabledWindowScroll={this.enabledWindowScroll}
+        onRefreshPlaceholder={this.onRefreshPlaceholder}
       >
         {this.enabledVList ? this.renderVlist(index) : this.renderContent(index)}
       </BaseLayout>

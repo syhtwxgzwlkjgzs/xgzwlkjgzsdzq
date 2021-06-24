@@ -36,6 +36,7 @@ const List = forwardRef(({
   errorText='加载失败',
   platform="",
   showLoadingInCenter = true,
+  screensForBottom = 3,
   site
 }, ref) => {
   const listWrapper = useRef(null);
@@ -117,7 +118,6 @@ const List = forwardRef(({
       currentScrollTop.current = scrollTop;
     }
   };
-
   const onTouchMove = throttle(({ isFirst = false }) => {
     if (!listWrapper || !listWrapper.current) {
       onScroll();
@@ -139,8 +139,7 @@ const List = forwardRef(({
     if (!isFirst) {
       allowHandleRefresh = (scrollTop !== 0);
     }
-
-    if ((scrollHeight / 2 <= scrollTop) && !isLoading && allowHandleRefresh) {
+    if (((scrollTop + (clientHeight*screensForBottom)) >= scrollHeight) && !isLoading && allowHandleRefresh) {
       setIsLoading(true);
       if (typeof(onRefresh) === 'function') {
         const promise = onRefresh();
