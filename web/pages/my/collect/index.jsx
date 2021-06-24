@@ -116,7 +116,7 @@ class Index extends React.Component {
       });
     }
 
-    return
+    return;
   };
 
   render() {
@@ -124,23 +124,29 @@ class Index extends React.Component {
     const { platform } = site;
     const { firstLoading } = this.state;
 
-    return <ViewAdapter 
-      h5={<IndexH5Page
-        firstLoading={firstLoading}
-        page={this.state.page}
-        totalPage={this.state.totalPage}
-        totalCount={this.state.totalCount}
-        dispatch={this.dispatch}
-      />}
-      pc={<IndexPCPage
-        page={this.state.page}
-        totalPage={this.state.totalPage}
-        totalCount={this.state.totalCount}
-        firstLoading={firstLoading}
-        dispatch={this.dispatch}
-      />} 
-      title={`我的收藏 - ${this.props.site?.siteName}`}
-    />
+    return (
+      <ViewAdapter
+        h5={
+          <IndexH5Page
+            firstLoading={firstLoading}
+            page={this.state.page}
+            totalPage={this.state.totalPage}
+            totalCount={this.state.totalCount}
+            dispatch={this.dispatch}
+          />
+        }
+        pc={
+          <IndexPCPage
+            page={this.state.page}
+            totalPage={this.state.totalPage}
+            totalCount={this.state.totalCount}
+            firstLoading={firstLoading}
+            dispatch={this.dispatch}
+          />
+        }
+        title={`我的收藏`}
+      />
+    );
   }
 }
 
