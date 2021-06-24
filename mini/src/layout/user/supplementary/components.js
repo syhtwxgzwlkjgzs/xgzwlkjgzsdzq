@@ -6,7 +6,6 @@ import Toast from '@discuzq/design/dist/components/toast/index';
 import { View } from '@tarojs/components';
 import '@discuzq/design/dist/styles/index.scss';
 import { ATTACHMENT_TYPE, ACCEPT_FILE_TYPES, ACCEPT_IMAGE_TYPES, THREAD_TYPE } from '@common/constants/thread-post';
-import beforeUpload from '@common/utils/before-upload';
 import Upload from './upload';
 
 export const InputType = {
@@ -147,7 +146,7 @@ const getAttachment = (ret) => {
   }
 };
 
-export function CreatePhotoUploader(field, layout, site) {
+export function CreatePhotoUploader(field, layout) {
   const { name, required } = field;
   return (
     <View className={layout.item} key={name}>
@@ -166,14 +165,13 @@ export function CreatePhotoUploader(field, layout, site) {
           onDelete={(fileList) => {
             field.value = [...fileList];
           }}
-          beforeUpload={(cloneList, showFileList) => beforeUpload(cloneList, showFileList, 'image', site)}
         ></Upload>
       </View>
     </View>
   );
 }
 
-export function CreateFileUploader(field, layout, site) {
+export function CreateFileUploader(field, layout) {
   const { name, required, fieldsDesc } = field;
   return (
     <View className={layout.item} key={name}>
@@ -203,7 +201,6 @@ export function CreateFileUploader(field, layout, site) {
           onDelete={(fileList) => {
             field.value = [...fileList];
           }}
-          beforeUpload={(cloneList, showFileList) => beforeUpload(cloneList, showFileList, 'file', site)}
         ></Upload>
       </View>
     </View>

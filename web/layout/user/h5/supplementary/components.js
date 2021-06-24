@@ -176,36 +176,36 @@ export function CreateFileUploader(field, layout, site) {
   const data = { type: ATTACHMENT_TYPE.file };
   return (
     <div className={layout.item} key={name}>
-      <div className={layout.attachmentsUpload}>
+      <FileUpload
+        className={layout.attachmentsUpload}
+        multiple={true}
+        btnText='上传文件'
+        data={data}
+        limit={9}
+        accept={ACCEPT_FILE_TYPES.join(',')}
+        onChange={(fileList) => {
+          field.value = fileList;
+        }}
+        onComplete={
+          (ret, file) => {
+            const att = getAttachment(ret);
+            Object.assign(file, att);
+          }
+        }
+        beforeUpload={(cloneList, showFileList) => beforeUpload(cloneList, showFileList, 'file', site)}
+        fileList={field.value}
+        isCustomUploadIcon={true}
+      >
         <span className={layout['attachmentsUpload-left']}>
           {requiredSign(required, layout.required)}
           {name}
         </span>
-        <FileUpload
-          className={layout['attachmentsUpload-right']}
-          listType='text'
-          multiple={true}
-          btnText='上传文件'
-          data={data}
-          limit={9}
-          accept={ACCEPT_FILE_TYPES.join(',')}
-          onChange={(fileList) => {
-            field.value = fileList;
-          }}
-          onComplete={
-            (ret, file) => {
-              const att = getAttachment(ret);
-              Object.assign(file, att);
-            }
-          }
-          beforeUpload={(cloneList, showFileList) => beforeUpload(cloneList, showFileList, 'file', site)}
-          fileList={field.value}
-          isCustomUploadIcon={true}
-        >
+        <span className={layout['attachmentsUpload-right']}>
           <Icon size='small' name='PaperClipOutlined' />
-          <span>{field.fieldsDesc}</span>
-        </FileUpload>
-      </div>
+          {field.fieldsDesc}
+        </span>
+      </FileUpload>
+      <div className={layout.attachmentsUpload_shade}></div>
     </div>
   );
 }
