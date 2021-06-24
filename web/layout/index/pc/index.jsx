@@ -229,9 +229,9 @@ class IndexPCPage extends React.Component {
         <div className={styles.themeBox}>
           <div className={styles.themeItem}>
             {pageData?.map((item, index) => (
-              <ThreadContent 
+              <ThreadContent
                 key={`${item.threadId}-${new Date().getTime()}-${index}`}
-                className={styles.threadContent} 
+                className={styles.threadContent}
                 data={item}
               />
             ))}
@@ -265,7 +265,7 @@ class IndexPCPage extends React.Component {
             onContentHeightChange={measure}
             onImageReady={measure}
             onVideoReady={measure}
-            key={index}
+            key={`${item.threadId}-${item.updatedAt}`}
             data={item}
             className={styles.listItem}
             recomputeRowHeights={measure}
