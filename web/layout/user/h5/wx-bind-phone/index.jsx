@@ -98,7 +98,7 @@ class WXBindPhoneH5Page extends React.Component {
       <div className={layout.container}>
         <HomeHeader hideInfo mode='login'/>
         <div className={layout.content}>
-          <div className={layout.title}>手机号登陆，并绑定微信账号</div>
+          <div className={layout.title}>手机号登录，并绑定微信账号</div>
           <div className={layout.tips}>
             <div className={layout.tips_user}>
               hi，

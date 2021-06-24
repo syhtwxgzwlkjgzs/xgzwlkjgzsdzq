@@ -9,15 +9,17 @@ import { inject, observer } from 'mobx-react';
 @observer
 class EditPwdPage extends React.Component {
   render() {
-    return <ViewAdapter 
-    h5={(
-      <div>
-        <UserCenterEditAccountPwd />
-      </div>
-    )}
-    pc={null}
-    title={`设置密码 - ${this.props.site?.siteName}`}
-  />
+    return (
+      <ViewAdapter
+        h5={
+          <div>
+            <UserCenterEditAccountPwd />
+          </div>
+        }
+        pc={null}
+        title={`设置密码`}
+      />
+    );
   }
 }
 

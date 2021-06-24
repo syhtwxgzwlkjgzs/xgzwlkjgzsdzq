@@ -23,6 +23,7 @@ class index extends Component {
       isConfirm: false, // 是否点击保存
     };
     this.user = this.props.user || {};
+    Taro.hideShareMenu();
   }
 
   initState = () => {

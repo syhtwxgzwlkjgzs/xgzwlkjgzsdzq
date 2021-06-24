@@ -9,13 +9,7 @@ import ViewAdapter from '@components/view-adapter';
 @observer
 class FrozenPage extends React.Component {
   render() {
-    return (
-      <ViewAdapter 
-        pc={null}
-        h5={<Frozen />}
-        title={`冻结金额 - ${this.props.site?.siteName}`}
-      />
-    )
+    return <ViewAdapter pc={null} h5={<Frozen />} title={`冻结金额`} />;
   }
 }
 

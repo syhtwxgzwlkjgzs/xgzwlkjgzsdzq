@@ -101,10 +101,45 @@ class Withdrawal extends React.Component {
         this.initState();
       });
   };
+  getStatusBarHeight() {
+    return wx?.getSystemInfoSync()?.statusBarHeight || 44;
+  }
 
-  // 点击返回按钮
-  handlePageJump = () => {
+  // 全屏状态下自定义左上角返回按钮位置
+  getTopBarBtnStyle() {
+    return {
+      position: 'fixed',
+      top: `${this.getStatusBarHeight()}px`,
+      left: '12px',
+      transform: 'translate(0, 10px)',
+    };
+  }
+
+  getTopBarTitleStyle() {
+    return {
+      position: 'fixed',
+      top: `${this.getStatusBarHeight()}px`,
+      left: '50%',
+      transform: 'translate(-50%, 8px)',
+    };
+  }
+
+  handleBack = () => {
     Taro.navigateBack();
+  };
+
+  // 渲染顶部title
+  renderTitleContent = () => {
+    return (
+      <View className={styles.topBarTitle}>
+        <View onClick={this.handleBack} className={styles.customCapsule} style={this.getTopBarBtnStyle()}>
+          <Icon size={18} name="LeftOutlined" />
+        </View>
+        <View style={this.getTopBarTitleStyle()} className={styles.fullScreenTitle}>
+          提现
+        </View>
+      </View>
+    );
   };
 
   render() {
@@ -116,9 +151,7 @@ class Withdrawal extends React.Component {
         <View className={styles.container}>
           <View className={styles.main}>
             {/* 自定义顶部返回 */}
-            <View className={styles.topBar}>
-              <Icon name="RightOutlined" onClick={() => this.handlePageJump()} />
-            </View>
+            {this.renderTitleContent()}
             <View className={styles.totalAmount}>
               <View className={styles.moneyTitle}>可提现金额</View>
               <View className={styles.moneyNum}>{this.props.walletData?.availableAmount}</View>
