@@ -59,6 +59,22 @@
   .spin {
     margin-right: rem(4);
   }
+  .noMoreLeft{
+    background-color: $text-color-placeholder;
+    width: rem(79);
+    height: rem(1);
+    float: left;
+    margin-right: rem($margin-4n);
+    margin-top: rem($margin-2n);
+  }
+  .noMoreRight{
+    background-color: $text-color-placeholder;
+    width: rem(79);
+    height: rem(1);
+    float: right;
+    margin-left: rem($margin-4n);
+    margin-top: rem($margin-2n);
+  }
   &.custom{
     padding-top: 0;
     display: block;
