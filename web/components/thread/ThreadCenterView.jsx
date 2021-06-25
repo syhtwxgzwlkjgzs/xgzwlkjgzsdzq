@@ -92,20 +92,20 @@ const Index = (props) => {
                       onImageReady={props.onImageReady}/>
                   )
               }
-              {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} />}
-              {fileData?.length > 0 && <AttachmentView threadId={threadId} attachments={fileData} onPay={onPay} isPay={needPay} />}
-              {goodsData && <ProductItem
-                  image={goodsData.imagePath}
-                  amount={goodsData.price}
-                  title={goodsData.title}
-                  onClick={onClick}
-              />}
               {rewardData && <Packet
                 type={1}
                 money={rewardData.money}
                 onClick={onClick}
               />}
               {redPacketData && <Packet money={redPacketData.money || 0} onClick={onClick} condition={redPacketData.condition} />}
+              {goodsData && <ProductItem
+                  image={goodsData.imagePath}
+                  amount={goodsData.price}
+                  title={goodsData.title}
+                  onClick={onClick}
+              />}
+              {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} />}
+              {fileData?.length > 0 && <AttachmentView threadId={threadId} attachments={fileData} onPay={onPay} isPay={needPay} />}
           </>
         );
     }
