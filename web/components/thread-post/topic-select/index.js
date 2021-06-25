@@ -129,7 +129,7 @@ class TopicSelect extends Component {
           noMore={finish}
           onRefresh={() => this.fetchTopics()}
         >
-          {keywords && this.renderItem({ content: keywords, newTopic: '新话题' })}
+          {keywords && !topics.length && this.renderItem({ content: keywords, newTopic: '新话题' })}
           {topics.map(item => (
             <React.Fragment key={item.topicId}>
               {this.renderItem(item)}
