@@ -49,6 +49,20 @@
         }
       }
     }
+
+    &.flex {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .moreItem {
+        margin-right: rem(32);
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
   }
 }
 
