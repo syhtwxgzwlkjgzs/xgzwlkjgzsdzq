@@ -1,9 +1,9 @@
 @import '@common/styles/index.scss';
-.header{
+.header {
   height: rem(60);
   width: 100%;
   display: block;
-  .headerFixedBox{
+  .headerFixedBox {
     display: flex;
     justify-content: center;
     padding: rem($padding-2n);
@@ -22,29 +22,29 @@
     width: 100%;
     border-bottom: 1px solid var(--border-line-color);
     z-index: $zindex-backtotop;
-    .headerContent{
+    .headerContent {
       max-width: rem(1420);
       width: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      .left{
+      .left {
         width: 50%;
         display: flex;
         align-items: center;
-        .siteLogo{
+        .siteLogo {
           width: rem(140);
           height: rem(24);
           cursor: pointer;
         }
-        .inputBox{
+        .inputBox {
           margin-left: rem(20);
-          flex:1;
-          :global{
-            .dzq-input{
+          flex: 1;
+          :global {
+            .dzq-input {
               width: 100%;
             }
-            input{
+            input {
               line-height: normal;
               max-width: rem(580);
               width: 100%;
@@ -52,82 +52,85 @@
           }
         }
       }
-      .right{
+      .right {
         display: flex;
         align-items: center;
 
-        :global{
-          .dzq-dropdown-menu{
+        :global {
+          .dzq-dropdown-menu {
             top: rem(45);
           }
-          .dzq-dropdown-menu__item{
+          .dzq-dropdown-menu__item {
             padding: rem($padding-10) 0;
             line-height: rem(26);
+            &:hover {
+              color: $primary-color;
+            }
           }
         }
 
-        .iconList{
+        .iconList {
           display: flex;
           align-items: center;
           justify-content: flex-start;
-          .iconItem{
+          .iconItem {
             display: flex;
             align-items: center;
             cursor: pointer;
 
-            .message{
+            .message {
               display: flex;
               flex-wrap: nowrap;
               align-items: center;
             }
 
-            &:hover{
-
-              p,div{
+            &:hover {
+              p,
+              div {
                 color: var(--color-primary);
               }
             }
             &:not(:last-child) {
               margin-right: rem(32);
             }
-            div{
+            div {
               color: var(--color-text-secondary);
             }
-            .iconText{
+            .iconText {
               font-size: rem($font-size-primary);
               margin-left: rem($margin-2n);
               color: var(--color-text-regular);
             }
             @include media('xl-pc') {
-              .iconText{
+              .iconText {
                 display: block;
               }
             }
             @include media('l-pc') {
-              .iconText{
+              .iconText {
                 display: block;
               }
             }
             @include media('s-pc') {
-              .iconText{
+              .iconText {
                 display: none;
               }
             }
           }
         }
-        .border{
+        .border {
           height: rem(24);
           width: rem(1);
           background-color: $border-color;
           margin: 0 rem(24);
         }
 
-        .userInfo{
+        .userInfo {
           cursor: pointer;
           display: flex;
           align-items: center;
 
-          .userName{
+          .userName {
             margin-left: rem(8);
             color: $text-color-regular;
             font-size: rem($font-size-primary);
@@ -136,7 +139,7 @@
             height: rem(20);
             line-height: rem(20);
           }
-          .userBtn{
+          .userBtn {
             margin-right: rem(16);
             padding: rem($padding-1n) rem(29);
             line-height: rem(26);
@@ -150,7 +153,6 @@
           }
         }
       }
-
     }
   }
 
