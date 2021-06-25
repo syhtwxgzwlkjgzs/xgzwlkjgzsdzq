@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 
 export default observer((props) => {
   const { data } = props;
+
   const ref = useRef(null);
 
   useEffect(() => {
@@ -20,7 +21,7 @@ export default observer((props) => {
         // showBottomStyle={index !== pageData.length - 1}
         data={data}
         // className={styles.listItem}
-        recomputeRowHeights={props.measure}
+        recomputeRowHeights={(data) => props.recomputeRowHeights(data)}
       />
     </div>
   );

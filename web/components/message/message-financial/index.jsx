@@ -56,6 +56,7 @@ const Index = ({ site, message }) => {
         showHeader={!site.isPC}
         list={renderList}
         type='financial'
+        showLoadingInCenter={false}
         onPullDown={() => readFinancialMsgList(1)}
         onScrollBottom={() => fetchFinancialData()}
         onBtnClick={(item) => deleteMsg(item.id, 'financialMsgList')}

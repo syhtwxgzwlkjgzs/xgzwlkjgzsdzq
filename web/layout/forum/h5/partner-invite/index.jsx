@@ -4,12 +4,11 @@ import { withRouter } from 'next/router';
 import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
 import List from '@components/list';
-import { Button, Toast, Avatar, Spin } from '@discuzq/design';
+import { Button, Toast, Avatar, Spin, Icon } from '@discuzq/design';
 import { get } from '@common/utils/get';
 import PopularContents from '../../../search/h5/components/popular-contents';
 import SiteInfo from './site-info';
 import { readUser } from '@server';
-import goToLoginPage from '@common/utils/go-to-login-page';
 import PayBox from '@components/payBox';
 import { numberFormat } from '@common/utils/number-format';
 import { getSiteUpdateTime } from '@common/utils/get-site-uptade-time';
@@ -19,6 +18,8 @@ import PartnerInviteHot from './partner-invite-hot';
 import PartnerInviteUser from './partner-invite-user';
 import pclayout from './pc.module.scss';
 import mlayout from './index.module.scss';
+import browser from '@common/utils/browser';
+import clearLoginStatus from '@common/utils/clear-login-status';
 
 @inject('site')
 @inject('index')
@@ -69,7 +70,7 @@ class PartnerInviteH5Page extends React.Component {
   handleJoinSite = async () => {
     const { user, site, router } = this.props;
     if (!user?.isLogin()) {
-      goToLoginPage({ url: '/user/login' });
+      router.push('/user/login');
       return;
     }
     const { setSite: { siteMode, sitePrice, siteName } = {} } = site.webConfig;
@@ -94,13 +95,18 @@ class PartnerInviteH5Page extends React.Component {
     window.location.href = '/';
   }
 
+  logout = () => {
+    clearLoginStatus();
+    this.props.user.removeUserInfo();
+    this.props.site.webConfig.user = null;
+    this.props.router.push('/user/login');
+  }
+
   // 右侧 - 潮流话题 粉丝 版权信息
   renderRight = () => {
-    const { inviteData } = this.props.invite;
-    const { site: { platform, webConfig = {} }, forum } = this.props;
+    const { site: { platform, webConfig = {} }, forum, user } = this.props;
     const { invitorName, invitorAvatar } = this.state;
     const { setSite: { siteMode, sitePrice, siteMasterScale, siteExpire } = {} } = webConfig;
-    const { updataTime } = forum;
     const layout = platform === 'h5' ? mlayout : pclayout;
     const { inviteCode } = this.props.router.query;
     // 内容数
@@ -173,8 +179,15 @@ class PartnerInviteH5Page extends React.Component {
               </div>
               : <></>
           }
-          <div className={layout.user_card_button} onClick={this.handleJoinSite}>{siteMode === 'pay' ? `¥ ${sitePrice}` : ''} 立即加入</div>
-          {(siteMode === 'pay' && siteExpire) ? <div className={layout.bottom_title}>有效期：<span>{siteExpire}天</span></div> : <></>}
+          <div className={layout.user_card_button} onClick={this.handleJoinSite}>
+            {siteMode === 'pay' ? (user.isLogin() ? `¥ ${sitePrice} 立即加入` : '登录浏览更多内容') : '立即加入' }
+          </div>
+          {siteMode === 'pay' ? (
+            <div className={layout.bottom_title}>
+              { user.isLogin() ? <></> : <span>新用户加入 <span className={layout.tips}>¥{sitePrice}</span></span> }
+              { siteExpire ? <span className={!user.isLogin() && siteExpire ? layout.expire : ''}>有效期{ user.isLogin() ? '：' : ' '}<span className={layout.tips}>{siteExpire}天 </span></span> : <></> }
+            </div>
+          ) : <></>}
         </div>
         <Copyright/>
       </>
@@ -201,30 +214,40 @@ class PartnerInviteH5Page extends React.Component {
             src='/dzq-img/join-banner-bg.png'
         />
         <ul className={pclayout.joinInfo}>
-            <li className={pclayout.item}>
-              <span className={pclayout.text}>站长</span>
-              <span className={pclayout.content}>{siteAuthor || '--'}</span>
-            </li>
-            <li className={pclayout.item}>
-              <span className={pclayout.text}>已创建</span>
-              <span className={pclayout.content}>{createDays || 0}天</span>
-            </li>
-          </ul>
+          <li className={pclayout.item}>
+            <span className={pclayout.text}>站长</span>
+            <span className={pclayout.content}>{siteAuthor || '--'}</span>
+          </li>
+          <li className={pclayout.item}>
+            <span className={pclayout.text}>已创建</span>
+            <span className={pclayout.content}>{createDays || 0}天</span>
+          </li>
+        </ul>
       </div>
     );
   };
 
   render() {
-    const { site: { platform, webConfig = {} }, forum: { updataTime } } = this.props;
+    const { site: { platform, webConfig = {} }, forum: { updataTime }, user } = this.props;
     const { inviteCode } = this.props.router.query;
     const { setSite: { siteMode, siteExpire, sitePrice, siteMasterScale } = {} } = webConfig;
     const { invitorName, invitorAvatar } = this.state;
     const layout = platform === 'h5' ? mlayout : pclayout;
     // 内容数
     const countThreads = get(webConfig, 'other.countThreads', '');
+    const isShowLogout = platform === 'h5' && user.isLogin() && !(browser.env('weixin') && this.props.site.isOffiaccountOpen); // h5下非微信浏览器访问时，若用户已登陆，展示退出按钮
+
     return (
       <PartnerInviteWrap renderRight={this.renderRight} contentHeader={this.contentHeader}>
         <div className={layout.content}>
+          {/* 站点加入页退出按钮 */}
+          {
+            isShowLogout ? (
+              <div className={layout.logout} onClick={this.logout}>
+                <Icon name="SignOutOutlined" size={20} className={layout.logoutBtn} />
+              </div>
+            ) : <></>
+          }
           {/* 站点信息 start */}
           <SiteInfo threadTotal={countThreads} updataTime={ updataTime }/>
           {/* 站点信息 end */}
@@ -256,16 +279,21 @@ class PartnerInviteH5Page extends React.Component {
                       </div>
                       : <></>
                   }
-                  {(siteMode === 'pay' && siteExpire) ? <div className={layout.bottom_title}>有效期：<span>{siteExpire}天</span></div> : <></>}
+                  {siteMode === 'pay' ? (
+                    <div className={layout.bottom_title}>
+                      { user.isLogin() ? <></> : <span>新用户加入 <span className={layout.tips}>¥{sitePrice}</span></span> }
+                      { siteExpire ? <span className={!user.isLogin() && siteExpire ? layout.expire : ''}>有效期{ user.isLogin() ? '：' : ' '}<span className={layout.tips}>{siteExpire}天 </span></span> : <></> }
+                    </div>
+                  ) : <></>}
                   <Button className={layout.bottom_button} onClick={this.handleJoinSite}>
-                    {siteMode === 'pay' ? `¥${sitePrice}` : ''} 立即加入
+                    { user.isLogin() ? `${siteMode === 'pay' ? `¥${sitePrice} ` : ''}立即加入` : `${siteMode === 'pay' ? '登录浏览更多内容' : '立即加入'}` }
                   </Button>
                 </div>
                 </>
               )
               : <></>
           }
-        <div className={layout.maskLayer}></div>
+          <div className={layout.maskLayer}></div>
         </div>
       </PartnerInviteWrap>
     );

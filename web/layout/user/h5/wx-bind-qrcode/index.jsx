@@ -19,6 +19,14 @@ import { isExtFieldsOpen } from '@common/store/login/util';
 @observer
 class WeixinBindQrCodePage extends React.Component {
   async componentDidMount() {
+    await this.generateQrCode();
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
+  async generateQrCode() {
     try {
       const { sessionToken, nickname } = this.props.router.query;
       const { platform, wechatEnv } = this.props.site;
@@ -46,10 +54,6 @@ class WeixinBindQrCodePage extends React.Component {
         duration: 1000,
       });
     }
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timer);
   }
 
   queryLoginState(type) {
@@ -108,6 +112,8 @@ class WeixinBindQrCodePage extends React.Component {
           </div>
           {/* 二维码 start */}
           <WeixinQrCode
+            refresh={() => {this.generateQrCode()}}
+            isValid={h5QrCode.isQrCodeValid}
             orCodeImg={h5QrCode.qrCode}
             orCodeTips={platform === 'h5' ? '长按保存二维码，并在微信中识别此二维码，即可完成登录' : '请使用微信，扫码登录'}
           />

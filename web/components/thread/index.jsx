@@ -141,7 +141,7 @@ class Index extends React.Component {
           this.props.user.updatePayThreadInfo(thread?.threadId, data)
 
           const { recomputeRowHeights = noop } = this.props;
-          recomputeRowHeights();
+          recomputeRowHeights(data);
         }
       }
     }, 1000)

@@ -61,14 +61,15 @@ const List = forwardRef(({
   }, []);
 
   // 当list内容高度，没有超过list高度，则将loading居中显示
-  // useEffect(() => {
-  //   if (listWrapper.current && showLoadingInCenter && site?.platform === 'h5') {
-  //     const { clientHeight } = listWrapper.current;
-  //     const { scrollHeight } = listWrapper.current;
-
-  //     setIsLoadingInCenter(scrollHeight <= clientHeight)
-  //   }
-  // }, [listWrapper.current, children])
+  useEffect(() => {
+    // 约束，只有在H5端，加载中的状态才会生效此样式
+    if (listWrapper.current && showLoadingInCenter && !noMore && !isError && site?.platform === 'h5') {
+      const { clientHeight } = listWrapper.current;
+      const { scrollHeight } = listWrapper.current;
+  
+      setIsLoadingInCenter(scrollHeight <= clientHeight)
+    }
+  }, [listWrapper.current, children])
 
   useEffect(() => {
     setIsError(requestError)
@@ -106,16 +107,32 @@ const List = forwardRef(({
     };
   };
 
-  const onBackTop = () => {
-    if (currentScrollTop.current > 0) {
-      const top = currentScrollTop.current -  currentScrollTop.current / 5;
-      window.requestAnimationFrame(onBackTop)
-      listWrapper.current.scrollTop = top;
-      currentScrollTop.current = top;
-    } else {
-      listWrapper.current.scrollTop = 0;
-      currentScrollTop.current = 0;
+  const onBackTop = () => {;
+    let step = listWrapper.current.scrollTop > 30000 ? 0 : listWrapper.current.scrollTop > 5000 ? 6 : 12;
+    const count = 8;
+    function fn() {
+      
+      if (step === 0) {
+        listWrapper.current.scrollTop = 0;
+        currentScrollTop.current = 0;
+      } else if ( step > 0 ) {
+        const top = currentScrollTop.current - currentScrollTop.current / count;
+        listWrapper.current.scrollTop = top;
+        currentScrollTop.current = top;
+        window.requestAnimationFrame(fn);
+      }
+      step--;
     }
+    fn();
+    // if (currentScrollTop.current > 0) {
+    //   const top = currentScrollTop.current -  currentScrollTop.current / 5;
+    //   window.requestAnimationFrame(onBackTop)
+    //   listWrapper.current.scrollTop = top;
+    //   currentScrollTop.current = top;
+    // } else {
+    //   listWrapper.current.scrollTop = 0;
+    //   currentScrollTop.current = 0;
+    // }
   };
 
   const jumpToScrollTop = (scrollTop) => {
@@ -124,7 +141,6 @@ const List = forwardRef(({
       currentScrollTop.current = scrollTop;
     }
   };
-
   const onTouchMove = throttle(({ isFirst = false }) => {
     if (!listWrapper || !listWrapper.current) {
       onScroll();
@@ -147,7 +163,8 @@ const List = forwardRef(({
       allowHandleRefresh = (scrollTop !== 0);
     }
 
-    if ((scrollHeight / 2 <= scrollTop) && !isLoading && allowHandleRefresh) {
+    if (((scrollTop + clientHeight) >= scrollHeight / 2) && !isLoading && allowHandleRefresh) {
+    // if ((scrollHeight/scrollTop <= 1.5) && !isLoading && allowHandleRefresh) {
       setIsLoading(true);
       if (typeof(onRefresh) === 'function') {
         const promise = onRefresh();
@@ -189,7 +206,7 @@ const List = forwardRef(({
         onScroll={onTouchMove}
       >
         {children}
-        {onRefresh && showRefresh && <BottomView isError={isError} errorText={errText} noMore={noMore} handleError={handleError} />}
+        {onRefresh && showRefresh && <BottomView isError={isError} errorText={errText} noMore={noMore} handleError={handleError} type = 'line' platform={platform} />}
       </div>
     </div>
   );
