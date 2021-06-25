@@ -35,30 +35,6 @@
           "pathName": "subPages/thread/index",
           "query": "id=47261",
           "scene": null
-        },
-        {
-          "name": "subPages/invite/index",
-          "pathName": "subPages/invite/index",
-          "query": "",
-          "scene": null
-        },
-        {
-          "name": "subPages/user/supplementary/index",
-          "pathName": "subPages/user/supplementary/index",
-          "query": "",
-          "scene": null
-        },
-        {
-          "name": "subPages/invite/index",
-          "pathName": "subPages/invite/index",
-          "query": "",
-          "scene": null
-        },
-        {
-          "name": "subPages/forum/partner-invite/index",
-          "pathName": "subPages/forum/partner-invite/index",
-          "query": "",
-          "scene": null
         }
       ]
     }
