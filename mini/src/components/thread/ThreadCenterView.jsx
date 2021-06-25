@@ -61,8 +61,10 @@ const Index = (props) => {
         {imageData?.length ? (
             <ImageDisplay platform="h5" imgData={imageData} isPay={needPay} onPay={onPay} onClickMore={onClick} />
         ) : null}
-        {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} />}
-        {fileData?.length ? <AttachmentView threadId={threadId} attachments={fileData} onPay={onPay} isPay={needPay} /> : null}
+        {rewardData && <Packet type={1} money={rewardData.money} onClick={onClick} />}
+        {redPacketData && (
+          <Packet money={redPacketData.money || 0} onClick={onClick} condition={redPacketData.condition} />
+        )}
         {goodsData && (
             <ProductItem
               image={goodsData.imagePath}
@@ -71,10 +73,8 @@ const Index = (props) => {
               onClick={onClick}
             />
         )}
-        {rewardData && <Packet type={1} money={rewardData.money} onClick={onClick} />}
-        {redPacketData && (
-          <Packet money={redPacketData.money || 0} onClick={onClick} condition={redPacketData.condition} />
-        )}
+        {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} />}
+        {fileData?.length ? <AttachmentView threadId={threadId} attachments={fileData} onPay={onPay} isPay={needPay} /> : null}
       </>
     );
   };
