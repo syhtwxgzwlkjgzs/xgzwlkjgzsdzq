@@ -52,9 +52,12 @@ class TopicSelect extends Component {
     const { fetchTopic } = this.props.threadPost;
     const { page, perPage, keywords } = this.state;
     const params = { page, perPage };
+
+    params.filter = {};
     if (keywords) {
-      params.filter = {};
       params.filter.content = keywords;
+    } else {
+      params.filter.recommended = 1;
     }
     // 2 发起请求
     const ret = await fetchTopic(params);
