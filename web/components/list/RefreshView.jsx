@@ -16,7 +16,7 @@ import styles from './index.module.scss';
  */
 const RefreshView = ({noMore = false, loadText = '加载更多...', noMoreText = '没有更多内容了', isError = false, onRefreshPlaceholder = null, type = 'normal', platform = 'pc' }) => {
     return (
-        <div className={`${styles.refreshView} ${onRefreshPlaceholder && styles.custom}`}>
+        <div className={`${styles.refreshView} ${onRefreshPlaceholder && !noMore && styles.custom}`}>
             {
                 !noMore ? (
                     onRefreshPlaceholder ? onRefreshPlaceholder() : <><Spin className={styles.spin} size={16} type="spinner"/>
