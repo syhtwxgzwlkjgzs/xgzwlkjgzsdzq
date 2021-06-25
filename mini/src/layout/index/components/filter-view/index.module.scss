@@ -7,7 +7,7 @@
 }
 .container {
   box-sizing: border-box;
-  padding: rem(25) rem(16) 0 rem(16);
+  padding: rem(16) rem(16) 0 rem(16);
   background-color: $white;
   border-top-right-radius: rem($border-radius-big);
   border-top-left-radius: rem($border-radius-big);
@@ -134,7 +134,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: $font-size-primary;
+    font-size: $font-size-middle;
     color: $text-color-regular;
     &:before {
       content: ' ';
