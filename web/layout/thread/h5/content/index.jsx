@@ -109,6 +109,7 @@ const RenderThreadContent = inject('user')(
               isPay={!isFree}
               isReward={isReward}
               isRed={isRedPack}
+              userId={threadStore?.threadData?.user?.userId}
               onClick={onUserClick}
             ></UserInfo>
           </div>
