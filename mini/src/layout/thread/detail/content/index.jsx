@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { View, Text } from '@tarojs/components';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Button from '@discuzq/design/dist/components/button/index';
+import Router from '@discuzq/sdk/dist/router';
 import ImageDisplay from '@components/thread/image-display';
 import AudioPlay from '@components/thread/audio-play';
 import PostContent from '@components/thread/post-content';
@@ -102,6 +103,12 @@ const RenderThreadContent = inject('user')(
       typeof props.onRewardClick === 'function' && props.onRewardClick();
     };
 
+    const onUserClick = () => {
+      const userId = threadStore?.threadData?.user?.userId
+      if(!userId) return
+      Router.push({url: `/subPages/user/index?id=${userId}`});
+    }
+
     return (
       <View className={`${styles.container}`}>
         <View className={styles.header}>
@@ -115,8 +122,10 @@ const RenderThreadContent = inject('user')(
               time={`${threadStore?.threadData?.createdAt}` || ''}
               isEssence={isEssence}
               isPay={!isFree}
+              userId={threadStore?.threadData?.user?.userId}
               isReward={isReward}
               isRed={isRedPack}
+              onClick={onUserClick}
             ></UserInfo>
           </View>
           {props?.user?.isLogin() && isApproved && (
