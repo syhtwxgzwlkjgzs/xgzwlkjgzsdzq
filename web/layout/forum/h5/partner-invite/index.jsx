@@ -9,7 +9,6 @@ import { get } from '@common/utils/get';
 import PopularContents from '../../../search/h5/components/popular-contents';
 import SiteInfo from './site-info';
 import { readUser } from '@server';
-import goToLoginPage from '@common/utils/go-to-login-page';
 import PayBox from '@components/payBox';
 import { numberFormat } from '@common/utils/number-format';
 import { getSiteUpdateTime } from '@common/utils/get-site-uptade-time';
@@ -71,7 +70,7 @@ class PartnerInviteH5Page extends React.Component {
   handleJoinSite = async () => {
     const { user, site, router } = this.props;
     if (!user?.isLogin()) {
-      goToLoginPage({ url: '/user/login' });
+      router.push('/user/login');
       return;
     }
     const { setSite: { siteMode, sitePrice, siteName } = {} } = site.webConfig;
@@ -99,7 +98,8 @@ class PartnerInviteH5Page extends React.Component {
   logout = () => {
     clearLoginStatus();
     this.props.user.removeUserInfo();
-    goToLoginPage({ url: '/user/login' });
+    this.props.site.webConfig.user = null;
+    this.props.router.push('/user/login');
   }
 
   // 右侧 - 潮流话题 粉丝 版权信息
