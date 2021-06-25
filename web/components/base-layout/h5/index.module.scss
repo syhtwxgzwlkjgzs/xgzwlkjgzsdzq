@@ -6,7 +6,7 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background: var(--background-color-text2);
+  background: $body-bg-color;
 
   .wrapper {
     display: flex;
