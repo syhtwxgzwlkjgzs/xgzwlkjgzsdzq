@@ -64,7 +64,7 @@ function Home(props, ref) {
   // 监听list列表
   useEffect(() => {
     setList([{ type: 'header' }, ...(props.list || []), { type: 'footer' }]);
-  }, [props.list]);
+  }, [props.list?.length]);
 
   // 监听置顶列表
   useEffect(() => {
