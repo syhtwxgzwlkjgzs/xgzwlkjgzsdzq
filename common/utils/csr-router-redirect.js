@@ -25,7 +25,9 @@ export default function csrRouterRedirect() {
             return;
         }
 
-        const pathArr = pathname.split('/');
+        const pathArr = pathname.split('/').map((item, key) => {
+            if (item !== '') return item;
+        });
         let curr = routerMap;
         let res = [];
         for ( let i = 0; i < pathArr.length; i++ ) {
