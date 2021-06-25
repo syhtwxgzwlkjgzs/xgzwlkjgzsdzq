@@ -22,7 +22,7 @@ function avatar(props) {
     user: myself,
     search,
     userType = -1,
-    withoutStopPropagation = false, // 是否需要阻止冒泡 默认false不阻止
+    withStopPropagation = false, // 是否需要阻止冒泡 默认false不阻止
   } = props;
 
   const userName = useMemo(() => {
@@ -162,13 +162,13 @@ function avatar(props) {
 
   const clickAvatar = useCallback(
     (e) => {
-      if (withoutStopPropagation) {
+      if (withStopPropagation) {
         e.stopPropagation();
       }
       if (!userId) return;
       onClick && onClick(e);
     },
-    [userId, withoutStopPropagation],
+    [userId, withStopPropagation],
   );
 
   const userInfoBox = useMemo(() => {
