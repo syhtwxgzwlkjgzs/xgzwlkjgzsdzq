@@ -195,13 +195,20 @@ class IndexAction extends IndexStore {
         }
       } else {
         if (this.threads && result.data.pageData && page !== 1) {
-          this.threads.pageData.push(...result.data.pageData);
-          const newPageData = this.threads.pageData.slice();
-          this.setThreads({
-            ...(this.adapterList(result.data)),
-            currentPage: result.data.currentPage,
-            pageData: newPageData
+          // this.threads.pageData.push(...result.data.pageData);
+          // const newPageData = this.threads.pageData.slice();
+          // this.setThreads({
+          //   ...(this.adapterList(result.data)),
+          //   currentPage: result.data.currentPage,
+          //   pageData: newPageData
+          // });
+          this.threads.pageData.forEach(item => {
+            item.openedMore = false;
           });
+
+          this.threads.pageData.push(...result.data.pageData);
+
+          this.threads.currentPage = result.data.currentPage;
         } else {
           // 首次加载
           this.threads = null;
