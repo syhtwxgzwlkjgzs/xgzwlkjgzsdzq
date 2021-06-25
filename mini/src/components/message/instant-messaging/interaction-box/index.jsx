@@ -183,12 +183,12 @@ const InteractionBox = (props) => {
     const text = typingValue.slice(0, cursorPosition) + emoji.code + typingValue.slice(cursorPosition);
     setTypingValue(text);
     setCursorPosition(cursorPosition + emoji.code.length);
-    setTimeout(() => {
-      setFocus(false);
-      setTimeout(() => {
-        setFocus(true);
-      }, 0);
-    }, 0);
+    // setTimeout(() => {
+    //   setFocus(false);
+    //   setTimeout(() => {
+    //     setFocus(true);
+    //   }, 0);
+    // }, 0);
   };
 
   return (

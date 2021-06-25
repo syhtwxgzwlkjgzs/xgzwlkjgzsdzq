@@ -236,7 +236,7 @@ const Index = (props) => {
         ownedBy: user.id === item.userId ? 'myself' : 'itself',
         nickname: item.user.username,
       };
-    }).filter(item => item.imageUrl || item.text).reverse();
+    }).filter(item => (item.imageUrl || item.text)).reverse();
 
     // 消息数有变化，即有新消息，此时把滚动条滚动到底部
     if (listData.length > listDataLengthRef.current) {
