@@ -61,14 +61,14 @@ const List = forwardRef(({
   }, []);
 
   // 当list内容高度，没有超过list高度，则将loading居中显示
-  // useEffect(() => {
-  //   if (listWrapper.current && showLoadingInCenter && site?.platform === 'h5') {
-  //     const { clientHeight } = listWrapper.current;
-  //     const { scrollHeight } = listWrapper.current;
-  //
-  //     setIsLoadingInCenter(scrollHeight <= clientHeight)
-  //   }
-  // }, [listWrapper.current, children])
+  useEffect(() => {
+    if (listWrapper.current && showLoadingInCenter && site?.platform === 'h5') {
+      const { clientHeight } = listWrapper.current;
+      const { scrollHeight } = listWrapper.current;
+  
+      setIsLoadingInCenter(scrollHeight <= clientHeight)
+    }
+  }, [listWrapper.current, children])
 
   useEffect(() => {
     setIsError(requestError)
