@@ -7,9 +7,10 @@ import { getImmutableTypeHeight, getSticksHeight } from '../utils';
 
 import { List, CellMeasurer, CellMeasurerCache, AutoSizer, InfiniteLoader } from 'react-virtualized';
 import { inject, observer } from 'mobx-react';
+import BacktoTop from '@components/list/backto-top';
+// import backtoTopFn from '@common/utils/backto-top';
 
 const immutableHeightMap = {}; // 不可变的高度
-
 let preScrollTop = 0;
 let scrollTimer;
 // 增强cache实例
@@ -60,6 +61,8 @@ function VList(props, ref) {
   const rowCount = list.length;
 
   const [flag, setFlag] = useState(true);
+  const [scrollTop, setScrollTop] = useState(0);
+  const winHeight = window.innerHeight;
 
   // 监听list列表
   useEffect(() => {
@@ -151,6 +154,7 @@ function VList(props, ref) {
   // 滚动事件
   const onScroll = ({ scrollTop, clientHeight, scrollHeight }) => {
     // scrollToPosition = scrollTop;
+    setScrollTop(scrollTop);
     setFlag(!(scrollTop < preScrollTop));
     preScrollTop = scrollTop;
 
@@ -175,6 +179,13 @@ function VList(props, ref) {
   const isRowLoaded = ({ index }) => !!list[index];
 
   const loadMoreRows = () => Promise.resolve();
+
+  const handleBacktoTop = () => {
+    // backtoTopFn(scrollTop, (top) => {
+    //   setScrollTop(top);
+    // });
+    setScrollTop(0);
+  };
 
   const clearAllCache = () => {
     cache.clearAll();
@@ -214,6 +225,7 @@ function VList(props, ref) {
                 onRowsRendered={(...props) => {
                   onRowsRendered(...props);
                 }}
+                scrollTop={scrollTop}
                 rowCount={rowCount}
                 rowHeight={getRowHeight}
                 rowRenderer={rowRenderer}
@@ -224,6 +236,8 @@ function VList(props, ref) {
           </AutoSizer>
         )}
       </InfiniteLoader>
+
+      {scrollTop > winHeight * 2 && <BacktoTop h5 onClick={handleBacktoTop} />}
     </div>
   );
 }
