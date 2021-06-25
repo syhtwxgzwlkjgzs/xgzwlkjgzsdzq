@@ -10,7 +10,7 @@
   box-shadow: $border-shadow-color;
   background: $white;
   box-sizing: border-box;
-  padding: $padding-3n * 7 $padding-6n $padding-4n;
+  padding: $padding-3n * 7 $padding-6n $padding-3n;
   margin-bottom: $margin-5n;
   .user_card_main {
     width: 100%;
@@ -128,9 +128,14 @@
     font-weight: normal;
     font-size: rem($font-size-label);
     color: $text-color-secondary;
-    padding-top: $padding-2n;
-    span {
+    padding-top: $padding-3n;
+    .tips {
       color: $primary-color;
+    }
+    .expire {
+      margin-left: $margin-2n;
+      padding-left: $padding-2n;
+      border-left: $border-solid-1;
     }
   }
 }

@@ -299,10 +299,46 @@ class WalletH5Page extends React.Component {
     }
   };
 
-  // 点击返回按钮
-  handlePageJump = () => {
-    Taro.navigateBack();
+  getStatusBarHeight() {
+    return wx?.getSystemInfoSync()?.statusBarHeight || 44;
   }
+
+  // 全屏状态下自定义左上角返回按钮位置
+  getTopBarBtnStyle() {
+    return {
+      position: 'fixed',
+      top: `${this.getStatusBarHeight()}px`,
+      left: '12px',
+      transform: 'translate(0, 10px)',
+    };
+  }
+
+  getTopBarTitleStyle() {
+    return {
+      position: 'fixed',
+      top: `${this.getStatusBarHeight()}px`,
+      left: '50%',
+      transform: 'translate(-50%, 8px)',
+    };
+  }
+
+  handleBack = () => {
+    Taro.navigateBack();
+  };
+
+  // 渲染顶部title
+  renderTitleContent = () => {
+    return (
+      <View className={layout.topBarTitle}>
+        <View onClick={this.handleBack} className={layout.customCapsule} style={this.getTopBarBtnStyle()}>
+          <Icon size={18} name="LeftOutlined" />
+        </View>
+        <View style={this.getTopBarTitleStyle()} className={layout.fullScreenTitle}>
+          我的钱包
+        </View>
+      </View>
+    );
+  };
 
   render() {
     const tabList = [
@@ -361,9 +397,7 @@ class WalletH5Page extends React.Component {
           >
             <View className={layout.header}>
               {/* 自定义顶部返回 */}
-              <View className={layout.topBar}>
-                <Icon name="RightOutlined" onClick={() => this.handlePageJump()} />
-              </View>
+              {this.renderTitleContent()}
               <WalletInfo
                 walletData={walletInfo}
                 webPageType="h5"
@@ -430,7 +464,7 @@ class WalletH5Page extends React.Component {
             disabledTime={true}
             wrap-class="my-class"
             select-item-class="mySelector"
-            type='wallet'
+            type="wallet"
           />
         </View>
       </Page>

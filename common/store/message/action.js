@@ -124,7 +124,7 @@ class MessageAction extends MessageStore {
   async readDialogList(page = 1) {
     const ret = await readDialogList({
       params: {
-        ...this.perPage,
+        perPage: 20,
         page,
       },
     });

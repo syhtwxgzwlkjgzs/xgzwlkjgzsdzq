@@ -9,15 +9,17 @@ import { inject, observer } from 'mobx-react';
 @observer
 class EditUserNamePage extends React.Component {
   render() {
-    return <ViewAdapter 
-    h5={(
-      <div>
-        <UserCenterEditUserName />
-      </div>
-    )}
-    pc={null} 
-    title={`编辑用户名 - ${this.props.site?.siteName}`}
-  />
+    return (
+      <ViewAdapter
+        h5={
+          <div>
+            <UserCenterEditUserName />
+          </div>
+        }
+        pc={null}
+        title={`编辑用户名`}
+      />
+    );
   }
 }
 

@@ -95,7 +95,7 @@ const InteractionBox = (props) => {
   const doSubmitClick = async () => {
     setShowEmoji(false);
     if (!typingValue.trim()) return;
-    submit({ messageText: typingValue });
+    submit({ messageText: typingValue, isImage: false });
   };
 
   // 触发图片选择
@@ -164,6 +164,7 @@ const InteractionBox = (props) => {
             submit({
               imageUrl: data.url,
               attachmentId: data.id,
+              isImage: true,
             });
           } else {
             Toast.error({ content: msg || '图片发送失败' });
