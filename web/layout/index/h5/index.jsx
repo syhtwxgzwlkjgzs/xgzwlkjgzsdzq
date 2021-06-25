@@ -10,7 +10,7 @@ import BaseLayout from '@components/base-layout';
 import initJSSdk from '@common/utils/initJSSdk.js';
 import { getSelectedCategoryIds } from '@common/utils/handleCategory';
 import wxAuthorization from '../../user/h5/wx-authorization';
-import VList from '@components/virtual-list/example/index';
+import VList from '@components/virtual-list/h5/index';
 import classnames from 'classnames';
 
 @inject('site')
