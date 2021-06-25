@@ -234,7 +234,6 @@ http.interceptors.response.use((res) => {
       Toast.error({
         content: '操作太频繁，请稍后重试',
       });
-      break;
     }
     default:  // 200 状态码
       if (status === 200) {
@@ -244,12 +243,12 @@ http.interceptors.response.use((res) => {
           msg: data.Message,
         });
       }
-      return Promise.resolve({
-        code: status,
-        data: null,
-        msg: statusText,
-      });
   }
+  return Promise.resolve({
+    code: status,
+    data: null,
+    msg: statusText,
+  });
 }, (err) => {
   const { isShowToast = true } = err?.config;
   if (window) {
