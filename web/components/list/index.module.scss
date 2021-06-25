@@ -56,8 +56,10 @@
   font-size: rem($font-size-primary);
   color: $text-color-placeholder;
   padding-top: rem(11);
+  line-height: rem($font-line-height-small);
   .spin {
     margin-right: rem(4);
+    color: $text-color-placeholder;
   }
   .noMoreLeft{
     background-color: $text-color-placeholder;

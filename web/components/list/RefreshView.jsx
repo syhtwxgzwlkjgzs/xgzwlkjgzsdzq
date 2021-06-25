@@ -19,7 +19,7 @@ const RefreshView = ({noMore = false, loadText = '加载更多...', noMoreText =
         <div className={`${styles.refreshView} ${onRefreshPlaceholder && styles.custom}`}>
             {
                 !noMore ? (
-                    onRefreshPlaceholder ? onRefreshPlaceholder() : <><Spin className={styles.spin} type="spinner"/>
+                    onRefreshPlaceholder ? onRefreshPlaceholder() : <><Spin className={styles.spin} size={16} type="spinner"/>
                         <span>{loadText}</span></>
                 ) : (
                     type !== 'normal' && platform === 'h5' ? (
