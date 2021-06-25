@@ -35,6 +35,7 @@ const Index = (props) => {
       onClick,
       onPay,
       onOpen,
+      platform
     } = props
 
     // 标题显示37个字符
@@ -112,7 +113,7 @@ const Index = (props) => {
 
     return (
         <>
-          <div className={styles.wrapper}>
+          <div className={`${platform === 'h5' ? styles.wrapper : styles.wrapperPC}`}>
             {title && <div className={styles.title} onClick={onClick}>{newTitle}</div>}
 
             {renderThreadContent(props.data)}
