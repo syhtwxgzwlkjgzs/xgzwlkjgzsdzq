@@ -36,7 +36,7 @@
       border-bottom: none;
       border-right: none;
       line-height: rem(50);
-      background: #ededed;
+      background-color: #ededed;
     }
   }
 }
@@ -113,11 +113,6 @@
     justify-content: center;
     color: $text-color-secondary;
     cursor: pointer;
-    :global {
-      .dzq-icon {
-        font-size: rem($font-size-primary) !important;
-      }
-    }
   }
 }
 
