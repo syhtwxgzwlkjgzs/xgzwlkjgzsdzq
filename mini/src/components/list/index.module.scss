@@ -28,12 +28,13 @@
 }
 
 .refreshView {
-  min-height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 14px;
   color: $text-color-placeholder;
+  padding: 24px 0;
+  line-height: $font-line-height-small;
   .spin {
     margin-right: 4px;
   }

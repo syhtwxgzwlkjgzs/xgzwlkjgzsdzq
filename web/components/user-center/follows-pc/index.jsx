@@ -73,7 +73,7 @@ class UserCenterFollowsPc extends React.Component {
           leftNum={followCount}
           isShowMore={this.props.showMore}
           onShowMore={this.moreFollow}
-          className={this.props.className}
+          className={`${this.props.className} ${styles.borderRadius}`}
         >
           <div className={classnames(styles.followsWrapper, this.props.className)}>
             {Number(followCount) !== 0 && (

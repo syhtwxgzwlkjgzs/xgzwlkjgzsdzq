@@ -64,7 +64,7 @@ function VList(props, ref) {
   // 监听list列表
   useEffect(() => {
     setList([{ type: 'header' }, ...(props.list || []), { type: 'footer' }]);
-  }, [props.list]);
+  }, [props.list?.length]);
 
   // 监听置顶列表
   useEffect(() => {
@@ -111,7 +111,7 @@ function VList(props, ref) {
       case 'header':
         return props.children;
       case 'footer':
-        return <BottomView noMore={props.noMore} isError={props.requestError} errorText={props.errorText}></BottomView>;
+        return <BottomView noMore={props.noMore} isError={props.requestError} errorText={props.errorText} type='line' platform={props.platform}></BottomView>;
       default:
         return <Item data={data} measure={measure} recomputeRowHeights={(data) => recomputeRowHeights(index, data)} />;
     }

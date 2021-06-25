@@ -72,7 +72,7 @@ const Index = ({ imgs = [], tipData = {}, wholeNum = 1, showMore= false, showCou
             }
         </div>
 
-        <PopupList tipData={tipData} visible={visible} onHidden={onHidden} />
+        {visible && <PopupList tipData={tipData} visible={visible} onHidden={onHidden} />}
     </>
   );
 };

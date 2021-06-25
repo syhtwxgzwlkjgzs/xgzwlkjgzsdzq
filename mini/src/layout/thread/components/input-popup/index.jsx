@@ -38,12 +38,12 @@ const InputPop = (props) => {
 
   useEffect(() => {
     setValue(initValue);
-  }, [initValue])
+  }, [initValue]);
 
   // 监听键盘的高度
-  Taro.onKeyboardHeightChange(res => {
+  Taro.onKeyboardHeightChange((res) => {
     setBottomHeight(res?.height || 0);
-  })
+  });
 
   // 点击发布
   const onSubmitClick = async () => {
@@ -134,7 +134,6 @@ const InputPop = (props) => {
     const insertPosition = cursorPos || 0;
     const newValue = value.substr(0, insertPosition) + (atListStr || '') + value.substr(insertPosition);
     setValue(newValue);
-
   }, [checkUser]);
 
   const handleUploadChange = async (list) => {
@@ -208,30 +207,30 @@ const InputPop = (props) => {
       <Popup position="bottom" visible={visible} onClose={onCancel} customScroll={true}>
         <View className={styles.container}>
           <View className={styles.main}>
-          <ScrollView scrollY className={styles.valueScroll}>
-            <Textarea
-              className={styles.input}
-              maxLength={5000}
-              rows={4}
-              showLimit={false}
-              value={value}
-              onBlur={(e) => {
-                onChange(e);
-              }}
-              onChange={debounce(e => {
-                onChange(e);
-                setValue(e.target.value);
-              }, 100)}
-              onFocus={() => setShowEmojis(false)}
-              placeholder={inputText}
-              disabled={loading}
-              placeholderClass={styles.placeholder}
-              forwardedRef={textareaRef}
-              fixed={true}
-              adjustPosition={false}
-              autoHeight={true}
-            ></Textarea>
-          </ScrollView>
+            <ScrollView scrollY className={styles.valueScroll}>
+              <Textarea
+                className={styles.input}
+                maxLength={5000}
+                rows={4}
+                showLimit={false}
+                value={value}
+                onBlur={(e) => {
+                  onChange(e);
+                }}
+                onChange={debounce((e) => {
+                  onChange(e);
+                  setValue(e.target.value);
+                }, 100)}
+                onFocus={() => setShowEmojis(false)}
+                placeholder={inputText}
+                disabled={loading}
+                placeholderClass={styles.placeholder}
+                forwardedRef={textareaRef}
+                fixed={true}
+                adjustPosition={false}
+                autoHeight={true}
+              ></Textarea>
+            </ScrollView>
 
             {showPicture && (
               <Fragment>
@@ -284,6 +283,7 @@ const InputPop = (props) => {
             <Emoji show={showEmojis} emojis={emojis} onClick={onEmojiClick} />
           </View>
         )}
+        <View className={styles.safeArea}></View>
       </Popup>
       {/* 
       {showAt && (
@@ -291,7 +291,6 @@ const InputPop = (props) => {
           <AtSelect visible={showAt} stateLess={true} getAtList={onAtListChange} onCancel={onAtIconClick} />
         </View>
       )} */}
-
     </View>
   );
 };

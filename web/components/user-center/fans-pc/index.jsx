@@ -59,6 +59,7 @@ class UserCenterFansPc extends React.Component {
       fansCount = this.props.user.fansCount;
     }
 
+
     return (
       <>
         <SidebarPanel
@@ -70,7 +71,7 @@ class UserCenterFansPc extends React.Component {
           leftNum={fansCount}
           onShowMore={this.moreFans}
           mold={'wrapper'}
-          className={this.props.className}
+          className={`${this.props.className} ${styles.borderRadius}`}
         >
           <div>
             {Number(fansCount) !== 0 && (

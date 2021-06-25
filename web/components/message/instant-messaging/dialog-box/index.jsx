@@ -42,7 +42,9 @@ const DialogBox = (props, ref) => {
               setPreviewerVisibled(true);
             }, 0);
           }}
-          // onLoad={scrollEnd}
+          onLoad={() => {
+            !height && scrollEnd();
+          }}
         />
       </div>
     );
@@ -60,11 +62,11 @@ const DialogBox = (props, ref) => {
         })}>
           {isImageFail || failMsg ? (
             <>
-              <Icon className={styles.failIcon} name="PictureOutlinedBig" size={size} />
+              <Icon className={styles.failIcon} name="PictureErrorOutlined" size={size} />
               {failMsg && <span className={styles.failMsg}>{failMsg}</span>}
-              <div className={styles.redDot} onClick={() => {
+              <Icon className={styles.redDot} name="TipsOutlined" size={16} onClick={() => {
                 sendImageAttachment(file, data.dialogId, true);
-              }}>!</div>
+              }} />
             </>
           ) : (
             <Icon className={styles.loadingIcon} name="LoadingOutlined" size={size} />

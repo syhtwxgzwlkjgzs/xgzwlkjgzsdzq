@@ -4,6 +4,10 @@ import styles from './index.module.scss';
 import { View } from '@tarojs/components';
 
 class UserCenterThreads extends React.Component {
+  static defaultProps = {
+    showBottomStyle: true
+  }
+  
   render() {
     return (
       <View
@@ -17,7 +21,7 @@ class UserCenterThreads extends React.Component {
       >
         {this.props.data.map((itemInfo, index) => (
           <View key={index} className={index === 0 ? styles.threadFirstItem : styles.threadItem}>
-            <Thread data={itemInfo} />
+            <Thread showBottomStyle={this.props.showBottomStyle} data={itemInfo} />
           </View>
         ))}
       </View>

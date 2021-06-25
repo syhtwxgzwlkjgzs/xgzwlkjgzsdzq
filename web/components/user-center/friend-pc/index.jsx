@@ -96,7 +96,7 @@ class UserCenterFriendPc extends React.Component {
           title="关注"
           leftNum={followCount}
           onShowMore={this.moreFriend}
-          className={this.props.className}
+          className={`${this.props.className} ${styles.borderRadius}`}
         >
           {Number(followCount) !== 0 && (
             <div

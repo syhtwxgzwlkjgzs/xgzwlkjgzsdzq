@@ -37,7 +37,7 @@ class IncomeList extends React.Component {
         </div>
         <div className={styles.footer}>
           <div className={styles.time}>
-            {tradeTime ? time.formatDate(tradeTime, 'YYYY-MM-DD HH:mm') : ''}
+            {tradeTime ? time.formatDate(tradeTime, 'YYYY-MM-DD HH:mm') : '暂无时间'}
           </div>
           <div className={styles[`withdrawalStatus${cashStatus}`]}>
             {STATUS_MAP[cashStatus]}

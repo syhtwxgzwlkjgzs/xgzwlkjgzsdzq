@@ -22,8 +22,8 @@ function avatar(props) {
     user: myself,
     search,
     userType = -1,
-    withStopPropagation = true, // 是否需要阻止冒泡 默认true阻止
     unifyOnClick = null, // 付费加入，统一点击事件
+    withStopPropagation = false, // 是否需要阻止冒泡 默认false不阻止
   } = props;
 
   const userName = useMemo(() => {
