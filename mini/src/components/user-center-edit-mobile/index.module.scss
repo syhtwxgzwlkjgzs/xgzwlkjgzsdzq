@@ -57,6 +57,8 @@
     background-color: $white;
     // @include ios-safe-area-inset-bottom;
     display: flex;
+    padding-bottom: calc(16px + constant(safe-area-inset-bottom)); ///兼容 IOS<11.2/
+    padding-bottom: calc(16px + env(safe-area-inset-bottom)); ///兼容 IOS>11.2/
     .btn {
       height: 42px;
       font-size: $font-size-middle;
@@ -71,7 +73,7 @@
 .bgBtnColor {
   :global {
     .dzq-button--primary.is-mouseenter {
-      @include button-primary()
+      @include button-primary();
     }
   }
 }

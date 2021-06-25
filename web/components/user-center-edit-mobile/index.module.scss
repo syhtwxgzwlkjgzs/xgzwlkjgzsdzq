@@ -50,6 +50,8 @@
     // border-top: 1px solid $border-color;
     padding: rem($padding-2n) rem($padding-4n) rem($padding-4n);
     background-color: $white;
+    padding-bottom: calc(16px + constant(safe-area-inset-bottom)); ///兼容 IOS<11.2/
+    padding-bottom: calc(16px + env(safe-area-inset-bottom)); ///兼容 IOS>11.2/
     // @include ios-safe-area-inset-bottom;
     display: flex;
     .btn {
