@@ -240,10 +240,10 @@ const InputPop = (props) => {
             <Emoji show={showEmojis} emojis={emojis} onClick={onEmojiClick} />
           </div>
         )}
+        <div className={styles.safeArea}></div>
       </Popup>
 
       {showAt && <AtSelect visible={showAt} getAtList={onAtListChange} onCancel={onAtIconClick} />}
-
     </div>
   );
 };

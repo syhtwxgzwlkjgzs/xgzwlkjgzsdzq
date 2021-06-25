@@ -27,6 +27,13 @@
   }
 }
 
+.safeArea {
+  background: $white;
+  width: 100%;
+  height: constant(safe-area-inset-bottom); ///兼容 IOS<11.2/
+  height: env(safe-area-inset-bottom); ///兼容 IOS>11.2/
+}
+
 .main {
   background: $white;
   width: 100%;
@@ -63,7 +70,6 @@
 }
 
 .emojis {
-
   :global {
     .dzq-toolbar-emoji {
       border-radius: 0;

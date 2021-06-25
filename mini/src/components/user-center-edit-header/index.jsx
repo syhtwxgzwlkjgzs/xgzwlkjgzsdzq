@@ -27,7 +27,7 @@ export default class index extends Component {
       inputWidth: '100%',
       canvasHeight: 0,
       canvasWidth: 0,
-    }
+    };
     this.config = getConfig();
     this.user = this.props.user || {};
     this.hiddenElement = React.createRef();
@@ -134,16 +134,16 @@ export default class index extends Component {
 
               Toast.error({
                 content: '图像转换失败',
-                duration: 2000
-              })
+                duration: 2000,
+              });
             },
             onError: (err) => {
               console.error('error', err);
 
               Toast.error({
                 content: '图像转换错误',
-                duration: 2000
-              })
+                duration: 2000,
+              });
             },
           });
         });
@@ -152,7 +152,6 @@ export default class index extends Component {
     const res = await drawPromisify();
 
     return res;
-
   };
 
   uploadAvatarImpl = async (fileList) => {
@@ -241,7 +240,7 @@ export default class index extends Component {
           this.props.user.userInfo = { ...this.props.user.userInfo };
         } else {
           Toast.error({
-            content: parsedData.Message || "上传背景图片失败",
+            content: parsedData.Message || '上传背景图片失败',
             duration: 2000,
           });
           this.setState({
@@ -288,17 +287,17 @@ export default class index extends Component {
   handleClickSignature = () => {
     this.setState({
       isClickSignature: !this.state.isClickSignature,
-      inputWidth: this.hiddenElement.current?.offsetWidth
-    })
-  }
+      inputWidth: this.hiddenElement.current?.offsetWidth,
+    });
+  };
 
   // 签名change事件
   handleChangeSignature = (e) => {
     this.props.user.editSignature = e.target.value;
     this.setState({
-      inputWidth: this.hiddenElement.current?.offsetWidth
-    })
-  }
+      inputWidth: this.hiddenElement.current?.offsetWidth,
+    });
+  };
 
   handleBlurSignature = (e) => {
     this.props.user.editSignature = e.target.value;
@@ -307,11 +306,46 @@ export default class index extends Component {
     });
   };
 
+  getStatusBarHeight() {
+    return wx?.getSystemInfoSync()?.statusBarHeight || 44;
+  }
+
+  // 全屏状态下自定义左上角返回按钮位置
+  getTopBarBtnStyle() {
+    return {
+      position: 'fixed',
+      top: `${this.getStatusBarHeight()}px`,
+      left: '12px',
+      transform: 'translate(0, 10px)',
+    };
+  }
+
+  getTopBarTitleStyle() {
+    return {
+      position: 'fixed',
+      top: `${this.getStatusBarHeight()}px`,
+      left: '50%',
+      transform: 'translate(-50%, 8px)',
+    };
+  }
+
+  // 渲染顶部title
+  renderTitleContent = () => {
+    return (
+      <View className={styles.topBar}>
+        <View style={this.getTopBarTitleStyle()} className={styles.fullScreenTitle}>
+          编辑资料
+        </View>
+      </View>
+    );
+  };
+
   render() {
-    const { isUploadAvatarUrl, isUploadBackgroundUrl, inputWidth } = this.state
+    const { isUploadAvatarUrl, isUploadBackgroundUrl, inputWidth } = this.state;
     return (
       <>
         <View className={styles.userCenterEditHeader}>
+          {this.renderTitleContent()}
           <View className={styles.bgContent}>
             <UserCenterHeaderImage onClick={this.handleBackgroundUpload} />
             {/* 背景图加载状态 */}
@@ -340,19 +374,28 @@ export default class index extends Component {
           <View className={styles.userCenterEditDec}>
             <View className={styles.userCenterEditDecItem}>
               <Icon className={styles.compileIcon} onClick={this.handleClickSignature} name="CompileOutlined" />
-              {
-                this.state.isClickSignature ? (
-                  <View
-                    style={{ width: inputWidth + 10, minWidth: !this.user.editSignature && '180px' }}
-                  >
-                    <Input trim className={styles.userSignatureInput} maxLength={50} focus={true} onChange={this.handleChangeSignature} onBlur={this.handleBlurSignature} value={this.user.editSignature} placeholder="这个人很懒，什么也没留下~" />
-                  </View>
-                ) : (
-                  <View style={{ minWidth: !this.user.editSignature && '180px' }} className={styles.text}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</View>
-                )
-              }
+              {this.state.isClickSignature ? (
+                <View style={{ width: inputWidth + 10, minWidth: !this.user.editSignature && '180px' }}>
+                  <Input
+                    trim
+                    className={styles.userSignatureInput}
+                    maxLength={50}
+                    focus={true}
+                    onChange={this.handleChangeSignature}
+                    onBlur={this.handleBlurSignature}
+                    value={this.user.editSignature}
+                    placeholder="这个人很懒，什么也没留下~"
+                  />
+                </View>
+              ) : (
+                <View style={{ minWidth: !this.user.editSignature && '180px' }} className={styles.text}>
+                  {this.user.editSignature || '这个人很懒，什么也没留下~'}
+                </View>
+              )}
               {/* 隐藏span--获取该内容宽度--赋值给input */}
-              <View style={{ maxWidth: '80%' }} ref={this.hiddenElement} className={styles.hiddenElement}>{this.user.editSignature || '这个人很懒，什么也没留下~'}</View>
+              <View style={{ maxWidth: '80%' }} ref={this.hiddenElement} className={styles.hiddenElement}>
+                {this.user.editSignature || '这个人很懒，什么也没留下~'}
+              </View>
             </View>
           </View>
           <Canvas
