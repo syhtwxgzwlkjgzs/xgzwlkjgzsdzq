@@ -62,7 +62,9 @@ const Index = ({ page, subPage, dialogId, username, message, user, nickname }) =
       <div className={styles['stepper-container']}>
         <Stepper onItemClick={sidebarClick} selectIndex={sidebarIndex} data={sidebarData} />
       </div>
-      <UserCenterFollowsPc userId={user.id} showMore={false} withLimit={100000} messageMode={true} />
+      <UserCenterFollowsPc userId={user.id} showMore={false} withLimit={100000} messageMode={true} style={{
+        maxHeight: '485px',
+      }} />
       <Copyright />
     </div>
   );
