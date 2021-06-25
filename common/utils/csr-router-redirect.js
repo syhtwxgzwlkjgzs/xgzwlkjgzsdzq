@@ -32,7 +32,20 @@ export default function csrRouterRedirect() {
 
             if ( curr[pathArr[i]] ) {
                 res.push(pathArr[i]);
-                curr = curr[pathArr[i]];
+
+                // 如果已经去到最后一个分段，但是map中依然有，需要看是否存在*，解决「id】类型的路由缺少对应id的路由导致死循环的问题
+                if ( i === pathArr.length - 1 ) {
+                    let last = curr[pathArr[i]];
+                    if ( last['*'] ) {
+                        console.log('404')
+                        Router.redirect({ url: `/404` });
+                        return;
+                    } else {
+                        curr = curr[pathArr[i]];
+                    }
+                } else {
+                    curr = curr[pathArr[i]];
+                }
             // 没有找到是否存在是动态路由
             } else {
                 if ( curr['*'] && i == pathArr.length - 1 ) {
