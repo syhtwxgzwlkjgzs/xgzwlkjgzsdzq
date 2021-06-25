@@ -192,14 +192,14 @@
     flex-shrink: 0;
 
     &.home-right {
-      top: rem(-125);
+      top: 0;
     }
 
-    @include media('xl-pc') {
-      &.home-right {
-        top: rem(-135);
-      }
-    }
+    // @include media('xl-pc') {
+    //   &.home-right {
+    //     top: rem(-135);
+    //   }
+    // }
   }
 }
 
@@ -234,26 +234,26 @@
     }
 
     .home {
-      @include heightMedia(660px, 580px) {
+      @include heightMedia(800px, 720px) {
         .right-recommend-item:nth-last-child(-n + 2) {
           display: none;
         }
       }
 
-      @include heightMedia(580px, 500px) {
+      @include heightMedia(720px, 640px) {
         .right-recommend-item:nth-last-child(-n + 3) {
           display: none;
         }
       }
 
-      @include heightMedia(500px, 420px) {
+      @include heightMedia(640px, 560px) {
         .right-recommend-item:nth-last-child(-n + 4) {
           display: none;
         }
       }
 
       // 如果小于默认高度不吸顶
-      @include heightMedia(415px) {
+      @include heightMedia(560px) {
         .baselayout-right {
           position: static;
         }

@@ -189,9 +189,9 @@ class IndexPCPage extends React.Component {
   // 右侧 -- 二维码 推荐内容
   renderRight = (data) => (
     <div className={styles.indexRight}>
-      <QcCode />
+      <Recommend />
       <div className={styles.indexRightCon}>
-        <Recommend />
+        <QcCode />
       </div>
       <Copyright />
     </div>
