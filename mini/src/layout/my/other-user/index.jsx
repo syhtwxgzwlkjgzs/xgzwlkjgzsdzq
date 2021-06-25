@@ -173,7 +173,7 @@ class H5OthersPage extends React.Component {
             <View className={styles.threadItemContainer}>
               {this.formatUserThreadsData(targetUserThreads) &&
                 this.formatUserThreadsData(targetUserThreads).length > 0 && (
-                  <UserCenterThreads data={this.formatUserThreadsData(targetUserThreads)} />
+                  <UserCenterThreads showBottomStyle={false} data={this.formatUserThreadsData(targetUserThreads)} />
                 )}
             </View>
           </View>
