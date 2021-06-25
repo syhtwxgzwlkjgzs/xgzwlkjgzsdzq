@@ -38,6 +38,7 @@ class Index extends React.Component {
           showHeader={!isPC}
           list={list}
           type='thread'
+          showLoadingInCenter={false}
           onPullDown={() => this.fetchMessageData(1)}
           onScrollBottom={() => this.fetchMessageData()}
           onBtnClick={this.handleThreadDelete}
