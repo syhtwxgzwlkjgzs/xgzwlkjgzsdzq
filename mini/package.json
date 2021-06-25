@@ -16,7 +16,8 @@
     "lintcss:fix": "stylelint src/**/*.{scss}",
     "dev:weapp": "cross-env NODE_ENV=development dzq dev -p mini --type weapp",
     "build:weapp": "cross-env NODE_ENV=production dzq build -p mini --type weapp && npm run dist",
-    "dist": "node handleDist.js"
+    "dist": "node handleDist.js",
+    "update": "dzq update"
   },
   "browserslist": [
     "last 3 versions",
