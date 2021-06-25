@@ -144,7 +144,7 @@ class Index extends React.Component {
           />
         }
         pc={<IndexPCPage firstLoading={firstLoading} dispatch={this.dispatch} />}
-        title={`我的点赞 - ${this.props.site?.siteName}`}
+        title={`我的点赞`}
       />
     );
   }

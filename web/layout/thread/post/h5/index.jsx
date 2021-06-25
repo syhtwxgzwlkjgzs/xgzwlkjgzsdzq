@@ -366,6 +366,7 @@ class ThreadCreate extends React.Component {
             onClick={(item) => {
               this.props.handleDefaultIconClick(item);
               if (item.type === defaultOperation.emoji) this.setPostBox();
+              else this.clearBottomFixed();
             }}
             permission={threadExtendPermissions}
             onSubmit={this.props.handleSubmit}>

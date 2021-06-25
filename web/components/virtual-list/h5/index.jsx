@@ -41,7 +41,7 @@ function extendCache(instance) {
   };
 }
 
-function Home(props, ref) {
+function VList(props, ref) {
   let cache = props.vlist.cache;
 
   if (!cache) {
@@ -78,7 +78,11 @@ function Home(props, ref) {
   }, [listRef?.Grid?.getTotalRowsHeight()]);
 
   // 重新计算指定的行高
-  const recomputeRowHeights = (index) => {
+  const recomputeRowHeights = (index, updatedData) => {
+    // TODO:先临时处理付费后，列表页面内容不更新的的问题
+    if (updatedData) {
+      list[index] = updatedData;
+    }
     listRef?.recomputeRowHeights(index);
   };
 
@@ -109,7 +113,7 @@ function Home(props, ref) {
       case 'footer':
         return <BottomView noMore={props.noMore} isError={props.requestError} errorText={props.errorText}></BottomView>;
       default:
-        return <Item data={data} measure={measure} recomputeRowHeights={() => recomputeRowHeights(index)} />;
+        return <Item data={data} measure={measure} recomputeRowHeights={(data) => recomputeRowHeights(index, data)} />;
     }
   };
 
@@ -160,7 +164,7 @@ function Home(props, ref) {
     }
 
     // if (scrollTop + (clientHeight * 4) >= scrollHeight && !loadData) {
-    if (scrollHeight/scrollTop <= 1.5 && !loadData) {
+    if (scrollHeight / scrollTop <= 1.5 && !loadData) {
       loadData = true;
       props.loadNextPage().finally(() => {
         loadData = false;
@@ -170,9 +174,7 @@ function Home(props, ref) {
 
   const isRowLoaded = ({ index }) => !!list[index];
 
-  const loadMoreRows = () => {
-    return Promise.resolve();
-  };
+  const loadMoreRows = () => Promise.resolve();
 
   const clearAllCache = () => {
     cache.clearAll();
@@ -226,4 +228,4 @@ function Home(props, ref) {
   );
 }
 
-export default observer(inject('vlist')(forwardRef(Home)));
+export default observer(inject('vlist')(forwardRef(VList)));
