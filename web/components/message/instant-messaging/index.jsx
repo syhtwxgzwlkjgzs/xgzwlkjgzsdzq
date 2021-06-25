@@ -47,7 +47,7 @@ const Index = (props) => {
   const clearPolling = () => clearTimeout(timeoutId.current);
 
   const replaceRouteWidthDialogId = (dialogId) => {
-    Router.replace({ url: `/message?page=chat&nickname=${nickname}&dialogId=${dialogId}` });
+    Router.replace({ url: `/message?page=chat&nickname=${nickname}&username=${username}&dialogId=${dialogId}` });
   };
 
   const submit = async (data) => {
@@ -262,23 +262,20 @@ const Index = (props) => {
     }
   }, [username, dialogId]);
 
-
   useEffect(() => {
     if (!threadPost.emojis.length) {
       threadPost.fetchEmoji();
     }
-  }, []);
-
-  useEffect(() => (
-    () => {
+    return () => {
       clearPolling();
       clearMessage();
       clearToast();
-    }
-  ), []);
+    };
+  }, []);
 
   // 切换username时，停止当前轮询，用于pc端对话页右下角点击切换聊天用户的场景
   useEffect(() => {
+    listDataLengthRef.current = 0;
     clearPolling();
   }, [username]);
 
