@@ -12,7 +12,7 @@ export default function avatar(props) {
     className = '',
     circle = true,
     size = 'primary',
-    withStopPropagation = true, // 是否需要阻止冒泡 默认true阻止
+    withoutStopPropagation = false, // 是否需要阻止冒泡 默认false不阻止
   } = props;
 
   const userName = useMemo(() => {
@@ -22,13 +22,13 @@ export default function avatar(props) {
 
   const clickHandle = useCallback(
     (e) => {
-      if (withStopPropagation) {
+      if (withoutStopPropagation) {
         e.stopPropagation();
       }
       if (!userId) return;
       onClick && onClick(e);
     },
-    [userId, withStopPropagation],
+    [userId, withoutStopPropagation],
   );
 
   if (image && image !== '') {
