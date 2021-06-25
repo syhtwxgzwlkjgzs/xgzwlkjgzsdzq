@@ -1,6 +1,6 @@
 @import '@common/styles/index.scss';
 .top_bg {
-  height: rem(144);
+  height: rem(180);
   background-color: $primary-color;
   .top_bg_image {
     position: absolute;
@@ -13,7 +13,7 @@
   height: 100%;
   // 用户信息 start
   .user_info{
-    height: rem(165);
+    height: rem(170);
     background: $comment-bg-color;
     position: relative;
   }
@@ -24,7 +24,7 @@
     position: absolute;
     left: 50%;
     margin-left: rem(-60);
-    top: rem(-80);
+    top: rem(-115);
     border-radius: $border-radius-circle;
     background: $white;
     border: rem(2) solid $white;
@@ -38,11 +38,11 @@
   }
   .user_info_content{
     width: rem(343);
-    height: rem(213);
+    height: rem(215);
     position: absolute;
     margin-left: rem(-171.5);
     left: 50%;
-    top: rem(-60);
+    top: rem(-55);
     background: $white;
     border-radius: $border-radius-small;
     text-align: center;
