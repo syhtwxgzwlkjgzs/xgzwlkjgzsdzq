@@ -133,7 +133,7 @@ class TopicSelect extends Component {
           onRefresh={() => this.fetchTopics()}
           hasOnScrollToLower={true}
         >
-          {keywords && this.renderItem({ content: keywords, newTopic: '新话题' })}
+          {keywords && !topics.length && this.renderItem({ content: keywords, newTopic: '新话题' })}
           {topics.map(item => (
             <React.Fragment key={item.topicId}>
               {this.renderItem(item)}
