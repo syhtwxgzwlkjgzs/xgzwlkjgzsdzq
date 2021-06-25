@@ -86,7 +86,7 @@ function UserInfo(props) {
 
   const createInviteLink = async () => {
     try {
-      const { site: { setSite: { siteTitle } = {} } = {}, user } = this.props;
+      const { site: { setSite: { siteTitle } = {} } = {}, user } = props;
       // copyToClipboard(`${window.location.origin}/forum/partner-invite?inviteCode=${user.id}`);
       h5Share({ title: `邀请您加入${siteTitle || ''}`, path: `/forum/partner-invite?inviteCode=${user.id}` });
       Toast.success({
