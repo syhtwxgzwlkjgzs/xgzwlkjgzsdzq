@@ -55,7 +55,6 @@ const RenderThreadContent = inject('user')(
     const threadPrice = threadStore?.threadData?.price || 0;
     // 当前用户是否需要付费
     const isNeedPay = threadStore?.threadData?.payType === 1 && threadStore?.threadData?.paid === false;
-    
 
     // 是否红包帖
     const isRedPack = threadStore?.threadData?.displayTag?.isRedPack;
@@ -134,6 +133,28 @@ const RenderThreadContent = inject('user')(
           {/* 文字 */}
           {text && <PostContent useShowMore={false} content={text || ''} />}
 
+          {/* 视频 */}
+          {parseContent.VIDEO && (
+            <VideoPlay
+              url={parseContent.VIDEO.mediaUrl}
+              coverUrl={parseContent.VIDEO.coverUrl}
+              v_height={parseContent.VIDEO.height || null}
+              v_width={parseContent.VIDEO.width || null}
+              status={parseContent.VIDEO.status}
+            />
+          )}
+
+          {/* 图片 */}
+          {parseContent.IMAGE && (
+            <ImageDisplay
+              flat
+              isPay={needAttachmentPay}
+              onPay={onContentClick}
+              platform="h5"
+              imgData={parseContent.IMAGE}
+            />
+          )}
+
           {/* 悬赏文案 */}
           {parseContent.REWARD && (
             <View className={styles.rewardText}>
@@ -147,59 +168,6 @@ const RenderThreadContent = inject('user')(
                   <View className={styles.rewardTime}>{parseContent.REWARD.expiredAt}截止悬赏</View>
                 </View>
               )}
-            </View>
-          )}
-
-          {/* 付费附件 */}
-          {needAttachmentPay && (
-            <View style={{ textAlign: 'center' }} onClick={onContentClick}>
-              <Button className={styles.payButton} type="primary">
-                <Icon className={styles.payIcon} name="GoldCoinOutlined" size={16}></Icon>
-                <View>支付{attachmentPrice}元查看附件内容</View>
-              </Button>
-            </View>
-          )}
-
-          {/* 图片 */}
-          {parseContent.IMAGE && <ImageDisplay flat isPay={needAttachmentPay} onPay={onContentClick} platform="h5" imgData={parseContent.IMAGE} />}
-
-          {/* 视频 */}
-          {parseContent.VIDEO && (
-            <VideoPlay
-              url={parseContent.VIDEO.mediaUrl}
-              coverUrl={parseContent.VIDEO.coverUrl}
-              v_height={parseContent.VIDEO.height || null}
-              v_width={parseContent.VIDEO.width || null}
-              status={parseContent.VIDEO.status}
-            />
-          )}
-          {/* 音频 */}
-          {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
-          {/* 附件 */}
-          {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} threadId={threadStore?.threadData?.threadId} />}
-          {/* 商品 */}
-          {parseContent.GOODS && (
-            <View>
-              <ProductItem
-                image={parseContent.GOODS.imagePath}
-                amount={parseContent.GOODS.price}
-                title={parseContent.GOODS.title}
-                className={styles.product}
-              />
-              <Button
-                className={styles.buyBtn}
-                type="danger"
-                onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
-              >
-                <Icon className={styles.payIcon} name="ShoppingCartOutlined" size={20}></Icon>
-                <Text className={styles.buyText}>购买商品</Text>
-              </Button>
-            </View>
-          )}
-          {/* 标签 */}
-          {threadStore?.threadData?.categoryName && (
-            <View className={styles.tag} onClick={onTagClick}>
-              {threadStore?.threadData?.categoryName}
             </View>
           )}
 
@@ -220,7 +188,7 @@ const RenderThreadContent = inject('user')(
               )}
               {/* 红包 */}
               {parseContent.RED_PACKET && (
-                <View>     
+                <View>
                   <PostRewardProgressBar
                     remaining={Number(parseContent.RED_PACKET.remainNumber || 0)}
                     received={
@@ -233,6 +201,51 @@ const RenderThreadContent = inject('user')(
                   )}
                 </View>
               )}
+            </View>
+          )}
+
+          {/* 商品 */}
+          {parseContent.GOODS && (
+            <View>
+              <ProductItem
+                image={parseContent.GOODS.imagePath}
+                amount={parseContent.GOODS.price}
+                title={parseContent.GOODS.title}
+                className={styles.product}
+              />
+              <Button
+                className={styles.buyBtn}
+                type="danger"
+                onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
+              >
+                <Icon className={styles.payIcon} name="ShoppingCartOutlined" size={20}></Icon>
+                <Text className={styles.buyText}>购买商品</Text>
+              </Button>
+            </View>
+          )}
+
+          {/* 音频 */}
+          {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
+
+          {/* 附件 */}
+          {parseContent.VOTE && (
+            <AttachmentView attachments={parseContent.VOTE} threadId={threadStore?.threadData?.threadId} />
+          )}
+
+          {/* 付费附件 */}
+          {needAttachmentPay && (
+            <View style={{ textAlign: 'center' }} onClick={onContentClick}>
+              <Button className={styles.payButton} type="primary">
+                <Icon className={styles.payIcon} name="GoldCoinOutlined" size={16}></Icon>
+                <View>支付{attachmentPrice}元查看附件内容</View>
+              </Button>
+            </View>
+          )}
+
+          {/* 标签 */}
+          {threadStore?.threadData?.categoryName && (
+            <View className={styles.tag} onClick={onTagClick}>
+              {threadStore?.threadData?.categoryName}
             </View>
           )}
 
@@ -288,7 +301,12 @@ const RenderThreadContent = inject('user')(
                 )}
               </View>
               <View className={styles.likeReward}>
-                <Tip tipData={tipData} imgs={threadStore?.threadData?.likeReward?.users || []} showMore={true} showCount={5}></Tip>
+                <Tip
+                  tipData={tipData}
+                  imgs={threadStore?.threadData?.likeReward?.users || []}
+                  showMore={true}
+                  showCount={5}
+                ></Tip>
               </View>
             </View>
             {threadStore?.threadData?.likeReward?.shareCount > 0 && (
