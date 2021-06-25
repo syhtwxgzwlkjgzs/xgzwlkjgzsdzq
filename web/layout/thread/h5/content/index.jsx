@@ -126,6 +126,28 @@ const RenderThreadContent = inject('user')(
           {/* 文字 */}
           {text && <PostContent useShowMore={false} content={text || ''} />}
 
+          {/* 视频 */}
+          {parseContent.VIDEO && (
+            <VideoPlay
+              url={parseContent.VIDEO.mediaUrl}
+              coverUrl={parseContent.VIDEO.coverUrl}
+              v_height={parseContent.VIDEO.height || null}
+              v_width={parseContent.VIDEO.width || null}
+              status={parseContent.VIDEO.status}
+            />
+          )}
+
+          {/* 图片 */}
+          {parseContent.IMAGE && (
+            <ImageDisplay
+              flat
+              platform="h5"
+              imgData={parseContent.IMAGE}
+              isPay={needAttachmentPay}
+              onPay={onContentClick}
+            />
+          )}
+
           {/* 悬赏文案 */}
           {parseContent.REWARD && (
             <div className={styles.rewardText}>
@@ -139,59 +161,6 @@ const RenderThreadContent = inject('user')(
                   <div className={styles.rewardTime}>{parseContent.REWARD.expiredAt}截止悬赏</div>
                 </div>
               )}
-            </div>
-          )}
-
-          {/* 付费附件 */}
-          {needAttachmentPay && (
-            <div style={{ textAlign: 'center' }} onClick={onContentClick}>
-              <Button className={styles.payButton} type="primary">
-                <Icon className={styles.payIcon} name="GoldCoinOutlined" size={16}></Icon>
-                <p>支付{attachmentPrice}元查看附件内容</p>
-              </Button>
-            </div>
-          )}
-
-          {/* 图片 */}
-          {parseContent.IMAGE && <ImageDisplay flat platform="h5" imgData={parseContent.IMAGE} isPay={needAttachmentPay} onPay={onContentClick} />}
-
-          {/* 视频 */}
-          {parseContent.VIDEO && (
-            <VideoPlay
-              url={parseContent.VIDEO.mediaUrl}
-              coverUrl={parseContent.VIDEO.coverUrl}
-              v_height={parseContent.VIDEO.height || null}
-              v_width={parseContent.VIDEO.width || null}
-              status={parseContent.VIDEO.status}
-            />
-          )}
-          {/* 音频 */}
-          {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
-          {/* 附件 */}
-          {parseContent.VOTE && <AttachmentView attachments={parseContent.VOTE} threadId={threadStore?.threadData?.threadId} />}
-          {/* 商品 */}
-          {parseContent.GOODS && (
-            <div>
-              <ProductItem
-                image={parseContent.GOODS.imagePath}
-                amount={parseContent.GOODS.price}
-                title={parseContent.GOODS.title}
-                className={styles.product}
-              />
-              <Button
-                className={styles.buyBtn}
-                type="danger"
-                onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
-              >
-                <Icon className={styles.payIcon} name="ShoppingCartOutlined" size={20}></Icon>
-                <span className={styles.buyText}>购买商品</span>
-              </Button>
-            </div>
-          )}
-          {/* 标签 */}
-          {threadStore?.threadData?.categoryName && (
-            <div className={styles.tag} onClick={onTagClick}>
-              {threadStore?.threadData?.categoryName}
             </div>
           )}
 
@@ -225,6 +194,51 @@ const RenderThreadContent = inject('user')(
                   )}
                 </div>
               )}
+            </div>
+          )}
+
+          {/* 商品 */}
+          {parseContent.GOODS && (
+            <div>
+              <ProductItem
+                image={parseContent.GOODS.imagePath}
+                amount={parseContent.GOODS.price}
+                title={parseContent.GOODS.title}
+                className={styles.product}
+              />
+              <Button
+                className={styles.buyBtn}
+                type="danger"
+                onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
+              >
+                <Icon className={styles.payIcon} name="ShoppingCartOutlined" size={20}></Icon>
+                <span className={styles.buyText}>购买商品</span>
+              </Button>
+            </div>
+          )}
+
+          {/* 音频 */}
+          {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
+
+          {/* 附件 */}
+          {parseContent.VOTE && (
+            <AttachmentView attachments={parseContent.VOTE} threadId={threadStore?.threadData?.threadId} />
+          )}
+
+          {/* 付费附件 */}
+          {needAttachmentPay && (
+            <div style={{ textAlign: 'center' }} onClick={onContentClick}>
+              <Button className={styles.payButton} type="primary">
+                <Icon className={styles.payIcon} name="GoldCoinOutlined" size={16}></Icon>
+                <p>支付{attachmentPrice}元查看附件内容</p>
+              </Button>
+            </div>
+          )}
+
+          {/* 标签 */}
+          {threadStore?.threadData?.categoryName && (
+            <div className={styles.tag} onClick={onTagClick}>
+              {threadStore?.threadData?.categoryName}
             </div>
           )}
 
@@ -280,7 +294,13 @@ const RenderThreadContent = inject('user')(
                 )}
               </div>
               <div className={styles.likeReward}>
-                <Tip tipData={tipData} imgs={threadStore?.threadData?.likeReward?.users || []} showMore={true} showCount={5} platform="h5"></Tip>
+                <Tip
+                  tipData={tipData}
+                  imgs={threadStore?.threadData?.likeReward?.users || []}
+                  showMore={true}
+                  showCount={5}
+                  platform="h5"
+                ></Tip>
               </div>
             </div>
             {threadStore?.threadData?.likeReward?.shareCount > 0 && (
