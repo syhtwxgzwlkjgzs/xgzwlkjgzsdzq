@@ -106,7 +106,8 @@ const DialogBox = (props) => {
       }
     });
 
-    return getMessageTimestamp(_list.reverse());
+    return _list.filter(item => (item.imageUrl || item.text)).reverse();
+    // return getMessageTimestamp(_list.filter(item => (item.imageUrl || item.text)).reverse());
   }, [dialogMsgListLength]);
 
   const [previewImageUrls, setPreviewImageUrls] = useState([]);
