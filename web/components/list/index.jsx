@@ -62,7 +62,8 @@ const List = forwardRef(({
 
   // 当list内容高度，没有超过list高度，则将loading居中显示
   useEffect(() => {
-    if (listWrapper.current && showLoadingInCenter && site?.platform === 'h5') {
+    // 约束，只有在H5端，加载中的状态才会生效此样式
+    if (listWrapper.current && showLoadingInCenter && !noMore && !isError && site?.platform === 'h5') {
       const { clientHeight } = listWrapper.current;
       const { scrollHeight } = listWrapper.current;
   

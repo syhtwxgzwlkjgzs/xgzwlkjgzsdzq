@@ -56,8 +56,10 @@
   font-size: rem($font-size-primary);
   color: $text-color-placeholder;
   padding-top: rem(11);
+  line-height: rem($font-line-height-small);
   .spin {
     margin-right: rem(4);
+    color: $text-color-placeholder;
   }
   .noMoreLeft{
     background-color: $text-color-placeholder;
@@ -65,7 +67,6 @@
     height: rem(1);
     float: left;
     margin-right: rem($margin-4n);
-    margin-top: rem($margin-2n);
   }
   .noMoreRight{
     background-color: $text-color-placeholder;
@@ -73,11 +74,15 @@
     height: rem(1);
     float: right;
     margin-left: rem($margin-4n);
-    margin-top: rem($margin-2n);
   }
   &.custom{
     padding-top: 0;
     display: block;
+  }
+  .lineSty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 

@@ -270,18 +270,13 @@ const Index = (props) => {
     }
   }, []);
 
-  useEffect(() => {
-    if (!isPC) {
-      document.addEventListener('focusin', () => {
-        setTimeout(scrollEnd, 0);
-      });
-    }
-    return () => {
+  useEffect(() => (
+    () => {
       clearPolling();
       clearMessage();
       clearToast();
-    };
-  }, []);
+    }
+  ), []);
 
   // 切换username时，停止当前轮询，用于pc端对话页右下角点击切换聊天用户的场景
   useEffect(() => {
@@ -321,6 +316,7 @@ const Index = (props) => {
         sendImageAttachment={sendImageAttachment}
       />
       <InteractionBox
+        scrollEnd={scrollEnd}
         typingValue={typingValue}
         setTypingValue={setTypingValue}
         uploadImage={uploadImage}

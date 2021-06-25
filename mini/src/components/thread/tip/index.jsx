@@ -71,7 +71,7 @@ import { debounce } from '@common/utils/throttle-debounce.js';
             }
         </View>
 
-        <PopupList tipData={tipData} visible={visible} onHidden={onHidden} />
+        {visible && <PopupList tipData={tipData} visible={visible} onHidden={onHidden} />}
     </>
   );
 }));
