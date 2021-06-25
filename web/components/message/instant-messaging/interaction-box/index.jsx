@@ -14,6 +14,7 @@ const InteractionBox = (props) => {
     doSubmitClick,
     typingValue,
     site: { isPC },
+    scrollEnd,
   } = props;
 
   const [cursorPosition, setCursorPosition] = useState(0);
@@ -49,6 +50,7 @@ const InteractionBox = (props) => {
                 onBlur={(e) => {
                   recordCursor(e);
                 }}
+                onFocus={scrollEnd}
               />
               <div className={styles.tools}>
                 <div>

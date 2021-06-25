@@ -42,7 +42,9 @@ const DialogBox = (props, ref) => {
               setPreviewerVisibled(true);
             }, 0);
           }}
-          // onLoad={scrollEnd}
+          onLoad={() => {
+            !height && scrollEnd();
+          }}
         />
       </div>
     );
