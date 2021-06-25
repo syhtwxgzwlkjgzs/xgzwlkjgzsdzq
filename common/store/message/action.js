@@ -134,6 +134,21 @@ class MessageAction extends MessageStore {
   // 获取对话的消息列表
   @action.bound
   async readDialogMsgList(dialogId, page = 1) {
+    return new Promise(async (resolve) => {
+      const ret = await readDialogMsgList({
+        params: {
+          perPage: 200,
+          page,
+          filter: {
+            dialogId,
+          },
+        },
+      });
+      this.setMsgList(page, 'dialogMsgList', ret);
+      resolve();
+    });
+
+
     const ret = await readDialogMsgList({
       params: {
         perPage: 200,
