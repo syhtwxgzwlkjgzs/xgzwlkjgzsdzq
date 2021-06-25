@@ -41,6 +41,7 @@ function extendCache(instance) {
     return height;
   };
 }
+let loadData = false;
 
 function VList(props, ref) {
   let cache = props.vlist.cache;
@@ -57,7 +58,6 @@ function VList(props, ref) {
 
   const [list, setList] = useState([{ type: 'header' }, ...(props.list || []), { type: 'footer' }]);
   let listRef = useRef(null);
-  let loadData = false;
   const rowCount = list.length;
 
   const [flag, setFlag] = useState(true);
@@ -166,9 +166,8 @@ function VList(props, ref) {
     if (scrollTop !== 0) {
       props.vlist.setPosition(scrollTop);
     }
-
     // if (scrollTop + (clientHeight * 4) >= scrollHeight && !loadData) {
-    if (scrollHeight / scrollTop <= 1.5 && !loadData) {
+    if (((scrollTop + (clientHeight * 4)) >= scrollHeight) && !loadData) {
       loadData = true;
       props.loadNextPage().finally(() => {
         loadData = false;
