@@ -22,7 +22,7 @@
   background: $body-bg-color;
   // 用户信息 start
   .user_info{
-    height: rem(170);
+    height: rem(167);
     background: $comment-bg-color;
     position: relative;
   }
@@ -36,7 +36,7 @@
     top: rem(-115);
     border-radius: $border-radius-circle;
     background: $white;
-    border: rem(2) solid $white;
+    border: rem(3) solid $white;
     overflow: hidden;
     z-index: $zindex-backtotop;
     :global(.dzq-avatar__img),:global(.dzq-avatar__text) {
@@ -46,8 +46,8 @@
     }
   }
   .user_info_content{
-    width: rem(343);
-    height: rem(215);
+    width: rem(345);
+    height: rem(211);
     position: absolute;
     margin-left: rem(-171.5);
     left: 50%;
@@ -69,13 +69,13 @@
   .user_info_tag{
     font-weight: normal;
     font-size: $font-size-small;
-    line-height: $font-line-height-large;
-    height: rem(30);
+    line-height: $font-line-height-small;
     color: $text-color-secondary;
   }
   .user_info_invite{
-    width: rem(311);
+    width: rem(315);
     height: rem(78);
+    margin-top: $margin-5;
     border-radius: $border-radius-small;
     background: $body-bg-color;
   }
@@ -232,12 +232,12 @@
     bottom: 0;
   }
   .refreshView {
-    height: rem(40);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: $font-size-primary;
-    color: $text-color-placeholder;
+    color: $text-color-secondary;
+    padding: $padding-4n;
   }
 }
 

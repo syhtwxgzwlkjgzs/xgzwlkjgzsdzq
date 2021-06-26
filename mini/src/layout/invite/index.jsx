@@ -104,7 +104,7 @@ class InviteH5Page extends React.Component {
                   inviteData?.inviteUsersList?.length
                     ? <></>
                     : <View className={layout.refreshView}>
-                        <View>暂无信息</View>
+                        <View>没有更多内容了</View>
                       </View>
                 }
               </View>
