@@ -175,145 +175,145 @@ export default inject('user')(
 
         <Divider className={topic.divider}></Divider>
 
-          <div className={topic.body}>
-            {/* 标题 */}
-            {threadStore?.threadData?.title && <div className={topic.title}>{threadStore?.threadData?.title}</div>}
+        <div className={topic.body}>
+          {/* 标题 */}
+          {threadStore?.threadData?.title && <div className={topic.title}>{threadStore?.threadData?.title}</div>}
 
-            {/* 文字 */}
-            {text && <PostContent useShowMore={false} content={text || ''} usePointer={false} />}
+          {/* 文字 */}
+          {text && <PostContent useShowMore={false} content={text || ''} usePointer={false} />}
 
-            {/* 付费附件：不能免费查看付费帖 && 需要付费 && 不是作者 && 没有付费 */}
-            {needAttachmentPay && (
-              <div style={{ textAlign: 'center' }} onClick={onContentClick}>
-                <Button className={topic.payButton} type="primary" size="large">
-                  <div className={topic.pay}>
-                    <Icon className={topic.payIcon} name="GoldCoinOutlined" size={18}></Icon>
-                    支付{attachmentPrice}元查看附件
-                  </div>
-                </Button>
-              </div>
-            )}
+          {/* 视频 */}
+          {parseContent.VIDEO && (
+            <VideoPlay
+              url={parseContent.VIDEO.mediaUrl}
+              coverUrl={parseContent.VIDEO.coverUrl}
+              v_width={parseContent.VIDEO.width || null}
+              v_height={parseContent.VIDEO.height || null}
+              status={parseContent.VIDEO.status}
+            />
+          )}
 
-            {/* 图片 */}
-            {parseContent.IMAGE && (
-              <ImageDisplay
-                flat
-                platform="pc"
-                isPay={needAttachmentPay}
-                onPay={onContentClick}
-                imgData={parseContent.IMAGE}
-              />
-            )}
+          {/* 图片 */}
+          {parseContent.IMAGE && (
+            <ImageDisplay
+              flat
+              platform="pc"
+              isPay={needAttachmentPay}
+              onPay={onContentClick}
+              imgData={parseContent.IMAGE}
+            />
+          )}
 
-            {/* 视频 */}
-            {parseContent.VIDEO && (
-              <VideoPlay
-                url={parseContent.VIDEO.mediaUrl}
-                coverUrl={parseContent.VIDEO.coverUrl}
-                v_width={parseContent.VIDEO.width || null}
-                v_height={parseContent.VIDEO.height || null}
-                status={parseContent.VIDEO.status}
-              />
-            )}
-
-            {/* 音频 */}
-            {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
-
-            {/* 附件 */}
-            {parseContent.VOTE && (
-              <AttachmentView attachments={parseContent.VOTE} threadId={threadStore?.threadData?.threadId} />
-            )}
-
-            {/* 商品 */}
-            {parseContent.GOODS && (
-              <div className={topic.goods}>
-                <ProductItem
-                  image={parseContent?.GOODS?.imagePath}
-                  amount={parseContent?.GOODS?.price}
-                  title={parseContent?.GOODS?.title}
-                  onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
-                />
-                <Button
-                  className={topic.buyBtn}
-                  type="danger"
-                  onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
-                >
-                  <div className={topic.buyContent}>
-                    <Icon className={topic.buyIcon} name="ShoppingCartOutlined" size={20}></Icon>
-                    <span className={topic.buyText}>购买商品</span>
-                  </div>
-                </Button>
-              </div>
-            )}
-
-            {/* 标签 */}
-            {threadStore?.threadData?.categoryName && (
-              <div className={topic.tag} onClick={onTagClick}>
-                {threadStore?.threadData?.categoryName}
-              </div>
-            )}
-
-            {(parseContent.RED_PACKET || parseContent.REWARD) && (
-              <div className={topic.reward}>
-                {/* 悬赏 */}
-                {parseContent.REWARD && (
-                  <div className={topic.rewardBody}>
-                    <PostRewardProgressBar
-                      type={POST_TYPE.BOUNTY}
-                      remaining={Number(parseContent.REWARD.remainMoney || 0)}
-                      received={minus(
-                        Number(parseContent.REWARD.money || 0),
-                        Number(parseContent.REWARD.remainMoney || 0),
-                      )}
-                    />
-                    <div className={topic.rewardMoney}>
-                      本帖向所有人悬赏
-                      <span className={topic.rewardNumber}>{parseContent.REWARD.money || 0}</span>元
-                    </div>
-                    <div className={topic.rewardTime}>{parseContent.REWARD.expiredAt}截止悬赏</div>
-                  </div>
-                )}
-
-                {/* 红包 */}
-                {parseContent.RED_PACKET && (
-                  <div>
-                    <PostRewardProgressBar
-                      remaining={Number(parseContent.RED_PACKET.remainNumber || 0)}
-                      received={
-                        Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remainNumber || 0)
-                      }
-                      condition={parseContent.RED_PACKET.condition}
-                    />
-                    {!!parseContent.RED_PACKET.condition && (
-                      <div className={topic.redPacketLikeNum}>评论集{parseContent.RED_PACKET.likenum}赞领红包</div>
+          {(parseContent.RED_PACKET || parseContent.REWARD) && (
+            <div className={topic.reward}>
+              {/* 悬赏 */}
+              {parseContent.REWARD && (
+                <div className={topic.rewardBody}>
+                  <PostRewardProgressBar
+                    type={POST_TYPE.BOUNTY}
+                    remaining={Number(parseContent.REWARD.remainMoney || 0)}
+                    received={minus(
+                      Number(parseContent.REWARD.money || 0),
+                      Number(parseContent.REWARD.remainMoney || 0),
                     )}
+                  />
+                  <div className={topic.rewardMoney}>
+                    本帖向所有人悬赏
+                    <span className={topic.rewardNumber}>{parseContent.REWARD.money || 0}</span>元
                   </div>
-                )}
-              </div>
-            )}
+                  <div className={topic.rewardTime}>{parseContent.REWARD.expiredAt}截止悬赏</div>
+                </div>
+              )}
 
-            {/* 帖子付费：不能免费查看付费帖 && 需要付费 && 不是作者 && 没有付费 */}
-            {!canFreeViewPost && isThreadPay && !isSelf && !isPayed && (
-              <div style={{ textAlign: 'center' }} onClick={onContentClick}>
-                <Button className={topic.payButton} type="primary" size="large">
-                  <div className={topic.pay}>
-                    <Icon className={topic.payIcon} name="GoldCoinOutlined" size={18}></Icon>
-                    支付{threadPrice}元查看剩余内容
-                  </div>
-                </Button>
-              </div>
-            )}
+              {/* 红包 */}
+              {parseContent.RED_PACKET && (
+                <div>
+                  <PostRewardProgressBar
+                    remaining={Number(parseContent.RED_PACKET.remainNumber || 0)}
+                    received={
+                      Number(parseContent.RED_PACKET.number || 0) - Number(parseContent.RED_PACKET.remainNumber || 0)
+                    }
+                    condition={parseContent.RED_PACKET.condition}
+                  />
+                  {!!parseContent.RED_PACKET.condition && (
+                    <div className={topic.redPacketLikeNum}>评论集{parseContent.RED_PACKET.likenum}赞领红包</div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
 
-            {/* 打赏 */}
-            {canBeReward && isApproved && !isSelf && (
-              <Button onClick={onRewardClick} className={topic.rewardButton} type="primary" size="large">
-                <div className={topic.buttonIconText}>
-                  <Icon className={topic.buttonIcon} name="HeartOutlined" size={19}></Icon>
-                  <span className={topic.buttonText}>打赏</span>
+          {/* 商品 */}
+          {parseContent.GOODS && (
+            <div className={topic.goods}>
+              <ProductItem
+                image={parseContent?.GOODS?.imagePath}
+                amount={parseContent?.GOODS?.price}
+                title={parseContent?.GOODS?.title}
+                onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
+              />
+              <Button
+                className={topic.buyBtn}
+                type="danger"
+                onClick={() => onBuyClick(parseContent.GOODS.detailContent)}
+              >
+                <div className={topic.buyContent}>
+                  <Icon className={topic.buyIcon} name="ShoppingCartOutlined" size={20}></Icon>
+                  <span className={topic.buyText}>购买商品</span>
                 </div>
               </Button>
-            )}
-          </div>
+            </div>
+          )}
+
+          {/* 音频 */}
+          {parseContent.VOICE && <AudioPlay url={parseContent.VOICE.mediaUrl} />}
+
+          {/* 附件 */}
+          {parseContent.VOTE && (
+            <AttachmentView attachments={parseContent.VOTE} threadId={threadStore?.threadData?.threadId} />
+          )}
+
+          {/* 付费附件：不能免费查看付费帖 && 需要付费 && 不是作者 && 没有付费 */}
+          {needAttachmentPay && (
+            <div style={{ textAlign: 'center' }} onClick={onContentClick}>
+              <Button className={topic.payButton} type="primary" size="large">
+                <div className={topic.pay}>
+                  <Icon className={topic.payIcon} name="GoldCoinOutlined" size={18}></Icon>
+                  支付{attachmentPrice}元查看附件
+                </div>
+              </Button>
+            </div>
+          )}
+
+          {/* 标签 */}
+          {threadStore?.threadData?.categoryName && (
+            <div className={topic.tag} onClick={onTagClick}>
+              {threadStore?.threadData?.categoryName}
+            </div>
+          )}
+
+          {/* 帖子付费：不能免费查看付费帖 && 需要付费 && 不是作者 && 没有付费 */}
+          {!canFreeViewPost && isThreadPay && !isSelf && !isPayed && (
+            <div style={{ textAlign: 'center' }} onClick={onContentClick}>
+              <Button className={topic.payButton} type="primary" size="large">
+                <div className={topic.pay}>
+                  <Icon className={topic.payIcon} name="GoldCoinOutlined" size={18}></Icon>
+                  支付{threadPrice}元查看剩余内容
+                </div>
+              </Button>
+            </div>
+          )}
+
+          {/* 打赏 */}
+          {canBeReward && isApproved && !isSelf && (
+            <Button onClick={onRewardClick} className={topic.rewardButton} type="primary" size="large">
+              <div className={topic.buttonIconText}>
+                <Icon className={topic.buttonIcon} name="HeartOutlined" size={19}></Icon>
+                <span className={topic.buttonText}>打赏</span>
+              </div>
+            </Button>
+          )}
+        </div>
 
         {/* 点赞分享 */}
         <div className={topic.footer}>

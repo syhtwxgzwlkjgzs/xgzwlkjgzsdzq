@@ -3,6 +3,7 @@ import { noop, isPromise } from '@components/thread/utils';
 import styles from './index.module.scss';
 import BottomView from './BottomView';
 import { inject, observer } from 'mobx-react';
+import backtoTopFn from '@common/utils/backto-top';
 
 
 /**
@@ -66,7 +67,7 @@ const List = forwardRef(({
     if (listWrapper.current && showLoadingInCenter && !noMore && !isError && site?.platform === 'h5') {
       const { clientHeight } = listWrapper.current;
       const { scrollHeight } = listWrapper.current;
-  
+
       setIsLoadingInCenter(scrollHeight <= clientHeight)
     }
   }, [listWrapper.current, children])
@@ -107,32 +108,11 @@ const List = forwardRef(({
     };
   };
 
-  const onBackTop = () => {;
-    let step = listWrapper.current.scrollTop > 30000 ? 0 : listWrapper.current.scrollTop > 5000 ? 6 : 12;
-    const count = 8;
-    function fn() {
-      
-      if (step === 0) {
-        listWrapper.current.scrollTop = 0;
-        currentScrollTop.current = 0;
-      } else if ( step > 0 ) {
-        const top = currentScrollTop.current - currentScrollTop.current / count;
-        listWrapper.current.scrollTop = top;
-        currentScrollTop.current = top;
-        window.requestAnimationFrame(fn);
-      }
-      step--;
-    }
-    fn();
-    // if (currentScrollTop.current > 0) {
-    //   const top = currentScrollTop.current -  currentScrollTop.current / 5;
-    //   window.requestAnimationFrame(onBackTop)
-    //   listWrapper.current.scrollTop = top;
-    //   currentScrollTop.current = top;
-    // } else {
-    //   listWrapper.current.scrollTop = 0;
-    //   currentScrollTop.current = 0;
-    // }
+  const onBackTop = () => {
+    backtoTopFn(listWrapper.current.scrollTop, (top) => {
+      listWrapper.current.scrollTop = top;
+      currentScrollTop.current = top;
+    });
   };
 
   const jumpToScrollTop = (scrollTop) => {

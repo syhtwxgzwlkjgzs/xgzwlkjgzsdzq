@@ -99,10 +99,13 @@ class UserAction extends SiteStore {
   @action
   async updateUserInfo(id) {
     const userInfo = await readUser({ params: { pid: id } });
+    if (!userInfo || userInfo?.code !== 0) {
+      return;
+    }
     const userPermissions = await readPermissions({});
-    userInfo.data && this.diffPicAndUpdateUserInfo(userInfo.data);
-    userPermissions.data && this.setUserPermissions(userPermissions.data);
-    return userInfo.code === 0 && userInfo.data;
+    userInfo?.data && this.diffPicAndUpdateUserInfo(userInfo.data);
+    userPermissions?.data && this.setUserPermissions(userPermissions.data);
+    return userInfo?.code === 0 && userInfo.data;
   }
 
   // 获取指定用户的用户信息，用于获取他人首页
