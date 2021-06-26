@@ -37,20 +37,34 @@
   > div:not(:last-child) {
     margin-bottom: rem($margin-4n);
   }
+}
 
-  .cover {
-    position: absolute;
-    right: 0;
-    left: 0;
-    top: rem(-16);
-    bottom: 0;
-    background-color: rgba($color: #000, $alpha: 0.5);
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
+.wrapperPC {
+  position: relative;
+  overflow: hidden;
+
+  > div:not(:last-child) {
+    margin-bottom: rem($margin-6n);
+  }
+
+  .title {
+    margin-bottom: rem($margin-4n) !important;
   }
 }
+
+.cover {
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: rem(-16);
+  bottom: 0;
+  background-color: rgba($color: #000, $alpha: 0.5);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
 .payContent {
   min-height: rem(40);
 }

@@ -15,7 +15,6 @@ import styles from './index.module.scss';
  * @constructor
  */
 const RefreshView = ({noMore = false, loadText = '加载更多...', noMoreText = '没有更多内容了', isError = false, onRefreshPlaceholder = null, type = 'normal', platform = 'pc' }) => {
-    console.log(`type`, type)
     return (
         <div className={`${styles.refreshView} ${onRefreshPlaceholder && styles.custom}`}>
             {

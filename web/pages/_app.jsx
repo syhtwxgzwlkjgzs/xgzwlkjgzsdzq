@@ -44,7 +44,7 @@ class DzqApp extends App {
   }
 
   componentDidMount() {
-    console.log('3.21.626');
+    console.log('3.21.6262');
     if ( window.performance ) {
       monitor.call('reportTime', {
         eventName: 'fist-render',

@@ -3,6 +3,14 @@
   overflow: hidden !important;
 }
 
+.friendsWrapperScroll {
+  overflow: auto !important;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 .followsWrapper {
   padding-top: rem(8);
   padding-bottom: rem(8);

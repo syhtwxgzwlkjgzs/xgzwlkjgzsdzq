@@ -102,6 +102,9 @@ class IndexPCPage extends React.Component {
   // 上拉加载更多
   onPullingUp = () => {
     const { dispatch = () => {} } = this.props;
+
+    if(!this.props.index?.threads?.pageData?.length) return; // 火狐浏览器会记录当前浏览位置。防止刷新页面触发载入第二页数据
+
     return dispatch('moreData');
   };
 
