@@ -183,7 +183,9 @@ function VList(props, ref) {
     // backtoTopFn(scrollTop, (top) => {
     //   setScrollTop(top);
     // });
-    setScrollTop(0);
+    listRef && listRef.scrollToPosition(0);
+    props.vlist.setPosition(0);
+    // setScrollTop(0);
   };
 
   const clearAllCache = () => {
@@ -224,7 +226,7 @@ function VList(props, ref) {
                 onRowsRendered={(...props) => {
                   onRowsRendered(...props);
                 }}
-                scrollTop={scrollTop}
+                // scrollTop={scrollTop}
                 rowCount={rowCount}
                 rowHeight={getRowHeight}
                 rowRenderer={rowRenderer}
