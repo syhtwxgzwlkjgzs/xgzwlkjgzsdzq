@@ -31,7 +31,7 @@ export default function csrRouterRedirect() {
         let curr = routerMap;
         let res = [];
         for ( let i = 0; i < pathArr.length; i++ ) {
-            if ( pathArr[i] === '' ) continue;
+            if ( !pathArr[i]) continue;
 
             if ( curr[pathArr[i]] ) {
                 res.push(pathArr[i]);
