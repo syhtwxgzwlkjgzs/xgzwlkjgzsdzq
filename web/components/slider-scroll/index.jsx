@@ -178,6 +178,7 @@ class Index extends Component {
       topCard,
       onPullDown,
       onScrollBottom,
+      showLoadingInCenter,
       ...other
     } = this.props;
     const { isFinished, damping, currentId } = this.state;
@@ -198,6 +199,7 @@ class Index extends Component {
             onScroll={throttle(this.onScroll, 10)}
             onRefresh={onScrollBottom}
             immediateCheck={false}
+            showLoadingInCenter={showLoadingInCenter}
           >
             {/* 导航条 */}
             {showHeader && <Header />}

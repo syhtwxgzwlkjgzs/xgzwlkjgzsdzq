@@ -1,7 +1,7 @@
 @import '@common/styles/index.scss';
 
 @mixin uploadStyles {
-  transition: all .5s;
+  transition: all 0.5s;
   position: absolute;
   left: 0;
   top: 0;
@@ -21,7 +21,7 @@
   min-height: 284px;
   border-bottom: 1px solid $spacer-bg-color;
   // background-color: pink;
-  .headImgBox{
+  .headImgBox {
     position: absolute;
     left: 50%;
     top: 228px;
@@ -144,3 +144,24 @@
   text-overflow: ellipsis;
 }
 
+/* 顶部title样式 */
+.topBar {
+  position: absolute;
+  top: 14px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: $padding-4n;
+  box-sizing: border-box;
+  text-align: center;
+  max-width: calc(100% - 100px);
+  justify-content: space-between;
+  z-index: 1;
+  .fullScreenTitle {
+    font-size: $font-size-middle;
+    color: $white;
+    max-width: 200px;
+    @include text-ellipsis();
+  }
+}

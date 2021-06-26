@@ -151,6 +151,7 @@ class Index extends React.Component {
           topCard={isPC ? card : null}
           list={renderList}
           type='account'
+          showLoadingInCenter={false}
           onPullDown={() => this.fetchMessageData(1)}
           onScrollBottom={() => this.fetchMessageData()}
           onBtnClick={this.handleAccountDelete}

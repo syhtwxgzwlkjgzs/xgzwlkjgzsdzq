@@ -42,6 +42,7 @@ class Index extends React.Component {
           onScrollBottom={() => dispatch(true)}
           onBtnClick={onDelete}
           onEdit={onEdit}
+          showLoadingInCenter={false}
         />
       </div>
     );

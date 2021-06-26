@@ -32,6 +32,13 @@
   }
 }
 
+.safeArea {
+  background: $white;
+  width: 100%;
+  height: constant(safe-area-inset-bottom); ///兼容 IOS<11.2/
+  height: env(safe-area-inset-bottom); ///兼容 IOS>11.2/
+}
+
 .placeholder {
   color: $disabled-color;
 }
@@ -100,7 +107,6 @@
   }
 }
 
-
 .emojis {
   // position: absolute;
   // left: 0;
@@ -134,7 +140,7 @@
   align-items: center;
   justify-content: center;
   z-index: $zindex-dialog;
-  overflow-y: scroll
+  overflow-y: scroll;
 }
 
 .imageUpload {

@@ -157,7 +157,8 @@
     height: rem(42);
     border-radius: rem($border-radius-small);
     color: $white;
-    background: $primary-color;
+    background-color: $primary-color;
+    border: none;
     font-family: 'PingFang SC';
     font-weight: normal;
     font-size: rem($font-size-middle);

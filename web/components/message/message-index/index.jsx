@@ -113,6 +113,7 @@ export class MessageIndex extends Component {
           topCard={isPC ? null : card}
           list={this.formatChatDialogList(list)}
           type='chat'
+          showLoadingInCenter={false}
           onPullDown={() => this.fetchDialogData(1)}
           onScrollBottom={() => this.fetchDialogData()}
           onBtnClick={this.handleDelete}

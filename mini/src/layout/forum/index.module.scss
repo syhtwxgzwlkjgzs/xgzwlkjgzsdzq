@@ -70,6 +70,7 @@
     }
     .icon{
       font-size: rem(10) !important;
+      transform: translate(0, rem(.5));
     }
   }
 }

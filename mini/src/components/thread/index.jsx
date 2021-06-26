@@ -50,6 +50,7 @@ class Index extends React.Component {
       e && e.stopPropagation();
       this.handlePraise()
     }
+    
     handlePraise = debounce(() => {
 
       if(this.state.isSendingLike) return;

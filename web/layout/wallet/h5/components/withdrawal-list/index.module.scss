@@ -58,6 +58,9 @@
   font-size: rem($font-size-label);
   text-align: left;
   color: $text-color-secondary;
-  padding: rem($padding-4n) 0;
+  padding: {
+    top: rem($padding-2n);
+    bottom: rem($padding-4n);
+  }
   border-bottom: $border-solid-1;
 }

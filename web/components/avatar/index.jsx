@@ -22,7 +22,7 @@ function avatar(props) {
     user: myself,
     search,
     userType = -1,
-    withStopPropagation = true, // 是否需要阻止冒泡 默认true阻止
+    withStopPropagation = false, // 是否需要阻止冒泡 默认false不阻止
   } = props;
 
   const userName = useMemo(() => {

@@ -8,15 +8,15 @@ import isServer from '@common/utils/is-server';
 import '@discuzq/design/dist/styles/index.scss';
 import csrRouterRedirect from '@common/utils/csr-router-redirect';
 import Router from '@discuzq/sdk/dist/router';
-import sentry from '@common/utils/sentry';
+// import sentry from '@common/utils/sentry';
 import '../styles/index.scss';
 import CustomHead from '@components/custom-head';
 import Head from 'next/head';
 import monitor from '@common/utils/monitor';
 
-if (!isServer()) {
-  process.env.NODE_ENV === 'production' && sentry();
-}
+// if (!isServer()) {
+//   process.env.NODE_ENV === 'production' && sentry();
+// }
 
 class DzqApp extends App {
   constructor(props) {
@@ -44,7 +44,7 @@ class DzqApp extends App {
   }
 
   componentDidMount() {
-    console.log('3.21.625');
+    console.log('3.21.6262');
     if ( window.performance ) {
       monitor.call('reportTime', {
         eventName: 'fist-render',
