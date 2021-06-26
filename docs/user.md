@@ -12,6 +12,23 @@
 $ git clone https://gitee.com/Discuz/discuz-fe.git
 ```
 
+## 安装项目依赖
+
+```bash
+$ cd ./mini
+$ npm install
+```
+
+如果遇到下载依赖失败可以尝试先运行如下命令,更改安装依赖的源地址
+```bash
+// 单次生效
+$ npm install --registry=https://registry.npm.taobao.org
+// 永久生效
+$ npm config set registry https://registry.npm.taobao.org
+```
+
+
+
 ## 小程序构建
 
 - 修改`project.config.json`文件中的appid为自己的appid
