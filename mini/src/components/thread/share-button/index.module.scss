@@ -12,7 +12,7 @@
     display: flex;
     justify-content: center;
     .moreItem {
-      margin-right: 34px;
+      margin-right: 32px;
       &:last-child {
         margin-right: 0;
       }
@@ -78,6 +78,11 @@
   width: 100%;
   background: $white;
   text-align: center;
+  height: 44px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   .cancel {
     border: none;
     padding: 0;
