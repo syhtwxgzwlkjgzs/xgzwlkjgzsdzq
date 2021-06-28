@@ -354,16 +354,16 @@ class Index extends Component {
             setPostData({
               video: {
                 id: data?.id,
-                thumbUrl: mediaUrl,
+                thumbUrl: data.mediaUrl,
               },
             });
           } else if (type === 'audio') {
             setPostData({
               audio: {
                 id: data?.id,
-                mediaUrl,
+                mediaUrl: data.mediaUrl,
               },
-              audioSrc: mediaUrl,
+              audioSrc: data.mediaUrl,
               audioRecordStatus: 'uploaded',
             });
           }
