@@ -82,8 +82,12 @@ class CommentAction extends CommentStore {
   }
 
   @action
-  deleteReplyToList() {
-    this.commentDetail?.commentPosts.pop();
+  deleteReplyToList(replyId) {
+    this.commentDetail?.commentPosts.map((reply, index) => {
+      if (reply.id === replyId) {
+        this.commentDetail.commentPosts?.splice(index, 1);
+      }
+    })
   }
   /**
    * 创建评论
@@ -389,7 +393,7 @@ class CommentAction extends CommentStore {
         }
       }
 
-      this.deleteReplyToList()
+      this.deleteReplyToList(replyId);
       return {
         msg: '操作成功',
         success: true,
