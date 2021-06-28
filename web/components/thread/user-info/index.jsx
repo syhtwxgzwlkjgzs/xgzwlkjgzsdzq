@@ -24,6 +24,7 @@ UserInfo.propTypes = {
   platform: PropTypes.string, // 是否展示pop PC端
   icon: PropTypes.string, // 图标：点赞或者是付费用户
   collect: PropTypes.string,
+  unifyOnClick: PropTypes.func
 };
 
 export default function UserInfo(props) {
@@ -48,6 +49,7 @@ export default function UserInfo(props) {
         image={props.avatar}
         name={props.name || ''}
         onClick={(e) => props.onClick && props.onClick(e)}
+        unifyOnClick={props.unifyOnClick}
       ></Avatar>
 
       <div className={styles.right}>

@@ -153,12 +153,14 @@ $baseHeight: 860px;
     flex: 1;
     :global {
       .dzq-avatar--primary,
+      .dzq-avatar__text,
       .dzq-avatar__img {
         margin: 0 auto;
         width: 60px;
         height: 60px;
         object-fit: cover;
         border-radius: $border-radius-circle;
+        line-height: 60px;
       }
     }
     .userName {
