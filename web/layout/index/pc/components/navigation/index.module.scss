@@ -121,6 +121,7 @@
     display: none;
   }
   &:hover {
+    margin-right: -4px;
     &::-webkit-scrollbar {
       display: block;
       width: 4px;
