@@ -2,9 +2,11 @@ import React, { useState, useCallback } from 'react';
 import Taro, { useDidShow, useDidHide } from '@tarojs/taro';
 import ThreadPost from '@layout/thread/post';
 import Page from '@components/page';
+import { THREAD_TYPE } from '@common/constants/thread-post';
 
 const Index = () => {
   const [bottomHeight, setBottomHeight] = useState(0); // 手机软键盘弹起高度
+  const [routerAction, setRouterAction] = useState(null); // 发帖插入项的路由行为
 
   // 滚动页面到指定视图位置
   const pageScrollTo = useCallback(({ selector = null, scrollTop = 0, duration = 500 } = {}) => {
@@ -35,6 +37,16 @@ const Index = () => {
     });
 
     setBottomHeight(0);
+
+    switch (routerAction) {
+      case THREAD_TYPE.at:
+        pageScrollTo();
+        break;
+      case THREAD_TYPE.topic:
+        pageScrollTo();
+        break;
+    }
+    setRouterAction(null);
   })
 
   useDidHide(() => {
@@ -43,7 +55,11 @@ const Index = () => {
 
   return (
     <Page withLogin>
-      <ThreadPost bottomHeight={bottomHeight} pageScrollTo={pageScrollTo} />
+      <ThreadPost
+        bottomHeight={bottomHeight}
+        pageScrollTo={pageScrollTo}
+        setRouterAction={value => setRouterAction(value)}
+      />
     </Page>
   )
 };

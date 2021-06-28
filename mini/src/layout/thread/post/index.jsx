@@ -300,8 +300,10 @@ class Index extends Component {
         this.props.pageScrollTo({ selector: "#thread-post-file" });
         break;
     }
-    if (nextRoute) Taro.navigateTo({ url: nextRoute });
-
+    if (nextRoute) {
+      this.props.setRouterAction(item.type);
+      Taro.navigateTo({ url: nextRoute });
+    }
   }
 
   // 执行上传视频
