@@ -50,8 +50,9 @@ class TopicSelect extends Component {
   async fetchTopics(p) {
     // 1 设置参数
     const { fetchTopic } = this.props.threadPost;
-    const { page, perPage, keywords } = this.state;
-    const params = { page: p || page, perPage };
+    const { perPage, keywords } = this.state;
+    const page = p || this.state.page;
+    const params = { page, perPage };
 
     params.filter = {};
     if (keywords) {
