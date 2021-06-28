@@ -8,14 +8,27 @@
   border-radius: $border-radius-big $border-radius-big 0 0;
   box-sizing: border-box;
 
+  .oneRow {
+    display: flex;
+    justify-content: center;
+    .moreItem {
+      margin-right: 34px;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .twoRows {
+    display: grid;
+    justify-content: space-between;
+  }
+
   .more {
     width: 100%;
-    display: grid;
     grid-template-columns: repeat(5, 40px);
     grid-row-gap: 16px;
-    justify-content: space-between;
     padding-bottom: $padding-4n;
-    
     Button{
       margin: 0px;
       padding: 0px;
