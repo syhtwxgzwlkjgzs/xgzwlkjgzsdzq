@@ -260,8 +260,11 @@ class ThreadPostAction extends ThreadPostStore {
       attachmentPrice, freeWords, redpacket, rewardQa } = this.postData;
     let text = contentText;
     if (isMini) {
-      text = text.split('\n').map(item => `<p>${item}</p>`)
-        .join('');
+      const marked = require('marked');
+      marked.setOptions({
+        breaks: true,
+      });
+      text = marked(text);
     }
     text = emojiFormatForCommit(text)
       .replace(/@([^@<]+)<\/p>/g, '@$1 </p>');
