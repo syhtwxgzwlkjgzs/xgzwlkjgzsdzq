@@ -260,11 +260,7 @@ class ThreadPostAction extends ThreadPostStore {
       attachmentPrice, freeWords, redpacket, rewardQa } = this.postData;
     let text = contentText;
     if (isMini) {
-      const marked = require('marked');
-      marked.setOptions({
-        breaks: true,
-      });
-      text = marked(text);
+      text = text.replace(/\n/g, '<br />');
     }
     text = emojiFormatForCommit(text)
       .replace(/@([^@<]+)<\/p>/g, '@$1 </p>');
@@ -301,13 +297,14 @@ class ThreadPostAction extends ThreadPostStore {
   }
 
   @action
-  formatThreadDetailToPostData(detail) {
+  formatThreadDetailToPostData(detail, isMini) {
     const { title, categoryId, content, freewords = 0, isDraft, isAnonymous, orderInfo = {}, threadId } = detail || {};
     const price = Number(detail.price);
     const attachmentPrice = Number(detail.attachmentPrice);
     let position = {};
     if (detail.position && detail.position.address) position = detail.position;
-    const contentText = content && content.text;
+    let contentText = content && content.text;
+    if (isMini) contentText = contentText.replace(/<br \/>/g, '\n');
     const contentindexes = (content && content.indexes) || {};
     let audio = {};
     let rewardQa = {};

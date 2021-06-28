@@ -150,7 +150,7 @@ class Index extends Component {
         });
       const status = isDraft ? THREAD_STATUS.draft : THREAD_STATUS.edit;
       threadPost.setThreadStatus(status);
-      threadPost.formatThreadDetailToPostData(ret.data);
+      threadPost.formatThreadDetailToPostData(ret.data, true);
       this.setCategory(categoryId);
       // isDraft && this.openSaveDraft(); // 现阶段，自动保存功能关闭
     } else {
