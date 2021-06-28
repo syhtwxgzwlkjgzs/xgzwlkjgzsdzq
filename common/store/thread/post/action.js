@@ -9,10 +9,11 @@ import { initPostData } from './common';
 class ThreadPostAction extends ThreadPostStore {
   /**
    * 发帖
+   * @param {boolean} isMini 是否是来自小程序
    */
   @action.bound
-  async createThread() {
-    const params = this.getCreateThreadParams();
+  async createThread(isMini) {
+    const params = this.getCreateThreadParams(false, isMini);
     const ret = await createThread(params);
     if (ret.code === 0) this.currentSelectedToolbar = false;
     return ret;
@@ -21,10 +22,11 @@ class ThreadPostAction extends ThreadPostStore {
   /**
    * 更新帖子
    * @param {number} id 帖子id
+   * @param {boolean} isMini 是否是来自小程序
    */
   @action.bound
-  async updateThread(id) {
-    const params = this.getCreateThreadParams(true);
+  async updateThread(id, isMini) {
+    const params = this.getCreateThreadParams(true, isMini);
     const ret = await updateThread({ ...params, threadId: Number(id) });
     return ret;
   }
@@ -253,13 +255,19 @@ class ThreadPostAction extends ThreadPostStore {
    * 获取发帖时需要的参数
    */
   @action
-  getCreateThreadParams(isUpdate) {
+  getCreateThreadParams(isUpdate, isMini) {
     const { title, categoryId, contentText, position, price,
       attachmentPrice, freeWords, redpacket, rewardQa } = this.postData;
+    let text = contentText;
+    if (isMini) {
+      text = text.split('\n').map(item => `<p>${item}</p>`)
+        .join('');
+    }
+    text = emojiFormatForCommit(text)
+      .replace(/@([^@<]+)<\/p>/g, '@$1 </p>');
     const params = {
       title, categoryId, content: {
-        text: emojiFormatForCommit(contentText).replace(/\n/g, '<br />')
-          .replace(/@([^@<]+)<\/p>/g, '@$1 </p>'),
+        text,
       },
     };
     if (position.address) params.position = position;
@@ -296,7 +304,7 @@ class ThreadPostAction extends ThreadPostStore {
     const attachmentPrice = Number(detail.attachmentPrice);
     let position = {};
     if (detail.position && detail.position.address) position = detail.position;
-    const contentText = content && content.text.replace(/<br \/>/g, '\n');
+    const contentText = content && content.text;
     const contentindexes = (content && content.indexes) || {};
     let audio = {};
     let rewardQa = {};

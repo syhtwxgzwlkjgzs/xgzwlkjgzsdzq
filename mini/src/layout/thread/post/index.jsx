@@ -527,9 +527,9 @@ class Index extends Component {
     // 6 根据是否存在主题id，选择更新主题、新建主题
     let ret = {};
     if (threadId) {
-      ret = await threadPost.updateThread(threadId);
+      ret = await threadPost.updateThread(threadId, true);
     } else {
-      ret = await threadPost.createThread();
+      ret = await threadPost.createThread(true);
     }
 
     // 7 处理请求数据
