@@ -252,10 +252,10 @@ class PartnerInviteH5Page extends React.Component {
           <SiteInfo threadTotal={countThreads} updataTime={ updataTime }/>
           {/* 站点信息 end */}
           {/* 站点用户 start */}
-          <PartnerInviteUser/>
+          <PartnerInviteUser onUserClick={this.handleJoinSite}/>
           {/* 站点用户 end */}
           {/* 热门内容预览 start */}
-          <PartnerInviteHot/>
+          <PartnerInviteHot unifyOnClick={this.handleJoinSite}/>
           {/* 热门内容预览 end */}
           {
             platform === 'h5'
@@ -293,7 +293,7 @@ class PartnerInviteH5Page extends React.Component {
               )
               : <></>
           }
-          <div className={layout.maskLayer}></div>
+        {/* <div className={layout.maskLayer}></div> */}
         </div>
       </PartnerInviteWrap>
     );

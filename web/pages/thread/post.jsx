@@ -226,7 +226,7 @@ class PostPage extends React.Component {
         this.setPostData({
           video: {
             id: data?.id,
-            thumbUrl: video.url,
+            thumbUrl: data.mediaUrl,
             type: file.type,
           },
         });
@@ -237,10 +237,10 @@ class PostPage extends React.Component {
         this.setPostData({
           audio: {
             id: data?.id,
-            mediaUrl: video.url,
+            mediaUrl: data.mediaUrl,
             type: file.type,
           },
-          audioSrc: video.url,
+          audioSrc: data.mediaUrl,
           audioRecordStatus: 'uploaded',
         });
         this.isAudioUploadDone = true;
@@ -533,12 +533,6 @@ class PostPage extends React.Component {
     if (!isDraft) this.setPostData({ draft: 0 });
     if (this.state.count >= MAX_COUNT) {
       this.postToast(`不能超过${MAX_COUNT}字`);
-      return;
-    }
-    if (this.vditor && !this.vditor.getValue().replace(/```/g, '')
-      .replace(/\n/g, '')
-      .trim()) {
-      this.postToast('不要全部输入空格或换行');
       return;
     }
     const { postData } = this.props.threadPost;

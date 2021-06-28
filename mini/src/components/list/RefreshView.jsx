@@ -24,11 +24,11 @@ const RefreshView = ({noMore = false, loadText = '加载更多...', noMoreText =
                     </>
                 ) : (
                 type !== 'normal' ? (
-                    <view>
+                    <View className={styles.lineSty}>
                       <Text className={styles.noMoreLeft}></Text>
                       <Text>{noMoreText}</Text>
                       <Text className={styles.noMoreRight}></Text>
-                    </view>) : (<Text>{noMoreText}</Text>)
+                    </View>) : (<Text>{noMoreText}</Text>)
                 )
             }
         </View>

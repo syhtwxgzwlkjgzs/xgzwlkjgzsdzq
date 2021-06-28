@@ -44,7 +44,6 @@
     height: 1px;
     float: left;
     margin-right: $margin-4n;
-    margin-top: $margin-2n;
   }
   .noMoreRight{
     background-color: $text-color-placeholder;
@@ -52,7 +51,11 @@
     height: 1px;
     float: right;
     margin-left: $margin-4n;
-    margin-top: $margin-2n;
+  }
+  .lineSty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 

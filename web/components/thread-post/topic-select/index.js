@@ -42,15 +42,16 @@ class TopicSelect extends Component {
   searchInput = () => {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
-      this.fetchTopics();
+      this.fetchTopics(1);
     }, 300);
   }
 
   // 请求
-  async fetchTopics() {
+  async fetchTopics(p) {
     // 1 设置参数
     const { fetchTopic } = this.props.threadPost;
-    const { page, perPage, keywords } = this.state;
+    const { perPage, keywords } = this.state;
+    const page = p || this.state.page;
     const params = { page, perPage };
 
     params.filter = {};

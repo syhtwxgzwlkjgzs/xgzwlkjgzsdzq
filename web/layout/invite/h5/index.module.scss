@@ -26,7 +26,7 @@
     top: rem(-120);
     border-radius: $border-radius-circle;
     background: $white;
-    border: rem(1) solid $white;
+    border: rem(3) solid $white;
     overflow: hidden;
     z-index: 3;
     :global(.dzq-avatar__img),:global(.dzq-avatar__text) {
