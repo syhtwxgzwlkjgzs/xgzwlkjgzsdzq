@@ -226,7 +226,7 @@ class PostPage extends React.Component {
         this.setPostData({
           video: {
             id: data?.id,
-            thumbUrl: video.url,
+            thumbUrl: data.mediaUrl,
             type: file.type,
           },
         });
@@ -237,10 +237,10 @@ class PostPage extends React.Component {
         this.setPostData({
           audio: {
             id: data?.id,
-            mediaUrl: video.url,
+            mediaUrl: data.mediaUrl,
             type: file.type,
           },
-          audioSrc: video.url,
+          audioSrc: data.mediaUrl,
           audioRecordStatus: 'uploaded',
         });
         this.isAudioUploadDone = true;

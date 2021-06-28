@@ -17,7 +17,8 @@ export const getMessageTimestamp = (list) => {
   const diffTimes2 = diffTimes1 - 6 * 24 * 60 * 60 * 1000  // 一周前凌晨时间毫秒数
 
   const handleTimestamp = (curTimestamp) => {
-    const currentTimes = Date.parse(curTimestamp); // 需处理的时间毫秒数
+    const time = curTimestamp.replace(/-/g, '/'); // 兼容IOS时间字符串格式
+    const currentTimes = Date.parse(time); // 需处理的时间毫秒数
 
     const prevTimes = storageTime.length > 0
       ? storageTime[storageTime.length - 1].timestamp
@@ -33,7 +34,7 @@ export const getMessageTimestamp = (list) => {
     }
     // 2 大于1天
     if (isBeyond &&  currentTimes < diffTimes1) {
-      const week = new Date(curTimestamp).getDay();
+      const week = new Date(time).getDay();
       return {
         timestamp: currentTimes,
         showText: weeks[week] + curTimestamp.substr(10, 6),
