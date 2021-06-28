@@ -22,6 +22,7 @@ function avatar(props) {
     user: myself,
     search,
     userType = -1,
+    unifyOnClick = null, // 付费加入，统一点击事件
     withStopPropagation = false, // 是否需要阻止冒泡 默认false不阻止
   } = props;
 
@@ -55,6 +56,10 @@ function avatar(props) {
 
   const followHandler = useCallback(
     async (e) => {
+      if (typeof unifyOnClick === 'function') {
+        unifyOnClick();
+        return;
+      }
       e && e.stopPropagation();
 
       // 对没有登录的先登录
@@ -92,6 +97,10 @@ function avatar(props) {
   );
 
   const messagingHandler = useCallback((e) => {
+    if (typeof unifyOnClick === 'function') {
+      unifyOnClick();
+      return;
+    }
     e && e.stopPropagation();
 
     // 对没有登录的先登录
@@ -111,6 +120,10 @@ function avatar(props) {
 
   const blockingHandler = useCallback(
     async (e) => {
+      if (typeof unifyOnClick === 'function') {
+        unifyOnClick();
+        return;
+      }
       e && e.stopPropagation();
       // 对没有登录的先登录
       if (!myself.isLogin()) {

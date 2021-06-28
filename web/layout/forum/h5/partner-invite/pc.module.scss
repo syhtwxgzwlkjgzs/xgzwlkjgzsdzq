@@ -31,12 +31,12 @@
       top: -60px;
       border-radius: 50%;
       background: $white;
-      border: 1px solid $white;
+      border: 2px solid $primary-color;
       overflow: hidden;
       z-index: 3;
       :global(.dzq-avatar__img),:global(.dzq-avatar__text) {
-        width: 118px;
-        height: 118px;
+        width: 116px;
+        height: 116px;
       }
 
     }
