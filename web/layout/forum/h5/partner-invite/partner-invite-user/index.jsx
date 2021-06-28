@@ -48,7 +48,7 @@ class PartnerInviteUser extends React.Component {
     }
   }
   render() {
-    const { site, forum } = this.props;
+    const { site, forum, onUserClick = () => {} } = this.props;
     const { platform } = site;
     const { isLoading } = this.state;
     const { usersPageData = [], threadsPageData = [] } = forum;
@@ -58,7 +58,7 @@ class PartnerInviteUser extends React.Component {
         <SectionTitle isShowMore={false} icon={{ type: 2, name: 'MemberOutlined' }} title="活跃用户"/>
           {
             !isLoading && usersPageData?.length
-              ? <ActiveUsers data={usersPageData} onItemClick={this.onUserClick} />
+              ? <ActiveUsers data={usersPageData} onItemClick={onUserClick} />
               : <></>
           }
           {
@@ -81,7 +81,7 @@ class PartnerInviteUser extends React.Component {
       <SectionTitle titleStyle={platform === 'pc' ? { padding: '24px 0' } : {}} isShowMore={false} icon={{ type: 2, name: 'MemberOutlined' }} title="活跃用户" />
         {
           !isLoading && usersPageData?.length
-            ? <ActiveUsersMore data={usersPageData} onItemClick={this.onUserClick} noOperation/>
+            ? <ActiveUsersMore data={usersPageData} onItemClick={onUserClick} noOperation/>
             : <></>
         }
         {
