@@ -110,7 +110,7 @@ const BaseLayout = forwardRef((props, ref) => {
       onError={onError}
       onScroll={({ scrollTop }) => {
         setScrollTop(scrollTop);
-        onScroll();
+        onScroll({ scrollTop });
       }}
     >
       {(pageName === 'home' || left) && (
