@@ -8,6 +8,7 @@ import InteractionBox from './interaction-box';
 import Router from '@discuzq/sdk/dist/router';
 import { createAttachment } from '@common/server';
 import { getMessageTimestamp } from '@common/utils/get-message-timestamp';
+import calcImageQuality from '@common/utils/calc-image-quality';
 import styles from './index.module.scss';
 
 const Index = (props) => {
@@ -21,6 +22,7 @@ const Index = (props) => {
   const uploadingImagesRef = useRef([]);
   const listDataLengthRef = useRef(0);
 
+  const viewWidth = window.screen.width;
   let toastInstance = null;
 
   const [showEmoji, setShowEmoji] = useState(false);
@@ -232,6 +234,14 @@ const Index = (props) => {
           }
         });
       }
+
+      // 处理图片格式和体积
+      if (!item.isImageLoading && item.imageUrl) {
+        const [path] = item.imageUrl.split('?');
+        const type = path.substr(path.indexOf('.') + 1);
+        item.renderUrl = `${path}?${calcImageQuality(viewWidth, type, 3)}`;
+      }
+
       return {
         ...item,
         timestamp: item.createdAt,
@@ -314,7 +324,6 @@ const Index = (props) => {
         ref={dialogBoxRef}
         messagesList={messagesList}
         showEmoji={showEmoji}
-        scrollEnd={scrollEnd}
         sendImageAttachment={sendImageAttachment}
       />
       <InteractionBox
