@@ -137,7 +137,7 @@ const InputPop = (props) => {
   }, [checkUser]);
 
   const handleUploadChange = async (list) => {
-    setImageList(list);
+    setImageList([...list]);
   };
 
   // 附件、图片上传之前

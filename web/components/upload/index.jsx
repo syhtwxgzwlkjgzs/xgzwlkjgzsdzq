@@ -68,7 +68,7 @@ export default function DzqUpload(props) {
   return (
     <div className={clsName} onClick={(e) => e.stopPropagation()}>
       <Upload
-        progressRender={(file) => <ProgressRender file={file} />}
+        // progressRender={(file) => <ProgressRender file={file} />}
         listType={listType}
         fileList={formatFileList}
         limit={limit}
