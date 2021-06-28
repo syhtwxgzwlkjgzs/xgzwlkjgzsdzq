@@ -52,9 +52,12 @@ class TopicSelect extends Component {
     const { fetchTopic } = this.props.threadPost;
     const { page, perPage, keywords } = this.state;
     const params = { page, perPage };
+
+    params.filter = {};
     if (keywords) {
-      params.filter = {};
       params.filter.content = keywords;
+    } else {
+      params.filter.recommended = 1;
     }
     // 2 发起请求
     const ret = await fetchTopic(params);
@@ -129,7 +132,7 @@ class TopicSelect extends Component {
           noMore={finish}
           onRefresh={() => this.fetchTopics()}
         >
-          {keywords && this.renderItem({ content: keywords, newTopic: '新话题' })}
+          {keywords && !topics.length && this.renderItem({ content: keywords, newTopic: '新话题' })}
           {topics.map(item => (
             <React.Fragment key={item.topicId}>
               {this.renderItem(item)}

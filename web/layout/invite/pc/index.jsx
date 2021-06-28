@@ -59,7 +59,7 @@ class InvitePCPage extends React.Component {
     const { pageData = [] } = this.props.search.topics || { pageData: [] };
     return (
       <>
-        <UserInfo />
+        <UserInfo {...this.props} />
         <UserCenterFriendPc className={layout.user_center_wrap}/>
         <UserCenterFansPc  className={`${layout.user_center_wrap} invite-pc`}/>
         <Copyright/>

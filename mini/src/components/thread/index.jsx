@@ -50,6 +50,7 @@ class Index extends React.Component {
       e && e.stopPropagation();
       this.handlePraise()
     }
+    
     handlePraise = debounce(() => {
 
       if(this.state.isSendingLike) return;
@@ -117,6 +118,7 @@ class Index extends React.Component {
       }
 
       if (threadId !== '') {
+        this.props.thread.isPositionToComment = false;
         Router.push({url: `/subPages/thread/index?id=${threadId}`})
 
         this.props.index.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })

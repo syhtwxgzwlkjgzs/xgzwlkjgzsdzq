@@ -14,13 +14,7 @@ class Index extends React.Component {
   render() {
     const { site } = this.props;
 
-    return (
-      <ViewAdapter
-        h5={<IndexH5Page />}
-        pc={<IndexPCPage dispatch={this.dispatch} />}
-        title={`我的屏蔽 - ${this.props.site?.siteName}`}
-      />
-    );
+    return <ViewAdapter h5={<IndexH5Page />} pc={<IndexPCPage dispatch={this.dispatch} />} title={`我的屏蔽`} />;
   }
 }
 

@@ -1,21 +1,35 @@
 import React, { useMemo } from 'react';
 import Avatar from '@discuzq/design/dist/components/avatar/index';
-import { View } from '@tarojs/components'
+import { View } from '@tarojs/components';
 import { useCallback } from 'react';
 
 export default function avatar(props) {
-  const { userId = null, image = '', name = '匿', onClick = () => {}, className = '', circle = true, size = 'primary' } = props;
+  const {
+    userId = null,
+    image = '',
+    name = '匿',
+    onClick = () => {},
+    className = '',
+    circle = true,
+    size = 'primary',
+    withStopPropagation = false, // 是否需要阻止冒泡 默认false不阻止
+  } = props;
 
   const userName = useMemo(() => {
     const newName = name?.toLocaleUpperCase()[0];
     return newName;
   }, [name]);
 
-  const clickHandle = useCallback((e) => {
-    e.stopPropagation();
-    if (!userId) return;
-    onClick && onClick(e);
-  }, [userId]);
+  const clickHandle = useCallback(
+    (e) => {
+      if (withStopPropagation) {
+        e.stopPropagation();
+      }
+      if (!userId) return;
+      onClick && onClick(e);
+    },
+    [userId, withStopPropagation],
+  );
 
   if (image && image !== '') {
     return (

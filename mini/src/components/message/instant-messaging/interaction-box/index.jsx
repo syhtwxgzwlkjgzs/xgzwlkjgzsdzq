@@ -95,7 +95,7 @@ const InteractionBox = (props) => {
   const doSubmitClick = async () => {
     setShowEmoji(false);
     if (!typingValue.trim()) return;
-    submit({ messageText: typingValue });
+    submit({ messageText: typingValue, isImage: false });
   };
 
   // 触发图片选择
@@ -164,6 +164,7 @@ const InteractionBox = (props) => {
             submit({
               imageUrl: data.url,
               attachmentId: data.id,
+              isImage: true,
             });
           } else {
             Toast.error({ content: msg || '图片发送失败' });
@@ -182,12 +183,12 @@ const InteractionBox = (props) => {
     const text = typingValue.slice(0, cursorPosition) + emoji.code + typingValue.slice(cursorPosition);
     setTypingValue(text);
     setCursorPosition(cursorPosition + emoji.code.length);
-    setTimeout(() => {
-      setFocus(false);
-      setTimeout(() => {
-        setFocus(true);
-      }, 0);
-    }, 0);
+    // setTimeout(() => {
+    //   setFocus(false);
+    //   setTimeout(() => {
+    //     setFocus(true);
+    //   }, 0);
+    // }, 0);
   };
 
   return (

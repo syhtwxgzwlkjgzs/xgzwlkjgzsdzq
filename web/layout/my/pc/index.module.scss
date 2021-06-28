@@ -6,7 +6,9 @@
     margin-bottom: rem($margin-10);
   }
 }
-
+.borderRadius {
+  border-radius: $border-radius-small;
+}
 .wrapper {
   padding: 0;
 }

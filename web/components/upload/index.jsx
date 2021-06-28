@@ -4,6 +4,7 @@ import { createAttachment } from '@common/server';
 import styles from './index.module.scss';
 import classNames from 'classnames';
 import ProgressRender from './progress-render';
+import { fixImageOrientation } from '@common/utils/exif';
 
 export default function DzqUpload(props) {
   const {
@@ -27,7 +28,8 @@ export default function DzqUpload(props) {
   const post = async (file, list, updater) => {
     // file, list, updater
     const formData = new FormData();
-    formData.append('file', file.originFileObj);
+    const fileImg = await fixImageOrientation(file.originFileObj);
+    formData.append('file', fileImg);
     Object.keys(data).forEach((item) => {
       formData.append(item, data[item]);
     });

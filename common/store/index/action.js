@@ -130,7 +130,7 @@ class IndexAction extends IndexStore {
    async deleteThreadsData({ id } = {}) {
      if (id && this.threads) {
         const { pageData = [] } = this.threads;
-        const newPageData = pageData.filter(item => item.threadId !== id)
+        const newPageData = pageData.filter(item => `${item.threadId}` !== `${id}`)
 
         if (this.threads?.pageData) {
           this.threads.pageData = newPageData;
@@ -195,13 +195,13 @@ class IndexAction extends IndexStore {
         }
       } else {
         if (this.threads && result.data.pageData && page !== 1) {
-          this.threads.pageData.push(...result.data.pageData);
-          const newPageData = this.threads.pageData.slice();
-          this.setThreads({
-            ...(this.adapterList(result.data)),
-            currentPage: result.data.currentPage,
-            pageData: newPageData
-          });
+          const nextThreads = result.data.pageData.map(item => {
+            item.openedMore = false;
+            return item
+          })
+
+          this.threads.pageData.push(...nextThreads);
+          this.threads.currentPage = result.data.currentPage;
         } else {
           // 首次加载
           this.threads = null;

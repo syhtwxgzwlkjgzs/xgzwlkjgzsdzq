@@ -59,7 +59,7 @@ class ThreadH5Page extends React.Component {
       // inputValue: '', // 评论内容
     };
 
-    this.perPage = 5;
+    this.perPage = 20;
     this.page = 1; // 页码
     this.commentDataSort = true;
 
@@ -211,10 +211,10 @@ class ThreadH5Page extends React.Component {
     });
   }
 
-  onUserClick(userId) {
-    if (!userId) return;
-    Router.push({ url: `/user/${userId}` });
-  }
+  // onUserClick(userId) {
+  //   if (!userId) return;
+  //   Router.push({ url: `/user/${userId}` });
+  // }
 
   // 点击更多icon
   onMoreClick = () => {
@@ -609,14 +609,22 @@ class ThreadH5Page extends React.Component {
   replyAvatarClick(reply, comment, floor) {
     if (floor === 2) {
       const { userId } = reply;
-      if(!userId) return;
-      this.props.router.push(`/user/${userId}`)
+      if (!userId) return;
+      this.props.router.push(`/user/${userId}`);
     }
     if (floor === 3) {
       const { commentUserId } = reply;
-      if(!commentUserId) return;
-      this.props.router.push(`/user/${commentUserId}`)
+      if (!commentUserId) return;
+      this.props.router.push(`/user/${commentUserId}`);
     }
+  }
+
+  onUserClick(e) {
+    e && e.stopPropagation();
+    const { threadData } = this.props.thread || {};
+    const useId = threadData?.userId;
+    if (!useId) return;
+    this.props.router.push(`/user/${threadData?.userId}`);
   }
 
   render() {
@@ -687,8 +695,8 @@ class ThreadH5Page extends React.Component {
               onRewardClick={() => this.onRewardClick()}
               onTagClick={() => this.onTagClick()}
               onPayClick={() => this.onPayClick()}
-              onPayClick={() => this.onPayClick()}
-              onUserClick={() => this.onUserClick(this.props.thread?.threadData?.user?.userId)}
+              // onPayClick={() => this.onPayClick()}
+              onUserClick={(e) => this.onUserClick(e)}
             ></RenderThreadContent>
           ) : (
             <LoadingTips type="init"></LoadingTips>
@@ -703,7 +711,7 @@ class ThreadH5Page extends React.Component {
                     router={this.props.router}
                     sort={(flag) => this.onSortChange(flag)}
                     onEditClick={(comment) => this.onEditClick(comment)}
-                    replyAvatarClick={(comment, reply, floor) =>this.replyAvatarClick(comment, reply, floor)}
+                    replyAvatarClick={(comment, reply, floor) => this.replyAvatarClick(comment, reply, floor)}
                   ></RenderCommentList>
                   {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
                   {isNoMore && <NoMore className={layout.noMore} empty={totalCount === 0}></NoMore>}
@@ -804,7 +812,7 @@ class ThreadH5Page extends React.Component {
               <SharePopup
                 visible={this.state.isShowWeiXinShare}
                 onClose={() => this.setState({ isShowWeiXinShare: false })}
-                type='thread'
+                type="thread"
               />
             )}
           </Fragment>

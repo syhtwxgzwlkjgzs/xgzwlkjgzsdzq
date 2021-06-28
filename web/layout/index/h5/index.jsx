@@ -10,7 +10,7 @@ import BaseLayout from '@components/base-layout';
 import initJSSdk from '@common/utils/initJSSdk.js';
 import { getSelectedCategoryIds } from '@common/utils/handleCategory';
 import wxAuthorization from '../../user/h5/wx-authorization';
-import VList from '@components/virtual-list/example/index';
+import VList from '@components/virtual-list/h5/index';
 import classnames from 'classnames';
 
 @inject('site')
@@ -213,12 +213,13 @@ class IndexH5Page extends React.Component {
               noMore={currentPage >= totalPage}
               requestError={threadError.isError}
               errorText={threadError.errorText}
+              platform={'h5'}
               renderItem={(item, index, recomputeRowHeights, onContentHeightChange, measure) => (
                 <ThreadContent
                   onContentHeightChange={measure}
                   onImageReady={measure}
                   onVideoReady={measure}
-                  key={index}
+                  key={`${item.threadId}-${item.updatedAt}`}
                   // showBottomStyle={index !== pageData.length - 1}
                   data={item}
                   className={styles.listItem}

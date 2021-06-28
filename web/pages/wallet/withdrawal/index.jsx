@@ -28,13 +28,8 @@ class WalletPage extends React.Component {
   }
 
   render() {
-    return  (
-      <ViewAdapter 
-        pc={null}
-        h5={<Withdrawal walletData={this.state.walletData} />}
-        title={`提现 - ${this.props.site?.siteName}`}
-      />)
-    }
+    return <ViewAdapter pc={null} h5={<Withdrawal walletData={this.state.walletData} />} title={`提现`} />;
+  }
 }
 
 // eslint-disable-next-line new-cap

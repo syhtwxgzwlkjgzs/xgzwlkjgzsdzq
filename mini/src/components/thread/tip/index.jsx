@@ -43,7 +43,8 @@ import { debounce } from '@common/utils/throttle-debounce.js';
 
     // 点赞头像的总宽度
   const sty = useMemo(() => {
-    return { width: `${22*(renderUsers.length)+4}px` }
+    const imgsLength = renderUsers.length;
+    return { width: `${(16*imgsLength+4*(imgsLength+1))*2}rpx`}
   }, [renderUsers]);
 
   const imgAfterArr = [styles.img, styles.imgAfter2, styles.imgAfter3, styles.imgAfter4, styles.imgAfter5];
@@ -70,7 +71,7 @@ import { debounce } from '@common/utils/throttle-debounce.js';
             }
         </View>
 
-        <PopupList tipData={tipData} visible={visible} onHidden={onHidden} />
+        {visible && <PopupList tipData={tipData} visible={visible} onHidden={onHidden} />}
     </>
   );
 }));

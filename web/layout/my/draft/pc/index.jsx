@@ -68,7 +68,7 @@ class PC extends React.Component {
 
   render() {
     const { index } = this.props;
-    const { currentPage, totalPage } = index.drafts || {};
+    const { currentPage, totalPage, pageData = [] } = index.drafts || {};
     return (
       <BaseLayout
         onRefresh={this.onPullingUp}
@@ -76,6 +76,7 @@ class PC extends React.Component {
         showRefresh={false}
         right={this.renderRight()}
         className="mydraft"
+        isShowLayoutRefresh={!!pageData.length}
       >
         {this.renderContent()}
       </BaseLayout>

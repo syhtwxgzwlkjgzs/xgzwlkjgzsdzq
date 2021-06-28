@@ -68,7 +68,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-
+  width: rem(251);
   .payListItem {
     &:first-child {
       border-radius: 5px 0 0 5px;

@@ -531,11 +531,8 @@ class PostPage extends React.Component {
   // 发布提交
   handleSubmit = async (isDraft) => {
     if (!isDraft) this.setPostData({ draft: 0 });
-    if (this.state.count >= MAX_COUNT) return;
-    if (this.vditor && !this.vditor.getValue().replace(/```/g, '')
-      .replace(/\n/g, '')
-      .trim()) {
-      this.postToast('不要全部输入空格或换行');
+    if (this.state.count >= MAX_COUNT) {
+      this.postToast(`不能超过${MAX_COUNT}字`);
       return;
     }
     const { postData } = this.props.threadPost;
@@ -647,7 +644,7 @@ class PostPage extends React.Component {
     const { code, data, msg } = ret;
     if (code === 0) {
       this.setState({ data });
-      thread.reset();
+      thread.reset({});
       this.toastInstance?.destroy();
       this.setPostData({ threadId: data.threadId });
       // 防止被清除
@@ -688,7 +685,7 @@ class PostPage extends React.Component {
     } else {
       const { categoryId = '' } = data;
       // 首页如果是全部或者是当前分类，则执行数据添加操作
-      if (this.props.index.isNeedAddThread(categoryId)) {
+      if (this.props.index.isNeedAddThread(categoryId) && data?.isApproved) {
         this.props.vlist.resetPosition();
         this.props.baselayout.setJumpingToTop();
         this.props.index.addThread(data);

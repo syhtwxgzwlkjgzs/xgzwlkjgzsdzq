@@ -18,10 +18,9 @@ import setTitle from '@common/utils/setTitle';
  *
  */
 const Index = () => {
-
   const { router } = getCurrentInstance();
 
- // 参数过滤
+  // 参数过滤
   const params = (({ page, subPage, dialogId, username, nickname }) => {
     if (!['index', 'thread', 'financial', 'account', 'chat'].includes(page)) {
       page = 'index';
@@ -36,7 +35,7 @@ const Index = () => {
 
   useEffect(() => {
     Taro.hideHomeButton();
-
+    Taro.hideShareMenu();
     const { page, nickname } = params;
     switch (page) {
       case 'index':

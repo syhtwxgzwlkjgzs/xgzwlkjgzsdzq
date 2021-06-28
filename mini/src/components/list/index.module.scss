@@ -28,14 +28,34 @@
 }
 
 .refreshView {
-  min-height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 14px;
   color: $text-color-placeholder;
+  padding: 24px 0;
+  line-height: $font-line-height-small;
   .spin {
     margin-right: 4px;
+  }
+  .noMoreLeft{
+    background-color: $text-color-placeholder;
+    width: 79px;
+    height: 1px;
+    float: left;
+    margin-right: $margin-4n;
+  }
+  .noMoreRight{
+    background-color: $text-color-placeholder;
+    width: 79px;
+    height: 1px;
+    float: right;
+    margin-left: $margin-4n;
+  }
+  .lineSty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 

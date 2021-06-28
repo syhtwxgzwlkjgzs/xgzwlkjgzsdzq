@@ -7,10 +7,10 @@
 }
 .container {
   box-sizing: border-box;
-  padding: rem(25) rem(16) 0 rem(16);
+  padding: $padding-4n $padding-4n 0 $padding-4n;
   background-color: $white;
-  border-top-right-radius: rem($border-radius-big);
-  border-top-left-radius: rem($border-radius-big);
+  border-top-right-radius: $border-radius-big;
+  border-top-left-radius: $border-radius-big;
   padding-bottom: constant(safe-area-inset-bottom);  ///兼容 IOS<11.2/
   padding-bottom: env(safe-area-inset-bottom);  ///兼容 IOS>11.2/
   position: relative;
@@ -57,7 +57,7 @@
     line-height: 24px;
     text-align: left;
     color: $text-color-primary;
-    margin-bottom: 16px;
+    margin-bottom: $margin-4n;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -134,7 +134,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: $font-size-primary;
+    font-size: $font-size-middle;
     color: $text-color-regular;
     &:before {
       content: ' ';

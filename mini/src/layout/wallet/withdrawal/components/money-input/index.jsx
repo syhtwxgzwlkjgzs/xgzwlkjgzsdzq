@@ -47,6 +47,7 @@ const MoneyInput = (props) => {
           placeholder="0.00"
           onChange={(e) => handleChange(e.target.value)}
           mode="number"
+          placeholder-style="color:#c5c6ca;"
         />
       </View>
       <View className={styles.leastMoney}>

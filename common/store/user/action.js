@@ -79,14 +79,33 @@ class UserAction extends SiteStore {
     // this.editBackgroundUrl = get(this.userInfo, 'backgroundUrl');
   }
 
+  @action
+  diffPicAndUpdateUserInfo(data) {
+    const transformedData = Object.assign({}, data);
+
+    if (data.backgroundUrl && this.backgroundUrl) {
+      const originBackgroundFilename = this.backgroundUrl?.split('?')[0];
+      const nextBackgroundFilename = data.backgroundUrl?.split('?')[0];
+  
+      if (originBackgroundFilename === nextBackgroundFilename) {
+        transformedData.backgroundUrl = this.backgroundUrl;
+      }
+    }
+
+    this.setUserInfo(transformedData);
+  }
+
   // 登录后获取新的用户信息
   @action
   async updateUserInfo(id) {
     const userInfo = await readUser({ params: { pid: id } });
+    if (!userInfo || userInfo?.code !== 0) {
+      return;
+    }
     const userPermissions = await readPermissions({});
-    userInfo.data && this.setUserInfo(userInfo.data);
-    userPermissions.data && this.setUserPermissions(userPermissions.data);
-    return userInfo.code === 0 && userInfo.data;
+    userInfo?.data && this.diffPicAndUpdateUserInfo(userInfo.data);
+    userPermissions?.data && this.setUserPermissions(userPermissions.data);
+    return userInfo?.code === 0 && userInfo.data;
   }
 
   // 获取指定用户的用户信息，用于获取他人首页

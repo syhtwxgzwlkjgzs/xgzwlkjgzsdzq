@@ -10,15 +10,17 @@ import { inject, observer } from 'mobx-react';
 @observer
 class FindPayPwdPage extends React.Component {
   render() {
-    return <ViewAdapter 
-    h5={(
-      <div>
-        <UserCenterEditFindPayPwd {...this.props}  />
-      </div>
-    )}
-    pc={null}
-    title={`找回支付密码 - ${this.props.site?.siteName}`}
-  />
+    return (
+      <ViewAdapter
+        h5={
+          <div>
+            <UserCenterEditFindPayPwd {...this.props} />
+          </div>
+        }
+        pc={null}
+        title={`找回支付密码`}
+      />
+    );
   }
 }
 

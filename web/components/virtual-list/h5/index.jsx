@@ -7,9 +7,10 @@ import { getImmutableTypeHeight, getSticksHeight } from '../utils';
 
 import { List, CellMeasurer, CellMeasurerCache, AutoSizer, InfiniteLoader } from 'react-virtualized';
 import { inject, observer } from 'mobx-react';
+import BacktoTop from '@components/list/backto-top';
+// import backtoTopFn from '@common/utils/backto-top';
 
 const immutableHeightMap = {}; // 不可变的高度
-
 let preScrollTop = 0;
 let scrollTimer;
 // 增强cache实例
@@ -40,8 +41,9 @@ function extendCache(instance) {
     return height;
   };
 }
+let loadData = false;
 
-function Home(props, ref) {
+function VList(props, ref) {
   let cache = props.vlist.cache;
 
   if (!cache) {
@@ -56,15 +58,16 @@ function Home(props, ref) {
 
   const [list, setList] = useState([{ type: 'header' }, ...(props.list || []), { type: 'footer' }]);
   let listRef = useRef(null);
-  let loadData = false;
   const rowCount = list.length;
 
   const [flag, setFlag] = useState(true);
+  const [scrollTop, setScrollTop] = useState(0);
+  const winHeight = window.innerHeight;
 
   // 监听list列表
   useEffect(() => {
     setList([{ type: 'header' }, ...(props.list || []), { type: 'footer' }]);
-  }, [props.list]);
+  }, [props.list?.length]);
 
   // 监听置顶列表
   useEffect(() => {
@@ -78,7 +81,11 @@ function Home(props, ref) {
   }, [listRef?.Grid?.getTotalRowsHeight()]);
 
   // 重新计算指定的行高
-  const recomputeRowHeights = (index) => {
+  const recomputeRowHeights = (index, updatedData) => {
+    // TODO:先临时处理付费后，列表页面内容不更新的的问题
+    if (updatedData) {
+      list[index] = updatedData;
+    }
     listRef?.recomputeRowHeights(index);
   };
 
@@ -107,9 +114,9 @@ function Home(props, ref) {
       case 'header':
         return props.children;
       case 'footer':
-        return <BottomView noMore={props.noMore} isError={props.requestError} errorText={props.errorText}></BottomView>;
+        return <BottomView noMore={props.noMore} isError={props.requestError} errorText={props.errorText} type='line' platform={props.platform}></BottomView>;
       default:
-        return <Item data={data} measure={measure} recomputeRowHeights={() => recomputeRowHeights(index)} />;
+        return <Item data={data} measure={measure} recomputeRowHeights={(data) => recomputeRowHeights(index, data)} />;
     }
   };
 
@@ -147,6 +154,7 @@ function Home(props, ref) {
   // 滚动事件
   const onScroll = ({ scrollTop, clientHeight, scrollHeight }) => {
     // scrollToPosition = scrollTop;
+    setScrollTop(scrollTop);
     setFlag(!(scrollTop < preScrollTop));
     preScrollTop = scrollTop;
 
@@ -158,9 +166,8 @@ function Home(props, ref) {
     if (scrollTop !== 0) {
       props.vlist.setPosition(scrollTop);
     }
-
     // if (scrollTop + (clientHeight * 4) >= scrollHeight && !loadData) {
-    if ( scrollHeight / 4 <= scrollTop && !loadData) {
+    if (((scrollTop + (clientHeight * 4)) >= scrollHeight) && !loadData) {
       loadData = true;
       props.loadNextPage().finally(() => {
         loadData = false;
@@ -170,8 +177,15 @@ function Home(props, ref) {
 
   const isRowLoaded = ({ index }) => !!list[index];
 
-  const loadMoreRows = () => {
-    return Promise.resolve();
+  const loadMoreRows = () => Promise.resolve();
+
+  const handleBacktoTop = () => {
+    // backtoTopFn(scrollTop, (top) => {
+    //   setScrollTop(top);
+    // });
+    listRef && listRef.scrollToPosition(0);
+    props.vlist.setPosition(0);
+    // setScrollTop(0);
   };
 
   const clearAllCache = () => {
@@ -212,6 +226,7 @@ function Home(props, ref) {
                 onRowsRendered={(...props) => {
                   onRowsRendered(...props);
                 }}
+                // scrollTop={scrollTop}
                 rowCount={rowCount}
                 rowHeight={getRowHeight}
                 rowRenderer={rowRenderer}
@@ -222,8 +237,10 @@ function Home(props, ref) {
           </AutoSizer>
         )}
       </InfiniteLoader>
+
+      {scrollTop > winHeight * 2 && <BacktoTop h5 onClick={handleBacktoTop} />}
     </div>
   );
 }
 
-export default observer(inject('vlist')(forwardRef(Home)));
+export default observer(inject('vlist')(forwardRef(VList)));

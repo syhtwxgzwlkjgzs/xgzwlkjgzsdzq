@@ -55,9 +55,34 @@
   justify-content: center;
   font-size: rem($font-size-primary);
   color: $text-color-placeholder;
-  padding-top: rem(11);
+  padding: rem(11) 0;
+  line-height: rem($font-line-height-small);
   .spin {
     margin-right: rem(4);
+    color: $text-color-placeholder;
+  }
+  .noMoreLeft{
+    background-color: $text-color-placeholder;
+    width: rem(79);
+    height: rem(1);
+    float: left;
+    margin-right: rem($margin-4n);
+  }
+  .noMoreRight{
+    background-color: $text-color-placeholder;
+    width: rem(79);
+    height: rem(1);
+    float: right;
+    margin-left: rem($margin-4n);
+  }
+  &.custom{
+    padding-top: 0;
+    display: block;
+  }
+  .lineSty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
@@ -67,4 +92,32 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.backtotop {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: $zindex-backtotop;
+  width: 40px;
+  height: 40px;
+  border: $border-solid-1;
+  border-radius: $border-radius-small;
+  box-shadow: $shadow-color2;
+  background-color: $white;
+  cursor: pointer;
+  &.pc:hover {
+    background-color: $primary-color6;
+    path {
+      fill: $white;
+    }
+  }
+  &.h5 {
+    right: 8px;
+    bottom: calc(constant(safe-area-inset-bottom) + 80px);
+    bottom: calc(env(safe-area-inset-bottom) + 80px);
+  }
 }

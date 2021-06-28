@@ -11,14 +11,15 @@ class WalletPage extends React.Component {
     this.state = {
       walletData: null,
     };
+    Taro.hideShareMenu();
   }
 
   setNavigationBarStyle = () => {
     Taro.setNavigationBarColor({
       frontColor: '#ffffff',
-      backgroundColor: '#ffffff'
-    })
-  }
+      backgroundColor: '#000000',
+    });
+  };
 
   componentDidMount() {
     this.getWallet();
@@ -32,15 +33,13 @@ class WalletPage extends React.Component {
     } else {
       Toast.error({
         content: res.msg,
-        duration: 2000
-      })
+        duration: 2000,
+      });
     }
   };
 
   render() {
-    return (
-      <Wallet walletData={this.state.walletData}></Wallet>
-    );
+    return <Wallet walletData={this.state.walletData}></Wallet>;
   }
 }
 
