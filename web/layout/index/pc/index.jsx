@@ -206,6 +206,7 @@ class IndexPCPage extends React.Component {
 
   // 中间 -- 筛选 置顶信息 是否新内容发布 主题内容
   renderContent = (data) => {
+    console.log('index', data);
     const { visible, conNum, isShowDefault } = this.state;
     const { sticks, threads } = data;
     const { pageData } = threads || {};

@@ -268,6 +268,19 @@ class IndexAction extends IndexStore {
     }
   }
 
+  // 获取指定的置顶帖子数据
+  findAssignSticks(threadId) {
+    if (this.sticks) {
+      for (let i = 0; i < this.sticks.length; i++)  {
+        debugger
+        if (this.sticks[i].threadId === threadId) {
+          return { index: i, data: this.sticks[i] };
+        }
+      }
+      return null;
+    }
+  }
+
   /**
    * 写入分类数据
    * @param {Object} data
@@ -325,12 +338,34 @@ class IndexAction extends IndexStore {
    */
   @action
   updateAssignThreadAllData(threadId, threadInfo) {
+    debugger
     if (!threadId || !threadInfo || !Object.keys(threadInfo).length) return false;
     const targetThread = this.findAssignThread(typeofFn.isNumber(threadId) ? threadId : +threadId);
     if (!targetThread) return false;
     const { index, data } = targetThread;
     this.threads.pageData[index] = threadInfo;
+debugger
+    this.updateAssignSticksInfo(threadId, threadInfo)
+
     return true;
+  }
+
+  @action
+  updateAssignSticksInfo(threadId, threadInfo) {
+    debugger
+    const targetThread = this.findAssignSticks(threadId);
+    if (!targetThread || targetThread.length === 0) return;
+
+    const { index, data } = targetThread;
+
+    this.sticks[index] = { 
+      canViewPosts: threadInfo?.ability?.canViewPost, 
+      categoryId: threadInfo?.categoryId, 
+      title: threadInfo.title || threadInfo?.content?.text, 
+      updatedAt: threadInfo?.updatedAt,
+      threadId: threadInfo?.threadId
+    };
+    debugger
   }
 
   /**

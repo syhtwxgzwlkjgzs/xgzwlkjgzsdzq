@@ -30,7 +30,7 @@ const TopNews = ({ data = [], router, platform = 'h5'}) => {
     }
     return title
   }
-
+console.log(data);
   return (
     <div className={styles.list}>
       {data?.map((item, index) => (
