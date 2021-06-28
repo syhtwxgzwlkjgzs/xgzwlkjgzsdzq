@@ -117,8 +117,10 @@
 }
 
 .verticalScrollbar {
+  margin-right: -4px;
   &::-webkit-scrollbar {
-    display: none;
+    width: 4px;
+    height: 4px;
   }
   &:hover {
     margin-right: -4px;
@@ -128,20 +130,21 @@
       height: 4px;
       border-radius: $border-radius-small;
     }
+
+    // 滚动条轨道
+    &::-webkit-scrollbar-track {
+      background: $border-color;
+    }
+
+    &::-webkit-scrollbar-corner {
+      background: $border-color;
+    }
+
+    // 滚动条上的滚动滑块
+    &::-webkit-scrollbar-thumb {
+      background: $border-shadow-color;
+      border-radius: 4px;
+    }
   }
 
-  // 滚动条轨道
-  &::-webkit-scrollbar-track {
-    background: $border-color;
-  }
-
-  &::-webkit-scrollbar-corner {
-    background: $border-color;
-  }
-
-  // 滚动条上的滚动滑块
-  &::-webkit-scrollbar-thumb {
-    background: $border-shadow-color;
-    border-radius: 4px;
-  }
 }

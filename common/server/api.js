@@ -236,13 +236,14 @@ http.interceptors.response.use((res) => {
       });
     }
     default:  // 200 状态码
-      if (status === 200) {
-        return Promise.resolve({
-          code: data.Code,
-          data: reasetData(data.Data),
-          msg: data.Message,
-        });
-      }
+    break;
+  }
+  if (status === 200) {
+    return Promise.resolve({
+      code: data.Code,
+      data: reasetData(data.Data),
+      msg: data.Message,
+    });
   }
   return Promise.resolve({
     code: status,
