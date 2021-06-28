@@ -288,6 +288,15 @@ class Index extends Component {
           showEmoji: !this.state.showEmoji
         });
         break;
+      case THREAD_TYPE.image:
+        this.props.pageScrollTo({ selector: "#thread-post-image" });
+        break;
+      case THREAD_TYPE.voice:
+        this.props.pageScrollTo({ selector: "#thread-post-voice" });
+        break;
+      case THREAD_TYPE.file:
+        this.props.pageScrollTo({ selector: "#thread-post-file" });
+        break;
     }
     if (nextRoute) Taro.navigateTo({ url: nextRoute });
 
@@ -751,7 +760,11 @@ class Index extends Component {
               />
 
               <View className={styles.plugin} onClick={e => e.stopPropagation()}>
-                <GeneralUpload type={operationType} audioUpload={(file) => { this.yundianboUpload('audio', file) }}>
+                <GeneralUpload
+                  type={operationType}
+                  pageScrollTo={this.props.pageScrollTo}
+                  audioUpload={(file) => { this.yundianboUpload('audio', file) }}
+                >
                   {video.thumbUrl && (
                     <Units
                       type='video'
