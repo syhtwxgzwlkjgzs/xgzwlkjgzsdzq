@@ -278,6 +278,7 @@ class Index extends Component {
         break;
       case THREAD_TYPE.video:
         this.handleVideoUpload();
+        postData.video.thumbUrl && this.props.pageScrollTo({ selector: '#thread-post-video' });
         break;
       case THREAD_TYPE.anonymity:
         if (postData.anonymous) this.props.threadPost.setPostData({ anonymous: 0 });
@@ -366,6 +367,7 @@ class Index extends Component {
                 thumbUrl: mediaUrl,
               },
             });
+            this.props.pageScrollTo({ selector: '#thread-post-video' });
           } else if (type === 'audio') {
             setPostData({
               audio: {
@@ -765,21 +767,17 @@ class Index extends Component {
                   pageScrollTo={this.props.pageScrollTo}
                   audioUpload={(file) => { this.yundianboUpload('audio', file) }}
                 >
-                  {video.thumbUrl && (
-                    <Units
-                      type='video'
-                      deleteShow
-                      src={video.thumbUrl}
-                      onDelete={() => setPostData({ video: {} })}
-                      onVideoLoaded={() => {
-                        Taro.pageScrollTo({
-                          scrollTop: 3000,
-                          // selector: '#thread-post-video',
-                          complete: (a,b,c) => {console.log(a,b,c)}
-                        });
-                      }}
-                    />
-                  )}
+                  <View id='thread-post-video'>
+                    {video.thumbUrl && (
+                      <Units
+                        type='video'
+                        deleteShow
+                        src={video.thumbUrl}
+                        onDelete={() => setPostData({ video: {} })}
+                        onVideoLoaded={() => {}}
+                      />
+                    )}
+                  </View>
                 </GeneralUpload>
                 {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => setPostData({ product: {} })} />}
               </View>

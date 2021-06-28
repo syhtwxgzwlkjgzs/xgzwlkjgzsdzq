@@ -40,7 +40,7 @@ const Index = (props) => {
 
   // 视频展示
   const video = (
-    <View className={deleteShow && styles['video-box']} id='thread-post-video'>
+    <View className={deleteShow && styles['video-box']}>
       {deleteShow &&
         <View className={styles['video-delete']} onClick={onDelete}>
           <Icon name="DeleteOutlined" />
