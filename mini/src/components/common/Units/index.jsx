@@ -63,7 +63,7 @@ const Index = (props) => {
 
   // 商品展示
   const product = (
-    <View className={styles['product']}>
+    <View className={styles['product']} id='thread-post-product'>
       <Image className={styles['image']} src={productSrc}></Image>
       <View className={styles['content']}>
         <Text className={styles['desc']}>{productDesc}</Text>

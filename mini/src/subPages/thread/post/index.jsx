@@ -40,10 +40,11 @@ const Index = () => {
 
     switch (routerAction) {
       case THREAD_TYPE.at:
-        pageScrollTo();
-        break;
       case THREAD_TYPE.topic:
         pageScrollTo();
+        break;
+      case THREAD_TYPE.goods:
+        pageScrollTo({ selector: "#thread-post-product" });
         break;
     }
     setRouterAction(null);
