@@ -19,7 +19,7 @@ const DialogBox = (props, ref) => {
 
   const renderImage = (data) => {
     const { isImageLoading, imageUrl, renderUrl, imageWidth, imageHeight } = data;
-    let [width, height] = [200, 200];
+    let [width, height] = [150, 150];
     if (isImageLoading) {
       [width, height] = getMessageImageSize(imageWidth, imageHeight, isPC);
     } else {
