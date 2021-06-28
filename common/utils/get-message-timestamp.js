@@ -28,7 +28,7 @@ export const getMessageTimestamp = (list) => {
     if (isBeyond && currentTimes < diffTimes2) {
       return {
         timestamp: currentTimes,
-        showText: curTimestamp.slice(0, 16),
+        showText: curTimestamp.substr(0, 16),
       };
     }
     // 2 大于1天
@@ -36,14 +36,14 @@ export const getMessageTimestamp = (list) => {
       const week = new Date(curTimestamp).getDay();
       return {
         timestamp: currentTimes,
-        showText: weeks[week] + curTimestamp.slice(10, 16),
+        showText: weeks[week] + curTimestamp.substr(10, 6),
       };
     }
     // 3 当天
     if (isBeyond) {
       return {
         timestamp: currentTimes,
-        showText: curTimestamp.slice(11, 17),
+        showText: curTimestamp.substr(11, 5),
       };
     }
 

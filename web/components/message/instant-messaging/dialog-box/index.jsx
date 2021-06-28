@@ -83,7 +83,7 @@ const DialogBox = (props, ref) => {
           const { id, timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl, userId, nickname } = item;
           return (
             <React.Fragment key={id}>
-              {displayTimePanel && <div className={styles.msgTime}>{diffDate(timestamp)}</div>}
+              {displayTimePanel && <div className={styles.msgTime}>{timestamp}</div>}
               <div className={`${ownedBy === 'myself' ? `${styles.myself}` : `${styles.itself}`} ${styles.persona}`}>
                 <div className={styles.profileIcon} onClick={() => {
                   userId && Router.push({ url: `/user/${userId}` });
