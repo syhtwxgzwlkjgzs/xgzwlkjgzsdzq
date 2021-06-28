@@ -168,6 +168,7 @@ class Index extends React.Component {
       }
 
       if (threadId !== '') {
+        this.props.thread.isPositionToComment = false;
         this.props.router.push(`/thread/${threadId}`);
 
         this.props.index.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
