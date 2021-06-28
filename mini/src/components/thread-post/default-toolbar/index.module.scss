@@ -1,16 +1,13 @@
 @import '@styles/index.scss';
 
 .container {
-  height: calc(45px + constant(safe-area-inset-bottom));
-  height: calc(45px + env(safe-area-inset-bottom));
+  height: 45px;
   padding: 0 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: $font-size-label;
   background: $body-bg-color;
-  padding-bottom: constant(safe-area-inset-bottom);
-  padding-bottom: env(safe-area-inset-bottom);
 
   .plug-icon {
     margin-right: 24px;

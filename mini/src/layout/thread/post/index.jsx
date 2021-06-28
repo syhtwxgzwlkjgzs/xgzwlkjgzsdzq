@@ -704,7 +704,7 @@ class Index extends Component {
     } = this.state;
     const navStyle = {
       height: `${navInfo.navHeight}px`,
-      marginTop: `${navInfo.statusBarHeight}px`,
+      paddingTop: `${navInfo.statusBarHeight}px`,
     }
     const contentStyle = {
       marginTop: navInfo.statusBarHeight > 30 ? `${navInfo.navHeight / 2}px` : '0px',
@@ -774,76 +774,76 @@ class Index extends Component {
             </View>
           </View>
 
-          {/* 插入内容tag展示区 */}
-          <View className={styles.tags} style={{ display: bottomHeight ? 'none' : 'block' }}>
-            {(permissions?.insertPosition?.enable) &&
-              <View className={styles['location-bar']}>
-                <Position
-                  currentPosition={position}
-                  positionChange={(position) => {
-                    setPostData({ position });
-                  }}
-                  canJumpToChoose={() => {
-                    return this.checkAudioRecordStatus();
-                  }}
-                />
-              </View>
-            }
-
-            {(Boolean(postData.price || postData.attachmentPrice) || redpacket.price || rewardQa.value) && (
-              <View className={styles['tag-toolbar']}>
-                {/* 插入付费tag */}
-                {(Boolean(postData.price || postData.attachmentPrice)) && (
-                  <Units
-                    type='tag'
-                    style={{ marginTop: 0, paddingRight: '8px' }}
-                    tagContent={`付费总额${(postData.price || postData.attachmentPrice).toFixed(2)}元`}
-                    onTagClick={() => {
-                      if (postData.price) {
-                        this.handlePluginClick({ type: THREAD_TYPE.paidPost })
-                      } else if (postData.attachmentPrice) {
-                        this.handlePluginClick({ type: THREAD_TYPE.paidAttachment })
-                      }
-                    }}
-                    onTagRemoveClick={() => {
-                      setPostData({
-                        price: 0,
-                        attachmentPrice: 0
-                      })
-                    }}
-                  />
-                )}
-                {/* 红包tag */}
-                {redpacket.price &&
-                  <Units
-                    type='tag'
-                    style={{ marginTop: 0, paddingRight: '8px' }}
-                    tagContent={this.redpacketContent()}
-                    onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.redPacket })}
-                    isCloseShow={this.state.canEditRedpacket}
-                    onTagRemoveClick={() => { setPostData({ redpacket: {} }) }}
-                  />
-                }
-                {/* 悬赏tag */}
-                {rewardQa.value &&
-                  <Units
-                    type='tag'
-                    style={{ marginTop: 0, paddingRight: '8px' }}
-                    tagContent={`悬赏金额${Number(rewardQa.value).toFixed(2)}元\\结束时间 ${rewardQa.times}`}
-                    onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
-                    isCloseShow={this.state.canEditReward}
-                    onTagRemoveClick={() => { setPostData({ rewardQa: {} }) }}
-                  />
-                }
-              </View>
-            )}
-          </View>
-
           {/* 工具栏区域、include各种插件触发图标、发布等 */}
           <View
             className={styles.toolbar}
             style={{ transform: `translateY(-${bottomHeight}px)`, bottom: bottomHeight ? 0 : '' }}
           >
+            {/* 插入内容tag展示区 */}
+            <View className={styles.tags} style={{ display: bottomHeight ? 'none' : 'block' }}>
+              {(permissions?.insertPosition?.enable) &&
+                <View className={styles['location-bar']}>
+                  <Position
+                    currentPosition={position}
+                    positionChange={(position) => {
+                      setPostData({ position });
+                    }}
+                    canJumpToChoose={() => {
+                      return this.checkAudioRecordStatus();
+                    }}
+                  />
+                </View>
+              }
+              {(Boolean(postData.price || postData.attachmentPrice) || redpacket.price || rewardQa.value) && (
+                <View className={styles['tag-toolbar']}>
+                  {/* 插入付费tag */}
+                  {(Boolean(postData.price || postData.attachmentPrice)) && (
+                    <Units
+                      type='tag'
+                      style={{ marginTop: 0, paddingRight: '8px' }}
+                      tagContent={`付费总额${(postData.price || postData.attachmentPrice).toFixed(2)}元`}
+                      onTagClick={() => {
+                        if (postData.price) {
+                          this.handlePluginClick({ type: THREAD_TYPE.paidPost })
+                        } else if (postData.attachmentPrice) {
+                          this.handlePluginClick({ type: THREAD_TYPE.paidAttachment })
+                        }
+                      }}
+                      onTagRemoveClick={() => {
+                        setPostData({
+                          price: 0,
+                          attachmentPrice: 0
+                        })
+                      }}
+                    />
+                  )}
+                  {/* 红包tag */}
+                  {redpacket.price &&
+                    <Units
+                      type='tag'
+                      style={{ marginTop: 0, paddingRight: '8px' }}
+                      tagContent={this.redpacketContent()}
+                      onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.redPacket })}
+                      isCloseShow={this.state.canEditRedpacket}
+                      onTagRemoveClick={() => { setPostData({ redpacket: {} }) }}
+                    />
+                  }
+                  {/* 悬赏tag */}
+                  {rewardQa.value &&
+                    <Units
+                      type='tag'
+                      style={{ marginTop: 0, paddingRight: '8px' }}
+                      tagContent={`悬赏金额${Number(rewardQa.value).toFixed(2)}元\\结束时间 ${rewardQa.times}`}
+                      onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
+                      isCloseShow={this.state.canEditReward}
+                      onTagRemoveClick={() => { setPostData({ rewardQa: {} }) }}
+                    />
+                  }
+                </View>
+              )}
+            </View>
+
+            {/* 工具栏 */}
             <PluginToolbar
               operationType={operationType}
               isOpenQcloudVod={this.props.site.isOpenQcloudVod}
