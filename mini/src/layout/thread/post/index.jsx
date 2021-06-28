@@ -288,6 +288,7 @@ class Index extends Component {
         this.setState({
           showEmoji: !this.state.showEmoji
         });
+        this.props.pageScrollTo();
         break;
       case THREAD_TYPE.image:
         this.props.pageScrollTo({ selector: "#thread-post-image" });
