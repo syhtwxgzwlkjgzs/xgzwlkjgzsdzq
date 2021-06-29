@@ -206,6 +206,7 @@ class IndexH5Page extends React.Component {
             </div>
 
             <VList
+              showTabBar
               list={pageData}
               sticks={sticks}
               onScroll={this.handleScroll}
