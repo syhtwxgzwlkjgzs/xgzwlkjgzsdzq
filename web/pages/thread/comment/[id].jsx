@@ -7,6 +7,7 @@ import CommentPCPage from '@layout/thread/comment/pc';
 import ErrorPCPage from '@layout/error/pc';
 import ErrorH5Page from '@layout/error/h5';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
+import HOCWithLogin from '@middleware/HOCWithLogin';
 import Router from '@discuzq/sdk/dist/router';
 import ViewAdapter from '@components/view-adapter';
 
@@ -107,4 +108,4 @@ class CommentDetail extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default withRouter(HOCFetchSiteData(CommentDetail));
+export default HOCFetchSiteData(HOCWithLogin(withRouter(CommentDetail)));
