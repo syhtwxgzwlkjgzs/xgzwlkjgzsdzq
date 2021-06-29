@@ -30,6 +30,13 @@
       {
         "loose": true
       }
+    ],
+    [
+      "@discuzq/design-babel-plugin",
+      {
+        "libraryName": "@discuzq/design",
+        "libraryDirectory": "dist/components"
+      }
     ]
   ]
 }
