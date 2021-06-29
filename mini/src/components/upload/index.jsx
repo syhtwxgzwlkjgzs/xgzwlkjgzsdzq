@@ -98,7 +98,7 @@ function DzqUpload(props) {
   return (
     <View className={clsName}>
       <Upload
-        progressRender={(file) => <ProgressRender file={file} />}
+        // progressRender={(file) => <ProgressRender file={file} />}
         listType={listType}
         fileList={fileList}
         limit={limit}

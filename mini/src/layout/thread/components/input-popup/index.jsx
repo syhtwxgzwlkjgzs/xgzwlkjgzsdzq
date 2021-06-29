@@ -1,5 +1,5 @@
 import React, { useEffect, useState, createRef, Fragment } from 'react';
-import { View, ScrollView } from '@tarojs/components';
+import { View } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import Popup from '@discuzq/design/dist/components/popup/index';
 import Textarea from '@discuzq/design/dist/components/textarea/index';
@@ -11,7 +11,6 @@ import { readEmoji } from '@common/server';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 import { debounce } from '@common/utils/throttle-debounce';
 import Emoji from '@components/emoji';
-import AtSelect from '@components/thread-post/at-select';
 import styles from './index.module.scss';
 import ImageUpload from '../image-upload';
 
@@ -30,6 +29,8 @@ const InputPop = (props) => {
   const [imageUploading, setImageUploading] = useState(false);
   const [bottomHeight, setBottomHeight] = useState(0);
 
+  const [focus, setFocus] = useState(true);
+
   // 输入框光标位置
   const [cursorPos, setCursorPos] = useState(0);
   const onChange = (e) => {
@@ -42,7 +43,7 @@ const InputPop = (props) => {
 
   // 监听键盘的高度
   Taro.onKeyboardHeightChange((res) => {
-    setBottomHeight(res?.height || 0);
+    setBottomHeight((res?.height || 0) - 1);
   });
 
   // 点击发布
@@ -82,6 +83,9 @@ const InputPop = (props) => {
     setShowAt(false);
     setShowPicture(false);
 
+    textareaRef.current.blur();
+    setFocus(false);
+
     // 请求表情地址
     if (!emojis?.length) {
       const ret = await readEmoji();
@@ -115,29 +119,26 @@ const InputPop = (props) => {
     setValue(newValue);
     setCursorPos(cursorPos + emoji.code.length);
 
-    // setShowEmojis(false);
+    textareaRef.current.focus();
+    // setFocus(true)
+
+    setShowEmojis(false);
   };
 
-  // 完成@人员选择
-  // const onAtListChange = (atList) => {
-  //   // 在光标位置插入
-  //   const atListStr = atList.map((atUser) => ` @${atUser} `).join('');
-  //   const insertPosition = cursorPos || 0;
-  //   const newValue = value.substr(0, insertPosition) + (atListStr || '') + value.substr(insertPosition);
-  //   setValue(newValue);
-
-  //   setShowEmojis(false);
-  // };
   useEffect(() => {
     // 在光标位置插入
     const atListStr = checkUser.map((atUser) => ` @${atUser} `).join('');
     const insertPosition = cursorPos || 0;
     const newValue = value.substr(0, insertPosition) + (atListStr || '') + value.substr(insertPosition);
     setValue(newValue);
+    if (textareaRef?.current) {
+      textareaRef.current.focus();
+      setFocus(true);
+    }
   }, [checkUser]);
 
   const handleUploadChange = async (list) => {
-    setImageList(list);
+    setImageList([...list]);
   };
 
   // 附件、图片上传之前
@@ -202,12 +203,17 @@ const InputPop = (props) => {
     });
   };
 
-  return (
-    <View>
-      <Popup position="bottom" visible={visible} onClose={onCancel} customScroll={true}>
-        <View className={styles.container}>
-          <View className={styles.main}>
-            <ScrollView scrollY className={styles.valueScroll}>
+  const onClick = () => {
+    typeof onCancel === 'function' && onCancel();
+  };
+
+  return visible ? (
+    <View className={styles.body}>
+      <View className={styles.popup} onClick={onClick}>
+        <View onClick={(e) => e.stopPropagation()}>
+          <View className={styles.container}>
+            <View className={styles.main}>
+              {/* <ScrollView scrollY className={styles.valueScroll}> */}
               <Textarea
                 className={styles.input}
                 maxLength={5000}
@@ -221,77 +227,78 @@ const InputPop = (props) => {
                   onChange(e);
                   setValue(e.target.value);
                 }, 100)}
-                onFocus={() => setShowEmojis(false)}
+                // onFocus={() => setShowEmojis(false)}
                 placeholder={inputText}
                 disabled={loading}
                 placeholderClass={styles.placeholder}
                 forwardedRef={textareaRef}
+                focus={focus}
                 fixed={true}
                 adjustPosition={false}
-                autoHeight={true}
+                // autoHeight={false}
               ></Textarea>
-            </ScrollView>
+              {/* </ScrollView> */}
 
-            {showPicture && (
-              <Fragment>
-                <View className={styles.imageUpload}>
-                  <ImageUpload
-                    fileList={imageList}
-                    onChange={handleUploadChange}
-                    onComplete={onComplete}
-                    beforeUpload={(cloneList, showFileList) => beforeUpload(cloneList, showFileList, THREAD_TYPE.image)}
-                    onFail={onFail}
-                  />
-                </View>
-                <Divider className={styles.divider}></Divider>
-              </Fragment>
-            )}
+              {showPicture && (
+                <Fragment>
+                  <View className={styles.imageUpload}>
+                    <ImageUpload
+                      fileList={imageList}
+                      onChange={handleUploadChange}
+                      onComplete={onComplete}
+                      beforeUpload={(cloneList, showFileList) =>
+                        beforeUpload(cloneList, showFileList, THREAD_TYPE.image)
+                      }
+                      onFail={onFail}
+                    />
+                  </View>
+                  <Divider className={styles.divider}></Divider>
+                </Fragment>
+              )}
+            </View>
+
+            <View className={styles.button}>
+              <View className={styles.operates}>
+                <Icon
+                  className={classnames(styles.operate, showEmojis && styles.actived)}
+                  name="SmilingFaceOutlined"
+                  size={20}
+                  onClick={onEmojiIconClick}
+                ></Icon>
+                <Icon
+                  className={classnames(styles.operate, showAt && styles.actived)}
+                  name="AtOutlined"
+                  size={20}
+                  onClick={onAtIconClick}
+                ></Icon>
+                <Icon
+                  className={classnames(styles.operate, showPicture && styles.actived)}
+                  name="PictureOutlinedBig"
+                  size={20}
+                  onClick={onPcitureIconClick}
+                ></Icon>
+              </View>
+              <View
+                onClick={onSubmitClick}
+                className={classnames(styles.ok, (loading || imageUploading) && styles.disabled)}
+              >
+                发布
+              </View>
+            </View>
           </View>
 
-          <View className={styles.button}>
-            <View className={styles.operates}>
-              <Icon
-                className={classnames(styles.operate, showEmojis && styles.actived)}
-                name="SmilingFaceOutlined"
-                size={20}
-                onClick={onEmojiIconClick}
-              ></Icon>
-              <Icon
-                className={classnames(styles.operate, showAt && styles.actived)}
-                name="AtOutlined"
-                size={20}
-                onClick={onAtIconClick}
-              ></Icon>
-              <Icon
-                className={classnames(styles.operate, showPicture && styles.actived)}
-                name="PictureOutlinedBig"
-                size={20}
-                onClick={onPcitureIconClick}
-              ></Icon>
+          {showEmojis && (
+            <View className={styles.emojis}>
+              <Emoji show={showEmojis} emojis={emojis} onClick={onEmojiClick} />
             </View>
-            <View
-              onClick={onSubmitClick}
-              className={classnames(styles.ok, (loading || imageUploading) && styles.disabled)}
-            >
-              发布
-            </View>
-          </View>
+          )}
+          <View style={{ transform: 'translateY(0)', height: `${bottomHeight}px` }}></View>
+          <View className={styles.safeArea}></View>
         </View>
-        <View style={{ transform: 'translateY(0)', height: `${bottomHeight}px` }}></View>
-        {showEmojis && (
-          <View className={styles.emojis}>
-            <Emoji show={showEmojis} emojis={emojis} onClick={onEmojiClick} />
-          </View>
-        )}
-        <View className={styles.safeArea}></View>
-      </Popup>
-      {/* 
-      {showAt && (
-        <View className={styles.atSelect}>
-          <AtSelect visible={showAt} stateLess={true} getAtList={onAtListChange} onCancel={onAtIconClick} />
-        </View>
-      )} */}
+      </View>
     </View>
+  ) : (
+    ''
   );
 };
 

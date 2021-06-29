@@ -47,7 +47,7 @@ class PartnerInviteHot extends React.Component {
   }
 
   render() {
-    const { site, forum } = this.props;
+    const { site, forum, unifyOnClick } = this.props;
     const { platform } = site;
     const { isLoading, errText } = this.state;
     const { threadsPageData = [] } = forum;
@@ -57,7 +57,7 @@ class PartnerInviteHot extends React.Component {
           <SectionTitle isShowMore={false} icon={{ type: 3, name: 'HotOutlined' }} title="热门内容预览" onShowMore={this.redirectToSearchResultPost} />
           {
             !isLoading && threadsPageData?.length
-              ? <PopularContents data={threadsPageData} onItemClick={this.onPostClick} />
+              ? <PopularContents data={threadsPageData} unifyOnClick={unifyOnClick} />
               : <></>
           }
           {
@@ -83,7 +83,7 @@ class PartnerInviteHot extends React.Component {
         {
           threadsPageData?.length
             ? threadsPageData.map((item, index) => (
-              <ThreadContent className={layout.threadContent} data={item} key={index} />
+              <ThreadContent unifyOnClick={unifyOnClick} className={layout.threadContent} data={item} key={index} />
             ))
             : <></>
         }

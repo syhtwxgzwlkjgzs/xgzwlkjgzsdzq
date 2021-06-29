@@ -35,19 +35,19 @@ $home-height-pc: 650px;
  * }
  */
 @mixin heightMedia($max: $s-height-pc, $min: 0) {
-  @if $max and not $min {
+  @if $max {
     @media only screen and (max-height: $max) {
       @content;
     }
   }
-  @else if $max and $min {
-    @media only screen and (min-width: $min) and (max-height: $max) {
-      @content;
-    }
-  }
-  @else if not $max and $min {
-    @media only screen and (min-width: $min) {
-      @content;
-    }
-  }
+  // @else if $max and $min {
+  //   @media only screen and (min-height: $min) and (max-height: $max) {
+  //     @content;
+  //   }
+  // }
+  // @else if not $max and $min {
+  //   @media only screen and (min-height: $min) {
+  //     @content;
+  //   }
+  // }
 }

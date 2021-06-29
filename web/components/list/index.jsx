@@ -29,7 +29,7 @@ const List = forwardRef(({
   onRefresh,
   onScroll = noop,
   showRefresh = true,
-  preload = 30,
+  preload = 1000,
   onError = noop,
   enableError = false,
   immediateCheck = true,
@@ -45,7 +45,8 @@ const List = forwardRef(({
   const [isError, setIsError] = useState(false);
   const [errText, setErrText] = useState(errorText);
   const [isLoadingInCenter, setIsLoadingInCenter] = useState(false)
-
+  // 提前加载
+  preload = site?.platform === 'pc' ? 3000 : 1000;
   useEffect(() => {
     if (noMore) {
       setIsLoading(true);
@@ -143,8 +144,8 @@ const List = forwardRef(({
       allowHandleRefresh = (scrollTop !== 0);
     }
 
-    if ((scrollTop / scrollHeight >= 0.7) && !isLoading && allowHandleRefresh) {
-    // if ((scrollHeight - preload <= clientHeight + scrollTop) && !isLoading && allowHandleRefresh) {
+    // if ((scrollTop / scrollHeight >= 0.7) && !isLoading && allowHandleRefresh) {
+    if ((scrollHeight - preload <= clientHeight + scrollTop) && !isLoading && allowHandleRefresh) {
     // if ((scrollHeight/scrollTop <= 1.5) && !isLoading && allowHandleRefresh) {
       setIsLoading(true);
       if (typeof(onRefresh) === 'function') {

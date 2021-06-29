@@ -7,13 +7,14 @@ import DialogBox from './dialog-box';
 import InteractionBox from './interaction-box';
 import Router from '@discuzq/sdk/dist/router';
 import { createAttachment } from '@common/server';
-import { ACCEPT_IMAGE_TYPES } from '@common/constants/thread-post';
+import { getMessageTimestamp } from '@common/utils/get-message-timestamp';
+import calcImageQuality from '@common/utils/calc-image-quality';
 import styles from './index.module.scss';
 
 const Index = (props) => {
   const { site: { isPC, webConfig }, dialogId, username, nickname, message, threadPost, user } = props;
   const { supportImgExt, supportMaxSize } = webConfig?.setAttach;
-  const { clearMessage, readDialogMsgList, createDialogMsg, createDialog, readDialogIdByUsername, dialogMsgList, dialogMsgListLength, updateDialog } = message;
+  const { clearMessage, readDialogMsgList, createDialogMsg, createDialog, readDialogIdByUsername, dialogMsgList, updateDialog } = message;
 
   const dialogBoxRef = useRef();
   const timeoutId = useRef();
@@ -21,6 +22,7 @@ const Index = (props) => {
   const uploadingImagesRef = useRef([]);
   const listDataLengthRef = useRef(0);
 
+  const viewWidth = window.screen.width;
   let toastInstance = null;
 
   const [showEmoji, setShowEmoji] = useState(false);
@@ -46,10 +48,12 @@ const Index = (props) => {
   // 清除轮询
   const clearPolling = () => clearTimeout(timeoutId.current);
 
+  // 获取dialogid后把其放到url中
   const replaceRouteWidthDialogId = (dialogId) => {
     Router.replace({ url: `/message?page=chat&nickname=${nickname}&username=${username}&dialogId=${dialogId}` });
   };
 
+  // 消息发送
   const submit = async (data) => {
     if (isSubmiting) return;
     let ret = {};
@@ -84,11 +88,13 @@ const Index = (props) => {
     }
   };
 
+  // 为图片发送空消息
   const submitEmptyImage = dialogId => createDialogMsg({
     dialogId,
     isImage: true,
   });
 
+  // 清除toast
   const clearToast = () => {
     toastInstance?.destroy();
   };
@@ -118,6 +124,7 @@ const Index = (props) => {
     return false;
   };
 
+  // 执行图片发送事宜
   const onImgChange = async (e) => {
     const { files } = e.target;
     let localDialogId = 0;
@@ -189,6 +196,7 @@ const Index = (props) => {
     });
   };
 
+  // 提交图片
   const sendImageAttachment = async (file, dialogId, isResend) => {
     if (file.failMsg) return;
     if (isResend) {
@@ -226,6 +234,14 @@ const Index = (props) => {
           }
         });
       }
+
+      // 处理图片格式和体积
+      if (!item.isImageLoading && item.imageUrl) {
+        const [path] = item.imageUrl.split('?');
+        const type = path.substr(path.indexOf('.') + 1);
+        item.renderUrl = `${path}?${calcImageQuality(viewWidth, type, 3)}`;
+      }
+
       return {
         ...item,
         timestamp: item.createdAt,
@@ -248,7 +264,7 @@ const Index = (props) => {
       }, 100);
     }
 
-    return listData;
+    return getMessageTimestamp(listData);
   }, [dialogMsgList]);
 
   useEffect(async () => {
@@ -308,7 +324,6 @@ const Index = (props) => {
         ref={dialogBoxRef}
         messagesList={messagesList}
         showEmoji={showEmoji}
-        scrollEnd={scrollEnd}
         sendImageAttachment={sendImageAttachment}
       />
       <InteractionBox

@@ -24,5 +24,13 @@
     font-size: rem($font-size-label);
     line-height: rem($font-line-height-small);
     color: $text-color-secondary;
+    >a{
+      color: $text-color-secondary;
+      text-decoration: unset;
+      cursor: pointer;
+      &:hover{
+        text-decoration: underline;
+      }
+    }
   }
 }

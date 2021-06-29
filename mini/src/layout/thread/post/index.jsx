@@ -150,7 +150,7 @@ class Index extends Component {
         });
       const status = isDraft ? THREAD_STATUS.draft : THREAD_STATUS.edit;
       threadPost.setThreadStatus(status);
-      threadPost.formatThreadDetailToPostData(ret.data);
+      threadPost.formatThreadDetailToPostData(ret.data, true);
       this.setCategory(categoryId);
       // isDraft && this.openSaveDraft(); // 现阶段，自动保存功能关闭
     } else {
@@ -354,16 +354,16 @@ class Index extends Component {
             setPostData({
               video: {
                 id: data?.id,
-                thumbUrl: mediaUrl,
+                thumbUrl: data.mediaUrl,
               },
             });
           } else if (type === 'audio') {
             setPostData({
               audio: {
                 id: data?.id,
-                mediaUrl,
+                mediaUrl: data.mediaUrl,
               },
-              audioSrc: mediaUrl,
+              audioSrc: data.mediaUrl,
               audioRecordStatus: 'uploaded',
             });
           }
@@ -527,9 +527,9 @@ class Index extends Component {
     // 6 根据是否存在主题id，选择更新主题、新建主题
     let ret = {};
     if (threadId) {
-      ret = await threadPost.updateThread(threadId);
+      ret = await threadPost.updateThread(threadId, true);
     } else {
-      ret = await threadPost.createThread();
+      ret = await threadPost.createThread(true);
     }
 
     // 7 处理请求数据

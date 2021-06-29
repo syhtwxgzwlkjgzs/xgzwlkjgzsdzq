@@ -238,7 +238,7 @@ function VList(props, ref) {
         )}
       </InfiniteLoader>
 
-      {scrollTop > winHeight * 2 && <BacktoTop h5 onClick={handleBacktoTop} />}
+      {scrollTop > winHeight * 2 && <BacktoTop showTabBar={props.showTabBar} h5 onClick={handleBacktoTop} />}
     </div>
   );
 }
