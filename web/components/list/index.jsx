@@ -59,8 +59,8 @@ const List = forwardRef(({
 
   useEffect(() => {
     // 初始化的时候，是否立即请求一次
-    if (immediateCheck) {
-      onTouchMove({ isFirst: true });
+    if (immediateCheck && typeof(onRefresh) === 'function') {
+      onRefresh()
     }
   }, []);
 
