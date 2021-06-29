@@ -9,8 +9,8 @@ import styles from './index.module.scss';
 const InputPop = (props) => {
   const { visible, onOkClick, onCancel, rewardAmount } = props;
 
-  const [value, setValue] = useState('');
-  const [moneyNum, setMoneyNum] = useState('');
+  const [value, setValue] = useState(0);
+  const [moneyNum, setMoneyNum] = useState(0);
 
   // const onInputChange = (val) => {
   //   if (Number(val) >= 0 && Number(val) <= 100) {
@@ -23,8 +23,7 @@ const InputPop = (props) => {
   //   }
   // };
   const onInputChange = (val) => {
-    console.log(val);
-    setValue(val);
+    setValue(Number(val));
     setMoneyNum((Number(val) * 0.01 * rewardAmount).toFixed(2));
   };
 
@@ -33,8 +32,8 @@ const InputPop = (props) => {
       try {
         const success = await onOkClick(moneyNum);
         if (success) {
-          setValue('');
-          setMoneyNum('');
+          setValue(0);
+          setMoneyNum(0);
         }
       } catch (error) {
         console.log(error);
@@ -52,7 +51,8 @@ const InputPop = (props) => {
               <View className={styles.text}>悬赏百分比</View>
               <View className={styles.slider}>
                 <Slider
-                  defaultValue={0}
+                  defaultValue={value}
+                  value={value}
                   max={100}
                   min={0}
                   step={1}
