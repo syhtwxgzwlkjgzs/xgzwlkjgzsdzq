@@ -166,7 +166,7 @@ const Index = (props) => {
       })
     )));
 
-    await Promise.all(fileList.map(() => submitEmptyImage(dialogId || localDialogId))).then((results) => {
+    Promise.all(fileList.map(() => submitEmptyImage(dialogId || localDialogId))).then((results) => {
       // 把消息id从小到大排序
       results.sort((a, b) => a.data.dialogMessageId - b.data.dialogMessageId);
 
