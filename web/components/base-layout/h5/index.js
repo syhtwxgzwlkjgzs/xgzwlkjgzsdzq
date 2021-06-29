@@ -59,7 +59,7 @@ const BaseLayout = forwardRef((props, ref) => {
         <List {...props} className={styles.listHeight} ref={listRef}
           onScroll={({ scrollTop }) => {
             setScrollTop(scrollTop);
-            onScroll();
+            onScroll({ scrollTop });
           }}
           platform={platform}>
           {typeof children === 'function' ? children({ ...props }) : children}
