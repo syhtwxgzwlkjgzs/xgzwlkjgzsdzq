@@ -3,7 +3,7 @@ import ThreadContent from '@components/thread';
 import { observer } from 'mobx-react';
 
 export default observer((props) => {
-  const { data } = props;
+  const { data, isLast } = props;
 
   const ref = useRef(null);
 
@@ -18,7 +18,7 @@ export default observer((props) => {
         onImageReady={props.measure}
         onVideoReady={props.measure}
         key={data.threadId}
-        // showBottomStyle={index !== pageData.length - 1}
+        showBottomStyle={!isLast}
         data={data}
         // className={styles.listItem}
         recomputeRowHeights={(data) => props.recomputeRowHeights(data)}
