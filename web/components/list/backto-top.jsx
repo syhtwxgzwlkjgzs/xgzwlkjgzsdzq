@@ -2,8 +2,9 @@ import React from 'react';
 import styles from './index.module.scss';
 
 export default function BacktoTop(props) {
-  const { className = '', onClick = () => { }, h5 } = props;
-  const cls = h5 ? styles.h5 : styles.pc;
+  const { className = '', onClick = () => { }, h5, showTabBar = false } = props;
+  let cls = h5 ? styles.h5 : styles.pc;
+  if (showTabBar && h5) cls = `${cls} ${styles.tabbar}`;
   return (
     <div className={`${styles.backtotop} ${cls} ${className}`} onClick={onClick}>
       {/* <img src="/dzq-img/backtop.svg" alt="backtotop icon" className={styles.topIcon} /> */}

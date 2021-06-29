@@ -91,7 +91,7 @@ const BaseLayout = forwardRef((props, ref) => {
       {showHeader && <Header />}
       {content}
       {footer}
-      {scrollTop > winHeight * 2 && !disabledList && <BacktoTop h5 onClick={handleBacktoTop} />}
+      {scrollTop > winHeight * 2 && !disabledList && <BacktoTop showTabBar={showTabBar} h5 onClick={handleBacktoTop} />}
       {showTabBar && <BottomNavBar onClick={onClickTabBar} placeholder curr={curr} />}
     </div>
   );

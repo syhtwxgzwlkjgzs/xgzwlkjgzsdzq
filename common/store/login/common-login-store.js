@@ -30,6 +30,7 @@ export default class commonLoginStore {
     @observable jsCode = '';
     @observable protocolVisible = false;
     @observable protocolStatus = 'register';
+    @observable loginLoading = true;
 
     @action
     setStatusCountDown(countDown) {
