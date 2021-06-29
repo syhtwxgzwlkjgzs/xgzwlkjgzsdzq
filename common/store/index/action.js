@@ -370,6 +370,7 @@ class IndexAction extends IndexStore {
     const targetThread = this.findAssignSticks(threadId);
     if (!targetThread || targetThread.length === 0) return;
 
+    // TODO 因为置顶贴的数据格式和帖子列表的数据格式不一致，先通过网络请求的方式解决问题
     const categoryids = handleString2Arr(this.filter, 'categoryids')
     this.getRreadStickList(categoryids)
 
