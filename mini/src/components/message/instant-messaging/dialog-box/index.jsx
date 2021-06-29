@@ -11,7 +11,7 @@ import styles from './index.module.scss';
 const DialogBox = (props) => {
   // const { shownMessages, dialogBoxRef } = props;
 
-  const { message, user, dialogId, showEmoji, keyboardHeight, inputBottom, hideEmoji, scrollEnd, messagesHistory } = props;
+  const { message, user, dialogId, showEmoji, keyboardHeight, hideEmoji, scrollEnd, messagesHistory } = props;
   const { readDialogMsgList, dialogMsgList, dialogMsgListLength, updateDialog } = message;
 
 
@@ -47,7 +47,6 @@ const DialogBox = (props) => {
         // let ratio = 750 / clientWidth;
         // let height = clientHeight * ratio;
 
-        const padding = (keyboardHeight && !showEmoji) ? inputBottom : 0
 
         setPaddingBottom(clientHeight);
         setTimeout(scrollEnd, 300);
