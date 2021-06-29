@@ -4,6 +4,7 @@ import { readCategories, readStickList, readThreadList, updatePosts, createThrea
 import typeofFn from '@common/utils/typeof';
 import threadReducer from '../thread/reducer';
 import { getCategoryName, getActiveId, getCategories, handleString2Arr } from '@common/utils/handleCategory'
+import replaceStringInRegex from '../../utils/replace-string-in-regex'
 
 class IndexAction extends IndexStore {
   constructor(props) {
@@ -338,7 +339,6 @@ class IndexAction extends IndexStore {
    */
   @action
   updateAssignThreadAllData(threadId, threadInfo) {
-    debugger
     if (!threadId || !threadInfo || !Object.keys(threadInfo).length) return false;
     const targetThread = this.findAssignThread(typeofFn.isNumber(threadId) ? threadId : +threadId);
     if (!targetThread) return false;
@@ -352,12 +352,18 @@ debugger
 
   @action
   updateAssignSticksInfo(threadId, threadInfo) {
-    debugger
     const targetThread = this.findAssignSticks(threadId);
     if (!targetThread || targetThread.length === 0) return;
 
     const { index, data } = targetThread;
-
+debugger
+    const text = threadInfo.title || threadInfo?.content?.text;
+    let newText = replaceStringInRegex(text, "break", '');
+    newText = replaceStringInRegex(newText, "heading", '');
+    newText = replaceStringInRegex(newText, "paragraph", '');
+    newText = replaceStringInRegex(newText, "imgButEmoj", '');
+    newText = replaceStringInRegex(newText, "list", '');
+    debugger
     this.sticks[index] = { 
       canViewPosts: threadInfo?.ability?.canViewPost, 
       categoryId: threadInfo?.categoryId, 
