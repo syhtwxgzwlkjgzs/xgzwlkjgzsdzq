@@ -130,11 +130,19 @@ class IndexAction extends IndexStore {
    @action
    async deleteThreadsData({ id } = {}) {
      if (id && this.threads) {
+      //  删除列表
         const { pageData = [] } = this.threads;
         const newPageData = pageData.filter(item => `${item.threadId}` !== `${id}`)
 
         if (this.threads?.pageData) {
           this.threads.pageData = newPageData;
+        }
+
+        // 删除置顶
+        const newSticksData = this.sticks?.filter(item => `${item.threadId}` !== `${id}`)
+
+        if (this.sticks) {
+          this.sticks = newSticksData;
         }
      }
    }
@@ -273,7 +281,6 @@ class IndexAction extends IndexStore {
   findAssignSticks(threadId) {
     if (this.sticks) {
       for (let i = 0; i < this.sticks.length; i++)  {
-        debugger
         if (this.sticks[i].threadId === threadId) {
           return { index: i, data: this.sticks[i] };
         }
@@ -340,38 +347,47 @@ class IndexAction extends IndexStore {
   @action
   updateAssignThreadAllData(threadId, threadInfo) {
     if (!threadId || !threadInfo || !Object.keys(threadInfo).length) return false;
+
+    // 更新置顶帖
+    this.updateAssignSticksInfo(threadId, threadInfo)
+
+    // 更新帖子列表
     const targetThread = this.findAssignThread(typeofFn.isNumber(threadId) ? threadId : +threadId);
     if (!targetThread) return false;
     const { index, data } = targetThread;
     this.threads.pageData[index] = threadInfo;
-debugger
-    this.updateAssignSticksInfo(threadId, threadInfo)
-
     return true;
   }
 
+  /**
+   * 更新置顶帖内容
+   * @param {string} threadId
+   * @param {object} threadInfo
+   * @returns boolean
+   */
   @action
   updateAssignSticksInfo(threadId, threadInfo) {
     const targetThread = this.findAssignSticks(threadId);
     if (!targetThread || targetThread.length === 0) return;
 
-    const { index, data } = targetThread;
-debugger
-    const text = threadInfo.title || threadInfo?.content?.text;
-    let newText = replaceStringInRegex(text, "break", '');
-    newText = replaceStringInRegex(newText, "heading", '');
-    newText = replaceStringInRegex(newText, "paragraph", '');
-    newText = replaceStringInRegex(newText, "imgButEmoj", '');
-    newText = replaceStringInRegex(newText, "list", '');
-    debugger
-    this.sticks[index] = { 
-      canViewPosts: threadInfo?.ability?.canViewPost, 
-      categoryId: threadInfo?.categoryId, 
-      title: threadInfo.title || threadInfo?.content?.text, 
-      updatedAt: threadInfo?.updatedAt,
-      threadId: threadInfo?.threadId
-    };
-    debugger
+    const categoryids = handleString2Arr(this.filter, 'categoryids')
+    this.getRreadStickList(categoryids)
+
+    // const { index, data } = targetThread;
+
+    // const text = threadInfo.title || threadInfo?.content?.text;
+    // let newText = replaceStringInRegex(text, "break", '');
+    // newText = replaceStringInRegex(newText, "heading", '');
+    // newText = replaceStringInRegex(newText, "paragraph", '');
+    // newText = replaceStringInRegex(newText, "imgButEmoj", '');
+    // newText = replaceStringInRegex(newText, "list", '');
+    // this.sticks[index] = { 
+    //   canViewPosts: threadInfo?.ability?.canViewPost, 
+    //   categoryId: threadInfo?.categoryId, 
+    //   title: threadInfo.title || threadInfo?.content?.text, 
+    //   updatedAt: threadInfo?.updatedAt,
+    //   threadId: threadInfo?.threadId
+    // };
   }
 
   /**
