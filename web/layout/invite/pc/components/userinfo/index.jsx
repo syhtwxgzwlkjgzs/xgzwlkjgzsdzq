@@ -1,20 +1,23 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import layout from './index.module.scss';
-import { Avatar, Toast } from '@discuzq/design';
+import { Toast } from '@discuzq/design';
+import Avatar from '@components/avatar';
 import { numberFormat } from '@common/utils/number-format';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
+import Router from '@discuzq/sdk/dist/router';
 
 function DefaultLayout(props) {
-  const { inviteData, createInviteLink } = props;
+  const { inviteData, createInviteLink, onAvatarClick } = props;
   return (
     <div className={layout.user_card_wrap}>
       <div className={layout.user_card_main}>
-        <div className={layout.user_card_avatar}>
+        <div className={layout.user_card_avatar} onClick={() => onAvatarClick({ id: inviteData.userId })}>
           <Avatar
             size={'big'}
+            userId={inviteData.userId}
             image={inviteData.avatar}
-            text={inviteData.nickname && inviteData.nickname.substring(0, 1)}
+            name={inviteData.nickname && inviteData.nickname.substring(0, 1)}
           />
         </div>
         <div className={layout.user_card_info}>
@@ -46,15 +49,17 @@ function DefaultLayout(props) {
 }
 
 function MiniLayout(props) {
-  const { inviteData, createInviteLink } = props;
+  const { inviteData, createInviteLink, onAvatarClick } = props;
 
   return (
     <div className={layout.wrapper}>
       <div className={layout.user}>
         <div className={layout.userLeft}>
           <Avatar
+            onClick={() => onAvatarClick({ id: inviteData.userId })}
+            userId={inviteData.userId}
             image={inviteData.avatar}
-            text={inviteData.nickname && inviteData.nickname.substring(0, 1)}
+            name={inviteData.nickname && inviteData.nickname.substring(0, 1)}
           />
           <div className={layout.userName}>{ inviteData.nickname }</div>
           <div className={layout.userGroup}>{ inviteData.groupName }</div>
@@ -99,11 +104,14 @@ function UserInfo(props) {
       });
     }
   };
+  const onAvatarClick = ({ id }) => {
+    Router.push({ url: `/user/${id}` });
+  };
 
   return (
     <>
-      <DefaultLayout inviteData={inviteData} createInviteLink={createInviteLink} />
-      <MiniLayout inviteData={inviteData} createInviteLink={createInviteLink} />
+      <DefaultLayout inviteData={inviteData} createInviteLink={createInviteLink} onAvatarClick={onAvatarClick}/>
+      <MiniLayout inviteData={inviteData} createInviteLink={createInviteLink} onAvatarClick={onAvatarClick} />
     </>
   );
 }
