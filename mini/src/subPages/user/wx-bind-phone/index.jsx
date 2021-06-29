@@ -93,7 +93,7 @@ class Index extends Component {
 
   handleBindButtonClick = async () => {
     const { wxPhoneBind } = this.props;
-    const { sessionToken } = getCurrentInstance().router.params;
+    const { sessionToken } = getCurrentInstance()?.router?.params;
     try {
       const resp = await wxPhoneBind.loginAndBind(sessionToken);
       const uid = get(resp, 'uid', '');
@@ -146,8 +146,7 @@ class Index extends Component {
 
   render() {
     const { wxPhoneBind, commonLogin } = this.props;
-    const { nickname } = getCurrentInstance().router.params;
-
+    const { nickname = '' } = getCurrentInstance()?.router?.params || commonLogin;
     return (
       <Page>
         {/* <MemoToastProvider> */}

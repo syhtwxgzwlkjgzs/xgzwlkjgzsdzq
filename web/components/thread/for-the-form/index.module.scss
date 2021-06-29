@@ -47,7 +47,7 @@
     .react-datepicker {
       // 整个盒子
       display: flex;
-      height: 392px;
+      height: 342px;
       font-size: $font-size-middle;
       border-radius: $border-radius-small;
       overflow: hidden;
@@ -109,6 +109,7 @@
       line-height: 24px !important;
       margin-left: 10px !important;
       margin-bottom: 8px !important;
+      margin-top: 8px !important;
     }
 
     .react-datepicker__day:hover,
@@ -123,6 +124,9 @@
     .react-datepicker__day--disabled:hover {
       background-color: $white;
       color: $text-color-placeholder;
+    }
+    .react-datepicker__time-list {
+      height: 280px !important;
     }
     .react-datepicker__time-list-item {
       height: 20px;
