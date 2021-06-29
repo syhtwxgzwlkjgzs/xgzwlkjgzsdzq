@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle,useMemo } from 'react';
+import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle, useMemo } from 'react';
 import { ScrollView } from '@tarojs/components';
 import { noop, isPromise } from '@components/thread/utils'
 import styles from './index.module.scss';
@@ -108,7 +108,7 @@ const List = forwardRef(({
     }
 
   const LoadingInCenter = useMemo(() => {
-    return showLoadingInCenter && !noMore && !isError ;
+    return showLoadingInCenter && !noMore && !isError;
   }, [showLoadingInCenter, noMore, isError]);
 
   return (
