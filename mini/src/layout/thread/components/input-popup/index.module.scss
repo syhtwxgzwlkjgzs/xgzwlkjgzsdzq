@@ -1,5 +1,13 @@
 @import '@common/styles/index.scss';
 
+.body {
+  display: none;
+}
+
+.show {
+  display: block !important;
+}
+
 .popup {
   position: fixed;
   width: 100%;
