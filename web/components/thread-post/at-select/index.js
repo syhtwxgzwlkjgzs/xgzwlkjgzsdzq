@@ -154,7 +154,7 @@ class AtSelect extends Component {
   render() {
     const { pc, visible } = this.props;
     const { keywords, checkUser, finish } = this.state;
-
+    const platform = pc ? 'pc' : 'h5';
     const content = (
       <div className={styles.wrapper} onClick={e => e.stopPropagation()}>
 
@@ -187,12 +187,14 @@ class AtSelect extends Component {
           onChange={val => this.setState({ checkUser: val })}
         >
           <List
+            showLoadingInCenter
             className={styles.list}
             wrapperClass={styles['list__inner']}
             height={pc ? 'auto' : 'calc(100vh - 120px)'}
             noMore={finish}
             onRefresh={this.onScrollBottom}
             immediateCheck={false}
+            platform={platform}
           >
             {this.renderItem()}
           </List>
