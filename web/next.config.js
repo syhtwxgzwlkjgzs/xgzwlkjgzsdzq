@@ -4,8 +4,6 @@ module.exports = nextConfig((config) => {
     config.productionBrowserSourceMaps = false;
     config.crossOrigin = 'anonymous';
     // console.log(config);
-    config.experimental = {};
-    config.experimental.disableOptimizedLoading = true;
     // config.devIndicators = {
     //     autoPrerender: false,
     // }
