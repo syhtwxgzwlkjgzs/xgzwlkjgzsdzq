@@ -18,7 +18,7 @@ const Index = ({
     loadingText = '加载更多...',
     noMoreText = '没有更多内容了',
     errorText = '加载失败',
-    type = 'normal',
+    noMoreType = 'normal',
     platform= 'pc',
     isShowLine = false,
     handleError = noop,
@@ -29,7 +29,7 @@ const Index = ({
     return (
         <div className={`${styles.bottomView} ${className} ${isBox ? styles.bottomViewBox : ''}`}>
             {!isError ? (
-                loadingView || <RefreshView onRefreshPlaceholder={onRefreshPlaceholder} noMore={noMore} loadText={loadingText} noMoreText={noMoreText} type={type} platform={platform} />
+                loadingView || <RefreshView onRefreshPlaceholder={onRefreshPlaceholder} noMore={noMore} loadText={loadingText} noMoreText={noMoreText} noMoreType={noMoreType} />
             ) : (
                 errorView || <ErrorView text={errorText || '加载失败'} onClick={handleError} />
             )}
