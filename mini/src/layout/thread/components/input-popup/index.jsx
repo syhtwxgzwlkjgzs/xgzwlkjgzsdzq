@@ -207,8 +207,7 @@ const InputPop = (props) => {
     typeof onCancel === 'function' && onCancel();
   };
 
-  return visible ? (
-    <View className={styles.body}>
+  return <View className={classnames(styles.body, visible && styles.show)}>
       <View className={styles.popup} onClick={onClick}>
         <View onClick={(e) => e.stopPropagation()}>
           <View className={styles.container}>
@@ -297,9 +296,6 @@ const InputPop = (props) => {
         </View>
       </View>
     </View>
-  ) : (
-    ''
-  );
 };
 
 InputPop.options = {
