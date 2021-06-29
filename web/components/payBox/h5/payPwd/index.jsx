@@ -101,6 +101,7 @@ class Index extends React.Component {
       setTimeout(() => {
         // TODO: 回跳逻辑补充
         this.props.payBox.visible = false;
+        this.props.payBox.step = null;
         Router.push({ url: '/user/bind-phone?from=paybox' });
       }, 1000);
       return;
