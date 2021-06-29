@@ -22,10 +22,20 @@ class BindNicknameH5Page extends React.Component {
     this.props.nicknameBind.nickname = e.target.value;
   };
 
+  componentWillUnmount() {
+    this.props.nicknameBind.nickname = '';
+  }
+
   handleBindButtonClick = async () => {
     try {
+      const { commonLogin } = this.props;
+      if (!commonLogin.loginLoading) {
+        return;
+      }
+      commonLogin.loginLoading = false;
       await this.props.nicknameBind.bindNickname();
-      this.props.commonLogin.needToSetNickname = false;
+      commonLogin.needToSetNickname = false;
+      commonLogin.loginLoading = true;
       Toast.success({
         content: '昵称设置成功',
         hasMask: false,
@@ -34,11 +44,11 @@ class BindNicknameH5Page extends React.Component {
           const { router, site, platform } = this.props;
           const { needToCompleteExtraInfo: isNeedToCompleteExtraInfo } = router.query;
           // 扩展信息的判断跳转
-          const needToCompleteExtraInfo = this.props.commonLogin.needToCompleteExtraInfo || isNeedToCompleteExtraInfo;
+          const needToCompleteExtraInfo = commonLogin.needToCompleteExtraInfo || isNeedToCompleteExtraInfo;
           // 跳转补充信息页
           if (needToCompleteExtraInfo) {
             if (isExtFieldsOpen(site)) {
-              this.props.commonLogin.needToCompleteExtraInfo = true;
+              commonLogin.needToCompleteExtraInfo = true;
               this.props.router.push('/user/supplementary');
               return;
             }
@@ -46,7 +56,7 @@ class BindNicknameH5Page extends React.Component {
           }
 
           const { statusCode, statusMsg, needToBindPhone,
-            needToBindWechat, nickName, sessionToken } = this.props.commonLogin;
+            needToBindWechat, nickName, sessionToken } = commonLogin;
 
           if (needToBindPhone) {
             return this.props.router.push(`/user/bind-phone?sessionToken=${sessionToken}`);
@@ -62,6 +72,7 @@ class BindNicknameH5Page extends React.Component {
         },
       });
     } catch (e) {
+      this.props.commonLogin.loginLoading = true;
       // 跳转状态页
       if ([BANNED_USER, REVIEWING, REVIEW_REJECT].includes(e.Code)) {
         const uid = get(e, 'uid', '');
@@ -79,7 +90,7 @@ class BindNicknameH5Page extends React.Component {
   };
 
   render() {
-    const { site, nicknameBind } = this.props;
+    const { site, nicknameBind, commonLogin: { loginLoading } } = this.props;
     const { platform } = site;
     return (
       <PcBodyWrap>
@@ -97,8 +108,11 @@ class BindNicknameH5Page extends React.Component {
             placeholder="昵称"
             clearable={true}
             onChange={this.handleNicknameChange}
+            onEnter={this.handleBindButtonClick}
           />
           <Button
+            disabled={!nicknameBind.nickname}
+            loading={!loginLoading}
             className={platform === 'h5' ? layout.button : layout.pc_button}
             type="primary"
             onClick={this.handleBindButtonClick}
