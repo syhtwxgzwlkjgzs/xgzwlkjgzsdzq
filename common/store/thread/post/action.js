@@ -260,7 +260,8 @@ class ThreadPostAction extends ThreadPostStore {
       attachmentPrice, freeWords, redpacket, rewardQa } = this.postData;
     let text = contentText;
     if (isMini) {
-      text = text.replace(/\n/g, '<br />');
+      // 目前只是简单的队小程序进行简单的处理
+      text = `<p>${text.replace(/(\n*)$/, '').replace(/\n/g, '<br />')}</p>`;
     }
     text = emojiFormatForCommit(text)
       .replace(/@([^@<]+)<\/p>/g, '@$1 </p>');
@@ -304,6 +305,7 @@ class ThreadPostAction extends ThreadPostStore {
     let position = {};
     if (detail.position && detail.position.address) position = detail.position;
     let contentText = content && content.text;
+    // 目前只是简单的队小程序进行简单的处理
     if (isMini) contentText = contentText.replace(/<br \/>/g, '\n');
     const contentindexes = (content && content.indexes) || {};
     let audio = {};
