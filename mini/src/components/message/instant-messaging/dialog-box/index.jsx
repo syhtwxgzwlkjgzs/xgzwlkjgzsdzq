@@ -3,8 +3,7 @@ import { View, Image } from '@tarojs/components';
 import Avatar from '@discuzq/design/dist/components/avatar/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import { diffDate } from '@common/utils/diff-date';
-import { getMessageImageSize } from '@common/utils/get-message-image-size';
-import { getMessageTimestamp } from '@common/utils/get-message-timestamp';
+
 import { inject, observer } from 'mobx-react';
 import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
@@ -12,7 +11,7 @@ import styles from './index.module.scss';
 const DialogBox = (props) => {
   // const { shownMessages, dialogBoxRef } = props;
 
-  const { message, user, dialogId, showEmoji, keyboardHeight, inputBottom, hideEmoji } = props;
+  const { message, user, dialogId, showEmoji, keyboardHeight, inputBottom, hideEmoji, scrollEnd, messagesHistory } = props;
   const { readDialogMsgList, dialogMsgList, dialogMsgListLength, updateDialog } = message;
 
 
@@ -57,14 +56,7 @@ const DialogBox = (props) => {
 
   }, [showEmoji, keyboardHeight]);
 
-  const scrollEnd = () => {
-    setTimeout(() => {
-      Taro.pageScrollTo({
-        scrollTop: 30000,
-        duration: 0
-      });
-    }, 0);
-  };
+
 
   // 每5秒轮询一次
   const updateMsgList = () => {
@@ -72,42 +64,10 @@ const DialogBox = (props) => {
     clearTimeout(timeoutId.current);
     timeoutId.current = setTimeout(() => {
       updateMsgList();
-    }, 5000);
+    }, 20000);
   };
 
-  const messagesHistory = useMemo(() => {
-    setTimeout(() => {
-      scrollEnd();
-      // 把消息状态更新为已读
-      updateDialog(dialogId);
-    }, 100);
 
-    const _list = dialogMsgList.list.map((item) => {
-      let [width, height] = [200, 0]; // 兼容没有返回图片尺寸的旧图片
-      if (item.imageUrl) {
-        const size = item.imageUrl.match(/\?width=(\d+)&height=(\d+)$/);
-        if (size) {
-          [width, height] = getMessageImageSize(size[1], size[2]); // 计算图片显示尺寸
-        }
-      }
-
-      return {
-        timestamp: item.createdAt,
-        userAvatar: item.user.avatar,
-        displayTimePanel: true,
-        textType: 'string',
-        text: item.messageTextHtml,
-        ownedBy: user.id === item.userId ? 'myself' : 'itself',
-        imageUrl: item.imageUrl,
-        width: width,
-        height: height,
-        userId: item.userId,
-        nickname: item.user.username,
-      }
-    });
-
-    return getMessageTimestamp(_list.filter(item => (item.imageUrl || item.text)).reverse());
-  }, [dialogMsgListLength]);
 
   const [previewImageUrls, setPreviewImageUrls] = useState([]);
   useMemo(() => {
