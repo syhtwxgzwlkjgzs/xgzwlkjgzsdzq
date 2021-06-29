@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { Icon, Popup, Button, Input, Slider } from '@discuzq/design';
-import { debounce } from '@common/utils/throttle-debounce';
+import { debounce, throttle } from '@common/utils/throttle-debounce';
 import styles from './index.module.scss';
 
 const InputPop = (props) => {
   const { visible, onOkClick, onCancel, rewardAmount } = props;
 
-  const [value, setValue] = useState('');
-  const [moneyNum, setMoneyNum] = useState('');
+  const [value, setValue] = useState(0);
+  const [moneyNum, setMoneyNum] = useState(0);
 
   const onInputChange = (val) => {
-    setValue(val);
+    setValue(Number(val));
     setMoneyNum((Number(val) * 0.01 * rewardAmount).toFixed(2));
   };
 
@@ -19,8 +19,8 @@ const InputPop = (props) => {
       try {
         const success = await onOkClick(moneyNum);
         if (success) {
-          setValue('');
-          setMoneyNum('');
+          setValue(0);
+          setMoneyNum(0);
         }
       } catch (error) {
         console.log(error);
@@ -44,11 +44,12 @@ const InputPop = (props) => {
               <div className={styles.text}>悬赏百分比</div>
               <div className={styles.slider}>
                 <Slider
-                  defaultValue={0}
+                  value={value}
+                  defaultValue={value}
                   max={100}
                   min={0}
                   step={1}
-                  onChange={debounce((val) => onInputChange(val), 200)}
+                  onChange={throttle((val) => onInputChange(val), 100)}
                 />
                 <div className={styles.perCent}>%</div>
               </div>
