@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { View } from '@tarojs/components';
 import { inject, observer } from 'mobx-react';
 import Taro from '@tarojs/taro';
@@ -9,6 +9,7 @@ import constants from '@common/constants';
 import locals from '@common/utils/local-bridge';
 import { getMessageImageSize } from '@common/utils/get-message-image-size';
 import { getMessageTimestamp } from '@common/utils/get-message-timestamp';
+import calcImageQuality from '@common/utils/calc-image-quality';
 
 const Index = ({ message, user, site, dialogId: _dialogId, username, nickname, threadPost }) => {
 
@@ -19,6 +20,8 @@ const Index = ({ message, user, site, dialogId: _dialogId, username, nickname, t
   const [showEmoji, setShowEmoji] = useState(false);
   const [isSubmiting, setIsSubmiting] = useState(false);
   const [typingValue, setTypingValue] = useState('');
+
+  const uploadingImagesRef = useRef([]);
 
   const scrollEnd = () => {
     setTimeout(() => {
@@ -71,6 +74,44 @@ const Index = ({ message, user, site, dialogId: _dialogId, username, nickname, t
     }
   };
 
+  // 为图片发送空消息
+  const submitEmptyImage = dialogId => createDialogMsg({
+    dialogId,
+    isImage: true,
+  });
+
+  // 提交图片
+  const sendImageAttachment = async (file, dialogId, isResend) => {
+    const { envConfig } = site;
+    const token = locals.get(constants.ACCESS_TOKEN_NAME);
+    Taro.uploadFile({
+      url: `${envConfig.COMMON_BASE_URL}/apiv3/attachments`,
+      filePath: file.path,
+      name: 'file',
+      header: {
+        'Content-Type': 'multipart/form-data',
+        'authorization': `Bearer ${token}`
+      },
+      formData: {
+        type: 1,
+        dialogMessageId: file.dialogMessageId,
+      },
+      success(res) {
+        if (res.statusCode === 200) {
+          const ret = JSON.parse(res.data);
+          const { Data: data, Code, Message: msg } = ret;
+          if (Code === 0) {
+
+          } else {
+            // Toast.error({ content: msg || '图片发送失败' });
+          }
+        } else {
+          // Toast.error({ content: '网络发生错误' });
+        }
+      }
+    });
+  };
+
   // 触发图片选择
   const chooseImage = () => {
     Taro.chooseImage({
@@ -82,49 +123,46 @@ const Index = ({ message, user, site, dialogId: _dialogId, username, nickname, t
   };
 
   const onImgChange = async (files) => {
-    // 图片上传前校验
-    // if (!beforeUpload(files)) return;
 
-    const { envConfig } = site;
-    const file = files[0];
-    const tempFilePath = file.path;
-    const token = locals.get(constants.ACCESS_TOKEN_NAME);
-    Taro.showLoading({
-      title: '图片发送中...',
-      mask: true
-    });
-    Taro.uploadFile({
-      url: `${envConfig.COMMON_BASE_URL}/apiv3/attachments`,
-      filePath: tempFilePath,
-      name: 'file',
-      header: {
-        'Content-Type': 'multipart/form-data',
-        'authorization': `Bearer ${token}`
-      },
-      formData: {
-        'type': 1
-      },
-      success(res) {
-        Taro.hideLoading();
-        if (res.statusCode === 200) {
-          const ret = JSON.parse(res.data);
-          const { Data: data, Code, Message: msg } = ret;
-          if (Code === 0) {
-            submit({
-              imageUrl: data.url,
-              attachmentId: data.id,
-              isImage: true,
-            });
-          } else {
-            Toast.error({ content: msg || '图片发送失败' });
+    // 先获取图片本地的路径、再异步获取图片的宽高
+    await Promise.all(files.map(file => {
+      new Promise(resolve => {
+        Taro.getImageInfo({
+          src: file.path,
+          complete: ({ width, height, type }) => {
+            file.width = width;
+            file.height = height;
+            file.type = type;
+            file.imageUrl = file.path;
+            resolve();
           }
-        } else {
-          Toast.error({ content: '网络发生错误' });
+        });
+      });
+    }));
+
+    Promise.all(files.map(() => submitEmptyImage(dialogId))).then((results) => {
+      // 把消息id从小到大排序
+      results.sort((a, b) => a.data.dialogMessageId - b.data.dialogMessageId);
+
+      // 把本地图片和消息id对应起来
+      files.forEach((file, i) => {
+        const { code, data: { dialogMessageId } } = results[i];
+        if (code === 0) {
+          file.dialogMessageId = dialogMessageId;
         }
-      },
-      fail(res) {
-        console.log(res);
-      }
+      });
+      // 维护本地图片队列
+      uploadingImagesRef.current = uploadingImagesRef.current.concat(files);
+      readDialogMsgList(dialogId).then(() => {
+        // clearToast();
+      });
+
+      // 开始上传图片
+      files.map(async (file) => {
+        sendImageAttachment(file, dialogId);
+      });
+
+      readDialogMsgList(dialogId);
     });
   };
 
@@ -160,12 +198,33 @@ const Index = ({ message, user, site, dialogId: _dialogId, username, nickname, t
     }, 100);
 
     const _list = dialogMsgList.list.map((item) => {
+      if (item.isImageLoading && uploadingImagesRef.current.length) {
+        uploadingImagesRef.current.forEach((file) => {
+          if (file.dialogMessageId === item.id) {
+            item = {
+              ...item,
+              ...file,
+              file,
+            };
+          }
+        });
+      }
+
       let [width, height] = [150, 150]; // 兼容没有返回图片尺寸的旧图片
       if (item.imageUrl) {
         const size = item.imageUrl.match(/\?width=(\d+)&height=(\d+)$/);
         if (size) {
           [width, height] = getMessageImageSize(size[1], size[2]); // 计算图片显示尺寸
         }
+      }
+
+      // 处理图片格式和体积
+      if (!item.isImageLoading && item.imageUrl) {
+        const [path] = item.imageUrl.split('?');
+        const type = path.substr(path.indexOf('.') + 1);
+        const info = Taro.getSystemInfoSync();
+        const viewWidth = info.windowWidth;
+        item.renderUrl = `${path}?${calcImageQuality(viewWidth, type, 3)}`;
       }
 
       return {
@@ -175,16 +234,15 @@ const Index = ({ message, user, site, dialogId: _dialogId, username, nickname, t
         textType: 'string',
         text: item.messageTextHtml,
         ownedBy: user.id === item.userId ? 'myself' : 'itself',
-        imageUrl: item.imageUrl,
         width: width,
         height: height,
-        userId: item.userId,
         nickname: item.user.username,
+        ...item,
       }
     });
 
     return getMessageTimestamp(_list.filter(item => (item.imageUrl || item.text)).reverse());
-  }, [dialogMsgListLength]);
+  }, [dialogMsgList]);
 
   useEffect(async () => {
     if (username && !dialogId) {
@@ -211,6 +269,7 @@ const Index = ({ message, user, site, dialogId: _dialogId, username, nickname, t
     Taro.onKeyboardHeightChange(res => {
       setKeyboardHeight(res?.height || 0);
     });
+
 
     return () => {
       clearMessage();
