@@ -66,10 +66,12 @@ const List = forwardRef(({
   useEffect(() => {
     // 约束，只有在H5端，加载中的状态才会生效此样式
     if (listWrapper.current && showLoadingInCenter && !noMore && !isError && site?.platform === 'h5') {
-      const { clientHeight } = listWrapper.current;
-      const { scrollHeight } = listWrapper.current;
+      const {clientHeight} = listWrapper.current;
+      const {scrollHeight} = listWrapper.current;
 
-      setIsLoadingInCenter(scrollHeight <= clientHeight)
+      setIsLoadingInCenter(scrollHeight <= clientHeight);
+    } else {
+      setIsLoadingInCenter(false);
     }
   }, [listWrapper.current, children])
 
