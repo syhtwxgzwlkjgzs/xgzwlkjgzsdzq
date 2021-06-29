@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle,useMemo } from 'react';
 import { ScrollView } from '@tarojs/components';
 import { noop, isPromise } from '@components/thread/utils'
 import styles from './index.module.scss';
@@ -51,6 +51,7 @@ const List = forwardRef(({
       jumpToScrollTop,
     }),
   );
+
 
 
   const jumpToScrollTop = (scrollTop) => {
@@ -106,10 +107,14 @@ const List = forwardRef(({
       }, 0)
     }
 
+  const LoadingInCenter = useMemo(() => {
+    return showLoadingInCenter && !noMore && !isError ;
+  }, [showLoadingInCenter, noMore, isError]);
+
   return (
     <ScrollView
       scrollY
-      className={`${styles.container} ${className} ${showLoadingInCenter ? styles.wrapperH5Center : ''}`}
+      className={`${styles.container} ${className} ${LoadingInCenter ? styles.wrapperH5Center : ''}`}
       style={{ height }}
       onScrollToLower={hasOnScrollToLower ? onTouchMove : null}
       lowerThreshold={preload}
