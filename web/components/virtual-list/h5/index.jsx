@@ -116,7 +116,7 @@ function VList(props, ref) {
       case 'footer':
         return <BottomView noMore={props.noMore} isError={props.requestError} errorText={props.errorText} type='line' platform={props.platform}></BottomView>;
       default:
-        return <Item data={data} measure={measure} recomputeRowHeights={(data) => recomputeRowHeights(index, data)} />;
+        return <Item data={data} isLast={index === list?.length - 2} measure={measure} recomputeRowHeights={(data) => recomputeRowHeights(index, data)} />;
     }
   };
 
@@ -238,7 +238,7 @@ function VList(props, ref) {
         )}
       </InfiniteLoader>
 
-      {scrollTop > winHeight * 2 && <BacktoTop h5 onClick={handleBacktoTop} />}
+      {scrollTop > winHeight * 2 && <BacktoTop showTabBar={props.showTabBar} h5 onClick={handleBacktoTop} />}
     </div>
   );
 }

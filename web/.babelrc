@@ -32,7 +32,7 @@
       }
     ],
     [
-      "@discuzq/design-babel-plugin",
+      "@discuzq/discuz-babel-plugin-import",
       {
         "libraryName": "@discuzq/design",
         "libraryDirectory": "dist/components"
