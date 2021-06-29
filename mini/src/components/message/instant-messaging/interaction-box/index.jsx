@@ -13,14 +13,14 @@ import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
 
 const InteractionBox = (props) => {
-  const { dialogId, threadPost, showEmoji, setShowEmoji, username, updateDialogId, keyboardHeight, inputBottom } = props;
+  const { dialogId, threadPost, showEmoji, switchEmoji, username, updateDialogId, keyboardHeight, inputBottom } = props;
   const { readDialogMsgList, dialogMsgList, createDialogMsg, createDialog, readDialogIdByUsername } = props.message;
 
   // const [dialogId, setDialogId] = useState(propsDialogId);
   const [lastTimestamp, setLastTimestamp] = useState(0);
   const [typingValue, setTypingValue] = useState('');
   const [cursorPosition, setCursorPosition] = useState(0);
-  // const [showEmoji, setShowEmoji] = useState(false);
+  // const [showEmoji, switchEmoji] = useState(false);
 
   const [isSubmiting, setIsSubmiting] = useState(false);
 
@@ -93,7 +93,7 @@ const InteractionBox = (props) => {
   };
 
   const doSubmitClick = async () => {
-    setShowEmoji(false);
+    switchEmoji(false);
     if (!typingValue.trim()) return;
     submit({ messageText: typingValue, isImage: false });
   };
@@ -218,7 +218,7 @@ const InteractionBox = (props) => {
           />
           <View className={styles.tools}>
             <View>
-              <Icon name="SmilingFaceOutlined" size={20} color={'var(--color-text-secondary)'} onClick={() => {setShowEmoji(!showEmoji)}} />
+              <Icon name="SmilingFaceOutlined" size={20} color={'var(--color-text-secondary)'} onClick={() => {switchEmoji(!showEmoji)}} />
             </View>
             <View className={styles.pictureUpload}>
               <Icon name="PictureOutlinedBig" size={20} color={'var(--color-text-secondary)'} onClick={chooseImage} />
