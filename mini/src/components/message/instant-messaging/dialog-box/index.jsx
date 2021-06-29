@@ -9,18 +9,11 @@ import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
 
 const DialogBox = (props) => {
-  // const { shownMessages, dialogBoxRef } = props;
-
   const { message, user, dialogId, showEmoji, keyboardHeight, hideEmoji, scrollEnd, messagesHistory } = props;
   const { readDialogMsgList, dialogMsgList, dialogMsgListLength, updateDialog } = message;
 
-
   const [paddingBottom, setPaddingBottom] = useState(52);
 
-  // const [previewerVisibled, setPreviewerVisibled] = useState(false);
-  // const [defaultImg, setDefaultImg] = useState('');
-  // const router = useRouter();
-  // const dialogId = router.query.dialogId;
   const dialogBoxRef = useRef();
   const timeoutId = useRef();
   useEffect(() => {
@@ -66,8 +59,6 @@ const DialogBox = (props) => {
     }, 20000);
   };
 
-
-
   const [previewImageUrls, setPreviewImageUrls] = useState([]);
   useMemo(() => {
     setPreviewImageUrls(dialogMsgList.list.filter(item => !!item.imageUrl).map(item => item.imageUrl).reverse());
@@ -81,7 +72,6 @@ const DialogBox = (props) => {
       className={styles.dialogBox}
       style={{
         paddingBottom: `${paddingBottom}px`,
-        // marginBottom: keyboardHeight ? 0 : '',
       }}
       ref={dialogBoxRef}>
       <View className={styles.box__inner}>

@@ -1,15 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Textarea } from '@tarojs/components';
+import React, { useState } from 'react';
+import { View } from '@tarojs/components';
 import Button from '@discuzq/design/dist/components/button/index';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Input from '@discuzq/design/dist/components/input/index';
-import Toast from '@discuzq/design/dist/components/toast/index';
-import Router from '@discuzq/sdk/dist/router';
-
-
 import { Emoji } from '@components/thread-post';
 import { inject, observer } from 'mobx-react';
-import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
 
 const InteractionBox = (props) => {

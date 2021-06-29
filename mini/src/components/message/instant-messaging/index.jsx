@@ -74,7 +74,7 @@ const Index = ({ message, user, site, dialogId: _dialogId, username, nickname, t
   // 触发图片选择
   const chooseImage = () => {
     Taro.chooseImage({
-      count: 1,
+      count: 9,
       success(res) {
         onImgChange(res.tempFiles)
       }
