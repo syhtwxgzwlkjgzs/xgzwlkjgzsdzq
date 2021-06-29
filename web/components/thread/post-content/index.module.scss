@@ -44,6 +44,10 @@
     :global(.dzq-richText) {
       overflow: hidden;
     }
+    :global(.dzq-code) {
+      display: block;
+      overflow: auto;
+    }
   }
 
   .hideCover {

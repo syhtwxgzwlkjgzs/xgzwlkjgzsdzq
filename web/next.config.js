@@ -3,6 +3,7 @@ const nextConfig = require('@discuzq/cli/config/next');
 module.exports = nextConfig((config) => {
     config.productionBrowserSourceMaps = false;
     config.crossOrigin = 'anonymous';
+    // console.log(config);
     // config.devIndicators = {
     //     autoPrerender: false,
     // }
