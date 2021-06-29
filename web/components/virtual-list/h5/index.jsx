@@ -243,4 +243,4 @@ function VList(props, ref) {
   );
 }
 
-export default observer(inject('vlist')(forwardRef(VList)));
+export default inject('vlist')(observer(forwardRef(VList)));
