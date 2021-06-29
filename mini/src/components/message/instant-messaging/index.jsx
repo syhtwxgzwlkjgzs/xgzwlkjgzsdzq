@@ -11,9 +11,10 @@ import { getMessageImageSize } from '@common/utils/get-message-image-size';
 import { getMessageTimestamp } from '@common/utils/get-message-timestamp';
 import calcImageQuality from '@common/utils/calc-image-quality';
 
-const Index = ({ message, user, site, dialogId: _dialogId, username, nickname, threadPost }) => {
+const Index = ({ message, user, site: { webConfig, envConfig }, dialogId: _dialogId, username, nickname, threadPost }) => {
 
-  const { clearMessage, readDialogMsgList, dialogMsgListLength, dialogMsgList, updateDialog, createDialogMsg, createDialog, readDialogIdByUsername } = message;
+  const { clearMessage, readDialogMsgList, dialogMsgList, updateDialog, createDialogMsg, createDialog, readDialogIdByUsername } = message;
+  const { supportImgExt, supportMaxSize } = webConfig?.setAttach;
 
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [dialogId, setDialogId] = useState(_dialogId);
@@ -22,6 +23,7 @@ const Index = ({ message, user, site, dialogId: _dialogId, username, nickname, t
   const [typingValue, setTypingValue] = useState('');
 
   const uploadingImagesRef = useRef([]);
+  const listDataLengthRef = useRef(0);
 
   const scrollEnd = () => {
     setTimeout(() => {
@@ -80,9 +82,37 @@ const Index = ({ message, user, site, dialogId: _dialogId, username, nickname, t
     isImage: true,
   });
 
+  // 检查文件类型和体积
+  const checkFile = (file) => {
+    if (!webConfig) return false;
+    const imageType = file.path.match(/\.([^\.]+)$/)[1].toLocaleLowerCase();
+    const imageSize = file.size;
+    const isLegalType = supportImgExt.toLocaleLowerCase().includes(imageType);
+    const isLegalSize = imageSize > 0 && imageSize < supportMaxSize * 1024 * 1024;
+    if (!isLegalType) {
+      return '格式错误';
+    }
+
+    if (!isLegalSize) {
+      // Toast.info({ content: `仅支持0 ~ ${supportMaxSize}MB的图片` });
+      return '体积过大';
+    }
+
+    return false;
+  };
+
   // 提交图片
-  const sendImageAttachment = async (file, dialogId, isResend) => {
-    const { envConfig } = site;
+  const sendImageAttachment = async (file, isResend) => {
+    if (file.failMsg) return;
+    if (isResend) {
+      uploadingImagesRef.current.forEach((item) => {
+        if (item.dialogMessageId === file.dialogMessageId) {
+          item.isImageFail = false;
+          readDialogMsgList(dialogId);
+        }
+      });
+    }
+
     const token = locals.get(constants.ACCESS_TOKEN_NAME);
     Taro.uploadFile({
       url: `${envConfig.COMMON_BASE_URL}/apiv3/attachments`,
@@ -104,10 +134,13 @@ const Index = ({ message, user, site, dialogId: _dialogId, username, nickname, t
 
           } else {
             // Toast.error({ content: msg || '图片发送失败' });
+            file.isImageFail = true;
           }
         } else {
           // Toast.error({ content: '网络发生错误' });
+          file.isImageFail = true;
         }
+        readDialogMsgList(dialogId);
       }
     });
   };
@@ -123,6 +156,18 @@ const Index = ({ message, user, site, dialogId: _dialogId, username, nickname, t
   };
 
   const onImgChange = async (files) => {
+    let localDialogId = 0;
+    if (!dialogId) {
+      const ret = await createDialog({
+        recipientUsername: username,
+        isImage: true,
+      });
+      const { code, data } = ret;
+      if (code === 0) {
+        localDialogId = data.dialogId;
+        setDialogId(data.dialogId);
+      }
+    }
 
     // 先获取图片本地的路径、再异步获取图片的宽高
     await Promise.all(files.map(file => {
@@ -134,13 +179,14 @@ const Index = ({ message, user, site, dialogId: _dialogId, username, nickname, t
             file.height = height;
             file.type = type;
             file.imageUrl = file.path;
+            file.failMsg = checkFile(file);
             resolve();
           }
         });
       });
     }));
 
-    Promise.all(files.map(() => submitEmptyImage(dialogId))).then((results) => {
+    Promise.all(files.map(() => submitEmptyImage(dialogId || localDialogId))).then((results) => {
       // 把消息id从小到大排序
       results.sort((a, b) => a.data.dialogMessageId - b.data.dialogMessageId);
 
@@ -153,41 +199,17 @@ const Index = ({ message, user, site, dialogId: _dialogId, username, nickname, t
       });
       // 维护本地图片队列
       uploadingImagesRef.current = uploadingImagesRef.current.concat(files);
-      readDialogMsgList(dialogId).then(() => {
+      readDialogMsgList(dialogId || localDialogId).then(() => {
         // clearToast();
       });
 
       // 开始上传图片
       files.map(async (file) => {
-        sendImageAttachment(file, dialogId);
+        sendImageAttachment(file);
       });
 
-      readDialogMsgList(dialogId);
+      readDialogMsgList(dialogId || localDialogId);
     });
-  };
-
-  // 图片上传之前，true-允许上传，false-取消上传
-  const beforeUpload = (cloneList) => {
-    const { webConfig } = site;
-    if (!webConfig) return false;
-    const file = cloneList[0];
-    const { supportImgExt, supportMaxSize } = webConfig.setAttach;
-    const imageType = file.path.match(/\.([^\.]+)$/)[1].toLocaleLowerCase();
-    const imageSize = file.size;
-    const isLegalType = supportImgExt.toLocaleLowerCase().includes(imageType);
-    const isLegalSize = imageSize > 0 && imageSize < supportMaxSize * 1024 * 1024;
-
-    if (!isLegalType) {
-      Toast.info({ content: `仅支持${supportImgExt}类型的图片` });
-      return false;
-    }
-
-    if (!isLegalSize) {
-      Toast.info({ content: `仅支持0 ~ ${supportMaxSize}MB的图片` });
-      return false;
-    }
-
-    return true;
   };
 
   const messagesHistory = useMemo(() => {
@@ -197,7 +219,7 @@ const Index = ({ message, user, site, dialogId: _dialogId, username, nickname, t
       updateDialog(dialogId);
     }, 100);
 
-    const _list = dialogMsgList.list.map((item) => {
+    const listData = dialogMsgList.list.map((item) => {
       if (item.isImageLoading && uploadingImagesRef.current.length) {
         uploadingImagesRef.current.forEach((file) => {
           if (file.dialogMessageId === item.id) {
@@ -215,6 +237,8 @@ const Index = ({ message, user, site, dialogId: _dialogId, username, nickname, t
         const size = item.imageUrl.match(/\?width=(\d+)&height=(\d+)$/);
         if (size) {
           [width, height] = getMessageImageSize(size[1], size[2]); // 计算图片显示尺寸
+        } else if (item.isImageLoading) {
+          [width, height] = getMessageImageSize(item.width, item.height);
         }
       }
 
@@ -228,6 +252,7 @@ const Index = ({ message, user, site, dialogId: _dialogId, username, nickname, t
       }
 
       return {
+        ...item,
         timestamp: item.createdAt,
         userAvatar: item.user.avatar,
         displayTimePanel: true,
@@ -237,11 +262,20 @@ const Index = ({ message, user, site, dialogId: _dialogId, username, nickname, t
         width: width,
         height: height,
         nickname: item.user.username,
-        ...item,
       }
-    });
+    }).filter(item => (item.imageUrl || item.text)).reverse();
 
-    return getMessageTimestamp(_list.filter(item => (item.imageUrl || item.text)).reverse());
+    // 消息数有变化，即有新消息，此时把滚动条滚动到底部
+    if (listData.length > listDataLengthRef.current) {
+      listDataLengthRef.current = listData.length;
+      setTimeout(() => {
+        scrollEnd();
+        // 把消息状态更新为已读
+        updateDialog(dialogId);
+      }, 100);
+    }
+
+    return getMessageTimestamp(listData);
   }, [dialogMsgList]);
 
   useEffect(async () => {
@@ -283,6 +317,7 @@ const Index = ({ message, user, site, dialogId: _dialogId, username, nickname, t
         scrollEnd={scrollEnd}
         dialogId={dialogId}
         showEmoji={showEmoji}
+        sendImageAttachment={sendImageAttachment}
         hideEmoji={() => {
           setShowEmoji(false);
         }}
