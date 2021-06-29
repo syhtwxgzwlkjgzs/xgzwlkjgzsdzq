@@ -261,7 +261,7 @@ class ThreadPostAction extends ThreadPostStore {
     let text = contentText;
     if (isMini) {
       // 目前只是简单的队小程序进行简单的处理
-      text = `<p>${text.replace(/(\n*)$/, '').replace(/\n/g, '<br />')}</p>`;
+      text = `${text.replace(/(\n*)$/, '').replace(/\n/g, '<br />')}`;
     }
     text = emojiFormatForCommit(text)
       .replace(/@([^@<]+)<\/p>/g, '@$1 </p>');
