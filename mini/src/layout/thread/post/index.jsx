@@ -278,6 +278,7 @@ class Index extends Component {
         break;
       case THREAD_TYPE.video:
         this.handleVideoUpload();
+        postData.video.thumbUrl && this.props.pageScrollTo({ selector: '#thread-post-video' });
         break;
       case THREAD_TYPE.anonymity:
         if (postData.anonymous) this.props.threadPost.setPostData({ anonymous: 0 });
@@ -287,10 +288,22 @@ class Index extends Component {
         this.setState({
           showEmoji: !this.state.showEmoji
         });
+        this.props.pageScrollTo();
+        break;
+      case THREAD_TYPE.image:
+        this.props.pageScrollTo({ selector: "#thread-post-image" });
+        break;
+      case THREAD_TYPE.voice:
+        this.props.pageScrollTo({ selector: "#thread-post-voice" });
+        break;
+      case THREAD_TYPE.file:
+        this.props.pageScrollTo({ selector: "#thread-post-file" });
         break;
     }
-    if (nextRoute) Taro.navigateTo({ url: nextRoute });
-
+    if (nextRoute) {
+      this.props.setRouterAction(item.type);
+      Taro.navigateTo({ url: nextRoute });
+    }
   }
 
   // 执行上传视频
@@ -357,6 +370,7 @@ class Index extends Component {
                 thumbUrl: data.mediaUrl,
               },
             });
+            this.props.pageScrollTo({ selector: '#thread-post-video' });
           } else if (type === 'audio') {
             setPostData({
               audio: {
@@ -704,7 +718,7 @@ class Index extends Component {
     } = this.state;
     const navStyle = {
       height: `${navInfo.navHeight}px`,
-      marginTop: `${navInfo.statusBarHeight}px`,
+      paddingTop: `${navInfo.statusBarHeight}px`,
     }
     const contentStyle = {
       marginTop: navInfo.statusBarHeight > 30 ? `${navInfo.navHeight / 2}px` : '0px',
@@ -751,22 +765,22 @@ class Index extends Component {
               />
 
               <View className={styles.plugin} onClick={e => e.stopPropagation()}>
-                <GeneralUpload type={operationType} audioUpload={(file) => { this.yundianboUpload('audio', file) }}>
-                  {video.thumbUrl && (
-                    <Units
-                      type='video'
-                      deleteShow
-                      src={video.thumbUrl}
-                      onDelete={() => setPostData({ video: {} })}
-                      onVideoLoaded={() => {
-                        Taro.pageScrollTo({
-                          scrollTop: 3000,
-                          // selector: '#thread-post-video',
-                          complete: (a,b,c) => {console.log(a,b,c)}
-                        });
-                      }}
-                    />
-                  )}
+                <GeneralUpload
+                  type={operationType}
+                  pageScrollTo={this.props.pageScrollTo}
+                  audioUpload={(file) => { this.yundianboUpload('audio', file) }}
+                >
+                  <View id='thread-post-video'>
+                    {video.thumbUrl && (
+                      <Units
+                        type='video'
+                        deleteShow
+                        src={video.thumbUrl}
+                        onDelete={() => setPostData({ video: {} })}
+                        onVideoLoaded={() => {}}
+                      />
+                    )}
+                  </View>
                 </GeneralUpload>
                 {product.detailContent && <Units type='product' productSrc={product.imagePath} productDesc={product.title} productPrice={product.price} onDelete={() => setPostData({ product: {} })} />}
               </View>
@@ -774,76 +788,76 @@ class Index extends Component {
             </View>
           </View>
 
-          {/* 插入内容tag展示区 */}
-          <View className={styles.tags} style={{ display: bottomHeight ? 'none' : 'block' }}>
-            {(permissions?.insertPosition?.enable) &&
-              <View className={styles['location-bar']}>
-                <Position
-                  currentPosition={position}
-                  positionChange={(position) => {
-                    setPostData({ position });
-                  }}
-                  canJumpToChoose={() => {
-                    return this.checkAudioRecordStatus();
-                  }}
-                />
-              </View>
-            }
-
-            {(Boolean(postData.price || postData.attachmentPrice) || redpacket.price || rewardQa.value) && (
-              <View className={styles['tag-toolbar']}>
-                {/* 插入付费tag */}
-                {(Boolean(postData.price || postData.attachmentPrice)) && (
-                  <Units
-                    type='tag'
-                    style={{ marginTop: 0, paddingRight: '8px' }}
-                    tagContent={`付费总额${(postData.price || postData.attachmentPrice).toFixed(2)}元`}
-                    onTagClick={() => {
-                      if (postData.price) {
-                        this.handlePluginClick({ type: THREAD_TYPE.paidPost })
-                      } else if (postData.attachmentPrice) {
-                        this.handlePluginClick({ type: THREAD_TYPE.paidAttachment })
-                      }
-                    }}
-                    onTagRemoveClick={() => {
-                      setPostData({
-                        price: 0,
-                        attachmentPrice: 0
-                      })
-                    }}
-                  />
-                )}
-                {/* 红包tag */}
-                {redpacket.price &&
-                  <Units
-                    type='tag'
-                    style={{ marginTop: 0, paddingRight: '8px' }}
-                    tagContent={this.redpacketContent()}
-                    onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.redPacket })}
-                    isCloseShow={this.state.canEditRedpacket}
-                    onTagRemoveClick={() => { setPostData({ redpacket: {} }) }}
-                  />
-                }
-                {/* 悬赏tag */}
-                {rewardQa.value &&
-                  <Units
-                    type='tag'
-                    style={{ marginTop: 0, paddingRight: '8px' }}
-                    tagContent={`悬赏金额${Number(rewardQa.value).toFixed(2)}元\\结束时间 ${rewardQa.times}`}
-                    onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
-                    isCloseShow={this.state.canEditReward}
-                    onTagRemoveClick={() => { setPostData({ rewardQa: {} }) }}
-                  />
-                }
-              </View>
-            )}
-          </View>
-
           {/* 工具栏区域、include各种插件触发图标、发布等 */}
           <View
             className={styles.toolbar}
             style={{ transform: `translateY(-${bottomHeight}px)`, bottom: bottomHeight ? 0 : '' }}
           >
+            {/* 插入内容tag展示区 */}
+            <View className={styles.tags} style={{ display: bottomHeight ? 'none' : 'block' }}>
+              {(permissions?.insertPosition?.enable) &&
+                <View className={styles['location-bar']}>
+                  <Position
+                    currentPosition={position}
+                    positionChange={(position) => {
+                      setPostData({ position });
+                    }}
+                    canJumpToChoose={() => {
+                      return this.checkAudioRecordStatus();
+                    }}
+                  />
+                </View>
+              }
+              {(Boolean(postData.price || postData.attachmentPrice) || redpacket.price || rewardQa.value) && (
+                <View className={styles['tag-toolbar']}>
+                  {/* 插入付费tag */}
+                  {(Boolean(postData.price || postData.attachmentPrice)) && (
+                    <Units
+                      type='tag'
+                      style={{ marginTop: 0, paddingRight: '8px' }}
+                      tagContent={`付费总额${(postData.price || postData.attachmentPrice).toFixed(2)}元`}
+                      onTagClick={() => {
+                        if (postData.price) {
+                          this.handlePluginClick({ type: THREAD_TYPE.paidPost })
+                        } else if (postData.attachmentPrice) {
+                          this.handlePluginClick({ type: THREAD_TYPE.paidAttachment })
+                        }
+                      }}
+                      onTagRemoveClick={() => {
+                        setPostData({
+                          price: 0,
+                          attachmentPrice: 0
+                        })
+                      }}
+                    />
+                  )}
+                  {/* 红包tag */}
+                  {redpacket.price &&
+                    <Units
+                      type='tag'
+                      style={{ marginTop: 0, paddingRight: '8px' }}
+                      tagContent={this.redpacketContent()}
+                      onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.redPacket })}
+                      isCloseShow={this.state.canEditRedpacket}
+                      onTagRemoveClick={() => { setPostData({ redpacket: {} }) }}
+                    />
+                  }
+                  {/* 悬赏tag */}
+                  {rewardQa.value &&
+                    <Units
+                      type='tag'
+                      style={{ marginTop: 0, paddingRight: '8px' }}
+                      tagContent={`悬赏金额${Number(rewardQa.value).toFixed(2)}元\\结束时间 ${rewardQa.times}`}
+                      onTagClick={() => this.handlePluginClick({ type: THREAD_TYPE.reward })}
+                      isCloseShow={this.state.canEditReward}
+                      onTagRemoveClick={() => { setPostData({ rewardQa: {} }) }}
+                    />
+                  }
+                </View>
+              )}
+            </View>
+
+            {/* 工具栏 */}
             <PluginToolbar
               operationType={operationType}
               isOpenQcloudVod={this.props.site.isOpenQcloudVod}
