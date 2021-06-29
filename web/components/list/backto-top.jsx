@@ -2,9 +2,11 @@ import React from 'react';
 import styles from './index.module.scss';
 
 export default function BacktoTop(props) {
-  const { className = '', onClick = () => { } } = props;
+  const { className = '', onClick = () => { }, h5, showTabBar = false } = props;
+  let cls = h5 ? styles.h5 : styles.pc;
+  if (showTabBar && h5) cls = `${cls} ${styles.tabbar}`;
   return (
-    <div className={`${styles.backtotop} ${className}`} onClick={onClick}>
+    <div className={`${styles.backtotop} ${cls} ${className}`} onClick={onClick}>
       {/* <img src="/dzq-img/backtop.svg" alt="backtotop icon" className={styles.topIcon} /> */}
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
         <g id="backtotop" data-name="置顶 (8)" transform="translate(0.037 -6.4)">

@@ -33,11 +33,11 @@
 .editor {
   position: relative;
   padding: 16px 16px 52px;
-  height: 550px;
+  height: 450px;
   border: $border-solid-1;
   border-radius: $border-radius-small;
   &-inner {
-    height: 550px;
+    height: 450px;
     overflow-y: scroll;
     overflow-x: hidden;
     @include scrollbar();

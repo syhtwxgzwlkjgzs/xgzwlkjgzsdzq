@@ -7,12 +7,14 @@ import DialogBox from './dialog-box';
 import InteractionBox from './interaction-box';
 import Router from '@discuzq/sdk/dist/router';
 import { createAttachment } from '@common/server';
-import { ACCEPT_IMAGE_TYPES } from '@common/constants/thread-post';
+import { getMessageTimestamp } from '@common/utils/get-message-timestamp';
+import calcImageQuality from '@common/utils/calc-image-quality';
 import styles from './index.module.scss';
 
 const Index = (props) => {
-  const { site: { isPC }, dialogId, username, nickname, message, threadPost, user } = props;
-  const { clearMessage, readDialogMsgList, createDialogMsg, createDialog, readDialogIdByUsername, dialogMsgList, dialogMsgListLength, updateDialog } = message;
+  const { site: { isPC, webConfig }, dialogId, username, nickname, message, threadPost, user } = props;
+  const { supportImgExt, supportMaxSize } = webConfig?.setAttach;
+  const { clearMessage, readDialogMsgList, createDialogMsg, createDialog, readDialogIdByUsername, dialogMsgList, updateDialog } = message;
 
   const dialogBoxRef = useRef();
   const timeoutId = useRef();
@@ -20,6 +22,7 @@ const Index = (props) => {
   const uploadingImagesRef = useRef([]);
   const listDataLengthRef = useRef(0);
 
+  const viewWidth = window.screen.width;
   let toastInstance = null;
 
   const [showEmoji, setShowEmoji] = useState(false);
@@ -33,22 +36,24 @@ const Index = (props) => {
     }
   };
 
-  // 每5秒轮询一次
+  // 每10秒轮询一次
   const updateMsgList = () => {
     readDialogMsgList(dialogId);
     clearPolling();
     timeoutId.current = setTimeout(() => {
       updateMsgList();
-    }, 5000);
+    }, 10000);
   };
 
   // 清除轮询
   const clearPolling = () => clearTimeout(timeoutId.current);
 
+  // 获取dialogid后把其放到url中
   const replaceRouteWidthDialogId = (dialogId) => {
-    Router.replace({ url: `/message?page=chat&nickname=${nickname}&dialogId=${dialogId}` });
+    Router.replace({ url: `/message?page=chat&nickname=${nickname}&username=${username}&dialogId=${dialogId}` });
   };
 
+  // 消息发送
   const submit = async (data) => {
     if (isSubmiting) return;
     let ret = {};
@@ -83,11 +88,13 @@ const Index = (props) => {
     }
   };
 
+  // 为图片发送空消息
   const submitEmptyImage = dialogId => createDialogMsg({
     dialogId,
     isImage: true,
   });
 
+  // 清除toast
   const clearToast = () => {
     toastInstance?.destroy();
   };
@@ -99,10 +106,7 @@ const Index = (props) => {
 
   // 检查文件类型和体积
   const checkFile = (file) => {
-    const { webConfig } = props.site;
     if (!webConfig) return false;
-
-    const { supportImgExt, supportMaxSize } = webConfig.setAttach;
     const imageType = file.name.match(/\.([^\.]+)$/)[1].toLocaleLowerCase();
     const imageSize = file.size;
     const isLegalType = supportImgExt.toLocaleLowerCase().includes(imageType);
@@ -120,6 +124,7 @@ const Index = (props) => {
     return false;
   };
 
+  // 执行图片发送事宜
   const onImgChange = async (e) => {
     const { files } = e.target;
     let localDialogId = 0;
@@ -138,6 +143,7 @@ const Index = (props) => {
 
     toastInstance = Toast.loading({
       content: '图片压缩中...',
+      duration: 0,
     });
 
     // 先获取图片本地的路径（base64）、再异步获取图片的宽高
@@ -161,8 +167,8 @@ const Index = (props) => {
     )));
 
     await Promise.all(fileList.map(() => submitEmptyImage(dialogId || localDialogId))).then((results) => {
-      // 把消息从大到小排序
-      results.sort((a, b) => b.data.dialogMessageId - a.data.dialogMessageId);
+      // 把消息id从小到大排序
+      results.sort((a, b) => a.data.dialogMessageId - b.data.dialogMessageId);
 
       // 把本地图片和消息id对应起来
       fileList.forEach((file, i) => {
@@ -171,16 +177,16 @@ const Index = (props) => {
           file.dialogMessageId = dialogMessageId;
         }
       });
-      readDialogMsgList(dialogId || localDialogId);
-      clearToast();
+      // 维护本地图片队列
+      uploadingImagesRef.current = uploadingImagesRef.current.concat(fileList);
+      readDialogMsgList(dialogId || localDialogId).then(() => {
+        clearToast();
+      });
 
       // 开始上传图片
       fileList.map(async (file) => {
         sendImageAttachment(file, dialogId || localDialogId);
       });
-
-      // 维护本地图片队列
-      uploadingImagesRef.current = uploadingImagesRef.current.concat(fileList);
 
       if (!dialogId) {
         replaceRouteWidthDialogId(localDialogId);
@@ -190,6 +196,7 @@ const Index = (props) => {
     });
   };
 
+  // 提交图片
   const sendImageAttachment = async (file, dialogId, isResend) => {
     if (file.failMsg) return;
     if (isResend) {
@@ -227,6 +234,14 @@ const Index = (props) => {
           }
         });
       }
+
+      // 处理图片格式和体积
+      if (!item.isImageLoading && item.imageUrl) {
+        const [path] = item.imageUrl.split('?');
+        const type = path.substr(path.indexOf('.') + 1);
+        item.renderUrl = `${path}?${calcImageQuality(viewWidth, type, 3)}`;
+      }
+
       return {
         ...item,
         timestamp: item.createdAt,
@@ -237,7 +252,7 @@ const Index = (props) => {
         ownedBy: user.id === item.userId ? 'myself' : 'itself',
         nickname: item.user.username,
       };
-    }).filter(item => item.imageUrl || item.text).reverse();
+    }).filter(item => (item.imageUrl || item.text)).reverse();
 
     // 消息数有变化，即有新消息，此时把滚动条滚动到底部
     if (listData.length > listDataLengthRef.current) {
@@ -249,8 +264,8 @@ const Index = (props) => {
       }, 100);
     }
 
-    return listData;
-  });
+    return getMessageTimestamp(listData);
+  }, [dialogMsgList]);
 
   useEffect(async () => {
     clearMessage();
@@ -263,18 +278,9 @@ const Index = (props) => {
     }
   }, [username, dialogId]);
 
-
   useEffect(() => {
     if (!threadPost.emojis.length) {
       threadPost.fetchEmoji();
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!isPC) {
-      document.addEventListener('focusin', () => {
-        setTimeout(scrollEnd, 0);
-      });
     }
     return () => {
       clearPolling();
@@ -285,6 +291,7 @@ const Index = (props) => {
 
   // 切换username时，停止当前轮询，用于pc端对话页右下角点击切换聊天用户的场景
   useEffect(() => {
+    listDataLengthRef.current = 0;
     clearPolling();
   }, [username]);
 
@@ -311,16 +318,16 @@ const Index = (props) => {
         multiple="multiple"
         ref={uploadRef}
         onChange={onImgChange}
-        accept={ACCEPT_IMAGE_TYPES.join(',')}
+        accept={supportImgExt ? supportImgExt.split(',').map(str => `image/${str}`).join(',') : 'image/*'}
       />
       <DialogBox
         ref={dialogBoxRef}
         messagesList={messagesList}
         showEmoji={showEmoji}
-        scrollEnd={scrollEnd}
         sendImageAttachment={sendImageAttachment}
       />
       <InteractionBox
+        scrollEnd={scrollEnd}
         typingValue={typingValue}
         setTypingValue={setTypingValue}
         uploadImage={uploadImage}

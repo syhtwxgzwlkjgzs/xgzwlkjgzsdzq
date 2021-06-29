@@ -17,7 +17,7 @@
     font-size: rem($font-size-base);
     line-height: rem(26);
     max-height: rem(49);
-    margin: rem($padding-4n) 0 rem($padding-2n);
+    margin: rem(14) 0 rem($padding-2n);
     @include lamp-clamp($line: 2);
     .richText{
       text-overflow: -o-ellipsis-lastline;

@@ -105,7 +105,7 @@ const InputPop = (props) => {
   };
 
   const handleUploadChange = async (list) => {
-    setImageList(list);
+    setImageList([...list]);
   };
 
   // 附件、图片上传之前
@@ -240,10 +240,10 @@ const InputPop = (props) => {
             <Emoji show={showEmojis} emojis={emojis} onClick={onEmojiClick} />
           </div>
         )}
+        <div className={styles.safeArea}></div>
       </Popup>
 
       {showAt && <AtSelect visible={showAt} getAtList={onAtListChange} onCancel={onAtIconClick} />}
-
     </div>
   );
 };

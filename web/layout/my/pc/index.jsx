@@ -96,6 +96,7 @@ class PCMyPage extends React.Component {
           onShowMore={() => {
             Router.push({ url: '/my/edit' });
           }}
+          className={`${styles.borderRadius}`}
         >
           {this.props.site?.isSmsOpen && (
             <div className={styles.userInfoWrapper}>

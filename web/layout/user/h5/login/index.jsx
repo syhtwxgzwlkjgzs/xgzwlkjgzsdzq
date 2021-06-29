@@ -24,7 +24,7 @@ class Login extends React.Component {
     });
 
     if (site.wechatEnv !== 'none') {
-      if (isWeiXin()) {
+      if (isWeiXin() && site?.isOffiaccountOpen) {
         let inviteCode = invite.getInviteCode(router);
         if (inviteCode) inviteCode = `?inviteCode=${inviteCode}`;
         const redirectEncodeUrl = encodeURIComponent(`${window.location.origin}/user/wx-auth${inviteCode}`);

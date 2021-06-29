@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Popup from '@discuzq/design/dist/components/popup/index';
 import Button from '@discuzq/design/dist/components/button/index';
+import className from 'classnames';
 import { View } from '@tarojs/components';
 import styles from './index.module.scss';
-import className from 'classnames';
 
 const InputPop = (props) => {
   const { visible, onSubmit, onClose, onOperClick, permissions = {}, statuses = {}, shareData, isShowShare } = props;
@@ -15,6 +15,11 @@ const InputPop = (props) => {
   const [essence, setEssence] = useState(isEssence);
   const [stick, setStick] = useState(isStick);
   const [collect, setCollect] = useState(isCollect);
+
+  const buttonNumber = useMemo(
+    () => (isShowShare ? 2 : 1 + canEdit + canDelete + canEssence + canStick + canShare + canCollect),
+    [canEdit, canDelete, canEssence, canStick, canShare, canCollect, isShowShare],
+  );
 
   useEffect(() => {
     setEssence(isEssence);
@@ -32,7 +37,7 @@ const InputPop = (props) => {
     <Popup position="bottom" visible={visible} onClose={onClose} customScroll={true}>
       <View className={styles.body}>
         <View className={styles.container}>
-          <View className={styles.more}>
+          <View className={className(styles.more, buttonNumber < 5 && styles.flex)}>
             {canEdit && !isShowShare && (
               <View className={styles.moreItem} onClick={() => onOperClick('edit')}>
                 <View className={styles.icon}>
@@ -61,7 +66,10 @@ const InputPop = (props) => {
               </View>
             )}
             {canStick && !isShowShare && (
-              <View className={className(styles.moreItem, stick && styles.actived)} onClick={() => onOperClick('stick')}>
+              <View
+                className={className(styles.moreItem, stick && styles.actived)}
+                onClick={() => onOperClick('stick')}
+              >
                 <View className={styles.icon}>
                   <Icon name="TopOutlined" size={20}></Icon>
                 </View>

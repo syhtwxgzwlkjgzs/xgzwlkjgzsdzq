@@ -23,7 +23,8 @@ import {
   SITE_CLOSED,
   JUMP_TO_PAY_SITE,
   SITE_NO_INSTALL,
-  JUMP_TO_SUPPLEMENTARY
+  JUMP_TO_SUPPLEMENTARY,
+  OPERATING_FREQUENCY
 } from '@common/constants/site';
 
 let globalToast = null;
@@ -229,16 +230,14 @@ http.interceptors.response.use((res) => {
       });
       break;
     }
+    case OPERATING_FREQUENCY: {
+      Toast.error({
+        content: '操作太频繁，请稍后重试',
+      });
+    }
     default:  // 200 状态码
-      if (status === 200) {
-        return Promise.resolve({
-          code: data.Code,
-          data: reasetData(data.Data),
-          msg: data.Message,
-        });
-      }
+    break;
   }
-
   if (status === 200) {
     return Promise.resolve({
       code: data.Code,
@@ -246,7 +245,6 @@ http.interceptors.response.use((res) => {
       msg: data.Message,
     });
   }
-
   return Promise.resolve({
     code: status,
     data: null,

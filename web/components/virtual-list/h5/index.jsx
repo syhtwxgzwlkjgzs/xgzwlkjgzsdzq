@@ -7,9 +7,10 @@ import { getImmutableTypeHeight, getSticksHeight } from '../utils';
 
 import { List, CellMeasurer, CellMeasurerCache, AutoSizer, InfiniteLoader } from 'react-virtualized';
 import { inject, observer } from 'mobx-react';
+import BacktoTop from '@components/list/backto-top';
+// import backtoTopFn from '@common/utils/backto-top';
 
 const immutableHeightMap = {}; // 不可变的高度
-
 let preScrollTop = 0;
 let scrollTimer;
 // 增强cache实例
@@ -40,6 +41,7 @@ function extendCache(instance) {
     return height;
   };
 }
+let loadData = false;
 
 function VList(props, ref) {
   let cache = props.vlist.cache;
@@ -56,15 +58,16 @@ function VList(props, ref) {
 
   const [list, setList] = useState([{ type: 'header' }, ...(props.list || []), { type: 'footer' }]);
   let listRef = useRef(null);
-  let loadData = false;
   const rowCount = list.length;
 
   const [flag, setFlag] = useState(true);
+  const [scrollTop, setScrollTop] = useState(0);
+  const winHeight = window.innerHeight;
 
   // 监听list列表
   useEffect(() => {
     setList([{ type: 'header' }, ...(props.list || []), { type: 'footer' }]);
-  }, [props.list]);
+  }, [props.list?.length]);
 
   // 监听置顶列表
   useEffect(() => {
@@ -111,7 +114,7 @@ function VList(props, ref) {
       case 'header':
         return props.children;
       case 'footer':
-        return <BottomView noMore={props.noMore} isError={props.requestError} errorText={props.errorText}></BottomView>;
+        return <BottomView noMore={props.noMore} isError={props.requestError} errorText={props.errorText} type='line' platform={props.platform}></BottomView>;
       default:
         return <Item data={data} measure={measure} recomputeRowHeights={(data) => recomputeRowHeights(index, data)} />;
     }
@@ -151,6 +154,7 @@ function VList(props, ref) {
   // 滚动事件
   const onScroll = ({ scrollTop, clientHeight, scrollHeight }) => {
     // scrollToPosition = scrollTop;
+    setScrollTop(scrollTop);
     setFlag(!(scrollTop < preScrollTop));
     preScrollTop = scrollTop;
 
@@ -162,9 +166,8 @@ function VList(props, ref) {
     if (scrollTop !== 0) {
       props.vlist.setPosition(scrollTop);
     }
-
     // if (scrollTop + (clientHeight * 4) >= scrollHeight && !loadData) {
-    if (scrollHeight / scrollTop <= 1.5 && !loadData) {
+    if (((scrollTop + (clientHeight * 4)) >= scrollHeight) && !loadData) {
       loadData = true;
       props.loadNextPage().finally(() => {
         loadData = false;
@@ -175,6 +178,15 @@ function VList(props, ref) {
   const isRowLoaded = ({ index }) => !!list[index];
 
   const loadMoreRows = () => Promise.resolve();
+
+  const handleBacktoTop = () => {
+    // backtoTopFn(scrollTop, (top) => {
+    //   setScrollTop(top);
+    // });
+    listRef && listRef.scrollToPosition(0);
+    props.vlist.setPosition(0);
+    // setScrollTop(0);
+  };
 
   const clearAllCache = () => {
     cache.clearAll();
@@ -214,6 +226,7 @@ function VList(props, ref) {
                 onRowsRendered={(...props) => {
                   onRowsRendered(...props);
                 }}
+                // scrollTop={scrollTop}
                 rowCount={rowCount}
                 rowHeight={getRowHeight}
                 rowRenderer={rowRenderer}
@@ -224,6 +237,8 @@ function VList(props, ref) {
           </AutoSizer>
         )}
       </InfiniteLoader>
+
+      {scrollTop > winHeight * 2 && <BacktoTop showTabBar={props.showTabBar} h5 onClick={handleBacktoTop} />}
     </div>
   );
 }

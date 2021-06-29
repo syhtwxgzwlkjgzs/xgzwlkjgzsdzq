@@ -206,6 +206,7 @@ class IndexH5Page extends React.Component {
             </div>
 
             <VList
+              showTabBar
               list={pageData}
               sticks={sticks}
               onScroll={this.handleScroll}
@@ -213,6 +214,7 @@ class IndexH5Page extends React.Component {
               noMore={currentPage >= totalPage}
               requestError={threadError.isError}
               errorText={threadError.errorText}
+              platform={'h5'}
               renderItem={(item, index, recomputeRowHeights, onContentHeightChange, measure) => (
                 <ThreadContent
                   onContentHeightChange={measure}

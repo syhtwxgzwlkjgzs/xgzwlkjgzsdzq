@@ -82,7 +82,7 @@
       }
 
       .left {
-        margin-right: rem(20);
+        margin-right: rem(24);
         width: rem(300);
       }
 
@@ -192,14 +192,14 @@
     flex-shrink: 0;
 
     &.home-right {
-      top: rem(-125);
+      top: 0;
     }
 
-    @include media('xl-pc') {
-      &.home-right {
-        top: rem(-135);
-      }
-    }
+    // @include media('xl-pc') {
+    //   &.home-right {
+    //     top: rem(-135);
+    //   }
+    // }
   }
 }
 
@@ -234,26 +234,26 @@
     }
 
     .home {
-      @include heightMedia(660px, 580px) {
+      @include heightMedia(800px, 720px) {
         .right-recommend-item:nth-last-child(-n + 2) {
           display: none;
         }
       }
 
-      @include heightMedia(580px, 500px) {
+      @include heightMedia(720px, 640px) {
         .right-recommend-item:nth-last-child(-n + 3) {
           display: none;
         }
       }
 
-      @include heightMedia(500px, 420px) {
+      @include heightMedia(640px, 560px) {
         .right-recommend-item:nth-last-child(-n + 4) {
           display: none;
         }
       }
 
       // 如果小于默认高度不吸顶
-      @include heightMedia(415px) {
+      @include heightMedia(560px) {
         .baselayout-right {
           position: static;
         }
@@ -266,9 +266,18 @@
     .mycollect,
     .search-result-post,
     .search-result-user {
+      .pop-topic div:nth-child(1),
+      .pop-topic div:nth-child(n+1),
+      .pop-topic div:nth-child(n+2) {
+        display: flex;
+      }
       @include heightMedia(650px, 595px) {
         .pop-topic div:nth-last-child(1) {
           display: none;
+        }
+
+        .pop-topic div:nth-last-child(-n + 2) {
+          border-bottom: none;
         }
       }
 
@@ -276,11 +285,19 @@
         .pop-topic div:nth-last-child(-n + 2) {
           display: none;
         }
+
+        .pop-topic div:nth-last-child(-n + 3) {
+          border-bottom: none;
+        }
       }
 
       @include heightMedia(545px, 495px) {
         .pop-topic div:nth-last-child(-n + 3) {
           display: none;
+        }
+
+        .pop-topic div:nth-last-child(-n + 4) {
+          border-bottom: none;
         }
       }
 
@@ -288,11 +305,19 @@
         .pop-topic div:nth-last-child(-n + 4) {
           display: none;
         }
+
+        .pop-topic div:nth-last-child(-n + 5) {
+          border-bottom: none;
+        }
       }
 
       @include heightMedia(445px, 395px) {
         .pop-topic div:nth-last-child(-n + 5) {
           display: none;
+        }
+
+        .pop-topic div:nth-last-child(-n + 6) {
+          border-bottom: none;
         }
       }
 
@@ -312,10 +337,9 @@
     }
 
     .mymessage-page {
-      // 这里暂时这样处理。等消息系列页面一起调整
-      min-height: 940px;
-
       @include heightMedia(940px) {
+        // 这里暂时这样处理。等消息系列页面一起调整
+        min-height: 940px;
         padding-top: 70px;
 
         .baselayout-right {
@@ -395,10 +419,17 @@
           display: none !important;
         }
       }
-
+      .pop-topic div:nth-child(1),
+      .pop-topic div:nth-child(n+1),
+      .pop-topic div:nth-child(n+2) {
+        display: flex;
+      }
       @include heightMedia(830px, 775px) {
         .pop-topic div:nth-last-child(1) {
           display: none;
+        }
+        .pop-topic div:nth-last-child(-n + 2) {
+          border-bottom: none;
         }
       }
 
@@ -406,11 +437,19 @@
         .pop-topic div:nth-last-child(-n + 2) {
           display: none;
         }
+
+        .pop-topic div:nth-last-child(-n + 3) {
+          border-bottom: none;
+        }
       }
 
       @include heightMedia(725px, 670px) {
         .pop-topic div:nth-last-child(-n + 3) {
           display: none;
+        }
+
+        .pop-topic div:nth-last-child(-n + 4) {
+          border-bottom: none;
         }
       }
 
@@ -418,11 +457,19 @@
         .pop-topic div:nth-last-child(-n + 4) {
           display: none;
         }
+
+        .pop-topic div:nth-last-child(-n + 5) {
+          border-bottom: none;
+        }
       }
 
       @include heightMedia(615px, 560px) {
         .pop-topic div:nth-last-child(-n + 5) {
           display: none;
+        }
+
+        .pop-topic div:nth-last-child(-n + 6) {
+          border-bottom: none;
         }
       }
 
