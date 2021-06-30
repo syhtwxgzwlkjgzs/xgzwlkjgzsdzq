@@ -263,6 +263,8 @@ const Index = (props) => {
 
       // 处理图片格式和体积
       if (!item.isImageLoading && item.imageUrl) {
+        const [path] = item.imageUrl.split('?');
+        const type = path.substr(path.indexOf('.') + 1);
         item.renderUrl = calcCosImageQuality(item.imageUrl, type, 3);
       }
 
