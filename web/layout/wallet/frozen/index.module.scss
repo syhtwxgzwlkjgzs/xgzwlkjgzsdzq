@@ -36,7 +36,6 @@
   margin-left: rem($margin-2n);
 }
 
-
 .content {
   position: relative;
   background-color: $white;
@@ -59,6 +58,7 @@
     font-size: rem($font-size-primary);
     text-align: left;
     color: $text-color-primary;
+    overflow: hidden;
   }
   .lower {
     display: flex;
@@ -69,5 +69,30 @@
     color: $text-color-secondary;
     padding-top: rem($padding-5n);
   }
-}
+  .amount {
+    margin-left: rem($margin-2n);
+    flex-shrink: 0;
+  }
+  .normalText {
+    overflow: hidden;
+    :global {
+      .qq-emotion {
+        width: rem(14);
+        height: rem(14);
+        display: inline-block;
+        flex-shrink: 0;
+      }
+      .dzq-richText {
+        font-size: rem($font-size-primary);
+        color: $text-color-primary;
+        overflow: hidden;
+        word-break: break-all;
+        @include text-ellipsis();
 
+        .dzq-a {
+          display: inline;
+        }
+      }
+    }
+  }
+}
