@@ -9,7 +9,8 @@ import Router from '@discuzq/sdk/dist/router';
 import initJSSdk from '@common/utils/initJSSdk.js';
 import { createAttachment } from '@common/server';
 import { getMessageTimestamp } from '@common/utils/get-message-timestamp';
-import calcImageQuality from '@common/utils/calc-image-quality';
+import calcCosImageQuality from '@common/utils/calc-cos-image-quality';
+
 import styles from './index.module.scss';
 
 const Index = (props) => {
@@ -267,9 +268,7 @@ const Index = (props) => {
 
       // 处理图片格式和体积
       if (!item.isImageLoading && item.imageUrl) {
-        const [path] = item.imageUrl.split('?');
-        const type = path.substr(path.indexOf('.') + 1);
-        item.renderUrl = `${path}?${calcImageQuality(viewWidth, type, 3)}`;
+        item.renderUrl = calcCosImageQuality(item.imageUrl, type, 3);
       }
 
       return {
