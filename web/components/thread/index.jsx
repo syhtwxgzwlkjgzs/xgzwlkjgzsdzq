@@ -245,7 +245,7 @@ class Index extends React.Component {
                 onClick={unifyOnClick || this.onClickUser}
                 unifyOnClick={unifyOnClick}
               />
-              {isShowIcon && <div className={styles.headerIcon} onClick={unifyOnClick || this.onClickHeaderIcon}>？？？？<Icon name='CollectOutlinedBig' size={20}></Icon></div>}
+              {isShowIcon && <div className={styles.headerIcon} onClick={unifyOnClick || this.onClickHeaderIcon}><Icon name='CollectOutlinedBig' size={20}></Icon></div>}
           </div>
 
           <ThreadCenterView
