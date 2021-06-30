@@ -1,19 +1,23 @@
 export function urlToLink(str) {
   // 匹配 https|http|ftp|rtsp|mms 协议以及非空格和中文以外的任意字符
-  const re = /(((https|http|ftp|rtsp|mms)?:\/\/)[^\s\u4e00-\u9fa5]+)/ig;
-  // 匹配 code
-  const codeReg = /(?<=<pre><code>)[\s\S]*?(?=<\/code><\/pre>)/gi;
+  const urlReg = /(((https|http|ftp|rtsp|mms)?:\/\/)[^\s\u4e00-\u9fa5]+)/ig;
+  // 匹配 code，没有在正则里面带上 code 标签，是因为 code 标签有可能存在不确定的 class 类，不容易匹配，
+  // 因此分开处理。而且 code 有两种存在形式：<pre><code></code></pre> 和 < code ></code >
+  const preReg = /(?<=<pre>)[\s\S]*?(?=<\/pre>)/gi;
+  const codeReg = /(?<=<code>)[\s\S]*?(?=<\/code>)/gi;
   // 匹配 a
-  const aReg = /<a[\s]*[^<>]*href="([\S]*[^<>]*)"/ig;
+  const aReg = /<a[\s]*[^<>]*href="([\S]*[^\s<>'"]*)"/ig;
   // 匹配 img
-  const imgReg = /<img[\s]*[^<>]*src="([\S]*[^<>]*)"/ig;
+  const imgReg = /<img[\s]*[^<>]*src="([\S]*[^\s<>"']*)"/ig;
 
   str = str
+    .replace(preReg, p => `${encodeURIComponent(p)}`)
     .replace(codeReg, p => `${encodeURIComponent(p)}`)
     .replace(imgReg, (p, p1) => `<img src="${encodeURIComponent(p1)}"`)
     .replace(aReg, (p, p1) => `<a href="${encodeURIComponent(p1)}"`)
-    .replace(re, website => `<a class="dzq-a" href="${website}" target="_blank">${website}</a>`)
+    .replace(urlReg, website => `<a href="${website}" target="_blank">${website}</a>`)
     .replace(codeReg, p => `${decodeURIComponent(p)}`)
+    .replace(preReg, p => `${decodeURIComponent(p)}`)
     .replace(imgReg, p => `${decodeURIComponent(p)}`)
     .replace(aReg, p => `${decodeURIComponent(p)}`);
 
