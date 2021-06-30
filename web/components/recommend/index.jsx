@@ -75,7 +75,7 @@ class Index extends React.Component {
         /* stylelint-disable */
         // maxHeight: (this.state.windowSize?.innerHeight - 80) || '600px'
       }}>
-        <div className={style.recommendContent}>推荐内容</div>
+        <div className={`${style.recommendContent} right-recommend-title`}>推荐内容</div>
         { (recommendsStatus === 'loading' || recommendsStatus === 'error' || !recommends?.length) && (
             <BottomView isBox isError={isError} errorText={errorText} noMore={recommendsStatus === 'none' && !recommends?.length} loadingText='正在加载' noMoreText='暂无数据' />
         )}
