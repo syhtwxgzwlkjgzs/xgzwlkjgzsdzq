@@ -40,7 +40,7 @@ const Index = (props) => {
 
   // 视频展示
   const video = (
-    <View className={deleteShow && styles['video-box']} id='thread-post-video'>
+    <View className={deleteShow && styles['video-box']}>
       {deleteShow &&
         <View className={styles['video-delete']} onClick={onDelete}>
           <Icon name="DeleteOutlined" />
@@ -63,7 +63,7 @@ const Index = (props) => {
 
   // 商品展示
   const product = (
-    <View className={styles['product']}>
+    <View className={styles['product']} id='thread-post-product'>
       <Image className={styles['image']} src={productSrc}></Image>
       <View className={styles['content']}>
         <Text className={styles['desc']}>{productDesc}</Text>
