@@ -16,6 +16,7 @@ import Toast from '@discuzq/design/dist/components/toast/index';
 import Button from '@discuzq/design/dist/components/button/index';
 import goToLoginPage from '@common/utils/go-to-login-page';
 
+import AboptPopup from './components/abopt-popup';
 import ReportPopup from './components/report-popup';
 import ShowTop from './components/show-top';
 import DeletePopup from './components/delete-popup';
@@ -31,6 +32,7 @@ import classNames from 'classnames';
 import { debounce } from '@common/utils/throttle-debounce';
 import styles from "./post/index.module.scss";
 import Router from '@discuzq/sdk/dist/router';
+import { parseContentData } from './utils';
 
 @inject('site')
 @inject('user')
@@ -45,6 +47,7 @@ class ThreadH5Page extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      showAboptPopup: false, // 是否弹出采纳弹框
       isShowShare: false, // 更多弹框是否显示分享
       showReportPopup: false, // 是否弹出举报弹框
       showDeletePopup: false, // 是否弹出删除弹框
@@ -754,12 +757,64 @@ class ThreadH5Page extends React.Component {
     });
   }
 
+  // 点击采纳
+  onAboptClick(data) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+      return;
+    }
+
+    this.commentData = data;
+    this.setState({ showAboptPopup: true });
+  }
+
+  // 悬赏弹框确定
+  async onAboptOk(data) {
+    if (data > 0) {
+      const params = {
+        postId: this.commentData?.id,
+        rewards: data,
+        threadId: this.props.thread?.threadData?.threadId,
+      };
+      const { success, msg } = await this.props.thread.reward(params);
+      if (success) {
+        this.setState({ showAboptPopup: false });
+
+        // 重新获取帖子详细
+        this.props.thread.fetchThreadDetail(params.threadId)
+
+        Toast.success({
+          content: `悬赏${data}元`,
+        });
+        return true;
+      }
+
+      Toast.error({
+        content: msg,
+      });
+    } else {
+      Toast.info({
+        content: '悬赏金额不能为0',
+      });
+    }
+  }
+
+  // 悬赏弹框取消
+  onAboptCancel() {
+    this.commentData = null;
+    this.setState({ showAboptPopup: false });
+  }
+
   render() {
     const { thread: threadStore } = this.props;
     const { isReady, isCommentReady, isNoMore, totalCount, isCommentListError } = threadStore;
     const fun = {
       moreClick: this.onMoreClick,
     };
+
+    const { indexes } = this.props.thread?.threadData?.content || {};
+    const parseContent = parseContentData(indexes);
 
     // const isDraft = threadStore?.threadData?.isDraft;
     // // 是否红包帖
@@ -846,6 +901,7 @@ class ThreadH5Page extends React.Component {
                       replyReplyClick={(reply, comment) => this.replyReplyClick(reply, comment)}
                       replyClick={(comment) => this.replyClick(comment)}
                       replyAvatarClick={(comment, reply, floor) =>this.replyAvatarClick(comment, reply, floor)}
+                      onAboptClick={(data) => this.onAboptClick(data)}
                     ></RenderCommentList>
                     {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
                     {isNoMore && (
@@ -958,6 +1014,14 @@ class ThreadH5Page extends React.Component {
               onCancel={() => this.setState({ showRewardPopup: false })}
               onOkClick={(value) => this.onRewardSubmit(value)}
             ></RewardPopup>
+
+            {/* 采纳弹层 */}
+            <AboptPopup
+              rewardAmount={parseContent.REWARD.money} // 需要传入剩余悬赏金额
+              visible={this.state.showAboptPopup}
+              onCancel={() => this.onAboptCancel()}
+              onOkClick={(data) => this.onAboptOk(data)}
+            ></AboptPopup>
           </Fragment>
         )}
       </View>

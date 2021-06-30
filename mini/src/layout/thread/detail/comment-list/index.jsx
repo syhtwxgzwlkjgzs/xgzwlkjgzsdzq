@@ -22,7 +22,6 @@ class RenderCommentList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showAboptPopup: false, // 是否弹出采纳弹框
       showCommentInput: false, // 是否弹出评论框
       commentSort: true, // ture 评论从旧到新 false 评论从新到旧
       showDeletePopup: false, // 是否弹出删除弹框
@@ -30,8 +29,8 @@ class RenderCommentList extends React.Component {
       inputText: '请输入内容', // 默认回复框placeholder内容
     };
 
-    // this.commentData = null;
-    // this.replyData = null;
+    this.commentData = null;
+    this.replyData = null;
 
     this.recordCommentLike = {
       // 记录当前评论点赞状态
@@ -274,14 +273,16 @@ class RenderCommentList extends React.Component {
 
   // 点击采纳
   onAboptClick(data) {
-    if (!this.props.user.isLogin()) {
-      Toast.info({ content: '请先登录!' });
-      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
-      return;
-    }
+    typeof this.props.onAboptClick === 'function' && this.props.onAboptClick(data);
+    
+    // if (!this.props.user.isLogin()) {
+    //   Toast.info({ content: '请先登录!' });
+    //   goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+    //   return;
+    // }
 
-    this.commentData = data;
-    this.setState({ showAboptPopup: true });
+    // this.commentData = data;
+    // this.setState({ showAboptPopup: true });
   }
 
   avatarClick(data) {
@@ -292,43 +293,6 @@ class RenderCommentList extends React.Component {
 
   replyAvatarClick(reply, comment, floor) {
     this.props.replyAvatarClick(reply, comment, floor);
-  }
-
-  // 悬赏弹框确定
-  async onAboptOk(data) {
-    if (data > 0) {
-      const params = {
-        postId: this.commentData?.id,
-        rewards: data,
-        threadId: this.props.thread?.threadData?.threadId,
-      };
-      const { success, msg } = await this.props.thread.reward(params);
-      if (success) {
-        this.setState({ showAboptPopup: false });
-
-        // 重新获取帖子详细
-        this.props.thread.fetchThreadDetail(params.threadId)
-
-        Toast.success({
-          content: `悬赏${data}元`,
-        });
-        return true;
-      }
-
-      Toast.error({
-        content: msg,
-      });
-    } else {
-      Toast.info({
-        content: '悬赏金额不能为0',
-      });
-    }
-  }
-
-  // 悬赏弹框取消
-  onAboptCancel() {
-    this.commentData = null;
-    this.setState({ showAboptPopup: false });
   }
 
   // 点击回复的删除
