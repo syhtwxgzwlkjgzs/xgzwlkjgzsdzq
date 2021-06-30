@@ -31,7 +31,7 @@
                 font-size: $font-size-primary;
                 overflow: hidden;
                 word-break: break-all;
-                max-width: 140px;
+                max-width: 200px;
                 line-height: 20px;
                 @include text-ellipsis();
 
