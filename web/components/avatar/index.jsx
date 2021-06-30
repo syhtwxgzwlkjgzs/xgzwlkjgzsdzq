@@ -24,19 +24,20 @@ function avatar(props) {
     userType = -1,
     unifyOnClick = null, // 付费加入，统一点击事件
     withStopPropagation = false, // 是否需要阻止冒泡 默认false不阻止
+    level = 6
   } = props;
 
   // console.log(image)
   // console.log(userInfo?.avatarUrl)
-
+  console.log(level);
   const currAvatarImage = useMemo(() => {
     if (!image || image === '') return image;
     if ( /(http|https):\/\/.*?(gif)/.test(image) ) {
       return calcCosImageQuality(image, 'gif');
     } else {
-      return calcCosImageQuality(image, 'png', 6);
+      return calcCosImageQuality(image, 'png', level);
     }
-  }, [image]);
+  }, [image, level]);
 
   const userName = useMemo(() => {
     const newName = (name || '').toLocaleUpperCase()[0];

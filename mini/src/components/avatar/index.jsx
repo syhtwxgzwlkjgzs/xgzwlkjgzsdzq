@@ -14,6 +14,7 @@ export default function avatar(props) {
     circle = true,
     size = 'primary',
     withStopPropagation = false, // 是否需要阻止冒泡 默认false不阻止
+    level = 6
   } = props;
 
   const userName = useMemo(() => {
@@ -26,9 +27,9 @@ export default function avatar(props) {
     if ( /(http|https):\/\/.*?(gif)/.test(image) ) {
       return calcCosImageQuality(image, 'gif');
     } else {
-      return calcCosImageQuality(image, 'png', 6);
+      return calcCosImageQuality(image, 'png', level);
     }
-  }, [image]);
+  }, [image, level]);
 
   const clickHandle = useCallback(
     (e) => {
