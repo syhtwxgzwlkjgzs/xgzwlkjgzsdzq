@@ -168,7 +168,6 @@ export default function HOCFetchSiteData(Component) {
         const {setSite} = siteConfig;
         const {siteTitle, siteIntroduction, siteFavicon} = setSite;
           window.wx && window.wx.ready(() => {
-          console.log(dataInfo)
 
           const dataInfo = {
               title: siteTitle || 'Discuz!Q', // 分享标题
@@ -176,12 +175,10 @@ export default function HOCFetchSiteData(Component) {
               link: window.location.url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
               imgUrl: siteFavicon, // 分享图标
           };
-          console.log(dataInfo)
           wx.updateAppMessageShareData(dataInfo); // 分享给朋友
           wx.updateTimelineShareData(dataInfo); // 分享到朋友圈
       });
       }
-      console.log(siteConfig);
       // wx && wx.ready(() => {
       //   // 需在用户可能点击分享按钮前就先调用
       //   const dataInfo = {
