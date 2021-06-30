@@ -1,12 +1,25 @@
 export function urlToLink(str) {
-  return str;
   // 匹配 https|http|ftp|rtsp|mms 协议以及非空格和中文以外的任意字符
-  const re = /(((https|http|ftp|rtsp|mms)?:\/\/)[^\s\u4e00-\u9fa5]+)/ig;
+  const urlReg = /(((https|http|ftp|rtsp|mms)?:\/\/)[^\s\u4e00-\u9fa5]+)/ig;
+  // 匹配 code，没有在正则里面带上 code 标签，是因为 code 标签有可能存在不确定的 class 类，不容易匹配，
+  // 因此分开处理。而且 code 有两种存在形式：<pre><code></code></pre> 和 < code ></code >
+  const preReg = /(?<=<pre>)[\s\S]*?(?=<\/pre>)/gi;
+  const codeReg = /(?<=<code>)[\s\S]*?(?=<\/code>)/gi;
+  // 匹配 a
+  const aReg = /<a[\s]*[^<>]*href="([\S]*[^\s<>'"]*)"/ig;
+  // 匹配 img
+  const imgReg = /<img[\s]*[^<>]*src="([\S]*[^\s<>"']*)"/ig;
+
   str = str
-    .replace(re, (website) => {
-      // 比如如果匹配到了引号，说明有可能是 a 链接或者图片，而不是直接写的链接。但是如果直接写的链接以引号结尾的话那么也匹配不了，也容易出错。代码里面的也会误判
-      if (/"/.test(website)) return website;
-      return `<a class'dzq-a' href='${website}' target='_blank'>${website}</a>`;
-    });
+    .replace(preReg, p => `${encodeURIComponent(p)}`)
+    .replace(codeReg, p => `${encodeURIComponent(p)}`)
+    .replace(imgReg, (p, p1) => `<img src="${encodeURIComponent(p1)}"`)
+    .replace(aReg, (p, p1) => `<a href="${encodeURIComponent(p1)}"`)
+    .replace(urlReg, website => `<a href="${website}" target="_blank">${website}</a>`)
+    .replace(codeReg, p => `${decodeURIComponent(p)}`)
+    .replace(preReg, p => `${decodeURIComponent(p)}`)
+    .replace(imgReg, p => `${decodeURIComponent(p)}`)
+    .replace(aReg, p => `${decodeURIComponent(p)}`);
+
   return str;
 }
