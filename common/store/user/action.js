@@ -40,11 +40,19 @@ class UserAction extends SiteStore {
   // 写入用户数据
   @action
   setUserInfo(data) {
-    this.userInfo = data;
-    if (data && data.id) {
-      this.updateLoginStatus(true);
-    } else {
-      this.updateLoginStatus(false);
+    if (data) {
+      if (!this.userInfo) {
+        this.userInfo = data;
+      } else {
+        Object.keys(data).forEach(key => {
+          this.userInfo[key] = data[key];
+        });
+      }
+      if (data && data.id) {
+        this.updateLoginStatus(true);
+      } else {
+        this.updateLoginStatus(false);
+      }
     }
   }
 

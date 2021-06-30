@@ -139,6 +139,11 @@ class PCMyPage extends React.Component {
     const { user } = this.props;
     const { userThreads, userThreadsTotalCount } = user;
     const formattedUserThreads = this.formatUserThreadsData(userThreads);
+    let showUserThreadsTotalCount = true;
+
+    if (userThreadsTotalCount === undefined || userThreadsTotalCount === null) {
+      showUserThreadsTotalCount = false;
+    }
 
     return (
       <div className={styles.userContent}>
@@ -155,7 +160,7 @@ class PCMyPage extends React.Component {
           isShowMore={false}
           noData={!formattedUserThreads?.length}
           isLoading={isLoading}
-          leftNum={`${userThreadsTotalCount}个主题`}
+          leftNum={showUserThreadsTotalCount ? `${userThreadsTotalCount}个主题` : ''}
           mold="plane"
         >
           {formattedUserThreads?.map((item, index) => (
