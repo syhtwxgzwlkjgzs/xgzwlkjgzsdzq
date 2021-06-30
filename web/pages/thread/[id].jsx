@@ -157,7 +157,6 @@ class Detail extends React.Component {
       desc = desc && desc !== '' ? desc.slice(0, 28) : ''
       let shareTitle = title && title !== '' ? title : desc && desc !== '' ? desc : setSpecialTitle(user, indexes);
       const shareImg = setShareImg( threadUser, text, indexes, siteFavicon);
-      console.log(shareTitle, desc, window.location.href, shareImg)
       setWxShare(shareTitle, desc, window.location.origin, shareImg);
     } catch(err) {
       console.error('设置分享错误', err);
