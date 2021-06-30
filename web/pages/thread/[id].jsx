@@ -102,7 +102,7 @@ class Detail extends React.Component {
       const {setSite} = webConfig;
       const {siteFavicon} = setSite;
       const { threadData } = thread;
-      const { content, title } = threadData;
+      const { content, title, user: threadUser } = threadData;
       const { text, indexes } = content;
 
       function setSpecialTitle(user, indexes = []) {
@@ -116,11 +116,11 @@ class Detail extends React.Component {
         return `${name}分享${contentLable}`;
       }
 
-      function setShareImg(user, text, indexes = [], favicon) {
+      function setShareImg(threadUser, text, indexes = [], favicon) {
         let img = null;
 
         // 取图文混排图片
-        const imageList = text.match(/<img[\s]+[^<>]*>|<img[\s]+[^<>]*/g);
+        const imageList = text.match(/<img[\s]+[^<>]*>|<img[\s]+[^<>]*/g) || [];
         for ( let i = 0; i < imageList.length; i++ ) {
           if ( imageList[i].indexOf('qq-emotion') === -1) {
             img = imageList[i].match(/(http|https):\/\/.*?(webp|png|jpg|jpeg)/gi);
@@ -142,8 +142,8 @@ class Detail extends React.Component {
           }
         }
         // 取用户头像
-        if (!img && user && user.userInfo && user.userInfo.avatarUrl) {
-          img = user.userInfo.avatarUrl;
+        if (!img && threadUser && threadUser.avatar) {
+          img = threadUser.avatar;
         }
 
         if (!img && favicon && favicon !== '') {
@@ -156,7 +156,8 @@ class Detail extends React.Component {
       let desc = htmlToString(text);
       desc = desc && desc !== '' ? desc.slice(0, 28) : ''
       let shareTitle = title && title !== '' ? title : desc && desc !== '' ? desc : setSpecialTitle(user, indexes);
-      const shareImg = setShareImg(user, text, indexes, siteFavicon);
+      const shareImg = setShareImg( threadUser, text, indexes, siteFavicon);
+      console.log(shareTitle, desc, window.location.href, shareImg)
       setWxShare(shareTitle, desc, window.location.origin, shareImg);
     } catch(err) {
       console.error('设置分享错误', err);
