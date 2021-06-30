@@ -28,6 +28,7 @@
   align-items: center;
   background-color: $comment-bg-color;
   padding: 0 rem($padding-4n);
+  min-height: rem(52);
 
   .status {
     font-family: 'PingFangSC-Regular';
