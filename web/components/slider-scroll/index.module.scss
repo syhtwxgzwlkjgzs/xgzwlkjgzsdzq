@@ -52,7 +52,11 @@
 
 .slider {
   background: $white;
-  overflow: hidden;
+
+  .slider__inner {
+    width: 100%;
+    overflow: hidden;
+  }
 
   .slider-item {
     display: flex;
