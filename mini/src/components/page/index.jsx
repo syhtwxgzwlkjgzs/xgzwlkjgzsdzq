@@ -44,8 +44,6 @@ export default class Page extends React.Component {
     if (noWithLogin && user.isLogin()) {
       Router.redirect({ url: INDEX_URL });
     }
-
-    this.isPass();
   }
 
   // 检查是否满足渲染条件
@@ -135,6 +133,10 @@ export default class Page extends React.Component {
   }
 
   render() {
+    if (!this.isPass()) {
+      return <></>;
+    }
+
     const { site, disabledToast, className = '' } = this.props;
     return (
       <View className={`${styles['dzq-page']} dzq-theme-${site.theme} ${className}`}>

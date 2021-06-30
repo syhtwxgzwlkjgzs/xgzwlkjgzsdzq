@@ -96,7 +96,12 @@
       }
       span[aria-label^="语言"],
       span[aria-label^="链接"],
-      span[aria-label^="图片地址"] {
+      span[aria-label^="文本（不能为空）"],
+      span[aria-label^="图片地址"],
+      span[aria-label^="替代文本"],
+      span[aria-label^="标题"],
+      span[aria-label^="行"],
+      span[aria-label^="列"] {
         display: inline-block !important;
         &::before,
         &::after {

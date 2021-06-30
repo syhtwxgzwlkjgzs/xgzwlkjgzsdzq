@@ -140,10 +140,10 @@ class PartnerInviteH5Page extends React.Component {
               isShowMore={false}
               icon={{ type: 2, name: 'MemberOutlined' }}
               title="活跃用户"
-              onShowMore={this.redirectToSearchResultUser}
+              onShowMore={this.handleJoinSite}
             />
             {!isLoading && usersPageData?.length ? (
-              <ActiveUsers data={usersPageData} onItemClick={this.onUserClick} />
+              <ActiveUsers data={usersPageData} onItemClick={this.handleJoinSite} />
             ) : (
               <></>
             )}
@@ -163,10 +163,10 @@ class PartnerInviteH5Page extends React.Component {
               isShowMore={false}
               icon={{ type: 3, name: 'HotOutlined' }}
               title="热门内容预览"
-              onShowMore={this.redirectToSearchResultPost}
+              onShowMore={this.handleJoinSite}
             />
             {!isLoading && threadsPageData?.length ? (
-              <PopularContents data={threadsPageData} onItemClick={this.onPostClick} />
+              <PopularContents data={threadsPageData} onItemClick={this.handleJoinSite} unifyOnClick={this.handleJoinSite} />
             ) : (
               <></>
             )}
@@ -180,7 +180,6 @@ class PartnerInviteH5Page extends React.Component {
             )}
           </View>
           {/* 热门内容预览 end */}
-          <View className={layout.maskLayer}></View>
           <View className={layout.bottom}>
             {inviteCode ? (
               <View className={layout.bottom_tips}>
@@ -190,6 +189,7 @@ class PartnerInviteH5Page extends React.Component {
                   text={invitorName?.substring(0, 1)}
                   className={layout.bottom_tips_img}
                   image={invitorAvatar}
+                  onClick={this.handleJoinSite}
                 />
                 <View className={layout.bottom_tips_text}>
                   <View>{invitorName} 邀请您加入站点</View>

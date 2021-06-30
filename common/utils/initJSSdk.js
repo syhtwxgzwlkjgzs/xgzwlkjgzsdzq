@@ -24,12 +24,14 @@ export default async function initJSSdk(jsApiList = []) {
       document.body.appendChild(script);
     });
     allPromise.push(scriptPromise);
+  } else {
+    allPromise.push(new Promise(resolve => resolve()));
   }
 
   // https://discuzv3-dev.dnspod.dev/apiv3/offiaccount/jssdk?url=https%3A%2F%2Fdiscuzv3-dev.dnspod.dev%2F
   const ajaxPromise = new Promise((resolve) => {
     const ajax = new XMLHttpRequest();
-    ajax.open('GET', `${window.location.origin}/apiv3/offiaccount/jssdk?url=${encodeURIComponent(location.href)}`, true);
+    ajax.open('GET', `https://bbsv3.techo.chat/apiv3/offiaccount/jssdk?url=${encodeURIComponent(location.href)}`, true);
     ajax.send(null);
     ajax.onreadystatechange = () => {
       if (ajax.readyState === 4) {
@@ -43,6 +45,7 @@ export default async function initJSSdk(jsApiList = []) {
   const [_ret, ret] = (await Promise.all(allPromise));
   if (ret && ret.Code === 0) {
     const params = (({ appId, timestamp, nonceStr, signature }) => ({ appId, timestamp, nonceStr, signature }))(ret.Data);
+    console.log(jsApiList);
     wx.config({
       debug: false,
       jsApiList,
