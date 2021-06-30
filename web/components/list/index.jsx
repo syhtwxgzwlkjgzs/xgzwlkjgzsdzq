@@ -69,7 +69,9 @@ const List = forwardRef(({
       const { clientHeight } = listWrapper.current;
       const { scrollHeight } = listWrapper.current;
 
-      setIsLoadingInCenter(scrollHeight <= clientHeight)
+      setIsLoadingInCenter(scrollHeight <= clientHeight);
+    } else {
+      setIsLoadingInCenter(false);
     }
   }, [listWrapper.current, children])
 
