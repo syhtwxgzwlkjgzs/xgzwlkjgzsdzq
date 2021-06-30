@@ -21,7 +21,7 @@ class CopyRight extends React.Component {
       <div className={clsName}>
         {setSite.siteRecord && <div className={styles.text}><a href="https://beian.miit.gov.cn/" target="_blank">{setSite.siteRecord}</a></div>}
         {setSite.siteRecordCode && <div className={styles.text}><a
-          href={`http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=${siteRecordCode}`}
+          href={`http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=${setSite.siteRecordCode}`}
           target="_blank"
         ></a>{setSite.siteRecordCode}</div>}
       </div>

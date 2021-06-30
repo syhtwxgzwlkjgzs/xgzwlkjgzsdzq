@@ -9,7 +9,7 @@ import Router from '@discuzq/sdk/dist/router';
 import wxChooseImage from '@common/utils/wx-choose-image';
 import { createAttachment } from '@common/server';
 import { getMessageTimestamp } from '@common/utils/get-message-timestamp';
-import calcImageQuality from '@common/utils/calc-image-quality';
+import calcCosImageQuality from '@common/utils/calc-cos-image-quality';
 import browser from '@common/utils/browser';
 import styles from './index.module.scss';
 
@@ -24,7 +24,6 @@ const Index = (props) => {
   const uploadingImagesRef = useRef([]);
   const listDataLengthRef = useRef(0);
 
-  const viewWidth = window.screen.width;
   let toastInstance = null;
 
   const [showEmoji, setShowEmoji] = useState(false);
@@ -262,9 +261,7 @@ const Index = (props) => {
 
       // 处理图片格式和体积
       if (!item.isImageLoading && item.imageUrl) {
-        const [path] = item.imageUrl.split('?');
-        const type = path.substr(path.indexOf('.') + 1);
-        item.renderUrl = `${path}?${calcImageQuality(viewWidth, type, 3)}`;
+        item.renderUrl = calcCosImageQuality(item.imageUrl, type, 3);
       }
 
       return {

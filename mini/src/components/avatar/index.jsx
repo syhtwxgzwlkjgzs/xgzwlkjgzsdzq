@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import Avatar from '@discuzq/design/dist/components/avatar/index';
 import { View } from '@tarojs/components';
 import { useCallback } from 'react';
+import calcCosImageQuality from '@common/utils/calc-cos-image-quality';
 
 export default function avatar(props) {
   const {
@@ -20,6 +21,15 @@ export default function avatar(props) {
     return newName;
   }, [name]);
 
+  const currAvatarImage = useMemo(() => {
+    if (!image || image === '') return image;
+    if ( /(http|https):\/\/.*?(gif)/.test(image) ) {
+      return calcCosImageQuality(image, 'gif');
+    } else {
+      return calcCosImageQuality(image, 'png', 6);
+    }
+  }, [image]);
+
   const clickHandle = useCallback(
     (e) => {
       if (withStopPropagation) {
@@ -34,7 +44,7 @@ export default function avatar(props) {
   if (image && image !== '') {
     return (
       <View onClick={clickHandle}>
-        <Avatar className={className} circle={circle} image={image} size={size}></Avatar>
+        <Avatar className={className} circle={circle} image={currAvatarImage} size={size}></Avatar>
       </View>
     );
   }
