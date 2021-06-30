@@ -22,11 +22,6 @@ export default class ReplyList extends React.Component {
     };
   }
 
-  // 跳转至评论详情
-  toCommentDetail() {
-    console.log('跳至评论详情');
-  }
-
   filterContent() {
     let newContent = this.props?.data?.content || '';
     newContent = s9e.parse(newContent);

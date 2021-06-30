@@ -13,7 +13,7 @@ const ProductSelect = (props) => {
   const parseLink = async () => {
     // 1 没有链接给予提示
     if (link === '') {
-      console.log('商品链接不能为空');
+      // console.log('商品链接不能为空');
       return;
     }
 
