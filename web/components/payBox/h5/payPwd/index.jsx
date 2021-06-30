@@ -101,7 +101,6 @@ class Index extends React.Component {
       setTimeout(() => {
         // TODO: 回跳逻辑补充
         this.props.payBox.visible = false;
-        this.props.payBox.step = null;
         Router.push({ url: '/user/bind-phone?from=paybox' });
       }, 1000);
       return;
@@ -158,7 +157,7 @@ class Index extends React.Component {
       <div>
         <Dialog
           className={styles.paypwdDialogWrapper}
-          visible={this.props.payBox.step === STEP_MAP.WALLET_PASSWORD}
+          visible={this.props.payBox.visible && this.props.payBox.step === STEP_MAP.WALLET_PASSWORD}
           position="center"
           maskClosable={true}
         >
