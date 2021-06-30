@@ -1,8 +1,10 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
-import { View } from '@tarojs/components';
+import { View, Navigator } from '@tarojs/components';
 import styles from './index.module.scss';
 import Icon from '@discuzq/design/dist/components/icon/index';
+import Popup from '@discuzq/design/dist/components/popup/index'
+import Button from '@discuzq/design/dist/components/button/index';;
 import Router from '@discuzq/sdk/dist/router';
 import { getCurrentInstance } from '@tarojs/taro';
 import PayBoxProvider from '@components/payBox/payBoxProvider';
@@ -33,8 +35,11 @@ export default class Page extends React.Component {
 
   constructor(props) {
     super(props);
-    const { noWithLogin, withLogin, user } = this.props;
-    
+    const { noWithLogin, withLogin, user, site } = this.props;
+    if (!site.isMiniProgramOpen) {
+      return;
+    }
+
     // 是否必须登录
     if (withLogin && !user.isLogin()) {
       Router.redirect({ url: WX_AUTH_URL });
@@ -150,6 +155,26 @@ export default class Page extends React.Component {
   }
 
   render() {
+    if (!this.props.site.isMiniProgramOpen) {
+      return (
+        <Popup position="center" visible={true} onClose={()=> {}}>
+          <View className={styles.container}>
+            <View className={styles.deleteTips}>
+              <View className={styles.tips}>提示</View>
+              <View className={styles.content}>未开启小程序配置</View>
+            </View>
+            <View className={styles.btn}>
+              <Button type='primary' className={styles.exit} onClick={() => {}}>
+                <Navigator openType='exit' target='miniProgram' className={styles.navigator}>
+                  关闭
+                </Navigator>
+              </Button>
+            </View>
+          </View>
+        </Popup>
+      );
+    }
+
     if (!this.isPass()) {
       return <></>;
     }
