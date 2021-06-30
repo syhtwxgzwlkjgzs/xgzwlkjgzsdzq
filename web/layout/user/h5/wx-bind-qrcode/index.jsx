@@ -70,7 +70,7 @@ class WeixinBindQrCodePage extends React.Component {
         clearInterval(this.timer);
       } catch (e) {
         const { site, h5QrCode, commonLogin, router } = this.props;
-        if (h5QrCode.countDown) {
+        if (h5QrCode.countDown > 0) {
           h5QrCode.countDown = h5QrCode.countDown - 3;
         } else {
           clearInterval(this.timer);

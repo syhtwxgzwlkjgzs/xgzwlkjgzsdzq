@@ -200,6 +200,7 @@ class Index extends Component {
             onRefresh={onScrollBottom}
             immediateCheck={false}
             showLoadingInCenter={showLoadingInCenter}
+            showLoadingInCenter={!noMore}
           >
             {/* 导航条 */}
             {showHeader && <Header />}

@@ -33,6 +33,12 @@
   padding: $padding-4n $padding-6n;
   width: calc(892px - 44px);
   z-index: 1;
+  :global {
+    .dzq-icon-CloseOutlined {
+      font-size: 12px !important;
+      transform: scale(.85);
+    }
+  }
 }
 .money-box.h5 {
   display: flex;

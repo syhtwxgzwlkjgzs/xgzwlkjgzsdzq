@@ -70,7 +70,36 @@ class Detail extends React.Component {
     }
   }
 
+  // 尝试从列表中获取帖子数据
+  async getThreadDataFromList(id) {
+    if (id) {
+      let threadData;
+      // 首页iebook
+      const indexRes = this.props.index.findAssignThread(Number(id));
+      threadData = indexRes?.data;
+
+      // 发现列表
+      if (!threadData) {
+        const searchRes = this.props.search.findAssignThread(Number(id));
+        threadData = searchRes[0]?.data;
+      }
+
+      // 话题列表
+      if (!threadData) {
+        const topicRes = this.props.topic.findAssignThread(Number(id));
+        threadData = topicRes?.data;
+      }
+
+      if (threadData?.threadId) {
+        this.props.thread.setThreadData(threadData);
+      }
+    }
+  }
+
   async getPageDate(id) {
+    // 先尝试从列表store中获取帖子数据
+    this.getThreadDataFromList(id);
+
     if (!this.props?.thread?.threadData) {
       const res = await this.props.thread.fetchThreadDetail(id);
 
@@ -120,11 +149,7 @@ class Detail extends React.Component {
       <ErrorMiniPage text={this.state.serverErrorMsg} />
     ) : (
       <Page>
-        {/* <MemoToastProvider> */}
-          {/* <PayBoxProvider> */}
-            <ThreadMiniPage></ThreadMiniPage>
-          {/* </PayBoxProvider> */}
-        {/* </MemoToastProvider> */}
+        <ThreadMiniPage></ThreadMiniPage>
       </Page>
     );
   }

@@ -357,7 +357,7 @@ class UserCenterFollows extends React.Component {
   render() {
     return (
       <div
-        className={this.props.className}
+        className={this.props.className + " user-center-follow-list"}
         ref={this.containerRef}
         style={{
           height: '100%',

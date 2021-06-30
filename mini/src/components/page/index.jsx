@@ -44,8 +44,6 @@ export default class Page extends React.Component {
     if (noWithLogin && user.isLogin()) {
       Router.redirect({ url: INDEX_URL });
     }
-
-    this.isPass();
   }
 
   // 检查是否满足渲染条件
@@ -108,6 +106,23 @@ export default class Page extends React.Component {
           }
         }
       }
+
+      // 访问指定页面，经过登陆、付费等操作完成后，跳回主页
+      const initialPage = site.getInitialPage();
+      if (initialPage) {
+        if (path === INDEX_URL) {
+          site.clearInitialPage();
+          Router.redirect({
+            url: initialPage,
+          });
+          return false;
+        }
+
+        if (initialPage.includes(path)) {
+          site.clearInitialPage();
+          return false;
+        }
+      }
     }
 
     return true;
@@ -135,6 +150,10 @@ export default class Page extends React.Component {
   }
 
   render() {
+    if (!this.isPass()) {
+      return <></>;
+    }
+
     const { site, disabledToast, className = '' } = this.props;
     return (
       <View className={`${styles['dzq-page']} dzq-theme-${site.theme} ${className}`}>
