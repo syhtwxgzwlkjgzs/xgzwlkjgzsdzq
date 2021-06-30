@@ -108,7 +108,6 @@ class Index extends React.Component {
     Router.push({ url: '/my/edit/find-paypwd?type=paybox' });
     this.initState();
     this.props.payBox.visible = false;
-    this.props.payBox.step = null;
   }, 1000);
 
   async submitPwa() {
