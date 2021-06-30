@@ -140,8 +140,6 @@ const Index = (props) => {
       files = e.target.files;
     }
 
-    console.log(files);
-
     // 处理首次发消息，还没有dialogId的情况
     let localDialogId = 0;
     if (!dialogId) {
@@ -171,7 +169,9 @@ const Index = (props) => {
           file.imageUrl = img.src;
           file.imageWidth = img.width;
           file.imageHeight = img.height;
-          // file.failMsg = checkFile(file);
+          if (!wxFiles) {
+            file.failMsg = checkFile(file);
+          }
           resolve();
         };
 
@@ -229,7 +229,11 @@ const Index = (props) => {
       });
     }
     const formData = new FormData();
-    formData.append('file', file);
+    if (file.serverId) {
+      formData.append('mediaId', file.serverId);
+    } else {
+      formData.append('file', file);
+    }
     formData.append('type', 1);
     formData.append('dialogMessageId', file.dialogMessageId);
     const ret = await createAttachment(formData);
