@@ -3,10 +3,11 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import { time } from '@discuzq/sdk/dist/index';
 import { diffDate } from '@common/utils/diff-date';
-import BaseLayout from '@components/base-layout'
-
+import BaseLayout from '@components/base-layout';
+import { RichText } from '@discuzq/design';
 import styles from './index.module.scss';
-
+import s9e from '@common/utils/s9e';
+import xss from '@common/utils/xss';
 @inject('wallet')
 @observer
 class FrozenAmount extends React.Component {
@@ -32,7 +33,7 @@ class FrozenAmount extends React.Component {
 
   fetchFreezeDetail = async () => {
     const freezeRes = await this.props.wallet.getFreezeDetail({
-      page: this.state.page
+      page: this.state.page,
     });
     const { totalCount, totalPage } = freezeRes;
     const pageData = {
@@ -44,7 +45,20 @@ class FrozenAmount extends React.Component {
     }
     this.setState(pageData);
 
-    return
+    return;
+  };
+
+  filterTag(html) {
+    return html?.replace(/<(\/)?([beprt]|br|div|h\d)[^>]*>|[\r\n]/gi, '').replace(/<img[^>]+>/gi, ($1) => {
+      return $1.includes('qq-emotion') ? $1 : '[图片]';
+    });
+  }
+
+  // parse content
+  parseHTML = (content) => {
+    let t = xss(s9e.parse(this.filterTag(content)));
+    t = typeof t === 'string' ? t : '';
+    return t;
   };
 
   render() {
@@ -59,16 +73,19 @@ class FrozenAmount extends React.Component {
           <div className={styles.totalMoney}>共有{this.state.totalCount}条记录</div>
           {/* TODO: 后台未返回涉及金额字段 */}
           <div className={styles.totalMoney}>
-            涉及金额 
-            <span className={styles.num}>{this.props.wallet.walletInfo.freezeAmount}元</span> 
+            涉及金额
+            <span className={styles.num}>{this.props.wallet.walletInfo.freezeAmount}元</span>
           </div>
         </div>
-   
-        {this.listRenderDataFilter().map(value => (
+
+        {this.listRenderDataFilter().map((value) => (
           <div className={styles.content} key={value.id}>
             <div className={styles.upper}>
-              <div>{value.title || value.changeDesc}</div>
-              <div>{value.amount}</div>
+              <div className={styles.normalText}>
+                <RichText content={this.parseHTML(value.title || value.changeDesc)} />
+              </div>
+              {/* <div>{value.title || value.changeDesc}</div> */}
+              <div className={styles.amount}>{value.amount}</div>
             </div>
             <div className={styles.lower}>
               <div>{time.formatDate(value.createdAt, 'YYYY-MM-DD HH:mm')}</div>

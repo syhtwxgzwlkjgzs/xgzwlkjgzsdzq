@@ -106,6 +106,23 @@ export default class Page extends React.Component {
           }
         }
       }
+
+      // 访问指定页面，经过登陆、付费等操作完成后，跳回主页
+      const initialPage = site.getInitialPage();
+      if (initialPage) {
+        if (path === INDEX_URL) {
+          site.clearInitialPage();
+          Router.redirect({
+            url: initialPage,
+          });
+          return false;
+        }
+
+        if (initialPage.includes(path)) {
+          site.clearInitialPage();
+          return false;
+        }
+      }
     }
 
     return true;
