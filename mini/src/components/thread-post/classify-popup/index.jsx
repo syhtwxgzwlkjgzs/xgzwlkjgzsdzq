@@ -61,10 +61,12 @@ const ClassifyPopup = (props) => {
     const { parent: storeParent, child: storeChild } = categorySelected;
     if (storeParent.pid && storeParent.pid !== parent.pid) {
       setParent(storeParent);
+      setPostData({ categoryId: storeParent.pid });
     }
     if (storeChild.pid && storeChild.pid !== child.pid) {
       setChild(storeChild);
       setSubCategory(storeParent.children);
+      setPostData({ categoryId: storeChild.pid });
     }
   }, [categorySelected]);
 
