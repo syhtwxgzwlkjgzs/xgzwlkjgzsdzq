@@ -61,6 +61,10 @@
   height: env(safe-area-inset-bottom); ///兼容 IOS>11.2/
 }
 
+.keyboard {
+  background: $white;
+}
+
 .placeholder {
   color: $disabled-color;
 }
