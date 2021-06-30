@@ -3,6 +3,8 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Toast } from '@discuzq/design';
+import Header from '@components/header';
+import BaseLayout from '@components/base-layout';
 import DialogBox from './dialog-box';
 import InteractionBox from './interaction-box';
 import Router from '@discuzq/sdk/dist/router';
@@ -332,8 +334,16 @@ const Index = (props) => {
     }
   }, [showEmoji]);
 
-  return (
-    <div className={!isPC ? styles.h5Page : styles.pcPage}>
+  const mainContent = (
+    <div className={isPC ? styles.pcPage : styles.h5Page}>
+      {isPC ? (
+        <div className={styles['pc-header']}>
+          <div className={styles['pc-header__inner']}>
+            {nickname}
+          </div>
+        </div>)
+        : <Header />
+      }
       <input
         style={{ display: 'none' }}
         type="file"
@@ -359,6 +369,22 @@ const Index = (props) => {
       />
     </div>
   );
+
+  if (isPC) {
+    return (
+      <BaseLayout
+        className={"mymessage-page"}
+        right={props.rightContent}
+        showRefresh={false}
+        immediateCheck={false}
+        isShowLayoutRefresh={false}
+      >
+        {mainContent}
+      </BaseLayout>
+    )
+  }
+
+  return mainContent;
 };
 
 export default inject('message', 'site', 'threadPost', 'user')(observer(Index));
