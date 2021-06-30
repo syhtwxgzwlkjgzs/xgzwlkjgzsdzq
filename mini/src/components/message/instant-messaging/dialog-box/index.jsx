@@ -54,11 +54,6 @@ const DialogBox = (props) => {
     }, 20000);
   };
 
-  const [previewImageUrls, setPreviewImageUrls] = useState([]);
-  useMemo(() => {
-    setPreviewImageUrls(dialogMsgList.list.filter(item => !!item.imageUrl).map(item => item.imageUrl).reverse());
-  }, [dialogMsgList]);
-
   const renderImageStatus = (data) => {
     const { isImageFail, isImageLoading, file, failMsg } = data;
     const size = 20;
@@ -96,11 +91,10 @@ const DialogBox = (props) => {
           mode='aspectFill'
           src={renderUrl || imageUrl}
           onClick={() => {
-            // setImagePreviewerUrls(dialogMsgList.list.filter(item => !!item.renderUrl).map(item => item.renderUrl).reverse())
-            // setTimeout(() => {
-            //   setDefaultImg(renderUrl);
-            //   setPreviewerVisibled(true);
-            // }, 0);
+            Taro.previewImage({
+              urls: dialogMsgList.list.filter(item => !!item.renderUrl || !!item.imageUrl).map(item => item.renderUrl || item.imageUrl).reverse(),
+              current: renderUrl || imageUrl,
+            });
           }}
         />
       </View>
