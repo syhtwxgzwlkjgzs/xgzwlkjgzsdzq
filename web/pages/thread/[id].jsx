@@ -10,6 +10,8 @@ import ErrorPCPage from '@layout/error/pc';
 import ErrorH5Page from '@layout/error/h5';
 import ViewAdapter from '@components/view-adapter';
 import { Toast } from '@discuzq/design';
+import setWxShare from '@common/utils/set-wx-share';
+import htmlToString from '@common/utils/html-to-string';
 
 @inject('site')
 @inject('thread')
@@ -76,6 +78,9 @@ class Detail extends React.Component {
       this.props.thread.reset();
       this.getPageDate(this.props.router.query.id);
     }
+    if ( this.props.thread && this.props.thread.threadData ) {
+      this.handleWeiXinShare();
+    }
   }
 
   async componentDidMount() {
@@ -84,7 +89,80 @@ class Detail extends React.Component {
     if (id) {
       this.getPageDate(id);
     }
+
+    if ( this.props.thread && this.props.thread.threadData ) {
+      this.handleWeiXinShare();
+    }
   }
+
+  handleWeiXinShare = async () => {
+    try {
+      const { site, thread, user } = this.props;
+      const {webConfig} = site;
+      const {setSite} = webConfig;
+      const {siteFavicon} = setSite;
+      const { threadData } = thread;
+      const { content, title, user: threadUser } = threadData;
+      const { text, indexes } = content;
+
+      function setSpecialTitle(user, indexes = []) {
+        const arr = [];
+        if ( indexes['101'] ) arr.push('图片');
+        if ( indexes['103'] ) arr.push('视频');
+        if ( indexes['102'] ) arr.push('音频');
+        if ( indexes['108'] ) arr.push('附件');
+        const contentLable = arr.length > 0 ? `【${arr.join('/')}】` : '【无内容】';
+        const name = user.userInfo && user.userInfo.nickname ? `【${user.userInfo.nickname}】` : '';
+        return `${name}分享${contentLable}`;
+      }
+
+      function setShareImg(threadUser, text, indexes = [], favicon) {
+        let img = null;
+
+        // 取图文混排图片
+        const imageList = text.match(/<img[\s]+[^<>]*>|<img[\s]+[^<>]*/g) || [];
+        for ( let i = 0; i < imageList.length; i++ ) {
+          if ( imageList[i].indexOf('qq-emotion') === -1) {
+            img = imageList[i].match(/(http|https):\/\/.*?(webp|png|jpg|jpeg)/gi);
+            if (img) {
+              img = img ? img[0] : null;
+              break;
+            } 
+          }
+        }
+
+        // 取上传图片
+        if (!img && indexes['101']) {
+          const bodyImgs = indexes['101'].body || [];
+          for ( let i = 0; i < bodyImgs.length; i++ ) {
+            if (bodyImgs[i].extension !== 'gif') {
+              img = bodyImgs[i].thumbUrl;
+              break;
+            }
+          }
+        }
+        // 取用户头像
+        if (!img && threadUser && threadUser.avatar) {
+          img = threadUser.avatar;
+        }
+
+        if (!img && favicon && favicon !== '') {
+          img = favicon;
+        }
+
+        return img;
+      }
+
+      let desc = htmlToString(text);
+      desc = desc && desc !== '' ? desc.slice(0, 28) : ''
+      let shareTitle = title && title !== '' ? title : desc && desc !== '' ? desc : setSpecialTitle(user, indexes);
+      const shareImg = setShareImg( threadUser, text, indexes, siteFavicon);
+      setWxShare(shareTitle, desc, window.location.href, shareImg);
+    } catch(err) {
+      console.error('设置分享错误', err);
+    }
+    
+  };
 
   async getPageDate(id) {
     // 获取帖子数据

@@ -49,7 +49,7 @@ class IndexH5Page extends React.Component {
     const {webConfig} = site;
     const {setSite} = webConfig;
     const {siteTitle, siteIntroduction, siteFavicon} = setSite;
-    setWxShare(`${user.userInfo && user.userInfo.nickname ? `【${user.userInfo.nickname}】` : ''}邀请你加入【${siteTitle}】`, siteIntroduction, window.location.origin, siteFavicon);
+    setWxShare(`${user.userInfo && user.userInfo.nickname ? `【${user.userInfo.nickname}】` : ''}邀请你加入【${siteTitle}】`, siteIntroduction, window.location.href, siteFavicon);
   };
 
   // 点击更多弹出筛选

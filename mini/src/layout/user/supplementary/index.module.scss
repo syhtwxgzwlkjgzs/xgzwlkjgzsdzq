@@ -123,7 +123,7 @@
       width: 100%;
       box-sizing: border-box;
       :global(.dzq-textarea__inner) {
-        padding: rem(7) $padding-2n;
+        padding: $padding-2n;
       }
       :global(.dzq-textarea__limit) {
         width: calc(100% - 15px);
