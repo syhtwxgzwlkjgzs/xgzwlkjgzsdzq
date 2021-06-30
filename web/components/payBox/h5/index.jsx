@@ -13,7 +13,7 @@ export default class index extends Component {
   onClose = () => {
     // FIXME: 延时回调的修复
     this.props.payBox.clear();
-  }
+  };
 
   render() {
     const { step } = this.props.payBox;
@@ -29,7 +29,7 @@ export default class index extends Component {
           {step === STEP_MAP.SURE && <AmountRecognized />}
           {step === STEP_MAP.PAYWAY && <PayConfirmed />}
         </Popup>
-        {step === STEP_MAP.WALLET_PASSWORD && <PayPwd />}
+        {this.props.payBox.visible && step === STEP_MAP.WALLET_PASSWORD && <PayPwd />}
       </>
     );
   }

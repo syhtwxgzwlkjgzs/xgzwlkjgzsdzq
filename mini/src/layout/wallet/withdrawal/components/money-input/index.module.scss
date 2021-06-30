@@ -3,6 +3,8 @@
 .container {
   // width: 100%;
   padding: $padding-6n $padding-6n $padding-4n;
+  height: 168px;
+  box-sizing: border-box;
 }
 
 .header {
@@ -28,6 +30,7 @@
       border: none;
       font-family: 'PingFang SC';
       font-weight: 600;
+      font-weight: bold;
       font-size: 30px;
       text-align: left;
       color: #c5c6ca;
@@ -60,18 +63,21 @@
   }
 }
 
-.leasterr {
-  color: $error-color;
-  padding-bottom: 8px;
-}
-
 .leastMoney {
   height: 17px;
   line-height: 17px;
-  font-family: 'PingFangSC-Regular';
   font-weight: normal;
   font-size: $font-size-label;
   text-align: left;
   color: $text-color-secondary;
-  padding: $padding-4n 0;
+  margin-top: $margin-4n;
+}
+.leasterr {
+  color: $error-color;
+  padding-bottom: $padding-2n;
+  margin-top: $margin-2n;
+}
+
+.leastMargin {
+  margin-top: $margin-2n;
 }
