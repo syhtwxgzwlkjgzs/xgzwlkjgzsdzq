@@ -10,6 +10,7 @@ import clearLoginStatus from '@common/utils/clear-login-status';
 import { REVIEWING } from '@common/store/login/util';
 import { Spin, Icon } from '@discuzq/design';
 import typeofFn from '@common/utils/typeof';
+import setWxShare from '@common/utils/set-wx-share';
 import styles from './HOCFetchSiteData.module.scss';
 import {
   WEB_SITE_JOIN_WHITE_LIST,
@@ -167,29 +168,8 @@ export default function HOCFetchSiteData(Component) {
       if ( siteConfig ) {
         const {setSite} = siteConfig;
         const {siteTitle, siteIntroduction, siteFavicon} = setSite;
-          window.wx && window.wx.ready(() => {
-
-          const dataInfo = {
-              title: siteTitle || 'Discuz!Q', // 分享标题
-              desc: siteIntroduction && siteIntroduction != '' ? siteIntroduction :  (siteTitle || 'Discuz!Q'), // 分享描述
-              link: window.location.url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-              imgUrl: siteFavicon, // 分享图标
-          };
-          wx.updateAppMessageShareData(dataInfo); // 分享给朋友
-          wx.updateTimelineShareData(dataInfo); // 分享到朋友圈
-      });
+        setWxShare(siteTitle, siteIntroduction, window.location.href, siteFavicon);
       }
-      // wx && wx.ready(() => {
-      //   // 需在用户可能点击分享按钮前就先调用
-      //   const dataInfo = {
-      //       title: opts.title || 'Discuz!Q', // 分享标题
-      //       desc: opts.desc || forums.set_site.site_introduction, // 分享描述
-      //       link: url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-      //       imgUrl: opts.imgUrl || forums.set_site.site_favicon, // 分享图标
-      //   };
-      //   wx.updateAppMessageShareData(dataInfo); // 分享给朋友
-      //   wx.updateTimelineShareData(dataInfo); // 分享到朋友圈
-      // });
 
       user.updateLoginStatus(loginStatus);
       this.setState({ isPass: this.isPass() });
@@ -197,6 +177,12 @@ export default function HOCFetchSiteData(Component) {
 
     setAppCommonStatus(result) {
       const { site } = this.props;
+
+      const CODE_NEED_SAVE = [JUMP_TO_LOGIN, JUMP_TO_REGISTER, JUMP_TO_AUDIT, JUMP_TO_REFUSE, JUMP_TO_DISABLED, JUMP_TO_SUPPLEMENTARY, JUMP_TO_PAY_SITE];
+      if (CODE_NEED_SAVE.includes(result.code)) {
+        this.saveInitialPage();
+      }
+
       switch (result.code) {
         case 0:
           break;
@@ -244,6 +230,20 @@ export default function HOCFetchSiteData(Component) {
       }
     }
 
+    saveInitialPage() {
+      const { site } = this.props;
+
+      if (!site.getInitialPage()) {
+        site.setInitialPage(window.location.href);
+      }
+    }
+
+    saveAndRedirect(url) {
+      this.saveInitialPage(url);
+
+      Router.redirect({ url });
+    }
+
     // 检查是否满足渲染条件
     isPass() {
       const { site, router, user } = this.props;
@@ -273,16 +273,13 @@ export default function HOCFetchSiteData(Component) {
           if (!site.isOffiaccountOpen && !site.isMiniProgramOpen) {
             // 绑定手机: 开启短信，没有绑定手机号
             if (router.asPath !== '/user/bind-phone' && site.isSmsOpen && !user.mobile) {
-              Router.redirect({ url: '/user/bind-phone' });
+              this.saveAndRedirect( '/user/bind-phone' );
               return false;
             }
           }
           // 绑定昵称：没有昵称
-          if (
-            router.asPath !== '/user/bind-nickname'
-            && !user.nickname
-          ) {
-            Router.redirect({ url: '/user/bind-nickname' });
+          if (router.asPath !== '/user/bind-nickname' && !user.nickname) {
+            this.saveAndRedirect( '/user/bind-nickname' );
             return false;
           }
           // 账号审核中的 用户只能访问 首页 + 帖子详情页，以及用户状态提示页
@@ -293,7 +290,6 @@ export default function HOCFetchSiteData(Component) {
             }
           }
         }
-
 
         if (site?.webConfig?.setSite?.siteMode !== 'pay') {
           return true;
@@ -312,10 +308,28 @@ export default function HOCFetchSiteData(Component) {
         const code = router.query.inviteCode;
         const query = code ? `?inviteCode=${code}` : '';
         if (!user?.paid) {
-          Router.redirect({ url: `/forum/partner-invite${query}` });
+          this.saveAndRedirect(`/forum/partner-invite${query}`);
           return false;
         }
+
+        // 访问指定页面，经过登陆、付费等操作完成后，跳回主页
+        if (router.asPath === '/') {
+          const initialPage = site.getInitialPage();
+          if (initialPage) {
+            const urlObj = new URL(initialPage);
+            if (urlObj.pathname !== router.asPath) {
+              site.clearInitialPage();
+              Router.redirect({
+                url: initialPage,
+              });
+              return false;
+            } else {
+              site.clearInitialPage();
+            }
+          }
+        }
       }
+
       return true;
     }
 
