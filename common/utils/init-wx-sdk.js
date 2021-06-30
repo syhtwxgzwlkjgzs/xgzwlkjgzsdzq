@@ -7,7 +7,7 @@ export default async function initWXSDK(jsApiList = []) {
     if ( !browser.env('weixin') ) return;
     const allPromise = [];
     const res = await getWXConfig({params: {
-        url: encodeURIComponent(window.location.origin)
+        url: encodeURIComponent(window.location.href)
     }});
     if (!(window.wx && wx.config)) {
         const scriptPromise = new Promise((resolve) => {
