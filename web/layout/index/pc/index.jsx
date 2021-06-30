@@ -46,6 +46,7 @@ class IndexPCPage extends React.Component {
   newThread = {};
 
   componentDidMount() {
+
     if (this.timer) {
       clearInterval(this.timer);
     }

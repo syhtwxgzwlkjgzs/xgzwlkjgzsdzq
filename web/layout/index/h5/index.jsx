@@ -36,7 +36,7 @@ class IndexH5Page extends React.Component {
 
   componentDidMount() {
     try {
-      this.handleWeiXinShare();
+      // this.handleWeiXinShare();
     } catch (error) {}
 
     // 是否有推荐

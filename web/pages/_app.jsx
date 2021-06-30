@@ -13,7 +13,7 @@ import '../styles/index.scss';
 import CustomHead from '@components/custom-head';
 import Head from 'next/head';
 import monitor from '@common/utils/monitor';
-
+import initWXSDK from '@common/utils/init-wx-sdk';
 // if (!isServer()) {
 //   process.env.NODE_ENV === 'production' && sentry();
 // }
@@ -21,8 +21,10 @@ import monitor from '@common/utils/monitor';
 class DzqApp extends App {
   constructor(props) {
     super(props);
+    !isServer() && initWXSDK();
     this.appStore = initializeStore();
     this.updateSize = this.updateSize.bind(this);
+    this.setWXShare = this.setWXShare.bind(this);
   }
 
   // 路由跳转时，需要清理图片预览器
@@ -55,6 +57,7 @@ class DzqApp extends App {
     window.addEventListener('resize', this.updateSize);
     csrRouterRedirect();
     this.listenRouterChangeAndClean();
+    this.props.router.events.on('routeChangeStart', this.setWXShare);    
   }
 
   componentWillUnmount() {
@@ -62,6 +65,11 @@ class DzqApp extends App {
       window.removeEventListener('resize', this.updateSize);
       window.removeEventListener('popstate', this.cleanImgViewer);
     }
+  }
+
+  setWXShare() {
+    console.log('setWXShare');
+    console.log(this.appStore);
   }
 
   // 出错捕获
