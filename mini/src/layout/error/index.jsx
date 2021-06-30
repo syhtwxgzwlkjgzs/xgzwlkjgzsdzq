@@ -20,7 +20,7 @@ export default function ErrorPage(props) {
         <Text className={styles.text}>{text}</Text>
 
       <View className={styles.footer}>
-        <Button onClick={onReflush} className={styles.button} type="primary">
+        <Button onClick={onReflush} className={styles.button} type="primary" size='large'>
           返回上一页
         </Button>
       </View>
