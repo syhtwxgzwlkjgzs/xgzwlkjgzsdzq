@@ -40,6 +40,7 @@ export function CreateInput(field, layout) {
           className={layout.input_value}
           value={field.value}
           placeholder={fieldsDesc}
+          placeholderClass={layout.placeholder}
           onChange={(e) => {
             field.value = e.target.value;
           }}
@@ -67,6 +68,7 @@ export function CreateTextArea(field, layout) {
           className={layout.textarea_item}
           value={field.value}
           placeholder={fieldsDesc}
+          placeholderClass={layout.placeholder}
           rows={3}
           onChange={(e) => {
             field.value = e.target.value;

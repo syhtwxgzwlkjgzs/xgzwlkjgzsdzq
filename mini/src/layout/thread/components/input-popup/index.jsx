@@ -43,8 +43,16 @@ const InputPop = (props) => {
 
   // 监听键盘的高度
   Taro.onKeyboardHeightChange((res) => {
-    setBottomHeight((res?.height || 0) - 1);
+    setBottomHeight((res?.height || 0) - (getBottomSafeArea() || 0));
   });
+
+  // 获取底部安全距离
+  const getBottomSafeArea = () => {
+    const screenHeight = Taro.getSystemInfoSync().screenHeight;
+    const bottom = Taro.getSystemInfoSync().safeArea.bottom;
+
+    return screenHeight - bottom
+  };
 
   // 点击发布
   const onSubmitClick = async () => {
@@ -207,95 +215,99 @@ const InputPop = (props) => {
     typeof onCancel === 'function' && onCancel();
   };
 
-  return visible ? <View className={classnames(styles.body, visible && styles.show)}>
-    <View className={styles.popup} onClick={onClick}>
-      <View onClick={(e) => e.stopPropagation()}>
-        <View className={styles.container}>
-          <View className={styles.main}>
-            {/* <ScrollView scrollY className={styles.valueScroll}> */}
-            <Textarea
-              className={styles.input}
-              maxLength={5000}
-              rows={4}
-              showLimit={false}
-              value={value}
-              onBlur={(e) => {
-                onChange(e);
-              }}
-              onChange={debounce((e) => {
-                onChange(e);
-                setValue(e.target.value);
-              }, 100)}
-              // onFocus={() => setShowEmojis(false)}
-              placeholder={inputText}
-              disabled={loading}
-              placeholderClass={styles.placeholder}
-              forwardedRef={textareaRef}
-              focus={focus}
-              fixed={true}
-              adjustPosition={false}
-            // autoHeight={false}
-            ></Textarea>
-            {/* </ScrollView> */}
+  return visible ? (
+    <View className={classnames(styles.body, visible && styles.show)}>
+      <View className={styles.popup} onClick={onClick}>
+        <View onClick={(e) => e.stopPropagation()}>
+          <View className={styles.container}>
+            <View className={styles.main}>
+              {/* <ScrollView scrollY className={styles.valueScroll}> */}
+              <Textarea
+                className={styles.input}
+                maxLength={5000}
+                rows={4}
+                showLimit={false}
+                value={value}
+                onBlur={(e) => {
+                  onChange(e);
+                }}
+                onChange={debounce((e) => {
+                  onChange(e);
+                  setValue(e.target.value);
+                }, 100)}
+                // onFocus={() => setShowEmojis(false)}
+                placeholder={inputText}
+                disabled={loading}
+                placeholderClass={styles.placeholder}
+                forwardedRef={textareaRef}
+                focus={focus}
+                fixed={true}
+                adjustPosition={false}
+                // autoHeight={false}
+              ></Textarea>
+              {/* </ScrollView> */}
 
-            {showPicture && (
-              <Fragment>
-                <View className={styles.imageUpload}>
-                  <ImageUpload
-                    fileList={imageList}
-                    onChange={handleUploadChange}
-                    onComplete={onComplete}
-                    beforeUpload={(cloneList, showFileList) =>
-                      beforeUpload(cloneList, showFileList, THREAD_TYPE.image)
-                    }
-                    onFail={onFail}
-                  />
-                </View>
-                <Divider className={styles.divider}></Divider>
-              </Fragment>
-            )}
-          </View>
-
-          <View className={styles.button}>
-            <View className={styles.operates}>
-              <Icon
-                className={classnames(styles.operate, showEmojis && styles.actived)}
-                name="SmilingFaceOutlined"
-                size={20}
-                onClick={onEmojiIconClick}
-              ></Icon>
-              <Icon
-                className={classnames(styles.operate, showAt && styles.actived)}
-                name="AtOutlined"
-                size={20}
-                onClick={onAtIconClick}
-              ></Icon>
-              <Icon
-                className={classnames(styles.operate, showPicture && styles.actived)}
-                name="PictureOutlinedBig"
-                size={20}
-                onClick={onPcitureIconClick}
-              ></Icon>
+              {showPicture && (
+                <Fragment>
+                  <View className={styles.imageUpload}>
+                    <ImageUpload
+                      fileList={imageList}
+                      onChange={handleUploadChange}
+                      onComplete={onComplete}
+                      beforeUpload={(cloneList, showFileList) =>
+                        beforeUpload(cloneList, showFileList, THREAD_TYPE.image)
+                      }
+                      onFail={onFail}
+                    />
+                  </View>
+                  <Divider className={styles.divider}></Divider>
+                </Fragment>
+              )}
             </View>
-            <View
-              onClick={onSubmitClick}
-              className={classnames(styles.ok, (loading || imageUploading) && styles.disabled)}
-            >
-              发布
-              </View>
-          </View>
-        </View>
 
-        {showEmojis && (
-          <View className={styles.emojis}>
-            <Emoji show={showEmojis} emojis={emojis} onClick={onEmojiClick} />
+            <View className={styles.button}>
+              <View className={styles.operates}>
+                <Icon
+                  className={classnames(styles.operate, showEmojis && styles.actived)}
+                  name="SmilingFaceOutlined"
+                  size={20}
+                  onClick={onEmojiIconClick}
+                ></Icon>
+                <Icon
+                  className={classnames(styles.operate, showAt && styles.actived)}
+                  name="AtOutlined"
+                  size={20}
+                  onClick={onAtIconClick}
+                ></Icon>
+                <Icon
+                  className={classnames(styles.operate, showPicture && styles.actived)}
+                  name="PictureOutlinedBig"
+                  size={20}
+                  onClick={onPcitureIconClick}
+                ></Icon>
+              </View>
+              <View
+                onClick={onSubmitClick}
+                className={classnames(styles.ok, (loading || imageUploading) && styles.disabled)}
+              >
+                发布
+              </View>
+            </View>
           </View>
-        )}
-        <View style={{ background: '#fff', transform: 'translateY(0)', height: `${bottomHeight}px` }}></View>
-        <View className={styles.safeArea}></View>
+
+          {showEmojis && (
+            <View className={styles.emojis}>
+              <Emoji show={showEmojis} emojis={emojis} onClick={onEmojiClick} />
+            </View>
+          )}
+          <View className={styles.keyboard} style={{ height: `${bottomHeight}px` }}></View>
+          <View className={styles.safeArea}></View>
+        </View>
       </View>
     </View>
-  </View> : ''
+  ) : (
+    <View className={classnames(styles.body, visible && styles.show)}></View>
+  );
 };
 
 InputPop.options = {

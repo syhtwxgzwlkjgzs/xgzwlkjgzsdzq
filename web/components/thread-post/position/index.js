@@ -57,7 +57,6 @@ const Index = (props) => {
       <Tag
         type="primary"
         closeable={position.location}
-        size="md"
         onClick={openMap}
         onClose={() => onChange({})}
         className={classNames(styles.tag, {
