@@ -50,7 +50,7 @@ function avatar(props) {
 
 
   const onMouseEnterHandler = useCallback(async () => {
-    if (!userId) return;
+    if (!isShowUserInfo || !userId) return;
     changeIsShow(true);
 
     if (!userInfo || userInfo === 'padding') {
@@ -61,7 +61,7 @@ function avatar(props) {
   });
 
   const onMouseLeaveHandler = useCallback(() => {
-    if (!userId) return;
+    if (!isShowUserInfo || !userId) return;
     changeIsShow(false);
     changeUserInfo('padding');
   });
