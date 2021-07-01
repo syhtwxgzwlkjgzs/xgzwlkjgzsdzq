@@ -45,8 +45,6 @@ class SearchResultPostH5Page extends React.Component {
     });
   };
 
-  onPostClick = (data) => {};
-
   render() {
     const { keyword } = this.state;
     const { threads, threadsError } = this.props.search;

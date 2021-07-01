@@ -10,6 +10,8 @@ import ErrorPCPage from '@layout/error/pc';
 import ErrorH5Page from '@layout/error/h5';
 import ViewAdapter from '@components/view-adapter';
 import { Toast } from '@discuzq/design';
+import setWxShare from '@common/utils/set-wx-share';
+import htmlToString from '@common/utils/html-to-string';
 
 @inject('site')
 @inject('thread')
@@ -86,6 +88,87 @@ class Detail extends React.Component {
     }
   }
 
+  handleWeiXinShare = async () => {
+    try {
+      const { site, thread } = this.props;
+      const {webConfig} = site;
+      const {setSite} = webConfig;
+      const {siteFavicon, siteIntroduction} = setSite;
+      const { threadData } = thread;
+      const { content, title, user: threadUser, payType } = threadData;
+      const { text, indexes } = content;
+      function setSpecialTitle(text, user, indexes = []) {
+
+        // 全贴付费不能使用内容展示
+        if ( payType !== 1 ) {
+          const contentStr = htmlToString(text);
+          if ( contentStr && contentStr !== '' ) return contentStr;
+        }
+        
+
+        const arr = [];
+        if ( indexes['101'] ) arr.push('图片');
+        if ( indexes['103'] ) arr.push('视频');
+        if ( indexes['102'] ) arr.push('音频');
+        if ( indexes['108'] ) arr.push('附件');
+        const contentLable = arr.length > 0 ? `${arr.join('/')}` : '内容';
+        const name = user && user.nickname ? `${user.nickname}` : '';
+        return `${name}分享的${contentLable}`;
+      }
+
+      function setShareImg(threadUser, text, indexes = [], favicon) {
+        let img = null;
+
+        // 全贴付费不能使用内容展示
+        if ( payType !== 1 ) {
+          // 取图文混排图片
+          const imageList = text.match(/<img[\s]+[^<>]*>|<img[\s]+[^<>]*/g) || [];
+          for ( let i = 0; i < imageList.length; i++ ) {
+            if ( imageList[i].indexOf('qq-emotion') === -1) {
+              img = imageList[i].match(/(http|https):\/\/.*?(webp|png|jpg|jpeg)/gi);
+              if (img) {
+                img = img ? img[0] : null;
+                break;
+              } 
+            }
+          }
+          // 附件付费不能使用内容展示
+          if ( payType !== 2 ) {
+            // 取上传图片
+            if (!img && indexes['101']) {
+              const bodyImgs = indexes['101'].body || [];
+              for ( let i = 0; i < bodyImgs.length; i++ ) {
+                if (bodyImgs[i].extension !== 'gif') {
+                  img = bodyImgs[i].thumbUrl;
+                  break;
+                }
+              }
+            }
+          }
+        }
+        
+        // 取用户头像
+        if (!img && threadUser && threadUser.avatar) {
+          img = threadUser.avatar;
+        }
+
+        if (!img && favicon && favicon !== '') {
+          img = favicon;
+        }
+
+        return img;
+      }
+
+      let desc = siteIntroduction && siteIntroduction !== '' ? siteIntroduction : '在这里，发现更多精彩内容';
+      let shareTitle = title && title !== '' ? title : setSpecialTitle(text, threadUser, indexes);
+      const shareImg = setShareImg( threadUser, text, indexes, siteFavicon);
+      setWxShare(shareTitle, desc, window.location.href, shareImg);
+    } catch(err) {
+      console.error('设置分享错误', err);
+    }
+    
+  };
+
   async getPageDate(id) {
     // 获取帖子数据
     if (!this.props?.thread?.threadData || !this.hasMaybeCache()) {
@@ -126,6 +209,9 @@ class Detail extends React.Component {
         }
       }
     }
+
+    // 设置详情分享
+    this.handleWeiXinShare();
 
     // 获取评论列表
     if (!this.props?.thread?.commentList || !this.hasMaybeCache()) {

@@ -48,6 +48,7 @@ const Index = (props) => {
       <>
         {text && <PostContent content={text} onPay={onPay} onRedirectToDetail={onClick} />}
         {videoData && (
+          <WrapperView onClick={onClick}>
             <VideoPlay
               url={videoData.mediaUrl}
               coverUrl={videoData.coverUrl}
@@ -57,6 +58,7 @@ const Index = (props) => {
               isPay={needPay}
               status={videoData.status}
             />
+          </WrapperView>
         )}
         {imageData?.length ? (
             <ImageDisplay platform="h5" imgData={imageData} isPay={needPay} onPay={onPay} onClickMore={onClick} />
@@ -106,6 +108,14 @@ const Index = (props) => {
   );
 };
 
-const BrWrapper = ({ children }) => <View className={styles.brWrapper}>{children}</View>;
-
 export default React.memo(Index);
+
+// 处理
+const WrapperView = ({ children, onClick }) => {
+  return (
+    <View className={styles.wrapperView}>
+      {children}
+      <View className={styles.placeholder} onClick={onClick}></View>
+    </View>
+  )
+}

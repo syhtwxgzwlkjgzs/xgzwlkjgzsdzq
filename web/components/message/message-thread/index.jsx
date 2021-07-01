@@ -26,19 +26,19 @@ class Index extends React.Component {
   }
 
   render() {
-    const { site: { isPC }, message: { threadMsgList } } = this.props;
+    const { site: { isPC }, message: { threadMsgList }, rightContent } = this.props;
     const { list, currentPage, totalPage, totalCount } = threadMsgList;
 
     return (
-      <div className={`${styles.wrapper} ${isPC ? styles.pc : styles.mobile}`}>
+      <div className={`${styles.wrapper} ${!isPC && styles.mobile}`}>
         <Notice
           infoIdx={1}
           totalCount={totalCount}
           noMore={currentPage >= totalPage}
           showHeader={!isPC}
+          rightContent={isPC ? rightContent : null}
           list={list}
           type='thread'
-          showLoadingInCenter={false}
           onPullDown={() => this.fetchMessageData(1)}
           onScrollBottom={() => this.fetchMessageData()}
           onBtnClick={this.handleThreadDelete}

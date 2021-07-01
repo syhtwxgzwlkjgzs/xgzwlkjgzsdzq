@@ -94,3 +94,12 @@
 .collectIcon {
   font-size: 20px !important;
 }
+
+.wrapperView {
+  display: flex;
+
+  .placeholder {
+    flex: 1;
+    height: auto;
+  }
+}

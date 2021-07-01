@@ -9,7 +9,7 @@ import constants from '@common/constants';
 import locals from '@common/utils/local-bridge';
 import { getMessageImageSize } from '@common/utils/get-message-image-size';
 import { getMessageTimestamp } from '@common/utils/get-message-timestamp';
-import calcImageQuality from '@common/utils/calc-image-quality';
+import calcCosImageQuality from '@common/utils/calc-cos-image-quality';
 
 const Index = ({ message, user, site: { webConfig, envConfig }, dialogId: _dialogId, username, nickname, threadPost }) => {
 
@@ -246,9 +246,7 @@ const Index = ({ message, user, site: { webConfig, envConfig }, dialogId: _dialo
       if (!item.isImageLoading && item.imageUrl) {
         const [path] = item.imageUrl.split('?');
         const type = path.substr(path.indexOf('.') + 1);
-        const info = Taro.getSystemInfoSync();
-        const viewWidth = info.windowWidth;
-        item.renderUrl = `${path}?${calcImageQuality(viewWidth, type, 3)}`;
+        item.renderUrl = calcCosImageQuality(item.imageUrl, type, 3);
       }
 
       return {

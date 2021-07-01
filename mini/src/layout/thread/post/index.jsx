@@ -755,6 +755,8 @@ class Index extends Component {
               <Content
                 ref={this.contentRef}
                 value={postData.contentText}
+                showEmoji={showEmoji}
+                bottomHeight={bottomHeight}
                 maxLength={maxLength}
                 onChange={this.onContentChange}
                 // onFocus={this.onContentFocus}
@@ -790,7 +792,7 @@ class Index extends Component {
 
           {/* 工具栏区域、include各种插件触发图标、发布等 */}
           <View
-            className={styles.toolbar}
+            className={`${styles.toolbar} ${!bottomHeight && styles['toolbar-padding']}`}
             style={{ transform: `translateY(-${bottomHeight}px)`, bottom: bottomHeight ? 0 : '' }}
           >
             {/* 插入内容tag展示区 */}

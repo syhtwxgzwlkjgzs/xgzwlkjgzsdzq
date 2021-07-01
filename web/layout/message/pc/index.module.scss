@@ -12,6 +12,7 @@
 
 /**
 * PC 消息页右侧关注列表自适应
+*
 */
 :global {
   .mymessage-page {
@@ -33,21 +34,27 @@
       }
     }
 
-    @include heightMedia(840px, 785px) {
+    @include heightMedia(895px, 840px) {
       .user-center-follow-list {
         max-height: 380px !important;
       }
     }
 
-    @include heightMedia(785px, 730px) {
+    @include heightMedia(840px, 785px) {
       .user-center-follow-list {
         max-height: 325px !important;
       }
     }
 
-    @include heightMedia(730px, 675px) {
+    @include heightMedia(785px, 730px) {
       .user-center-follow-list {
         max-height: 270px !important;
+      }
+    }
+
+    @include heightMedia(730px, 675px) {
+      .user-center-follow-list {
+        max-height: 215px !important;
       }
     }
 
