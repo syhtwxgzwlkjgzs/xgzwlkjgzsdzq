@@ -42,7 +42,7 @@
 .topWrapper {
   width: 100%;
   position: sticky;
-  top: rem(-1);
+  top: 0;
   left: 0;
   display: flex;
   z-index: 1000;
@@ -73,17 +73,25 @@
     width: 100%;
     padding: rem(6.5) rem(24);
     @include media('l-pc') {
-      padding: rem(6.5) rem($padding-4n);
+      padding: 0 rem($padding-4n);
     }
     @include media('s-pc') {
-      padding: rem(6.5) rem($padding-4n) rem(16);
+      padding: 0 rem($padding-4n) rem($padding-3n);
     }
-    @media only screen and (min-width: 800px) and (max-width: 830px) {
-      padding: rem(6.5) 0;
+    @media only screen and (min-width: 800px) and (max-width: 860px) {
+      :global {
+        .dzq-menu {
+          flex-wrap: wrap;
+          &-item,
+          .dzq-submenu {
+            padding: 0 !important;
+          }
+        }
+      }
     }
-    @media only screen and (min-width: 830px) and (max-width: 860px) {
-      padding: rem(6.5) rem($padding-1n);
-    }
+    // @media only screen and (min-width: 830px) and (max-width: 860px) {
+    //   padding: rem(6.5) rem($padding-1n);
+    // }
     display: flex;
     align-items: center;
     background: var(--color-white);
