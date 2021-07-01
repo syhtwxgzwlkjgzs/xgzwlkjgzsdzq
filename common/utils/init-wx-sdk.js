@@ -2,7 +2,7 @@
 
 import { getWXConfig } from '@discuzq/sdk/dist/api/wx/get-wx-config';
 import browser from '@common/utils/browser';
-const DEFAULT_JSAPULIST = ['closeWindow', 'chooseImage', 'uploadImage', 'updateAppMessageShareData', 'updateTimelineShareData', 'getLocalImgData'];
+const DEFAULT_JSAPULIST = ['closeWindow', 'chooseImage', 'uploadImage', 'getLocalImgData', 'updateAppMessageShareData', 'updateTimelineShareData'];
 export default async function initWXSDK(jsApiList = []) {
     if ( !browser.env('weixin') ) return;
     const allPromise = [];

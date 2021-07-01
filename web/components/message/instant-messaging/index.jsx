@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable no-param-reassign */
 import React, { useState, useEffect, useRef, useMemo } from 'react';
@@ -225,11 +226,7 @@ const Index = (props) => {
       });
     }
     const formData = new FormData();
-    // if (file.serverId) {
-    //   formData.append('mediaId', file.serverId);
-    // } else {
-      formData.append('file', file);
-    // }
+    formData.append('file', file);
     formData.append('type', 1);
     formData.append('dialogMessageId', file.dialogMessageId);
     const ret = await createAttachment(formData);
@@ -273,7 +270,8 @@ const Index = (props) => {
         ownedBy: user.id === item.userId ? 'myself' : 'itself',
         nickname: item.user.username,
       };
-    }).filter(item => (item.imageUrl || item.text)).reverse();
+    }).filter(item => (item.imageUrl || item.text))
+      .reverse();
 
     // 消息数有变化，即有新消息，此时把滚动条滚动到底部
     if (listData.length > listDataLengthRef.current) {
@@ -370,7 +368,7 @@ const Index = (props) => {
   if (isPC) {
     return (
       <BaseLayout
-        className={"mymessage-page"}
+        className={'mymessage-page'}
         right={props.rightContent}
         showRefresh={false}
         immediateCheck={false}
@@ -378,7 +376,7 @@ const Index = (props) => {
       >
         {mainContent}
       </BaseLayout>
-    )
+    );
   }
 
   return mainContent;

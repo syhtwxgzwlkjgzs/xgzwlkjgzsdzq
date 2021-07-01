@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable prefer-destructuring */
 const dataURLtoFile = (dataurl, filename = 'image') => {
   const arr = dataurl.split(',');
