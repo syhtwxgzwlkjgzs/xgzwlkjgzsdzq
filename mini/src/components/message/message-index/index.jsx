@@ -9,9 +9,8 @@ import Card from '@components/message/message-card';
 import BottomNavBar from '@components/bottom-nav-bar';
 
 const Index = ({ message, user }) => {
-  const { readDialogList, dialogList, threadUnread, financialUnread, accountUnread } = message;
+  const { readDialogList, dialogList, threadUnread, financialUnread, accountUnread, deleteDialog } = message;
   const { currentPage, totalPage, list } = dialogList;
-  console.log('message :>> ', message);
 
   // 初始化请求数据
   useDidShow(async () => {
@@ -93,7 +92,7 @@ const Index = ({ message, user }) => {
           type='chat'
           onPullDown={onPullDown}
           onScrollBottom={handleScrollBottom}
-          onBtnClick={() => deleteDialog(item.id)}
+          onBtnClick={(item) => deleteDialog(item.id)}
         />
       </View>
       <BottomNavBar fixed={false} curr={'message'} />

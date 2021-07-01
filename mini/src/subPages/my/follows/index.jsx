@@ -8,6 +8,7 @@ import Divider from '@discuzq/design/dist/components/divider/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import Page from '@components/page';
 import styles from './index.module.scss';
+import Taro from '@tarojs/taro';
 
 @inject('user')
 @observer
@@ -20,6 +21,7 @@ class index extends Component {
     };
     this.props.user.cleanUserFollows();
     this.props.user.cleanTargetUserFollows();
+    Taro.hideShareMenu();
   }
 
   componentDidMount() {

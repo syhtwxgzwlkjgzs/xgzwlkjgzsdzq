@@ -5,6 +5,7 @@ import { View, Text, Image } from '@tarojs/components';
 import Icon from '@discuzq/design/dist/components/icon/index'
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
+import { debounce } from '@common/utils/throttle-debounce.js';
 
 /**
  * 帖子点赞、打赏视图
@@ -12,15 +13,15 @@ import { inject, observer } from 'mobx-react';
  */
 
  const Index = inject('index')(
-  observer(({ imgs = [], tipData = {}, wholeNum = 1,showMore=false, index, showCount = 5 }) => {
+  observer(({ imgs = [], tipData = {}, wholeNum = 1,showMore=false, index, showCount = 5, unifyOnClick = null }) => {
   const [visible, setVisible] = useState(false);
 
-  const onClick = (e) => {
+  const onClick = debounce((e) => {
     e.stopPropagation();
     index.setHiddenTabBar(true)
     index.setHasOnScrollToLower(false)
     setVisible(true);
-  };
+  }, 200);
 
   const onHidden = () => {
     index.setHiddenTabBar(false)
@@ -42,14 +43,15 @@ import { inject, observer } from 'mobx-react';
 
     // 点赞头像的总宽度
   const sty = useMemo(() => {
-    return { width: `${22*(renderUsers.length)+4}px` }
+    const imgsLength = renderUsers.length;
+    return { width: `${(16*imgsLength+4*(imgsLength+1))*2}rpx`}
   }, [renderUsers]);
 
   const imgAfterArr = [styles.img, styles.imgAfter2, styles.imgAfter3, styles.imgAfter4, styles.imgAfter5];
 
     return (
     <>
-        <View className={styles.container} onClick={onClick} style={sty}>
+        <View className={styles.container} onClick={unifyOnClick || onClick} style={sty}>
             {
                 wholeNum !== 0 && renderUsers?.filter((_, index) => index < showCount).map((item, index) => (
                   <View key={index} className={imgAfterArr[index]}>
@@ -69,7 +71,7 @@ import { inject, observer } from 'mobx-react';
             }
         </View>
 
-        <PopupList tipData={tipData} visible={visible} onHidden={onHidden} />
+        {visible && <PopupList tipData={tipData} visible={visible} onHidden={onHidden} />}
     </>
   );
 }));

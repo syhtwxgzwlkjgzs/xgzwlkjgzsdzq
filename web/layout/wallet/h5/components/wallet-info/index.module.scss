@@ -3,7 +3,12 @@
 .containerH5 {
     background:$primary-color url('/dzq-img/walletbackground.png') 100%  no-repeat padding-box;
     background-size: cover;
-    padding: rem($padding-4n);
+    padding: {
+        top: rem(22);
+        bottom: rem(27);
+        left: rem(16);
+        right: rem(16);
+    }
 }
 .containerPC {
     width: rem(330);
@@ -55,7 +60,6 @@
 .totalAmountH5 {
     color: $white;
     text-align: left;
-    padding-top: rem(40);
     .moneyTitle {
         font-family: 'PingFangSC-Regular';
         font-weight: normal;
@@ -94,7 +98,7 @@
         font-weight: normal;
         font-size: rem($font-size-large);
         line-height: rem(16.8);
-        padding: rem(14) 0;
+        padding-top: rem(14) 0;
     }
 }
 .amountStatusH5 {
@@ -115,7 +119,7 @@
         font-weight: normal;
         font-size: rem($font-size-large);
         line-height: rem(16.8);
-        padding: rem(14) 0;
+        padding-top: rem(14);
     }
     .withdrawalAmount {
         margin-right: rem(40);

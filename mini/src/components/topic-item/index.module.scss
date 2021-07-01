@@ -16,7 +16,7 @@
     font-size: $font-size-base;
     line-height: 26px;
     max-height: 49px;
-    margin: 16px 0 8px;
+    margin: 14px 0 8px;
     @include lamp-clamp($line: 2);
     .richText{
       display: inline-block;

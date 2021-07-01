@@ -13,7 +13,7 @@ class ParnerInvite extends React.Component {
     return <ViewAdapter
               h5={<ParnerInviteH5Page />}
               pc={<ParnerInviteH5Page />}
-              title={`站点加入 - ${this.props.site?.siteName}`}
+              title="站点加入"
             />;
   }
 }

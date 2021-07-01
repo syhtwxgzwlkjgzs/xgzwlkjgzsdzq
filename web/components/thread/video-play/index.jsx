@@ -67,8 +67,12 @@ const Index = ({
       v_height,
       viewHeight: window.innerHeight
     });
+
+    // height容错
+    const newHeight = (height === 'NaN' || !height) ? 0 : height
+    
     setWidth(width);
-    setHeight(height);
+    setHeight(newHeight);
   }, []);
 
   useEffect(() => {
@@ -90,6 +94,7 @@ const Index = ({
             height={height}
             poster={coverUrl}
             duration={time}
+            playsinline={true}
           />
         )
       }

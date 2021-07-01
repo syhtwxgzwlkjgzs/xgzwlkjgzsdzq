@@ -68,7 +68,7 @@ class RenderCommentList extends React.Component {
       id: data.id,
       isLiked: !data.isLiked,
     };
-    const { success, msg } = await this.props.comment.updateLiked(params);
+    const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
 
     if (success) {
       this.props.thread.setCommentListDetailField(data.id, 'isLiked', params.isLiked);
@@ -355,6 +355,19 @@ class RenderCommentList extends React.Component {
     typeof this.props.onReportClick === 'function' && this.props.onReportClick(comment);
   }
 
+  replyAvatarClick(reply, comment, floor) {
+    if (floor === 2) {
+      const { userId } = reply;
+      if(!userId) return;
+      this.props.router.push(`/user/${userId}`)
+    }
+    if (floor === 3) {
+      const { commentUserId } = reply;
+      if(!commentUserId) return;
+      this.props.router.push(`/user/${commentUserId}`)
+    }
+  }
+
   render() {
     const { totalCount, commentList } = this.props.thread;
 
@@ -414,6 +427,7 @@ class RenderCommentList extends React.Component {
                 data={val}
                 key={val.id}
                 avatarClick={(userId) => this.onUserClick(userId)}
+                replyAvatarClick={(reply,floor) =>this.replyAvatarClick(reply,val,floor)}
                 likeClick={() => this.likeClick(val)}
                 replyClick={() => this.replyClick(val)}
                 deleteClick={() => this.deleteClick(val)}

@@ -4,6 +4,7 @@ import { readCategories, readStickList, readThreadList, updatePosts, createThrea
 import typeofFn from '@common/utils/typeof';
 import threadReducer from '../thread/reducer';
 import { getCategoryName, getActiveId, getCategories, handleString2Arr } from '@common/utils/handleCategory'
+import replaceStringInRegex from '../../utils/replace-string-in-regex'
 
 class IndexAction extends IndexStore {
   constructor(props) {
@@ -22,7 +23,7 @@ class IndexAction extends IndexStore {
   @computed get activeCategoryId() {
     const categories = this.categories || [];
     const { categoryids } = this.filter
-    
+
     const [id, cid] = getActiveId(categories, categoryids)
     return id
   }
@@ -31,7 +32,7 @@ class IndexAction extends IndexStore {
   @computed get activeChildCategoryId() {
     const categories = this.categories || [];
     const { categoryids } = this.filter
-    
+
     const [id, cid] = getActiveId(categories, categoryids)
     return cid
   }
@@ -129,11 +130,19 @@ class IndexAction extends IndexStore {
    @action
    async deleteThreadsData({ id } = {}) {
      if (id && this.threads) {
+      //  删除列表
         const { pageData = [] } = this.threads;
-        const newPageData = pageData.filter(item => item.threadId !== id)
+        const newPageData = pageData.filter(item => `${item.threadId}` !== `${id}`)
 
         if (this.threads?.pageData) {
           this.threads.pageData = newPageData;
+        }
+
+        // 删除置顶
+        const newSticksData = this.sticks?.filter(item => `${item.threadId}` !== `${id}`)
+
+        if (this.sticks) {
+          this.sticks = newSticksData;
         }
      }
    }
@@ -149,7 +158,7 @@ class IndexAction extends IndexStore {
       this.threads = null;
       this.sticks = null;
     }
-    
+
     this.resetErrorInfo()
 
     await this.getRreadStickList(filter.categoryids);
@@ -195,13 +204,13 @@ class IndexAction extends IndexStore {
         }
       } else {
         if (this.threads && result.data.pageData && page !== 1) {
-          this.threads.pageData.push(...result.data.pageData);
-          const newPageData = this.threads.pageData.slice();
-          this.setThreads({
-            ...(this.adapterList(result.data)),
-            currentPage: result.data.currentPage,
-            pageData: newPageData
-          });
+          const nextThreads = result.data.pageData.map(item => {
+            item.openedMore = false;
+            return item
+          })
+
+          this.threads.pageData.push(...nextThreads);
+          this.threads.currentPage = result.data.currentPage;
         } else {
           // 首次加载
           this.threads = null;
@@ -268,6 +277,18 @@ class IndexAction extends IndexStore {
     }
   }
 
+  // 获取指定的置顶帖子数据
+  findAssignSticks(threadId) {
+    if (this.sticks) {
+      for (let i = 0; i < this.sticks.length; i++)  {
+        if (this.sticks[i].threadId === threadId) {
+          return { index: i, data: this.sticks[i] };
+        }
+      }
+      return null;
+    }
+  }
+
   /**
    * 写入分类数据
    * @param {Object} data
@@ -275,38 +296,6 @@ class IndexAction extends IndexStore {
   @action.bound
   setCategories(data) {
     this.categories = data;
-  }
-
-  /**
-   * 根据 ID 获取当前选中的类别
-   * @param {number} id 帖子类别id
-   * @returns 选中的帖子详细信息
-   */
-  @action
-  getCategorySelectById(id) {
-    let parent = {};
-    let child = {};
-    let currentId = id;
-    if (!id && this.categoriesNoAll && this.categoriesNoAll.length) currentId = this.categoriesNoAll[0].pid;
-    if (this.categoriesNoAll && this.categoriesNoAll.length && currentId) {
-      this.categoriesNoAll.forEach((item) => {
-        const { children } = item;
-        if (item.pid === currentId) {
-          parent = item;
-          if (children && children.length > 0) [child] = children;
-        } else {
-          if (children && children.length > 0) {
-            children.forEach((elem) => {
-              if (elem.pid === currentId) {
-                child = elem;
-                parent = item;
-              }
-            });
-          }
-        }
-      });
-    }
-    return { parent, child };
   }
 
   /* 写入置顶数据
@@ -358,11 +347,48 @@ class IndexAction extends IndexStore {
   @action
   updateAssignThreadAllData(threadId, threadInfo) {
     if (!threadId || !threadInfo || !Object.keys(threadInfo).length) return false;
+
+    // 更新置顶帖
+    this.updateAssignSticksInfo(threadId, threadInfo)
+
+    // 更新帖子列表
     const targetThread = this.findAssignThread(typeofFn.isNumber(threadId) ? threadId : +threadId);
     if (!targetThread) return false;
     const { index, data } = targetThread;
     this.threads.pageData[index] = threadInfo;
     return true;
+  }
+
+  /**
+   * 更新置顶帖内容
+   * @param {string} threadId
+   * @param {object} threadInfo
+   * @returns boolean
+   */
+  @action
+  updateAssignSticksInfo(threadId, threadInfo) {
+    const targetThread = this.findAssignSticks(threadId);
+    if (!targetThread || targetThread.length === 0) return;
+
+    // TODO 因为置顶贴的数据格式和帖子列表的数据格式不一致，先通过网络请求的方式解决问题
+    const categoryids = handleString2Arr(this.filter, 'categoryids')
+    this.getRreadStickList(categoryids)
+
+    // const { index, data } = targetThread;
+
+    // const text = threadInfo.title || threadInfo?.content?.text;
+    // let newText = replaceStringInRegex(text, "break", '');
+    // newText = replaceStringInRegex(newText, "heading", '');
+    // newText = replaceStringInRegex(newText, "paragraph", '');
+    // newText = replaceStringInRegex(newText, "imgButEmoj", '');
+    // newText = replaceStringInRegex(newText, "list", '');
+    // this.sticks[index] = { 
+    //   canViewPosts: threadInfo?.ability?.canViewPost, 
+    //   categoryId: threadInfo?.categoryId, 
+    //   title: threadInfo.title || threadInfo?.content?.text, 
+    //   updatedAt: threadInfo?.updatedAt,
+    //   threadId: threadInfo?.threadId
+    // };
   }
 
   /**
@@ -474,7 +500,7 @@ class IndexAction extends IndexStore {
    @action
    async getRecommends({ categoryIds = [] } = {}) {
     this.updateRecommendsStatus('loading');
-    
+
     const result = await readRecommends({ params: { categoryIds } })
     if (result.code === 0) {
       this.setRecommends(result.data || []);

@@ -37,6 +37,7 @@ const Index = ({
   getShareContent,
   shareContent,
   user,
+  unifyOnClick = null,
   onShare = () => {},
   onComment = () => {},
   onPraise = () => {},
@@ -87,7 +88,7 @@ const Index = ({
       <View className={needHeight ? styles.user : styles.users}>
         {userImgs.length !== 0 ? <View className={styles.userImg}>
           <View className={styles.portrait}>
-            <Tip tipData={tipData} imgs={userImgs} wholeNum={wholeNum} showCount={5}></Tip>
+            <Tip tipData={tipData} imgs={userImgs} wholeNum={wholeNum} showCount={5} unifyOnClick={unifyOnClick}></Tip>
           </View>
           {
             wholeNum !== 0 && (
@@ -108,7 +109,7 @@ const Index = ({
         {
           postList.map((item, index) => (
               item.name === '分享'?(
-                <View key={index} className={styles.fabulous} onClick={handleClickShare}>
+                <View key={index} className={styles.fabulous} onClick={unifyOnClick || handleClickShare}>
                  <View className={styles.fabulousIcon}>
                     <Icon
                     className={`${styles.icon} ${item.type}`}
@@ -121,7 +122,7 @@ const Index = ({
                 </Text>
               </View>
               ):
-              (<View key={index} className={styles.fabulous} onClick={item.event}>
+              (<View key={index} className={styles.fabulous} onClick={unifyOnClick || item.event}>
                  <View className={styles.fabulousIcon}>
                     <Icon
                     className={`${styles.icon} ${item.type} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`}
@@ -137,13 +138,13 @@ const Index = ({
         }
       </View>
 
-      <Popup
+      {show && <Popup
         position="bottom"
         visible={show}
         onClose={onClose}
       >
         <ShareButton data={data} setShow={setShow} tipData={tipData} index={thread} shareContent={shareContent} getShareContent={getShareContent} shareThreadid={shareThreadid} shareAvatar={shareAvatar} shareNickname={shareNickname} getShareData={getShareData}></ShareButton>
-      </Popup>
+      </Popup>}
     </View>
   );
 };

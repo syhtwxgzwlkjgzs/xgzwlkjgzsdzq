@@ -258,10 +258,18 @@
       .user-center-friends-item:nth-last-child(-n + 2) {
         display: none;
       }
+      .user-center-friends-item:nth-child(n + 2),
+      .user-center-friends-item:nth-child(1) {
+        display: block;
+      }
     }
     @include heightMedia(995px, 940px) {
       .user-center-friends-item:nth-last-child(-n + 3) {
         display: none;
+      }
+      .user-center-friends-item:nth-child(n + 2),
+      .user-center-friends-item:nth-child(1) {
+        display: block;
       }
     }
     .user-center-friends-mini {
@@ -272,7 +280,7 @@
         display: flex !important;
       }
       .user-center-friends-item {
-        display: none;
+        display: none !important;
       }
     }
   }

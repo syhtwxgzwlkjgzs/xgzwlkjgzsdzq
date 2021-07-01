@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { inject, observer } from 'mobx-react';
 
 import Notice from '@components/message/notice';
 
 import styles from './index.module.scss';
 
-const Index = ({ site, message }) => {
+const Index = ({ site, message, rightContent }) => {
   const { readFinancialMsgList, financialMsgList, deleteMsg } = message;
   const { list, currentPage, totalPage, totalCount } = financialMsgList;
 
@@ -23,7 +23,7 @@ const Index = ({ site, message }) => {
   const formatFinancialList = (list = []) => {
     const newList = [];
     list.forEach(({
-      amount, cashActualAmount, content, createdAt, id, threadId, threadTitle, type, userAvatar, userId, username, nickname, orderType
+      amount, cashActualAmount, content, createdAt, id, threadId, threadTitle, type, userAvatar, userId, username, nickname, orderType, threadUserAvatar, threadUsername, threadUserNickname
     }) => {
       newList.push({
         amount: amount || cashActualAmount || 0,
@@ -32,10 +32,10 @@ const Index = ({ site, message }) => {
         id,
         threadId,
         type,
-        avatar: userAvatar,
+        avatar: type === "threadrewarded" ? threadUserAvatar : userAvatar,
         userId,
-        username,
-        nickname,
+        username: type === "threadrewarded" ? threadUsername : username,
+        nickname: type === "threadrewarded" ? threadUserNickname : nickname,
         orderType,
       });
     });
@@ -48,12 +48,13 @@ const Index = ({ site, message }) => {
   }, [list])
 
   return (
-    <div className={`${styles.wrapper} ${site.isPC ? styles.pc : styles.mobile}`}>
+    <div className={`${styles.wrapper} ${!site.isPC && styles.mobile}`}>
       <Notice
         infoIdx={2}
         totalCount={totalCount}
         noMore={currentPage >= totalPage}
         showHeader={!site.isPC}
+        rightContent={site.isPC ? rightContent : null}
         list={renderList}
         type='financial'
         onPullDown={() => readFinancialMsgList(1)}

@@ -31,7 +31,10 @@ class CommentDetail extends React.Component {
     }
 
     if (id) {
-      const res = await readCommentDetail({ params: { pid: Number(id) } });
+      const res = await readCommentDetail({ params: {
+        perPage: 20,
+        pid: Number(id) 
+      } });
 
       if (res.code !== 0) {
         // 404

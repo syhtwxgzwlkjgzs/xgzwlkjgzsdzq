@@ -19,6 +19,14 @@ import { isExtFieldsOpen } from '@common/store/login/util';
 @observer
 class WeixinBindQrCodePage extends React.Component {
   async componentDidMount() {
+    await this.generateQrCode();
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
+  async generateQrCode() {
     try {
       const { sessionToken, nickname } = this.props.router.query;
       const { platform, wechatEnv } = this.props.site;
@@ -48,10 +56,6 @@ class WeixinBindQrCodePage extends React.Component {
     }
   }
 
-  componentWillUnmount() {
-    clearInterval(this.timer);
-  }
-
   queryLoginState(type) {
     this.timer = setInterval(async () => {
       try {
@@ -59,16 +63,14 @@ class WeixinBindQrCodePage extends React.Component {
           type,
           params: { sessionToken: this.props.h5QrCode.sessionToken },
         });
-        console.log(res);
         const uid = get(res, 'data.uid');
         this.props.user.updateUserInfo(uid);
         // FIXME: 使用 window 跳转用来解决，获取 forum 在登录前后不同的问题，后续需要修改 store 完成
-        console.log('binded');
         window.location.href = '/';
         clearInterval(this.timer);
       } catch (e) {
         const { site, h5QrCode, commonLogin, router } = this.props;
-        if (h5QrCode.countDown) {
+        if (h5QrCode.countDown > 0) {
           h5QrCode.countDown = h5QrCode.countDown - 3;
         } else {
           clearInterval(this.timer);
@@ -110,6 +112,8 @@ class WeixinBindQrCodePage extends React.Component {
           </div>
           {/* 二维码 start */}
           <WeixinQrCode
+            refresh={() => {this.generateQrCode()}}
+            isValid={h5QrCode.isQrCodeValid}
             orCodeImg={h5QrCode.qrCode}
             orCodeTips={platform === 'h5' ? '长按保存二维码，并在微信中识别此二维码，即可完成登录' : '请使用微信，扫码登录'}
           />

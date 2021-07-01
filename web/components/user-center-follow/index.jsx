@@ -158,7 +158,7 @@ class UserCenterFollows extends React.Component {
     });
   }
 
-  followUser = throttle(async ({ id: userId }) => {
+  followUser = async ({ id: userId }) => {
     try {
       const res = await createFollow({ data: { toUserId: userId } });
       if (res.code === 0 && res.data) {
@@ -195,9 +195,9 @@ class UserCenterFollows extends React.Component {
         duration: 2000,
       });
     }
-  }, 1000);
+  }
 
-  unFollowUser = throttle(async ({ id }) => {
+  unFollowUser = async ({ id }) => {
     try {
       const res = await deleteFollow({ data: { id, type: 1 } });
       if (res.code === 0 && res.data) {
@@ -232,7 +232,7 @@ class UserCenterFollows extends React.Component {
         duration: 2000,
       });
     }
-  }, 1000);
+  };
 
   async componentDidMount() {
     // 第一次加载完后，才允许加载更多页面
@@ -320,26 +320,6 @@ class UserCenterFollows extends React.Component {
   };
 
   searchDispatch = debounce(async () => {
-    this.setState({
-      loading: true,
-    });
-    this.setState({
-      follows: [],
-    });
-    if (this.props.setDataSource) {
-      this.props.setDataSource({});
-    }
-    await this.fetchFollows();
-    this.setState({
-      loading: false,
-    });
-  }, 300);
-
-  handleSearchValueChange = async (e) => {
-    this.setState({
-      searchValue: e.target.value,
-    });
-
     if (this.props.updateSourcePage) {
       this.props.updateSourcePage(1);
     }
@@ -349,13 +329,35 @@ class UserCenterFollows extends React.Component {
 
     this.page = 1;
     this.totalPage = 1;
+
+    this.setState({
+      loading: true,
+    });
+
+    this.setState({
+      follows: [],
+    });
+    if (this.props.setDataSource) {
+      this.props.setDataSource({});
+    }
+    await this.fetchFollows();
+
+    this.setState({
+      loading: false,
+    });
+  }, 500);
+
+  handleSearchValueChange = async (e) => {
+    this.setState({
+      searchValue: e.target.value,
+    });
     this.searchDispatch();
   };
 
   render() {
     return (
       <div
-        className={this.props.className}
+        className={this.props.className + " user-center-follow-list"}
         ref={this.containerRef}
         style={{
           height: '100%',
@@ -429,7 +431,7 @@ class UserCenterFollows extends React.Component {
             );
           })}
         </div>
-        {followerAdapter(this.props.dataSource || this.state.follows).length === 0 && !this.state.loading && <NoData />}
+        {followerAdapter(this.props.dataSource || this.state.follows).length === 0 && !this.state.loading && <NoData defaultShow={true} />}
         {this.state.loading && (
           <div className={styles.loadMoreContainer}>
             <Spin type={'spinner'}>加载中 ...</Spin>

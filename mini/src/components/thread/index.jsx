@@ -28,15 +28,16 @@ class Index extends React.Component {
     onComment = (e) => {
       e && e.stopPropagation();
 
-      // 对没有登录的先登录
-      if (!this.props.user.isLogin()) {
+      const { threadId = '', ability } = this.props.data || {};
+      const { canViewPost } = ability;
+
+      // 没有查看权限，且未登录，需要去登录
+      if (!canViewPost && !this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
         goToLoginPage({ url: '/subPages/user/wx-auth/index' });
         return;
       }
 
-      const { data = {} } = this.props;
-      const { threadId = '' } = data;
       if (threadId !== '') {
         this.props.thread.positionToComment()
         Router.push({url: `/subPages/thread/index?id=${threadId}`})
@@ -49,6 +50,7 @@ class Index extends React.Component {
       e && e.stopPropagation();
       this.handlePraise()
     }
+    
     handlePraise = debounce(() => {
 
       if(this.state.isSendingLike) return;
@@ -112,9 +114,11 @@ class Index extends React.Component {
 
       if (!canViewPost) {
         Toast.info({ content: '暂无权限查看详情，请联系管理员' });
+        return
       }
 
       if (threadId !== '') {
+        this.props.thread.isPositionToComment = false;
         Router.push({url: `/subPages/thread/index?id=${threadId}`})
 
         this.props.index.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
@@ -150,7 +154,7 @@ class Index extends React.Component {
     }
 
     render() {
-      const { data, className = '', site = {}, showBottomStyle = true, isShowIcon = false } = this.props;
+      const { data, className = '', site = {}, showBottomStyle = true, isShowIcon = false, unifyOnClick = null } = this.props;
       const { platform = 'pc' } = site;
       if (!data) {
         return <NoData />;
@@ -176,7 +180,7 @@ class Index extends React.Component {
       const {shareNickname, shareAvatar, shareThreadid, shareContent} = this.props.user
       return (
         <View className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`}>
-          <View className={styles.header} onClick={this.onClick}>
+          <View className={styles.header} onClick={unifyOnClick || this.onClick}>
               <UserInfo
                 name={user.nickname || ''}
                 avatar={user.avatar || ''}
@@ -191,12 +195,12 @@ class Index extends React.Component {
                 isAnonymous={isAnonymous}
                 userId={user?.userId}
                 platform={platform}
-                onClick={this.onUser}
+                onClick={unifyOnClick || this.onUser}
               />
-              {isShowIcon && <View className={styles.headerIcon} onClick={this.onClickHeaderIcon}><Icon name='CollectOutlinedBig' className={styles.collectIcon}></Icon></View>}
+              {isShowIcon && <View className={styles.headerIcon} onClick={unifyOnClick || this.onClickHeaderIcon}><Icon name='CollectOutlinedBig' className={styles.collectIcon}></Icon></View>}
           </View>
 
-          <ThreadCenterView text={text} data={data} onClick={this.onClick} onPay={this.onPay} platform={platform} />
+          <ThreadCenterView text={text} data={data} onClick={unifyOnClick || this.onClick} onPay={unifyOnClick || this.onPay} platform={platform} />
 
           <BottomEvent
             userImgs={likeReward.users}
@@ -206,6 +210,7 @@ class Index extends React.Component {
             // onShare={this.onShare}
             onComment={this.onComment}
             onPraise={this.onPraise}
+            unifyOnClick={unifyOnClick}
             isLiked={isLike}
             isSendingLike={this.state.isSendingLike}
             tipData={{ postId, threadId, platform, payType }}

@@ -109,7 +109,7 @@ function Home(props, ref) {
       case 'header':
         return props.children;
       case 'footer':
-        return <BottomView noMore={props.noMore} isError={props.requestError}></BottomView>;
+        return <BottomView noMore={props.noMore} isError={props.requestError} platform={platform}></BottomView>;
       default:
         return <Item data={data} measure={measure} recomputeRowHeights={() => recomputeRowHeights(index)} />;
     }
@@ -228,4 +228,4 @@ function Home(props, ref) {
   );
 }
 
-export default observer(inject('vlist')(forwardRef(Home)));
+export default inject('vlist')(observer(forwardRef(Home)));

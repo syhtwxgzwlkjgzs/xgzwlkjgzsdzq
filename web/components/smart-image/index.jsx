@@ -2,7 +2,8 @@ import React, {useState, useEffect, useCallback, useRef, useMemo} from 'react';
 import isServer from '@common/utils/is-server';
 import styles from './index.module.scss';
 import {isLongImage} from '@common/utils/calc-image-type';
-import calcImageQuality from '@common/utils/calc-image-quality';
+import calcCosImageQuality from '@common/utils/calc-cos-image-quality';
+
 const SmartImg = ({level, type, src, onClick, noSmart = false}) => {
 
     const [isLong, changeIsLong] = useState(false);
@@ -10,24 +11,8 @@ const SmartImg = ({level, type, src, onClick, noSmart = false}) => {
 
     const imgSrc = useMemo(() => {
         if (noSmart) return src;
-        const [path, param] = src.split('?');
-        let newSrc = src;
-        let newParam = '';
-        if ( !isServer() ) {
-            const viewWidth = window.screen.width;
-            newParam = calcImageQuality(viewWidth, type, level);
-
-            if ( param && param !== '' ) {
-                const paramArr = param.split('&');
-                paramArr.push(newParam);
-                newSrc = `${newSrc}&${paramArr.join('&')}`;
-            } else {
-                newParam = `${newParam}?${newParam}`;
-            }
-        }
-
-        return newSrc;
-    }, [noSmart, src, type])
+        return calcCosImageQuality(src, type, level);
+    }, [noSmart, src, type, level])
 
     const imgOnload = useCallback(() => {
         if (img && img.current) {

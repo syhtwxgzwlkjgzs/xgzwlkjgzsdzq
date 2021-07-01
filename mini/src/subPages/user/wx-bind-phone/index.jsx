@@ -93,7 +93,7 @@ class Index extends Component {
 
   handleBindButtonClick = async () => {
     const { wxPhoneBind } = this.props;
-    const { sessionToken } = getCurrentInstance().router.params;
+    const { sessionToken } = getCurrentInstance()?.router?.params;
     try {
       const resp = await wxPhoneBind.loginAndBind(sessionToken);
       const uid = get(resp, 'uid', '');
@@ -146,14 +146,13 @@ class Index extends Component {
 
   render() {
     const { wxPhoneBind, commonLogin } = this.props;
-    const { nickname } = getCurrentInstance().router.params;
-
+    const { nickname = '' } = getCurrentInstance()?.router?.params || commonLogin;
     return (
       <Page>
         {/* <MemoToastProvider> */}
         <View className={layout.container}>
           <View className={layout.content}>
-            <View className={layout.title}>手机号登陆，并绑定微信账号</View>
+            <View className={layout.title}>手机号登录，并绑定微信账号</View>
             <View className={layout.tips}>
               <View style={{display: 'flex' }}>hi， 微信用户<Avatar style={{margin: '0 8px'}} circle size='small' image={commonLogin.avatarUrl}/>{nickname}</View>
               <View>请您登录，即可完成微信号和用户名的绑定</View>

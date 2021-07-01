@@ -16,16 +16,18 @@ import NoData from '@components/no-data';
 class H5MyPage extends React.Component {
   constructor(props) {
     super(props);
+    this.isUnmount = false;
     this.state = {
       firstLoading: true,
     };
   }
 
-  componentDidMount = async () => {
-    await this.props.user.updateUserInfo(this.props.user.id);
-
+  fetchUserThreads = async () => {
     try {
-      await this.props.user.getUserThreads();
+      const userThreadsList = await this.props.user.getUserThreads();
+      if (!this.unMount) {
+        this.props.user.setUserThreads(userThreadsList);
+      }
     } catch (err) {
       console.error(err);
       let errMessage = '加载用户列表失败';
@@ -39,10 +41,22 @@ class H5MyPage extends React.Component {
         hasMask: false,
       });
     }
+  }
+
+  componentDidMount = async () => {
+    await this.props.user.updateUserInfo(this.props.user.id);
+
+    await this.fetchUserThreads();
+
     this.setState({
       firstLoading: false,
     });
   };
+
+  componentWillUnmount = () => {
+    this.unMount = true;
+    this.props.user.clearUserThreadsInfo();
+  }
 
   formatUserThreadsData = (userThreads) => {
     if (Object.keys(userThreads).length === 0) return [];
@@ -60,7 +74,7 @@ class H5MyPage extends React.Component {
         curr={'my'}
         showHeader={false}
         showTabBar={true}
-        onRefresh={user.getUserThreads}
+        onRefresh={this.fetchUserThreads}
         noMore={userThreadsTotalPage <= userThreadsPage}
         showRefresh={!this.state.firstLoading}
         immediateCheck

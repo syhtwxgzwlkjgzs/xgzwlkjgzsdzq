@@ -45,7 +45,6 @@ const Index = (props) => {
 
 
   const onPositionChange = (val) => { // 根据选择地址，存储最新位置
-    console.log(`val`, val)
     if (val.latitude === position.latitude) return;
 
     const newPosition = { ...val };
@@ -58,7 +57,6 @@ const Index = (props) => {
       <Tag
         type="primary"
         closeable={position.location}
-        size="md"
         onClick={openMap}
         onClose={() => onChange({})}
         className={classNames(styles.tag, {

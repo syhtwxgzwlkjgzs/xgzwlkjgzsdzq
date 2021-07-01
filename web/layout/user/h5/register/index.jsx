@@ -72,6 +72,8 @@ class RegisterH5Page extends React.Component {
     } catch (e) {
       // 跳转补充信息页
       if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+        const uid = get(e, 'uid', '');
+        uid && this.props.user.updateUserInfo(uid);
         if (isExtFieldsOpen(this.props.site)) {
           this.props.commonLogin.needToCompleteExtraInfo = true;
           this.props.router.push('/user/supplementary');

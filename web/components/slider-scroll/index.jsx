@@ -33,6 +33,7 @@ class SlierItem extends PureComponent {
 
   // touchStart，更新当前触摸项，记录起点
   handleTouchStart = (e) => {
+    if (!this.props.isFinished) return; // 下拉刷新中
     const { item, currentId, onSliderTouch } = this.props;
     currentId !== item.id && onSliderTouch(item.id);
     this.setState({
@@ -43,6 +44,7 @@ class SlierItem extends PureComponent {
 
   // touchMove
   handleTouchMove = (e) => {
+    if (!this.props.isFinished) return;
     const moveX = e.touches[0].clientX - this.state.startX;
     const moveY = e.touches[0].clientY - this.state.startY;
     if (Math.abs(moveX) > Math.abs(moveY) && Math.abs(moveX) > 50) {
@@ -198,6 +200,7 @@ class Index extends Component {
             onScroll={throttle(this.onScroll, 10)}
             onRefresh={onScrollBottom}
             immediateCheck={false}
+            showLoadingInCenter={true}
           >
             {/* 导航条 */}
             {showHeader && <Header />}
@@ -205,17 +208,20 @@ class Index extends Component {
             {topCard}
             {/* show list */}
             <div className={styles.slider}>
-              {list.map((item, index) => (
-                <SlierItem
-                  key={item.id}
-                  item={item}
-                  index={index}
-                  isLast={list.length === (index + 1)}
-                  currentId={currentId}
-                  onSliderTouch={(id) => this.setState({ currentId: id })}
-                  {...other}
-                />
-              ))}
+              <div className={styles['slider__inner']}>
+                {list.map((item, index) => (
+                  <SlierItem
+                    key={item.id}
+                    item={item}
+                    index={index}
+                    isLast={list.length === (index + 1)}
+                    currentId={currentId}
+                    isFinished={isFinished}
+                    onSliderTouch={(id) => this.setState({ currentId: id })}
+                    {...other}
+                  />
+                ))}
+              </div>
             </div>
           </List>
         </PullDownRefresh>

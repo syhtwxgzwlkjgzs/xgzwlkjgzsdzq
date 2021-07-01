@@ -39,9 +39,9 @@ class MyDocument extends Document {
               }, 0);
           ` }} />
           {/* <!--腾讯地图定位组件--> */}
-          <script async src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
+          <script async={true} src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
           {/* 编辑器markdown依赖 */}
-          <script async src="https://cloudcache.tencent-cloud.com/operation/dianshi/other/lute.min.6cbcbfbacd9fa7cda638f1a6cfde011f7305a071.js?max_age=31536000" ></script>
+          <script async={true} src="https://cloudcache.tencent-cloud.com/operation/dianshi/other/lute.min.6cbcbfbacd9fa7cda638f1a6cfde011f7305a071.js?max_age=31536000" ></script>
           {this.createMonitor()}
         </Head>
 
@@ -60,6 +60,20 @@ class MyDocument extends Document {
             </script>
             <NextScript/>
         </body>
+        <script dangerouslySetInnerHTML={{__html: `
+          window.sessionStorage.setItem('__TD_td_channel', window.location.hostname.replace(/\./g, '_'));
+          var tdjs = document.createElement('script');
+          tdjs.type = 'text/javascript';
+          tdjs.async = true;
+          tdjs.src = 'https://jic.talkingdata.com/app/h5/v1?appid=750AEE91CF4446A19A2D12D5EE32F725';
+          document.getElementsByTagName('body')[0].appendChild(tdjs);
+      
+          var dzqjs = document.createElement('script');
+          dzqjs.type = 'text/javascript';
+          dzqjs.async = true;
+          dzqjs.src = 'https://dl.discuz.chat/dzq.js';
+          document.getElementsByTagName('body')[0].appendChild(dzqjs);
+        `}}/>
         <script dangerouslySetInnerHTML={{__html: `
             // 微信设置字体最大，布局乱的补丁
             function is_weixn() {

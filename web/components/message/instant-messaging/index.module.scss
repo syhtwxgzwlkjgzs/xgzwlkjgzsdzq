@@ -1,9 +1,10 @@
-@import './vars.scss';
+@import "./vars.scss";
 
 .pcPage {
   display: flex;
   flex-direction: column;
-  height: calc(100% - 100px);
+  height: calc(100% - 10px);
+  max-height: 940px;
   max-width: 750px;
   padding: 0 $padding-4n;
   background: $white;
@@ -15,4 +16,22 @@
   border-top: $border-solid-1;
   height: calc(100vh - 41px);
   background-color: $body-bg-color;
+}
+
+.pc-header {
+  background: $white;
+  padding: 0 $padding-6n;
+
+  .pc-header__inner {
+    height: rem(73px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: "PingFang SC";
+    font-size: $font-size-large;
+    color: $text-color-primary;
+    font-weight: 600;
+    text-align: left;
+    border-bottom: $border-solid-1;
+  }
 }

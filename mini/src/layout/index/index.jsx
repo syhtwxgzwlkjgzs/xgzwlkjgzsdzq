@@ -161,7 +161,7 @@ class IndexH5Page extends React.Component {
       <>
         {categories?.length > 0 && (
           <>
-          <View 
+          <View
             ref={this.tabsRef}
             className={`${styles.homeContent} ${fixedTab ? styles.fixed : ''}`}
             style={{top: `${navBarHeight}px`}}
@@ -233,10 +233,10 @@ class IndexH5Page extends React.Component {
 
         <View style={{display: isClickTab ? 'none' : 'block'}}>
           {this.renderHeaderContent()}
-       
+
           {pageData?.map((item, index) => (
               <ThreadContent
-                key={`${item.threadId}-${new Date().getTime()}`}
+                key={`${item.threadId}-${item.updatedAt}`}
                 showBottomStyle={index !== pageData.length - 1}
                 data={item}
                 className={styles.listItem}

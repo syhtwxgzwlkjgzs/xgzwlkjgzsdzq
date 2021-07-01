@@ -33,7 +33,6 @@ function DzqUpload(props) {
   const post = async (file, list, updater) => {
     const ret = await createAttachment(file, (progressEvent) => {
       const { progress } = progressEvent;
-      console.log(progress);
       // progressEvent
       file.status = 'uploading';
       file.percent = progress === 100 ? 99 : progress;
@@ -99,7 +98,7 @@ function DzqUpload(props) {
   return (
     <View className={clsName}>
       <Upload
-        progressRender={(file) => <ProgressRender file={file} />}
+        // progressRender={(file) => <ProgressRender file={file} />}
         listType={listType}
         fileList={fileList}
         limit={limit}
