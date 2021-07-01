@@ -119,9 +119,8 @@ class UserAction extends SiteStore {
   // 获取指定用户的用户信息，用于获取他人首页
   @action
   async getTargetUserInfo(id) {
-    let id_ = typeof id === 'string' ? Number(id) : id;
     this.targetUserId = id;
-    const userInfo = await this.getAssignUserInfo(id_);
+    const userInfo = await this.getAssignUserInfo(id);
     this.targetUser = userInfo;
     return userInfo;
   }

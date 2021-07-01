@@ -66,7 +66,7 @@ class UserCenterFollows extends React.Component {
           page: this.page,
           perPage: 20,
           filter: {
-            userId: Number(this.props.userId),
+            userId: this.props.userId,
           },
         },
       };
