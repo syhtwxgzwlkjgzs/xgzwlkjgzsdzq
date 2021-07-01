@@ -221,6 +221,7 @@ class Index extends React.Component {
         displayTag,
         payType,
         isAnonymous,
+        diffTime,
       } = data || {};
       const { isEssence, isPrice, isRedPack, isReward } = displayTag || {};
 
@@ -233,7 +234,7 @@ class Index extends React.Component {
                 location={position.location}
                 view={`${viewCount}`}
                 groupName={group?.groupName}
-                time={createdAt}
+                time={diffTime}
                 isEssence={isEssence}
                 isPay={isPrice}
                 isRed={isRedPack}
