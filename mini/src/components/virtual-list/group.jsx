@@ -64,6 +64,10 @@ const VirtualList = forwardRef(({
     setErrText(errorText)
   }, [errorText])
 
+  useEffect(() => {
+    observePage(wholePageIndex.current)
+  }, [heights.current.length])
+
   useImperativeHandle(
     ref,
     () => ({
@@ -128,6 +132,23 @@ const VirtualList = forwardRef(({
     heights.current[index] = height
   }
 
+  const observePage = (pageIndex) => {
+    const observerObj = wx.createIntersectionObserver(this).relativeToViewport({ top: 2 * windowHeight.current, bottom: 2 * windowHeight.current });
+    observerObj.observe(`#virtual-list-${pageIndex}`, (res) => {
+      const newArr = dataSource.slice()
+console.log(pageIndex);
+      if(res.intersectionRatio <= 0) {
+        debugger
+        newArr[pageIndex] = originalDataSource.current[pageIndex] 
+      } else {
+        debugger
+        newArr[pageIndex] = { height: heights.current[pageIndex] }
+      }
+
+      setDataSource(newArr)
+    });
+  }
+
   // 处理数据
   const handleCurrentIndex = (realScrollTop) => {
     
@@ -141,9 +162,12 @@ const VirtualList = forwardRef(({
         break;
       } 
     }
-
     const currentIndex = currentRenderIndex.current
     if (computedCurrentIndex !== currentIndex) {
+      // if (computedCurrentIndex === 0) {
+      //   debugger
+      // }
+
       const newDataSource = dataSource.map((item, index, arr) => {
         if(computedCurrentIndex-1 <= index && index <= computedCurrentIndex+1) {
           return originalDataSource.current[index];
@@ -152,6 +176,8 @@ const VirtualList = forwardRef(({
         }
       })
       currentRenderIndex.current = computedCurrentIndex
+      // console.log('currentRenderIndex.current', currentRenderIndex.current);
+
       setDataSource(newDataSource)
     }
   }
@@ -167,9 +193,9 @@ const VirtualList = forwardRef(({
         const promise = onRefresh()
         isPromise(promise) && promise
           .then(() => {
-            wholePageIndex.current += 1
             // 解决因promise和react渲染不同执行顺序导致重复触发加载数据的问题
             setTimeout(() => {
+              wholePageIndex.current += 1
               isLoadingRef.current = false;
               setIsLoading(false);
               if (noMore) {
@@ -201,7 +227,7 @@ const VirtualList = forwardRef(({
 
     const { scrollTop = 0 } = e?.detail || {}
     handlePreFetch(e)
-    handleCurrentIndex(scrollTop)
+    // handleCurrentIndex(scrollTop)
   }
 
   const handlePreFetch = async (e) => {
