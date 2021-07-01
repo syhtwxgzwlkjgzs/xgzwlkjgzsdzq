@@ -6,10 +6,10 @@
   background: var(--color-warn9);
   text-align: center;
   line-height: rem(52);
-  position: relative;
+  position: absolute;
   top: rem(60);
   display: none;
-  z-index: $zindex-popup;
+  z-index: $zindex-backtotop;
 
   .innerTip {
     width: 100%;
