@@ -105,6 +105,7 @@ const Index = (props) => {
   // 触发图片选择
   const uploadImage = async () => {
     if (browser.env('weixin')) {
+      // 微信环境下使用jssdk进行图片选择
       const files = await wxChooseImage();
       onImgChange('', files);
     } else {
@@ -115,7 +116,7 @@ const Index = (props) => {
   // 检查文件类型和体积
   const checkFile = (file) => {
     if (!webConfig) return false;
-    const imageType = file.name.match(/\.([^\.]+)$/)[1].toLocaleLowerCase();
+    const imageType = file.type.replace('image/', '');
     const imageSize = file.size;
     const isLegalType = supportImgExt.toLocaleLowerCase().includes(imageType);
     const isLegalSize = imageSize > 0 && imageSize < supportMaxSize * 1024 * 1024;
@@ -170,21 +171,15 @@ const Index = (props) => {
           file.imageUrl = img.src;
           file.imageWidth = img.width;
           file.imageHeight = img.height;
-          if (!wxFiles) {
-            file.failMsg = checkFile(file);
-          }
+          file.failMsg = checkFile(file);
           resolve();
         };
 
-        if (wxFiles) {
-          img.src = file.localId;
-        } else {
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = (e) => {
-            img.src = e.target.result;
-          };
-        }
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (e) => {
+          img.src = e.target.result;
+        };
       })
     )));
 
@@ -230,11 +225,11 @@ const Index = (props) => {
       });
     }
     const formData = new FormData();
-    if (file.serverId) {
-      formData.append('mediaId', file.serverId);
-    } else {
+    // if (file.serverId) {
+    //   formData.append('mediaId', file.serverId);
+    // } else {
       formData.append('file', file);
-    }
+    // }
     formData.append('type', 1);
     formData.append('dialogMessageId', file.dialogMessageId);
     const ret = await createAttachment(formData);
