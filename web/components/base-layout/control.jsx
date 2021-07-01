@@ -62,7 +62,10 @@ const BaseLayoutControl = forwardRef((props, ref) => {
       } else {
         if(baselayout[pageName] > 0) {
           if (pageName !== 'search' || (pageName === 'search' && jumpTo !== -1)) {
-            listRef.current.jumpToScrollTop(baselayout[pageName]);
+            // 需要一部触发，可能存在列表没有渲染出来
+            setTimeout(() => {
+              listRef.current.jumpToScrollTop(baselayout[pageName]);
+            });
           }
         } else if(baselayout.isJumpingToTop) {
           baselayout.removeJumpingToTop();

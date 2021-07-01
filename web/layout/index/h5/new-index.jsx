@@ -1,6 +1,6 @@
 import React, { createRef, Fragment } from 'react';
 import { inject, observer, Observer } from 'mobx-react';
-import { Icon, Tabs, Spin } from '@discuzq/design';
+import { Icon, Tabs } from '@discuzq/design';
 // import ThreadContent from '@components/thread';
 import HomeHeader from '@components/home-header';
 import styles from './index.module.scss';
@@ -14,7 +14,11 @@ import classnames from 'classnames';
 import setWxShare from '@common/utils/set-wx-share';
 // import DynamicVList from './components/dynamic-vlist';
 import dynamic from 'next/dynamic';
-import DynamicLoading from '@components/dynamic-loading';
+
+const DynamicComponentWithCustomLoading = dynamic(
+  () => import('./components/dynamic-vlist'),
+  { loading: () => <p>...</p> }
+)
 
 @inject('site')
 @inject('user')
@@ -38,18 +42,6 @@ class IndexH5Page extends React.Component {
     this.handleScroll = this.handleScroll.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
   }
-
-  DynamicVListLoading = dynamic(
-    () => import('./components/dynamic-vlist'),
-    { loading: (res) => {
-        return (
-            <div>
-                <HomeHeader ref={this.headerRef} />
-                <DynamicLoading data={res}/>
-            </div>
-        )
-      } }
-  )
 
   componentDidMount() {
     try {
@@ -202,7 +194,7 @@ class IndexH5Page extends React.Component {
           {this.renderTabs()}
         </div>
 
-        <this.DynamicVListLoading
+        <DynamicComponentWithCustomLoading
           pageData={pageData}
           sticks={sticks}
           onScroll={this.handleScroll}
@@ -215,7 +207,7 @@ class IndexH5Page extends React.Component {
           <HomeHeader ref={this.headerRef} />
           <Observer>{() => this.renderTabs()}</Observer>
           <Observer>{() => this.renderHeaderContent()}</Observer>
-        </this.DynamicVListLoading>
+        </DynamicComponentWithCustomLoading>
       </Fragment>
 
         <FilterView
