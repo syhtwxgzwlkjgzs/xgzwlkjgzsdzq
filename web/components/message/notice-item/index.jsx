@@ -18,14 +18,13 @@
  *
  */
 import React, { Component } from 'react';
-import { Avatar, Icon } from '@discuzq/design';
+import { Icon } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import classNames from 'classnames';
 import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
-import Toast from '@discuzq/design/dist/components/toast';
+import Avatar from '@components/avatar';
 
-import stringToColor from '@common/utils/string-to-color';
 import { diffDate } from '@common/utils/diff-date';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
@@ -43,11 +42,6 @@ class Index extends Component {
       return url || '/dzq-img/default-favicon.png';
     }
     return avatar;
-  };
-
-  // 获取头像背景色
-  getBackgroundColor = (name) => {
-    return name ? stringToColor(name.toUpperCase()[0]) : "#8590a6";
   };
 
   // 针对财务消息，获取后缀提示语
@@ -137,19 +131,13 @@ class Index extends Component {
 
             {/* 未读消息红点 */}
             <UnreadRedDot type='avatar' unreadCount={item.unreadCount}>
-              {
-                avatarUrl ? (
-                  <Avatar image={avatarUrl} circle={true} />
-                ) : (
-                  <Avatar
-                    text={item.nickname}
-                    circle={true}
-                    style={{
-                      backgroundColor: this.getBackgroundColor(item.nickname),
-                    }}
-                  />
-                )
-              }
+              <Avatar
+                isShowUserInfo={isPC && item.nickname && type !== 'thread'}
+                userId={item.userId}
+                image={avatarUrl}
+                name={item.nickname}
+                circle={true}
+              />
             </UnreadRedDot>
 
           </div>
