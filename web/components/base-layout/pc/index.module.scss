@@ -8,7 +8,13 @@
   flex-direction: column;
   align-items: center;
   background: $body-bg-color;
-  overflow-x: hidden;
+  overflow: hidden;
+
+  scrollbar-width: none; /* Firefox */
+  scrollbar-color: transparent transparent; /* Firefox */
+  ::-webkit-scrollbar {
+    display: none; /* Chrome Safari */
+  }
 }
 
 
