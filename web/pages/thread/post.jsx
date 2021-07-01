@@ -378,9 +378,12 @@ class PostPage extends React.Component {
   }
 
   checkFileType = (file, supportType) => {
-    const { name } = file;
-    const arr = (name || '')?.toLowerCase()?.split('.');
-    const prefix = arr[arr.length - 1];
+    const { name, imageType } = file;
+    let prefix = imageType;
+    if (!imageType) {
+      const arr = (name || '')?.toLowerCase()?.split('.');
+      prefix = arr[arr.length - 1];
+    }
     if (supportType.indexOf(prefix) === -1) return false;
     return true;
   };
