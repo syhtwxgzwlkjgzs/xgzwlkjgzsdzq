@@ -47,8 +47,8 @@
   display: flex;
   z-index: 1000;
   background: $body-bg-color;
-  border-top-left-radius: rem(5);
-  border-top-right-radius: rem(5);
+  // border-top-left-radius: rem(5);
+  // border-top-right-radius: rem(5);
 
   &:after {
     content: '';
