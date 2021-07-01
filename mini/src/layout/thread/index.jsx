@@ -22,6 +22,7 @@ import ShowTop from './components/show-top';
 import DeletePopup from './components/delete-popup';
 import MorePopup from './components/more-popup';
 import InputPopup from './components/input-popup';
+import BottomView from '@components/list/BottomView';
 import throttle from '@common/utils/thottle';
 
 import threadPay from '@common/pay-bussiness/thread-pay';
@@ -918,12 +919,9 @@ class ThreadH5Page extends React.Component {
                       replyAvatarClick={(comment, reply, floor) => this.replyAvatarClick(comment, reply, floor)}
                       onAboptClick={(data) => this.onAboptClick(data)}
                     ></RenderCommentList>
-                    {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
-                    {isNoMore && (
                       <View className={layout.noMore}>
-                        <NoMore empty={totalCount === 0}></NoMore>
+                        <BottomView isError={isCommentListError} noMore={isNoMore}></BottomView>
                       </View>
-                    )}
                   </Fragment>
                 ) : (
                   <LoadingTips isError={isCommentListError} type="init"></LoadingTips>
