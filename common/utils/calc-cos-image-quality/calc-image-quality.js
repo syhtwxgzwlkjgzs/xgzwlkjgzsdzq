@@ -1,5 +1,5 @@
 import isServer from '@common/utils/is-server';
-import Taro from '@tarojs/taro';
+// import Taro from '@tarojs/taro';
 
 let isSupportWebp = false;
 if (!isServer()) {
@@ -9,11 +9,11 @@ if (!isServer()) {
             isSupportWebp = img.indexOf('data:image/webp') === 0;
         } else {
             // TODO 需要区分小程序打包判断当前平台是安卓和ios
-            if (Taro.getSystemInfoSync().platform === 'android') {
-                isSupportWebp = true;
-            } else {
+            // if (Taro.getSystemInfoSync().platform === 'android') {
+            //     isSupportWebp = true;
+            // } else {
                 isSupportWebp = false;
-            }
+            // }
         }
     } catch(err) {
         isSupportWebp = false;
