@@ -221,6 +221,7 @@ class Index extends React.Component {
         displayTag,
         payType,
         isAnonymous,
+        diffTime,
       } = data || {};
       const { isEssence, isPrice, isRedPack, isReward } = displayTag || {};
 
@@ -233,7 +234,7 @@ class Index extends React.Component {
                 location={position.location}
                 view={`${viewCount}`}
                 groupName={group?.groupName}
-                time={createdAt}
+                time={diffTime}
                 isEssence={isEssence}
                 isPay={isPrice}
                 isRed={isRedPack}
@@ -245,7 +246,7 @@ class Index extends React.Component {
                 onClick={unifyOnClick || this.onClickUser}
                 unifyOnClick={unifyOnClick}
               />
-              {isShowIcon && <div className={styles.headerIcon} onClick={unifyOnClick || this.onClickHeaderIcon}>？？？？<Icon name='CollectOutlinedBig' size={20}></Icon></div>}
+              {isShowIcon && <div className={styles.headerIcon} onClick={unifyOnClick || this.onClickHeaderIcon}><Icon name='CollectOutlinedBig' size={20}></Icon></div>}
           </div>
 
           <ThreadCenterView

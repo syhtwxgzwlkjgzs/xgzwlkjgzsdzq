@@ -8,7 +8,13 @@
   flex-direction: column;
   align-items: center;
   background: $body-bg-color;
-  overflow-x: hidden;
+  overflow: hidden;
+
+  scrollbar-width: none; /* Firefox */
+  scrollbar-color: transparent transparent; /* Firefox */
+  ::-webkit-scrollbar {
+    display: none; /* Chrome Safari */
+  }
 }
 
 
@@ -393,16 +399,16 @@
       }
     }
 
+    // 暂时注释，类名必须存在，等待消息系列页面一起调整。
     .mymessage-page {
-      @include heightMedia(940px) {
-        // 这里暂时这样处理。等消息系列页面一起调整
-        min-height: 940px;
-        padding-top: 70px;
+      // @include heightMedia(940px) {
+      //   min-height: 940px;
+      //   padding-top: 70px;
 
-        .baselayout-right {
-          position: static;
-        }
-      }
+      //   .baselayout-right {
+      //     position: static;
+      //   }
+      // }
     }
 
     .mywallet-page {

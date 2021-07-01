@@ -3,30 +3,15 @@ import { View, Image, Text } from '@tarojs/components'
 import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
 import {isLongImage} from '@common/utils/calc-image-type';
-import calcImageQuality from '@common/utils/calc-image-quality';
+import calcCosImageQuality from '@common/utils/calc-cos-image-quality';
 
 const SmartImg = ({level, autoSize = false, type, src, onClick, mode = '', noSmart = false}) => {
     const [isLong, changeIsLong] = useState(false);
 
     const imgSrc = useMemo(() => {
         if (noSmart) return src;
-        const [path, param] = src.split('?');
-        let newSrc = src;
-        let newParam = '';
-        const info = Taro.getSystemInfoSync();
-        const viewWidth = info.windowWidth;
-        newParam = calcImageQuality(viewWidth, type, level);
-
-        if ( param && param !== '' ) {
-            const paramArr = param.split('&');
-            paramArr.push(newParam);
-            newSrc = `${newSrc}&${paramArr.join('&')}`;
-        } else {
-            newSrc = `${newSrc}?${newParam}`;
-        }
-
-        return newSrc;
-    }, [noSmart, src, type])
+        return calcCosImageQuality(src, type, level);
+    }, [noSmart, src, type, level])
     
 
     const imgOnload = useCallback((data) => {

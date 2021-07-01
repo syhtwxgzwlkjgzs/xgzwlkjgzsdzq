@@ -88,6 +88,9 @@
   justify-content: space-between;
   width: 251px;
   .payListItem {
+    flex: 1;
+    display: flex;
+    
     &:first-child {
       border-radius: 5px 0 0 5px;
     }
