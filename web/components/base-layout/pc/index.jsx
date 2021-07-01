@@ -136,7 +136,7 @@ const BaseLayout = forwardRef((props, ref) => {
 
   if (disabledList) {
     content = (
-      <div className={styles.list}>
+      <div className={`${styles.list} ${styles.fixed}`}>
         {(pageName === 'home' || left) && (
           <div className={styles.left}>{typeof left === 'function' ? left({ ...props }) : left}</div>
         )}
@@ -159,7 +159,7 @@ const BaseLayout = forwardRef((props, ref) => {
   }
 
   return (
-    <div className={`${styles.container} ${props.enabledWindowScroll && styles.autoHeight}`}>
+    <div className={`${styles.container}`}>
       {(header && header({ ...props })) || <Header onSearch={onSearch} />}
 
       <div className={`${styles.body} ${cls} ${props.className}`}>

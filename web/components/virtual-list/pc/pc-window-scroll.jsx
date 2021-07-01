@@ -1,8 +1,8 @@
 import React, { useRef, forwardRef, useState, useEffect } from 'react';
 import './index.scss';
-import Item from './item';
+import Item from '../h5/item';
 import BottomView from '../BottomView';
-
+import BacktoTop from '@components/list/backto-top';
 import { getImmutableTypeHeight, getLogHeight, getSticksHeight, getTabsHeight } from '../utils';
 
 import { List, CellMeasurer, CellMeasurerCache, AutoSizer, InfiniteLoader, WindowScroller } from 'react-virtualized';
@@ -14,6 +14,7 @@ const immutableHeightMap = {}; // 不可变的高度
 
 let preScrollTop = 0;
 let scrollTimer;
+let loadData = false;
 // 增强cache实例
 function extendCache(instance) {
   instance.getDefaultHeight = ({ index, data }) => {
@@ -60,15 +61,19 @@ function Home(props, ref) {
 
   const [list, setList] = useState([{ type: 'header' }, ...(props.list || []), { type: 'footer' }]);
   let listRef = useRef(null);
-  let loadData = false;
   const rowCount = list.length;
+  const [scrollTop, setScrollTop] = useState(0);
 
   const [flag, setFlag] = useState(true);
+
+  useEffect(() => {
+    console.log(flag);
+  }, [flag]);
 
   // 监听list列表
   useEffect(() => {
     setList([{ type: 'header' }, ...(props.list || []), { type: 'footer' }]);
-  }, [props.list]);
+  }, [props?.list?.length]);
 
   // 监听置顶列表
   useEffect(() => {
@@ -77,14 +82,29 @@ function Home(props, ref) {
 
   useEffect(() => {
     if (listRef) {
-      listRef.scrollToPosition && listRef.scrollToPosition(props.vlist.home || 0);
+      // console.log(listRef, props.vlist.home);
+      // listRef.scrollToPosition && listRef.scrollToPosition(props.vlist.home || 0);
+      console.log(scrollElement);
+      scrollElement?.scrollTo &&
+        scrollElement.scrollTo({
+          top: 1000,
+          behavior: 'auto',
+        });
     }
   }, [listRef?.Grid?.getTotalRowsHeight()]);
 
   // 重新计算指定的行高
-  const recomputeRowHeights = (index) => {
+  const recomputeRowHeights = (index, updatedData) => {
+    // TODO:先临时处理付费后，列表页面内容不更新的的问题
+    if (updatedData) {
+      list[index] = updatedData;
+    }
     listRef?.recomputeRowHeights && listRef?.recomputeRowHeights(index);
   };
+
+  useEffect(() => {
+    // console.log('listRef', listRef);
+  }, [listRef]);
 
   // 获取每一行元素的高度
   const getRowHeight = ({ index }) => {
@@ -113,7 +133,14 @@ function Home(props, ref) {
       case 'footer':
         return <BottomView noMore={props.noMore} isError={props.requestError} platform={props.platform}></BottomView>;
       default:
-        return <Item data={data} measure={measure} recomputeRowHeights={() => recomputeRowHeights(index)} />;
+        return (
+          <Item
+            data={data}
+            isLast={index === list?.length - 2}
+            measure={measure}
+            recomputeRowHeights={(data) => recomputeRowHeights(index, data)}
+          />
+        );
     }
   };
 
@@ -136,7 +163,7 @@ function Home(props, ref) {
             data-id={data.threadId}
             data-height={immutableHeightMap[index]}
           >
-            {renderListItem(data.type, data, flag ? measure : () => {}, {
+            {renderListItem(data.type, data, flag ? measure : null, {
               index,
               key,
               parent,
@@ -150,14 +177,15 @@ function Home(props, ref) {
 
   // 滚动事件
   const onScroll = ({ scrollTop, clientHeight, scrollHeight }) => {
-    //  && // scrollToPosition = scrollTop;
     setFlag(!(scrollTop < preScrollTop));
     preScrollTop = scrollTop;
+
+    setScrollTop(scrollTop);
 
     clearTimeout(scrollTimer);
     scrollTimer = setTimeout(() => {
       setFlag(true);
-    }, 100);
+    }, 2000);
 
     props.onScroll && props.onScroll({ scrollTop, clientHeight, scrollHeight });
     if (scrollTop !== 0) {
@@ -172,12 +200,33 @@ function Home(props, ref) {
     }
   };
 
-  const isRowLoaded = ({ index }) => !!list[index];
+  // 滚动事件
+  const onWindwoScroll = ({ scrollTop, clientHeight = 1250 }) => {
+    const scrollHeight = listRef?.Grid?.getTotalRowsHeight();
 
-  const loadMoreRows = ({ startIndex, stopIndex }) => Promise.resolve();
+    setFlag(!(scrollTop < preScrollTop));
+    preScrollTop = scrollTop;
 
-  const clearAllCache = () => {
-    cache.clearAll();
+    setScrollTop(scrollTop);
+
+    console.log(scrollTop, clientHeight, scrollHeight);
+
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => {
+      setFlag(true);
+    }, 2000);
+
+    props.onScroll && props.onScroll({ scrollTop, clientHeight, scrollHeight });
+    if (scrollTop !== 0) {
+      props.vlist.setPosition(scrollTop);
+    }
+
+    if (scrollTop + clientHeight + clientHeight >= scrollHeight && !loadData) {
+      loadData = true;
+      props.loadNextPage().finally(() => {
+        loadData = false;
+      });
+    }
   };
 
   // 自定义扫描数据范围
@@ -192,10 +241,24 @@ function Home(props, ref) {
 
     return {
       overscanStartIndex: Math.max(0, startIndex - overscanCellsCount),
-      overscanStopIndex: Math.min(cellCount - 1, stopIndex),
+      overscanStopIndex: Math.min(cellCount - 1, stopIndex + overscanCellsCount),
     };
   };
 
+  // 滚动到顶部
+  const handleBacktoTop = () => {
+    scrollElement?.scrollTo &&
+      scrollElement.scrollTo({
+        top: 0,
+        behavior: 'auto',
+      });
+  };
+
+  const isRowLoaded = ({ index }) => !!list[index];
+
+  const loadMoreRows = () => Promise.resolve();
+
+  // 滚动元素
   const [scrollElement, setElement] = useState(null);
   useEffect(() => {
     setElement(document.querySelector('.home'));
@@ -205,32 +268,29 @@ function Home(props, ref) {
     <div className="page">
       {scrollElement && (
         <WindowScroller scrollElement={scrollElement}>
-          {({ height, isScrolling, registerChild, onChildScroll, scrollTop }) => (
+          {({ height, scrollTop }) => (
             <InfiniteLoader isRowLoaded={isRowLoaded} loadMoreRows={loadMoreRows} rowCount={rowCount}>
-              {({ onRowsRendered }) => (
-                <AutoSizer disableHeight>
+              {({ registerChild }) => (
+                <AutoSizer>
                   {({ width }) => (
                     <div className={styles.center} ref={registerChild}>
                       <List
                         ref={(ref) => {
                           listRef = ref;
-                          // registerChild(ref);
+                          registerChild(ref);
                         }}
                         onScroll={onScroll}
                         deferredMeasurementCache={cache}
-                        height={height}
+                        height={height || 0}
                         autoHeight={true}
                         isScrolling={false}
-                        overscanRowCount={20}
-                        onRowsRendered={(...props) => {
-                          onRowsRendered(...props);
-                        }}
+                        overscanRowCount={10}
                         rowCount={rowCount}
                         rowHeight={getRowHeight}
                         rowRenderer={rowRenderer}
                         scrollTop={scrollTop}
                         width={width}
-                        // overscanIndicesGetter={overscanIndicesGetter}
+                        overscanIndicesGetter={overscanIndicesGetter}
                       />
                     </div>
                   )}
@@ -240,50 +300,10 @@ function Home(props, ref) {
           )}
         </WindowScroller>
       )}
+
+      {scrollTop > 100 && <BacktoTop onClick={handleBacktoTop} />}
     </div>
   );
-
-  // return (
-  //   <div className="page">
-  //     <InfiniteLoader isRowLoaded={isRowLoaded} loadMoreRows={loadMoreRows} rowCount={rowCount}>
-  //       {({ onRowsRendered }) => (
-  //         <WindowScroller>
-  //           {({ height, isScrolling, registerChild, onChildScroll, scrollTop }) => {
-  //             return (
-  //               <AutoSizer disableHeight>
-  //                 {({ width }) => (
-  //                   <div className={styles.center} ref={registerChild}>
-  //                     <List
-  //                       ref={(ref) => {
-  //                         listRef = ref;
-  //                       }}
-  //                       onScroll={onScroll}
-  //                       deferredMeasurementCache={cache}
-  //                       height={height}
-  //                       autoHeight={true}
-  //                       isScrolling={false}
-  //                       overscanRowCount={20}
-  //                       onRowsRendered={(...props) => {
-  //                         onRowsRendered(...props);
-  //                       }}
-  //                       rowCount={rowCount}
-  //                       rowHeight={getRowHeight}
-  //                       rowRenderer={rowRenderer}
-  //                       scrollTop={scrollTop}
-  //                       width={width}
-  //                       overscanIndicesGetter={overscanIndicesGetter}
-  //                     />
-  //                     //{' '}
-  //                   </div>
-  //                 )}
-  //               </AutoSizer>
-  //             );
-  //           }}
-  //         </WindowScroller>
-  //       )}
-  //     </InfiniteLoader>
-  //   </div>
-  // );
 }
 
 export default inject('vlist')(observer(forwardRef(Home)));

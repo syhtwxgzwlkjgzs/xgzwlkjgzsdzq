@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import styles from './index.module.scss';
@@ -16,7 +16,6 @@ import { Button } from '@discuzq/design';
 import deepClone from '@common/utils/deep-clone';
 import { handleString2Arr, getSelectedCategoryIds } from '@common/utils/handleCategory';
 import WindowVList from '@components/virtual-list/pc/pc-window-scroll';
-import VList from '@components/virtual-list/pc/pc-scroll';
 
 @inject('site')
 @inject('user')
@@ -33,7 +32,6 @@ class IndexPCPage extends React.Component {
     };
 
     this.enabledVList = true; // 开启虚拟列表
-    this.enabledWindowScroll = true; // 开启window滚动
     this.onRefreshPlaceholder = this.onRefreshPlaceholder.bind(this);
 
     // 存储最新的数据，以便于点击刷新时，可以直接赋值
@@ -47,7 +45,6 @@ class IndexPCPage extends React.Component {
   }
 
   componentDidMount() {
-
     if (this.timer) {
       clearInterval(this.timer);
     }
@@ -83,8 +80,8 @@ class IndexPCPage extends React.Component {
         },
       }).then((res) => {
         const { totalCount = 0 } = res?.data || {};
-        const newConNum = totalCount - nowTotal
-        const { visible = false, conNum = 0 } = this.state
+        const newConNum = totalCount - nowTotal;
+        const { visible = false, conNum = 0 } = this.state;
 
         if (newConNum > conNum) {
           this.setState({
@@ -108,7 +105,7 @@ class IndexPCPage extends React.Component {
   onPullingUp = () => {
     const { dispatch = () => {} } = this.props;
 
-    if(!this.props.index?.threads?.pageData?.length) return; // 火狐浏览器会记录当前浏览位置。防止刷新页面触发载入第二页数据
+    if (!this.props.index?.threads?.pageData?.length) return; // 火狐浏览器会记录当前浏览位置。防止刷新页面触发载入第二页数据
 
     return dispatch('moreData');
   };
@@ -256,7 +253,7 @@ class IndexPCPage extends React.Component {
     const { index, site } = this.props;
     const { countThreads = 0 } = site?.webConfig?.other || {};
 
-    return this.enabledWindowScroll ? (
+    return (
       <WindowVList
         list={pageData}
         sticks={sticks}
@@ -285,6 +282,7 @@ class IndexPCPage extends React.Component {
             onFilterClick={this.onFilterClick}
             onPostThread={this.onPostThread}
             isShowDefault={isShowDefault}
+            ishide={true}
           />
 
           <div className={styles.contnetTop}>
@@ -301,51 +299,6 @@ class IndexPCPage extends React.Component {
           </div>
         </div>
       </WindowVList>
-    ) : (
-      <VList
-        list={pageData}
-        sticks={sticks}
-        platform="pc"
-        pageName="home"
-        // onScroll={this.handleScroll}
-        loadNextPage={this.onPullingUp}
-        // noMore={currentPage >= totalPage}
-        // requestError={this.props.isError}
-        left={this.renderLeft(countThreads)}
-        right={this.renderRight()}
-        renderItem={(item, index, recomputeRowHeights, onContentHeightChange, measure) => (
-          <ThreadContent
-            onContentHeightChange={measure}
-            onImageReady={measure}
-            onVideoReady={measure}
-            key={index}
-            data={item}
-            className={styles.listItem}
-            recomputeRowHeights={measure}
-          />
-        )}
-      >
-        <div className={styles.indexContent}>
-          <TopFilterView
-            onFilterClick={this.onFilterClick}
-            onPostThread={this.onPostThread}
-            isShowDefault={isShowDefault}
-          />
-
-          <div className={styles.contnetTop}>
-            {sticks?.length > 0 && (
-              <div className={`${styles.TopNewsBox} ${!visible && styles.noBorder}`}>
-                <TopNews data={sticks} platform="pc" isShowBorder={false} />
-              </div>
-            )}
-            {visible && (
-              <div className={styles.topNewContent}>
-                <NewContent visible={visible} conNum={conNum} goRefresh={this.goRefresh} />
-              </div>
-            )}
-          </div>
-        </div>
-      </VList>
     );
   };
 
@@ -353,24 +306,24 @@ class IndexPCPage extends React.Component {
     return (
       <div key={key} className={styles.placeholder}>
         <div className={styles.header}>
-          <div className={styles.avatar}/>
-          <div className={styles.box}/>
+          <div className={styles.avatar} />
+          <div className={styles.box} />
         </div>
-        <div className={styles.content}/>
-        <div className={styles.content}/>
+        <div className={styles.content} />
+        <div className={styles.content} />
         <div className={styles.footer}>
-          <div className={styles.box}/>
-          <div className={styles.box}/>
-          <div className={styles.box}/>
+          <div className={styles.box} />
+          <div className={styles.box} />
+          <div className={styles.box} />
         </div>
       </div>
-    )
+    );
   }
 
   onRefreshPlaceholder() {
-      return [1,2].map((item, key) => {
-        return this.RefreshPlaceholderBox(key);
-      });
+    return [1, 2].map((item, key) => {
+      return this.RefreshPlaceholderBox(key);
+    });
   }
 
   render() {
@@ -378,6 +331,8 @@ class IndexPCPage extends React.Component {
     const { countThreads = 0 } = site?.webConfig?.other || {};
     const { currentPage, totalPage } = index.threads || {};
     const { threadError } = index;
+
+    const { visible, conNum, isShowDefault } = this.state;
 
     return (
       <BaseLayout
@@ -394,10 +349,23 @@ class IndexPCPage extends React.Component {
         errorText={threadError.errorText}
         className="home"
         disabledList={this.enabledVList}
-        enabledWindowScroll={this.enabledWindowScroll}
         onRefreshPlaceholder={this.onRefreshPlaceholder}
       >
-        {this.enabledVList ? this.renderVlist(index) : this.renderContent(index)}
+        {this.enabledVList ? (
+          <Fragment>
+            <div className={styles.topFixed}>
+              <div className={styles.emptyBox}></div>
+              <TopFilterView
+                onFilterClick={this.onFilterClick}
+                onPostThread={this.onPostThread}
+                isShowDefault={isShowDefault}
+              />
+            </div>
+            {this.renderVlist(index)}
+          </Fragment>
+        ) : (
+          this.renderContent(index)
+        )}
       </BaseLayout>
     );
   }
@@ -405,9 +373,9 @@ class IndexPCPage extends React.Component {
 
 export default withRouter(IndexPCPage);
 
-const TopFilterView = ({ onFilterClick, isShowDefault, onPostThread }) => {
+const TopFilterView = ({ onFilterClick, isShowDefault, onPostThread, ishide }) => {
   return (
-    <div className={styles.topWrapper}>
+    <div className={styles.topWrapper} style={{ visibility: ishide ? 'hidden' : 'visible' }}>
       <div className={styles.topBox}>
         <TopMenu onSubmit={onFilterClick} isShowDefault={isShowDefault} />
         <div className={styles.PostTheme}>

@@ -8,15 +8,19 @@ export default observer((props) => {
   const ref = useRef(null);
 
   useEffect(() => {
-    props.measure();
+    measure();
   }, [ref?.current?.clientHeight]);
+
+  const measure = () => {
+    typeof props.measure === 'function' && props.measure();
+  };
 
   return (
     <div ref={ref}>
       <ThreadContent
-        onContentHeightChange={props.measure}
-        onImageReady={props.measure}
-        onVideoReady={props.measure}
+        onContentHeightChange={measure}
+        onImageReady={measure}
+        onVideoReady={measure}
         key={data.threadId}
         showBottomStyle={!isLast}
         data={data}
