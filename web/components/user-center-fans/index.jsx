@@ -323,7 +323,15 @@ class UserCenterFans extends React.Component {
           {followerAdapter(this.props.dataSource || this.state.fans).map((user, index) => {
             if (index + 1 > this.props.limit) return null;
             return (
-              <div key={user.id + index} className={friendsStyle.friendItem}>
+              <div
+                key={user.id + index}
+                className={friendsStyle.friendItem}
+                onClick={async () => {
+                  await this.props.onContainerClick({
+                    id: user.id,
+                  });
+                }}
+              >
                 <div className={friendsStyle.friendAvatar}>
                   <Avatar image={user.avatar} userId={user.id} circle name={user.nickName} />
                 </div>

@@ -391,6 +391,13 @@ class UserAction extends SiteStore {
         Msg: userThreadList.msg || '获取用户主题列表失败',
       };
     }
+
+    return userThreadList;
+  };
+
+  // 获取用户主题列表的写方法
+  // 读写分离，用于阻止多次请求的数据错乱
+  setUserThreads = async (userThreadList) => {
     const pageData = get(userThreadList, 'data.pageData', []);
     const totalPage = get(userThreadList, 'data.totalPage', 1);
     this.userThreadsTotalPage = totalPage;
@@ -403,8 +410,6 @@ class UserAction extends SiteStore {
     if (this.userThreadsPage <= this.userThreadsTotalPage) {
       this.userThreadsPage += 1;
     }
-
-    return this.userThreads;
   };
 
   /**
