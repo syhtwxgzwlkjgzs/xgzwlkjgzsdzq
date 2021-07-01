@@ -1,4 +1,5 @@
 import React from 'react';
+import Taro from '@tarojs/taro';
 import IndexPage from '@layout/index/index';
 import Page from '@components/page';
 import withShare from '@common/utils/withShare/withShare'
@@ -113,6 +114,17 @@ class Index extends React.Component {
       this.page = 1;
       return await index.getReadThreadList({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
     }
+  }
+
+  setNavigationBarStyle = () => {
+    Taro.setNavigationBarColor({
+      frontColor: '#ffffff',
+      backgroundColor: '#ffffff'
+    });
+  }
+
+  componentDidMount() {
+    this.setNavigationBarStyle();
   }
 
   render() {

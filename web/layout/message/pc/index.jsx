@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
@@ -7,7 +7,6 @@ import MessageIndex from '@components/message/message-index';
 import MessageThread from '@components/message/message-thread';
 import MessageFinancial from '@components/message/message-financial';
 import MessageChat from '@components/message/message-chat';
-import BaseLayout from '@components/base-layout';
 import Copyright from '@components/copyright';
 import Stepper from '../../search/pc/components/stepper';
 import { sidebarData as sidebarDataOriginal } from '@common/constants/message';
@@ -22,6 +21,24 @@ const Index = ({ page, subPage, dialogId, username, message, user, nickname }) =
 
   const [sidebarIndex, setSidebarIndex] = useState(9999);
 
+  const sidebarClick = (_index, _iconName, item) => {
+    router.replace(`/message?page=${item.type}`);
+  };
+
+  const rightContent = useCallback(() => {
+    return (
+      <div className={styles.rightside}>
+        <div className={styles['stepper-container']}>
+          <Stepper onItemClick={sidebarClick} selectIndex={sidebarIndex} data={sidebarData} />
+        </div>
+        <UserCenterFollowsPc userId={user.id} showMore={false} withLimit={100000} messageMode={true} style={{
+          maxHeight: '485px',
+        }} />
+        <Copyright />
+      </div>
+    )
+  }, [sidebarIndex, sidebarData])
+
   const mainContent = useMemo(() => {
     // 处理侧边栏选中状态
     const p = page === 'chat' ? 'index' : page;
@@ -34,18 +51,17 @@ const Index = ({ page, subPage, dialogId, username, message, user, nickname }) =
     // 处理页面主内容切换
     switch (page) {
       case 'index':
-        return <MessageIndex />;
+        return <MessageIndex rightContent={rightContent} />;
       case 'account':
-        return <MessageAccount subPage={subPage} />;
+        return <MessageAccount subPage={subPage} rightContent={rightContent} />;
       case 'thread':
-        return <MessageThread />;
+        return <MessageThread rightContent={rightContent} />;
       case 'financial':
-        return <MessageFinancial />;
+        return <MessageFinancial rightContent={rightContent} />;
       case 'chat':
-        return <MessageChat dialogId={dialogId} username={username} nickname={nickname} />;
+        return <MessageChat dialogId={dialogId} username={username} nickname={nickname} rightContent={rightContent} />;
     }
-  }, [page, subPage, dialogId, username]);
-
+  }, [page, subPage, dialogId, username, sidebarIndex, sidebarData]);
 
   // 更新未读消息到视图中
   useEffect(() => {
@@ -56,29 +72,7 @@ const Index = ({ page, subPage, dialogId, username, message, user, nickname }) =
     }));
   }, [threadUnread, financialUnread, accountUnread, dialogMessageUnread]);
 
-
-  const rightContent = () => (
-    <div className={styles.rightside}>
-      <div className={styles['stepper-container']}>
-        <Stepper onItemClick={sidebarClick} selectIndex={sidebarIndex} data={sidebarData} />
-      </div>
-      <UserCenterFollowsPc userId={user.id} showMore={false} withLimit={100000} messageMode={true} />
-      <Copyright />
-    </div>
-  );
-
-  const sidebarClick = (_index, _iconName, item) => {
-    router.replace(`/message?page=${item.type}`);
-  };
-
-  return (
-    <BaseLayout
-      right={rightContent}
-      className="mymessage-page"immediateCheck={false}
-    >
-      {mainContent}
-    </BaseLayout>
-  );
+  return mainContent;
 };
 
 export default inject('message', 'user')(observer(Index));

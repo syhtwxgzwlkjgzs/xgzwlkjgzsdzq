@@ -27,7 +27,16 @@ export const getConfig = ({
         width: marglength + 10,
         height: 54,
         backgroundColor: '#F7F7F7',
-        borderRadius: 6
+        borderRadius: 6,
+        text: {
+          text: `${group}`,
+          color: '#777',
+          fontSize: 24,
+          zIndex: 20,
+          lineNum: 1,
+          textAlign: 'center',
+          baseLine: 'middle',
+        }
       },
       // 二维码和文字部分
       {
@@ -89,18 +98,6 @@ export const getConfig = ({
         textAlign: 'left',
         zIndex: 10,
         baseLine: 'top'
-      },
-      // 分组内容
-      {
-        text: `${group}`,
-        color: '#777',
-        x: 50,
-        y: 767 + contentHeight,
-        fontSize: 24,
-        zIndex: 20,
-        lineNum: 1,
-        textAlign: 'left',
-        baseLine: 'top',
       },
       // 二维码描述
       {

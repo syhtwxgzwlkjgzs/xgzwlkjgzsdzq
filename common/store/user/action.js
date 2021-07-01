@@ -40,11 +40,19 @@ class UserAction extends SiteStore {
   // 写入用户数据
   @action
   setUserInfo(data) {
-    this.userInfo = data;
-    if (data && data.id) {
-      this.updateLoginStatus(true);
-    } else {
-      this.updateLoginStatus(false);
+    if (data) {
+      if (!this.userInfo) {
+        this.userInfo = data;
+      } else {
+        Object.keys(data).forEach(key => {
+          this.userInfo[key] = data[key];
+        });
+      }
+      if (data && data.id) {
+        this.updateLoginStatus(true);
+      } else {
+        this.updateLoginStatus(false);
+      }
     }
   }
 
@@ -79,14 +87,33 @@ class UserAction extends SiteStore {
     // this.editBackgroundUrl = get(this.userInfo, 'backgroundUrl');
   }
 
+  @action
+  diffPicAndUpdateUserInfo(data) {
+    const transformedData = Object.assign({}, data);
+
+    if (data.backgroundUrl && this.backgroundUrl) {
+      const originBackgroundFilename = this.backgroundUrl?.split('?')[0];
+      const nextBackgroundFilename = data.backgroundUrl?.split('?')[0];
+  
+      if (originBackgroundFilename === nextBackgroundFilename) {
+        transformedData.backgroundUrl = this.backgroundUrl;
+      }
+    }
+
+    this.setUserInfo(transformedData);
+  }
+
   // 登录后获取新的用户信息
   @action
   async updateUserInfo(id) {
     const userInfo = await readUser({ params: { pid: id } });
+    if (!userInfo || userInfo?.code !== 0) {
+      return;
+    }
     const userPermissions = await readPermissions({});
-    userInfo.data && this.setUserInfo(userInfo.data);
-    userPermissions.data && this.setUserPermissions(userPermissions.data);
-    return userInfo.code === 0 && userInfo.data;
+    userInfo?.data && this.diffPicAndUpdateUserInfo(userInfo.data);
+    userPermissions?.data && this.setUserPermissions(userPermissions.data);
+    return userInfo?.code === 0 && userInfo.data;
   }
 
   // 获取指定用户的用户信息，用于获取他人首页
@@ -364,6 +391,13 @@ class UserAction extends SiteStore {
         Msg: userThreadList.msg || '获取用户主题列表失败',
       };
     }
+
+    return userThreadList;
+  }
+
+  // 获取用户主题列表的写方法
+  // 读写分离，用于阻止多次请求的数据错乱
+  setUserThreads = async (userThreadList) => {
     const pageData = get(userThreadList, 'data.pageData', []);
     const totalPage = get(userThreadList, 'data.totalPage', 1);
     this.userThreadsTotalPage = totalPage;
@@ -376,8 +410,6 @@ class UserAction extends SiteStore {
     if (this.userThreadsPage <= this.userThreadsTotalPage) {
       this.userThreadsPage += 1;
     }
-
-    return this.userThreads;
   }
 
   /**

@@ -99,18 +99,19 @@ export class MessageIndex extends Component {
 
   render() {
     const { items } = this.state;
-    const { site: { isPC }, message: { dialogList } } = this.props;
+    const { site: { isPC }, message: { dialogList }, rightContent } = this.props;
     const { list, currentPage, totalPage, totalCount } = dialogList;
     const card = <Card cardItems={items} onClick={this.toOtherMessage} />;
 
     return (
-      <div className={`${styles.wrapper} ${isPC ? styles.pc : styles.mobile}`}>
+      <div className={`${styles.wrapper} ${!isPC && styles.mobile}`}>
         <Notice
           infoIdx={0}
           totalCount={totalCount}
           withBottomBar={!isPC}
           noMore={currentPage >= totalPage}
           topCard={isPC ? null : card}
+          rightContent={isPC ? rightContent : null}
           list={this.formatChatDialogList(list)}
           type='chat'
           onPullDown={() => this.fetchDialogData(1)}

@@ -1,22 +1,23 @@
 @import '@common/styles/index.scss';
 @import '@common/styles/_variable.scss';
+@import '@common/styles/mixin/index.scss';
 
 .mobileLayout {
-    background: $white;
+  background: $white;
 }
 
 .unit {
-    &::before {
-        content: '';
-        display: block;
-        height: 10px;
-        background: $spacer-bg-color;
-    }
+  &::before {
+    content: '';
+    display: block;
+    height: 10px;
+    background: $spacer-bg-color;
+  }
 }
 
 .threadHeader {
-    padding: 0 $padding-4n;
-    background-color: $white;
+  padding: 0 $padding-4n;
+  background-color: $white;
 }
 
 .threadBackgroundColor {
@@ -24,29 +25,47 @@
 }
 
 .dividerContainer {
-    padding-left: $padding-4n;
-    padding-right: $padding-4n;
+  padding-left: $padding-4n;
+  padding-right: $padding-4n;
 }
 
 .divider {
-    margin: $margin-2n 0;
+  margin: $margin-2n 0;
 }
 
 .threadUnit {
-    padding: $padding-4n;
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
+  padding: $padding-4n;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
 
-    .threadTitle {
-        font-weight: 600;
-        font-size: $font-size-middle;
-        color: $text-color-primary;
-        margin-right: $margin-3n;
-    }
+  .threadTitle {
+    font-weight: 600;
+    font-size: $font-size-middle;
+    color: $text-color-primary;
+    margin-right: $margin-3n;
+  }
 
-    .threadCount {
-        font-size: $font-size-small;
-        color: $text-color-secondary;
-    }
+  .threadCount {
+    font-size: $font-size-small;
+    color: $text-color-secondary;
+  }
+}
+/* 顶部title样式 */
+.topBar {
+  position: absolute;
+  top: 14px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: $padding-4n;
+  box-sizing: border-box;
+  text-align: center;
+  .fullScreenTitle {
+    font-size: $font-size-middle;
+    color: $white;
+    flex: 1;
+    @include text-ellipsis();
+  }
 }

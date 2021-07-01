@@ -81,6 +81,7 @@
   font-weight: $font-weight-regular;
   font-size: rem($font-size-middle);
   word-break: break-all;
+  margin-bottom: rem($margin-4n) !important;
 }
 
 .body {
@@ -88,6 +89,10 @@
 
   > * {
     margin-bottom: rem($margin-6n);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 }
 
@@ -257,6 +262,13 @@
 
 .rewardTime {
   margin-top: rem(4);
+  font-size: rem($font-size-label);
+  color: $text-color-secondary;
+}
+
+.redPacketLikeNum {
+  text-align: center;
+  margin-top: $margin-5n;
   font-size: rem($font-size-label);
   color: $text-color-secondary;
 }

@@ -13,7 +13,6 @@ import { getSelectedCategoryIds } from '@common/utils/handleCategory';
 import Taro from '@tarojs/taro';
 import { debounce } from '@common/utils/throttle-debounce.js';
 import styles from './index.module.scss';
-import VirtualList from '@components/virtual-list/group';
 @inject('site')
 @inject('user')
 @inject('index')
@@ -34,7 +33,6 @@ class IndexH5Page extends React.Component {
     };
     this.tabsRef = createRef();
     this.headerRef = createRef(null);
-    this.list = createRef(null);
   }
 
   setNavigationBarStyle = () => {
@@ -95,7 +93,6 @@ class IndexH5Page extends React.Component {
   }
 
   changeFilter = (params) => {
-    this.list?.current?.jumpToScrollTop(0)
     this.props.index.resetErrorInfo()
     this.setState({ isClickTab: true })
 
@@ -164,7 +161,7 @@ class IndexH5Page extends React.Component {
       <>
         {categories?.length > 0 && (
           <>
-          <View 
+          <View
             ref={this.tabsRef}
             className={`${styles.homeContent} ${fixedTab ? styles.fixed : ''}`}
             style={{top: `${navBarHeight}px`}}
@@ -215,74 +212,47 @@ class IndexH5Page extends React.Component {
     const { currentPage, totalPage, pageData } = threads || {};
 
     return (
-      // <BaseLayout
-      //   showHeader={false}
-      //   showTabBar
-      //   onRefresh={this.onRefresh}
-      //   noMore={!isClickTab && currentPage >= totalPage}
-      //   isFinished={isFinished}
-      //   onScroll={this.handleScroll}
-      //   onScrollToUpper={this.handleScrollToUpper}
-      //   curr='home'
-      //   pageName='home'
-      //   preload={3000}
-      //   requestError={threadError.isError}
-      //   errorText={threadError.errorText}
-      //   onClickTabBar={this.handleClickTabBar}
-      // >
-        // <HomeHeader ref={this.headerRef} />
-
-        // {this.renderTabs()}
-
-        // <View style={{display: isClickTab ? 'none' : 'block'}}>
-        //   {this.renderHeaderContent()}
-       
-        //   {pageData?.map((item, index) => (
-        //       <ThreadContent
-        //         key={item.threadId}
-        //         showBottomStyle={index !== pageData.length - 1}
-        //         data={item}
-        //         className={styles.listItem}
-        //       />
-        //     ))}
-        // </View>
-
-        // <FilterView
-        //   data={currentCategories}
-        //   current={filter}
-        //   onCancel={this.onClose}
-        //   visible={this.state.visible}
-        //   onSubmit={this.changeFilter}
-        //   permissions={user.threadExtendPermissions}
-        // />
-      // </BaseLayout>
-      <>
-      <VirtualList
-        ref={this.list}
-        data={pageData}
+      <BaseLayout
+        showHeader={false}
+        showTabBar
         onRefresh={this.onRefresh}
+        noMore={!isClickTab && currentPage >= totalPage}
+        isFinished={isFinished}
+        onScroll={this.handleScroll}
+        onScrollToUpper={this.handleScrollToUpper}
+        curr='home'
+        pageName='home'
+        preload={3000}
         requestError={threadError.isError}
         errorText={threadError.errorText}
-        currentPage={currentPage}
-        totalPage={totalPage}
-        noMore={!isClickTab && currentPage >= totalPage}
-        onScroll={this.handleScroll}
-        curr='home'
         onClickTabBar={this.handleClickTabBar}
       >
         <HomeHeader ref={this.headerRef} />
+
         {this.renderTabs()}
-        {this.renderHeaderContent()}
-      </VirtualList>
-      <FilterView
-        data={currentCategories}
-        current={filter}
-        onCancel={this.onClose}
-        visible={this.state.visible}
-        onSubmit={this.changeFilter}
-        permissions={user.threadExtendPermissions}
-      />
-    </>
+
+        <View style={{display: isClickTab ? 'none' : 'block'}}>
+          {this.renderHeaderContent()}
+
+          {pageData?.map((item, index) => (
+              <ThreadContent
+                key={`${item.threadId}-${item.updatedAt}`}
+                showBottomStyle={index !== pageData.length - 1}
+                data={item}
+                className={styles.listItem}
+              />
+            ))}
+        </View>
+
+        <FilterView
+          data={currentCategories}
+          current={filter}
+          onCancel={this.onClose}
+          visible={this.state.visible}
+          onSubmit={this.changeFilter}
+          permissions={user.threadExtendPermissions}
+        />
+      </BaseLayout>
     );
   }
 }

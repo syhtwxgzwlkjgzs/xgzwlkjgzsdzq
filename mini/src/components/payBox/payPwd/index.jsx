@@ -87,7 +87,7 @@ class PayPassword extends React.Component {
           // TODO: 回跳逻辑补充
           this.props.payBox.visible = false;
           Taro.navigateTo({ url: '/subPages/user/bind-phone/index?from=paybox' });
-        }
+        },
       });
       return;
     }
@@ -170,7 +170,7 @@ class PayPassword extends React.Component {
       <View>
         <Dialog
           className={styles.paypwdDialogWrapper}
-          visible={this.props.payBox.step === STEP_MAP.WALLET_PASSWORD}
+          visible={this.props.payBox.visible && this.props.payBox.step === STEP_MAP.WALLET_PASSWORD}
           position="center"
           maskClosable={true}
         >
@@ -254,7 +254,7 @@ class PayPassword extends React.Component {
               0
             </View>
             <View data-key="-1" className={`${styles.column} ${styles.special}`}>
-              <Icon name="BackspaceOutlined" size={16} />
+              <Icon name="BackspaceOutlined" size={18} />
             </View>
           </View>
         </View>

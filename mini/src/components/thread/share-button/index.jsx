@@ -3,6 +3,7 @@ import { View, Button, Text } from '@tarojs/components'
 import styles from './index.module.scss'
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Taro, { useDidHide, useDidShow } from '@tarojs/taro'
+import classNames from 'classnames';
 
 const index = ({setShow, tipData, data, index, getShareData, shareNickname, shareAvatar, shareThreadid, getShareContent, shareContent}) => {
     const {threadId} = tipData
@@ -54,7 +55,7 @@ const index = ({setShow, tipData, data, index, getShareData, shareNickname, shar
     return (
         <View className={styles.body}>
             <View className={styles.container}>
-            <View className={styles.more}>
+            <View className={classNames(styles.more, styles.oneRow)}>
                 <View className={styles.moreItem} onClick={CreateCard}>
                     <View className={styles.icon}>
                         <Icon name='PictureOutlinedBig' size={20}>

@@ -8,6 +8,7 @@
   align-items: center;
   flex-shrink: 0;
   padding: rem($padding-2n) rem($padding-4n);
+  cursor: pointer;
 }
 
 .friendInfo {
@@ -15,7 +16,6 @@
   width: calc(100% - 104px);
 
   .friendAvatar {
-      
   }
 
   .friendTextInfo {
@@ -87,9 +87,9 @@
       font-size: rem($font-size-small);
     }
   }
-  :global{
-    .dzq-button  {
-      padding: 0 ;
+  :global {
+    .dzq-button {
+      padding: 0;
     }
   }
 }

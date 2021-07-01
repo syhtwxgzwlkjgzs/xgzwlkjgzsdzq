@@ -57,8 +57,8 @@ class UserCenterAction extends React.Component {
     const { totalUnread } = message;
     return (
       <div className={`${styles.userCenterAction} ${this.props.user.isAdmini && styles.userCenterColumnStyle}`}>
-        <div className={styles.userCenterActionItem}>
-          <div onClick={this.handleMyMessage} className={styles.userCenterActionItemIcon}>
+        <div onClick={this.handleMyMessage} className={styles.userCenterActionItem}>
+          <div className={styles.userCenterActionItemIcon}>
             <div className={styles.userMessage}>
               <UnreadRedDot unreadCount={totalUnread}>
                 <Icon name={'MailOutlined'} size={20} />

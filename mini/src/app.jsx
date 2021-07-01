@@ -61,7 +61,6 @@ class App extends Component {
           console.log(err)
         }
       });
-      
     }
   }
 
@@ -75,12 +74,35 @@ class App extends Component {
   componentDidShow(options) {
     // 捕获从其它小程序返回的验证码result
     this.onCaptchaResult(options);
+
+    // 记录跳转的目的页。目前分享地址统一格式为；/pages/index/index?path={targetUrl}
+    try {
+      const { path, query} = options;
+      let targetUrl;
+      if (path === 'pages/index/index') {
+        targetUrl = decodeURIComponent(query.path || '');
+      } else {
+        targetUrl = path;
+        if (Object.keys(query).length > 0) {
+          targetUrl = `${path}?${Object.entries(query).map(([key, value])=> `${key}=${value}`).join('&')}`;
+        }
+      }
+      
+      const { site } = this.store;
+      site.setInitialPage(targetUrl);
+    } catch(err) {
+      console.log('savePageJump', err);
+    }
   }
 
   /**
    * 程序切后台时触发
    */
-  componentDidHide() {}
+  // componentDidHide() {
+  //   // 关闭小程序，清空跳转
+  //   const { site } = this.store;
+  //   site.clearInitialPage();
+  // }
 
   /**
    * 程序要打开的页面不存在时触发

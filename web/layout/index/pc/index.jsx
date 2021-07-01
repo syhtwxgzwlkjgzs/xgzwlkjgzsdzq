@@ -34,17 +34,20 @@ class IndexPCPage extends React.Component {
 
     this.enabledVList = false; // 开启虚拟列表
     this.enabledWindowScroll = false; // 开启window滚动
+    this.onRefreshPlaceholder = this.onRefreshPlaceholder.bind(this);
+
+    // 存储最新的数据，以便于点击刷新时，可以直接赋值
+    this.newThread = {};
+
+    // 轮询定时器
+    this.timer = null;
+
+    // List组件ref
+    this.listRef = React.createRef();
   }
 
-  // 轮询定时器
-  timer = null;
-
-  // List组件ref
-  listRef = React.createRef();
-  // 存储最新的数据，以便于点击刷新时，可以直接赋值
-  newThread = {};
-
   componentDidMount() {
+
     if (this.timer) {
       clearInterval(this.timer);
     }
@@ -80,10 +83,13 @@ class IndexPCPage extends React.Component {
         },
       }).then((res) => {
         const { totalCount = 0 } = res?.data || {};
-        if (totalCount > nowTotal) {
+        const newConNum = totalCount - nowTotal
+        const { visible = false, conNum = 0 } = this.state
+
+        if (newConNum > conNum) {
           this.setState({
             visible: true,
-            conNum: totalCount - nowTotal,
+            conNum: newConNum,
           });
           // 缓存新数据
           this.newThread = res?.data;
@@ -101,6 +107,9 @@ class IndexPCPage extends React.Component {
   // 上拉加载更多
   onPullingUp = () => {
     const { dispatch = () => {} } = this.props;
+
+    if(!this.props.index?.threads?.pageData?.length) return; // 火狐浏览器会记录当前浏览位置。防止刷新页面触发载入第二页数据
+
     return dispatch('moreData');
   };
 
@@ -188,9 +197,9 @@ class IndexPCPage extends React.Component {
   // 右侧 -- 二维码 推荐内容
   renderRight = (data) => (
     <div className={styles.indexRight}>
-      <QcCode />
+      <Recommend />
       <div className={styles.indexRightCon}>
-        <Recommend />
+        <QcCode />
       </div>
       <Copyright />
     </div>
@@ -228,9 +237,9 @@ class IndexPCPage extends React.Component {
         <div className={styles.themeBox}>
           <div className={styles.themeItem}>
             {pageData?.map((item, index) => (
-              <ThreadContent 
-                key={`${item.threadId}-${new Date().getTime()}-${index}`}
-                className={styles.threadContent} 
+              <ThreadContent
+                key={`${item.threadId}-${item.createdAt || ''}-${item.updatedAt || ''}`}
+                className={styles.threadContent}
                 data={item}
               />
             ))}
@@ -264,7 +273,7 @@ class IndexPCPage extends React.Component {
             onContentHeightChange={measure}
             onImageReady={measure}
             onVideoReady={measure}
-            key={index}
+            key={`${item.threadId}-${item.updatedAt}`}
             data={item}
             className={styles.listItem}
             recomputeRowHeights={measure}
@@ -340,6 +349,30 @@ class IndexPCPage extends React.Component {
     );
   };
 
+  RefreshPlaceholderBox(key) {
+    return (
+      <div key={key} className={styles.placeholder}>
+        <div className={styles.header}>
+          <div className={styles.avatar}/>
+          <div className={styles.box}/>
+        </div>
+        <div className={styles.content}/>
+        <div className={styles.content}/>
+        <div className={styles.footer}>
+          <div className={styles.box}/>
+          <div className={styles.box}/>
+          <div className={styles.box}/>
+        </div>
+      </div>
+    )
+  }
+
+  onRefreshPlaceholder() {
+      return [1,2].map((item, key) => {
+        return this.RefreshPlaceholderBox(key);
+      });
+  }
+
   render() {
     const { index, site } = this.props;
     const { countThreads = 0 } = site?.webConfig?.other || {};
@@ -362,6 +395,7 @@ class IndexPCPage extends React.Component {
         className="home"
         disabledList={this.enabledVList}
         enabledWindowScroll={this.enabledWindowScroll}
+        onRefreshPlaceholder={this.onRefreshPlaceholder}
       >
         {this.enabledVList ? this.renderVlist(index) : this.renderContent(index)}
       </BaseLayout>

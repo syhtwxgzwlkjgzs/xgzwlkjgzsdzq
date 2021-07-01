@@ -22,11 +22,6 @@ export default class ReplyList extends React.Component {
     };
   }
 
-  // 跳转至评论详情
-  toCommentDetail() {
-    console.log('跳至评论详情');
-  }
-
   filterContent() {
     let newContent = this.props?.data?.content || '';
     newContent = s9e.parse(newContent);
@@ -50,6 +45,9 @@ export default class ReplyList extends React.Component {
   deleteClick() {
     typeof this.props.deleteClick === 'function' && this.props.deleteClick();
   }
+  avatarClick(floor) {
+    typeof this.props.avatarClick === 'function' && this.props.avatarClick(floor);
+  }
 
   generatePermissions(data = {}) {
     return {
@@ -66,7 +64,7 @@ export default class ReplyList extends React.Component {
 
     return (
       <div className={styles.replyList}>
-        <div className={styles.replyListAvatar} onClick={this.props.avatarClick('2')}>
+        <div className={styles.replyListAvatar}>
           <Avatar
             image={this.props?.data?.user?.avatar}
             name={this.props?.data?.user?.nickname || this.props?.data?.user?.userName || ''}
@@ -74,18 +72,19 @@ export default class ReplyList extends React.Component {
             userId={this.props?.data?.user?.id}
             isShowUserInfo={true}
             size="small"
+            onClick={() => this.avatarClick(2)}
           ></Avatar>
         </div>
 
         <div className={styles.replyListContent}>
           <div className={styles.replyListContentText}>
-            <div className={styles.replyListName}>
+            <div className={styles.replyListName} onClick={() => this.avatarClick(2)}>
               {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
             </div>
             <div className={styles.replyListText}>
               {this.props.data.commentUserId && this.props.data?.commentUser ? (
                 <div className={styles.commentUser}>
-                  <div className={styles.replyedAvatar} onClick={this.props.avatarClick()}>
+                  <div className={styles.replyedAvatar}>
                     <Avatar
                       className={styles.avatar}
                       image={this.props.data.commentUser.avatar}
@@ -94,9 +93,10 @@ export default class ReplyList extends React.Component {
                       userId={this.props.data.commentUser.id}
                       isShowUserInfo={true}
                       size="mini"
+                      onClick={() => this.avatarClick(3)}
                     ></Avatar>
                   </div>
-                  <span className={styles.replyedUserName}>
+                  <span className={styles.replyedUserName} onClick={() => this.avatarClick(3)}>
                     {this.props.data.commentUser.nickname || this.props.data.commentUser.userName}
                   </span>
                 </div>

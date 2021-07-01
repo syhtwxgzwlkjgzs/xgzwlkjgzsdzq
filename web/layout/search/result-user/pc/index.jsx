@@ -6,6 +6,7 @@ import ActiveUsersMore from '../../../search/pc/components/active-users-more';
 import Copyright from '@components/copyright';
 import SidebarPanel from '@components/sidebar-panel';
 import PopTopic from '@components/pop-topic';
+import { Toast } from '@discuzq/design';
 
 @inject('site')
 @inject('user')
@@ -47,6 +48,8 @@ class SearchResultUserPcPage extends React.Component {
         if (result) {
           this.props.search.updateActiveUserInfo(id, { isFollow: true })
         }
+      }).catch(err => {
+        Toast.info({ content: err });
       })
     } else {
       this.props.search.cancelFollow({ id, type: 1 }).then(result => {

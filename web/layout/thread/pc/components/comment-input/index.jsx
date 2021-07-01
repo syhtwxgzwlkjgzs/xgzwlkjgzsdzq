@@ -120,7 +120,7 @@ const CommentInput = inject('site')((props) => {
   };
 
   const handleUploadChange = async (list) => {
-    setImageList(list);
+    setImageList([...list]);
   };
 
   // 附件、图片上传之前

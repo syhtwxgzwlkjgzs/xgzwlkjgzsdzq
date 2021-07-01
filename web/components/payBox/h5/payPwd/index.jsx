@@ -108,7 +108,6 @@ class Index extends React.Component {
     Router.push({ url: '/my/edit/find-paypwd?type=paybox' });
     this.initState();
     this.props.payBox.visible = false;
-    this.props.payBox.step = null;
   }, 1000);
 
   async submitPwa() {
@@ -157,7 +156,7 @@ class Index extends React.Component {
       <div>
         <Dialog
           className={styles.paypwdDialogWrapper}
-          visible={this.props.payBox.step === STEP_MAP.WALLET_PASSWORD}
+          visible={this.props.payBox.visible && this.props.payBox.step === STEP_MAP.WALLET_PASSWORD}
           position="center"
           maskClosable={true}
         >
@@ -188,7 +187,7 @@ class Index extends React.Component {
 
             {/* 关闭按钮 */}
             <div className={styles.payBoxCloseIcon} onClick={this.handleCancel}>
-              <Icon name="CloseOutlined" size={16} />
+              <Icon name="CloseOutlined" size={12} />
             </div>
           </div>
         </Dialog>
@@ -241,7 +240,7 @@ class Index extends React.Component {
               0
             </div>
             <div data-key="-1" className={`${styles.column} ${styles.special}`}>
-              <Icon name="BackspaceOutlined" size={16} />
+              <Icon name="BackspaceOutlined" size={18} />
             </div>
           </div>
         </div>

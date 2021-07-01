@@ -13,7 +13,7 @@ import { debounce } from '@common/utils/throttle-debounce.js';
  */
 
  const Index = inject('index')(
-  observer(({ imgs = [], tipData = {}, wholeNum = 1,showMore=false, index, showCount = 5 }) => {
+  observer(({ imgs = [], tipData = {}, wholeNum = 1,showMore=false, index, showCount = 5, unifyOnClick = null }) => {
   const [visible, setVisible] = useState(false);
 
   const onClick = debounce((e) => {
@@ -51,7 +51,7 @@ import { debounce } from '@common/utils/throttle-debounce.js';
 
     return (
     <>
-        <View className={styles.container} onClick={onClick} style={sty}>
+        <View className={styles.container} onClick={unifyOnClick || onClick} style={sty}>
             {
                 wholeNum !== 0 && renderUsers?.filter((_, index) => index < showCount).map((item, index) => (
                   <View key={index} className={imgAfterArr[index]}>

@@ -50,6 +50,7 @@ class Index extends React.Component {
       e && e.stopPropagation();
       this.handlePraise()
     }
+    
     handlePraise = debounce(() => {
 
       if(this.state.isSendingLike) return;
@@ -117,6 +118,7 @@ class Index extends React.Component {
       }
 
       if (threadId !== '') {
+        this.props.thread.isPositionToComment = false;
         Router.push({url: `/subPages/thread/index?id=${threadId}`})
 
         this.props.index.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
@@ -152,7 +154,7 @@ class Index extends React.Component {
     }
 
     render() {
-      const { data, className = '', site = {}, showBottomStyle = true, isShowIcon = false } = this.props;
+      const { data, className = '', site = {}, showBottomStyle = true, isShowIcon = false, unifyOnClick = null } = this.props;
       const { platform = 'pc' } = site;
       if (!data) {
         return <NoData />;
@@ -171,6 +173,7 @@ class Index extends React.Component {
         payType,
         content,
         isAnonymous,
+        diffTime
       } = data || {};
       const {text} = content
       const { isEssence, isPrice, isRedPack, isReward } = displayTag;
@@ -178,14 +181,14 @@ class Index extends React.Component {
       const {shareNickname, shareAvatar, shareThreadid, shareContent} = this.props.user
       return (
         <View className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`}>
-          <View className={styles.header} onClick={this.onClick}>
+          <View className={styles.header} onClick={unifyOnClick || this.onClick}>
               <UserInfo
                 name={user.nickname || ''}
                 avatar={user.avatar || ''}
                 location={position.location}
                 view={`${viewCount}`}
                 groupName={group?.groupName}
-                time={createdAt}
+                time={diffTime}
                 isEssence={isEssence}
                 isPay={isPrice}
                 isRed={isRedPack}
@@ -193,12 +196,12 @@ class Index extends React.Component {
                 isAnonymous={isAnonymous}
                 userId={user?.userId}
                 platform={platform}
-                onClick={this.onUser}
+                onClick={unifyOnClick || this.onUser}
               />
-              {isShowIcon && <View className={styles.headerIcon} onClick={this.onClickHeaderIcon}><Icon name='CollectOutlinedBig' className={styles.collectIcon}></Icon></View>}
+              {isShowIcon && <View className={styles.headerIcon} onClick={unifyOnClick || this.onClickHeaderIcon}><Icon name='CollectOutlinedBig' className={styles.collectIcon}></Icon></View>}
           </View>
 
-          <ThreadCenterView text={text} data={data} onClick={this.onClick} onPay={this.onPay} platform={platform} />
+          <ThreadCenterView text={text} data={data} onClick={unifyOnClick || this.onClick} onPay={unifyOnClick || this.onPay} platform={platform} />
 
           <BottomEvent
             userImgs={likeReward.users}
@@ -208,6 +211,7 @@ class Index extends React.Component {
             // onShare={this.onShare}
             onComment={this.onComment}
             onPraise={this.onPraise}
+            unifyOnClick={unifyOnClick}
             isLiked={isLike}
             isSendingLike={this.state.isSendingLike}
             tipData={{ postId, threadId, platform, payType }}

@@ -57,24 +57,16 @@ const ClassifyPopup = (props) => {
   };
 
   // hook
-  useEffect(() => { // 初始化
-    if (category?.length > 0) {
-      if (!props.threadPost.postData.categoryId) {
-        setParent(category[0]);
-        setPostData({ categoryId: category[0].pid });
-        setCategorySelected({ parent: category[0], child: {} });
-      }
-    }
-  }, [category]);
-
-  useEffect(() => { // 回显分类
+  useEffect(() => { // 回显分类,默认选中首项父类以及子类
     const { parent: storeParent, child: storeChild } = categorySelected;
     if (storeParent.pid && storeParent.pid !== parent.pid) {
       setParent(storeParent);
-      // setChildrenList(storeParent?.children?.slice(), storeParent);
+      setPostData({ categoryId: storeParent.pid });
     }
     if (storeChild.pid && storeChild.pid !== child.pid) {
       setChild(storeChild);
+      setSubCategory(storeParent.children);
+      setPostData({ categoryId: storeChild.pid });
     }
   }, [categorySelected]);
 

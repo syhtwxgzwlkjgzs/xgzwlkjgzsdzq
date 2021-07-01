@@ -7,6 +7,7 @@ import { View, Button } from '@tarojs/components';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import Avatar from '@discuzq/design/dist/components/avatar/index';
 import Spin from '@discuzq/design/dist/components/spin/index';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import NoData from '@components/no-data';
 import SectionTitle from '@components/section-title';
 import { get } from '@common/utils/get';
@@ -14,8 +15,6 @@ import ActiveUsers from '../../search/components/active-users';
 import PopularContents from '../../search/components/popular-contents';
 import layout from './index.module.scss';
 import SiteInfo from '../site-info';
-import { inviteDetail } from '@server';
-import goToLoginPage from '@common/utils/go-to-login-page';
 import PayBox from '@components/payBox';
 import { simpleRequest } from '@common/utils/simple-request';
 import Router from '@discuzq/sdk/dist/router';
@@ -121,7 +120,7 @@ class PartnerInviteH5Page extends React.Component {
   };
 
   render() {
-    const { site, forum, invite } = this.props;
+    const { site, forum, invite, user } = this.props;
     const { inviteCode } = invite;
     const { webConfig } = site;
     const { setSite: { siteMode, siteExpire, sitePrice, siteMasterScale } = {} } = webConfig;
@@ -141,10 +140,10 @@ class PartnerInviteH5Page extends React.Component {
               isShowMore={false}
               icon={{ type: 2, name: 'MemberOutlined' }}
               title="活跃用户"
-              onShowMore={this.redirectToSearchResultUser}
+              onShowMore={this.handleJoinSite}
             />
             {!isLoading && usersPageData?.length ? (
-              <ActiveUsers data={usersPageData} onItemClick={this.onUserClick} />
+              <ActiveUsers data={usersPageData} onItemClick={this.handleJoinSite} />
             ) : (
               <></>
             )}
@@ -164,10 +163,10 @@ class PartnerInviteH5Page extends React.Component {
               isShowMore={false}
               icon={{ type: 3, name: 'HotOutlined' }}
               title="热门内容预览"
-              onShowMore={this.redirectToSearchResultPost}
+              onShowMore={this.handleJoinSite}
             />
             {!isLoading && threadsPageData?.length ? (
-              <PopularContents data={threadsPageData} onItemClick={this.onPostClick} />
+              <PopularContents data={threadsPageData} onItemClick={this.handleJoinSite} unifyOnClick={this.handleJoinSite} />
             ) : (
               <></>
             )}
@@ -181,7 +180,6 @@ class PartnerInviteH5Page extends React.Component {
             )}
           </View>
           {/* 热门内容预览 end */}
-          <View className={layout.maskLayer}></View>
           <View className={layout.bottom}>
             {inviteCode ? (
               <View className={layout.bottom_tips}>
@@ -191,6 +189,7 @@ class PartnerInviteH5Page extends React.Component {
                   text={invitorName?.substring(0, 1)}
                   className={layout.bottom_tips_img}
                   image={invitorAvatar}
+                  onClick={this.handleJoinSite}
                 />
                 <View className={layout.bottom_tips_text}>
                   <View>{invitorName} 邀请您加入站点</View>
@@ -201,16 +200,18 @@ class PartnerInviteH5Page extends React.Component {
             ) : (
               <></>
             )}
-            {(siteMode === 'pay' && siteExpire) ? (
-              <View className={layout.bottom_title}>
-                有效期：<View>{siteExpire}天</View>
-              </View>
-            ) : (
-              <></>
-            )}
+            
             <View className={layout.bottom_button_wrap}>
+              {siteMode === 'pay' ? (
+                <View className={layout.bottom_title}>
+                  { user.isLogin() ? <></> : <View>新用户加入 <View className={layout.tips}>¥{sitePrice}</View></View> }
+                  { siteExpire ? <View className={!user.isLogin() && siteExpire ? layout.expire : ''}>有效期{ user.isLogin() ? '：' : ' '}<View className={layout.tips}>{siteExpire}天 </View></View> : <></> }
+                </View>
+              ) :
+                <></>
+              }
               <Button className={layout.bottom_button} onClick={this.handleJoinSite}>
-                {siteMode === 'pay' ? `¥${sitePrice}` : ''} 立即加入
+                { user.isLogin() ? `${siteMode === 'pay' ? `¥${sitePrice} ` : ''}立即加入` : '登录浏览更多内容'}
               </Button>
             </View>
           </View>

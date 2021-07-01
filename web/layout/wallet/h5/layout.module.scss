@@ -1,8 +1,6 @@
 @import '@common/styles/index.scss';
 
-
 .container {
-
   :global {
     .datepicker-modal {
       z-index: 1 !important;
@@ -19,7 +17,6 @@
   background: var(--comment-content-bg-color);
 }
 
-
 .header {
   width: 100%;
 }
@@ -31,6 +28,7 @@
   align-items: center;
   background-color: $comment-bg-color;
   padding: 0 rem($padding-4n);
+  min-height: rem(52);
 
   .status {
     font-family: 'PingFangSC-Regular';
@@ -53,7 +51,6 @@
     justify-content: center;
     align-items: center;
   }
-
 
   :global {
     .dzq-tabs__panel {
@@ -85,7 +82,8 @@
     }
 
     .dzq-tabs__label {
-      padding-bottom: rem(10) !important;
+      margin-top: rem(13) !important;
+      padding-bottom: rem(11) !important;
       font-family: 'PingFang SC';
       font-weight: 600;
       font-size: rem($font-size-primary);
@@ -102,12 +100,10 @@
       }
     }
   }
-
 }
 
 .tag {
   margin-right: $margin-2n;
-
 }
 
 .tag-active-green {
@@ -122,7 +118,6 @@
   color: $error-color;
 }
 
-
 .footer {
   width: 100%;
   height: rem(69);
@@ -135,7 +130,8 @@
     height: rem(42);
     border-radius: rem($border-radius-small);
     color: $white;
-    background: $primary-color;
+    background-color: $primary-color;
+    border: none;
     font-family: 'PingFang SC';
     font-weight: normal;
     font-size: rem($font-size-middle);
