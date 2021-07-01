@@ -159,7 +159,7 @@ export default class Page extends React.Component {
           <View className={styles.container}>
             <View className={styles.deleteTips}>
               <View className={styles.tips}>提示</View>
-              <View className={styles.content}>未开启小程序配置</View>
+              <View className={styles.content}>管理员未开启小程序配置，暂不支持小程序访问</View>
             </View>
             <View className={styles.btn}>
               <Button type='primary' className={styles.exit} onClick={() => {}}>
