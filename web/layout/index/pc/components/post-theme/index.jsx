@@ -22,10 +22,10 @@ const PostTheme = () => {
     </Dropdown.Menu>;
   }
   const onChange = (key) => {
-    console.log('点击了', key)
+    // console.log('点击了', key)
   }
   const onVisibleChange = (isShow) => {
-    console.log('菜单打开：', isShow)
+    // console.log('菜单打开：', isShow)
   }
   return (
     <Dropdown

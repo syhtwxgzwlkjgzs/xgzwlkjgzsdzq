@@ -39,8 +39,6 @@ class SearchH5Page extends React.Component {
     this.props.router.push(`/topic/topic-detail/${topicId}`)
   };
 
-  onPostClick = data => console.log('post click', data);
-
   onCancel = () => {
     this.props.router.back();
   };
