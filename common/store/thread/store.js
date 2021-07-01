@@ -1,4 +1,6 @@
 import { observable, computed } from 'mobx';
+import htmlToString from '../../utils/html-to-string';
+import { parseContentData } from '@layout/thread/utils';
 
 class ThreadStore {
   constructor(props) {
@@ -41,9 +43,53 @@ class ThreadStore {
     return this.commentList?.length >= this.totalCount;
   }
 
-  // 帖子标题
+  /**
+   * 1. 若有帖子标题，则title为【帖子标题】
+   * 2. 若无帖子标题，帖子正文包含文字内容，则展示文字内容前33字，第34字及以后为【...】
+   * 3. 如果没有帖子文字标题 / 文字内容，则根据帖子包含的内容，对应展示：【图片/视频/语音/附件】- 【站点名称】
+   */
   @computed get title() {
-    return this.threadData?.title.slice(0, 15) || this.threadData?.categoryName || '';
+    // 标题
+    const { title } = this.threadData || {};
+    if (title) {
+      return title;
+    }
+
+    // 文字内容
+    const { text, indexes } = this?.threadData?.content || {};
+    if (text) {
+      const parsedText = htmlToString(text);
+      if (parsedText) {
+        return parsedText.length > 33 ? `${parsedText.slice(0, 33)}...` : parsedText;
+      }
+    }
+
+    // 附件内容
+    const parsedContent = parseContentData(indexes);
+    const keys = Object.keys(parsedContent);
+    if (keys?.length) {
+      return keys
+        .map((key) => {
+          switch (key) {
+            case 'VIDEO':
+              return '视频';
+            case 'IMAGE':
+              return '图片';
+            case 'RED_PACKET':
+              return '红包';
+            case 'REWARD':
+              return '悬赏';
+            case 'GOODS':
+              return '商品';
+            case 'VOICE':
+              return '语音';
+            case 'VOTE':
+              return '附件';
+          }
+        })
+        .filter((item) => !!item)
+        .join('/');
+    }
   }
 }
 

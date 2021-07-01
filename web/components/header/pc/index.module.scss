@@ -63,6 +63,7 @@
           .dzq-dropdown-menu__item {
             padding: rem($padding-10) 0;
             line-height: rem(26);
+            color: $text-color-regular;
             &:hover {
               color: $primary-color;
             }

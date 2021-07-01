@@ -7,11 +7,11 @@ import styles from './index.module.scss';
 import TopNew from './components/top-news';
 import FilterView from './components/filter-view';
 import BaseLayout from '@components/base-layout';
-import initJSSdk from '@common/utils/initJSSdk.js';
 import { getSelectedCategoryIds } from '@common/utils/handleCategory';
 import wxAuthorization from '../../user/h5/wx-authorization';
 import VList from '@components/virtual-list/h5/index';
 import classnames from 'classnames';
+import setWxShare from '@common/utils/set-wx-share';
 
 @inject('site')
 @inject('user')
@@ -45,30 +45,11 @@ class IndexH5Page extends React.Component {
   }
 
   handleWeiXinShare = async () => {
-    let { href } = window.location;
-    href = href.split('/');
-    href = [href[0], href[1], href[2]];
-    href = href.join('/');
-    const { site } = this.props;
-    const title = site.webConfig?.setSite?.siteName || 'Discuz! Q';
-    const desc = site.webConfig?.setSite?.siteUrl || href;
-    const imgUrl = site.webConfig?.setSite?.siteLogo;
-    const link = site.webConfig?.setSite?.siteUrl;
-    await initJSSdk(['updateAppMessageShareData', 'updateTimelineShareData']);
-    wx.ready(() => {
-      // 需在用户可能点击分享按钮前就先调用
-      wx.updateAppMessageShareData({
-        title, // 分享标题
-        desc, // 分享描述
-        link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-      });
-
-      wx.updateTimelineShareData({
-        title, // 分享标题
-        link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        imgUrl, // 分享图标
-      });
-    });
+    const { site, user } = this.props;
+    const {webConfig} = site;
+    const {setSite} = webConfig;
+    const {siteTitle, siteIntroduction, siteFavicon} = setSite;
+    setWxShare(`${user.userInfo && user.userInfo.nickname ? `【${user.userInfo.nickname}】` : ''}邀请你加入【${siteTitle}】`, siteIntroduction, window.location.href, siteFavicon);
   };
 
   // 点击更多弹出筛选

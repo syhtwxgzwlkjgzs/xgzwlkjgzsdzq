@@ -8,7 +8,6 @@ import { h5WechatCodeLogin } from '@server';
 import setAccessToken from '@common/utils/set-access-token';
 import { get } from '@common/utils/get';
 import { checkUserStatus } from '@common/store/login/util';
-import initJSSdk from '@common/utils/initJSSdk.js';
 
 const NEED_BIND_OR_REGISTER_USER = -7016;
 let bindLoading = false;
@@ -19,9 +18,6 @@ let bindLoading = false;
 @inject('invite')
 @observer
 class WXAuthorizationPage extends React.Component {
-  componentDidMount() {
-    initJSSdk(['closeWindow']);
-  }
   render() {
     return (
       <div className={layout.container}>
@@ -45,7 +41,9 @@ class WXAuthorizationPage extends React.Component {
               <span className={layout.clickBtn} onClick={() => {
                 this.props.h5QrCode.loginTitle = '已取消登录';
                 this.props.h5QrCode.isBtn = false;
-                wx.closeWindow();
+                window.wx && window.wx.ready(() => {
+                  wx.closeWindow();
+                });
               }}>
                 退出
               </span>

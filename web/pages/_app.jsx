@@ -13,6 +13,8 @@ import '../styles/index.scss';
 import CustomHead from '@components/custom-head';
 import Head from 'next/head';
 import monitor from '@common/utils/monitor';
+import initWXSDK from '@common/utils/init-wx-sdk';
+import setWxShare from '@common/utils/set-wx-share';
 
 // if (!isServer()) {
 //   process.env.NODE_ENV === 'production' && sentry();
@@ -21,8 +23,10 @@ import monitor from '@common/utils/monitor';
 class DzqApp extends App {
   constructor(props) {
     super(props);
+    !isServer() && initWXSDK();
     this.appStore = initializeStore();
     this.updateSize = this.updateSize.bind(this);
+    this.setWXShare = this.setWXShare.bind(this);
   }
 
   // 路由跳转时，需要清理图片预览器
@@ -55,12 +59,28 @@ class DzqApp extends App {
     window.addEventListener('resize', this.updateSize);
     csrRouterRedirect();
     this.listenRouterChangeAndClean();
+    this.props.router.events.on('routeChangeStart', this.setWXShare);    
   }
 
   componentWillUnmount() {
     if (!isServer()) {
       window.removeEventListener('resize', this.updateSize);
       window.removeEventListener('popstate', this.cleanImgViewer);
+    }
+  }
+
+  // 每次跳转，都会设置默认的分享配置
+  setWXShare() {
+    const {site} = this.appStore;
+    const {webConfig} = site;
+    if ( webConfig ) {
+      try {
+        const {setSite} = webConfig;
+        const {siteTitle, siteIntroduction, siteFavicon} = setSite;
+        setWxShare(siteTitle, siteIntroduction, window.location.origin, siteFavicon);
+      } catch(err) {
+        setWxShare('Discuz!Q', 'Discuz!Q', window.location.origin, null);
+      }
     }
   }
 

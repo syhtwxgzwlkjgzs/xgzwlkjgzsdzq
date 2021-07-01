@@ -248,7 +248,7 @@ export default function DVditor(props) {
           bubbleHide: false,
         },
         bubbleToolbar: pc ? [...baseToolbar] : [],
-        icon: '',
+        // icon: '',
         preview: {
           theme: {
             current: '',

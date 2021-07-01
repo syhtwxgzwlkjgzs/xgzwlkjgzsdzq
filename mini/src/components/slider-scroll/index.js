@@ -179,6 +179,7 @@ class Index extends Component {
             onScroll={throttle(this.onScroll, 10)}
             onRefresh={onScrollBottom}
             hasOnScrollToLower={true}
+            showLoadingInCenter={!noMore}
           >
             {/* 顶部导航卡片 */}
             {topCard}

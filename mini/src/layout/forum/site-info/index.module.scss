@@ -2,8 +2,7 @@
 
 
 .site{
-  padding: rem($padding-4n);
-  padding-top: 0;
+  padding: 0 rem($padding-4n) rem($padding-3n);
   border-bottom: rem(10) solid var(--comment-content-bg-color); // todo 这个颜色未定义scss变量
   &.popularContents{
     padding-bottom: 0;
@@ -25,19 +24,20 @@
     border-bottom: $border-solid-1;
   }
   .site_status{
-    padding-top: $padding-4n;
+    padding-top: $padding-3n;
     display: flex;
     .site_status_list{
       flex: 1;
       float: left;
       text-align: center;
       font-size: $font-size-primary;
+      line-height: $font-line-height-middle;
       &:nth-child(2):after, &:nth-child(2):before{
         float: left;
         content: '';
         height: 14px;
         width: 1px;
-        margin-top: $margin-base;
+        margin-top: rem(6);
         background-color: $border-color;
       }
     }
