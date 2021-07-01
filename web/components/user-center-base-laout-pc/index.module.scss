@@ -102,6 +102,15 @@
   padding-top: rem($margin-10);
   width: 32%;
 }
+.slideWrap {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+  .right {
+    width: calc(32% - 10px);
+  }
+}
 
 .list {
   width: 100%;
