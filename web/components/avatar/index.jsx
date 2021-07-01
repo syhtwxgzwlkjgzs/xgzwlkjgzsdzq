@@ -27,9 +27,6 @@ function avatar(props) {
     level = 6
   } = props;
 
-  // console.log(image)
-  // console.log(userInfo?.avatarUrl)
-  console.log(level);
   const currAvatarImage = useMemo(() => {
     if (!image || image === '') return image;
     if ( /(http|https):\/\/.*?(gif)/.test(image) ) {
