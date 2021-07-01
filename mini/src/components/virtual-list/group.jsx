@@ -8,6 +8,7 @@ import { getElementRect, arrTrans, getWindowHeight, randomStr } from './utils';
 import Taro from '@tarojs/taro';
 import { throttle } from '@common/utils/throttle-debounce.js';
 import BottomNavBar from '@components/bottom-nav-bar'
+import { useMemo } from 'react';
 
 /**
  * 列表组件，集成上拉刷新能力
@@ -40,11 +41,11 @@ const VirtualList = forwardRef(({
   const [isError, setIsError] = useState(false);
   const [errText, setErrText] = useState(errorText);
   const [scrollTop, setScrollTop] = useState(-1);
-  const [dataSource, setDataSource] = useState([]);
+  const [dataSource, setDataSource] = useState({});
   
   const wholePageIndex = useRef(0)
   const currentRenderIndex = useRef(0)
-  const windowHeight = useRef(667)
+  const windowHeight = useRef(null)
   const originalDataSource = useRef([])
   const heights = useRef([])
   const childrenHeightId = useRef(`home-header-${randomStr()}`)
@@ -83,9 +84,9 @@ const VirtualList = forwardRef(({
         const arr = arrTrans(10, data)
         const length = arr.length
         if (arr.length) {
-          const newArr = dataSource.slice()
-          newArr.push(arr[length - 1]) 
-          setDataSource(newArr)
+          const newArr = arr[length - 1]
+          const key = `${wholePageIndex.current}`
+          setDataSource({ ...dataSource, [key]: newArr })
         }
         originalDataSource.current = arr
       }
@@ -94,7 +95,7 @@ const VirtualList = forwardRef(({
 
   // 缓存所有的分组高度
   useEffect(() => {
-      if (dataSource.length) {
+      if (Object.values(dataSource).length) {
         handleHeight()
       }
     getChildrenHeight()
@@ -110,7 +111,7 @@ const VirtualList = forwardRef(({
 
     //   当源数据为空时，重置组件数据
     const resetAllData = () => {
-        setDataSource([])
+        setDataSource({})
         originalDataSource.current = []
         wholePageIndex.current = 0
         currentRenderIndex.current = 0
@@ -132,20 +133,21 @@ const VirtualList = forwardRef(({
     heights.current[index] = height
   }
 
-  const observePage = (pageIndex) => {
-    const observerObj = wx.createIntersectionObserver(this).relativeToViewport({ top: 2 * windowHeight.current, bottom: 2 * windowHeight.current });
-    observerObj.observe(`#virtual-list-${pageIndex}`, (res) => {
-      const newArr = dataSource.slice()
-console.log(pageIndex);
-      if(res.intersectionRatio <= 0) {
-        debugger
-        newArr[pageIndex] = originalDataSource.current[pageIndex] 
-      } else {
-        debugger
-        newArr[pageIndex] = { height: heights.current[pageIndex] }
-      }
+  const test = ({ index, isHidden }) => {
+    console.log(dataSource);
+    console.log(heights.current);
+    console.log(index, isHidden);
+  }
 
-      setDataSource(newArr)
+  const observePage = (pageIndex) => {
+
+    if (!windowHeight.current) {
+      return
+    }
+    const observerObj = Taro.createIntersectionObserver(this, { thresholds: [0], observeAll: true }).relativeToViewport({ top: 2 * windowHeight.current, bottom: 2 * windowHeight.current });
+    observerObj.observe(`#virtual-list-${pageIndex}`, (res) => {
+      
+      test({ index: pageIndex, isHidden: res.intersectionRatio <= 0 })
     });
   }
 
@@ -193,9 +195,10 @@ console.log(pageIndex);
         const promise = onRefresh()
         isPromise(promise) && promise
           .then(() => {
+            wholePageIndex.current += 1
+
             // 解决因promise和react渲染不同执行顺序导致重复触发加载数据的问题
             setTimeout(() => {
-              wholePageIndex.current += 1
               isLoadingRef.current = false;
               setIsLoading(false);
               if (noMore) {
@@ -274,7 +277,7 @@ console.log(pageIndex);
         </View>
 
         {
-            dataSource?.map((item, index) => (
+            Object.values(dataSource).map((item, index) => (
                 item?.length > 0 ? 
                     (
                         <View id={`virtual-list-${index}`}>
