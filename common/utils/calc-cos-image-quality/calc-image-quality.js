@@ -23,6 +23,7 @@ const QUALITY_17 = '90';
 const QUALITY_18 = '95';
 const QUALITY_19 = '100';
 
+const LEVEL_0 = 0;
 const LEVEL_1 = 1;
 const LEVEL_2 = 2;
 const LEVEL_3 = 3;
@@ -38,6 +39,16 @@ const CGIF = '/cgif';
 
 function _conversion(conversion) {
     return `${CONVERSION}/${conversion}`;
+}
+
+function _level_0_quality(viewWidth, conversion) {
+    let zoom = QUALITY_13;
+    if ( viewWidth > 667 && viewWidth < 1080 ){
+        zoom = QUALITY_14;
+    } else if ( viewWidth >= 1080  ){
+        zoom = QUALITY_15;
+    }
+    return `${IMAGEMOGR2}${conversion ? _conversion(conversion) : ''}${QUALITY_NAME}${zoom}${INTERLACE}`;
 }
 
 function _level_1_quality(viewWidth, conversion) {
@@ -115,6 +126,8 @@ export default function calcImageQuality(viewWidth, type, level) {
     // 根据图片类型判断使用何种方式
     if (/(jpg|jpeg|webp)/.test(type)) {
         switch (level) {
+            case LEVEL_0: param = _level_0_quality(viewWidth, supportWebp ? 'webp' : null);
+            break;
             case LEVEL_1: param = _level_1_quality(viewWidth, supportWebp ? 'webp' : null);
             break;
             case LEVEL_2: param = _level_2_quality(viewWidth, supportWebp ? 'webp' : null);
@@ -141,6 +154,8 @@ export default function calcImageQuality(viewWidth, type, level) {
         return `${IMAGEMOGR2}${CGIF}/${frame}`;
     } else {
         switch (level) {
+            case LEVEL_0: param = _level_0_quality(viewWidth, supportWebp ? 'webp' : 'jpg');
+            break;
             case LEVEL_1: param = _level_1_quality(viewWidth, supportWebp ? 'webp' : 'jpg');
             break;
             case LEVEL_2: param = _level_2_quality(viewWidth, supportWebp ? 'webp' : 'jpg');
