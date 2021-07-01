@@ -78,9 +78,6 @@ class Detail extends React.Component {
       this.props.thread.reset();
       this.getPageDate(this.props.router.query.id);
     }
-    if ( this.props.thread && this.props.thread.threadData ) {
-      this.handleWeiXinShare();
-    }
   }
 
   async componentDidMount() {
@@ -88,10 +85,6 @@ class Detail extends React.Component {
 
     if (id) {
       this.getPageDate(id);
-    }
-
-    if ( this.props.thread && this.props.thread.threadData ) {
-      this.handleWeiXinShare();
     }
   }
 
@@ -106,9 +99,12 @@ class Detail extends React.Component {
       const { text, indexes } = content;
       function setSpecialTitle(text, user, indexes = []) {
 
-        const contentStr = htmlToString(text);
-
-        if ( contentStr && contentStr !== '' ) return contentStr;
+        // 全贴付费不能使用内容展示
+        if ( payType !== 1 ) {
+          const contentStr = htmlToString(text);
+          if ( contentStr && contentStr !== '' ) return contentStr;
+        }
+        
 
         const arr = [];
         if ( indexes['101'] ) arr.push('图片');
@@ -123,6 +119,7 @@ class Detail extends React.Component {
       function setShareImg(threadUser, text, indexes = [], favicon) {
         let img = null;
 
+        // 全贴付费不能使用内容展示
         if ( payType !== 1 ) {
           // 取图文混排图片
           const imageList = text.match(/<img[\s]+[^<>]*>|<img[\s]+[^<>]*/g) || [];
@@ -135,7 +132,7 @@ class Detail extends React.Component {
               } 
             }
           }
-
+          // 附件付费不能使用内容展示
           if ( payType !== 2 ) {
             // 取上传图片
             if (!img && indexes['101']) {
@@ -165,7 +162,6 @@ class Detail extends React.Component {
       let desc = siteIntroduction && siteIntroduction !== '' ? siteIntroduction : '在这里，发现更多精彩内容';
       let shareTitle = title && title !== '' ? title : setSpecialTitle(text, threadUser, indexes);
       const shareImg = setShareImg( threadUser, text, indexes, siteFavicon);
-      console.log(shareTitle, desc, window.location.href, shareImg)
       setWxShare(shareTitle, desc, window.location.href, shareImg);
     } catch(err) {
       console.error('设置分享错误', err);
@@ -213,6 +209,9 @@ class Detail extends React.Component {
         }
       }
     }
+
+    // 设置详情分享
+    this.handleWeiXinShare();
 
     // 获取评论列表
     if (!this.props?.thread?.commentList || !this.hasMaybeCache()) {
