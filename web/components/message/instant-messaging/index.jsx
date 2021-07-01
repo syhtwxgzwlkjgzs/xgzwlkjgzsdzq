@@ -13,7 +13,6 @@ import wxChooseImage from '@common/utils/wx-choose-image';
 import { createAttachment } from '@common/server';
 import { getMessageTimestamp } from '@common/utils/get-message-timestamp';
 import calcCosImageQuality from '@common/utils/calc-cos-image-quality';
-import browser from '@common/utils/browser';
 import styles from './index.module.scss';
 
 const Index = (props) => {
@@ -105,9 +104,8 @@ const Index = (props) => {
 
   // 触发图片选择
   const uploadImage = async () => {
-    if (browser.env('weixin')) {
-      // 微信环境下使用jssdk进行图片选择
-      const files = await wxChooseImage();
+    const files = await wxChooseImage();
+    if (files.length) {
       onImgChange('', files);
     } else {
       uploadRef.current.click();

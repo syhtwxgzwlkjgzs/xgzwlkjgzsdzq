@@ -136,8 +136,14 @@ const InputPop = (props) => {
 
       let isAllLegal = true; // 状态：此次上传图片是否全部合法
       cloneList.forEach((item, index) => {
-        const arr = item.name.split('.').pop();
-        const imageType = arr.toLocaleLowerCase();
+        let imageType = '';
+        if (item.imageType) {
+          imageType = item.imageType;
+        } else {
+          const arr = item.name.split('.').pop();
+          imageType = arr.toLocaleLowerCase();
+        }
+
         const isLegalType = supportImgExt.toLocaleLowerCase().includes(imageType);
 
         // 存在不合法图片时，从上传图片列表删除
@@ -146,7 +152,6 @@ const InputPop = (props) => {
           isAllLegal = false;
         }
       });
-
       !isAllLegal && Toast.info({ content: `仅支持${supportImgExt}类型的图片` });
 
       cloneList?.length && setImageUploading(true);
