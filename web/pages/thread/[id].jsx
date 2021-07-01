@@ -11,6 +11,7 @@ import ErrorH5Page from '@layout/error/h5';
 import ViewAdapter from '@components/view-adapter';
 import { Toast } from '@discuzq/design';
 import setWxShare from '@common/utils/set-wx-share';
+import htmlToString from '@common/utils/html-to-string';
 
 @inject('site')
 @inject('thread')
@@ -103,13 +104,18 @@ class Detail extends React.Component {
       const { threadData } = thread;
       const { content, title, user: threadUser, payType } = threadData;
       const { text, indexes } = content;
-      function setSpecialTitle(user, indexes = []) {
+      function setSpecialTitle(text, user, indexes = []) {
+
+        const contentStr = htmlToString(text);
+
+        if ( contentStr && contentStr !== '' ) return contentStr;
+
         const arr = [];
         if ( indexes['101'] ) arr.push('图片');
         if ( indexes['103'] ) arr.push('视频');
         if ( indexes['102'] ) arr.push('音频');
         if ( indexes['108'] ) arr.push('附件');
-        const contentLable = arr.length > 0 ? `${arr.join('/')}` : '无内容';
+        const contentLable = arr.length > 0 ? `${arr.join('/')}` : '内容';
         const name = user && user.nickname ? `${user.nickname}` : '';
         return `${name}分享的${contentLable}`;
       }
@@ -157,8 +163,9 @@ class Detail extends React.Component {
       }
 
       let desc = siteIntroduction && siteIntroduction !== '' ? siteIntroduction : '在这里，发现更多精彩内容';
-      let shareTitle = title && title !== '' ? title : desc && desc !== '' ? desc : setSpecialTitle(threadUser, indexes);
+      let shareTitle = title && title !== '' ? title : setSpecialTitle(text, threadUser, indexes);
       const shareImg = setShareImg( threadUser, text, indexes, siteFavicon);
+      console.log(shareTitle, desc, window.location.href, shareImg)
       setWxShare(shareTitle, desc, window.location.href, shareImg);
     } catch(err) {
       console.error('设置分享错误', err);
