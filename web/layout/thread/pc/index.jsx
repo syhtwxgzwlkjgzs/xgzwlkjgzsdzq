@@ -757,14 +757,15 @@ class ThreadPCPage extends React.Component {
 
     // 是否审核通过
     const isApproved = (threadStore?.threadData?.isApproved || 0) === 1;
-    console.log(threadStore?.threadData)
-    if ( threadStore?.threadData ) {
-      const text = threadStore?.threadData.content.text;
-      let reg=/(<\/?.+?\/?>)|\n/g;
-      let newText = text.replace(reg,'');
-      // newText = newText.replace(/\n/g, '');
-      console.log(newText);
-    }
+    // TODO:目前还不清楚这块代码的作用，可能会对过滤代码块有影响
+    // console.log(threadStore?.threadData)
+    // if ( threadStore?.threadData ) {
+    //   const text = threadStore?.threadData.content.text;
+    //   let reg=/(<\/?.+?\/?>)|\n/g;
+    //   let newText = text.replace(reg,'');
+    //   // newText = newText.replace(/\n/g, '');
+    //   console.log(newText);
+    // }
     
     return (
       <div>
