@@ -105,3 +105,12 @@
     padding: rem($padding-4n) 0;
   }
 }
+
+.wrapperView {
+  display: flex;
+
+  .placeholder {
+    flex: 1;
+    height: auto;
+  }
+}

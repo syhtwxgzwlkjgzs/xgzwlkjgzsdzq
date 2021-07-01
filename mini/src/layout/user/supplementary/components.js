@@ -70,6 +70,7 @@ export function CreateTextArea(field, layout) {
           placeholder={fieldsDesc}
           placeholderClass={layout.placeholder}
           rows={3}
+          disableDefaultPadding={true}
           onChange={(e) => {
             field.value = e.target.value;
           }}

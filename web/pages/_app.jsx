@@ -14,6 +14,8 @@ import CustomHead from '@components/custom-head';
 import Head from 'next/head';
 import monitor from '@common/utils/monitor';
 import initWXSDK from '@common/utils/init-wx-sdk';
+import setWxShare from '@common/utils/set-wx-share';
+
 // if (!isServer()) {
 //   process.env.NODE_ENV === 'production' && sentry();
 // }
@@ -67,9 +69,19 @@ class DzqApp extends App {
     }
   }
 
+  // 每次跳转，都会设置默认的分享配置
   setWXShare() {
-    console.log('setWXShare');
-    console.log(this.appStore);
+    const {site} = this.appStore;
+    const {webConfig} = site;
+    if ( webConfig ) {
+      try {
+        const {setSite} = webConfig;
+        const {siteTitle, siteIntroduction, siteFavicon} = setSite;
+        setWxShare(siteTitle, siteIntroduction, window.location.origin, siteFavicon);
+      } catch(err) {
+        setWxShare('Discuz!Q', 'Discuz!Q', window.location.origin, null);
+      }
+    }
   }
 
   // 出错捕获

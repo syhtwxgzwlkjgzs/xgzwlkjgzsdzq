@@ -268,7 +268,6 @@ class PayBoxStore {
         clearInterval(this.timer);
 
         if (mode === PAY_MENT_MAP.WX_H5) {
-          console.log(payRes);
           return;
         }
         listenWXJsBridgeAndExecCallback(() => {

@@ -1,4 +1,5 @@
 export default {
   navigationBarTitleText: '站点加入',
-  navigationBarBackgroundColor: '#ffffff'
+  navigationBarBackgroundColor: '#ffffff',
+  backgroundColor: '#ffffff',
 };

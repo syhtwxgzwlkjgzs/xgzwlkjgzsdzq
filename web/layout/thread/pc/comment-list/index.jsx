@@ -68,7 +68,7 @@ class RenderCommentList extends React.Component {
       id: data.id,
       isLiked: !data.isLiked,
     };
-    const { success, msg } = await this.props.comment.updateLiked(params);
+    const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
 
     if (success) {
       this.props.thread.setCommentListDetailField(data.id, 'isLiked', params.isLiked);

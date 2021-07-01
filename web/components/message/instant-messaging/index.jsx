@@ -3,13 +3,16 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Toast } from '@discuzq/design';
+import Header from '@components/header';
+import BaseLayout from '@components/base-layout';
 import DialogBox from './dialog-box';
 import InteractionBox from './interaction-box';
 import Router from '@discuzq/sdk/dist/router';
-import initJSSdk from '@common/utils/initJSSdk.js';
+import wxChooseImage from '@common/utils/wx-choose-image';
 import { createAttachment } from '@common/server';
 import { getMessageTimestamp } from '@common/utils/get-message-timestamp';
-import calcImageQuality from '@common/utils/calc-image-quality';
+import calcCosImageQuality from '@common/utils/calc-cos-image-quality';
+import browser from '@common/utils/browser';
 import styles from './index.module.scss';
 
 const Index = (props) => {
@@ -23,7 +26,6 @@ const Index = (props) => {
   const uploadingImagesRef = useRef([]);
   const listDataLengthRef = useRef(0);
 
-  const viewWidth = window.screen.width;
   let toastInstance = null;
 
   const [showEmoji, setShowEmoji] = useState(false);
@@ -101,37 +103,13 @@ const Index = (props) => {
   };
 
   // 触发图片选择
-  const uploadImage = () => {
-    const ua = window.navigator.userAgent.toLowerCase();
-    console.log(ua.match(/MicroMessenger/i));
-    if (ua.match(/MicroMessenger/i) !== null) {
-      weixinChooseImage();
+  const uploadImage = async () => {
+    if (browser.env('weixin')) {
+      const files = await wxChooseImage();
+      onImgChange('', files);
     } else {
       uploadRef.current.click();
     }
-  };
-
-  // 微信选择图片
-  const weixinChooseImage = () => {
-    wx.chooseImage({
-      count: 9, // 默认9
-      sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-      sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-      success: (res) => {
-        const { localIds } = res; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-
-        localIds.forEach(localId => {
-          wx.uploadImage({
-            localId, // 需要上传的图片的本地ID，由chooseImage接口获得
-            isShowProgressTips: 1, // 默认为1，显示进度提示
-            success: (res) => {
-              const { serverId } = res; // 返回图片的服务器端ID
-              setTypingValue(serverId);
-            }
-          });
-        });
-      },
-    });
   };
 
   // 检查文件类型和体积
@@ -155,8 +133,15 @@ const Index = (props) => {
   };
 
   // 执行图片发送事宜
-  const onImgChange = async (e) => {
-    const { files } = e.target;
+  const onImgChange = async (e, wxFiles) => {
+    let files = [];
+    if (wxFiles) {
+      files = wxFiles;
+    } else {
+      files = e.target.files;
+    }
+
+    // 处理首次发消息，还没有dialogId的情况
     let localDialogId = 0;
     if (!dialogId) {
       const ret = await createDialog({
@@ -169,6 +154,7 @@ const Index = (props) => {
       }
     }
 
+    // 开始处理图片发送
     const fileList = [...files];
 
     toastInstance = Toast.loading({
@@ -179,20 +165,26 @@ const Index = (props) => {
     // 先获取图片本地的路径（base64）、再异步获取图片的宽高
     await Promise.all(fileList.map(file => (
       new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (e) => {
-          const src = e.target.result;
-          const img = new Image();
-          img.src = src;
-          img.onload = () => {
-            file.imageUrl = src;
-            file.imageWidth = img.width;
-            file.imageHeight = img.height;
+        const img = new Image();
+        img.onload = () => {
+          file.imageUrl = img.src;
+          file.imageWidth = img.width;
+          file.imageHeight = img.height;
+          if (!wxFiles) {
             file.failMsg = checkFile(file);
-            resolve();
-          };
+          }
+          resolve();
         };
+
+        if (wxFiles) {
+          img.src = file.localId;
+        } else {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = (e) => {
+            img.src = e.target.result;
+          };
+        }
       })
     )));
 
@@ -238,7 +230,11 @@ const Index = (props) => {
       });
     }
     const formData = new FormData();
-    formData.append('file', file);
+    if (file.serverId) {
+      formData.append('mediaId', file.serverId);
+    } else {
+      formData.append('file', file);
+    }
     formData.append('type', 1);
     formData.append('dialogMessageId', file.dialogMessageId);
     const ret = await createAttachment(formData);
@@ -269,7 +265,7 @@ const Index = (props) => {
       if (!item.isImageLoading && item.imageUrl) {
         const [path] = item.imageUrl.split('?');
         const type = path.substr(path.indexOf('.') + 1);
-        item.renderUrl = `${path}?${calcImageQuality(viewWidth, type, 3)}`;
+        item.renderUrl = calcCosImageQuality(item.imageUrl, type, 3);
       }
 
       return {
@@ -309,8 +305,6 @@ const Index = (props) => {
   }, [username, dialogId]);
 
   useEffect(() => {
-    initJSSdk(['chooseImage', 'uploadImage']);
-
     if (!threadPost.emojis.length) {
       threadPost.fetchEmoji();
     }
@@ -342,8 +336,16 @@ const Index = (props) => {
     }
   }, [showEmoji]);
 
-  return (
-    <div className={!isPC ? styles.h5Page : styles.pcPage}>
+  const mainContent = (
+    <div className={isPC ? styles.pcPage : styles.h5Page}>
+      {isPC ? (
+        <div className={styles['pc-header']}>
+          <div className={styles['pc-header__inner']}>
+            {nickname}
+          </div>
+        </div>)
+        : <Header />
+      }
       <input
         style={{ display: 'none' }}
         type="file"
@@ -369,6 +371,22 @@ const Index = (props) => {
       />
     </div>
   );
+
+  if (isPC) {
+    return (
+      <BaseLayout
+        className={"mymessage-page"}
+        right={props.rightContent}
+        showRefresh={false}
+        immediateCheck={false}
+        isShowLayoutRefresh={false}
+      >
+        {mainContent}
+      </BaseLayout>
+    )
+  }
+
+  return mainContent;
 };
 
 export default inject('message', 'site', 'threadPost', 'user')(observer(Index));

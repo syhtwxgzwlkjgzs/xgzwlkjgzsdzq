@@ -12,11 +12,6 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
 
 @observer
 export default class ReplyList extends React.Component {
-  // 跳转至评论详情
-  toCommentDetail() {
-    console.log('跳至评论详情');
-  }
-
   likeClick() {
     typeof this.props.likeClick === 'function' && this.props.likeClick();
   }

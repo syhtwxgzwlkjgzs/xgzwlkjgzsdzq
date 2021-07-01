@@ -72,16 +72,19 @@ const Index = (props) => {
               }
 
               {videoData && (
-                <VideoPlay
-                  url={videoData.mediaUrl}
-                  coverUrl={videoData.coverUrl}
-                  v_width={videoData.width || null}
-                  v_height={videoData.height || null}
-                  onPay={onPay}
-                  isPay={needPay}
-                  status={videoData.status}
-                  onVideoReady={props.onVideoReady}
-                />
+                <WrapperView onClick={onClick}>
+                  <VideoPlay
+                    url={videoData.mediaUrl}
+                    coverUrl={videoData.coverUrl}
+                    v_width={videoData.width || null}
+                    v_height={videoData.height || null}
+                    onPay={onPay}
+                    isPay={needPay}
+                    status={videoData.status}
+                    onVideoReady={props.onVideoReady}
+                  />
+                </WrapperView>
+                
               )}
               {imageData?.length > 0 && (
                   <ImageDisplay 
@@ -135,3 +138,13 @@ const Index = (props) => {
 }
 
 export default React.memo(Index)
+
+// 处理
+const WrapperView = ({ children, onClick }) => {
+  return (
+    <div className={styles.wrapperView}>
+      {children}
+      <div className={styles.placeholder} onClick={onClick}></div>
+    </div>
+  )
+}
