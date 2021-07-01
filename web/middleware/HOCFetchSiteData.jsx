@@ -165,7 +165,7 @@ export default function HOCFetchSiteData(Component) {
       }
 
       // 初始化分享配置
-      if ( siteConfig ) {
+      if ( siteConfig && siteConfig.setSite ) {
         const {setSite} = siteConfig;
         const {siteTitle, siteIntroduction, siteFavicon} = setSite;
         setWxShare(siteTitle, siteIntroduction, window.location.href, siteFavicon);
