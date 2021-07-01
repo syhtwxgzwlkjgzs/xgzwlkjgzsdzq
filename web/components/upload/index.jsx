@@ -78,7 +78,7 @@ export default function DzqUpload(props) {
         onRemove={(file) => {
           onRemove(file);
         }}
-        wxChooseImage={wxChooseImage}
+        // wxChooseImage={wxChooseImage}
         beforeUpload={(cloneList, showFileList) => {
           if (typeof beforeUpload !== 'function') return true;
           return beforeUpload(cloneList, showFileList);
