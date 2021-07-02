@@ -729,12 +729,12 @@ class ThreadPCPage extends React.Component {
     const isAnonymous = threadStore?.threadData?.isAnonymous;
 
     return (
-      <div className={`${layout.bodyRigth} ${isSelf ? layout.positionSticky : ''}`}>
+      <div className={`${layout.bodyRigth}}`}>
         {isReady && !isApproved && (
           <div className={layout.examinePosition}></div>
         )}
         {!isAnonymous && (
-          <div className={layout.authorInfo}>
+          <div className={`${layout.authorInfo} detail-authorinfo`}>
             {threadStore?.authorInfo ? (
               <AuthorInfo
                 user={threadStore.authorInfo}
@@ -777,12 +777,12 @@ class ThreadPCPage extends React.Component {
     //   // newText = newText.replace(/\n/g, '');
     //   console.log(newText);
     // }
-    
+
     return (
       <div>
         <ShowTop showContent={this.props.thread?.threadData?.isStick} setTop={this.state.setTop}></ShowTop>
         <IsApproved isShow={isReady && !isApproved}></IsApproved>
-        
+
         <BaseLayout
           onRefresh={() => this.handleOnRefresh()}
           onScroll={() => this.handleOnScroll()}
