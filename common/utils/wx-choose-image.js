@@ -25,22 +25,23 @@ const dataURLtoFile = (dataurl, filename = 'image') => {
 
 const wxChooseImage = () => new Promise(async (resolve) => {
   // 验证不通过，jssdk接口不可用，resolve一个空数组给业务，业务自行判断并进行图片选择的降级处理
-  // step 1: 判断是否是微信环境 及 jssdk文件是否下载成功
-  if (!browser.env('weixin') || !(window.wx && wx.config)) {
+  // step 1: 判断是否是微信环境、jssdk文件是否下载并执行
+  if (!browser.env('weixin') || !(window.wx && wx.chooseImage)) {
     resolve([]);
     return;
   }
-  // step 2:判断jssdk鉴权是否通过
-  const isApiConfigSuccess = await new Promise((resolve) => {
-    wx.getNetworkType({
-      success: () => resolve(true),
-    });
-    wx.error(() => resolve(false));
-  });
-  if (!isApiConfigSuccess) {
-    resolve([]);
-    return;
-  }
+
+  // step 2:判断jssdk鉴权是否通过 ---（经测试chooseImage和getLocalImgData无须鉴权也能使用）
+  // const isApiConfigSuccess = await new Promise((resolve) => {
+  //   wx.getNetworkType({
+  //     success: () => resolve(true),
+  //   });
+  //   wx.error(() => resolve(false));
+  // });
+  // if (!isApiConfigSuccess) {
+  //   resolve([]);
+  //   return;
+  // }
 
 
   // 验证通过，接口可用，开始选择图片
