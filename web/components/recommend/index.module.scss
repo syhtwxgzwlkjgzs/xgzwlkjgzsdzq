@@ -86,6 +86,16 @@
             display: none;
           }
         }
+        // 因为当有4个的时候会展示不了
+        @include widthAndHeightMedia(1250px) {
+          .lg {
+            display: none;
+          }
+
+          .sm {
+            display: block;
+          }
+        }
         @include media('s-pc') {
           .lg{
             display: none;
@@ -94,7 +104,7 @@
             display: block;
           }
         }
-        
+
       }
     }
   }

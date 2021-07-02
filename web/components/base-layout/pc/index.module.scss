@@ -265,9 +265,13 @@
           .dzq-submenu__title {
             font-size: $font-size-primary;
           }
+          &-item {
+            padding-top: $padding-3n;
+            padding-bottom: $padding-3n;
+          }
         }
         .top-news-item {
-          height: 36px;
+          height: 32px;
           div {
             font-size: $font-size-primary;
           }
@@ -282,7 +286,7 @@
             font-size: $font-size-primary;
           }
           >div:first-child {
-            padding-top: $padding-3n;
+            padding-top: $padding-10;
           }
           >div:last-child {
             margin-top: $margin-2n;
@@ -290,6 +294,10 @@
         }
         .right-recommend-title {
           font-size: $font-size-primary;
+        }
+        .right-recommend-switch {
+          height: 42px;
+          padding-top: $padding-2n;
         }
         .qrcode {
           padding: $padding-2n $padding-4n;
@@ -317,7 +325,7 @@
         }
       }
       // 如果小于默认高度不吸顶
-      @include heightMedia(600px) {
+      @include heightMedia(590px) {
         .baselayout-right {
           position: static;
         }
