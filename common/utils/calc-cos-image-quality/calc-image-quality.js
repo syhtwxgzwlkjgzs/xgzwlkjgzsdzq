@@ -1,24 +1,7 @@
-import isServer from '@common/utils/is-server';
-// import Taro from '@tarojs/taro';
+import isSuportWebp from './is-support-webp';
 
-let isSupportWebp = false;
-if (!isServer()) {
-    try {
-        if (process.env.DISCUZ_ENV === 'web') {
-            const img = document.createElement('canvas').toDataURL('image/webp', 0.5);
-            isSupportWebp = img.indexOf('data:image/webp') === 0;
-        } else {
-            // TODO 需要区分小程序打包判断当前平台是安卓和ios
-            // if (Taro.getSystemInfoSync().platform === 'android') {
-            //     isSupportWebp = true;
-            // } else {
-                isSupportWebp = false;
-            // }
-        }
-    } catch(err) {
-        isSupportWebp = false;
-    }
-}
+let supportWebp = isSuportWebp();
+
 
 const QUALITY_1 = '10';
 const QUALITY_2 = '15';
@@ -40,6 +23,7 @@ const QUALITY_17 = '90';
 const QUALITY_18 = '95';
 const QUALITY_19 = '100';
 
+const LEVEL_0 = 0;
 const LEVEL_1 = 1;
 const LEVEL_2 = 2;
 const LEVEL_3 = 3;
@@ -55,6 +39,16 @@ const CGIF = '/cgif';
 
 function _conversion(conversion) {
     return `${CONVERSION}/${conversion}`;
+}
+
+function _level_0_quality(viewWidth, conversion) {
+    let zoom = QUALITY_13;
+    if ( viewWidth > 667 && viewWidth < 1080 ){
+        zoom = QUALITY_14;
+    } else if ( viewWidth >= 1080  ){
+        zoom = QUALITY_15;
+    }
+    return `${IMAGEMOGR2}${conversion ? _conversion(conversion) : ''}${QUALITY_NAME}${zoom}${INTERLACE}`;
 }
 
 function _level_1_quality(viewWidth, conversion) {
@@ -132,21 +126,23 @@ export default function calcImageQuality(viewWidth, type, level) {
     // 根据图片类型判断使用何种方式
     if (/(jpg|jpeg|webp)/.test(type)) {
         switch (level) {
-            case LEVEL_1: param = _level_1_quality(viewWidth, isSupportWebp ? 'webp' : null);
+            case LEVEL_0: param = _level_0_quality(viewWidth, supportWebp ? 'webp' : null);
             break;
-            case LEVEL_2: param = _level_2_quality(viewWidth, isSupportWebp ? 'webp' : null);
+            case LEVEL_1: param = _level_1_quality(viewWidth, supportWebp ? 'webp' : null);
             break;
-            case LEVEL_3: param = _level_3_quality(viewWidth, isSupportWebp ? 'webp' : null);
+            case LEVEL_2: param = _level_2_quality(viewWidth, supportWebp ? 'webp' : null);
             break;
-            case LEVEL_4: param = _level_4_quality(viewWidth, isSupportWebp ? 'webp' : null);
+            case LEVEL_3: param = _level_3_quality(viewWidth, supportWebp ? 'webp' : null);
             break;
-            case LEVEL_5: param = _level_5_quality(viewWidth, isSupportWebp ? 'webp' : null);
+            case LEVEL_4: param = _level_4_quality(viewWidth, supportWebp ? 'webp' : null);
             break;
-            case LEVEL_6: param = _level_6_quality(viewWidth, isSupportWebp ? 'webp' : null);
+            case LEVEL_5: param = _level_5_quality(viewWidth, supportWebp ? 'webp' : null);
             break;
-            case LEVEL_7: param = _level_7_quality(viewWidth, isSupportWebp ? 'webp' : null);
+            case LEVEL_6: param = _level_6_quality(viewWidth, supportWebp ? 'webp' : null);
             break;
-            default: param = _level_1_quality(viewWidth, isSupportWebp ? 'webp' : null);
+            case LEVEL_7: param = _level_7_quality(viewWidth, supportWebp ? 'webp' : null);
+            break;
+            default: param = _level_1_quality(viewWidth, supportWebp ? 'webp' : null);
         }
     } else if(/(gif)/.test(type)) {
         let frame = 5;
@@ -158,21 +154,23 @@ export default function calcImageQuality(viewWidth, type, level) {
         return `${IMAGEMOGR2}${CGIF}/${frame}`;
     } else {
         switch (level) {
-            case LEVEL_1: param = _level_1_quality(viewWidth, isSupportWebp ? 'webp' : 'jpg');
+            case LEVEL_0: param = _level_0_quality(viewWidth, supportWebp ? 'webp' : 'jpg');
             break;
-            case LEVEL_2: param = _level_2_quality(viewWidth, isSupportWebp ? 'webp' : 'jpg');
+            case LEVEL_1: param = _level_1_quality(viewWidth, supportWebp ? 'webp' : 'jpg');
             break;
-            case LEVEL_3: param = _level_3_quality(viewWidth, isSupportWebp ? 'webp' : 'jpg');
+            case LEVEL_2: param = _level_2_quality(viewWidth, supportWebp ? 'webp' : 'jpg');
             break;
-            case LEVEL_4: param = _level_4_quality(viewWidth, isSupportWebp ? 'webp' : 'jpg');
+            case LEVEL_3: param = _level_3_quality(viewWidth, supportWebp ? 'webp' : 'jpg');
             break;
-            case LEVEL_5: param = _level_5_quality(viewWidth, isSupportWebp ? 'webp' : 'jpg');
+            case LEVEL_4: param = _level_4_quality(viewWidth, supportWebp ? 'webp' : 'jpg');
             break;
-            case LEVEL_6: param = _level_6_quality(viewWidth, isSupportWebp ? 'webp' : 'jpg');
+            case LEVEL_5: param = _level_5_quality(viewWidth, supportWebp ? 'webp' : 'jpg');
             break;
-            case LEVEL_7: param = _level_7_quality(viewWidth, isSupportWebp ? 'webp' : 'jpg');
+            case LEVEL_6: param = _level_6_quality(viewWidth, supportWebp ? 'webp' : 'jpg');
             break;
-            default: param = _level_1_quality(viewWidth, isSupportWebp ? 'webp' : 'jpg');
+            case LEVEL_7: param = _level_7_quality(viewWidth, supportWebp ? 'webp' : 'jpg');
+            break;
+            default: param = _level_1_quality(viewWidth, supportWebp ? 'webp' : 'jpg');
         }
     }
     return param;

@@ -10,7 +10,7 @@ const SmartImg = ({level, type, src, onClick, noSmart = false}) => {
     const img = useRef(null);
 
     const imgSrc = useMemo(() => {
-        if (noSmart) return src;
+        if (noSmart) return calcCosImageQuality(src, type, 0);
         return calcCosImageQuality(src, type, level);
     }, [noSmart, src, type, level])
 

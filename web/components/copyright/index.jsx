@@ -16,6 +16,7 @@ class CopyRight extends React.Component {
     const clsName = classnames(styles.container, {
       [`${styles.center}`]: center,
       [`${styles.line}`]: line,
+      copyright: true,
     })
     return (
       <div className={clsName}>

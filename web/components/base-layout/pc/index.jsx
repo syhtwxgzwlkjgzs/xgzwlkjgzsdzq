@@ -114,7 +114,7 @@ const BaseLayout = forwardRef((props, ref) => {
       }}
     >
       {(pageName === 'home' || left) && (
-        <div className={styles.left}>{typeof left === 'function' ? left({ ...props }) : left}</div>
+        <div className={`baselayout-left ${styles.left}`}>{typeof left === 'function' ? left({ ...props }) : left}</div>
       )}
 
       <div className={styles.center}>

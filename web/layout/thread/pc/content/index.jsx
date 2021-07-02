@@ -122,7 +122,7 @@ export default inject('user')(
               groupName={threadStore?.threadData?.group?.groupName || ''}
               location={threadStore?.threadData?.position.location || ''}
               view={`${threadStore?.threadData?.viewCount}` || ''}
-              time={`${threadStore?.threadData?.createdAt}` || ''}
+              time={`${threadStore?.threadData?.diffTime}` || ''}
               userId={threadStore?.threadData?.user?.userId}
               isEssence={isEssence}
               isPay={!isFree}

@@ -32,11 +32,11 @@ const TopNews = ({ data = [], router, platform = 'h5'}) => {
   }
 
   return (
-    <div className={styles.list}>
+    <div className={`${styles.list} top-news`}>
       {data?.map((item, index) => (
         <div
           key={index}
-          className={`${styles.item} ${platform === 'pc' ? styles.itemPC : styles.itemH5}`}
+          className={`top-news-item ${styles.item} ${platform === 'pc' ? styles.itemPC : styles.itemH5}`}
           onClick={() => onClick(item)}
         >
           <div className={styles.prefix}>{item.prefix || '置顶'}</div>
