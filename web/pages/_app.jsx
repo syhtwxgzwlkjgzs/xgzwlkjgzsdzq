@@ -14,6 +14,9 @@ import CustomHead from '@components/custom-head';
 import Head from 'next/head';
 import monitor from '@common/utils/monitor';
 import setWxShare from '@common/utils/set-wx-share';
+import { detectH5Orient } from '@common/utils/detect-orient';
+import browser from '@common/utils/browser';
+import Toast from '@discuzq/design/dist/components/toast';
 
 // if (!isServer()) {
 //   process.env.NODE_ENV === 'production' && sentry();
@@ -54,6 +57,7 @@ class DzqApp extends App {
       });
     }
     
+    this.initOretation();
     window.addEventListener('resize', this.updateSize);
     csrRouterRedirect();
     this.listenRouterChangeAndClean();
@@ -89,7 +93,21 @@ class DzqApp extends App {
     // Router.replace({ url: '/render-error' });
   }
 
-  updateSize() {
+  initOretation() {
+    // 移动端检测横屏
+    if (browser.env('mobile')) {
+      const isVertical = detectH5Orient();
+
+      if (!isVertical) {
+        Toast.info({
+          content: '为了更好的体验，请使用竖屏浏览',
+          duration: 5000
+        });
+      }
+    }
+  }
+
+  initPlatform() {
     const currentWidth = window.innerWidth;
     
     if ( this.appStore.site ) {
@@ -103,6 +121,11 @@ class DzqApp extends App {
         return;
       }
     }
+  }
+
+  updateSize() {
+    this.initOretation();
+    this.initPlatform();
   }
 
   render() {
