@@ -30,6 +30,10 @@ class WXBindPhoneH5Page extends React.Component {
     wxPhoneBind.code = code;
   };
 
+  componentWillUnmount() {
+    this.props.wxPhoneBind.reset();
+  }
+
   handleSendCodeButtonClick = async () => {
     try {
       const { commonLogin } = this.props;
@@ -51,10 +55,15 @@ class WXBindPhoneH5Page extends React.Component {
     }
   };
   handleBindButtonClick = async () => {
-    const { wxPhoneBind, router } = this.props;
+    const { wxPhoneBind, router, commonLogin } = this.props;
     const { sessionToken } = router.query;
     try {
+      if (!commonLogin.loginLoading) {
+        return;
+      }
+      commonLogin.loginLoading = false;
       const resp = await wxPhoneBind.loginAndBind(sessionToken);
+      commonLogin.loginLoading = true;
       const uid = get(resp, 'uid', '');
       this.props.user.updateUserInfo(uid);
       Toast.success({
@@ -66,6 +75,7 @@ class WXBindPhoneH5Page extends React.Component {
         window.location.href = '/';
       }, 1000);
     } catch (error) {
+      commonLogin.loginLoading = true;
       // 跳转补充信息页
       if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
         if (isExtFieldsOpen(this.props.site)) {
@@ -93,7 +103,7 @@ class WXBindPhoneH5Page extends React.Component {
     const { wxPhoneBind, router, commonLogin, site } = this.props;
     const { nickname, avatarUrl } = router.query;
     // 接受监听一下协议的数据，不能去掉，去掉后协议的点击无反应
-    const { protocolVisible } = commonLogin;
+    const { protocolVisible, loginLoading } = commonLogin;
     return (
       <div className={layout.container}>
         <HomeHeader hideInfo mode='login'/>
@@ -130,6 +140,8 @@ class WXBindPhoneH5Page extends React.Component {
           {/* 手机验证码 end */}
           {/* 登录按钮 start */}
           <Button
+            loading={!loginLoading}
+            disabled={!wxPhoneBind.isInfoComplete || !wxPhoneBind.isInvalidCode}
             className={layout.button}
             type="primary"
             onClick={this.handleBindButtonClick}
