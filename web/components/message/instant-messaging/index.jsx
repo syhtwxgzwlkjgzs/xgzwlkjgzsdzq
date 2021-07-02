@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable no-param-reassign */
 import React, { useState, useEffect, useRef, useMemo } from 'react';
@@ -12,7 +13,6 @@ import wxChooseImage from '@common/utils/wx-choose-image';
 import { createAttachment } from '@common/server';
 import { getMessageTimestamp } from '@common/utils/get-message-timestamp';
 import calcCosImageQuality from '@common/utils/calc-cos-image-quality';
-import browser from '@common/utils/browser';
 import styles from './index.module.scss';
 
 const Index = (props) => {
@@ -104,9 +104,8 @@ const Index = (props) => {
 
   // 触发图片选择
   const uploadImage = async () => {
-    if (browser.env('weixin')) {
-      // 微信环境下使用jssdk进行图片选择
-      const files = await wxChooseImage();
+    const files = await wxChooseImage();
+    if (files.length) {
       onImgChange('', files);
     } else {
       uploadRef.current.click();
@@ -225,11 +224,7 @@ const Index = (props) => {
       });
     }
     const formData = new FormData();
-    // if (file.serverId) {
-    //   formData.append('mediaId', file.serverId);
-    // } else {
-      formData.append('file', file);
-    // }
+    formData.append('file', file);
     formData.append('type', 1);
     formData.append('dialogMessageId', file.dialogMessageId);
     const ret = await createAttachment(formData);
@@ -273,7 +268,8 @@ const Index = (props) => {
         ownedBy: user.id === item.userId ? 'myself' : 'itself',
         nickname: item.user.username,
       };
-    }).filter(item => (item.imageUrl || item.text)).reverse();
+    }).filter(item => (item.imageUrl || item.text))
+      .reverse();
 
     // 消息数有变化，即有新消息，此时把滚动条滚动到底部
     if (listData.length > listDataLengthRef.current) {
@@ -370,7 +366,7 @@ const Index = (props) => {
   if (isPC) {
     return (
       <BaseLayout
-        className={"mymessage-page"}
+        className={'mymessage-page'}
         right={props.rightContent}
         showRefresh={false}
         immediateCheck={false}
@@ -378,7 +374,7 @@ const Index = (props) => {
       >
         {mainContent}
       </BaseLayout>
-    )
+    );
   }
 
   return mainContent;

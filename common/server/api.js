@@ -233,7 +233,7 @@ http.interceptors.response.use((res) => {
     }
     case OPERATING_FREQUENCY: {
       Toast.error({
-        content: '操作太频繁，请稍后重试',
+        content: data.Message && data.Message !== '' ? data.Message : '操作太频繁，请稍后重试',
       });
     }
     default:  // 200 状态码
