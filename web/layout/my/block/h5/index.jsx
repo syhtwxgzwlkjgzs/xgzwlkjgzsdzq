@@ -19,7 +19,6 @@ class Index extends React.Component {
     super(props);
     this.state = {
       isTop: false, // 列表位置
-      loading: false,
       perPage: 20, // 定义每页显示条数
       height: '100%',
     };
@@ -27,7 +26,6 @@ class Index extends React.Component {
 
   async componentDidMount() {
     this.setState({
-      loading: false,
       height: window.outerHeight - 95, // header 是 40px，留出 2px ，用以触发下拉事件
     });
     await this.props.user.getUserShieldList();
@@ -42,15 +40,6 @@ class Index extends React.Component {
     Router.push({ url: `/user/${item.denyUserId}` });
   };
 
-  // 检查是否满足触底加载更多的条件
-  checkLoadCondition() {
-    const hasMorePage = this.props.user.userShieldTotalPage >= this.props.user.userShieldPage;
-    if (this.state.loading) return false;
-    if (!hasMorePage) return false;
-
-    return true;
-  }
-
   // 加载更多函数
   loadMore = async () => {
     await this.props.user.getUserShieldList();
@@ -63,7 +52,7 @@ class Index extends React.Component {
     return (
       <div className={styles.shieldBox}>
         <Header />
-        {userShield.length > 0 && <div className={styles.titleBox}>{`共有${userShield.length}位用户`}</div>}
+        {userShield.length > 0 && <div className={styles.titleBox}>{`共有${userShieldTotalCount}位用户`}</div>}
         <List
           height={this.state.height}
           immediateCheck={false}

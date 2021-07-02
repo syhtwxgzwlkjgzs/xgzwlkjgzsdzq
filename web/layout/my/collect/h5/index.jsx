@@ -1,33 +1,16 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-import Header from '@components/header';
-import List from '@components/list';
-import NoData from '@components/no-data';
 import ThreadContent from '@components/thread';
-import { Spin, Toast } from '@discuzq/design';
+import { Toast } from '@discuzq/design';
 import styles from './index.module.scss';
-import classnames from 'classnames';
+import BaseLayout from '@components/base-layout';
 
 @inject('site')
 @inject('index')
 @inject('thread')
 @observer
 class Index extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      height: '100%',
-    };
-  }
-
-  componentDidMount() {
-    this.setState({
-      // header 是 40px，留出 2px ，用以触发下拉事件
-      height: window.outerHeight - 94,
-    });
-  }
-
   handleUnFavoriteItem = async (item) => {
     const { index } = this.props;
     const { pageData = [] } = index.threads || {};
@@ -52,36 +35,33 @@ class Index extends React.Component {
   };
 
   render() {
-    const { index, page, totalPage } = this.props;
-    const { pageData = [] } = index.threads || {};
-
+    const { index } = this.props;
+    const { pageData = [], currentPage, totalPage, totalCount } = index.threads || {};
     return (
-      <div className={styles.collectBox}>
-        <Header />
-        {pageData?.length !== 0 && <div className={styles.titleBox}>{`${this.props.totalCount} 条收藏`}</div>}
-        <List
-          height={this.state.height}
-          className={classnames(styles.list, {
-            [styles.noDataList]: this.props.firstLoading,
-          })}
-          immediateCheck={false}
-          onRefresh={this.props.dispatch}
-          noMore={page > totalPage}
-        >
-          <div className={styles.collectSplitLine} />
-          {pageData?.map((item, index) => (
-            <div className={styles.listItem} key={index}>
-              <ThreadContent
-                data={item}
-                isShowIcon
-                onClickIcon={async () => {
-                  this.handleUnFavoriteItem(item);
-                }}
-              />
-            </div>
-          ))}
-        </List>
-      </div>
+      <BaseLayout
+        showLoadingInCenter={!pageData?.length}
+        showHeader={true}
+        noMore={currentPage >= totalPage}
+        onRefresh={this.props.dispatch}
+      >
+        {pageData?.length !== 0 && (
+          <div className={styles.titleBox}>
+            <span className={styles.num}>{`${totalCount || 0}`}</span>
+            条收藏
+          </div>
+        )}
+
+        {pageData?.map((item, index) => (
+          <ThreadContent
+            onClickIcon={async () => {
+              this.handleUnFavoriteItem(item);
+            }}
+            isShowIcon
+            key={index}
+            data={item}
+          />
+        ))}
+      </BaseLayout>
     );
   }
 }

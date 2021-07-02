@@ -38,7 +38,6 @@ class Index extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstLoading: true, // 首次加载状态判断
       totalCount: 0,
       page: 1,
     };
@@ -48,7 +47,6 @@ class Index extends React.Component {
       this.state.page = 2;
       this.state.totalPage = serverIndex.totalPage;
       this.state.totalCount = serverIndex.totalCount;
-      this.state.firstLoading = false;
     } else {
       index.setThreads(null);
     }
@@ -75,9 +73,6 @@ class Index extends React.Component {
           page: this.state.page + 1,
         });
       }
-      this.setState({
-        firstLoading: false,
-      });
     }
     this.listenRouterChangeAndClean();
   }
@@ -125,15 +120,7 @@ class Index extends React.Component {
 
     return (
       <ViewAdapter
-        h5={
-          <IndexH5Page
-            firstLoading={firstLoading}
-            page={this.state.page}
-            totalPage={this.state.totalPage}
-            totalCount={this.state.totalCount}
-            dispatch={this.dispatch}
-          />
-        }
+        h5={<IndexH5Page dispatch={this.dispatch} />}
         pc={
           <IndexPCPage
             firstLoading={firstLoading}
