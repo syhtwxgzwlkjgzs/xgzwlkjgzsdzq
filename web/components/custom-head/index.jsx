@@ -16,16 +16,16 @@ class CustomHead extends React.Component {
 
   componentDidMount() {
     // 添加统计
-    const siteStat = this.props.site?.webConfig?.setSite?.siteStat || ''
-    evalScript(siteStat)
+    const siteStat = this.props.site?.webConfig?.setSite?.siteStat || '';
+    evalScript(siteStat);
   }
 
   formatTitle() {
-    const { site, title } = this.props;
+    const { site, title, showSiteName = true } = this.props;
     const base = get(site, 'webConfig.setSite.siteName', '欢迎您');
     let renderTitle = base;
-    if ( title && title !== '' ) {
-      renderTitle = `${title} - ${renderTitle}`
+    if (title && title !== '') {
+      renderTitle = `${title}${showSiteName ? ` - ${renderTitle}` : ''}`;
     }
     return renderTitle;
   }
@@ -34,8 +34,8 @@ class CustomHead extends React.Component {
     const { site, keywords } = this.props;
     const base = get(site, 'webConfig.setSite.siteKeywords', '欢迎您');
     let renderKeywords = base;
-    if ( keywords && keywords !== '' ) {
-      renderKeywords = `${title} - ${renderTitle}`
+    if (keywords && keywords !== '') {
+      renderKeywords = `${title} - ${renderTitle}`;
     }
     return renderKeywords;
   }
@@ -44,7 +44,7 @@ class CustomHead extends React.Component {
     const { site, description } = this.props;
     const base = get(site, 'webConfig.setSite.siteIntroduction', '欢迎您');
     let renderDescription = base;
-    if ( description && description !== '' ) {
+    if (description && description !== '') {
       renderDescription = description;
     }
     return renderDescription;
@@ -52,7 +52,7 @@ class CustomHead extends React.Component {
 
 
   render() {
-    const ico = this.props.site?.webConfig?.setSite?.siteFavicon || ''
+    const ico = this.props.site?.webConfig?.setSite?.siteFavicon || '';
 
     return (
       <Head>
