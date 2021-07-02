@@ -66,6 +66,12 @@ function Home(props, ref) {
 
   const [flag, setFlag] = useState(true);
 
+  // 滚动元素
+  const [scrollElement, setElement] = useState(null);
+  useEffect(() => {
+    setElement(document.querySelector('.home'));
+  }, []);
+
   // 监听list列表
   useEffect(() => {
     setList([{ type: 'header' }, ...(props.list || []), { type: 'footer' }]);
@@ -77,31 +83,19 @@ function Home(props, ref) {
   }, [props.sticks]);
 
   useEffect(() => {
-    console.log('listRef', listRef);
     if (listRef) {
-      listRef.scrollToPosition && listRef.scrollToPosition(props.vlist.home || 0);
-      console.log(scrollElement);
-      scrollElement?.scrollTo &&
-        scrollElement.scrollTo({
-          top: 1000,
-          behavior: 'auto',
-        });
+      listRef.scrollToPosition && listRef.scrollToPosition(props.vlist.home || 1000);
     }
   }, [listRef?.Grid?.getTotalRowsHeight()]);
 
   // 重新计算指定的行高
   const recomputeRowHeights = (index, updatedData) => {
-    console.log(listRef?.recomputeRowHeights, index);
     // TODO:先临时处理付费后，列表页面内容不更新的的问题
     if (updatedData) {
       list[index] = updatedData;
     }
     listRef?.recomputeRowHeights && listRef?.recomputeRowHeights(index);
   };
-
-  useEffect(() => {
-    // console.log('listRef', listRef);
-  }, [listRef]);
 
   // 获取每一行元素的高度
   const getRowHeight = ({ index }) => {
@@ -132,6 +126,7 @@ function Home(props, ref) {
       default:
         return (
           <Item
+            key={key}
             data={data}
             isLast={index === list?.length - 2}
             measure={measure}
@@ -153,10 +148,9 @@ function Home(props, ref) {
         {({ measure, registerChild }) => (
           <div
             ref={registerChild}
-            key={key}
+            key={`${key}-${data.threadId}`}
             style={style}
             data-index={index}
-            data-key={key}
             data-id={data.threadId}
             data-height={immutableHeightMap[index]}
           >
@@ -183,35 +177,6 @@ function Home(props, ref) {
     scrollTimer = setTimeout(() => {
       setFlag(true);
     }, 100);
-
-    props.onScroll && props.onScroll({ scrollTop, clientHeight, scrollHeight });
-    if (scrollTop !== 0) {
-      props.vlist.setPosition(scrollTop);
-    }
-
-    if (scrollTop + clientHeight + clientHeight >= scrollHeight && !loadData) {
-      loadData = true;
-      props.loadNextPage().finally(() => {
-        loadData = false;
-      });
-    }
-  };
-
-  // 滚动事件
-  const onWindwoScroll = ({ scrollTop, clientHeight = 1250 }) => {
-    const scrollHeight = listRef?.Grid?.getTotalRowsHeight();
-
-    setFlag(!(scrollTop < preScrollTop));
-    preScrollTop = scrollTop;
-
-    setScrollTop(scrollTop);
-
-    console.log(scrollTop, clientHeight, scrollHeight);
-
-    clearTimeout(scrollTimer);
-    scrollTimer = setTimeout(() => {
-      setFlag(true);
-    }, 2000);
 
     props.onScroll && props.onScroll({ scrollTop, clientHeight, scrollHeight });
     if (scrollTop !== 0) {
@@ -255,12 +220,6 @@ function Home(props, ref) {
 
   const loadMoreRows = () => Promise.resolve();
 
-  // 滚动元素
-  const [scrollElement, setElement] = useState(null);
-  useEffect(() => {
-    setElement(document.querySelector('.home'));
-  }, []);
-
   return (
     <div className="page">
       {scrollElement && (
@@ -270,7 +229,7 @@ function Home(props, ref) {
               {({ registerChild }) => (
                 <AutoSizer>
                   {({ width }) => (
-                    <div className={styles.center} ref={registerChild}>
+                    <div className={styles.center}>
                       <List
                         ref={(ref) => {
                           ref && (listRef = ref);
