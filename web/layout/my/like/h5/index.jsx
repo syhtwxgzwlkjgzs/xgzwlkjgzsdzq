@@ -27,34 +27,21 @@ class Index extends React.Component {
   }
 
   render() {
-    const { index, page, totalPage } = this.props;
+    const { index, page, totalPage = 0 } = this.props;
     const { pageData = [] } = index.threads || {};
     return (
       <div>
         <Header />
-        {
-          this.props.firstLoading && (
-            <div className={styles.spinLoading}><Spin type="spinner">加载中...</Spin></div>
-          )
-        }
-        {
-          pageData?.length
-            ? (
-              <List
-                height={this.state.height}
-                className={styles.list}
-                onRefresh={this.props.dispatch}
-                noMore={page > totalPage}
-              >
-                {
-                  pageData?.map((item, index) => (
-                    <ThreadContent className={styles.listItem} key={index} data={item} />
-                  ))
-                }
-              </List>
-            )
-            : <>{!this.props.firstLoading && <NoData className={styles.noDataList} />}</>
-        }
+        <List
+          height={this.state.height}
+          className={styles.list}
+          onRefresh={this.props.dispatch}
+          noMore={page > totalPage}
+        >
+          {pageData?.map((item, index) => (
+            <ThreadContent className={styles.listItem} key={index} data={item} />
+          ))}
+        </List>
       </div>
     );
   }

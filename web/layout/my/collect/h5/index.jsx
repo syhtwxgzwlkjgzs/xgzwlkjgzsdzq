@@ -59,37 +59,28 @@ class Index extends React.Component {
       <div className={styles.collectBox}>
         <Header />
         {pageData?.length !== 0 && <div className={styles.titleBox}>{`${this.props.totalCount} 条收藏`}</div>}
-        {this.props.firstLoading && (
-          <div className={styles.spinLoading}>
-            <Spin type="spinner">加载中...</Spin>
-          </div>
-        )}
-        {pageData?.length ? (
-          <List
-            height={this.state.height}
-            className={classnames(styles.list, {
-              [styles.noDataList]: this.props.firstLoading,
-            })}
-            immediateCheck={false}
-            onRefresh={this.props.dispatch}
-            noMore={page > totalPage}
-          >
-            <div className={styles.collectSplitLine} />
-            {pageData?.map((item, index) => (
-              <div className={styles.listItem} key={index}>
-                <ThreadContent
-                  data={item}
-                  isShowIcon
-                  onClickIcon={async () => {
-                    this.handleUnFavoriteItem(item);
-                  }}
-                />
-              </div>
-            ))}
-          </List>
-        ) : (
-          <>{!this.props.firstLoading && <NoData className={styles.noDataList} />}</>
-        )}
+        <List
+          height={this.state.height}
+          className={classnames(styles.list, {
+            [styles.noDataList]: this.props.firstLoading,
+          })}
+          immediateCheck={false}
+          onRefresh={this.props.dispatch}
+          noMore={page > totalPage}
+        >
+          <div className={styles.collectSplitLine} />
+          {pageData?.map((item, index) => (
+            <div className={styles.listItem} key={index}>
+              <ThreadContent
+                data={item}
+                isShowIcon
+                onClickIcon={async () => {
+                  this.handleUnFavoriteItem(item);
+                }}
+              />
+            </div>
+          ))}
+        </List>
       </div>
     );
   }

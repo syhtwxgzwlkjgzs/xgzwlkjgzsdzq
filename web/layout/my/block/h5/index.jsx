@@ -64,41 +64,30 @@ class Index extends React.Component {
       <div className={styles.shieldBox}>
         <Header />
         {userShield.length > 0 && <div className={styles.titleBox}>{`共有${userShield.length}位用户`}</div>}
-        {
-          this.props.firstLoading && (
-            <div className={styles.spinLoading}><Spin type="spinner">加载中...</Spin></div>
-          )
-        }
-        {
-          userShield?.length
-            ? (
-              <List
-                height={this.state.height}
-                immediateCheck={false}
-                showPullDown={false}
-                onRefresh={this.loadMore}
-                noMore={userShieldTotalPage < userShieldPage}
+        <List
+          height={this.state.height}
+          immediateCheck={false}
+          showPullDown={false}
+          onRefresh={this.loadMore}
+          noMore={userShieldTotalPage < userShieldPage}
+        >
+          <div className={styles.blockSplitLine} />
+          {userShield.map((item, index) => (
+            <div className={styles.haieldImg} key={index}>
+              <div
+                className={styles.haieldImgBox}
+                onClick={() => {
+                  this.handleOnClick(item);
+                }}
               >
-                <div className={styles.blockSplitLine}/>
-                {userShield.map((item, index) => (
-                  <div className={styles.haieldImg} key={index}>
-                    <div
-                      className={styles.haieldImgBox}
-                      onClick={() => {
-                        this.handleOnClick(item);
-                      }}
-                    >
-                      <div className={styles.haieldImgHead}>
-                        <Avatar className={styles.img} image={item.avatar} name={item.username} userId={item.denyUserId} />
-                        <p className={styles.haieldName}>{item.nickname}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </List>
-            )
-            : <>{!this.props.firstLoading && <NoData className={styles.noDataList} />}</>
-        }
+                <div className={styles.haieldImgHead}>
+                  <Avatar className={styles.img} image={item.avatar} name={item.username} userId={item.denyUserId} />
+                  <p className={styles.haieldName}>{item.nickname}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </List>
       </div>
     );
   }

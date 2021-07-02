@@ -66,11 +66,11 @@ class Index extends React.Component {
         page: 1,
       });
       this.setState({
-        totalCount: threadsResp.totalCount,
-        totalPage: threadsResp.totalPage,
+        totalCount: threadsResp?.totalCount,
+        totalPage: threadsResp?.totalPage,
       });
 
-      if (this.state.page <= threadsResp.totalPage) {
+      if (this.state.page <= threadsResp?.totalPage) {
         this.setState({
           page: this.state.page + 1,
         });

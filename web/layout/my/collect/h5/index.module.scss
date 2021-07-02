@@ -1,20 +1,5 @@
 @import '@common/styles/index.scss';
 
-@mixin loadMoreStyles {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  background-color: $body-bg-color;
-  z-index: -1;
-  transform: translateY(rem(-30));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .collectBox {
   background-color: $body-bg-color;
 }
@@ -41,7 +26,7 @@
   flex: 1;
   height: 100%;
   background-color: $body-bg-color;
-  -webkit-overflow-scrolling:touch
+  -webkit-overflow-scrolling: touch;
 }
 
 .listItem {
@@ -58,12 +43,4 @@
   .listItemIcon {
     color: var(--color-primary);
   }
-}
-
-.noDataList {
-  @include loadMoreStyles();
-}
-
-.spinLoading {
-  @include loadMoreStyles();
 }
