@@ -22,9 +22,9 @@ $ npm install
 如果遇到下载依赖失败可以尝试先运行如下命令,更改安装依赖的源地址
 ```bash
 // 单次生效
-$ npm install --registry=https://registry.npm.taobao.org
+$ npm install --registry=http://mirrors.cloud.tencent.com/npm/
 // 永久生效
-$ npm config set registry https://registry.npm.taobao.org
+$ npm config set registry http://mirrors.cloud.tencent.com/npm/
 ```
 
 
