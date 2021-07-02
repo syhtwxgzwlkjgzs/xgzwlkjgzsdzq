@@ -5,6 +5,7 @@
   width: 100%;
   height: 100%;
   box-sizing: border-box;
+  background-color: $white;
 
   .header {
     font-weight: $font-weight-regular;
@@ -114,5 +115,46 @@
     // TODO:token
     background: $warn-color;
     border-color: $warn-color;
+  }
+
+  // 嵌套的真深
+  @include widthAndHeightMedia($media-min-width, $media-detail-min-height) {
+    padding: $padding-3n 14px;
+    .header {
+      padding-bottom: $padding-3n;
+      font-size: $font-size-primary;
+    }
+    .info {
+      padding-bottom: $padding-2n;
+      .AuthorInfo {
+        padding: $padding-10 0;
+        .information {
+          .dynamic {
+            font-size: $font-size-small;
+          }
+        }
+      }
+      .theme {
+        .themeInfo {
+          .title {
+            font-size: $font-size-small;
+            line-height: 16px;
+          }
+          .number {
+            height: auto;
+            padding-top: 2px;
+            font-size: $font-size-middle;
+            line-height: 16px;
+          }
+        }
+      }
+    }
+    .btn {
+      padding-top: $padding-3n;
+      .follow,
+      .privateLetter {
+        height: 33px;
+      }
+    }
   }
 }
