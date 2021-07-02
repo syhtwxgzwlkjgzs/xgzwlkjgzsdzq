@@ -104,15 +104,6 @@ export default function HOCFetchSiteData(Component) {
       serverUser && serverUser.userInfo && user.setUserInfo(serverUser.userInfo);
       serverUser && serverUser.userPermissions && user.setUserPermissions(serverUser.userPermissions);
 
-      // 如果还没有获取用户名登录入口是否展示接口，那么请求来赋予初始值
-      if (this.props.site.isUserLoginVisible === null) {
-        try {
-          this.props.site.getUserLoginEntryStatus();
-        } catch (error) {
-          console.log(error);
-        }
-      }
-
       if (!isServer()) {
         isNoSiteData = !((site && site.webConfig));
       } else {
@@ -133,12 +124,12 @@ export default function HOCFetchSiteData(Component) {
       // 设置平台标识
       site.setPlatform(getPlatform(window.navigator.userAgent));
 
-
       if (isNoSiteData) {
-        siteConfig = serverSite && serverSite.webConfig ? serverSite.webConfig : null;
-        if (!serverSite || !serverSite.webConfig) {
+        siteConfig = serverSite?.webConfig || null;
+        if (!siteConfig) {
           const result = await readForum({});
           result.data && site.setSiteConfig(result.data);
+          
           // 设置全局状态
           this.setAppCommonStatus(result);
           siteConfig = result.data || null;
@@ -146,6 +137,9 @@ export default function HOCFetchSiteData(Component) {
       } else {
         siteConfig = site ? site.webConfig : null;
       }
+      // 初始化登陆方式
+      site.initUserLoginEntryStatus();
+
       // 判断是否有token
       if (siteConfig && siteConfig.user) {
         if ((!user || !user.userInfo) && (!serverUser || !serverUser.userInfo)) {
