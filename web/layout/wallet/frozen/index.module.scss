@@ -17,14 +17,14 @@
   padding: 0 rem($padding-4n);
   margin-bottom: rem($margin-2n);
 
-  font-family: 'PingFangSC-Regular';
+  
   font-weight: normal;
   text-align: left;
   color: $text-color-secondary;
 }
 
 .totalMoney {
-  font-family: 'PingFangSC-Regular';
+  
   font-weight: normal;
   font-size: rem($font-size-base);
   line-height: rem(16);
@@ -54,7 +54,7 @@
   .upper {
     display: flex;
     justify-content: space-between;
-    font-family: 'PingFang SC';
+    
     font-size: rem($font-size-primary);
     text-align: left;
     color: $text-color-primary;
@@ -63,7 +63,7 @@
   .lower {
     display: flex;
     justify-content: space-between;
-    font-family: 'PingFangSC-Regular';
+    
     font-size: rem($font-size-label);
     text-align: left;
     color: $text-color-secondary;

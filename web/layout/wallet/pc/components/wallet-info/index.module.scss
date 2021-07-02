@@ -26,7 +26,6 @@
     box-sizing: border-box;
   }
   .name {
-    font-family: 'PingFangSC-Regular';
     font-weight: normal;
     font-size: rem($font-size-middle);
     text-align: left;
@@ -47,7 +46,6 @@
   text-align: center;
   margin-bottom: rem($margin-4n);
   .moneyTitle {
-    font-family: 'PingFangSC-Regular';
     font-weight: normal;
     font-size: rem($font-size-primary);
     line-height: rem($font-line-height-small);
@@ -55,7 +53,6 @@
     margin-bottom: rem($margin-2n);
   }
   .moneyNum {
-    font-family: 'PingFang SC';
     font-weight: 600;
     font-size: rem(30);
     line-height: rem(42);
@@ -67,14 +64,12 @@
   text-align: left;
   padding-top: rem(40);
   .moneyTitle {
-    font-family: 'PingFangSC-Regular';
     font-weight: normal;
     font-size: rem($font-size-primary);
     line-height: rem(16.8);
     padding: rem($padding-2n) 0;
   }
   .moneyNum {
-    font-family: 'PingFang SC';
     font-weight: 600;
     font-size: rem(30);
     line-height: rem($font-line-height-large);
@@ -87,7 +82,6 @@
   color: var(--color-white);
   text-align: center;
   .statusTitle {
-    font-family: 'PingFangSC-Regular';
     font-weight: normal;
     font-size: rem($font-size-primary);
     line-height: rem(20);
@@ -100,7 +94,6 @@
     }
   }
   .statusTitleFreeze {
-    font-family: 'PingFangSC-Regular';
     font-weight: normal;
     font-size: rem($font-size-primary);
     line-height: rem(20);
@@ -110,7 +103,6 @@
     flex-direction: column;
   }
   .statusNum {
-    font-family: 'PingFang SC';
     font-weight: normal;
     font-size: rem($font-size-large);
     margin-top: rem($margin-2n);
@@ -135,13 +127,11 @@
   color: var(--color-white);
   text-align: left;
   .statusTitle {
-    font-family: 'PingFangSC-Regular';
     font-weight: normal;
     font-size: rem($font-size-primary);
     line-height: rem($font-line-height-primary);
   }
   .statusNum {
-    font-family: 'PingFang SC';
     font-weight: normal;
     font-size: rem($font-size-large);
     line-height: rem(16.8);
