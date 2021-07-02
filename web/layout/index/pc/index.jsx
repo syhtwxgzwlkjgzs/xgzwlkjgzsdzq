@@ -124,7 +124,7 @@ class IndexPCPage extends React.Component {
         const newConNum = totalCount - nowTotal
         const { visible = false, conNum = 0 } = this.state
 
-        if (newConNum > conNum) {
+        if (newConNum > conNum && newConNum > 0) {
           this.setState({
             visible: true,
             conNum: newConNum,
