@@ -231,14 +231,6 @@
     left: rem(16);
     bottom: 0;
   }
-  .refreshView {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: $font-size-primary;
-    color: $text-color-placeholder;
-    padding: $padding-4n;
-  }
 }
 
 .footer {
