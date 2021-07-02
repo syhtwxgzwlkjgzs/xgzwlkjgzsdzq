@@ -143,6 +143,7 @@ class IndexH5Page extends React.Component {
   // 上拉加载更多
   onRefresh = () => {
     const { dispatch = () => {} } = this.props;
+    if(!this.props.index?.threads?.pageData?.length) return; // 防止第一页还没加载出来，用户使劲滚动页面到底部触发请求第二页
     return dispatch('moreData');
   };
 
