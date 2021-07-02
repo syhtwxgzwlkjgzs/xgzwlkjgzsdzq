@@ -1,7 +1,7 @@
 @import '@common/styles/index.scss';
 
 .no_more_data_tip {
-  height: rem(68);
+  height: rem(64);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,9 +24,8 @@
   }
 
   .text_tip {
-    height: rem(20);
     color: $text-color-placeholder;
     font-size: $font-size-primary;
-    line-height: $font-line-height-small;
+    line-height: $font-size-primary;
   }
 }
