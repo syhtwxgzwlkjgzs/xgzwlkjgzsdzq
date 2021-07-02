@@ -88,7 +88,7 @@
       }
 
       .left {
-        margin-right: rem(24);
+        margin-right: rem(20);
         width: rem(300);
       }
 
@@ -240,26 +240,84 @@
     }
 
     .home {
-      @include heightMedia(800px, 720px) {
-        .right-recommend-item:nth-last-child(-n + 2) {
-          display: none;
+      @include media('xl-pc') {
+        .baselayout-left {
+          margin-right: rem(24);
         }
       }
 
-      @include heightMedia(720px, 640px) {
-        .right-recommend-item:nth-last-child(-n + 3) {
-          display: none;
+      @include media('l-pc') {
+        .baselayout-left {
+          margin-right: calc(1.4% + 4px);
+          width: calc(20% - 4px);
         }
       }
 
-      @include heightMedia(640px, 560px) {
-        .right-recommend-item:nth-last-child(-n + 4) {
-          display: none;
+      @include media('s-pc') {
+        .baselayout-left {
+          margin-right: calc(1% + 4px);
+          width: calc(24% - 4px);
         }
       }
-
+      @include widthAndHeightMedia(1200px, 800px) {
+        .dzq-menu {
+          &-item,
+          .dzq-submenu__title {
+            font-size: $font-size-primary;
+          }
+        }
+        .top-news-item {
+          height: 36px;
+          div {
+            font-size: $font-size-primary;
+          }
+          :global {
+            .dzq-richText {
+              font-size: $font-size-primary;
+            }
+          }
+        }
+        .right-recommend-item {
+          p {
+            font-size: $font-size-primary;
+          }
+          >div:first-child {
+            padding-top: $padding-3n;
+          }
+          >div:last-child {
+            margin-top: $margin-2n;
+          }
+        }
+        .right-recommend-title {
+          font-size: $font-size-primary;
+        }
+        .qrcode {
+          padding: $padding-2n $padding-4n;
+          p {
+            font-size: $font-size-primary;
+          }
+        }
+        .copyright {
+          margin-top: $margin-10;
+        }
+        :global {
+          .dzq-richText {
+            p {
+              font-size: $font-size-primary !important;
+            }
+          }
+        }
+      }
+      @include heightMedia(720px) {
+        .qrcode {
+          display: none;
+        }
+        .copyright {
+          margin-top: 0;
+        }
+      }
       // 如果小于默认高度不吸顶
-      @include heightMedia(560px) {
+      @include heightMedia(600px) {
         .baselayout-right {
           position: static;
         }
