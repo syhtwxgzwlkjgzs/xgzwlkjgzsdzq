@@ -14,14 +14,22 @@ const TrendingTopics = ({ data, onItemClick }) => {
   };
 
   return (
-    <div className={styles.list}>
-    {data?.map((item, index, arr) => (
-      <div key={index} className={`${styles.item} ${arr.length - index < 3 ? styles.footerItem : ''}`} onClick={() => click(item)}>
-        <span className={`${styles.index} ${styles[`itemIndex${index + 1}`]}`}>{index + 1}</span>
-        <span className={styles.text}>{`#${item.content}#`}</span>
+      <div className={styles.list}>
+        {data?.map((item, index, arr) => (
+            arr.length % 2 === 0 ?
+                (<div key={index} className={`${styles.item} ${arr.length - index < 3 ? styles.footerItem : ''}`}
+                      onClick={() => click(item)}>
+                  <span className={`${styles.index} ${styles[`itemIndex${index + 1}`]}`}>{index + 1}</span>
+                  <span className={styles.text}>{`#${item.content}#`}</span>
+                </div>) :
+                (<div key={index} className={`${styles.item} ${arr.length - index < 2 ? styles.footerItem : ''}`}
+                      onClick={() => click(item)}>
+                  <span className={`${styles.index} ${styles[`itemIndex${index + 1}`]}`}>{index + 1}</span>
+                  <span className={styles.text}>{`#${item.content}#`}</span>
+                </div>)
+
+        ))}
       </div>
-    ))}
-  </div>
-)};
+  );};
 
 export default React.memo(TrendingTopics);

@@ -17,9 +17,9 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
 
   const onClick = (subIndex, index) => {
     let categoryIds = subIndex.split('/')
-  
+
     // 点击没有二级分类的一级分类，或者是二级分类
-    if (categoryIds.length !== 1) { 
+    if (categoryIds.length !== 1) {
       setFistIndex(categoryIds[0]);
       setSecondIndex(categoryIds[1]);
       if (categoryIds[1] === 'all') {
@@ -68,14 +68,14 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
   const renderMenuTitle = ({ name, threadCount }) => (
     <div className={styles.subMenuBox}>
       <span className={styles.ellipsis}>{name}</span>
-      {threadCount !== 0 && <span className={styles.span}>{name === '全部' ? totalThreads : threadCount}</span>}
+      <span className={styles.span}>{name === '全部' ? totalThreads : threadCount}</span>
     </div>
   );
 
   const renderSubMenuTitle = ({ name, threadCount }) => (
     <div>
       <span className={styles.ellipsis}>{name}</span>
-      {threadCount !== 0 && <span className={styles.subSpan}>{threadCount}</span>}
+      <span className={styles.subSpan}>{threadCount}</span>
     </div>
   );
 

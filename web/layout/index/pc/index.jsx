@@ -275,8 +275,8 @@ class IndexPCPage extends React.Component {
           indexStore={index}
           siteStore={site}
           visible={visible}
-          visible={conNum}
-          visible={isShowDefault}
+          conNum={conNum}
+          isShowDefault={isShowDefault}
           onFilterClick={this.onFilterClick}
           onPostThread={this.onPostThread}
           goRefresh={this.goRefresh}

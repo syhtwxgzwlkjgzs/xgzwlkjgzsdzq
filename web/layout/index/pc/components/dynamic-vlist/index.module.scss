@@ -25,6 +25,14 @@
   background: $body-bg-color;
   // border-top-left-radius: rem(5);
   // border-top-right-radius: rem(5);
+  @include media('s-pc') {
+    .PostTheme {
+      width: 100%;
+      button {
+        width: 100%;
+      }
+    }
+  }
 
   &:after {
     content: '';
