@@ -38,11 +38,6 @@ class MyDocument extends Document {
                 window.addEventListener('resize', remCalc);
               }, 0);
           ` }} />
-          {/* <!--腾讯地图定位组件--> */}
-          <script async={true} src="https://mapapi.qq.com/web/mapComponents/geoLocation/v/geolocation.min.js"></script>
-          {/* 编辑器markdown依赖 */}
-          <script async={true} src="https://cdn.jsdelivr.net/npm/@discuzq/vditor@1.0.22/dist/js/lute/lute.min.js" ></script>
-          {this.createMonitor()}
         </Head>
 
 
@@ -104,6 +99,11 @@ class MyDocument extends Document {
               }
             }
         `}}/>
+        {/* <!--腾讯地图定位组件--> */}
+        <script async={true} src="https://mapapi.qq.com/web/mapComponents/geoLocation/v/geolocation.min.js"></script>
+        {/* 编辑器markdown依赖 */}
+        <script async={true} src="https://cdn.jsdelivr.net/npm/@discuzq/vditor@1.0.22/dist/js/lute/lute.min.js" ></script>
+        {this.createMonitor()}
       </Html>
     );
   }

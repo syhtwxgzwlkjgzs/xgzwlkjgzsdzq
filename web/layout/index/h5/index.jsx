@@ -45,7 +45,36 @@ class IndexH5Page extends React.Component {
         return (
             <div>
                 <HomeHeader ref={this.headerRef} />
-                <DynamicLoading data={res}/>
+                <DynamicLoading data={res} style={{padding: '0 0 20px 0'}} loadComponent={
+                  <div style={{width: '100%'}}>
+                    <div className={styles.placeholder}>
+                      <div className={styles.header}>
+                        <div className={styles.avatar}/>
+                        <div className={styles.box}/>
+                      </div>
+                      <div className={styles.content}/>
+                      <div className={styles.content}/>
+                      <div className={styles.footer}>
+                        <div className={styles.box}/>
+                        <div className={styles.box}/>
+                        <div className={styles.box}/>
+                      </div>
+                    </div>
+                    <div className={styles.placeholder}>
+                      <div className={styles.header}>
+                        <div className={styles.avatar}/>
+                        <div className={styles.box}/>
+                      </div>
+                      <div className={styles.content}/>
+                      <div className={styles.content}/>
+                      <div className={styles.footer}>
+                        <div className={styles.box}/>
+                        <div className={styles.box}/>
+                        <div className={styles.box}/>
+                      </div>
+                    </div>
+                  </div>
+                }/>
             </div>
         )
       } }
@@ -114,6 +143,7 @@ class IndexH5Page extends React.Component {
   // 上拉加载更多
   onRefresh = () => {
     const { dispatch = () => {} } = this.props;
+    if(!this.props.index?.threads?.pageData?.length) return; // 防止第一页还没加载出来，用户使劲滚动页面到底部触发请求第二页
     return dispatch('moreData');
   };
 

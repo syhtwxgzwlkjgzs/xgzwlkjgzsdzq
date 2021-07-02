@@ -15,7 +15,7 @@
     "@discuzq/design": "^1.0.28",
     "@discuzq/discuz-babel-plugin-import": "0.0.1",
     "@discuzq/plugin": "^1.0.26",
-    "@discuzq/sdk": "^1.0.23",
+    "@discuzq/sdk": "^1.0.24",
     "@discuzq/vditor": "^1.0.22",
     "@sandstreamdev/react-swipeable-list": "^1.0.1",
     "@sentry/browser": "^6.4.1",

@@ -246,7 +246,7 @@ const Index = ({ message, user, site: { webConfig, envConfig }, dialogId: _dialo
       if (!item.isImageLoading && item.imageUrl) {
         const [path] = item.imageUrl.split('?');
         const type = path.substr(path.indexOf('.') + 1);
-        item.renderUrl = calcCosImageQuality(item.imageUrl, type, 3);
+        item.renderUrl = calcCosImageQuality(item.imageUrl, type, 7);
       }
 
       return {

@@ -13,7 +13,6 @@ import '../styles/index.scss';
 import CustomHead from '@components/custom-head';
 import Head from 'next/head';
 import monitor from '@common/utils/monitor';
-import initWXSDK from '@common/utils/init-wx-sdk';
 import setWxShare from '@common/utils/set-wx-share';
 
 // if (!isServer()) {
@@ -23,7 +22,6 @@ import setWxShare from '@common/utils/set-wx-share';
 class DzqApp extends App {
   constructor(props) {
     super(props);
-    !isServer() && initWXSDK();
     this.appStore = initializeStore();
     this.updateSize = this.updateSize.bind(this);
     this.setWXShare = this.setWXShare.bind(this);
