@@ -68,7 +68,7 @@ class Detail extends React.Component {
     const { thread, serverThread } = this.props;
 
     // 初始化数据到store中
-    serverThread?.threadData && thread.setThreadData(serverThread.threadData);
+    // serverThread?.threadData && thread.setThreadData(serverThread.threadData);
     serverThread?.commentList && thread.setCommentList(serverThread.commentList);
     serverThread?.totalCount && thread.setTotalCount(serverThread.totalCount);
   }

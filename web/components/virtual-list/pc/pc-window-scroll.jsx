@@ -87,9 +87,10 @@ function Home(props, ref) {
     recomputeRowHeights(0);
   }, [props.visible]);
 
+  // TODO:滚动到上次的位置,目前好像不生效
   useEffect(() => {
     if (listRef) {
-      listRef.scrollToPosition && listRef.scrollToPosition(props.vlist.home || 1000);
+      listRef.scrollToPosition && listRef.scrollToPosition(props.vlist.home || 0);
     }
   }, [listRef?.Grid?.getTotalRowsHeight()]);
 
@@ -130,7 +131,7 @@ function Home(props, ref) {
   const renderListItem = (type, data, measure, { index, key, parent, style }) => {
     switch (type) {
       case 'header':
-        return props.children;
+        return <div style={{ background: '#fff', ...style }}>{props.children}</div>;
       case 'footer':
         return <BottomView noMore={props.noMore} isError={props.requestError} platform={props.platform}></BottomView>;
       default:

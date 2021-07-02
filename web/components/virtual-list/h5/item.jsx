@@ -12,7 +12,11 @@ export default observer((props) => {
   }, [ref?.current?.clientHeight]);
 
   const measure = () => {
-    typeof props.measure === 'function' && props.measure();
+    try {
+      typeof props.measure === 'function' && props.measure();
+    } catch (error) {
+      // console.log(error);
+    }
   };
 
   const recomputeRowHeights = (data) => {
