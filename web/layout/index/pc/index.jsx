@@ -124,7 +124,7 @@ class IndexPCPage extends React.Component {
         const newConNum = totalCount - nowTotal
         const { visible = false, conNum = 0 } = this.state
 
-        if (newConNum > conNum && newConNum > 0) {
+        if (newConNum > conNum) {
           this.setState({
             visible: true,
             conNum: newConNum,
@@ -275,8 +275,8 @@ class IndexPCPage extends React.Component {
           indexStore={index}
           siteStore={site}
           visible={visible}
-          visible={conNum}
-          visible={isShowDefault}
+          conNum={conNum}
+          isShowDefault={isShowDefault}
           onFilterClick={this.onFilterClick}
           onPostThread={this.onPostThread}
           goRefresh={this.goRefresh}
