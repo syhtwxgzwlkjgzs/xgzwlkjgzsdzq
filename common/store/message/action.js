@@ -12,7 +12,7 @@ class MessageAction extends MessageStore {
   // 把对话消息设置为已读
   @action.bound
   async updateDialog(dialogId) {
-    updateDialog({ data: { dialogId } });
+    updateDialog({ data: { dialogId: parseInt(dialogId) } });
   }
 
   // 获取未读消息数量
@@ -140,7 +140,7 @@ class MessageAction extends MessageStore {
           perPage: 200,
           page,
           filter: {
-            dialogId,
+            dialogId: parseInt(dialogId),
           },
         },
       });

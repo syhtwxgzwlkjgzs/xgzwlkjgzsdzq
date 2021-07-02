@@ -1,24 +1,9 @@
-// import {createOrdersCreate} from '@discuzq/sdk/dist/api/pay/create-orderscreate';
-import api from '../api';
-
 /**
  * 获取未读消息数量
- * TODO: 待更新到sdk
  */
+import { readUnreadNotification } from '@discuzq/sdk/dist/api/notice/read-unread-notification';
+
 export default async function _readUnreadCount(opts = {}, ctx = null) {
-  try {
-    const { params = {}, data = {}, ...others } = opts;
-    const options = {
-      url: 'apiv3/unreadnotification',
-      method: 'GET',
-      params,
-      data,
-      __context: ctx,
-      ...others,
-    };
-    const result = await api.http(options);
-    return result;
-  } catch (error) {
-    return error;
-  }
+  const res = await readUnreadNotification({ ...opts, __context: ctx });
+  return res;
 }
