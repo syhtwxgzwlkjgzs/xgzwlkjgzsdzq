@@ -15,6 +15,11 @@ export default observer((props) => {
     typeof props.measure === 'function' && props.measure();
   };
 
+  const recomputeRowHeights = (data) => {
+    props.recomputeRowHeights(data);
+    measure();
+  };
+
   return (
     <div ref={ref}>
       <ThreadContent
@@ -25,7 +30,7 @@ export default observer((props) => {
         showBottomStyle={!isLast}
         data={data}
         // className={styles.listItem}
-        recomputeRowHeights={(data) => props.recomputeRowHeights(data)}
+        recomputeRowHeights={(data) => recomputeRowHeights(data)}
       />
     </div>
   );

@@ -66,10 +66,6 @@ function Home(props, ref) {
 
   const [flag, setFlag] = useState(true);
 
-  useEffect(() => {
-    console.log(flag);
-  }, [flag]);
-
   // 监听list列表
   useEffect(() => {
     setList([{ type: 'header' }, ...(props.list || []), { type: 'footer' }]);
@@ -81,9 +77,9 @@ function Home(props, ref) {
   }, [props.sticks]);
 
   useEffect(() => {
+    console.log('listRef', listRef);
     if (listRef) {
-      // console.log(listRef, props.vlist.home);
-      // listRef.scrollToPosition && listRef.scrollToPosition(props.vlist.home || 0);
+      listRef.scrollToPosition && listRef.scrollToPosition(props.vlist.home || 0);
       console.log(scrollElement);
       scrollElement?.scrollTo &&
         scrollElement.scrollTo({
@@ -95,6 +91,7 @@ function Home(props, ref) {
 
   // 重新计算指定的行高
   const recomputeRowHeights = (index, updatedData) => {
+    console.log(listRef?.recomputeRowHeights, index);
     // TODO:先临时处理付费后，列表页面内容不更新的的问题
     if (updatedData) {
       list[index] = updatedData;
@@ -185,7 +182,7 @@ function Home(props, ref) {
     clearTimeout(scrollTimer);
     scrollTimer = setTimeout(() => {
       setFlag(true);
-    }, 2000);
+    }, 100);
 
     props.onScroll && props.onScroll({ scrollTop, clientHeight, scrollHeight });
     if (scrollTop !== 0) {
@@ -276,7 +273,7 @@ function Home(props, ref) {
                     <div className={styles.center} ref={registerChild}>
                       <List
                         ref={(ref) => {
-                          listRef = ref;
+                          ref && (listRef = ref);
                           registerChild(ref);
                         }}
                         onScroll={onScroll}

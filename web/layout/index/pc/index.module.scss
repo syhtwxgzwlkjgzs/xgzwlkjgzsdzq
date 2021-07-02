@@ -223,7 +223,7 @@
   overflow: hidden;
 
   .emptyBox {
-    background: #f5f7f8;
+    background: $body-bg-color;
   }
 
   @include media('xl-pc') {
