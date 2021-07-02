@@ -114,6 +114,7 @@
 
   @include media('xl-pc') {
     width: 750px;
+    left: calc(50% - 15px);
 
     .emptyBox {
       height: 16px;
@@ -122,6 +123,7 @@
 
   @include media('l-pc') {
     width: 52%;
+    left: calc(50% - 15px);
 
     .emptyBox {
       height: 16px;
@@ -130,6 +132,7 @@
 
   @include media('s-pc') {
     width: 44%;
+    left: calc(50% - 17px);
 
     .emptyBox {
       height: 18px;
