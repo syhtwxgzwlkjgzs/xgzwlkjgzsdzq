@@ -27,7 +27,35 @@ $ npm install --registry=http://mirrors.cloud.tencent.com/npm/
 $ npm config set registry http://mirrors.cloud.tencent.com/npm/
 ```
 
+如果遇到以下问题：
+```bash
+npm ERR! code ERESOLVE
+npm ERR! ERESOLVE unable to resolve dependency tree
+npm ERR! 
+npm ERR! While resolving: discuz-app-mini@0.0.1-beta.3
+npm ERR! Found: react@17.0.1
+npm ERR! node_modules/react
+npm ERR!   react@"17.0.1" from the root project
+npm ERR! 
+npm ERR! Could not resolve dependency:
+npm ERR! peer react@"^16.8.0 || 16.9.0-alpha.0" from mobx-react@6.1.4
+npm ERR! node_modules/mobx-react
+npm ERR!   mobx-react@"6.1.4" from the root project
+npm ERR! 
+npm ERR! Fix the upstream dependency conflict, or retry
+npm ERR! this command with --force, or --legacy-peer-deps
+npm ERR! to accept an incorrect (and potentially broken) dependency resolution.
+npm ERR! 
+npm ERR! See /Users/samwu/.npm/eresolve-report.txt for a full report.
 
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /Users/xxx/.npm/_logs/2021-07-02T17_24_15_418Z-debug.log
+```
+
+可以尝试使用以下命令：
+```bash
+npm cache clean --force && npm i --legacy-peer-deps
+```
 
 ## 小程序构建
 
