@@ -92,8 +92,8 @@ const DialogBox = (props) => {
           src={renderUrl || imageUrl}
           onClick={() => {
             Taro.previewImage({
-              urls: dialogMsgList.list.filter(item => !!item.renderUrl || !!item.imageUrl).map(item => item.renderUrl || item.imageUrl).reverse(),
-              current: renderUrl || imageUrl,
+              urls: dialogMsgList.list.filter(item => (item.imageUrl && !item.isImageLoading)).map(item => item.imageUrl).reverse(),
+              current: imageUrl,
             });
           }}
         />
