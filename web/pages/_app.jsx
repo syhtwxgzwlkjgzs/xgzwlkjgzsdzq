@@ -2,6 +2,7 @@ import React from 'react';
 import { Provider } from 'mobx-react';
 import { hideInstance } from '@discuzq/design/dist/components/image-previewer/layouts/web';
 import App from 'next/app';
+import getPlatform from '@common/utils/get-platform';
 import initializeStore from '@common/store';
 import PayBoxProvider from '../components/payBox/payBoxProvider';
 import isServer from '@common/utils/is-server';
@@ -90,19 +91,7 @@ class DzqApp extends App {
   }
 
   updateSize() {
-    const currentWidth = window.innerWidth;
-    
-    if ( this.appStore.site ) {
-      if ( this.appStore.site.platform === 'pc' && currentWidth < 800 ) {
-        this.appStore.site.setPlatform('h5');
-        return;
-      }
-
-      if ( this.appStore.site.platform === 'h5' && currentWidth >= 800 ) {
-        this.appStore.site.setPlatform('pc');
-        return;
-      }
-    }
+    this.appStore.site.setPlatform(getPlatform(window.navigator.userAgent));
   }
 
   render() {
