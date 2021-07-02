@@ -2,7 +2,7 @@
 
 import { getWXConfig } from '@discuzq/sdk/dist/api/wx/get-wx-config';
 import browser from '@common/utils/browser';
-const DEFAULT_JSAPULIST = ['closeWindow', 'chooseImage', 'uploadImage', 'updateAppMessageShareData', 'updateTimelineShareData', 'getLocalImgData'];
+const DEFAULT_JSAPULIST = ['closeWindow', 'chooseImage', 'uploadImage', 'getLocalImgData', 'updateAppMessageShareData', 'updateTimelineShareData', 'getNetworkType'];
 export default async function initWXSDK(jsApiList = []) {
     if ( !browser.env('weixin') ) return;
     const allPromise = [];
@@ -21,6 +21,7 @@ export default async function initWXSDK(jsApiList = []) {
     if ( res.code === 0 && res.data && res.data.appId) {
         await Promise.all(allPromise);
         const params = (({ appId, timestamp, nonceStr, signature }) => ({ appId, timestamp, nonceStr, signature }))(res.data);
+        // params.signature = '用来测试签名失效的场景';
         wx && wx.config({
             debug: false,
             ...params,

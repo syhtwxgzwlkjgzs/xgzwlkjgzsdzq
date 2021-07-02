@@ -116,7 +116,8 @@ const InputPop = (props) => {
     const { supportFileExt, supportImgExt, supportMaxSize } = webConfig.setAttach;
     if (type === THREAD_TYPE.file) {
       // 当前选择附件的类型大小
-      const fileType = cloneList[0].name.match(/\.(.+)$/i)[1].toLocaleLowerCase();
+      const arr = cloneList[0].name.split('.').pop();
+      const fileType = arr.toLocaleLowerCase();
       const fileSize = cloneList[0].size;
       // 判断合法性
       const isLegalType = supportFileExt.toLocaleLowerCase().includes(fileType);
@@ -136,8 +137,14 @@ const InputPop = (props) => {
 
       let isAllLegal = true; // 状态：此次上传图片是否全部合法
       cloneList.forEach((item, index) => {
-        const arr = item.name.split('.').pop();
-        const imageType = arr.toLocaleLowerCase();
+        let imageType = '';
+        if (item.imageType) {
+          imageType = item.imageType;
+        } else {
+          const arr = item.name.split('.').pop();
+          imageType = arr.toLocaleLowerCase();
+        }
+
         const isLegalType = supportImgExt.toLocaleLowerCase().includes(imageType);
 
         // 存在不合法图片时，从上传图片列表删除
@@ -146,7 +153,6 @@ const InputPop = (props) => {
           isAllLegal = false;
         }
       });
-
       !isAllLegal && Toast.info({ content: `仅支持${supportImgExt}类型的图片` });
 
       cloneList?.length && setImageUploading(true);

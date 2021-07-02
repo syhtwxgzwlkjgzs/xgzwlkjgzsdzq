@@ -671,8 +671,13 @@ class ThreadPCPage extends React.Component {
   renderContent() {
     const { thread: threadStore } = this.props;
     const { isReady, isCommentReady, isNoMore, totalCount, isCommentListError } = threadStore;
+    // 是否审核通过
+    const isApproved = (threadStore?.threadData?.isApproved || 0) === 1;
     return (
       <div className={layout.bodyLeft}>
+        {isReady && !isApproved && (
+          <div className={layout.examinePosition}></div>
+        )}
         {/* 帖子内容 */}
         {isReady ? (
           <RenderThreadContent
@@ -714,7 +719,10 @@ class ThreadPCPage extends React.Component {
 
   renderRight() {
     const { thread: threadStore } = this.props;
-    const { isAuthorInfoError } = threadStore;
+    const { isAuthorInfoError, isReady } = threadStore;
+
+    // 是否审核通过
+    const isApproved = (threadStore?.threadData?.isApproved || 0) === 1;
     // 是否作者自己
     const isSelf = this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === threadStore?.threadData?.userId;
     // 是否匿名
@@ -722,6 +730,9 @@ class ThreadPCPage extends React.Component {
 
     return (
       <div className={`${layout.bodyRigth} ${isSelf ? layout.positionSticky : ''}`}>
+        {isReady && !isApproved && (
+          <div className={layout.examinePosition}></div>
+        )}
         {!isAnonymous && (
           <div className={layout.authorInfo}>
             {threadStore?.authorInfo ? (

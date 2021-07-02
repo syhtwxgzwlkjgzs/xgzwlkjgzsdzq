@@ -4,9 +4,11 @@
   :global {
     .dzq-card {
       border-radius: rem($border-radius-small);
+      background-color: $body-bg-color;
     }
     .dzq-card__body {
       padding: 0 5%;
+      background-color: $white;
     }
     .dzq-submenu__title {
       padding-right: 0;
@@ -119,11 +121,11 @@
 .verticalScrollbar {
   margin-right: -4px;
   &::-webkit-scrollbar {
+    display: block;
     width: 4px;
     height: 4px;
   }
   &:hover {
-    margin-right: -4px;
     &::-webkit-scrollbar {
       display: block;
       width: 4px;
