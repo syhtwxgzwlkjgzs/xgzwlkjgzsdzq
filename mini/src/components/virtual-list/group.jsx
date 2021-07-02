@@ -133,21 +133,23 @@ const VirtualList = forwardRef(({
     heights.current[index] = height
   }
 
-  const test = ({ index, isHidden }) => {
+  const test = ({ index, isHidden, that }) => {
+
     console.log(dataSource);
     console.log(heights.current);
     console.log(index, isHidden);
   }
 
   const observePage = (pageIndex) => {
-
     if (!windowHeight.current) {
       return
     }
+    debugger
+    const that = this
     const observerObj = Taro.createIntersectionObserver(this, { thresholds: [0], observeAll: true }).relativeToViewport({ top: 2 * windowHeight.current, bottom: 2 * windowHeight.current });
     observerObj.observe(`#virtual-list-${pageIndex}`, (res) => {
-      
-      test({ index: pageIndex, isHidden: res.intersectionRatio <= 0 })
+      console.log(this);
+      test({ index: pageIndex, isHidden: res.intersectionRatio <= 0, that })
     });
   }
 
