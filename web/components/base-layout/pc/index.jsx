@@ -135,27 +135,7 @@ const BaseLayout = forwardRef((props, ref) => {
   );
 
   if (disabledList) {
-    content = (
-      <div className={`${styles.list} ${styles.fixed}`}>
-        {(pageName === 'home' || left) && (
-          <div className={styles.left}>{typeof left === 'function' ? left({ ...props }) : left}</div>
-        )}
-
-        <div className={styles.center}>
-          {typeof children === 'function' ? children({ ...props }) : children}
-        </div>
-
-        {(pageName === 'home' || right) && (
-          <div
-            className={`baselayout-right ${styles.right} ${rightClassName} ${
-              pageName === 'home' ? styles['home-right'] : ''
-            }`}
-          >
-            {typeof right === 'function' ? right({ ...props }) : right}
-          </div>
-        )}
-      </div>
-    );
+    content = children;
   }
 
   return (

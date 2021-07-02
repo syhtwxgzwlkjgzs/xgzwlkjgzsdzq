@@ -5,10 +5,10 @@ import BottomView from '../BottomView';
 import BacktoTop from '@components/list/backto-top';
 import { getImmutableTypeHeight, getLogHeight, getSticksHeight, getTabsHeight } from '../utils';
 
-import { List, CellMeasurer, CellMeasurerCache, AutoSizer, InfiniteLoader } from 'react-virtualized';
+import { List, CellMeasurer, CellMeasurerCache, AutoSizer, InfiniteLoader, WindowScroller } from 'react-virtualized';
 import { inject, observer } from 'mobx-react';
 
-import layout from './layout.module.scss';
+import styles from './index.module.scss';
 
 const immutableHeightMap = {}; // 不可变的高度
 
@@ -65,12 +65,13 @@ function Home(props, ref) {
   const [scrollTop, setScrollTop] = useState(0);
 
   const [flag, setFlag] = useState(true);
+  const [windowScroller, setWindowScroller] = useState(null);
 
+  // 滚动元素
+  const [scrollElement, setElement] = useState(null);
   useEffect(() => {
-    if (listRef) {
-      listRef.scrollToPosition(props.vlist.home || 0);
-    }
-  }, [listRef?.Grid?.getTotalRowsHeight()]);
+    setElement(document.querySelector('.home'));
+  }, []);
 
   // 监听list列表
   useEffect(() => {
@@ -86,6 +87,13 @@ function Home(props, ref) {
   useEffect(() => {
     recomputeRowHeights(0);
   }, [props.visible]);
+
+  // TODO:滚动到上次的位置,目前好像不生效
+  useEffect(() => {
+    if (listRef) {
+      listRef.scrollToPosition && listRef.scrollToPosition(props.vlist.home || 0);
+    }
+  }, [listRef?.Grid?.getTotalRowsHeight()]);
 
   // 重新计算指定的行高
   const recomputeRowHeights = (index, updatedData) => {
@@ -154,7 +162,6 @@ function Home(props, ref) {
             ref={registerChild}
             key={`${key}-${data.threadId}`}
             style={style}
-            className={layout.center}
             data-index={index}
             data-id={data.threadId}
             data-height={immutableHeightMap[index]}
@@ -216,8 +223,11 @@ function Home(props, ref) {
 
   // 滚动到顶部
   const handleBacktoTop = () => {
-    listRef && listRef.scrollToPosition(0);
-    props.vlist.setPosition(0);
+    scrollElement?.scrollTo &&
+      scrollElement.scrollTo({
+        top: 0,
+        behavior: 'auto',
+      });
   };
 
   const isRowLoaded = ({ index }) => !!list[index];
@@ -225,46 +235,41 @@ function Home(props, ref) {
   const loadMoreRows = () => Promise.resolve();
 
   return (
-    <div className="page">
-      <InfiniteLoader isRowLoaded={isRowLoaded} loadMoreRows={loadMoreRows} rowCount={rowCount}>
-        {({ onRowsRendered, registerChild }) => (
-          <AutoSizer className="list">
-            {({ height, width }) => {
-              return (
-                <div className={`${layout.list} ${layout.fixed}`}>
-                  <div className={layout.left}>{typeof left === 'function' ? left({ ...props }) : left}</div>
-
-                  <List
-                    ref={(ref) => {
-                      listRef = ref;
-                      registerChild(ref);
-                    }}
-                    onScroll={onScroll}
-                    deferredMeasurementCache={cache}
-                    height={height}
-                    overscanRowCount={20}
-                    onRowsRendered={(...props) => {
-                      onRowsRendered(...props);
-                    }}
-                    // scrollTop={scrollTop}
-                    rowCount={rowCount}
-                    rowHeight={getRowHeight}
-                    rowRenderer={rowRenderer}
-                    width={width}
-                    overscanIndicesGetter={overscanIndicesGetter}
-                  />
-
-                  <div className={`baselayout-right ${layout.right}`}>
-                    {typeof right === 'function' ? right({ ...props }) : right}
+    <div >
+      <WindowScroller ref={(ref) => setWindowScroller(ref)}>
+        {({ height, scrollTop }) => (
+          <InfiniteLoader isRowLoaded={isRowLoaded} loadMoreRows={loadMoreRows} rowCount={rowCount}>
+            {({ registerChild }) => (
+              <AutoSizer>
+                {({ width }) => (
+                  <div className={styles.center}>
+                    <List
+                      ref={(ref) => {
+                        ref && (listRef = ref);
+                        registerChild(ref);
+                      }}
+                      onScroll={onScroll}
+                      deferredMeasurementCache={cache}
+                      height={height || 0}
+                      autoHeight={true}
+                      isScrolling={false}
+                      overscanRowCount={10}
+                      rowCount={rowCount}
+                      rowHeight={getRowHeight}
+                      rowRenderer={rowRenderer}
+                      // scrollTop={scrollTop}
+                      width={width}
+                      overscanIndicesGetter={overscanIndicesGetter}
+                    />
                   </div>
-
-                  {scrollTop > 100 && <BacktoTop onClick={handleBacktoTop} />}
-                </div>
-              );
-            }}
-          </AutoSizer>
+                )}
+              </AutoSizer>
+            )}
+          </InfiniteLoader>
         )}
-      </InfiniteLoader>
+      </WindowScroller>
+
+      {scrollTop > 100 && <BacktoTop onClick={handleBacktoTop} />}
     </div>
   );
 }
