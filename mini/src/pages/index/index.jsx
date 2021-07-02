@@ -34,10 +34,6 @@ const CLOSE_URL = '/subPage/close/index';
 class Index extends React.Component {
 
     $instance = Taro.getCurrentInstance()
-    
-    componentDidUpdate() {
-
-    }
 
     componentDidShow() {
       this.initSiteData();
@@ -48,6 +44,12 @@ class Index extends React.Component {
       const { site } = this.props;
       switch (result.code) {
         case 0:
+          // 未开启小程序，展示错误页面信息
+          if(result?.data?.passport?.miniprogramOpen === false) {
+            Router.redirect({
+              url: '/subPages/500/index'
+            });
+          }
           break;
         case SITE_CLOSED: site.setCloseSiteConfig(result.data);// 关闭站点
           Router.redirect({
@@ -118,11 +120,11 @@ class Index extends React.Component {
       if ( !site.webConfig ) {
         // 获取站点信息  
         const siteResult = await readForum({});
-
         // 检查站点状态
         const isPass = this.setAppCommonStatus(siteResult);
         if(!isPass) return;
         site.setSiteConfig(siteResult.data);
+
         webConfig = siteResult.data;
       } else {
         webConfig = site.webConfig;

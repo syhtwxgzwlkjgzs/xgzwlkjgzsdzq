@@ -16,7 +16,7 @@ export function urlToLink(str) {
     .replace(imgReg, (p, p1) => `<img src="${encodeURIComponent(p1)}"`)
     .replace(aReg, (p, p1) => `<a href="${encodeURIComponent(p1)}"`)
     .replace(urlReg, website => `<a href="${website}" target="_blank">${website}</a>`)
-    .replace(preReg, (p, p1)  => `${decodeURIComponent(p1)}`)
+    .replace(preReg, (p, p1, p2)  => `${p1}${decodeURIComponent(p2)}</code></pre>`)
     .replace(codeReg, (p, p1, p2) => `${p1}${decodeURIComponent(p2)}</code>`)
     .replace(imgReg, p => `${decodeURIComponent(p)}`)
     .replace(aReg, p => `${decodeURIComponent(p)}`);

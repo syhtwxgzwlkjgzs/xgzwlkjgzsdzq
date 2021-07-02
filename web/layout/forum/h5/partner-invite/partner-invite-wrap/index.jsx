@@ -29,6 +29,7 @@ class PartnerInviteWrap extends React.Component {
     <BaseLayout
       right={ renderRight }
       contentHeader={ contentHeader }
+      slideRight={ true }
     >
       { children }
     </BaseLayout>

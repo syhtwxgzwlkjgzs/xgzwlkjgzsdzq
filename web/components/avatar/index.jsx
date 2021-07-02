@@ -27,9 +27,6 @@ function avatar(props) {
     level = 6
   } = props;
 
-  // console.log(image)
-  // console.log(userInfo?.avatarUrl)
-  console.log(level);
   const currAvatarImage = useMemo(() => {
     if (!image || image === '') return image;
     if ( /(http|https):\/\/.*?(gif)/.test(image) ) {
@@ -53,7 +50,7 @@ function avatar(props) {
 
 
   const onMouseEnterHandler = useCallback(async () => {
-    if (!userId) return;
+    if (!isShowUserInfo || !userId) return;
     changeIsShow(true);
 
     if (!userInfo || userInfo === 'padding') {
@@ -64,7 +61,7 @@ function avatar(props) {
   });
 
   const onMouseLeaveHandler = useCallback(() => {
-    if (!userId) return;
+    if (!isShowUserInfo || !userId) return;
     changeIsShow(false);
     changeUserInfo('padding');
   });

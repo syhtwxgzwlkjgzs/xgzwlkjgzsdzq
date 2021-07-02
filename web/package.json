@@ -12,7 +12,7 @@
     "update": "dzq update"
   },
   "dependencies": {
-    "@discuzq/design": "^1.0.26",
+    "@discuzq/design": "^1.0.28",
     "@discuzq/discuz-babel-plugin-import": "0.0.1",
     "@discuzq/plugin": "^1.0.26",
     "@discuzq/sdk": "^1.0.23",

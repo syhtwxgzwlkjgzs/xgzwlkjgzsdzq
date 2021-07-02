@@ -26,9 +26,6 @@ export default function fuzzyCalcContentLength(content, lengthInLine = 50) {
     // 替换图片标签
     newContent = replaceStringInRegex(newContent, "img", '');
 
-    // 回车换成'\n'
-    newContent = replaceStringInRegex(newContent, "break", '\n');
-
     // 替换所有标签
     newContent = replaceStringInRegex(newContent, "tags", '');
 
