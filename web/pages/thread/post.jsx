@@ -715,8 +715,10 @@ class PostPage extends React.Component {
 
   handleEditorBoxScroller = (top = 0) => {
     const editorbox = document.querySelector('#post-inner');
+    const editorContent = document.querySelector('#dzq-vditor');
     const rect = editorbox.getBoundingClientRect();
-    const gap = this.props.site?.isPc ? top - rect.top : top;
+    if (top < editorContent.clientHeight) top = editorContent.clientHeight;
+    const gap = this.props.site?.isPc ? rect.top - top : top;
     editorbox.scrollTo({ top: gap, behavior: 'smooth' });
   };
 
