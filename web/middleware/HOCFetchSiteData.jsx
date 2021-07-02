@@ -12,6 +12,7 @@ import { Spin, Icon } from '@discuzq/design';
 import typeofFn from '@common/utils/typeof';
 import setWxShare from '@common/utils/set-wx-share';
 import styles from './HOCFetchSiteData.module.scss';
+import initWXSDK from '@common/utils/init-wx-sdk';
 import {
   WEB_SITE_JOIN_WHITE_LIST,
   JUMP_TO_404,
@@ -164,15 +165,17 @@ export default function HOCFetchSiteData(Component) {
         loginStatus = false;
       }
 
+      user.updateLoginStatus(loginStatus);
+      this.setState({ isPass: this.isPass() });
+
       // 初始化分享配置
-      if ( siteConfig && siteConfig.setSite ) {
+      const isInit = await initWXSDK(siteConfig && siteConfig.passport && siteConfig.passport.offiaccountOpen);
+      if ( isInit && siteConfig && siteConfig.setSite ) {
         const {setSite} = siteConfig;
         const {siteTitle, siteIntroduction, siteFavicon} = setSite;
         setWxShare(siteTitle, siteIntroduction, window.location.href, siteFavicon);
       }
-
-      user.updateLoginStatus(loginStatus);
-      this.setState({ isPass: this.isPass() });
+      
     }
 
     setAppCommonStatus(result) {
