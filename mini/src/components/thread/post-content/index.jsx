@@ -12,6 +12,9 @@ import { View, Text, Image } from '@tarojs/components'
 import styles from './index.module.scss';
 import { urlToLink } from '@common/utils/replace-url-to-a';
 
+import { getElementRect, randomStr } from '../utils'
+
+
 /**
  * 帖子内容展示
  * @prop {string}   content 内容
@@ -34,6 +37,8 @@ const Index = ({
   onRedirectToDetail = noop,
   loading,
   customHoverBg = false,
+  relativeToViewport,
+  onChangeHeight = noop,
   ...props
 }) => {
   // 内容是否超出屏幕高度
@@ -41,6 +46,8 @@ const Index = ({
   const [cutContentForDisplay, setCutContentForDisplay] = useState("");
   const [showMore, setHiddenMore] = useState(!useShowMore);
   const contentWrapperRef = useRef(null);
+  const [richTextH, setRichTextH] = useState(0)
+  const richTextId= useRef(`rich-text-${randomStr()}`)
 
   const texts = {
     showMore: '查看更多',
@@ -109,15 +116,29 @@ const Index = ({
     }
   }, [filterContent]);
 
+  useEffect(() => {
+    getElementRect(richTextId.current).then(res => {
+      setRichTextH(res?.height)
+    })
+    onChangeHeight({})
+  }, [showMore])
+
+  const sty = useMemo(() => {
+    if (richTextH > 0) {
+      return { height: `${richTextH}px` }
+    }
+    return {}
+  }, [richTextH])
+
   return (
-    <View className={styles.container} {...props}>
+    <View id={richTextId.current} style={sty} className={styles.container} {...props}>
       <View
         ref={contentWrapperRef}
         className={`${styles.contentWrapper} ${showHideCover ? styles.hideCover : ''} ${customHoverBg ? styles.bg : ''}`}
         onClick={!showMore ? onShowMore : handleClick}
       >
         <View className={styles.content}>
-          <RichText content={(useShowMore && cutContentForDisplay) ? cutContentForDisplay : urlToLink(filterContent)} onClick={handleClick} />
+          {relativeToViewport && <RichText content={(useShowMore && cutContentForDisplay) ? cutContentForDisplay : urlToLink(filterContent)} onClick={handleClick} />}
         </View>
       </View>
       {!loading && useShowMore && !showMore && (

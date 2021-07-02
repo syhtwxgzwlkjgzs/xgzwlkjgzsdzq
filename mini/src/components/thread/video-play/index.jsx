@@ -32,7 +32,9 @@ const Index = ({
   onPay = noop,
   baselayout = {},
   v_width = null,
-  v_height = null
+  v_height = null,
+  relativeToViewport = true,
+  onChangeHeight = noop
 }) => {
   let player = null;
   const videoId = useRef(`video${randomStr()}`);
@@ -90,11 +92,20 @@ const Index = ({
       });
       setWidth(width);
       setHeight(height);
+      onChangeHeight({ video: true })
     })
   }, []);
 
+  const sty = useMemo(() => {
+    return { 
+      display: relativeToViewport ? 'block' : 'none', 
+      width: `${width}px`, 
+      height: `${height}px` 
+    }
+  }, [relativeToViewport])
+
   return (
-    <View id={videoId.current} className={styles.container} style={{width: `${width}px`, height: `${height}px`}}>
+    <View id={videoId.current} className={styles.container} style={sty}>
       {
         width && (
           <Video

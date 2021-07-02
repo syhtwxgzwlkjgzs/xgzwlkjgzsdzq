@@ -154,7 +154,8 @@ class Index extends React.Component {
     }
 
     render() {
-      const { data, className = '', site = {}, showBottomStyle = true, isShowIcon = false, unifyOnClick = null } = this.props;
+      const { data, className = '', site = {}, showBottomStyle = true, isShowIcon = false, unifyOnClick = null, relativeToViewport = true } = this.props;
+
       const { platform = 'pc' } = site;
       if (!data) {
         return <NoData />;
@@ -201,7 +202,7 @@ class Index extends React.Component {
               {isShowIcon && <View className={styles.headerIcon} onClick={unifyOnClick || this.onClickHeaderIcon}><Icon name='CollectOutlinedBig' className={styles.collectIcon}></Icon></View>}
           </View>
 
-          <ThreadCenterView text={text} data={data} onClick={unifyOnClick || this.onClick} onPay={unifyOnClick || this.onPay} platform={platform} />
+          <ThreadCenterView text={text} data={data} onClick={unifyOnClick || this.onClick} onPay={unifyOnClick || this.onPay} platform={platform} relativeToViewport={relativeToViewport} />
 
           <BottomEvent
             userImgs={likeReward.users}

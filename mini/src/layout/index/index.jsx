@@ -267,10 +267,13 @@ class IndexH5Page extends React.Component {
         onScroll={this.handleScroll}
         curr='home'
         onClickTabBar={this.handleClickTabBar}
+        isClickTab={isClickTab}
       >
         <HomeHeader ref={this.headerRef} />
         {this.renderTabs()}
-        {this.renderHeaderContent()}
+        <View style={{display: isClickTab ? 'none' : 'block'}}>
+          {this.renderHeaderContent()}
+        </View>
       </VirtualList>
       <FilterView
         data={currentCategories}

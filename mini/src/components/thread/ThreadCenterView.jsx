@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useEffect, useState } from 'react';
 import Button from '@discuzq/design/dist/components/button/index';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import AudioPlay from './audio-play';
@@ -11,6 +11,7 @@ import ImageDisplay from './image-display';
 import Packet from './packet';
 import styles from './index.module.scss';
 import { View, Text } from '@tarojs/components';
+import { getElementRect, randomStr } from './utils'
 
 /**
  * 帖子内容组件
@@ -22,7 +23,39 @@ import { View, Text } from '@tarojs/components';
 const Index = (props) => {
   const { title = '', payType, price, paid, attachmentPrice } = props.data || {};
   const needPay = useMemo(() => payType !== 0 && !paid, [paid, payType]);
-  const { onClick, onPay } = props;
+  const { onClick, onPay, relativeToViewport } = props;
+  const [ready, setReady] = useState({ video: false })
+
+  const [wrapperH, setWrapperH] = useState(0)
+  const wrapperId= useRef(`thread-wrapper-${randomStr()}`)
+
+  useEffect(() => {
+    const { videoData } = handleAttachmentData(props.data);
+    const { video } = ready
+    if (!videoData) {
+      getElementRect(wrapperId.current).then(res => {
+        setWrapperH(res?.height)
+      })
+    } else {
+      debugger
+      if (video) {
+        getElementRect(wrapperId.current).then(res => {
+          setWrapperH(res?.height)
+        })
+      }
+    }
+  }, [ready])
+
+  const sty = useMemo(() => {
+    if (wrapperH > 0) {
+      return { height: `${wrapperH}px` }
+    }
+    return { height: 'auto' }
+  }, [wrapperH, relativeToViewport])
+
+  const onChangeHeight = (value) => {
+    setReady({ ...ready, ...value })
+  }
 
   // 标题显示37个字符
   const newTitle = useMemo(() => {
@@ -46,7 +79,15 @@ const Index = (props) => {
     } = handleAttachmentData(data);
     return (
       <>
-        {text && <PostContent content={text} onPay={onPay} onRedirectToDetail={onClick} />}
+        {text && (
+          <PostContent 
+            content={text} 
+            onPay={onPay} 
+            onRedirectToDetail={onClick} 
+            relativeToViewport={relativeToViewport}
+            onChangeHeight={onChangeHeight}
+          />
+        )}
         {videoData && (
           <WrapperView onClick={onClick}>
             <VideoPlay
@@ -57,11 +98,20 @@ const Index = (props) => {
               onPay={onPay}
               isPay={needPay}
               status={videoData.status}
+              relativeToViewport={relativeToViewport}
+              onChangeHeight={onChangeHeight}
             />
           </WrapperView>
         )}
         {imageData?.length ? (
-            <ImageDisplay platform="h5" imgData={imageData} isPay={needPay} onPay={onPay} onClickMore={onClick} />
+            <ImageDisplay 
+              platform="h5" 
+              imgData={imageData} 
+              isPay={needPay} 
+              onPay={onPay} 
+              onClickMore={onClick}
+              relativeToViewport={relativeToViewport}
+            />
         ) : null}
         {rewardData && <Packet type={1} money={rewardData.money} onClick={onClick} />}
         {redPacketData && (
@@ -82,7 +132,7 @@ const Index = (props) => {
   };
   return (
     <>
-      <View className={styles.wrapper}>
+      <View id={wrapperId.current} style={sty} className={styles.wrapper}>
         {title && (
           <View className={styles.title} onClick={onClick}>
             {newTitle}
