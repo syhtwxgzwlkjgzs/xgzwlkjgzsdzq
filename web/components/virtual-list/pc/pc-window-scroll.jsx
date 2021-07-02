@@ -82,6 +82,11 @@ function Home(props, ref) {
     recomputeRowHeights(0);
   }, [props.sticks]);
 
+  // 监听更新条数
+  useEffect(() => {
+    recomputeRowHeights(0);
+  }, [props.visible]);
+
   useEffect(() => {
     if (listRef) {
       listRef.scrollToPosition && listRef.scrollToPosition(props.vlist.home || 1000);
@@ -107,7 +112,12 @@ function Home(props, ref) {
 
     // 头部
     if (data.type === 'header') {
-      return getLogHeight(platform) + getTabsHeight(platform) + getSticksHeight(props.sticks, platform);
+      return (
+        getLogHeight(platform) +
+        getTabsHeight(platform) +
+        getSticksHeight(props.sticks, platform) +
+        (props.visible ? 50 : 0)
+      );
     }
 
     // 底部

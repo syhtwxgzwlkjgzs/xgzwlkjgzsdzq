@@ -93,6 +93,7 @@ export default class DynamicVList extends React.Component {
         // requestError={props.isError}
         left={renderLeft(countThreads)}
         right={renderRight()}
+        visible={visible}
         renderItem={(item, index, recomputeRowHeights, onContentHeightChange, measure) => (
           <ThreadContent
             onContentHeightChange={measure}
