@@ -28,6 +28,7 @@ class DzqApp extends App {
     this.appStore = initializeStore();
     this.updateSize = this.updateSize.bind(this);
     this.setWXShare = this.setWXShare.bind(this);
+    this.toastInstance = null;
   }
 
   // 路由跳转时，需要清理图片预览器
@@ -94,12 +95,14 @@ class DzqApp extends App {
   }
 
   initOretation() {
+    this.toastInstance?.destroy();
+    
     // 移动端检测横屏
     if (browser.env('mobile')) {
       const isVertical = detectH5Orient();
 
       if (!isVertical) {
-        Toast.info({
+        this.toastInstance = Toast.info({
           content: '为了更好的体验，请使用竖屏浏览',
           duration: 5000
         });
