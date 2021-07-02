@@ -45,8 +45,10 @@ const List = forwardRef(({
   const [isError, setIsError] = useState(false);
   const [errText, setErrText] = useState(errorText);
   const [isLoadingInCenter, setIsLoadingInCenter] = useState(false)
+
   // 提前加载
   preload = site?.platform === 'pc' ? 3000 : 1000;
+
   useEffect(() => {
     if (noMore) {
       setIsLoading(true);
@@ -69,7 +71,9 @@ const List = forwardRef(({
       const { clientHeight } = listWrapper.current;
       const { scrollHeight } = listWrapper.current;
 
-      setIsLoadingInCenter(scrollHeight <= clientHeight)
+      setIsLoadingInCenter(scrollHeight <= clientHeight);
+    } else {
+      setIsLoadingInCenter(false);
     }
   }, [listWrapper.current, children])
 
@@ -80,6 +84,11 @@ const List = forwardRef(({
   useEffect(() => {
     setErrText(errorText)
   }, [errorText])
+
+  //移动端没有更多内容样式才有下划线
+  const noMoreType = useMemo(() => {
+    return site.platform === 'h5' ? 'line' : 'normal'
+  },[site.platform])
 
   useImperativeHandle(
     ref,
@@ -144,7 +153,7 @@ const List = forwardRef(({
       allowHandleRefresh = (scrollTop !== 0);
     }
 
-    // if ((scrollTop / scrollHeight >= 0.7) && !isLoading && allowHandleRefresh) {
+    // if (((scrollTop + clientHeight) >= scrollHeight / 2) && !isLoading && allowHandleRefresh) {
     if ((scrollHeight - preload <= clientHeight + scrollTop) && !isLoading && allowHandleRefresh) {
     // if ((scrollHeight/scrollTop <= 1.5) && !isLoading && allowHandleRefresh) {
       setIsLoading(true);
@@ -188,7 +197,7 @@ const List = forwardRef(({
         onScroll={onTouchMove}
       >
         {children}
-        {onRefresh && showRefresh && <BottomView isError={isError} errorText={errText} noMore={noMore} handleError={handleError} type = 'line' platform={platform} />}
+        {onRefresh && showRefresh && <BottomView isError={isError} errorText={errText} noMore={noMore} handleError={handleError} noMoreType={noMoreType} />}
       </div>
     </div>
   );

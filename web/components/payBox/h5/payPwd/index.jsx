@@ -108,7 +108,6 @@ class Index extends React.Component {
     Router.push({ url: '/my/edit/find-paypwd?type=paybox' });
     this.initState();
     this.props.payBox.visible = false;
-    this.props.payBox.step = null;
   }, 1000);
 
   async submitPwa() {
@@ -157,7 +156,7 @@ class Index extends React.Component {
       <div>
         <Dialog
           className={styles.paypwdDialogWrapper}
-          visible={this.props.payBox.step === STEP_MAP.WALLET_PASSWORD}
+          visible={this.props.payBox.visible && this.props.payBox.step === STEP_MAP.WALLET_PASSWORD}
           position="center"
           maskClosable={true}
         >

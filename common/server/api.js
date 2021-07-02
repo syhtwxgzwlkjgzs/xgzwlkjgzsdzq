@@ -95,6 +95,7 @@ http.interceptors.response.use((res) => {
       // @TODO 未登陆且无权限时，直接跳转加入页面。可能影响其它逻辑
       // 通过res?.config?.headers?.authorization获取用户的token判断是否登陆
       // 未登陆时，帖子列表接口返回无权限，跳转登陆
+      // TODO: 没有开启小程序配置时，在小程序里不要做跳转
       if (!res?.config?.headers?.authorization && ~res?.config?.url.indexOf('/thread.list')) {
         if (process.env.DISCUZ_ENV === 'web') {
           url = '/user/login';
@@ -232,7 +233,7 @@ http.interceptors.response.use((res) => {
     }
     case OPERATING_FREQUENCY: {
       Toast.error({
-        content: '操作太频繁，请稍后重试',
+        content: data.Message && data.Message !== '' ? data.Message : '操作太频繁，请稍后重试',
       });
     }
     default:  // 200 状态码

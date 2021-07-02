@@ -10,7 +10,9 @@ import clearLoginStatus from '@common/utils/clear-login-status';
 import { REVIEWING } from '@common/store/login/util';
 import { Spin, Icon } from '@discuzq/design';
 import typeofFn from '@common/utils/typeof';
+import setWxShare from '@common/utils/set-wx-share';
 import styles from './HOCFetchSiteData.module.scss';
+import initWXSDK from '@common/utils/init-wx-sdk';
 import {
   WEB_SITE_JOIN_WHITE_LIST,
   JUMP_TO_404,
@@ -165,10 +167,25 @@ export default function HOCFetchSiteData(Component) {
 
       user.updateLoginStatus(loginStatus);
       this.setState({ isPass: this.isPass() });
+
+      // 初始化分享配置
+      const isInit = await initWXSDK(siteConfig && siteConfig.passport && siteConfig.passport.offiaccountOpen);
+      if ( isInit && siteConfig && siteConfig.setSite ) {
+        const {setSite} = siteConfig;
+        const {siteTitle, siteIntroduction, siteFavicon} = setSite;
+        setWxShare(siteTitle, siteIntroduction, window.location.href, siteFavicon);
+      }
+      
     }
 
     setAppCommonStatus(result) {
       const { site } = this.props;
+
+      const CODE_NEED_SAVE = [JUMP_TO_LOGIN, JUMP_TO_REGISTER, JUMP_TO_AUDIT, JUMP_TO_REFUSE, JUMP_TO_DISABLED, JUMP_TO_SUPPLEMENTARY, JUMP_TO_PAY_SITE];
+      if (CODE_NEED_SAVE.includes(result.code)) {
+        this.saveInitialPage();
+      }
+
       switch (result.code) {
         case 0:
           break;
@@ -216,6 +233,20 @@ export default function HOCFetchSiteData(Component) {
       }
     }
 
+    saveInitialPage() {
+      const { site } = this.props;
+
+      if (!site.getInitialPage()) {
+        site.setInitialPage(window.location.href);
+      }
+    }
+
+    saveAndRedirect(url) {
+      this.saveInitialPage(url);
+
+      Router.redirect({ url });
+    }
+
     // 检查是否满足渲染条件
     isPass() {
       const { site, router, user } = this.props;
@@ -245,16 +276,13 @@ export default function HOCFetchSiteData(Component) {
           if (!site.isOffiaccountOpen && !site.isMiniProgramOpen) {
             // 绑定手机: 开启短信，没有绑定手机号
             if (router.asPath !== '/user/bind-phone' && site.isSmsOpen && !user.mobile) {
-              Router.redirect({ url: '/user/bind-phone' });
+              this.saveAndRedirect( '/user/bind-phone' );
               return false;
             }
           }
           // 绑定昵称：没有昵称
-          if (
-            router.asPath !== '/user/bind-nickname'
-            && !user.nickname
-          ) {
-            Router.redirect({ url: '/user/bind-nickname' });
+          if (router.asPath !== '/user/bind-nickname' && !user.nickname) {
+            this.saveAndRedirect( '/user/bind-nickname' );
             return false;
           }
           // 账号审核中的 用户只能访问 首页 + 帖子详情页，以及用户状态提示页
@@ -265,7 +293,6 @@ export default function HOCFetchSiteData(Component) {
             }
           }
         }
-
 
         if (site?.webConfig?.setSite?.siteMode !== 'pay') {
           return true;
@@ -284,10 +311,28 @@ export default function HOCFetchSiteData(Component) {
         const code = router.query.inviteCode;
         const query = code ? `?inviteCode=${code}` : '';
         if (!user?.paid) {
-          Router.redirect({ url: `/forum/partner-invite${query}` });
+          this.saveAndRedirect(`/forum/partner-invite${query}`);
           return false;
         }
+
+        // 访问指定页面，经过登陆、付费等操作完成后，跳回主页
+        if (router.asPath === '/') {
+          const initialPage = site.getInitialPage();
+          if (initialPage) {
+            const urlObj = new URL(initialPage);
+            if (urlObj.pathname !== router.asPath) {
+              site.clearInitialPage();
+              Router.redirect({
+                url: initialPage,
+              });
+              return false;
+            } else {
+              site.clearInitialPage();
+            }
+          }
+        }
       }
+
       return true;
     }
 

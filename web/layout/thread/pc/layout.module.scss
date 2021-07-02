@@ -9,7 +9,7 @@
 }
 
 .positionSticky {
-  top: rem(-308) !important;
+  top: 0 !important;
 }
 
 .bottom {
@@ -68,4 +68,8 @@
 .copyright {
   margin-top: rem(10);
   width: 100%;
+}
+
+.examinePosition {
+  height: rem(52);
 }

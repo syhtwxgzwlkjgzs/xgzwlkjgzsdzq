@@ -43,8 +43,16 @@ const InputPop = (props) => {
 
   // 监听键盘的高度
   Taro.onKeyboardHeightChange((res) => {
-    setBottomHeight((res?.height || 0) - 1);
+    setBottomHeight((res?.height || 0) - (getBottomSafeArea() || 0));
   });
+
+  // 获取底部安全距离
+  const getBottomSafeArea = () => {
+    const screenHeight = Taro.getSystemInfoSync().screenHeight;
+    const bottom = Taro.getSystemInfoSync().safeArea.bottom;
+
+    return screenHeight - bottom
+  };
 
   // 点击发布
   const onSubmitClick = async () => {
@@ -149,7 +157,8 @@ const InputPop = (props) => {
     const { supportFileExt, supportImgExt, supportMaxSize } = webConfig.setAttach;
     if (type === THREAD_TYPE.file) {
       // 当前选择附件的类型大小
-      const fileType = cloneList[0].name.match(/\.(.+)$/i)[1].toLocaleLowerCase();
+      const arr = cloneList[0].name.split('.').pop();
+      const fileType = arr.toLocaleLowerCase();
       const fileSize = cloneList[0].size;
       // 判断合法性
       const isLegalType = supportFileExt.toLocaleLowerCase().includes(fileType);
@@ -207,7 +216,8 @@ const InputPop = (props) => {
     typeof onCancel === 'function' && onCancel();
   };
 
-  return <View className={classnames(styles.body, visible && styles.show)}>
+  return visible ? (
+    <View className={classnames(styles.body, visible && styles.show)}>
       <View className={styles.popup} onClick={onClick}>
         <View onClick={(e) => e.stopPropagation()}>
           <View className={styles.container}>
@@ -291,11 +301,14 @@ const InputPop = (props) => {
               <Emoji show={showEmojis} emojis={emojis} onClick={onEmojiClick} />
             </View>
           )}
-          <View style={{ transform: 'translateY(0)', height: `${bottomHeight}px` }}></View>
+          <View className={styles.keyboard} style={{ height: `${bottomHeight}px` }}></View>
           <View className={styles.safeArea}></View>
         </View>
       </View>
     </View>
+  ) : (
+    <View className={classnames(styles.body, visible && styles.show)}></View>
+  );
 };
 
 InputPop.options = {

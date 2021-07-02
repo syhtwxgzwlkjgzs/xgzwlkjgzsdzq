@@ -378,9 +378,12 @@ class PostPage extends React.Component {
   }
 
   checkFileType = (file, supportType) => {
-    const { name } = file;
-    const arr = (name || '')?.toLowerCase()?.split('.');
-    const prefix = arr[arr.length - 1];
+    const { name, imageType } = file;
+    let prefix = imageType;
+    if (!imageType) {
+      const arr = (name || '')?.toLowerCase()?.split('.');
+      prefix = arr[arr.length - 1];
+    }
     if (supportType.indexOf(prefix) === -1) return false;
     return true;
   };
@@ -715,8 +718,10 @@ class PostPage extends React.Component {
 
   handleEditorBoxScroller = (top = 0) => {
     const editorbox = document.querySelector('#post-inner');
+    const editorContent = document.querySelector('#dzq-vditor');
     const rect = editorbox.getBoundingClientRect();
-    const gap = this.props.site?.isPc ? top - rect.top : top;
+    if (top < editorContent.clientHeight) top = editorContent.clientHeight;
+    const gap = this.props.site?.isPc ? rect.top - top : top;
     editorbox.scrollTo({ top: gap, behavior: 'smooth' });
   };
 

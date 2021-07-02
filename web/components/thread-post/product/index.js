@@ -40,7 +40,6 @@ const Product = (props) => {
 
   // 组件内处理函数：添加商品，router.push('去往添加商品页');
   const addGood = () => {
-    console.log('添加商品');
     router.push('thread/100');
   };
   const clsName = props.pc ? classNames(styles['post-good-box'], styles.pc) : styles['post-good-box'];

@@ -26,17 +26,20 @@ import { Toast } from '@discuzq/design';
 class PCMyPage extends React.Component {
   constructor(props) {
     super(props);
+    this.isUnmount = false;
     this.state = {
       showFansPopup: false, // 是否弹出粉丝框
       showFollowPopup: false, // 是否弹出关注框
       isLoading: true,
     };
   }
-  async componentDidMount() {
-    await this.props.user.updateUserInfo(this.props.user.id);
 
+  fetchUserThreads = async () => {
     try {
-      await this.props.user.getUserThreads();
+      const userThreadsList = await this.props.user.getUserThreads();
+      if (!this.unMount) {
+        this.props.user.setUserThreads(userThreadsList);
+      }
     } catch (err) {
       console.error(err);
       let errMessage = '加载用户列表失败';
@@ -50,8 +53,19 @@ class PCMyPage extends React.Component {
         hasMask: false,
       });
     }
+  }
+
+  async componentDidMount() {
+    await this.props.user.updateUserInfo(this.props.user.id);
+    await this.fetchUserThreads();
 
     this.setState({ isLoading: false });
+  }
+
+
+  componentWillUnmount = () => {
+    this.unMount = true;
+    this.props.user.clearUserThreadsInfo();
   }
 
   loginOut() {
@@ -109,7 +123,7 @@ class PCMyPage extends React.Component {
             <div className={styles.userInfoWrapper}>
               <div className={styles.userInfoKey}>微信</div>
               <div className={`${styles.userInfoValue} ${styles.wxContent}`}>
-                <Avatar size="small" image={this.props.user.wxHeadImgUrl} name={this.props.user.wxNickname} />
+                <Avatar size="small" image={this.props.user.wxHeadImgUrl} name={this.props.user.wxNickname}/>
                 <span className={styles.wecahtNickname}>{this.props.user.wxNickname}</span>
               </div>
             </div>
@@ -139,6 +153,11 @@ class PCMyPage extends React.Component {
     const { user } = this.props;
     const { userThreads, userThreadsTotalCount } = user;
     const formattedUserThreads = this.formatUserThreadsData(userThreads);
+    let showUserThreadsTotalCount = true;
+
+    if (userThreadsTotalCount === undefined || userThreadsTotalCount === null) {
+      showUserThreadsTotalCount = false;
+    }
 
     return (
       <div className={styles.userContent}>
@@ -155,7 +174,7 @@ class PCMyPage extends React.Component {
           isShowMore={false}
           noData={!formattedUserThreads?.length}
           isLoading={isLoading}
-          leftNum={`${userThreadsTotalCount}个主题`}
+          leftNum={showUserThreadsTotalCount ? `${userThreadsTotalCount}个主题` : ''}
           mold="plane"
         >
           {formattedUserThreads?.map((item, index) => (
@@ -187,7 +206,7 @@ class PCMyPage extends React.Component {
           right={this.renderRight}
           immediateCheck={false}
           noMore={userThreadsTotalPage <= currentPageNum}
-          onRefresh={getUserThreads}
+          onRefresh={this.fetchUserThreads}
           showLayoutRefresh={!isLoading && !!formattedUserThreads?.length}
           showHeaderLoading={IS_USER_INFO_LOADING}
         >

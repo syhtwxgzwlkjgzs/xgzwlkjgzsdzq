@@ -671,8 +671,13 @@ class ThreadPCPage extends React.Component {
   renderContent() {
     const { thread: threadStore } = this.props;
     const { isReady, isCommentReady, isNoMore, totalCount, isCommentListError } = threadStore;
+    // 是否审核通过
+    const isApproved = (threadStore?.threadData?.isApproved || 0) === 1;
     return (
       <div className={layout.bodyLeft}>
+        {isReady && !isApproved && (
+          <div className={layout.examinePosition}></div>
+        )}
         {/* 帖子内容 */}
         {isReady ? (
           <RenderThreadContent
@@ -714,16 +719,22 @@ class ThreadPCPage extends React.Component {
 
   renderRight() {
     const { thread: threadStore } = this.props;
-    const { isAuthorInfoError } = threadStore;
+    const { isAuthorInfoError, isReady } = threadStore;
+
+    // 是否审核通过
+    const isApproved = (threadStore?.threadData?.isApproved || 0) === 1;
     // 是否作者自己
     const isSelf = this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === threadStore?.threadData?.userId;
     // 是否匿名
     const isAnonymous = threadStore?.threadData?.isAnonymous;
 
     return (
-      <div className={`${layout.bodyRigth} ${isSelf ? layout.positionSticky : ''}`}>
+      <div className={`${layout.bodyRigth}}`}>
+        {isReady && !isApproved && (
+          <div className={layout.examinePosition}></div>
+        )}
         {!isAnonymous && (
-          <div className={layout.authorInfo}>
+          <div className={`${layout.authorInfo} detail-authorinfo`}>
             {threadStore?.authorInfo ? (
               <AuthorInfo
                 user={threadStore.authorInfo}
@@ -757,12 +768,21 @@ class ThreadPCPage extends React.Component {
 
     // 是否审核通过
     const isApproved = (threadStore?.threadData?.isApproved || 0) === 1;
+    // TODO:目前还不清楚这块代码的作用，可能会对过滤代码块有影响
+    // console.log(threadStore?.threadData)
+    // if ( threadStore?.threadData ) {
+    //   const text = threadStore?.threadData.content.text;
+    //   let reg=/(<\/?.+?\/?>)|\n/g;
+    //   let newText = text.replace(reg,'');
+    //   // newText = newText.replace(/\n/g, '');
+    //   console.log(newText);
+    // }
 
     return (
       <div>
         <ShowTop showContent={this.props.thread?.threadData?.isStick} setTop={this.state.setTop}></ShowTop>
         <IsApproved isShow={isReady && !isApproved}></IsApproved>
-        
+
         <BaseLayout
           onRefresh={() => this.handleOnRefresh()}
           onScroll={() => this.handleOnScroll()}

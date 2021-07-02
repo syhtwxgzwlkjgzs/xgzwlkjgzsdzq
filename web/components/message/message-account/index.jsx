@@ -133,7 +133,7 @@ class Index extends React.Component {
   }
 
   render() {
-    const { site: { isPC }, message, router } = this.props;
+    const { site: { isPC }, message, router, rightContent } = this.props;
     const { type, items } = this.state;
     const { subPage } = router.query;
     const { list, currentPage, totalPage, totalCount } = message[type];
@@ -141,7 +141,7 @@ class Index extends React.Component {
     const card = <Card type={subPage} cardItems={items} onClick={this.toOtherMessage} />;
 
     return (
-      <div className={`${styles.wrapper} ${isPC ? styles.pc : styles.mobile}`}>
+      <div className={`${styles.wrapper} ${!isPC && styles.mobile}`}>
         <Notice
           infoIdx={3}
           totalCount={totalCount}
@@ -149,9 +149,9 @@ class Index extends React.Component {
           showHeader={!isPC}
           // topCard={(isPC || type === 'accountMsgList') ? card : null}
           topCard={isPC ? card : null}
+          rightContent={isPC ? rightContent : null}
           list={renderList}
           type='account'
-          showLoadingInCenter={false}
           onPullDown={() => this.fetchMessageData(1)}
           onScrollBottom={() => this.fetchMessageData()}
           onBtnClick={this.handleAccountDelete}

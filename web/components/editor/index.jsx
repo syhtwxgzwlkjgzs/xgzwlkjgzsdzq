@@ -195,7 +195,7 @@ export default function DVditor(props) {
     const editor = new Vditor(
       vditorId,
       {
-        _lutePath: 'https://cloudcache.tencent-cloud.com/operation/dianshi/other/lute.min.6cbcbfbacd9fa7cda638f1a6cfde011f7305a071.js?max_age=31536000',
+        _lutePath: 'https://cdn.jsdelivr.net/npm/@discuzq/vditor@1.0.22/dist/js/lute/lute.min.js',
         ...baseOptions,
         minHeight: 44,
         // 编辑器初始化值
@@ -248,7 +248,7 @@ export default function DVditor(props) {
           bubbleHide: false,
         },
         bubbleToolbar: pc ? [...baseToolbar] : [],
-        icon: '',
+        // icon: '',
         preview: {
           theme: {
             current: '',

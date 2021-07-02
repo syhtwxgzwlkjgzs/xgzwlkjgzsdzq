@@ -8,25 +8,24 @@ page {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 100%;
     padding-top: 60px;
+    padding-bottom: 220px;
+    padding-bottom: calc(220px + constant(safe-area-inset-bottom));
+    padding-bottom: calc(220px + env(safe-area-inset-bottom));
+    background-color: $white;
     border-top: $border-solid-1;
 
     .topBar {
+      box-sizing: content-box;
       position: fixed;
       top: 0;
       left: 0;
+      z-index: 99;
       display: flex;
       justify-content: flex-start;
       align-items: center;
       width: 100%;
       height: 64px;
-      // padding-top: $padding-5n;
-      // padding-top: calc(20px + constant(safe-area-inset-top));
-      // padding-top: calc(20px + env(safe-area-inset-top));
       font-size: $font-size-middle;
       color: $black;
       background: $white;
@@ -38,7 +37,6 @@ page {
         display: flex;
         justify-content: center;
         align-items: center;
-        // padding-right: 20px;
         text-align: center;
       }
       .topBar-title-inner {
@@ -71,9 +69,7 @@ page {
     }
 
     .tags {
-      padding-bottom: 90px;
-      padding-bottom: calc(90px + constant(safe-area-inset-bottom));
-      padding-bottom: calc(90px + env(safe-area-inset-bottom));
+      background: $white;
 
       .location-bar {
         padding: 0 16px;
@@ -99,13 +95,17 @@ page {
     }
 
     .toolbar {
-      position: absolute;
+      position: fixed;
       left: 0;
       right: 0;
       bottom: 0;
-      // bottom: calc(constant(safe-area-inset-bottom));
-      // bottom: calc(env(safe-area-inset-bottom));
-      z-index: 8;
+      z-index: 99;
+      background: $body-bg-color;
+    }
+
+    .toolbar-padding {
+      padding-bottom: calc(constant(safe-area-inset-bottom));
+      padding-bottom: calc(env(safe-area-inset-bottom));
     }
   }
 }

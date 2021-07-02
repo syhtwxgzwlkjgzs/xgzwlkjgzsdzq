@@ -228,4 +228,4 @@ function Home(props, ref) {
   );
 }
 
-export default observer(inject('vlist')(forwardRef(Home)));
+export default inject('vlist')(observer(forwardRef(Home)));
