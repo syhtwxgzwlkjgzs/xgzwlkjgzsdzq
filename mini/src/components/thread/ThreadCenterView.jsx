@@ -131,7 +131,7 @@ const Index = (props) => {
   };
   return (
     <>
-      <View id={wrapperId.current}  className={styles.wrapper}>
+      <View id={wrapperId.current} style={sty} className={styles.wrapper}>
         {title && (
           <View className={styles.title} onClick={onClick}>
             {newTitle}
