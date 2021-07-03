@@ -19,7 +19,6 @@
       img {
         &:not(:global(.qq-emotion)) {
           max-width: 100%;
-          max-height: rem(200);
           overflow: hidden;
         }
       }
@@ -35,10 +34,7 @@
     :global(.dzq-richText) {
       overflow: hidden;
     }
-    :global(.dzq-code) {
-      display: block;
-      overflow: auto;
-    }
+    
   }
 
   .hideCover {

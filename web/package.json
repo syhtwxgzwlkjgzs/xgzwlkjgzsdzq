@@ -12,10 +12,10 @@
     "update": "dzq update"
   },
   "dependencies": {
-    "@discuzq/design": "^1.0.27",
+    "@discuzq/design": "^1.0.31",
     "@discuzq/discuz-babel-plugin-import": "0.0.1",
     "@discuzq/plugin": "^1.0.26",
-    "@discuzq/sdk": "^1.0.23",
+    "@discuzq/sdk": "^1.0.24",
     "@discuzq/vditor": "^1.0.22",
     "@sandstreamdev/react-swipeable-list": "^1.0.1",
     "@sentry/browser": "^6.4.1",
@@ -37,11 +37,9 @@
     "react-multi-carousel": "2.6.2",
     "react-render-html": "^0.6.0",
     "react-virtualized": "^9.22.3",
-    "recorder-core": "1.1.21021500",
     "url": "0.11.0",
     "vditor": "3.8.4",
     "vod-js-sdk-v6": "1.4.11",
-    "webpack-bundle-analyzer": "^4.4.2",
     "xss": "1.0.8"
   },
   "devDependencies": {

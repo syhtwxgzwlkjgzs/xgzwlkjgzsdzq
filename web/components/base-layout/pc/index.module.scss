@@ -17,13 +17,6 @@
   }
 }
 
-
-.autoHeight {
-  min-height: 100vh;
-  ;
-  height: auto !important;
-}
-
 .body {
   width: 100%;
   min-width: rem(800);
@@ -209,30 +202,69 @@
   }
 }
 
+@mixin common() {
+  .qrcode {
+    padding: $padding-2n $padding-4n;
+
+    p {
+      font-size: $font-size-primary;
+    }
+  }
+
+  .copyright {
+    margin-top: $margin-10;
+  }
+
+  :global {
+    .dzq-richText {
+      p {
+        font-size: $font-size-primary !important;
+      }
+    }
+  }
+}
 // 高度自适应
 .container {
   :global {
     .detail {
-      @include heightMedia(780px, 700px) {
+      @include widthAndHeightMedia($media-min-width, $media-detail-min-height) {
+        @include common;
+      }
+      // 如果小于默认高度不吸顶
+      @include heightMedia($media-min-height) {
+        // .baselayout-right {
+        //   position: static;
+        // }
+      }
+      @include heightMedia(890px) {
+        .qrcode {
+          display: none;
+        }
+
+        .copyright {
+          margin-top: 0;
+        }
+      }
+      .right-recommend-item:nth-child(1),
+      .right-recommend-item:nth-child(n+1) {
+        display: block;
+      }
+      @include heightMedia(785px) {
         .right-recommend-item:nth-last-child(-n + 2) {
           display: none;
         }
       }
-
-      @include heightMedia(700px, 620px) {
+      @include heightMedia(720px) {
         .right-recommend-item:nth-last-child(-n + 3) {
           display: none;
         }
       }
-
-      @include heightMedia(620px, 540px) {
+      @include heightMedia(640px) {
         .right-recommend-item:nth-last-child(-n + 4) {
           display: none;
         }
       }
-
-      // 如果小于默认高度不吸顶
-      @include heightMedia(540px) {
+      @include heightMedia(560px) {
         .baselayout-right {
           position: static;
         }
@@ -259,15 +291,19 @@
           width: calc(24% - 4px);
         }
       }
-      @include widthAndHeightMedia(1200px, 800px) {
+      @include widthAndHeightMedia($media-min-width, $media-min-height) {
         .dzq-menu {
           &-item,
           .dzq-submenu__title {
             font-size: $font-size-primary;
           }
+          &-item {
+            padding-top: $padding-3n;
+            padding-bottom: $padding-3n;
+          }
         }
         .top-news-item {
-          height: 36px;
+          height: 32px;
           div {
             font-size: $font-size-primary;
           }
@@ -277,36 +313,7 @@
             }
           }
         }
-        .right-recommend-item {
-          p {
-            font-size: $font-size-primary;
-          }
-          >div:first-child {
-            padding-top: $padding-3n;
-          }
-          >div:last-child {
-            margin-top: $margin-2n;
-          }
-        }
-        .right-recommend-title {
-          font-size: $font-size-primary;
-        }
-        .qrcode {
-          padding: $padding-2n $padding-4n;
-          p {
-            font-size: $font-size-primary;
-          }
-        }
-        .copyright {
-          margin-top: $margin-10;
-        }
-        :global {
-          .dzq-richText {
-            p {
-              font-size: $font-size-primary !important;
-            }
-          }
-        }
+        @include common;
       }
       @include heightMedia(720px) {
         .qrcode {
@@ -317,7 +324,7 @@
         }
       }
       // 如果小于默认高度不吸顶
-      @include heightMedia(600px) {
+      @include heightMedia(590px) {
         .baselayout-right {
           position: static;
         }
@@ -331,8 +338,8 @@
     .search-result-post,
     .search-result-user {
       .pop-topic div:nth-child(1),
-      .pop-topic div:nth-child(n+1),
-      .pop-topic div:nth-child(n+2) {
+      .pop-topic div:nth-child(n + 1),
+      .pop-topic div:nth-child(n + 2) {
         display: flex;
       }
       @include heightMedia(650px, 595px) {
@@ -484,8 +491,8 @@
         }
       }
       .pop-topic div:nth-child(1),
-      .pop-topic div:nth-child(n+1),
-      .pop-topic div:nth-child(n+2) {
+      .pop-topic div:nth-child(n + 1),
+      .pop-topic div:nth-child(n + 2) {
         display: flex;
       }
       @include heightMedia(830px, 775px) {
@@ -554,11 +561,61 @@
   // padding: rem(20) 0;
 }
 
-
-
 .list {
   width: 100%;
   flex: 1;
   display: flex;
   justify-content: center;
+}
+
+// 接入虚拟滚动采用fixed方式进行布局
+.list.fixed {
+  .left {
+    position: fixed;
+  }
+
+  .center {
+    position: relative;
+    left: -12px;
+  }
+
+  .right {
+    position: fixed;
+  }
+
+  @include media('xl-pc') {
+    .left {
+      top: 77px;
+      left: calc(50vw - 710px);
+    }
+
+    .right {
+      top: 77px;
+      right: calc(50vw - 710px);
+    }
+  }
+
+  @include media('l-pc') {
+    .left {
+      top: 77px;
+      left: 20px;
+    }
+
+    .right {
+      top: 77px;
+      right: 20px;
+    }
+  }
+
+  @include media('s-pc') {
+    .left {
+      top: 74px;
+      left: 14px;
+    }
+
+    .right {
+      top: 74px;
+      right: 14px;
+    }
+  }
 }

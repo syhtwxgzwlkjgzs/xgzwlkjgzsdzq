@@ -11,7 +11,6 @@ export default class H5Qrcode {
   @observable qrCode = '';
   @observable sessionToken = '';
   @observable countDown = COUNT_DOWN_OF_SECONDS;
-  @observable loginTitle = '你确定要授权登录Discuz!Q吗？';
   @observable bindTitle = '请绑定您的微信';
   @observable isBtn = true;
   countDownOfSeconds = COUNT_DOWN_OF_SECONDS; // 有效期，单位s

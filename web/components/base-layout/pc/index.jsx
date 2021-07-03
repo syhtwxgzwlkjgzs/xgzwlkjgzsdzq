@@ -135,31 +135,11 @@ const BaseLayout = forwardRef((props, ref) => {
   );
 
   if (disabledList) {
-    content = (
-      <div className={styles.list}>
-        {(pageName === 'home' || left) && (
-          <div className={styles.left}>{typeof left === 'function' ? left({ ...props }) : left}</div>
-        )}
-
-        <div className={styles.center}>
-          {typeof children === 'function' ? children({ ...props }) : children}
-        </div>
-
-        {(pageName === 'home' || right) && (
-          <div
-            className={`baselayout-right ${styles.right} ${rightClassName} ${
-              pageName === 'home' ? styles['home-right'] : ''
-            }`}
-          >
-            {typeof right === 'function' ? right({ ...props }) : right}
-          </div>
-        )}
-      </div>
-    );
+    content = children;
   }
 
   return (
-    <div className={`${styles.container} ${props.enabledWindowScroll && styles.autoHeight}`}>
+    <div className={`${styles.container}`}>
       {(header && header({ ...props })) || <Header onSearch={onSearch} />}
 
       <div className={`${styles.body} ${cls} ${props.className}`}>

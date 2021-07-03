@@ -29,6 +29,7 @@ class IndexPCPage extends React.Component {
 
     // 存储最新的数据，以便于点击刷新时，可以直接赋值
     this.newThread = {};
+    this.enabledVList = true; // 开启虚拟列表
 
     // 轮询定时器
     this.timer = null;
@@ -48,7 +49,7 @@ class IndexPCPage extends React.Component {
     () => import('./components/dynamic-vlist'),
     { loading: (res) => {
         return (
-            <div style={{width: '100%'}}>
+            <div style={{width: '100%', maxWidth: '1420px'}}>
                 <DynamicLoading data={res} style={{padding: '0 0 20px 0'}} loadComponent={
                   <div style={{width: '100%'}}>
                     <div className={styles.placeholder}>
@@ -85,7 +86,6 @@ class IndexPCPage extends React.Component {
   )
 
   componentDidMount() {
-
     if (this.timer) {
       clearInterval(this.timer);
     }
@@ -121,8 +121,8 @@ class IndexPCPage extends React.Component {
         },
       }).then((res) => {
         const { totalCount = 0 } = res?.data || {};
-        const newConNum = totalCount - nowTotal
-        const { visible = false, conNum = 0 } = this.state
+        const newConNum = totalCount - nowTotal;
+        const { visible = false, conNum = 0 } = this.state;
 
         if (newConNum > conNum) {
           this.setState({
@@ -146,7 +146,7 @@ class IndexPCPage extends React.Component {
   onPullingUp = () => {
     const { dispatch = () => {} } = this.props;
 
-    if(!this.props.index?.threads?.pageData?.length) return; // 火狐浏览器会记录当前浏览位置。防止刷新页面触发载入第二页数据
+    if (!this.props.index?.threads?.pageData?.length) return; // 火狐浏览器会记录当前浏览位置。防止刷新页面触发载入第二页数据
 
     return dispatch('moreData');
   };
@@ -269,14 +269,17 @@ class IndexPCPage extends React.Component {
         errorText={threadError.errorText}
         className="home"
         disabledList={this.enabledVList}
-        enabledWindowScroll={this.enabledWindowScroll}
+        onRefreshPlaceholder={this.onRefreshPlaceholder}
       >
         <this.DynamicVListLoading
           indexStore={index}
           siteStore={site}
           visible={visible}
-          visible={conNum}
-          visible={isShowDefault}
+          conNum={conNum}
+          noMore={currentPage >= totalPage}
+          requestError={threadError.isError}
+          errorText={threadError.errorText}
+          isShowDefault={isShowDefault}
           onFilterClick={this.onFilterClick}
           onPostThread={this.onPostThread}
           goRefresh={this.goRefresh}

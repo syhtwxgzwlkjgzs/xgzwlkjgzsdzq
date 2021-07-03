@@ -12,6 +12,7 @@ import { Spin, Icon } from '@discuzq/design';
 import typeofFn from '@common/utils/typeof';
 import setWxShare from '@common/utils/set-wx-share';
 import styles from './HOCFetchSiteData.module.scss';
+import initWXSDK from '@common/utils/init-wx-sdk';
 import {
   WEB_SITE_JOIN_WHITE_LIST,
   JUMP_TO_404,
@@ -104,15 +105,6 @@ export default function HOCFetchSiteData(Component) {
       serverUser && serverUser.userInfo && user.setUserInfo(serverUser.userInfo);
       serverUser && serverUser.userPermissions && user.setUserPermissions(serverUser.userPermissions);
 
-      // 如果还没有获取用户名登录入口是否展示接口，那么请求来赋予初始值
-      if (this.props.site.isUserLoginVisible === null) {
-        try {
-          this.props.site.getUserLoginEntryStatus();
-        } catch (error) {
-          console.log(error);
-        }
-      }
-
       if (!isServer()) {
         isNoSiteData = !((site && site.webConfig));
       } else {
@@ -133,12 +125,12 @@ export default function HOCFetchSiteData(Component) {
       // 设置平台标识
       site.setPlatform(getPlatform(window.navigator.userAgent));
 
-
       if (isNoSiteData) {
-        siteConfig = serverSite && serverSite.webConfig ? serverSite.webConfig : null;
-        if (!serverSite || !serverSite.webConfig) {
+        siteConfig = serverSite?.webConfig || null;
+        if (!siteConfig) {
           const result = await readForum({});
           result.data && site.setSiteConfig(result.data);
+          
           // 设置全局状态
           this.setAppCommonStatus(result);
           siteConfig = result.data || null;
@@ -146,6 +138,9 @@ export default function HOCFetchSiteData(Component) {
       } else {
         siteConfig = site ? site.webConfig : null;
       }
+      // 初始化登陆方式
+      site.initUserLoginEntryStatus();
+
       // 判断是否有token
       if (siteConfig && siteConfig.user) {
         if ((!user || !user.userInfo) && (!serverUser || !serverUser.userInfo)) {
@@ -164,15 +159,17 @@ export default function HOCFetchSiteData(Component) {
         loginStatus = false;
       }
 
+      user.updateLoginStatus(loginStatus);
+      this.setState({ isPass: this.isPass() });
+
       // 初始化分享配置
-      if ( siteConfig && siteConfig.setSite ) {
+      const isInit = await initWXSDK(siteConfig && siteConfig.passport && siteConfig.passport.offiaccountOpen);
+      if ( isInit && siteConfig && siteConfig.setSite ) {
         const {setSite} = siteConfig;
         const {siteTitle, siteIntroduction, siteFavicon} = setSite;
         setWxShare(siteTitle, siteIntroduction, window.location.href, siteFavicon);
       }
-
-      user.updateLoginStatus(loginStatus);
-      this.setState({ isPass: this.isPass() });
+      
     }
 
     setAppCommonStatus(result) {

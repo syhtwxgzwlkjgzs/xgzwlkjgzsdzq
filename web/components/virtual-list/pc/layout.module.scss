@@ -1,0 +1,86 @@
+@import '@common/styles/index.scss';
+
+.list {
+  width: 100%;
+}
+
+.list.fixed {
+  .left {
+    position: fixed;
+    z-index: 1000;
+  }
+
+
+  .right {
+    position: fixed;
+    z-index: 1000;
+  }
+
+  .top {
+    position: fixed;
+    z-index: 1000;
+  }
+
+  @include media('xl-pc') {
+    .center {
+      width: rem(750) !important;
+      left: calc(300px + 50vw - 710px + 20px) !important;
+    }
+
+    .left {
+      margin-right: rem(20);
+      width: rem(300);
+      top: 77px;
+      left: calc(50vw - 710px);
+    }
+
+    .right {
+      margin-left: rem(20);
+      width: rem(330);
+      top: 77px;
+      right: calc(50vw - 710px);
+    }
+  }
+
+  @include media('l-pc') {
+    .center {
+      width: 52% !important;
+      left: calc(21.4% + 20px) !important;
+    }
+
+    .left {
+      margin-right: 1.4%;
+      width: 20%;
+      top: 77px;
+      left: 20px;
+    }
+
+    .right {
+      margin-left: 1.4%;
+      width: 22%;
+      top: 77px;
+      right: 20px;
+    }
+  }
+
+  @include media('s-pc') {
+    .center {
+      width: 44% !important;
+      left: calc(24% + 14px + 1%) !important;
+    }
+
+    .left {
+      margin-right: 1%;
+      width: 24%;
+      top: 74px;
+      left: 14px;
+    }
+
+    .right {
+      margin-left: 0.9%;
+      width: 27%;
+      top: 74px;
+      right: 14px;
+    }
+  }
+}

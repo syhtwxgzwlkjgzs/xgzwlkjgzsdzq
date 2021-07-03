@@ -35,7 +35,7 @@ class CustomHead extends React.Component {
     const base = get(site, 'webConfig.setSite.siteKeywords', '欢迎您');
     let renderKeywords = base;
     if (keywords && keywords !== '') {
-      renderKeywords = `${title} - ${renderTitle}`;
+      renderKeywords = `${keywords} - ${renderKeywords}`;
     }
     return renderKeywords;
   }
