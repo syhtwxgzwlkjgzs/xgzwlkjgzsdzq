@@ -850,6 +850,7 @@ class ThreadH5Page extends React.Component {
       canStick: threadStore?.threadData?.ability?.canStick,
       canShare: this.props.user.isLogin(),
       canCollect: this.props.user.isLogin(),
+      isAdmini: this.props?.user?.isAdmini,
     };
 
     // 更多弹窗界面
