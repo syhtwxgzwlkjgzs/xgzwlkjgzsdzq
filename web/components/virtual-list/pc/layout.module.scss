@@ -7,17 +7,17 @@
 .list.fixed {
   .left {
     position: fixed;
-    z-index: 1000;
+    z-index: $zindex-normal;
   }
 
   .right {
-    position: fixed;
-    z-index: 1000;
+    position: fixed !important;
+    z-index: $zindex-normal;
   }
 
   .top {
     position: fixed;
-    z-index: 1000;
+    z-index: $zindex-backtotop;
   }
 
   @include media('xl-pc') {
@@ -82,12 +82,37 @@
       right: 14px;
     }
   }
+
+  // 自适应高度
+  :global {
+    @include heightMedia(660px, 580px) {
+      .right-recommend-item:nth-last-child(-n + 2) {
+        display: none;
+      }
+    }
+    @include heightMedia(580px, 500px) {
+      .right-recommend-item:nth-last-child(-n + 3) {
+        display: none;
+      }
+    }
+    @include heightMedia(500px, 420px) {
+      .right-recommend-item:nth-last-child(-n + 4) {
+        display: none;
+      }
+    }
+    // 如果小于默认高度不吸顶
+    @include heightMedia(415px) {
+      .baselayout-right {
+        // position: static;
+      }
+    }
+  }
 }
 
 .scrollArea {
   overflow: hidden overlay !important;
   @include scrollbar();
-  
+
   // 滚动条上的滚动滑块
   &::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 0.5);

@@ -1,6 +1,7 @@
 import React, { useRef, forwardRef, useState, useEffect } from 'react';
 import './index.scss';
 import Item from '../h5/item';
+import ObserveItem from '../h5/observe-item';
 import BottomView from '../BottomView';
 import BacktoTop from '@components/list/backto-top';
 import { getImmutableTypeHeight, getLogHeight, getSticksHeight, getTabsHeight } from '../utils';
@@ -105,14 +106,14 @@ function Home(props, ref) {
     }
 
     // 头部
-    if (data.type === 'header') {
-      return (
-        getLogHeight(platform) +
-        getTabsHeight(platform) +
-        getSticksHeight(props.sticks, platform) +
-        (props.visible ? 50 : 0)
-      );
-    }
+    // if (data.type === 'header') {
+    //   return (
+    //     getLogHeight(platform) +
+    //     getTabsHeight(platform) +
+    //     getSticksHeight(props.sticks, platform) +
+    //     (props.visible ? 50 : 0)
+    //   );
+    // }
 
     // 底部
     if (data.type === 'footer') {
@@ -124,7 +125,11 @@ function Home(props, ref) {
   const renderListItem = (type, data, measure, { index, key, parent, style }) => {
     switch (type) {
       case 'header':
-        return <div style={{ background: '#fff', ...style }}>{props.children}</div>;
+        return (
+          <ObserveItem key={key} measure={measure}>
+            {props.children}
+          </ObserveItem>
+        );
       case 'footer':
         return (
           <BottomView
@@ -264,9 +269,7 @@ function Home(props, ref) {
                     // overscanIndicesGetter={overscanIndicesGetter}
                   />
 
-                  <div className={`baselayout-right ${layout.right}`}>
-                    {typeof right === 'function' ? right({ ...props }) : right}
-                  </div>
+                  <div className={`${layout.right}`}>{typeof right === 'function' ? right({ ...props }) : right}</div>
 
                   {scrollTop > 100 && <BacktoTop onClick={handleBacktoTop} />}
                 </div>
