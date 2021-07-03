@@ -7,7 +7,7 @@
 .list.fixed {
   .left {
     position: fixed;
-    z-index: $zindex-normal;
+    z-index: $zindex-backtotop;
   }
 
   .right {

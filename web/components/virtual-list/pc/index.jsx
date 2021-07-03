@@ -203,9 +203,14 @@ function Home(props, ref) {
     if (scrollTop + clientHeight + clientHeight >= scrollHeight && !loadData) {
       loadData = true;
       if (props.loadNextPage) {
-        props.loadNextPage().finally(() => {
+        const promise = props.loadNextPage();
+        if (promise) {
+          promise.finally(() => {
+            loadData = false;
+          });
+        } else {
           loadData = false;
-        });
+        }
       }
     }
   };
