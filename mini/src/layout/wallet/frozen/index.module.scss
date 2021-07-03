@@ -16,14 +16,11 @@
   font-weight: bold;
   padding: 0 $padding-4n;
   margin-bottom: $margin-10;
-
-  font-family: 'PingFangSC-Regular';
   font-weight: normal;
   text-align: left;
   color: $text-color-secondary;
 
   .totalMoneyNumber {
-    font-family: 'PingFang SC';
     font-weight: $font-weight-regular;
   }
 }
@@ -38,7 +35,6 @@
     .upper {
       display: flex;
       justify-content: space-between;
-      font-family: 'PingFang SC';
       text-align: left;
       color: $text-color-primary;
       overflow: hidden;
@@ -78,7 +74,7 @@
     .lower {
       display: flex;
       justify-content: space-between;
-      font-family: 'PingFangSC-Regular';
+      
       font-size: $font-size-label;
       text-align: left;
       color: $text-color-secondary;

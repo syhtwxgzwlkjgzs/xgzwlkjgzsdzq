@@ -202,30 +202,69 @@
   }
 }
 
+@mixin common() {
+  .qrcode {
+    padding: $padding-2n $padding-4n;
+
+    p {
+      font-size: $font-size-primary;
+    }
+  }
+
+  .copyright {
+    margin-top: $margin-10;
+  }
+
+  :global {
+    .dzq-richText {
+      p {
+        font-size: $font-size-primary !important;
+      }
+    }
+  }
+}
 // 高度自适应
 .container {
   :global {
     .detail {
-      @include heightMedia(780px, 700px) {
+      @include widthAndHeightMedia($media-min-width, $media-detail-min-height) {
+        @include common;
+      }
+      // 如果小于默认高度不吸顶
+      @include heightMedia($media-min-height) {
+        // .baselayout-right {
+        //   position: static;
+        // }
+      }
+      @include heightMedia(890px) {
+        .qrcode {
+          display: none;
+        }
+
+        .copyright {
+          margin-top: 0;
+        }
+      }
+      .right-recommend-item:nth-child(1),
+      .right-recommend-item:nth-child(n+1) {
+        display: block;
+      }
+      @include heightMedia(785px) {
         .right-recommend-item:nth-last-child(-n + 2) {
           display: none;
         }
       }
-
-      @include heightMedia(700px, 620px) {
+      @include heightMedia(720px) {
         .right-recommend-item:nth-last-child(-n + 3) {
           display: none;
         }
       }
-
-      @include heightMedia(620px, 540px) {
+      @include heightMedia(640px) {
         .right-recommend-item:nth-last-child(-n + 4) {
           display: none;
         }
       }
-
-      // 如果小于默认高度不吸顶
-      @include heightMedia(540px) {
+      @include heightMedia(560px) {
         .baselayout-right {
           position: static;
         }
@@ -252,15 +291,19 @@
           width: calc(24% - 4px);
         }
       }
-      @include widthAndHeightMedia(1200px, 800px) {
+      @include widthAndHeightMedia($media-min-width, $media-min-height) {
         .dzq-menu {
           &-item,
           .dzq-submenu__title {
             font-size: $font-size-primary;
           }
+          &-item {
+            padding-top: $padding-3n;
+            padding-bottom: $padding-3n;
+          }
         }
         .top-news-item {
-          height: 36px;
+          height: 32px;
           div {
             font-size: $font-size-primary;
           }
@@ -270,36 +313,7 @@
             }
           }
         }
-        .right-recommend-item {
-          p {
-            font-size: $font-size-primary;
-          }
-          >div:first-child {
-            padding-top: $padding-3n;
-          }
-          >div:last-child {
-            margin-top: $margin-2n;
-          }
-        }
-        .right-recommend-title {
-          font-size: $font-size-primary;
-        }
-        .qrcode {
-          padding: $padding-2n $padding-4n;
-          p {
-            font-size: $font-size-primary;
-          }
-        }
-        .copyright {
-          margin-top: $margin-10;
-        }
-        :global {
-          .dzq-richText {
-            p {
-              font-size: $font-size-primary !important;
-            }
-          }
-        }
+        @include common;
       }
       @include heightMedia(720px) {
         .qrcode {
@@ -310,7 +324,7 @@
         }
       }
       // 如果小于默认高度不吸顶
-      @include heightMedia(600px) {
+      @include heightMedia(590px) {
         .baselayout-right {
           position: static;
         }

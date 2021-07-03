@@ -53,7 +53,6 @@
   }
 }
 
-
 .placeholder {
   width: 100%;
   background: $white;
@@ -71,6 +70,7 @@
       height: rem(38);
       border-radius: 50%;
       background: $box-color-placeholder;
+      // background: $box-color-placeholder;
       flex-shrink: 0;
     }
     .box {
@@ -79,6 +79,16 @@
       margin-left: rem($margin-2n);
       flex: 1;
       border-radius: $border-radius-small;
+      animation: loading 6s linear infinite;
+      background-image: linear-gradient(
+        50deg,
+        $box-color-placeholder,
+        $box-color-placeholder 52%,
+        #fff 55%,
+        $box-color-placeholder 58%,
+        $box-color-placeholder
+      );
+      background-size: 400% 100%;
     }
   }
   .content {
@@ -86,6 +96,16 @@
     background: $box-color-placeholder;
     border-radius: $border-radius-small;
     margin-top: rem($margin-4n);
+    animation: loading 6s linear infinite;
+    background-image: linear-gradient(
+      50deg,
+      $box-color-placeholder,
+      $box-color-placeholder 52%,
+      #fff 55%,
+      $box-color-placeholder 58%,
+      $box-color-placeholder
+    );
+    background-size: 400% 100%;
   }
   .footer {
     margin-top: rem($margin-4n);
@@ -103,41 +123,11 @@
   }
 }
 
-.topFixed {
-  position: fixed;
-  transform: translateX(-50%);
-  z-index: 10;
-  top: 60px;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  overflow: hidden;
-
-  .emptyBox {
-    background: $body-bg-color;
+@keyframes loading {
+  0% {
+    background-position: 400% 50%;
   }
-
-  @include media('xl-pc') {
-    width: 750px;
-    left: calc(50% - 15px);
-
-    .emptyBox {
-      height: 16px;
-    }
-  }
-
-  @include media('l-pc') {
-    width: 52%;
-
-    .emptyBox {
-      height: 16px;
-    }
-  }
-
-  @include media('s-pc') {
-    width: 44%;
-
-    .emptyBox {
-      height: 18px;
-    }
+  to {
+    background-position: 0% 50%;
   }
 }

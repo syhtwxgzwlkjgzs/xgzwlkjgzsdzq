@@ -25,6 +25,14 @@
   background: $body-bg-color;
   // border-top-left-radius: rem(5);
   // border-top-right-radius: rem(5);
+  @include media('s-pc') {
+    .PostTheme {
+      width: 100%;
+      button {
+        width: 100%;
+      }
+    }
+  }
 
   &:after {
     content: '';
@@ -98,44 +106,4 @@
     margin: 0 rem($margin-6n);
     border-bottom-left-radius: rem(5);
     border-bottom-right-radius: rem(5);
-}
-
-.topFixed {
-  position: fixed;
-  left: calc(50% - 12px);
-  transform: translateX(-50%);
-  z-index: 10;
-  top: 60px;
-  overflow: hidden;
-
-  .emptyBox {
-    background: $body-bg-color;
-  }
-
-  @include media('xl-pc') {
-    width: 750px;
-    left: calc(50% - 15px);
-
-    .emptyBox {
-      height: 16px;
-    }
-  }
-
-  @include media('l-pc') {
-    width: 52%;
-    left: calc(50% - 15px);
-
-    .emptyBox {
-      height: 16px;
-    }
-  }
-
-  @include media('s-pc') {
-    width: 44%;
-    left: calc(50% - 17px);
-
-    .emptyBox {
-      height: 18px;
-    }
-  }
 }

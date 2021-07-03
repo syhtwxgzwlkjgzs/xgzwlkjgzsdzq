@@ -7,6 +7,7 @@ import BottomView from '@components/list/BottomView';
 import isServer from '@common/utils/is-server';
 import { debounce } from '@common/utils/throttle-debounce';
 import replaceStringInRegex from '@common/utils/replace-string-in-regex';
+import classNames from 'classnames';
 
 @inject('index')
 @observer
@@ -131,7 +132,7 @@ class Index extends React.Component {
               </div>
           )})
         }
-        {(recommendsStatus === 'none'|| recommendsStatus === 'error') && <div className={style.recommendSwitch}>
+        {(recommendsStatus === 'none'|| recommendsStatus === 'error') && <div className={classNames(style.recommendSwitch, 'right-recommend-switch')}>
           <div className={style.switchBox} onClick={this.changeBatch}>
             <Icon name="RenovateOutlined" className={style.switchIcon} size={14}/>换一批
           </div>
