@@ -52,6 +52,16 @@ export default class resetPasswordStore {
       return this.code.length === 6;
     }
 
+    // 重置参数
+    @action
+    reset = () => {
+      this.mobile = '';
+      this.code = '';
+      this.newPassword = '';
+      this.newPasswordRepeat = '';
+      this.codeTimeout = null;
+    }
+
     // 是否信息填写完毕
     @computed get isInfoComplete() {
       return (
@@ -59,8 +69,7 @@ export default class resetPasswordStore {
             && this.mobile
             && this.newPassword
             && this.newPasswordRepeat
-            // 新旧密码需要相同
-            && this.newPasswordRepeat === this.newPassword
+            && this.newPassword
       );
     }
 

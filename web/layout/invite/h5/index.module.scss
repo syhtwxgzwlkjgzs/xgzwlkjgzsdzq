@@ -269,7 +269,30 @@
     color: $text-color-placeholder;
   }
   .bottom_tips_wrap {
-    height: rem(46);
+    min-height: rem(40);
+  }
+  .noMoreLeft{
+    background-color: #e5e5e5;
+    width: rem(79);
+    height: rem(1);
+    float: left;
+    margin-right: rem($margin-4n);
+  }
+  .noMoreRight{
+    background-color: #e5e5e5;
+    width: rem(79);
+    height: rem(1);
+    float: right;
+    margin-left: rem($margin-4n);
+  }
+  .lineSty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: rem($font-size-primary);
+    color: $text-color-placeholder;
+    padding: rem($padding-6n) 0;
+    line-height: rem($font-line-height-small);
   }
 
 }

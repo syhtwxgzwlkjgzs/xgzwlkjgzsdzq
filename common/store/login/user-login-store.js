@@ -18,6 +18,13 @@ export default class UserLoginStore {
     return this.username && this.password;
   }
 
+  // 重置参数
+  @action
+  reset = () => {
+    this.username = '';
+    this.password = '';
+  }
+
   @action
   login = async () => {
     // 信息需要填写完整
