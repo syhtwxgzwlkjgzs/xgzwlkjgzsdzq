@@ -95,19 +95,12 @@ class DzqApp extends App {
     // Router.replace({ url: '/render-error' });
   }
 
-  // 待验证
-  isMobile () {
-    console.log(100, 'mobile:', browser.env('mobile'), 'iPad', browser.env('iPad'))
-    return browser.env('mobile') && !browser.env('iPad')
-  }
-
+  // 移动端检测横屏
   initOretation() {
     this.toastInstance?.destroy();
     
-    // 移动端检测横屏
-    if (this.isMobile()) {
+    if (browser.env('mobile') && !browser.env('iPad')) {
       const isVertical = detectH5Orient();
-      console.log(200, 'isVertical',  isVertical)
       if (!isVertical) {
         this.toastInstance = Toast.info({
           content: '为了更好的体验，请使用竖屏浏览',
