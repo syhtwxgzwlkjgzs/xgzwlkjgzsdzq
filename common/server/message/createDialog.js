@@ -1,16 +1,9 @@
-// import {createOrdersCreate} from '@discuzq/sdk/dist/api/pay/create-orderscreate';
-import api from '../api';
-
 /**
- * 创建新的私信对话
- * TODO: 待更新到sdk
+ * 新建私信对话
  */
+import { createDialog } from '@discuzq/sdk/dist/api/notice/create-dialog';
+
 export default async function _createDialog(params) {
-  const res = await api.http({
-    url: '/apiv3/dialog.create',
-    method: 'post',
-    data: params,
-    timeout: 5000,
-  });
+  const res = await createDialog({ data: params });
   return res;
 }
