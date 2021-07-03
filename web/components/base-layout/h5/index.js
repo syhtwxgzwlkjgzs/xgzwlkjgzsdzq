@@ -74,7 +74,7 @@ const BaseLayout = forwardRef((props, ref) => {
       ref={listRef}
       onScroll={({ scrollTop }) => {
         setScrollTop(scrollTop);
-        onScroll();
+        onScroll({ scrollTop });
       }}
       platform={platform}
     >
