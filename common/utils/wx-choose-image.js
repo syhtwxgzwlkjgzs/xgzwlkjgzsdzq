@@ -26,7 +26,7 @@ const dataURLtoFile = (dataurl, filename = 'image') => {
 const wxChooseImage = () => new Promise(async (resolve) => {
   // 验证不通过，jssdk接口不可用，resolve一个空数组给业务，业务自行判断并进行图片选择的降级处理
   // step 1: 判断是否是微信环境、jssdk文件是否下载并执行
-  if (!browser.env('weixin') || !(window.wx && wx.chooseImage)) {
+  if (!browser.env('weixin') || !browser.env('android') || !(window.wx && wx.chooseImage)) {
     resolve([]);
     return;
   }
