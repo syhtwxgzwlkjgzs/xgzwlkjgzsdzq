@@ -35,6 +35,10 @@ class LoginPhoneH5Page extends React.Component {
     mobileLogin.code = code;
   };
 
+  componentWillUnmount() {
+    this.props.mobileLogin.reset();
+  }
+
   handleLoginButtonClick = async () => {
     try {
       const { mobileLogin, router, invite, commonLogin } = this.props;
@@ -52,7 +56,6 @@ class LoginPhoneH5Page extends React.Component {
         hasMask: false,
         duration: 1000,
         onClose: () => {
-          mobileLogin.reset();
           window.location.href = '/';
         },
       });

@@ -132,8 +132,15 @@ class InviteH5Page extends React.Component {
                 ))
               }
               <div className={layout.bottom_tips_wrap}>
-                {isNoData && <NoData className={layout.invite_list_nodata} text='没有更多内容了'/>}
                 {inviteLoading && <div className={layout.loadMoreContainer}><Spin type={'spinner'}>加载中 ...</Spin></div>}
+                {
+                  !inviteLoading && isNoData
+                  && <div className={layout.lineSty}>
+                        <span className={layout.noMoreLeft}></span>
+                        <span>没有更多内容了</span>
+                        <span className={layout.noMoreRight}></span>
+                    </div>
+                }
               </div>
             </div>
           </div>

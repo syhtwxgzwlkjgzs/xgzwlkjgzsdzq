@@ -16,9 +16,19 @@ import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-stor
 @inject('commonLogin')
 @observer
 class WXBindUsernameH5page extends React.Component {
+  componentWillUnmount() {
+    this.props.userLogin.reset();
+  }
+
   handleLoginButtonClick = async () => {
+    const { commonLogin } = this.props;
     try {
+      if (!commonLogin.loginLoading) {
+        return;
+      }
+      commonLogin.loginLoading = false;
       const res = await this.props.userLogin.login();
+      commonLogin.loginLoading = true;
       const uid = get(res, 'data.uid');
       this.props.user.updateUserInfo(uid);
       Toast.success({
@@ -31,6 +41,7 @@ class WXBindUsernameH5page extends React.Component {
         window.location.href = '/';
       }, 1000);
     } catch (e) {
+      commonLogin.loginLoading = true;
       // 跳转补充信息页
       if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
         if (isExtFieldsOpen(this.props.site)) {
@@ -57,7 +68,7 @@ class WXBindUsernameH5page extends React.Component {
     }
   };
   render() {
-    const { userLogin, router } = this.props;
+    const { userLogin, router, commonLogin: { loginLoading } } = this.props;
     const { nickname, avatarUrl } = router.query;
     userLogin.sessionToken = router.query.sessionToken;
     return (
@@ -103,10 +114,11 @@ class WXBindUsernameH5page extends React.Component {
             onChange={(e) => {
               userLogin.password = e.target.value;
             }}
+            onEnter={this.handleLoginButtonClick}
           />
           {/* 输入框 end */}
           {/* 登录按钮 start */}
-          <Button className={layout.button} type="primary" onClick={this.handleLoginButtonClick}>
+          <Button loading={!loginLoading} disabled={!this.props.userLogin.isInfoComplete}  className={layout.button} type="primary" onClick={this.handleLoginButtonClick}>
             登录并绑定
           </Button>
           {/* 登录按钮 end */}

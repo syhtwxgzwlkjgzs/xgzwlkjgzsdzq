@@ -18,6 +18,10 @@ import HOCTencentCaptcha from '@middleware/HOCTencentCaptcha';
 @inject('resetPassword')
 @observer
 class ResetPasswordH5Page extends React.Component {
+  componentWillUnmount() {
+    this.props.resetPassword.reset();
+  }
+
   handlePhoneNumCallback = (phoneNum) => {
     const { resetPassword } = this.props;
     resetPassword.mobile = phoneNum;
@@ -52,6 +56,11 @@ class ResetPasswordH5Page extends React.Component {
 
   handleResetPasswordButtonClick = async () => {
     try {
+      const { commonLogin } = this.props;
+      if (!commonLogin.loginLoading) {
+        return;
+      }
+      commonLogin.loginLoading = false;
       await this.props.resetPassword.resetPassword();
 
       Toast.success({
@@ -61,9 +70,11 @@ class ResetPasswordH5Page extends React.Component {
       });
 
       setTimeout(() => {
+        commonLogin.loginLoading = true;
         this.props.router.push('/user/login');
       }, 1000);
     } catch (e) {
+      this.props.commonLogin.loginLoading = true;
       Toast.error({
         content: e.Message,
         hasMask: false,
@@ -73,7 +84,7 @@ class ResetPasswordH5Page extends React.Component {
   };
 
   render() {
-    const { site } = this.props;
+    const { site, commonLogin: { loginLoading }  } = this.props;
     const { platform } = site;
     return (
       <PcBodyWrap>
@@ -116,8 +127,11 @@ class ResetPasswordH5Page extends React.Component {
             onChange={(e) => {
               this.props.resetPassword.newPasswordRepeat = e.target.value;
             }}
+            onEnter={this.handleResetPasswordButtonClick}
           />
           <Button
+            loading={!loginLoading}
+            disabled={!this.props.resetPassword.isInfoComplete}
             className={platform === 'h5' ? layout.button : layout.pc_button}
             type="primary"
             onClick={this.handleResetPasswordButtonClick}
