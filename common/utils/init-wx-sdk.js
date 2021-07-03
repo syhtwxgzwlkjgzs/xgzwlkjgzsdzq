@@ -34,6 +34,9 @@ export default async function initWXSDK(isInitConfig = false, jsApiList = []) {
             ...params,
             jsApiList: [...DEFAULT_JSAPULIST, ...jsApiList],
         });
+        if (wx) {
+            wx.hasDoneConfig = true;
+        }
         isInited = true;
         return true;
     } else {
