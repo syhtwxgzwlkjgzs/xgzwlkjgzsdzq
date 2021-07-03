@@ -255,6 +255,7 @@ function Home(props, ref) {
                     onRowsRendered={(...props) => {
                       onRowsRendered(...props);
                     }}
+                    className={layout.scrollArea}
                     // scrollTop={scrollTop}
                     rowCount={rowCount}
                     rowHeight={getRowHeight}

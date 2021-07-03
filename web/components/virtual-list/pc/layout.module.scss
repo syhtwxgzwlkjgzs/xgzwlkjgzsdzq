@@ -10,7 +10,6 @@
     z-index: 1000;
   }
 
-
   .right {
     position: fixed;
     z-index: 1000;
@@ -82,5 +81,16 @@
       top: 74px;
       right: 14px;
     }
+  }
+}
+
+.scrollArea {
+  overflow: hidden overlay !important;
+  @include scrollbar();
+  
+  // 滚动条上的滚动滑块
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
   }
 }
