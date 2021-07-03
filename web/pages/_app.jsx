@@ -2,6 +2,7 @@ import React from 'react';
 import { Provider } from 'mobx-react';
 import { hideInstance } from '@discuzq/design/dist/components/image-previewer/layouts/web';
 import App from 'next/app';
+import getPlatform from '@common/utils/get-platform';
 import initializeStore from '@common/store';
 import PayBoxProvider from '../components/payBox/payBoxProvider';
 import isServer from '@common/utils/is-server';
@@ -94,13 +95,19 @@ class DzqApp extends App {
     // Router.replace({ url: '/render-error' });
   }
 
+  // 待验证
+  isMobile () {
+    console.log(100, 'mobile:', browser.env('mobile'), 'iPad', browser.env('iPad'))
+    return browser.env('mobile') && !browser.env('iPad')
+  }
+
   initOretation() {
     this.toastInstance?.destroy();
     
     // 移动端检测横屏
-    if (browser.env('mobile')) {
+    if (this.isMobile()) {
       const isVertical = detectH5Orient();
-
+      console.log(200, 'isVertical',  isVertical)
       if (!isVertical) {
         this.toastInstance = Toast.info({
           content: '为了更好的体验，请使用竖屏浏览',
@@ -110,25 +117,10 @@ class DzqApp extends App {
     }
   }
 
-  initPlatform() {
-    const currentWidth = window.innerWidth;
-    
-    if ( this.appStore.site ) {
-      if ( this.appStore.site.platform === 'pc' && currentWidth < 800 ) {
-        this.appStore.site.setPlatform('h5');
-        return;
-      }
-
-      if ( this.appStore.site.platform === 'h5' && currentWidth >= 800 ) {
-        this.appStore.site.setPlatform('pc');
-        return;
-      }
-    }
-  }
-
   updateSize() {
+    this.appStore.site.setPlatform(getPlatform(window.navigator.userAgent));
+
     this.initOretation();
-    this.initPlatform();
   }
 
   render() {

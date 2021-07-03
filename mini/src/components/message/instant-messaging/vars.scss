@@ -16,7 +16,7 @@ $im-space-in-between-btns: var(--padding-3n);
   $line-height: $font-line-height-middle,
   $color: $white
 ) {
-  font-family: 'PingFang SC';
+  font-family: $font-family;
   font-size: $font-size;
   font-weight: $font-weight;
   line-height: $line-height;

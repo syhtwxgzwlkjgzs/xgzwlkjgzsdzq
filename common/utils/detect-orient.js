@@ -20,6 +20,7 @@ export function detectH5Orient() {
   } else {
     [_Width, _Height] = screenParams.split(',');
   }
+  console.log(222, 'detect', Math.abs(_Height - clientWidth) > Math.abs(_Width - clientWidth), clientWidth, _Width, _Height, )
 
   // 是否为竖屏
   return Math.abs(_Height - clientWidth) > Math.abs(_Width - clientWidth);
