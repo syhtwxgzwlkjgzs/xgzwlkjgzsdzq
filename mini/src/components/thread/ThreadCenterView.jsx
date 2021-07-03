@@ -30,14 +30,13 @@ const Index = (props) => {
   const wrapperId= useRef(`thread-wrapper-${randomStr()}`)
 
   useEffect(() => {
-    const { videoData } = handleAttachmentData(props.data);
+    const { videoData } = handleAttachmentData(props.data.content);
     const { video } = ready
     if (!videoData) {
       getElementRect(wrapperId.current).then(res => {
         setWrapperH(res?.height)
       })
     } else {
-      debugger
       if (video) {
         getElementRect(wrapperId.current).then(res => {
           setWrapperH(res?.height)
@@ -132,7 +131,7 @@ const Index = (props) => {
   };
   return (
     <>
-      <View id={wrapperId.current} style={sty} className={styles.wrapper}>
+      <View id={wrapperId.current}  className={styles.wrapper}>
         {title && (
           <View className={styles.title} onClick={onClick}>
             {newTitle}
