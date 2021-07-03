@@ -49,7 +49,7 @@ class IndexPCPage extends React.Component {
     () => import('./components/dynamic-vlist'),
     { loading: (res) => {
         return (
-            <div style={{width: '100%'}}>
+            <div style={{width: '100%', maxWidth: '1420px'}}>
                 <DynamicLoading data={res} style={{padding: '0 0 20px 0'}} loadComponent={
                   <div style={{width: '100%'}}>
                     <div className={styles.placeholder}>
@@ -276,6 +276,9 @@ class IndexPCPage extends React.Component {
           siteStore={site}
           visible={visible}
           conNum={conNum}
+          noMore={currentPage >= totalPage}
+          requestError={threadError.isError}
+          errorText={threadError.errorText}
           isShowDefault={isShowDefault}
           onFilterClick={this.onFilterClick}
           onPostThread={this.onPostThread}

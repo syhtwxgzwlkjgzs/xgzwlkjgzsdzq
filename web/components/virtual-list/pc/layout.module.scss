@@ -16,6 +16,11 @@
     z-index: 1000;
   }
 
+  .top {
+    position: fixed;
+    z-index: 1000;
+  }
+
   @include media('xl-pc') {
     .center {
       width: rem(750) !important;

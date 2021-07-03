@@ -4,7 +4,7 @@ import TopNews from '../../../h5/components/top-news';
 import TopMenu from '../top-menu';
 import { Button } from '@discuzq/design';
 import ThreadContent from '@components/thread';
-import WindowVList from '@components/virtual-list/pc/pc-window-scroll';
+import WindowVList from '@components/virtual-list/pc';
 import styles from './index.module.scss';
 
 const TopFilterView = ({ onFilterClick, isShowDefault, onPostThread, ishide }) => {
@@ -64,6 +64,19 @@ export default class DynamicVList extends React.Component {
     );
   };
 
+  renderTop = () => {
+    const { onFilterClick, isShowDefault, onPostThread } = this.props;
+
+    return (
+      <TopFilterView
+        onFilterClick={onFilterClick}
+        onPostThread={onPostThread}
+        isShowDefault={isShowDefault}
+        ishide={false}
+      />
+    );
+  };
+
   renderVlist = (data) => {
     const {
       visible,
@@ -75,6 +88,9 @@ export default class DynamicVList extends React.Component {
       loadNextPage,
       renderRight,
       renderLeft,
+      requestError, 
+      noMore,
+      errorText
     } = this.props;
     const { sticks, threads } = data;
     const { pageData } = threads || {};
@@ -89,10 +105,12 @@ export default class DynamicVList extends React.Component {
         pageName="home"
         // onScroll={this.handleScroll}
         loadNextPage={loadNextPage}
-        // noMore={currentPage >= totalPage}
-        // requestError={props.isError}
+        noMore={noMore}
+        requestError={requestError}
+        errorText={errorText}
         left={renderLeft(countThreads)}
         right={renderRight()}
+        top={this.renderTop()}
         visible={visible}
         renderItem={(item, index, recomputeRowHeights, onContentHeightChange, measure) => (
           <ThreadContent
@@ -132,18 +150,8 @@ export default class DynamicVList extends React.Component {
   };
 
   render() {
-    const { indexStore, onFilterClick, isShowDefault, onPostThread } = this.props;
+    const { indexStore } = this.props;
 
-    return this.enabledVList ? (
-      <Fragment>
-        <div className={styles.topFixed}>
-          <div className={styles.emptyBox}></div>
-          <TopFilterView onFilterClick={onFilterClick} onPostThread={onPostThread} isShowDefault={isShowDefault} />
-        </div>
-        {this.renderVlist(indexStore)}
-      </Fragment>
-    ) : (
-      this.renderContent(indexStore)
-    );
+    return this.enabledVList ? this.renderVlist(indexStore) : this.renderContent(indexStore);
   }
 }
