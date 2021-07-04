@@ -10,9 +10,30 @@ export default class List extends React.Component {
         super(props);
 
         this.state = {
-            displays: []
+            displays: [],
+            heights: []
         }
+
+        this.currentIndex = 0
     }
+
+    // 获取元素高度
+    // handleHeight = async (isHidden, index, that) => {
+    //     let newHeights = that.state.heights.map(item => {
+    //         return { ...item }
+    //     })
+    //     if (isHidden) {
+    //         const { height = 300 } = await getElementRect(`virtual-list-${index}`)
+    //         newHeights[index] = { height: `${height}px` }
+    //     } else {
+    //         newHeights[index] = {}
+    //     }
+
+    //     that.setState({
+    //         heights: newHeights
+    //     })
+
+    // }
 
     observePage = (pageIndex) => {
         const { windowHeight } = this.props
@@ -27,6 +48,7 @@ export default class List extends React.Component {
             const isHidden = res.intersectionRatio <= 0
 
             const { displays } = that.state
+            
             const newDisplays = displays.slice()
             newDisplays[pageIndex] = !isHidden
 

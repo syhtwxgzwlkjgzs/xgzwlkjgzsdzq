@@ -37,8 +37,7 @@ const Index = ({
   onRedirectToDetail = noop,
   loading,
   customHoverBg = false,
-  relativeToViewport,
-  onChangeHeight = noop,
+  relativeToViewport = true,
   ...props
 }) => {
   // 内容是否超出屏幕高度
@@ -46,7 +45,7 @@ const Index = ({
   const [cutContentForDisplay, setCutContentForDisplay] = useState("");
   const [showMore, setHiddenMore] = useState(!useShowMore);
   const contentWrapperRef = useRef(null);
-  const [richTextH, setRichTextH] = useState(0)
+  const [richTextH, setRichTextH] = useState({})
   const richTextId= useRef(`rich-text-${randomStr()}`)
 
   const texts = {
@@ -117,21 +116,17 @@ const Index = ({
   }, [filterContent]);
 
   useEffect(() => {
-    getElementRect(richTextId.current).then(res => {
-      setRichTextH(res?.height)
-    })
-    onChangeHeight({})
-  }, [showMore])
-
-  const sty = useMemo(() => {
-    if (richTextH > 0) {
-      return { height: `${richTextH}px` }
+    if (relativeToViewport) {
+      setRichTextH({})
+    } else {
+      getElementRect(richTextId.current).then(res => {
+        setRichTextH({ height: `${res?.height}px` })
+      })
     }
-    return {}
-  }, [richTextH])
+  }, [relativeToViewport])
 
   return (
-    <View id={richTextId.current} style={sty} className={styles.container} {...props}>
+    <View id={richTextId.current} style={richTextH} className={styles.container} {...props}>
       <View
         ref={contentWrapperRef}
         className={`${styles.contentWrapper} ${showHideCover ? styles.hideCover : ''} ${customHoverBg ? styles.bg : ''}`}
