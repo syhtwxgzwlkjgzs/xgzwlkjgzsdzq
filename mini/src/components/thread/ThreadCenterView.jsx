@@ -26,6 +26,9 @@ const Index = (props) => {
   const needPay = useMemo(() => payType !== 0 && !paid, [paid, payType]);
   const { onClick, onPay, relativeToViewport } = props;
 
+  const wrapperId= useRef(`thread-wrapper-${randomStr()}`)
+  const [wrapperSty, setWrapperSty] = useState({})
+
   // 标题显示37个字符
   const newTitle = useMemo(() => {
     if (title.length > 37) {
@@ -49,6 +52,16 @@ const Index = (props) => {
     }
     return []
   }, [relativeToViewport])
+
+  // useEffect(() => {
+  //   if (relativeToViewport) {
+  //     setWrapperSty({})
+  //   } else {
+  //     getElementRect(wrapperId.current).then(res => {
+  //       setWrapperSty({ height: `${res?.height}px` })
+  //     })
+  //   }
+  // }, [relativeToViewport])
 
   // 帖子属性内容
   const renderThreadContent = ({ content: data, attachmentPrice, payType, paid } = {}) => {
@@ -90,7 +103,7 @@ const Index = (props) => {
         {imageData?.length ? (
             <ImageDisplay 
               platform="h5" 
-              imgData={images} 
+              imgData={imageData} 
               isPay={needPay} 
               onPay={onPay} 
               onClickMore={onClick}
@@ -116,7 +129,7 @@ const Index = (props) => {
   };
   return (
     <>
-      <View className={styles.wrapper}>
+      <View id={wrapperId.current} className={styles.wrapper}>
         {title && (
           <View className={styles.title} onClick={onClick}>
             {newTitle}

@@ -18,22 +18,19 @@ export default class List extends React.Component {
     }
 
     // 获取元素高度
-    // handleHeight = async (isHidden, index, that) => {
-    //     let newHeights = that.state.heights.map(item => {
-    //         return { ...item }
-    //     })
-    //     if (isHidden) {
-    //         const { height = 300 } = await getElementRect(`virtual-list-${index}`)
-    //         newHeights[index] = { height: `${height}px` }
-    //     } else {
-    //         newHeights[index] = {}
-    //     }
+    handleHeight = async (index, isHidden, that) => {
 
-    //     that.setState({
-    //         heights: newHeights
-    //     })
-
-    // }
+        if (!isHidden) {
+            let newHeights = that.state.heights.map(item => {
+                return { ...item }
+            })
+            const { height = 300 } = await getElementRect(`virtual-list-${index}`)
+            newHeights[index] = { height: `${height}px` }
+            that.setState({
+                heights: newHeights
+            })
+        } 
+    }
 
     observePage = (pageIndex) => {
         const { windowHeight } = this.props
@@ -48,13 +45,17 @@ export default class List extends React.Component {
             const isHidden = res.intersectionRatio <= 0
 
             const { displays } = that.state
-            
-            const newDisplays = displays.slice()
-            newDisplays[pageIndex] = !isHidden
+            if (!displays[pageIndex] || `${displays[pageIndex]}` !== `${!isHidden}`) {
+                const newDisplays = displays.slice()
+                console.log(newDisplays[pageIndex], !isHidden);
+                newDisplays[pageIndex] = !isHidden
+    
+                that.setState({
+                    displays: newDisplays
+                })
 
-            that.setState({
-                displays: newDisplays
-            })
+                that.handleHeight(pageIndex, isHidden, that)
+            }
         });
     }
 
@@ -65,6 +66,7 @@ export default class List extends React.Component {
 
         if (dataSource.length !== oldDataSource.length && dataSource.length > displays.length) {
             setTimeout(() => {
+                this.handleHeight()
                 this.observePage(wholePageIndex)
             }, 10)
         }
@@ -72,14 +74,14 @@ export default class List extends React.Component {
 
     render () {
         const { dataSource } = this.props
-        const { displays } = this.state
+        const { displays, heights } = this.state
 
         return (
             <>
                 {
                     dataSource?.map((item, index) => {
                         return (
-                        <View id={`virtual-list-${index}`}>
+                        <View id={`virtual-list-${index}`} style={heights[index] || {}}>
                         {
                             item?.map((subItem, subIndex) => (<Thread data={subItem} key={subIndex} relativeToViewport={displays[index]} />))
                         }
