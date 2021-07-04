@@ -42,10 +42,6 @@ export default class List extends React.Component {
         const { displays } = this.state
 
         if (dataSource.length !== oldDataSource.length && dataSource.length > displays.length) {
-            getElementRect(this.childrenHeightId).then((res) => {
-                this.childrenHeight = res.height || 262
-            })
-
             setTimeout(() => {
                 this.observePage(wholePageIndex)
             }, 10)

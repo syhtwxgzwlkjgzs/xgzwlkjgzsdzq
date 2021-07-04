@@ -4,10 +4,11 @@ import styles from './index.module.scss';
 import Video from '@discuzq/design/dist/components/video/index';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import { noop } from '../utils';
-import { View, Text } from '@tarojs/components'
+import { View, Text, Image } from '@tarojs/components'
 import { getElementRect, randomStr } from '../utils'
 import Taro from '@tarojs/taro';
 import calcVideoSize from '@common/utils/calc-video-size';
+import placehold from '../../../public/dzq-img/placehold.jpg'
 
 /**
  * 视频
@@ -34,7 +35,6 @@ const Index = ({
   v_width = null,
   v_height = null,
   relativeToViewport = true,
-  onChangeHeight = noop
 }) => {
   let player = null;
   const videoId = useRef(`video${randomStr()}`);
@@ -92,22 +92,17 @@ const Index = ({
       });
       setWidth(width);
       setHeight(height);
-      onChangeHeight({ video: true })
     })
   }, []);
 
-  const sty = useMemo(() => {
-    return { 
-      display: relativeToViewport ? 'block' : 'none', 
+  return (
+    <View id={videoId.current} className={styles.container} style={{ 
       width: `${width}px`, 
       height: `${height}px` 
-    }
-  }, [relativeToViewport])
-
-  return (
-    <View id={videoId.current} className={styles.container} style={sty}>
+    }}>
       {
-        width && (
+        width && ( 
+          relativeToViewport ? 
           <Video
             className={styles.videoBox}
             onReady={onReady}
@@ -118,7 +113,7 @@ const Index = ({
             height={`${height}px`}
             poster={coverUrl}
             duration={time}
-          />
+          /> : <Image src={placehold} mode='aspectFill' style={{ height: '100%', width: '100%' }}></Image>
         )
       }
       {/* 视频蒙层 已付费时隐藏 未付费时显示 */}

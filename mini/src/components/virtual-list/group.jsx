@@ -266,7 +266,6 @@ const VirtualList = forwardRef(({
             dataSource={dataSource} 
             wholePageIndex={wholePageIndex.current} 
             windowHeight={windowHeight.current} 
-            originalDataSource={originalDataSource.current} 
             dispatch={dispatch}
           />
         </View>   

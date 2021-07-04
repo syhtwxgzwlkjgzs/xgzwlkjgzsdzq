@@ -12,6 +12,7 @@ import Packet from './packet';
 import styles from './index.module.scss';
 import { View, Text } from '@tarojs/components';
 import { getElementRect, randomStr } from './utils'
+import placehold from '../../public/dzq-img/placehold.jpg'
 
 /**
  * 帖子内容组件
@@ -24,37 +25,6 @@ const Index = (props) => {
   const { title = '', payType, price, paid, attachmentPrice } = props.data || {};
   const needPay = useMemo(() => payType !== 0 && !paid, [paid, payType]);
   const { onClick, onPay, relativeToViewport } = props;
-  const [ready, setReady] = useState({ video: false })
-
-  const [wrapperH, setWrapperH] = useState(0)
-  const wrapperId= useRef(`thread-wrapper-${randomStr()}`)
-
-  useEffect(() => {
-    const { videoData } = handleAttachmentData(props.data.content);
-    const { video } = ready
-    if (!videoData) {
-      getElementRect(wrapperId.current).then(res => {
-        setWrapperH(res?.height)
-      })
-    } else {
-      if (video) {
-        getElementRect(wrapperId.current).then(res => {
-          setWrapperH(res?.height)
-        })
-      }
-    }
-  }, [ready])
-
-  const sty = useMemo(() => {
-    if (wrapperH > 0) {
-      return { height: `${wrapperH}px` }
-    }
-    return { height: 'auto' }
-  }, [wrapperH, relativeToViewport])
-
-  const onChangeHeight = (value) => {
-    setReady({ ...ready, ...value })
-  }
 
   // 标题显示37个字符
   const newTitle = useMemo(() => {
@@ -63,6 +33,23 @@ const Index = (props) => {
     }
     return title;
   }, [title]);
+
+
+  const images = useMemo(() => {
+    const { imageData } = handleAttachmentData(props.data.content);
+
+    if (imageData?.length) {
+      const newImageData = imageData.map(item => {
+        return { ...item }
+      })
+      return relativeToViewport ? imageData : newImageData.map(item => { 
+        item.thumbUrl = placehold
+        return item
+      })
+    }
+    return []
+  }, [relativeToViewport])
+
   // 帖子属性内容
   const renderThreadContent = ({ content: data, attachmentPrice, payType, paid } = {}) => {
     const {
@@ -84,7 +71,6 @@ const Index = (props) => {
             onPay={onPay} 
             onRedirectToDetail={onClick} 
             relativeToViewport={relativeToViewport}
-            onChangeHeight={onChangeHeight}
           />
         )}
         {videoData && (
@@ -98,14 +84,13 @@ const Index = (props) => {
               isPay={needPay}
               status={videoData.status}
               relativeToViewport={relativeToViewport}
-              onChangeHeight={onChangeHeight}
             />
           </WrapperView>
         )}
         {imageData?.length ? (
             <ImageDisplay 
               platform="h5" 
-              imgData={imageData} 
+              imgData={images} 
               isPay={needPay} 
               onPay={onPay} 
               onClickMore={onClick}
@@ -131,7 +116,7 @@ const Index = (props) => {
   };
   return (
     <>
-      <View id={wrapperId.current} style={sty} className={styles.wrapper}>
+      <View className={styles.wrapper}>
         {title && (
           <View className={styles.title} onClick={onClick}>
             {newTitle}
