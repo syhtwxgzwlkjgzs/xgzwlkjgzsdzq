@@ -13,7 +13,7 @@ import { handleString2Arr, getSelectedCategoryIds } from '@common/utils/handleCa
 import DynamicLoading from '@components/dynamic-loading';
 import dynamic from 'next/dynamic';
 
-DynamicVListLoading = dynamic(
+const DynamicVListLoading = dynamic(
   () => import('./components/dynamic-vlist'),
   { loading: (res) => {
       return (
@@ -286,12 +286,11 @@ class IndexPCPage extends React.Component {
           loadNextPage={this.onPullingUp}
           renderRight={this.renderRight}
           renderLeft={this.renderLeft}
+          enabledVList={this.enabledVList}
         />
-        
       </BaseLayout>
     );
   }
 }
 
 export default withRouter(IndexPCPage);
-

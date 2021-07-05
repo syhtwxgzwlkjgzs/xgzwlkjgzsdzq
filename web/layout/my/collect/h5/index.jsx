@@ -39,6 +39,7 @@ class Index extends React.Component {
     const { pageData = [], currentPage, totalPage, totalCount } = index.threads || {};
     return (
       <BaseLayout
+        pageName={'collect'}
         showLoadingInCenter={!pageData?.length}
         showHeader={true}
         noMore={currentPage >= totalPage}
