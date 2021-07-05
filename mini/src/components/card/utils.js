@@ -8,7 +8,13 @@ export const getByteLen = (val) => {
     if (a.match(/[^\x00-\xff]/ig) != null) {
       len += 2;
     } else {
-      len += 1.2;
+      switch(a) {
+        case '1': len += 0.8; break;
+        case '7': len += 1.09; break;
+        case ' ': len += 0.66; break;
+        case ':': len += 0.52; break;
+        default: len += 1.2;
+      }
     }
   }
   return len;
@@ -37,10 +43,14 @@ const openConfirm = function () {
 }
 
 const savaImg = (shareImage) => {
+  Taro.showLoading({
+    title: '正在保存至相册'
+  })
   Taro.saveImageToPhotosAlbum({
     filePath: shareImage,
     success: (res) => {
       if (res.errMsg === 'saveImageToPhotosAlbum:ok') {
+        Taro.hideLoading();
         Toast.info({
           content: '保存图片成功',
           icon: 'success',
@@ -49,6 +59,7 @@ const savaImg = (shareImage) => {
       }
     },
     fail: () => {
+      Taro.hideLoading();
       Toast.error({
         content: '保存图片失败',
         icon: 'none',
@@ -75,3 +86,30 @@ export const saveToAlbum = (shareImage) => () => {
     }
   })
 };
+
+// base64转url
+export function checkAndGetBase64Src(imgPath, index) {
+  return new Promise((resolve, reject) => {
+    const[, format, bodyData] = /data:image\/(\w+);base64,(.*)/.exec(imgPath) || [];
+    if(!format) {
+      resolve(imgPath);
+      return;
+    }
+    
+    const filePath = `${Taro.env.USER_DATA_PATH}/temp${index || ''}.png`;
+    const buffer = Taro.base64ToArrayBuffer(bodyData);
+
+    const fsm = Taro.getFileSystemManager();
+    fsm.writeFile({
+      filePath,
+      data: buffer,
+      encoding:'binary',
+      success() {
+        resolve(filePath);
+      },
+      fail(err) {
+        reject(err);
+      }
+    });
+  });
+}
