@@ -23,7 +23,7 @@ class UserCenterPost extends React.Component {
         <div className={styles.userCenterPostTitle}>发帖</div>
         <div className={styles.userCenterPostContent}>
           <div className={styles.userCenterPostAvatar}>
-          <Avatar image={user.avatarUrl} name={user.username} circle/>
+            <Avatar image={user.avatarUrl} name={user.nickname} circle />
           </div>
           <div
             style={{

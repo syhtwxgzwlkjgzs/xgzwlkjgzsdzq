@@ -39,7 +39,12 @@ class Index extends React.Component {
     const { index } = this.props;
     const { pageData = [], currentPage, totalPage, totalCount } = index.threads || {};
     return (
-      <BaseLayout showLoadingInCenter={true} showHeader={false} noMore={currentPage >= totalPage} onRefresh={this.props.dispatch}>
+      <BaseLayout
+        showLoadingInCenter={!pageData?.length}
+        showHeader={false}
+        noMore={currentPage >= totalPage}
+        onRefresh={this.props.dispatch}
+      >
         {pageData?.length !== 0 && (
           <View className={styles.titleBox}>
             <Text className={styles.num}>{`${totalCount || 0}`}</Text>
