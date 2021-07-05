@@ -67,6 +67,10 @@ class IndexH5Page extends React.Component {
     }
 
     this.setState({ navBarHeight })
+
+    // 是否有推荐
+    const isDefault = this.props.site.checkSiteIsOpenDefautlThreadListData();
+    this.props.index.setNeedDefault(isDefault);
   }
 
   // 点击更多弹出筛选
@@ -87,7 +91,7 @@ class IndexH5Page extends React.Component {
   };
 
   handleClickTabBar = (item, idx) => {
-    if(item?.router === "/pages/home/index") { // 点击首页刷新
+    if(item?.router === "/subPages/home/index") { // 点击首页刷新
       this.changeFilter()
     }
   }

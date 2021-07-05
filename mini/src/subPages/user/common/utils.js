@@ -26,7 +26,9 @@ export const getParamCode = (commonLogin) =>
  */
 export const getUserProfile = (callback, isShowLoading = true) =>
   new Promise((resolve, reject) => {
-    Taro.getUserProfile({
+    // pc端微信访问小程序，getUserProfile目前接口不可用 20210705
+    const getUserInfo = typeof wx.getUserProfile !== 'undefined' ? Taro.getUserProfile : Taro.getUserInfo;
+    getUserInfo({
       desc: '账号绑定微信',
       success: async (res) => {
         if (isShowLoading) {
@@ -34,7 +36,7 @@ export const getUserProfile = (callback, isShowLoading = true) =>
         }
 
         try {
-          if (res.errMsg === 'getUserProfile:ok') {
+          if (res.errMsg === 'getUserProfile:ok' || res.errMsg === 'getUserInfo:ok') {
             await callback(res);
             resolve(res);
           } else {

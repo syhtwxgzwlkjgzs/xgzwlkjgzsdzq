@@ -119,7 +119,7 @@ const RenderThreadContent = inject('user')(
               location={threadStore?.threadData?.position.location || ''}
               groupName={threadStore?.threadData?.group?.groupName || ''}
               view={`${threadStore?.threadData?.viewCount}` || ''}
-              time={`${threadStore?.threadData?.createdAt}` || ''}
+              time={`${threadStore?.threadData?.diffTime}` || ''}
               isEssence={isEssence}
               isPay={!isFree}
               userId={threadStore?.threadData?.user?.userId}
@@ -252,9 +252,9 @@ const RenderThreadContent = inject('user')(
           )}
 
           {/* 标签 */}
-          {threadStore?.threadData?.categoryName && (
+          {(threadStore?.threadData?.parentCategoryName || threadStore?.threadData?.categoryName) && (
             <View className={styles.tag} onClick={onTagClick}>
-              {threadStore?.threadData?.categoryName}
+              {threadStore?.threadData?.parentCategoryName || threadStore?.threadData?.categoryName}
             </View>
           )}
 

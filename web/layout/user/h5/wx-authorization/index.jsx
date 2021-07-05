@@ -8,7 +8,6 @@ import { h5WechatCodeLogin } from '@server';
 import setAccessToken from '@common/utils/set-access-token';
 import { get } from '@common/utils/get';
 import { checkUserStatus } from '@common/store/login/util';
-import initJSSdk from '@common/utils/initJSSdk.js';
 
 const NEED_BIND_OR_REGISTER_USER = -7016;
 let bindLoading = false;
@@ -19,15 +18,19 @@ let bindLoading = false;
 @inject('invite')
 @observer
 class WXAuthorizationPage extends React.Component {
-  componentDidMount() {
-    initJSSdk(['closeWindow']);
+  constructor(props) {
+    super(props);
+    this.state = {
+      loginTitle: `你确定要授权登录${props.site.siteName}吗？`
+    }
   }
+
   render() {
     return (
       <div className={layout.container}>
         <HomeHeader hideInfo mode='login'/>
         <div className={layout.content}>
-          <div className={layout.title}>{this.props.h5QrCode.loginTitle}</div>
+          <div className={layout.title}>{this.state.loginTitle}</div>
           {
             this.props.h5QrCode.isBtn
               ? <>
@@ -41,15 +44,19 @@ class WXAuthorizationPage extends React.Component {
                 </>
               : <></>
           }
-          <div className={layout.functionalRegion}>
-              <span className={layout.clickBtn} onClick={() => {
-                this.props.h5QrCode.loginTitle = '已取消登录';
-                this.props.h5QrCode.isBtn = false;
+          <Button
+            className={layout.exit}
+            onClick={() => {
+              this.setState({
+                loginTitle: '已取消登录'
+              });
+              this.props.h5QrCode.isBtn = false;
+              window.wx && window.wx.ready(() => {
                 wx.closeWindow();
-              }}>
-                退出
-              </span>
-            </div>
+              });
+            }}>
+            退出
+          </Button>
         </div>
       </div>
     );
@@ -94,7 +101,9 @@ class WXAuthorizationPage extends React.Component {
         return;
       }
       if (res.code === 0) {
-        this.props.h5QrCode.loginTitle = '已成功登录';
+        this.setState({
+          loginTitle: '已成功登录'
+        });
         this.props.h5QrCode.isBtn = false;
         return;
       }
@@ -105,7 +114,9 @@ class WXAuthorizationPage extends React.Component {
       };
     } catch (error) {
       bindLoading = false;
-      this.props.h5QrCode.loginTitle = '登录失败，请刷新二维码重新扫码';
+      this.setState({
+        loginTitle: '登录失败，请刷新二维码重新扫码'
+      });
       this.props.h5QrCode.isBtn = false;
       Toast.error({
         content: error.Message,

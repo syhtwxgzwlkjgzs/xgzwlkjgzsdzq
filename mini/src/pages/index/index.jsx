@@ -34,10 +34,6 @@ const CLOSE_URL = '/subPage/close/index';
 class Index extends React.Component {
 
     $instance = Taro.getCurrentInstance()
-    
-    componentDidUpdate() {
-
-    }
 
     componentDidShow() {
       this.initSiteData();
@@ -48,6 +44,12 @@ class Index extends React.Component {
       const { site } = this.props;
       switch (result.code) {
         case 0:
+          // 未开启小程序，展示错误页面信息
+          if(result?.data?.passport?.miniprogramOpen === false) {
+            Router.redirect({
+              url: '/subPages/500/index'
+            });
+          }
           break;
         case SITE_CLOSED: site.setCloseSiteConfig(result.data);// 关闭站点
           Router.redirect({
@@ -83,7 +85,7 @@ class Index extends React.Component {
           Router.push({ url: '/subPages/user/status/index?statusCode=-4009' });
           break;
         case JUMP_TO_HOME_INDEX:// 到首页
-          Router.redirect({ url: '/pages/home/index' });
+          Router.redirect({ url: '/subPages/home/index' });
           break;
         case JUMP_TO_PAY_SITE:// 到付费加入页面
           Router.push({ url: '/subPages/forum/partner-invite/index' });
@@ -118,11 +120,11 @@ class Index extends React.Component {
       if ( !site.webConfig ) {
         // 获取站点信息  
         const siteResult = await readForum({});
-
         // 检查站点状态
         const isPass = this.setAppCommonStatus(siteResult);
         if(!isPass) return;
         site.setSiteConfig(siteResult.data);
+
         webConfig = siteResult.data;
       } else {
         webConfig = site.webConfig;
@@ -160,7 +162,7 @@ class Index extends React.Component {
             params,
             fail: () => {
               Router.redirect({
-                url: '/pages/home/index'
+                url: '/subPages/home/index'
               });
             }
           });
@@ -170,13 +172,13 @@ class Index extends React.Component {
             url: decodeURIComponent(router.params.path),
             fail: () => {
               Router.redirect({
-                url: '/pages/home/index'
+                url: '/subPages/home/index'
               });
             }
           });
         } else {
           Router.redirect({
-            url: '/pages/home/index'
+            url: '/subPages/home/index'
           });
         }
       } else {

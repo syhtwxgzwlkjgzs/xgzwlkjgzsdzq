@@ -1,9 +1,10 @@
-@import './vars.scss';
+@import "./vars.scss";
 
 .pcPage {
   display: flex;
   flex-direction: column;
-  height: calc(100% - 100px);
+  height: calc(100% - 10px);
+  max-height: 940px;
   max-width: 750px;
   padding: 0 $padding-4n;
   background: $white;
@@ -11,8 +12,27 @@
 }
 
 .h5Page {
-  position: relative;
-  border-top: $border-solid-1;
-  height: calc(100vh - 41px);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
   background-color: $body-bg-color;
+}
+
+.pc-header {
+  background: $white;
+  padding: 0 $padding-6n;
+
+  .pc-header__inner {
+    height: rem(73px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: $font-size-large;
+    color: $text-color-primary;
+    font-weight: 600;
+    text-align: left;
+    border-bottom: $border-solid-1;
+  }
 }

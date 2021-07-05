@@ -63,8 +63,12 @@ DatePickers.propTypes = {
 
 // 设置props默认值
 DatePickers.defaultProps = {
-    onCancels: (e) => { console.log('点击了取消') },//点击取消的时候回调
-    onSelects: (e) => { console.log(e) },//点击完成的时候，返回现在选中的时间
+    onCancels: (e) => { 
+        // console.log('点击了取消') 
+    },//点击取消的时候回调
+    onSelects: (e) => { 
+        // console.log(e) 
+    },//点击完成的时候，返回现在选中的时间
     isOpen: false,//是否显示
     time: new Date(),//目前选中时间
 };

@@ -90,10 +90,17 @@ class Index extends React.Component {
 
     let categoryIds = handleString2Arr(newData, 'categoryids');
 
+    // 每次请求前，先判断错误状态，并重置
+    if (this.props.index?.threadError?.isError) {
+      this.props.index.threadError = {
+        isError: false,
+        errorText: ''
+      }
+    }
+
     if (type === 'click-filter') { // 点击tab
       this.page = 1;
       this.props.baselayout.setJumpingToTop();
-
       await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
     } else if (type === 'moreData') {
       this.page += 1;

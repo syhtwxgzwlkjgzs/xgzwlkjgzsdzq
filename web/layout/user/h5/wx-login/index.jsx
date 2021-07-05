@@ -23,12 +23,14 @@ import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-stor
 class WXLoginH5Page extends React.Component {
   
   timer = null;
+  isDestroy = false;
 
   async componentDidMount() {
     await this.generateQrCode();
   }
 
   componentWillUnmount() {
+    this.isDestroy = true;
     clearInterval(this.timer);
   }
 
@@ -76,7 +78,10 @@ class WXLoginH5Page extends React.Component {
       }
 
       await h5QrCode.generate({ params });
-
+      // 组件销毁后，不执行后面的逻辑
+      if (this.isDestroy) {
+        return;
+      }
       if (platform === 'pc') {
         this.queryLoginState(params.type);
       } else {

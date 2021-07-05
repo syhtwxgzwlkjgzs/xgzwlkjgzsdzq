@@ -20,6 +20,32 @@ $xl-pc: 1420px;
     }
 }
 
+$media-min-width: 1200px;
+$media-min-height: 700px;
+$media-second-height: 800px;
+$media-detail-min-height: 1072px;
+@mixin widthAndHeightMedia($width: 0, $height: 0) {
+  @if $width and not $height {
+    @media only screen and (max-width: $width) {
+      @content;
+    }
+  }
+
+  @if not $width and $height {
+    @media only screen and (max-height: $height) {
+      @content;
+    }
+  }
+
+  @if $width and $height {
+    @media screen {
+      @media only screen and (max-width: $width), (max-height: $height) {
+        @content;
+      }
+    }
+  }
+}
+
 // 最小高度
 $s-height-pc: 750px; // 定这个像素是发现首页右侧栏：扫码 + 推荐 + 版本号 之后的高度
 $detail-height-pc: $s-height-pc;
@@ -35,19 +61,19 @@ $home-height-pc: 650px;
  * }
  */
 @mixin heightMedia($max: $s-height-pc, $min: 0) {
-  @if $max and not $min {
+  @if $max {
     @media only screen and (max-height: $max) {
       @content;
     }
   }
-  @else if $max and $min {
-    @media only screen and (min-width: $min) and (max-height: $max) {
-      @content;
-    }
-  }
-  @else if not $max and $min {
-    @media only screen and (min-width: $min) {
-      @content;
-    }
-  }
+  // @else if $max and $min {
+  //   @media only screen and (min-height: $min) and (max-height: $max) {
+  //     @content;
+  //   }
+  // }
+  // @else if not $max and $min {
+  //   @media only screen and (min-height: $min) {
+  //     @content;
+  //   }
+  // }
 }

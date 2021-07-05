@@ -3,25 +3,58 @@ import ThreadContent from '@components/thread';
 import { observer } from 'mobx-react';
 
 export default observer((props) => {
-  const { data } = props;
+  const { data, isLast } = props;
 
   const ref = useRef(null);
 
   useEffect(() => {
-    props.measure();
+    measure();
   }, [ref?.current?.clientHeight]);
+
+  const measure = () => {
+    try {
+      typeof props.measure === 'function' && props.measure();
+    } catch (error) {
+      // console.log(error);
+    }
+  };
+
+  const recomputeRowHeights = (data) => {
+    props.recomputeRowHeights(data);
+    measure();
+  };
+
+  const callback = () => {
+    measure && measure();
+  };
+
+  useEffect(() => {
+    if (ref.current) {
+      const config = { attributes: true, childList: true, subtree: true };
+
+      try {
+        const observer = new MutationObserver(callback);
+        observer.observe(ref.current, config);
+        return () => {
+          observer.disconnect();
+        };
+      } catch (error) {
+        // console.log(error);
+      }
+    }
+  }, [ref]);
 
   return (
     <div ref={ref}>
       <ThreadContent
-        onContentHeightChange={props.measure}
-        onImageReady={props.measure}
-        onVideoReady={props.measure}
+        onContentHeightChange={measure}
+        onImageReady={measure}
+        onVideoReady={measure}
         key={data.threadId}
-        // showBottomStyle={index !== pageData.length - 1}
+        showBottomStyle={!isLast}
         data={data}
         // className={styles.listItem}
-        recomputeRowHeights={(data) => props.recomputeRowHeights(data)}
+        recomputeRowHeights={(data) => recomputeRowHeights(data)}
       />
     </div>
   );

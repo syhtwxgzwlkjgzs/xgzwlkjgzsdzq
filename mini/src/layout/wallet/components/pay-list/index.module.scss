@@ -15,7 +15,6 @@
   line-height: 20px;
 
   .money {
-    font-family: 'PingFang SC';
     font-weight: 600;
     font-size: $font-size-middle;
     text-align: left;
@@ -34,7 +33,7 @@
       font-size: $font-size-primary;
       overflow: hidden;
       word-break: break-all;
-      max-width: 140px;
+      max-width: 200px;
       line-height: 20px;
       @include text-ellipsis();
 
@@ -48,7 +47,6 @@
   display: flex;
   justify-content: space-between;
   border-bottom: $border-solid-1;
-  font-family: 'PingFangSC-Regular';
   font-weight: normal;
   font-size: $font-size-label;
   .time {

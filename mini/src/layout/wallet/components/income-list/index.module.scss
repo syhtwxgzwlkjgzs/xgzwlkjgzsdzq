@@ -11,7 +11,6 @@
     font-weight: normal;
     padding-bottom: $padding-2n;
     .text {
-        font-family: 'PingFang SC';
         font-size: $font-size-primary;
         text-align: left;
         color: $text-color-primary;
@@ -31,7 +30,7 @@
                 font-size: $font-size-primary;
                 overflow: hidden;
                 word-break: break-all;
-                max-width: 140px;
+                max-width: 200px;
                 line-height: 20px;
                 @include text-ellipsis();
 
@@ -42,7 +41,6 @@
             }
         }
     .money {
-        font-family: 'PingFangSC-Semibold';
         font-size: $font-size-middle;
         text-align: left;
         color: $error-color;
@@ -51,7 +49,6 @@
 }
 
 .time {
-    font-family: 'PingFangSC-Regular';
     font-weight: normal;
     font-size: $font-size-label;
     text-align: left;

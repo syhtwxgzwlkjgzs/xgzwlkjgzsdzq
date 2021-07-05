@@ -33,7 +33,9 @@ class Header extends React.Component {
   // 轮询更新未读消息
   updateUnreadMessage() {
     if (!this.props.user.id) return;
-    const { message: { readUnreadCount } } = this.props;
+    const {
+      message: { readUnreadCount },
+    } = this.props;
     readUnreadCount();
     this.timeoutId = setTimeout(() => {
       this.updateUnreadMessage();
@@ -94,8 +96,14 @@ class Header extends React.Component {
   renderHeaderLogo() {
     const { site } = this.props;
 
-    if (site?.webConfig?.setSite?.siteHeaderLogo !== '') {
-      return <img className={styles.siteLogo} src={site?.webConfig?.setSite?.siteHeaderLogo} onClick={() => this.handleRouter('/')} />;
+    if (site?.webConfig?.setSite?.siteLogo !== '') {
+      return (
+        <img
+          className={styles.siteLogo}
+          src={site?.webConfig?.setSite?.siteLogo}
+          onClick={() => this.handleRouter('/')}
+        />
+      );
     }
     return <img className={styles.siteLogo} src="/dzq-img/admin-logo-pc.png" onClick={() => this.handleRouter('/')} />;
   }
@@ -149,12 +157,14 @@ class Header extends React.Component {
             {/* onClick={this.handleUserInfoClick} */}
             <Avatar
               className={styles.avatar}
-              name={user.userInfo.username}
+              name={user.userInfo.nickname}
               circle={true}
               image={user.userInfo?.avatarUrl}
               onClick={() => {}}
             ></Avatar>
-            <p title={user.userInfo.nickname || ''} className={styles.userName}>{user.userInfo.nickname || ''}</p>
+            <p title={user.userInfo.nickname || ''} className={styles.userName}>
+              {user.userInfo.nickname || ''}
+            </p>
           </div>
         </Dropdown>
       );
@@ -179,7 +189,12 @@ class Header extends React.Component {
   }
 
   render() {
-    const { site, user, message: { totalUnread,  }, forum } = this.props;
+    const {
+      site,
+      user,
+      message: { totalUnread },
+      forum,
+    } = this.props;
     const { otherPermissions } = forum || {};
     return (
       <div className={styles.header}>
@@ -224,8 +239,9 @@ class Header extends React.Component {
                     </div>
                   </UnreadRedDot>
                 </div>
-                {
-                  !otherPermissions?.canViewThreads ? <></> :
+                {!otherPermissions?.canViewThreads ? (
+                  <></>
+                ) : (
                   <div className={styles.iconItem} onClick={() => this.handleRouter('/search')}>
                     <Icon
                       onClick={() => {
@@ -236,7 +252,7 @@ class Header extends React.Component {
                     />
                     <p className={styles.iconText}>发现</p>
                   </div>
-                }
+                )}
               </div>
               <div className={styles.border}></div>
               {this.renderUserInfo()}

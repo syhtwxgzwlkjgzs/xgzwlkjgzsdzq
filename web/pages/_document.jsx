@@ -38,11 +38,6 @@ class MyDocument extends Document {
                 window.addEventListener('resize', remCalc);
               }, 0);
           ` }} />
-          {/* <!--腾讯地图定位组件--> */}
-          <script async src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
-          {/* 编辑器markdown依赖 */}
-          <script async src="https://cloudcache.tencent-cloud.com/operation/dianshi/other/lute.min.6cbcbfbacd9fa7cda638f1a6cfde011f7305a071.js?max_age=31536000" ></script>
-          {this.createMonitor()}
         </Head>
 
 
@@ -67,7 +62,7 @@ class MyDocument extends Document {
           tdjs.async = true;
           tdjs.src = 'https://jic.talkingdata.com/app/h5/v1?appid=750AEE91CF4446A19A2D12D5EE32F725';
           document.getElementsByTagName('body')[0].appendChild(tdjs);
-      
+
           var dzqjs = document.createElement('script');
           dzqjs.type = 'text/javascript';
           dzqjs.async = true;
@@ -104,6 +99,11 @@ class MyDocument extends Document {
               }
             }
         `}}/>
+        {/* <!--腾讯地图定位组件--> */}
+        <script async={true} src="https://mapapi.qq.com/web/mapComponents/geoLocation/v/geolocation.min.js"></script>
+        {/* 编辑器markdown依赖 */}
+        <script async={true} src="https://cdn.jsdelivr.net/npm/@discuzq/vditor@1.0.22/dist/js/lute/lute.min.js" ></script>
+        {this.createMonitor()}
       </Html>
     );
   }

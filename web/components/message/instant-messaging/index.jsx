@@ -1,19 +1,24 @@
+/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable no-param-reassign */
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Toast } from '@discuzq/design';
+import Header from '@components/header';
+import BaseLayout from '@components/base-layout';
 import DialogBox from './dialog-box';
 import InteractionBox from './interaction-box';
 import Router from '@discuzq/sdk/dist/router';
+import wxChooseImage from '@common/utils/wx-choose-image';
 import { createAttachment } from '@common/server';
-import { ACCEPT_IMAGE_TYPES } from '@common/constants/thread-post';
+import { getMessageTimestamp } from '@common/utils/get-message-timestamp';
+import calcCosImageQuality from '@common/utils/calc-cos-image-quality';
 import styles from './index.module.scss';
 
 const Index = (props) => {
   const { site: { isPC, webConfig }, dialogId, username, nickname, message, threadPost, user } = props;
   const { supportImgExt, supportMaxSize } = webConfig?.setAttach;
-  const { clearMessage, readDialogMsgList, createDialogMsg, createDialog, readDialogIdByUsername, dialogMsgList, dialogMsgListLength, updateDialog } = message;
+  const { clearMessage, readDialogMsgList, createDialogMsg, createDialog, readDialogIdByUsername, dialogMsgList, updateDialog } = message;
 
   const dialogBoxRef = useRef();
   const timeoutId = useRef();
@@ -46,17 +51,19 @@ const Index = (props) => {
   // 清除轮询
   const clearPolling = () => clearTimeout(timeoutId.current);
 
+  // 获取dialogid后把其放到url中
   const replaceRouteWidthDialogId = (dialogId) => {
     Router.replace({ url: `/message?page=chat&nickname=${nickname}&username=${username}&dialogId=${dialogId}` });
   };
 
+  // 消息发送
   const submit = async (data) => {
     if (isSubmiting) return;
     let ret = {};
     if (dialogId) {
       setIsSubmiting(true);
       ret = await createDialogMsg({
-        dialogId,
+        dialogId: parseInt(dialogId),
         ...data,
       });
       setIsSubmiting(false);
@@ -84,24 +91,31 @@ const Index = (props) => {
     }
   };
 
+  // 为图片发送空消息
   const submitEmptyImage = dialogId => createDialogMsg({
-    dialogId,
+    dialogId: parseInt(dialogId),
     isImage: true,
   });
 
+  // 清除toast
   const clearToast = () => {
     toastInstance?.destroy();
   };
 
   // 触发图片选择
-  const uploadImage = () => {
-    uploadRef.current.click();
+  const uploadImage = async () => {
+    const files = await wxChooseImage();
+    if (files.length) {
+      onImgChange('', files);
+    } else {
+      uploadRef.current.click();
+    }
   };
 
   // 检查文件类型和体积
   const checkFile = (file) => {
     if (!webConfig) return false;
-    const imageType = file.name.match(/\.([^\.]+)$/)[1].toLocaleLowerCase();
+    const imageType = file.type.replace('image/', '');
     const imageSize = file.size;
     const isLegalType = supportImgExt.toLocaleLowerCase().includes(imageType);
     const isLegalSize = imageSize > 0 && imageSize < supportMaxSize * 1024 * 1024;
@@ -118,8 +132,16 @@ const Index = (props) => {
     return false;
   };
 
-  const onImgChange = async (e) => {
-    const { files } = e.target;
+  // 执行图片发送事宜
+  const onImgChange = async (e, wxFiles) => {
+    let files = [];
+    if (wxFiles) {
+      files = wxFiles;
+    } else {
+      files = e.target.files;
+    }
+
+    // 处理首次发消息，还没有dialogId的情况
     let localDialogId = 0;
     if (!dialogId) {
       const ret = await createDialog({
@@ -132,6 +154,7 @@ const Index = (props) => {
       }
     }
 
+    // 开始处理图片发送
     const fileList = [...files];
 
     toastInstance = Toast.loading({
@@ -142,24 +165,24 @@ const Index = (props) => {
     // 先获取图片本地的路径（base64）、再异步获取图片的宽高
     await Promise.all(fileList.map(file => (
       new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          file.imageUrl = img.src;
+          file.imageWidth = img.width;
+          file.imageHeight = img.height;
+          file.failMsg = checkFile(file);
+          resolve();
+        };
+
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = (e) => {
-          const src = e.target.result;
-          const img = new Image();
-          img.src = src;
-          img.onload = () => {
-            file.imageUrl = src;
-            file.imageWidth = img.width;
-            file.imageHeight = img.height;
-            file.failMsg = checkFile(file);
-            resolve();
-          };
+          img.src = e.target.result;
         };
       })
     )));
 
-    await Promise.all(fileList.map(() => submitEmptyImage(dialogId || localDialogId))).then((results) => {
+    Promise.all(fileList.map(() => submitEmptyImage(dialogId || localDialogId))).then((results) => {
       // 把消息id从小到大排序
       results.sort((a, b) => a.data.dialogMessageId - b.data.dialogMessageId);
 
@@ -189,6 +212,7 @@ const Index = (props) => {
     });
   };
 
+  // 提交图片
   const sendImageAttachment = async (file, dialogId, isResend) => {
     if (file.failMsg) return;
     if (isResend) {
@@ -226,6 +250,14 @@ const Index = (props) => {
           }
         });
       }
+
+      // 处理图片格式和体积
+      if (!item.isImageLoading && item.imageUrl) {
+        const [path] = item.imageUrl.split('?');
+        const type = path.substr(path.indexOf('.') + 1);
+        item.renderUrl = calcCosImageQuality(item.imageUrl, type, 7);
+      }
+
       return {
         ...item,
         timestamp: item.createdAt,
@@ -236,7 +268,8 @@ const Index = (props) => {
         ownedBy: user.id === item.userId ? 'myself' : 'itself',
         nickname: item.user.username,
       };
-    }).filter(item => (item.imageUrl || item.text)).reverse();
+    }).filter(item => (item.imageUrl || item.text))
+      .reverse();
 
     // 消息数有变化，即有新消息，此时把滚动条滚动到底部
     if (listData.length > listDataLengthRef.current) {
@@ -248,7 +281,7 @@ const Index = (props) => {
       }, 100);
     }
 
-    return listData;
+    return getMessageTimestamp(listData);
   }, [dialogMsgList]);
 
   useEffect(async () => {
@@ -276,6 +309,7 @@ const Index = (props) => {
   // 切换username时，停止当前轮询，用于pc端对话页右下角点击切换聊天用户的场景
   useEffect(() => {
     listDataLengthRef.current = 0;
+    setTypingValue('');
     clearPolling();
   }, [username]);
 
@@ -294,8 +328,16 @@ const Index = (props) => {
     }
   }, [showEmoji]);
 
-  return (
-    <div className={!isPC ? styles.h5Page : styles.pcPage}>
+  const mainContent = (
+    <div className={isPC ? styles.pcPage : styles.h5Page}>
+      {isPC ? (
+        <div className={styles['pc-header']}>
+          <div className={styles['pc-header__inner']}>
+            {nickname}
+          </div>
+        </div>)
+        : <Header />
+      }
       <input
         style={{ display: 'none' }}
         type="file"
@@ -308,7 +350,6 @@ const Index = (props) => {
         ref={dialogBoxRef}
         messagesList={messagesList}
         showEmoji={showEmoji}
-        scrollEnd={scrollEnd}
         sendImageAttachment={sendImageAttachment}
       />
       <InteractionBox
@@ -322,6 +363,22 @@ const Index = (props) => {
       />
     </div>
   );
+
+  if (isPC) {
+    return (
+      <BaseLayout
+        className={'mymessage-page'}
+        right={props.rightContent}
+        showRefresh={false}
+        immediateCheck={false}
+        isShowLayoutRefresh={false}
+      >
+        {mainContent}
+      </BaseLayout>
+    );
+  }
+
+  return mainContent;
 };
 
 export default inject('message', 'site', 'threadPost', 'user')(observer(Index));

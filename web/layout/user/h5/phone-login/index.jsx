@@ -35,14 +35,20 @@ class LoginPhoneH5Page extends React.Component {
     mobileLogin.code = code;
   };
 
+  componentWillUnmount() {
+    this.props.mobileLogin.reset();
+  }
+
   handleLoginButtonClick = async () => {
     try {
-      const { mobileLogin, router, invite } = this.props;
-      if (!mobileLogin.isInvalidCode || !mobileLogin.verifyMobile()) {
+      const { mobileLogin, router, invite, commonLogin } = this.props;
+      if (!commonLogin.loginLoading || !mobileLogin.isInvalidCode || !mobileLogin.verifyMobile()) {
         return;
       }
+      commonLogin.loginLoading = false;
       this.props.mobileLogin.inviteCode = invite.getInviteCode(router);
       const resp = await this.props.mobileLogin.login();
+      commonLogin.loginLoading = true;
       const uid = get(resp, 'uid', '');
       this.props.user.updateUserInfo(uid);
       Toast.success({
@@ -50,11 +56,11 @@ class LoginPhoneH5Page extends React.Component {
         hasMask: false,
         duration: 1000,
         onClose: () => {
-          mobileLogin.reset();
           window.location.href = '/';
         },
       });
     } catch (e) {
+      this.props.commonLogin.loginLoading = true;
       if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_USERNAME.Code) {
         this.props.commonLogin.needToSetNickname = true;
         this.props.router.push('/user/bind-nickname');
@@ -167,7 +173,7 @@ class LoginPhoneH5Page extends React.Component {
     const { platform } = site;
     const isAnotherLoginWayAvaliable = this.props.site.wechatEnv !== 'none' || this.props.site.isUserLoginVisible;
     // 接受监听一下协议的数据，不能去掉，去掉后协议的点击无反应
-    const { protocolVisible } = commonLogin;
+    const { protocolVisible, loginLoading } = commonLogin;
     /**
      * TODO 样式这块待修改，pc、h5分开两个文件，类名保持一直，根据platform来判断加载哪个文件的layout
      */
@@ -196,6 +202,7 @@ class LoginPhoneH5Page extends React.Component {
             className={platform === 'h5' ? layout.button : layout.pc_button}
             type="primary"
             onClick={this.handleLoginButtonClick}
+            loading={!loginLoading}
           >
             登录
           </Button>

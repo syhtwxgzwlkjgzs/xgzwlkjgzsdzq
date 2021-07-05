@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import ProgressRender from './progress-render';
 import { fixImageOrientation } from '@common/utils/exif';
 
+
 export default function DzqUpload(props) {
   const {
     listType,
@@ -23,6 +24,7 @@ export default function DzqUpload(props) {
     data,
     accept,
     className,
+    wxChooseImage = () => new Promise(resolve => resolve([])),
   } = props;
   const multiple = limit > 1;
   const post = async (file, list, updater) => {
@@ -68,7 +70,7 @@ export default function DzqUpload(props) {
   return (
     <div className={clsName} onClick={(e) => e.stopPropagation()}>
       <Upload
-        progressRender={(file) => <ProgressRender file={file} />}
+        // progressRender={(file) => <ProgressRender file={file} />}
         listType={listType}
         fileList={formatFileList}
         limit={limit}
@@ -76,6 +78,7 @@ export default function DzqUpload(props) {
         onRemove={(file) => {
           onRemove(file);
         }}
+        wxChooseImage={wxChooseImage}
         beforeUpload={(cloneList, showFileList) => {
           if (typeof beforeUpload !== 'function') return true;
           return beforeUpload(cloneList, showFileList);

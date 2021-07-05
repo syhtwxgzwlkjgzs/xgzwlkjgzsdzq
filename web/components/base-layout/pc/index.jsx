@@ -35,6 +35,7 @@ const baseLayoutWhiteList = ['home', 'search'];
 const BaseLayout = forwardRef((props, ref) => {
   // UI设置相关 left-children-right 对应三列布局
   const {
+    noHeader = false,
     header = null,
     left = null,
     children = null,
@@ -114,7 +115,7 @@ const BaseLayout = forwardRef((props, ref) => {
       }}
     >
       {(pageName === 'home' || left) && (
-        <div className={styles.left}>{typeof left === 'function' ? left({ ...props }) : left}</div>
+        <div className={`baselayout-left ${styles.left}`}>{typeof left === 'function' ? left({ ...props }) : left}</div>
       )}
 
       <div className={styles.center}>
@@ -135,32 +136,11 @@ const BaseLayout = forwardRef((props, ref) => {
   );
 
   if (disabledList) {
-    content = (
-      <div className={styles.list}>
-        {(pageName === 'home' || left) && (
-          <div className={styles.left}>{typeof left === 'function' ? left({ ...props }) : left}</div>
-        )}
-
-        <div className={styles.center}>
-          {typeof children === 'function' ? children({ ...props }) : children}
-        </div>
-
-        {(pageName === 'home' || right) && (
-          <div
-            className={`baselayout-right ${styles.right} ${rightClassName} ${
-              pageName === 'home' ? styles['home-right'] : ''
-            }`}
-          >
-            {typeof right === 'function' ? right({ ...props }) : right}
-          </div>
-        )}
-      </div>
-    );
+    content = children;
   }
-
   return (
-    <div className={`${styles.container} ${props.enabledWindowScroll && styles.autoHeight}`}>
-      {(header && header({ ...props })) || <Header onSearch={onSearch} />}
+    <div className={`${styles.container}`}>
+      {!noHeader ? ((header && header({ ...props })) || <Header onSearch={onSearch} />) : null}
 
       <div className={`${styles.body} ${cls} ${props.className}`}>
         {content}

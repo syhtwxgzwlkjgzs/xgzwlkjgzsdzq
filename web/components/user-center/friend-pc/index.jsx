@@ -6,7 +6,8 @@ import { getUserFollow } from '@server';
 import styles from './index.module.scss';
 import { get } from '@common/utils/get';
 import { withRouter } from 'next/router';
-import { Spin, Avatar } from '@discuzq/design';
+import { Spin } from '@discuzq/design';
+import Avatar from '@components/avatar';
 import NoData from '@components/no-data';
 import { followerAdapter } from './adapter';
 
@@ -104,17 +105,28 @@ class UserCenterFriendPc extends React.Component {
             {followerAdapter(this.state.follows).map((user, index) => {
               if (index + 1 > this.props.limit) return null;
               return (
-                <div key={user.id} className={styles.friendItem}>
+                <div
+                  key={user.id}
+                  className={styles.friendItem}
+                  onClick={() => {
+                    this.props.router.push({
+                      pathname: '/user/[id]',
+                      query: {
+                        id: user.id,
+                      },
+                    });
+                  }}
+                >
                   <div className={styles.friendAvatar}>
                     <Avatar
                       image={user.avatar}
                       userId={user.id}
                       circle
-                      name={user.userName}
+                      name={user.nickName}
                     />
                   </div>
                   <div className={styles.friendTextInfo}>
-                    {user.userName}
+                    {user.nickName}
                   </div>
                 </div>
               );

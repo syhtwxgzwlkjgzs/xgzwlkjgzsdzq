@@ -31,6 +31,10 @@ class UsernameH5Login extends React.Component {
     this.props.userLogin.password = e.target.value;
   };
 
+  componentWillUnmount() {
+    this.props.userLogin.reset();
+  }
+
   loginErrorHandler = async (e) => {
     // 跳转补充信息页
     if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
@@ -94,8 +98,14 @@ class UsernameH5Login extends React.Component {
   }
 
   handleLoginButtonClick = async () => {
+    const { commonLogin } = this.props;
     try {
+      if (!commonLogin.loginLoading) {
+        return;
+      }
+      commonLogin.loginLoading = false;
       const resp = await this.props.userLogin.login();
+      commonLogin.loginLoading = true;
       const uid = get(resp, 'data.uid', '');
       this.props.user.updateUserInfo(uid);
       Toast.success({
@@ -107,6 +117,7 @@ class UsernameH5Login extends React.Component {
         },
       });
     } catch (e) {
+      commonLogin.loginLoading = true;
       this.loginErrorHandler(e);
     }
   };
@@ -116,7 +127,7 @@ class UsernameH5Login extends React.Component {
     const { platform } = site;
     const isAnotherLoginWayAvailable = this.props.site.wechatEnv !== 'none' || this.props.site.isSmsOpen;
     // 接受监听一下协议的数据，不能去掉，去掉后协议的点击无反应
-    const { protocolVisible } = commonLogin;
+    const { protocolVisible, loginLoading } = commonLogin;
     return (
       <PcBodyWrap>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
@@ -148,7 +159,7 @@ class UsernameH5Login extends React.Component {
           />
           {/* 输入框 end */}
           {/* 登录按钮 start */}
-          <Button disabled={!this.props.userLogin.isInfoComplete} className={platform === 'h5' ? layout.button : layout.pc_button} type="primary" onClick={this.handleLoginButtonClick}>
+          <Button loading={!loginLoading} disabled={!this.props.userLogin.isInfoComplete} className={platform === 'h5' ? layout.button : layout.pc_button} type="primary" onClick={this.handleLoginButtonClick}>
             登录
           </Button>
           {/* 登录按钮 end */}

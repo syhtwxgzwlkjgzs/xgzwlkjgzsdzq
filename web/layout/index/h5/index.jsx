@@ -1,17 +1,20 @@
 import React, { createRef, Fragment } from 'react';
 import { inject, observer, Observer } from 'mobx-react';
-import { Icon, Tabs } from '@discuzq/design';
-import ThreadContent from '@components/thread';
+import { Icon, Tabs, Spin } from '@discuzq/design';
+// import ThreadContent from '@components/thread';
 import HomeHeader from '@components/home-header';
 import styles from './index.module.scss';
 import TopNew from './components/top-news';
 import FilterView from './components/filter-view';
 import BaseLayout from '@components/base-layout';
-import initJSSdk from '@common/utils/initJSSdk.js';
 import { getSelectedCategoryIds } from '@common/utils/handleCategory';
 import wxAuthorization from '../../user/h5/wx-authorization';
-import VList from '@components/virtual-list/h5/index';
+// import VList from '@components/virtual-list/h5/index';
 import classnames from 'classnames';
+import setWxShare from '@common/utils/set-wx-share';
+// import DynamicVList from './components/dynamic-vlist';
+import dynamic from 'next/dynamic';
+import DynamicLoading from '@components/dynamic-loading';
 
 @inject('site')
 @inject('user')
@@ -32,7 +35,50 @@ class IndexH5Page extends React.Component {
 
     // 是否开启虚拟滚动
     this.enableVlist = true;
+    this.handleScroll = this.handleScroll.bind(this);
+    this.onRefresh = this.onRefresh.bind(this);
   }
+
+  DynamicVListLoading = dynamic(
+    () => import('./components/dynamic-vlist'),
+    { loading: (res) => {
+        return (
+            <div>
+                <HomeHeader ref={this.headerRef} />
+                <DynamicLoading data={res} style={{padding: '0 0 20px 0'}} loadComponent={
+                  <div style={{width: '100%'}}>
+                    <div className={styles.placeholder}>
+                      <div className={styles.header}>
+                        <div className={styles.avatar}/>
+                        <div className={styles.box}/>
+                      </div>
+                      <div className={styles.content}/>
+                      <div className={styles.content}/>
+                      <div className={styles.footer}>
+                        <div className={styles.box}/>
+                        <div className={styles.box}/>
+                        <div className={styles.box}/>
+                      </div>
+                    </div>
+                    <div className={styles.placeholder}>
+                      <div className={styles.header}>
+                        <div className={styles.avatar}/>
+                        <div className={styles.box}/>
+                      </div>
+                      <div className={styles.content}/>
+                      <div className={styles.content}/>
+                      <div className={styles.footer}>
+                        <div className={styles.box}/>
+                        <div className={styles.box}/>
+                        <div className={styles.box}/>
+                      </div>
+                    </div>
+                  </div>
+                }/>
+            </div>
+        )
+      } }
+  )
 
   componentDidMount() {
     try {
@@ -45,30 +91,11 @@ class IndexH5Page extends React.Component {
   }
 
   handleWeiXinShare = async () => {
-    let { href } = window.location;
-    href = href.split('/');
-    href = [href[0], href[1], href[2]];
-    href = href.join('/');
-    const { site } = this.props;
-    const title = site.webConfig?.setSite?.siteName || 'Discuz! Q';
-    const desc = site.webConfig?.setSite?.siteUrl || href;
-    const imgUrl = site.webConfig?.setSite?.siteLogo;
-    const link = site.webConfig?.setSite?.siteUrl;
-    await initJSSdk(['updateAppMessageShareData', 'updateTimelineShareData']);
-    wx.ready(() => {
-      // 需在用户可能点击分享按钮前就先调用
-      wx.updateAppMessageShareData({
-        title, // 分享标题
-        desc, // 分享描述
-        link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-      });
-
-      wx.updateTimelineShareData({
-        title, // 分享标题
-        link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        imgUrl, // 分享图标
-      });
-    });
+    const { site, user } = this.props;
+    const {webConfig} = site;
+    const {setSite} = webConfig;
+    const {siteTitle, siteIntroduction, siteFavicon} = setSite;
+    setWxShare(`${user.userInfo && user.userInfo.nickname ? `【${user.userInfo.nickname}】` : ''}邀请你加入【${siteTitle}】`, siteIntroduction, window.location.href, siteFavicon);
   };
 
   // 点击更多弹出筛选
@@ -116,6 +143,7 @@ class IndexH5Page extends React.Component {
   // 上拉加载更多
   onRefresh = () => {
     const { dispatch = () => {} } = this.props;
+    if(!this.props.index?.threads?.pageData?.length) return; // 防止第一页还没加载出来，用户使劲滚动页面到底部触发请求第二页
     return dispatch('moreData');
   };
 
@@ -199,57 +227,26 @@ class IndexH5Page extends React.Component {
         onClickTabBar={this.onClickTabBar}
         disabledList={this.enableVlist}
       >
-        {this.enableVlist && (
-          <Fragment>
-            <div className={classnames(styles.vTabs, 'text', this.state.fixedTab && styles.vFixed)}>
-              {this.renderTabs()}
-            </div>
+      <Fragment>
+        <div className={classnames(styles.vTabs, 'text', this.state.fixedTab && styles.vFixed)}>
+          {this.renderTabs()}
+        </div>
 
-            <VList
-              list={pageData}
-              sticks={sticks}
-              onScroll={this.handleScroll}
-              loadNextPage={this.onRefresh}
-              noMore={currentPage >= totalPage}
-              requestError={threadError.isError}
-              errorText={threadError.errorText}
-              platform={'h5'}
-              renderItem={(item, index, recomputeRowHeights, onContentHeightChange, measure) => (
-                <ThreadContent
-                  onContentHeightChange={measure}
-                  onImageReady={measure}
-                  onVideoReady={measure}
-                  key={`${item.threadId}-${item.updatedAt}`}
-                  // showBottomStyle={index !== pageData.length - 1}
-                  data={item}
-                  className={styles.listItem}
-                  recomputeRowHeights={measure}
-                />
-              )}
-            >
-              <HomeHeader ref={this.headerRef} />
-              <Observer>{() => this.renderTabs()}</Observer>
-              <Observer>{() => this.renderHeaderContent()}</Observer>
-            </VList>
-          </Fragment>
-        )}
-
-        {!this.enableVlist && (
-          <Fragment>
-            <HomeHeader ref={this.headerRef} />
-            {this.renderTabs()}
-            {this.renderHeaderContent()}
-
-            {pageData?.map((item, index) => (
-              <ThreadContent
-                key={index}
-                showBottomStyle={index !== pageData.length - 1}
-                data={item}
-                className={styles.listItem}
-              />
-            ))}
-          </Fragment>
-        )}
+        <this.DynamicVListLoading
+          pageData={pageData}
+          sticks={sticks}
+          onScroll={this.handleScroll}
+          loadNextPage={this.onRefresh}
+          noMore={currentPage >= totalPage}
+          requestError={threadError.isError}
+          errorText={threadError.errorText}
+          platform={'h5'}
+        >
+          <HomeHeader ref={this.headerRef} />
+          <Observer>{() => this.renderTabs()}</Observer>
+          <Observer>{() => this.renderHeaderContent()}</Observer>
+        </this.DynamicVListLoading>
+      </Fragment>
 
         <FilterView
           data={currentCategories}

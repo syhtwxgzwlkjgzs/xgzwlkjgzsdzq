@@ -63,7 +63,7 @@
     .text {
       color: $disabled-color;
     }
-  
+
     .icon {
       color: $disabled-color;
     }
@@ -82,6 +82,9 @@
   font-size: rem($font-size-middle);
   word-break: break-all;
   margin-bottom: rem($margin-4n) !important;
+  @include widthAndHeightMedia($media-min-width, $media-min-height) {
+    font-size: $font-size-primary;
+  }
 }
 
 .body {

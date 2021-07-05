@@ -50,11 +50,13 @@ const MoneyInput = (props) => {
           placeholder-style="color:#c5c6ca;"
         />
       </View>
-      <View className={styles.leastMoney}>
+      <View>
         {parseFloat(maxmoney) < parseFloat(value) && (
-          <Text className={styles.leasterr}>提现金额不得大于可提现金额</Text>
+          <View className={`${styles.leastMoney} ${styles.leasterr}`}>提现金额不得大于可提现金额</View>
         )}
-        提现金额最低{minmoney}元
+        <View className={`${styles.leastMoney} ${parseFloat(maxmoney) < parseFloat(value) && styles.leastMargin}`}>
+          提现金额最低{minmoney}元
+        </View>
       </View>
     </View>
   );

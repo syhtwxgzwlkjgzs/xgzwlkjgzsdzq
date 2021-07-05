@@ -7,7 +7,7 @@ import classNames from 'classnames';
 const InputPop = (props) => {
   const { visible, onSubmit, onClose, onOperClick, permissions = {}, statuses = {} } = props;
 
-  const { canEdit, canDelete, canEssence, canStick, canShare, canCollect } = permissions;
+  const { canEdit, canDelete, canEssence, canStick, canShare, canCollect, isAdmini } = permissions;
   const { isEssence, isStick, isCollect } = statuses;
 
   const [essence, setEssence] = useState(isEssence);
@@ -94,13 +94,14 @@ const InputPop = (props) => {
                 <div className={styles.text}>分享</div>
               </div>
             )}
-
-            <div className={styles.moreItem} onClick={() => onOperClick('report')}>
-              <div className={styles.icon}>
-                <Icon name="WarnOutlined" size={20}></Icon>
+            {!isAdmini && (
+              <div className={styles.moreItem} onClick={() => onOperClick('report')}>
+                <div className={styles.icon}>
+                  <Icon name="WarnOutlined" size={20}></Icon>
+                </div>
+                <div className={styles.text}>举报</div>
               </div>
-              <div className={styles.text}>举报</div>
-            </div>
+            )}
           </div>
         </div>
 

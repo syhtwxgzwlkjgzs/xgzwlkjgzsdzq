@@ -39,7 +39,7 @@ class H5OthersPage extends React.Component {
   onShow = async () => {
     const { id = '' } = getCurrentInstance().router.params;
     if (!id) {
-      Router.replace({ url: '/pages/home/index' });
+      Router.replace({ url: '/subPages/home/index' });
     }
     if (!this.targetUserId) {
       this.targetUserId = id;
@@ -145,6 +145,7 @@ class H5OthersPage extends React.Component {
         immediateCheck={true}
         onRefresh={this.fetchTargetUserThreads}
         noMore={targetUserThreadsTotalPage < targetUserThreadsPage}
+        showLoadingInCenter={!this.formatUserThreadsData(targetUserThreads).length}
       >
         <View className={styles.mobileLayout}>
           {this.renderTitleContent()}

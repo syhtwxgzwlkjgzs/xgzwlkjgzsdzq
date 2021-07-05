@@ -36,9 +36,7 @@ class FindPasswordH5Page extends React.Component {
             }}
           />
           <PhoneInput/>
-          <Button className={layout.button} type="primary" onClick={() => {
-            console.log('下一步');
-          }}>
+          <Button className={layout.button} type="primary">
             下一步
           </Button>
         </div>

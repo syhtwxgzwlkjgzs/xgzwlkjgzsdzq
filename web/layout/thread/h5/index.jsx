@@ -620,11 +620,10 @@ class ThreadH5Page extends React.Component {
   }
 
   onUserClick(e) {
-    e && e.stopPropagation();
     const { threadData } = this.props.thread || {};
-    const useId = threadData?.userId;
+    const useId = threadData?.user?.userId;
     if (!useId) return;
-    this.props.router.push(`/user/${threadData?.userId}`);
+    this.props.router.push(`/user/${threadData?.user?.userId}`);
   }
 
   render() {
@@ -652,6 +651,7 @@ class ThreadH5Page extends React.Component {
       canStick: threadStore?.threadData?.ability?.canStick,
       canShare: this.props.user.isLogin(),
       canCollect: this.props.user.isLogin(),
+      isAdmini: this.props?.user?.isAdmini,
     };
     // 更多弹窗界面
     const moreStatuses = {

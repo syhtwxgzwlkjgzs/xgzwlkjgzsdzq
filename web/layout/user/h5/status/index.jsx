@@ -1,13 +1,13 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-import { Button, Input } from '@discuzq/design';
+import { Button } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
 import layout from './index.module.scss';
 import PcBodyWrap from '../components/pc-body-wrap';
-
+import clearLoginStatus from '@common/utils/clear-login-status';
 
 @inject('site')
 @inject('user')
@@ -37,6 +37,20 @@ class StatusH5Page extends React.Component {
     // clearInterval(this.timer);
   }
 
+  handleClick() {
+    const { user, site, router } = this.props;
+    const { statusCode } = router.query;
+
+    if (statusCode === '2') {
+      router.push('/');
+    } else {
+      clearLoginStatus();
+      user.removeUserInfo();
+      site.webConfig.user = null;
+      router.push('/user/login');
+    }
+  }
+
   render() {
     const { commonLogin, site, router } = this.props;
     const { platform } = site;
@@ -58,9 +72,7 @@ class StatusH5Page extends React.Component {
                 { commonLogin.statusMessage || (statusCode && commonLogin.setStatusMessage(statusCode, statusMsg)) }
               </span>
           </div>
-          <Button className={platform === 'h5' ? layout.button : layout.pc_button } type="primary" onClick={() => {
-            window.location.replace('/');
-          }}>
+          <Button className={platform === 'h5' ? layout.button : layout.pc_button } type="primary" onClick={() => this.handleClick()}>
             {
               statusCode === '2'
                 ? `跳转到首页${commonLogin.statusCountDown ? `（倒计时 ${commonLogin.statusCountDown} s）` : ''}`

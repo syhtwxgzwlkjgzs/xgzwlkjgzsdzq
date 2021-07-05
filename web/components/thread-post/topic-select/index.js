@@ -42,15 +42,16 @@ class TopicSelect extends Component {
   searchInput = () => {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
-      this.fetchTopics();
+      this.fetchTopics(1);
     }, 300);
   }
 
   // 请求
-  async fetchTopics() {
+  async fetchTopics(p) {
     // 1 设置参数
     const { fetchTopic } = this.props.threadPost;
-    const { page, perPage, keywords } = this.state;
+    const { perPage, keywords } = this.state;
+    const page = p || this.state.page;
     const params = { page, perPage };
 
     params.filter = {};
@@ -98,7 +99,7 @@ class TopicSelect extends Component {
     const { pc, visible = false, cancelTopic, threadPost } = this.props;
     const { topics = [] } = threadPost;
     const { finish, keywords } = this.state;
-
+    const platform = pc ? 'pc' : 'h5';
     const content = (
       <div className={styles.wrapper} onClick={e => e.stopPropagation()}>
 
@@ -131,6 +132,8 @@ class TopicSelect extends Component {
           height={pc ? 'auto' : 'calc(100vh - 50px)'}
           noMore={finish}
           onRefresh={() => this.fetchTopics()}
+          immediateCheck={false}
+          platform={platform}
         >
           {keywords && !topics.length && this.renderItem({ content: keywords, newTopic: '新话题' })}
           {topics.map(item => (

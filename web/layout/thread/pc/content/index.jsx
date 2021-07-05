@@ -122,7 +122,7 @@ export default inject('user')(
               groupName={threadStore?.threadData?.group?.groupName || ''}
               location={threadStore?.threadData?.position.location || ''}
               view={`${threadStore?.threadData?.viewCount}` || ''}
-              time={`${threadStore?.threadData?.createdAt}` || ''}
+              time={`${threadStore?.threadData?.diffTime}` || ''}
               userId={threadStore?.threadData?.user?.userId}
               isEssence={isEssence}
               isPay={!isFree}
@@ -162,13 +162,15 @@ export default inject('user')(
                   </Dropdown>
                 </div>
               )}
-              <div
-                className={classnames(topic.iconText, props?.user?.isAdmini && topic.disabled)}
-                onClick={() => onDropdownChange('report')}
-              >
-                <Icon className={topic.icon} name="WarnOutlinedThick"></Icon>
-                <span className={topic.text}>举报</span>
-              </div>
+              {!props?.user?.isAdmini && (
+                <div
+                  className={classnames(topic.iconText, props?.user?.isAdmini && topic.disabled)}
+                  onClick={() => onDropdownChange('report')}
+                >
+                  <Icon className={topic.icon} name="WarnOutlinedThick"></Icon>
+                  <span className={topic.text}>举报</span>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -286,9 +288,9 @@ export default inject('user')(
           )}
 
           {/* 标签 */}
-          {threadStore?.threadData?.categoryName && (
+          {(threadStore?.threadData?.parentCategoryName || threadStore?.threadData?.categoryName) && (
             <div className={topic.tag} onClick={onTagClick}>
-              {threadStore?.threadData?.categoryName}
+              {threadStore?.threadData?.parentCategoryName || threadStore?.threadData?.categoryName}
             </div>
           )}
 

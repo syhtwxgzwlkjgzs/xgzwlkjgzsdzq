@@ -116,7 +116,7 @@ class BindPhoneH5Page extends React.Component {
             return;
           }
           redirectTo({
-            url: `/pages/home/index`
+            url: `/subPages/home/index`
           });
         }
       });
@@ -128,7 +128,7 @@ class BindPhoneH5Page extends React.Component {
           redirectTo({ url: '/subPages/user/supplementary/index' });
           return;
         }
-        redirectTo({ url: '/pages/home/index' });
+        redirectTo({ url: '/subPages/home/index' });
         return;
       }
 
@@ -190,7 +190,7 @@ class BindPhoneH5Page extends React.Component {
                 <View className={layout.functionalRegion}>
                   <Text className={layout.clickBtn} onClick={() => {
                     redirectTo({
-                      url: `/pages/home/index`
+                      url: `/subPages/home/index`
                     });
                   }} >跳过</Text>
                 </View>

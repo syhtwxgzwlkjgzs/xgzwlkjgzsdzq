@@ -103,7 +103,7 @@ class ResetPasswordH5Page extends React.Component {
         duration: 1000,
         onClose: () => {
           redirectTo({
-            url: `/pages/home/index`
+            url: `/subPages/home/index`
           });
         }
       });

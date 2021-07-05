@@ -1,25 +1,9 @@
-// import {createOrdersCreate} from '@discuzq/sdk/dist/api/pay/create-orderscreate';
-import api from '../api';
-
 /**
- * 把私信对话更新为已读
- * TODO: 待更新到sdk
+ * 更新私信未读为已读
  */
-export default async function _updateDialog(opts, ctx = null) {
-  try {
-    const { params = {}, data = {}, ...others } = opts;
-    const options = {
-      url: '/apiv3/dialog.update',
-      method: 'POST',
-      params,
-      data,
-      __context: ctx,
-      ...others,
-    };
-    const result = await api.http(options);
-    return result;
-  } catch (error) {
-    return error;
-  }
-}
+import { updateDialog } from '@discuzq/sdk/dist/api/notice/update-dialog';
 
+export default async function _updateDialog(opts, ctx = null) {
+  const res = await updateDialog({ ...opts, __context: ctx });
+  return res;
+}

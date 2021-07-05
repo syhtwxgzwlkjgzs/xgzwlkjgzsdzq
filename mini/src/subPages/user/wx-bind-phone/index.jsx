@@ -93,7 +93,7 @@ class Index extends Component {
 
   handleBindButtonClick = async () => {
     const { wxPhoneBind } = this.props;
-    const { sessionToken } = getCurrentInstance().router.params;
+    const { sessionToken } = getCurrentInstance()?.router?.params;
     try {
       const resp = await wxPhoneBind.loginAndBind(sessionToken);
       const uid = get(resp, 'uid', '');
@@ -103,7 +103,7 @@ class Index extends Component {
         duration: 1000,
         onClose: () => {
           navigateTo({
-            url: `/pages/home/index`
+            url: `/subPages/home/index`
           });
         }
       });
@@ -115,7 +115,7 @@ class Index extends Component {
           redirectTo({ url: '/subPages/user/supplementary/index' });
           return;
         }
-        redirectTo({ url: '/pages/home/index' });
+        redirectTo({ url: '/subPages/home/index' });
         return;
       }
       // 跳转状态页
@@ -146,8 +146,7 @@ class Index extends Component {
 
   render() {
     const { wxPhoneBind, commonLogin } = this.props;
-    const { nickname } = getCurrentInstance().router.params;
-
+    const { nickname = '' } = getCurrentInstance()?.router?.params || commonLogin;
     return (
       <Page>
         {/* <MemoToastProvider> */}

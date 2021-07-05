@@ -4,18 +4,17 @@
   position: relative;
   width: 100%;
   height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  // display: flex;
+  // flex-direction: column;
+  // align-items: center;
   background: $body-bg-color;
-  overflow-x: hidden;
-}
+  overflow: hidden;
 
-
-.autoHeight {
-  min-height: 100vh;
-  ;
-  height: auto !important;
+  // scrollbar-width: none; /* Firefox */
+  // scrollbar-color: transparent transparent; /* Firefox */
+  // ::-webkit-scrollbar {
+  //   display: none; /* Chrome Safari */
+  // }
 }
 
 .body {
@@ -131,7 +130,7 @@
   }
 
   @include media('s-pc') {
-    padding-top: rem($padding-4n);
+    padding-top: rem($padding-10);
 
     &.col-1 {
       .center {
@@ -165,6 +164,9 @@
         width: 27%;
       }
     }
+  }
+  @include heightMedia($media-min-height) {
+    padding-top: rem($padding-10);
   }
 
   .center {
@@ -203,59 +205,136 @@
   }
 }
 
+@mixin common() {
+  .qrcode {
+    padding: $padding-2n $padding-4n;
+
+    p {
+      font-size: $font-size-primary;
+    }
+  }
+
+  .copyright {
+    margin-top: $margin-10;
+  }
+
+  :global {
+    .dzq-richText {
+      p {
+        font-size: $font-size-primary !important;
+      }
+    }
+  }
+}
 // 高度自适应
 .container {
   :global {
     .detail {
-      @include heightMedia(780px, 700px) {
+      @include widthAndHeightMedia($media-min-width, $media-min-height) {
+        @include common;
+      }
+      @include heightMedia(500px) {
+        .baselayout-right.is-userinfo-show {
+          top: 0 !important;
+        }
+      }
+      @include heightMedia($media-second-height) {
+        .qrcode {
+          display: none;
+        }
+
+        .copyright {
+          margin-top: 0;
+        }
+      }
+      .right-recommend-item:nth-child(1),
+      .right-recommend-item:nth-child(n+1) {
+        display: block;
+      }
+      @include heightMedia(700px) {
         .right-recommend-item:nth-last-child(-n + 2) {
           display: none;
         }
       }
-
-      @include heightMedia(700px, 620px) {
+      @include heightMedia(690px) {
         .right-recommend-item:nth-last-child(-n + 3) {
           display: none;
         }
       }
-
-      @include heightMedia(620px, 540px) {
+      @include heightMedia(625px) {
         .right-recommend-item:nth-last-child(-n + 4) {
           display: none;
         }
       }
-
-      // 如果小于默认高度不吸顶
-      @include heightMedia(540px) {
-        .baselayout-right {
-          position: static;
+      @include heightMedia(565px) {
+        .right-recommend-item:nth-last-child(-n + 5) {
+          display: none;
+        }
+      }
+      @include heightMedia(500px) {
+        .recommend {
+          display: none;
         }
       }
     }
 
     .home {
-      @include heightMedia(800px, 720px) {
+      @include widthAndHeightMedia($media-min-width, $media-min-height) {
+        .dzq-menu {
+          &-item,
+          .dzq-submenu__title {
+            font-size: $font-size-primary;
+          }
+          &-item {
+            padding-top: $padding-3n;
+            padding-bottom: $padding-3n;
+          }
+        }
+        .top-news-item {
+          height: 32px;
+          div {
+            font-size: $font-size-primary;
+          }
+          :global {
+            .dzq-richText {
+              font-size: $font-size-primary;
+            }
+          }
+        }
+        @include common;
+      }
+      @include heightMedia($media-second-height) {
+        .qrcode {
+          display: none;
+        }
+        .copyright {
+          margin-top: 0;
+        }
+      }
+      .right-recommend-item:nth-child(1),
+      .right-recommend-item:nth-child(n+1) {
+        display: block;
+      }
+
+      @include heightMedia(590px) {
         .right-recommend-item:nth-last-child(-n + 2) {
           display: none;
         }
       }
 
-      @include heightMedia(720px, 640px) {
+      @include heightMedia(520px) {
         .right-recommend-item:nth-last-child(-n + 3) {
           display: none;
         }
       }
-
-      @include heightMedia(640px, 560px) {
+      @include heightMedia(450px) {
         .right-recommend-item:nth-last-child(-n + 4) {
           display: none;
         }
       }
-
-      // 如果小于默认高度不吸顶
-      @include heightMedia(560px) {
-        .baselayout-right {
-          position: static;
+      @include heightMedia(380px) {
+        .right-recommend-item:nth-last-child(-n + 5) {
+          display: none;
         }
       }
     }
@@ -267,8 +346,8 @@
     .search-result-post,
     .search-result-user {
       .pop-topic div:nth-child(1),
-      .pop-topic div:nth-child(n+1),
-      .pop-topic div:nth-child(n+2) {
+      .pop-topic div:nth-child(n + 1),
+      .pop-topic div:nth-child(n + 2) {
         display: flex;
       }
       @include heightMedia(650px, 595px) {
@@ -336,16 +415,16 @@
       }
     }
 
+    // 暂时注释，类名必须存在，等待消息系列页面一起调整。
     .mymessage-page {
-      @include heightMedia(940px) {
-        // 这里暂时这样处理。等消息系列页面一起调整
-        min-height: 940px;
-        padding-top: 70px;
+      // @include heightMedia(940px) {
+      //   min-height: 940px;
+      //   padding-top: 70px;
 
-        .baselayout-right {
-          position: static;
-        }
-      }
+      //   .baselayout-right {
+      //     position: static;
+      //   }
+      // }
     }
 
     .mywallet-page {
@@ -420,8 +499,8 @@
         }
       }
       .pop-topic div:nth-child(1),
-      .pop-topic div:nth-child(n+1),
-      .pop-topic div:nth-child(n+2) {
+      .pop-topic div:nth-child(n + 1),
+      .pop-topic div:nth-child(n + 2) {
         display: flex;
       }
       @include heightMedia(830px, 775px) {
@@ -490,11 +569,61 @@
   // padding: rem(20) 0;
 }
 
-
-
 .list {
   width: 100%;
   flex: 1;
   display: flex;
   justify-content: center;
+}
+
+// 接入虚拟滚动采用fixed方式进行布局
+.list.fixed {
+  .left {
+    position: fixed;
+  }
+
+  .center {
+    position: relative;
+    left: -12px;
+  }
+
+  .right {
+    position: fixed;
+  }
+
+  @include media('xl-pc') {
+    .left {
+      top: 77px;
+      left: calc(50vw - 710px);
+    }
+
+    .right {
+      top: 77px;
+      right: calc(50vw - 710px);
+    }
+  }
+
+  @include media('l-pc') {
+    .left {
+      top: 77px;
+      left: 20px;
+    }
+
+    .right {
+      top: 77px;
+      right: 20px;
+    }
+  }
+
+  @include media('s-pc') {
+    .left {
+      top: 74px;
+      left: 14px;
+    }
+
+    .right {
+      top: 74px;
+      right: 14px;
+    }
+  }
 }

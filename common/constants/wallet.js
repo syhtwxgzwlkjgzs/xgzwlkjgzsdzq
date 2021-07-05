@@ -51,7 +51,7 @@ export const EXPAND_DETAIL_CONSTANTS = {
   },
   REDPACK_EXPAND: {
     text: '红包支出',
-    code: 153,
+    code: '153,100,110',
   },
   OFFER_REWARD_RETURN: {
     text: '悬赏支出',

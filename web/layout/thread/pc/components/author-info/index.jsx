@@ -120,7 +120,7 @@ class AuthorInfo extends React.Component {
             </Button>
           </div>
         ) : (
-          <div className={styles.btn}></div>
+          ''
         )}
       </div>
     );

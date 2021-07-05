@@ -5,23 +5,21 @@ import { inject, observer } from 'mobx-react';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import { getMessageImageSize } from '@common/utils/get-message-image-size';
+
 import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
 import classnames from 'classnames';
 
 const DialogBox = (props, ref) => {
-  const { site: { isPC }, message, showEmoji, scrollEnd, messagesList, sendImageAttachment } = props;
+  const { site: { isPC }, message, showEmoji, messagesList, sendImageAttachment } = props;
   const { dialogMsgList } = message;
   const [previewerVisibled, setPreviewerVisibled] = useState(false);
   const [defaultImg, setDefaultImg] = useState('');
-
-  const imagePreviewerUrls = useMemo(() => {
-    return dialogMsgList.list.filter(item => !!item.imageUrl).map(item => item.imageUrl).reverse();
-  }, [dialogMsgList]);
+  const [imagePreviewerUrls, setImagePreviewerUrls] = useState([]);
 
   const renderImage = (data) => {
-    const { isImageLoading, imageUrl, imageWidth, imageHeight } = data;
-    let [width, height] = [200, 0];
+    const { isImageLoading, imageUrl, renderUrl, imageWidth, imageHeight } = data;
+    let [width, height] = [150, 150];
     if (isImageLoading) {
       [width, height] = getMessageImageSize(imageWidth, imageHeight, isPC);
     } else {
@@ -30,20 +28,19 @@ const DialogBox = (props, ref) => {
         [width, height] = getMessageImageSize(size[1], size[2], isPC);
       }
     }
+
     return (
-      <div className={styles['msgImage-container']} style={{ width: `${width}px`, height: height ? `${height}px` : 'auto' }}>
+      <div className={styles['msgImage-container']} style={{ width: `${width}px`, height: `${height}px` }}>
         {renderImageStatus(data)}
         <img
           className={styles.msgImage}
-          src={imageUrl}
+          src={renderUrl || imageUrl}
           onClick={() => {
-            setDefaultImg(imageUrl);
+            setImagePreviewerUrls(dialogMsgList.list.filter(item => (!item.isImageLoading && item.imageUrl)).map(item => item.imageUrl).reverse())
             setTimeout(() => {
+              setDefaultImg(imageUrl);
               setPreviewerVisibled(true);
             }, 0);
-          }}
-          onLoad={() => {
-            !height && scrollEnd();
           }}
         />
       </div>
@@ -83,7 +80,7 @@ const DialogBox = (props, ref) => {
           const { id, timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl, userId, nickname } = item;
           return (
             <React.Fragment key={id}>
-              {displayTimePanel && <div className={styles.msgTime}>{diffDate(timestamp)}</div>}
+              {displayTimePanel && <div className={styles.msgTime}>{timestamp}</div>}
               <div className={`${ownedBy === 'myself' ? `${styles.myself}` : `${styles.itself}`} ${styles.persona}`}>
                 <div className={styles.profileIcon} onClick={() => {
                   userId && Router.push({ url: `/user/${userId}` });

@@ -5,7 +5,7 @@ import { withRouter } from 'next/router';
 import LoadingBox from '@components/loading-box';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import classNames from 'classnames';
-
+import calcCosImageQuality from '@common/utils/calc-cos-image-quality';
 import styles from './index.module.scss';
 
 function avatar(props) {
@@ -22,8 +22,19 @@ function avatar(props) {
     user: myself,
     search,
     userType = -1,
+    unifyOnClick = null, // 付费加入，统一点击事件
     withStopPropagation = false, // 是否需要阻止冒泡 默认false不阻止
+    level = 6
   } = props;
+
+  const currAvatarImage = useMemo(() => {
+    if (!image || image === '') return image;
+    if ( /(http|https):\/\/.*?(gif)/.test(image) ) {
+      return calcCosImageQuality(image, 'gif');
+    } else {
+      return calcCosImageQuality(image, 'png', level);
+    }
+  }, [image, level]);
 
   const userName = useMemo(() => {
     const newName = (name || '').toLocaleUpperCase()[0];
@@ -35,9 +46,11 @@ function avatar(props) {
   const [following, changeFollowStatus] = useState(false);
   const [blocking, changeBlockStatus] = useState(false);
   const [isSameWithMe, changeIsSameWithMe] = useState(false);
+  
+
 
   const onMouseEnterHandler = useCallback(async () => {
-    if (!userId) return;
+    if (!isShowUserInfo || !userId) return;
     changeIsShow(true);
 
     if (!userInfo || userInfo === 'padding') {
@@ -48,13 +61,17 @@ function avatar(props) {
   });
 
   const onMouseLeaveHandler = useCallback(() => {
-    if (!userId) return;
+    if (!isShowUserInfo || !userId) return;
     changeIsShow(false);
     changeUserInfo('padding');
   });
 
   const followHandler = useCallback(
     async (e) => {
+      if (typeof unifyOnClick === 'function') {
+        unifyOnClick();
+        return;
+      }
       e && e.stopPropagation();
 
       // 对没有登录的先登录
@@ -92,6 +109,10 @@ function avatar(props) {
   );
 
   const messagingHandler = useCallback((e) => {
+    if (typeof unifyOnClick === 'function') {
+      unifyOnClick();
+      return;
+    }
     e && e.stopPropagation();
 
     // 对没有登录的先登录
@@ -111,6 +132,10 @@ function avatar(props) {
 
   const blockingHandler = useCallback(
     async (e) => {
+      if (typeof unifyOnClick === 'function') {
+        unifyOnClick();
+        return;
+      }
       e && e.stopPropagation();
       // 对没有登录的先登录
       if (!myself.isLogin()) {
@@ -184,6 +209,14 @@ function avatar(props) {
       );
     }
 
+    let targetAvatarImage = userInfo?.avatarUrl;
+    if (targetAvatarImage && targetAvatarImage !== '') {
+      if ( /(http|https):\/\/.*?(gif)/.test(targetAvatarImage) ) {
+        targetAvatarImage = calcCosImageQuality(targetAvatarImage, 'gif');
+      } else {
+        targetAvatarImage = calcCosImageQuality(targetAvatarImage, 'png', 5);
+      }
+    }
     return (
       <div
         id="avatar-popup"
@@ -196,7 +229,7 @@ function avatar(props) {
               <Avatar
                 className={classNames(styles.customAvatar, styles.cursor)}
                 circle={true}
-                image={userInfo.avatarUrl}
+                image={targetAvatarImage}
                 siz="primary"
                 text={userInfo.nickname && userInfo.nickname.substring(0, 1)}
               ></Avatar>
@@ -268,11 +301,11 @@ function avatar(props) {
     bgClrBasedOnType =
       userType === 1 ? styles.like : userType === 2 ? styles.heart : userType === 3 ? styles.heart : '';
 
-  if (image && image !== '') {
+  if (currAvatarImage && currAvatarImage !== '') {
     return (
       <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
         <div className={styles.avatarWrapper} onClick={clickAvatar}>
-          <Avatar className={className} circle={circle} image={image} size={size}></Avatar>
+          <Avatar className={className} circle={circle} image={currAvatarImage} size={size}></Avatar>
           {userTypeIcon && (
             <div className={`${styles.userIcon} ${bgClrBasedOnType}`}>
               <Icon name={userTypeIcon} size={12} />

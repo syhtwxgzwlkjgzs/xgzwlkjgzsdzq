@@ -39,12 +39,12 @@ class HomeHeader extends React.Component {
 
   getLogo() {
     // 站点加入页面logo图片定制
-    const { mode } = this.props;
-    if (mode === 'join') {
+    const { mode, site } = this.props;
+    const siteHeaderLogo = get(site, 'webConfig.setSite.siteHeaderLogo', '');
+    if (mode === 'join' && !siteHeaderLogo) {
       return joinLogoImg;
     }
 
-    const { site } = this.props;
     const siteData = site.webConfig || {};
     if (siteData.setSite?.siteHeaderLogo) {
       return siteData.setSite.siteHeaderLogo;
@@ -110,7 +110,7 @@ class HomeHeader extends React.Component {
     Router.back({
       fail: () => {
         Router.redirect({
-          url: '/pages/home/index'
+          url: '/subPages/home/index'
         });
       }
     });

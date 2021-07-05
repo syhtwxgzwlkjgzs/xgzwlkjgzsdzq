@@ -29,7 +29,7 @@ const List = forwardRef(({
   onRefresh,
   onScroll = noop,
   showRefresh = true,
-  preload = 30,
+  preload = 1000,
   onError = noop,
   enableError = false,
   immediateCheck = true,
@@ -71,7 +71,9 @@ const List = forwardRef(({
       const { clientHeight } = listWrapper.current;
       const { scrollHeight } = listWrapper.current;
 
-      setIsLoadingInCenter(scrollHeight <= clientHeight)
+      setIsLoadingInCenter(scrollHeight <= clientHeight);
+    } else {
+      setIsLoadingInCenter(false);
     }
   }, [listWrapper.current, children])
 
@@ -82,6 +84,11 @@ const List = forwardRef(({
   useEffect(() => {
     setErrText(errorText)
   }, [errorText])
+
+  //移动端没有更多内容样式才有下划线
+  const noMoreType = useMemo(() => {
+    return site.platform === 'h5' ? 'line' : 'normal'
+  },[site.platform])
 
   useImperativeHandle(
     ref,
@@ -190,7 +197,7 @@ const List = forwardRef(({
         onScroll={onTouchMove}
       >
         {children}
-        {onRefresh && showRefresh && <BottomView isError={isError} errorText={errText} noMore={noMore} handleError={handleError} type = 'line' platform={platform} />}
+        {onRefresh && showRefresh && <BottomView isError={isError} errorText={errText} noMore={noMore} handleError={handleError} noMoreType={noMoreType} />}
       </div>
     </div>
   );

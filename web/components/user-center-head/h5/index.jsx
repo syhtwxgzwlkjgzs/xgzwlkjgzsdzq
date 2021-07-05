@@ -203,7 +203,7 @@ class index extends Component {
         {/* 上 */}
         <div className={styles.h5boxTop}>
           <div className={styles.headImgBox}>
-            <Avatar image={user.avatarUrl} size="big" name={user.nickname} />
+            <Avatar image={user.avatarUrl} size="big" name={user.nickname} level={1}/>
           </div>
           {/* 粉丝|关注|点赞 */}
           <div className={styles.userMessageList}>

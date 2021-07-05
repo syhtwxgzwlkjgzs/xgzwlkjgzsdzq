@@ -33,10 +33,18 @@ class BindPhoneH5Page extends React.Component {
     mobileBind.code = code;
   }
 
+  componentWillUnmount() {
+    this.props.mobileBind.reset();
+  }
+
   handleBindButtonClick = async () => {
     try {
-      const { query } = this.props.router;
+      const { commonLogin, router: { query } } = this.props;
+      if (!commonLogin.loginLoading) {
+        return;
+      }
       const { sessionToken } = query;
+      commonLogin.loginLoading = false;
       const resp = await this.props.mobileBind.bind(sessionToken);
       const uid = get(resp, 'uid', '');
       this.props.user.updateUserInfo(uid);
@@ -46,10 +54,11 @@ class BindPhoneH5Page extends React.Component {
         duration: 1000,
       });
       setTimeout(() => {
-        this.props.mobileBind.reset();
+        commonLogin.loginLoading = true;
         window.location.href = '/';
       }, 1000);
     } catch (e) {
+      this.props.commonLogin.loginLoading = true;
       // 跳转补充信息页
       if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
         if (isExtFieldsOpen(this.props.site)) {
@@ -98,7 +107,7 @@ class BindPhoneH5Page extends React.Component {
   }
 
   render() {
-    const { mobileBind, site } = this.props;
+    const { mobileBind, site, commonLogin: { loginLoading } } = this.props;
     const { platform, wechatEnv } = site;
     return (
       <PcBodyWrap>
@@ -120,8 +129,15 @@ class BindPhoneH5Page extends React.Component {
             phoneCodeCallback={this.handlePhoneCodeCallback} // 验证码输入时的回调
             sendCodeCallback={this.handleSendCodeButtonClick} // 验证码点击时的回调
             codeTimeout={mobileBind.codeTimeout} // 验证码倒计时
+            enterCallback={this.handleBindButtonClick}
           />
-          <Button className={platform === 'h5' ? layout.button : layout.pc_button} type="primary" onClick={this.handleBindButtonClick}>
+          <Button
+            disabled={!mobileBind.isInfoComplete}
+            loading={!loginLoading}
+            className={platform === 'h5' ? layout.button : layout.pc_button}
+            type="primary"
+            onClick={this.handleBindButtonClick}
+          >
             下一步
           </Button>
           {
