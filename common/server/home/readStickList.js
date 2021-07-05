@@ -1,7 +1,10 @@
-import {readStickList} from '@discuzq/sdk/dist/api/content/read-sticklist';
+import { readStickList } from '@discuzq/sdk/dist/api/home/read-stick-list';
 
-
+/** 置顶列表
+ * @param {object} params
+ * @returns object
+ */
 export default async function _readStickList(opts, ctx = null) {
-  const res = await readStickList({ ...opts, __context: ctx, url: '/apiv3/thread.stick' });
+  const res = await readStickList({ ...opts, __context: ctx });
   return res;
 }
