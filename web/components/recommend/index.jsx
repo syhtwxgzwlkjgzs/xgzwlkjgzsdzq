@@ -72,7 +72,7 @@ class Index extends React.Component {
     const { filterCount = 5 } = this.props
     const { isError, errorText } = this.state
     return (
-      <div className={style.recommend} style={{
+      <div className={`${style.recommend} recommend`} style={{
         /* stylelint-disable */
         // maxHeight: (this.state.windowSize?.innerHeight - 80) || '600px'
       }}>

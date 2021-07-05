@@ -25,7 +25,6 @@ const TopFilterView = ({ onFilterClick, isShowDefault, onPostThread, ishide }) =
 export default class DynamicVList extends React.Component {
   constructor(props) {
     super(props);
-    this.enabledVList = true; // 开启虚拟列表
   }
 
   // 中间 -- 筛选 置顶信息 是否新内容发布 主题内容
@@ -152,6 +151,6 @@ export default class DynamicVList extends React.Component {
   render() {
     const { indexStore } = this.props;
 
-    return this.enabledVList ? this.renderVlist(indexStore) : this.renderContent(indexStore);
+    return this.props.enabledVList ? this.renderVlist(indexStore) : this.renderContent(indexStore);
   }
 }

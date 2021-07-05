@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button, Textarea, Icon, Input } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import Emoji from '@components/editor/emoji';
@@ -18,6 +18,10 @@ const InteractionBox = (props) => {
   } = props;
 
   const [cursorPosition, setCursorPosition] = useState(0);
+
+  const inputBoxRef = useRef();
+
+
   const recordCursor = (e) => {
     setCursorPosition(e.target.selectionStart);
   };
@@ -38,7 +42,7 @@ const InteractionBox = (props) => {
     <>
       {!isPC && (
         <>
-          <div className={styles.h5InteractionBox} style={{ bottom: showEmoji ? '200px' : 0 }}>
+          <div className={styles.h5InteractionBox} style={{ bottom: showEmoji ? '200px' : 0 }} ref={inputBoxRef}>
             <div className={styles.inputWrapper}>
               <Input
                 value={typingValue}
@@ -49,8 +53,18 @@ const InteractionBox = (props) => {
                 }}
                 onBlur={(e) => {
                   recordCursor(e);
+                  setTimeout(() => {
+                    inputBoxRef.current.scrollIntoView(false);
+                  }, 300);
                 }}
-                onFocus={scrollEnd}
+                onFocus={() => {
+                  setTimeout(() => {
+                    inputBoxRef.current.scrollIntoViewIfNeeded(false);
+                    setTimeout(() => {
+                      scrollEnd();
+                    }, 500);
+                  }, 300);
+                }}
               />
               <div className={styles.tools}>
                 <div>

@@ -62,7 +62,7 @@ export function _drawSingleText(drawData, drawOptions) {
                 fillText = '';
                 line++;
             }
-            else {if ((ctx.measureText(fillText).width) >= drawWidth) {
+            else {if ((ctx.measureText(fillText).width) >= drawWidth - 10) { // 减10，是为了不贴着边
                 if (line === lineNum) {
                     if (i !== text.length - 1) {
                         fillText = `${fillText.substring(0, fillText.length - 1)  }...`;

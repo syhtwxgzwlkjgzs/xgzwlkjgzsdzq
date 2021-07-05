@@ -288,9 +288,9 @@ export default inject('user')(
           )}
 
           {/* 标签 */}
-          {threadStore?.threadData?.categoryName && (
+          {(threadStore?.threadData?.parentCategoryName || threadStore?.threadData?.categoryName) && (
             <div className={topic.tag} onClick={onTagClick}>
-              {threadStore?.threadData?.categoryName}
+              {threadStore?.threadData?.parentCategoryName || threadStore?.threadData?.categoryName}
             </div>
           )}
 

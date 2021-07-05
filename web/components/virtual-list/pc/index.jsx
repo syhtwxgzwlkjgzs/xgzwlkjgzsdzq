@@ -200,7 +200,7 @@ function Home(props, ref) {
       props.vlist.setPosition(scrollTop);
     }
 
-    if (scrollTop + clientHeight + clientHeight >= scrollHeight && !loadData) {
+    if (((scrollTop + (clientHeight) + 3000) >= scrollHeight) && !loadData) {
       loadData = true;
       if (props.loadNextPage) {
         const promise = props.loadNextPage();
@@ -249,7 +249,7 @@ function Home(props, ref) {
             {({ height, width }) => {
               return (
                 <div className={`${layout.list} ${layout.fixed}`}>
-                  <div className={layout.left}>{typeof left === 'function' ? left({ ...props }) : left}</div>
+                  <div className={`baselayout-left ${layout.left}`}>{typeof left === 'function' ? left({ ...props }) : left}</div>
 
                   <div className={`${layout.top} ${layout.center} top`}>{top}</div>
 
@@ -274,7 +274,7 @@ function Home(props, ref) {
                     // overscanIndicesGetter={overscanIndicesGetter}
                   />
 
-                  <div className={`${layout.right}`}>{typeof right === 'function' ? right({ ...props }) : right}</div>
+                  <div className={`baselayout-right ${layout.right}`}>{typeof right === 'function' ? right({ ...props }) : right}</div>
 
                   {scrollTop > 100 && <BacktoTop onClick={handleBacktoTop} />}
                 </div>
