@@ -69,7 +69,7 @@ const Index = ({ message, user, site: { webConfig, envConfig }, dialogId: _dialo
       Taro.hideLoading();
       if (ret.code === 0) {
         if (!data.imageUrl) setTypingValue('');
-        updateDialogId(ret.data.dialogId);
+        setDialogId(ret.data.dialogId);
       } else {
         Toast.error({ content: ret.msg });
       }
@@ -281,7 +281,7 @@ const Index = ({ message, user, site: { webConfig, envConfig }, dialogId: _dialo
       const res = await readDialogIdByUsername(username);
       const { code, data: { dialogId } } = res;
       if (code === 0 && dialogId) {
-        updateDialogId(dialogId);
+        setDialogId(dialogId);
       }
     }
 
@@ -332,9 +332,6 @@ const Index = ({ message, user, site: { webConfig, envConfig }, dialogId: _dialo
         dialogId={dialogId}
         switchEmoji={(show) => {
           setShowEmoji(show);
-        }}
-        updateDialogId={(dialogId) => {
-          setDialogId(dialogId);
         }}
       />
     </View>
