@@ -17,46 +17,38 @@
   background: $white;
 }
 
-.scroll {
+.header {
   width: 100%;
-  height: calc(100vh - 58px - constant(safe-area-inset-bottom));
-  height: calc(100vh - 58px - env(safe-area-inset-bottom));
-  overflow-y: scroll;
-  flex: 1 0 auto;
-  background: var(--comment-content-bg-color);
+}
 
-  .header {
-    width: 100%;
-    background: $primary-color url('../../../../web/public/dzq-img/walletbackground.png') 100% no-repeat padding-box;
-    background-size: 100% 100%;
+.choiceTime {
+  height: 52px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: $comment-bg-color;
+  padding: 0 rem($padding-4n);
+  min-height: 52px;
 
-    .topBar {
-      position: fixed;
-      top: 54px;
-      left: 0;
-      display: flex;
-      justify-content: flex-start;
-      width: 100%;
+  .status {
+    font-family: 'PingFangSC-Regular';
+    font-weight: normal;
+    color: $text-color-regular;
+    font-size: rem($font-size-primary);
 
-      :global {
-        .dzq-icon {
-          display: inline-flex;
-          align-items: center;
-          height: 100%;
-          width: 40px;
-          padding-left: $padding-10;
-          transform: rotate(180deg);
-          font-size: $font-size-middle;
-          color: $white;
-        }
-      }
+    .icon {
+      margin-left: rem(9);
     }
   }
+}
 
-  .choiceTime {
-    height: 52px;
+.tabs {
+  width: 100%;
+  border-bottom: $border-solid-1;
+
+  .tagbox {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     background-color: $comment-bg-color;
     padding: 0 rem($padding-4n);
@@ -73,48 +65,38 @@
     }
   }
 
-  .tabs {
-    width: 100%;
-    border-bottom: $border-solid-1;
-
-    .tagbox {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+  :global {
+    .dzq-tabs__panel {
+      height: 0;
     }
 
-    :global {
-      .dzq-tabs__panel {
-        height: 0;
-      }
+    .dzq-tabs__list {
+      display: flex;
+    }
 
-      .dzq-tabs__list {
-        display: flex;
-      }
+    .dzq-tabs__content {
+      padding-top: rem(1);
+      padding-left: 0;
+      padding-right: 0;
+    }
 
-      .dzq-tabs__content {
-        padding-top: rem(1);
-        padding-left: 0;
-        padding-right: 0;
-      }
+    .dzq-tabs__label {
+      padding-bottom: 15px !important;
+      font-family: 'PingFang SC';
+      font-weight: 600;
+      font-size: rem($font-size-primary);
+      line-height: 20px;
+    }
 
-      .dzq-tabs__label {
-        padding-bottom: 15px !important;
-        font-weight: 600;
-        font-size: rem($font-size-primary);
-        line-height: 20px;
-      }
+    .dzq-tabs__item {
+      height: 53px;
+      box-sizing: border-box;
+      flex: 1;
+      padding: 0 $padding-4n;
 
-      .dzq-tabs__item {
-        height: 53px;
-        box-sizing: border-box;
-        flex: 1;
-        padding: 0 $padding-4n;
-
-        &::after {
-          width: 80px;
-          margin: auto;
-        }
+      &::after {
+        width: 80px;
+        margin: auto;
       }
     }
   }

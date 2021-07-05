@@ -195,7 +195,7 @@ class UserCenterFollows extends React.Component {
         duration: 2000,
       });
     }
-  }
+  };
 
   unFollowUser = async ({ id }) => {
     try {
@@ -357,7 +357,7 @@ class UserCenterFollows extends React.Component {
   render() {
     return (
       <div
-        className={this.props.className + " user-center-follow-list"}
+        className={this.props.className + ' user-center-follow-list'}
         ref={this.containerRef}
         style={{
           height: '100%',
@@ -431,7 +431,9 @@ class UserCenterFollows extends React.Component {
             );
           })}
         </div>
-        {followerAdapter(this.props.dataSource || this.state.follows).length === 0 && !this.state.loading && <NoData defaultShow={true} />}
+        {followerAdapter(this.props.dataSource || this.state.follows).length === 0 && !this.state.loading && (
+          <NoData defaultShow={true} />
+        )}
         {this.state.loading && (
           <div className={styles.loadMoreContainer}>
             <Spin type={'spinner'}>加载中 ...</Spin>
