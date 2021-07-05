@@ -13,6 +13,46 @@ import { handleString2Arr, getSelectedCategoryIds } from '@common/utils/handleCa
 import DynamicLoading from '@components/dynamic-loading';
 import dynamic from 'next/dynamic';
 
+const DynamicVListLoading = dynamic(
+  () => import('./components/dynamic-vlist'),
+  { loading: (res) => {
+      return (
+          <div style={{width: '100%', maxWidth: '1420px'}}>
+              <DynamicLoading data={res} style={{padding: '0 0 20px 0'}} loadComponent={
+                <div style={{width: '100%'}}>
+                  <div className={styles.placeholder}>
+                    <div className={styles.header}>
+                      <div className={styles.avatar}/>
+                      <div className={styles.box}/>
+                    </div>
+                    <div className={styles.content}/>
+                    <div className={styles.content}/>
+                    <div className={styles.footer}>
+                      <div className={styles.box}/>
+                      <div className={styles.box}/>
+                      <div className={styles.box}/>
+                    </div>
+                  </div>
+                  <div className={styles.placeholder}>
+                    <div className={styles.header}>
+                      <div className={styles.avatar}/>
+                      <div className={styles.box}/>
+                    </div>
+                    <div className={styles.content}/>
+                    <div className={styles.content}/>
+                    <div className={styles.footer}>
+                      <div className={styles.box}/>
+                      <div className={styles.box}/>
+                      <div className={styles.box}/>
+                    </div>
+                  </div>
+                </div>
+              }/>
+          </div>
+      )
+    } }
+)
+
 @inject('site')
 @inject('user')
 @inject('index')
@@ -44,46 +84,6 @@ class IndexPCPage extends React.Component {
     this.renderLeft = this.renderLeft.bind(this);
     this.renderRight = this.renderRight.bind(this);
   }
-
-  DynamicVListLoading = dynamic(
-    () => import('./components/dynamic-vlist'),
-    { loading: (res) => {
-        return (
-            <div style={{width: '100%', maxWidth: '1420px'}}>
-                <DynamicLoading data={res} style={{padding: '0 0 20px 0'}} loadComponent={
-                  <div style={{width: '100%'}}>
-                    <div className={styles.placeholder}>
-                      <div className={styles.header}>
-                        <div className={styles.avatar}/>
-                        <div className={styles.box}/>
-                      </div>
-                      <div className={styles.content}/>
-                      <div className={styles.content}/>
-                      <div className={styles.footer}>
-                        <div className={styles.box}/>
-                        <div className={styles.box}/>
-                        <div className={styles.box}/>
-                      </div>
-                    </div>
-                    <div className={styles.placeholder}>
-                      <div className={styles.header}>
-                        <div className={styles.avatar}/>
-                        <div className={styles.box}/>
-                      </div>
-                      <div className={styles.content}/>
-                      <div className={styles.content}/>
-                      <div className={styles.footer}>
-                        <div className={styles.box}/>
-                        <div className={styles.box}/>
-                        <div className={styles.box}/>
-                      </div>
-                    </div>
-                  </div>
-                }/>
-            </div>
-        )
-      } }
-  )
 
   componentDidMount() {
     if (this.timer) {
@@ -271,7 +271,7 @@ class IndexPCPage extends React.Component {
         disabledList={this.enabledVList}
         onRefreshPlaceholder={this.onRefreshPlaceholder}
       >
-        <this.DynamicVListLoading
+        <DynamicVListLoading
           indexStore={index}
           siteStore={site}
           visible={visible}
@@ -286,12 +286,11 @@ class IndexPCPage extends React.Component {
           loadNextPage={this.onPullingUp}
           renderRight={this.renderRight}
           renderLeft={this.renderLeft}
+          enabledVList={this.enabledVList}
         />
-        
       </BaseLayout>
     );
   }
 }
 
 export default withRouter(IndexPCPage);
-
