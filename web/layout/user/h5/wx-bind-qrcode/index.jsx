@@ -18,11 +18,16 @@ import { isExtFieldsOpen } from '@common/store/login/util';
 @inject('commonLogin')
 @observer
 class WeixinBindQrCodePage extends React.Component {
+
+  timer = null;
+  isDestroy = false;
+
   async componentDidMount() {
     await this.generateQrCode();
   }
 
   componentWillUnmount() {
+    this.isDestroy = true;
     clearInterval(this.timer);
   }
 
@@ -46,6 +51,10 @@ class WeixinBindQrCodePage extends React.Component {
           redirectUri: encodeURIComponent(redirectUri),
         },
       });
+      // 组件销毁后，不执行后面的逻辑
+      if (this.isDestroy) {
+        return;
+      }
       this.queryLoginState(wechatEnv === 'miniProgram' ? 'pc_bind_mini' : qrCodeType);
     } catch (e) {
       Toast.error({

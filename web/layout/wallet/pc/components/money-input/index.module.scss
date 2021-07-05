@@ -5,7 +5,7 @@
 }
 
 .header {
-  font-family: 'PingFangSC-Regular';
+  
   font-weight: normal;
   font-size: rem($font-size-primary);
   text-align: left;
@@ -20,14 +20,14 @@
   :global {
     .dzq-input__inner {
       border: none;
-      font-family: 'PingFang SC';
+      
       font-weight: 600;
       font-size: rem(30);
       text-align: left;
     }
   }
   .moneyIcon {
-    font-family: 'PingFang SC';
+    
     font-weight: 600;
     font-size: rem(30);
     text-align: left;
@@ -35,7 +35,7 @@
   }
 
   .moneyIcon-Red {
-    font-family: 'PingFang SC';
+    
     font-weight: 600;
     font-size: rem(30);
     text-align: left;
@@ -57,7 +57,6 @@
 }
 
 .leastMoney {
-  font-family: PingFangSC-Regular;
   font-weight: normal;
   font-size: rem($font-size-label);
   text-align: left;

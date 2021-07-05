@@ -2,6 +2,7 @@ import React from 'react';
 import { Provider } from 'mobx-react';
 import { hideInstance } from '@discuzq/design/dist/components/image-previewer/layouts/web';
 import App from 'next/app';
+import getPlatform from '@common/utils/get-platform';
 import initializeStore from '@common/store';
 import PayBoxProvider from '../components/payBox/payBoxProvider';
 import isServer from '@common/utils/is-server';
@@ -14,6 +15,9 @@ import CustomHead from '@components/custom-head';
 import Head from 'next/head';
 import monitor from '@common/utils/monitor';
 import setWxShare from '@common/utils/set-wx-share';
+import { detectH5Orient } from '@common/utils/detect-orient';
+import browser from '@common/utils/browser';
+import Toast from '@discuzq/design/dist/components/toast';
 
 // if (!isServer()) {
 //   process.env.NODE_ENV === 'production' && sentry();
@@ -25,6 +29,7 @@ class DzqApp extends App {
     this.appStore = initializeStore();
     this.updateSize = this.updateSize.bind(this);
     this.setWXShare = this.setWXShare.bind(this);
+    this.toastInstance = null;
   }
 
   // 路由跳转时，需要清理图片预览器
@@ -54,6 +59,7 @@ class DzqApp extends App {
       });
     }
     
+    this.initOretation();
     window.addEventListener('resize', this.updateSize);
     csrRouterRedirect();
     this.listenRouterChangeAndClean();
@@ -89,20 +95,25 @@ class DzqApp extends App {
     // Router.replace({ url: '/render-error' });
   }
 
-  updateSize() {
-    const currentWidth = window.innerWidth;
+  // 移动端检测横屏
+  initOretation() {
+    this.toastInstance?.destroy();
     
-    if ( this.appStore.site ) {
-      if ( this.appStore.site.platform === 'pc' && currentWidth < 800 ) {
-        this.appStore.site.setPlatform('h5');
-        return;
-      }
-
-      if ( this.appStore.site.platform === 'h5' && currentWidth >= 800 ) {
-        this.appStore.site.setPlatform('pc');
-        return;
+    if (browser.env('mobile') && !browser.env('iPad')) {
+      const isVertical = detectH5Orient();
+      if (!isVertical) {
+        this.toastInstance = Toast.info({
+          content: '为了更好的体验，请使用竖屏浏览',
+          duration: 5000
+        });
       }
     }
+  }
+
+  updateSize() {
+    this.appStore.site.setPlatform(getPlatform(window.navigator.userAgent));
+
+    this.initOretation();
   }
 
   render() {

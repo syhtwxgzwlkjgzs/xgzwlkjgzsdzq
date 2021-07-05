@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, computed, action } from 'mobx';
 import { usernameRegister } from '@server';
 import { get } from '@common/utils/get';
 import setAccessToken from '../../utils/set-access-token';
@@ -16,12 +16,12 @@ export default class UserRegisterStore {
     return this.password === this.passwordConfirmation;
   }
 
-  isInfoNotCpl() {
+  @computed get isInfoNotCpl() {
     return !this.username || !this.password || !this.nickname || !this.passwordConfirmation;
   }
 
   verifyForm() {
-    if (this.isInfoNotCpl()) {
+    if (this.isInfoNotCpl) {
       throw {
         Code: 'reg_0000',
         Message: '请填写完整信息',
@@ -34,6 +34,15 @@ export default class UserRegisterStore {
         Message: '两次输入的密码不一致',
       };
     }
+  }
+
+  // 重置参数
+  @action
+  reset = () => {
+    this.username = '';
+    this.password = '';
+    this.passwordConfirmation = '';
+    this.nickname = '';
   }
 
   @action

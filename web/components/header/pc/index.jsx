@@ -96,7 +96,7 @@ class Header extends React.Component {
   renderHeaderLogo() {
     const { site } = this.props;
 
-    if (site?.webConfig?.setSite?.siteHeaderLogo !== '') {
+    if (site?.webConfig?.setSite?.siteLogo !== '') {
       return (
         <img
           className={styles.siteLogo}

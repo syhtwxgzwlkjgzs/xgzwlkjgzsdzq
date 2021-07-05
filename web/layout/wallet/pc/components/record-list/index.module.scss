@@ -11,7 +11,7 @@
   padding: 0 rem($padding-4n);
   border-radius: rem(5) rem(5) 0 0;
   background-color: $comment-bg-color;
-  font-family: 'PingFang SC';
+  
   font-weight: normal;
   font-size: rem($font-size-primary);
   text-align: left;
@@ -63,7 +63,7 @@
 
   .left {
     width: 40%;
-    font-family: 'PingFang SC';
+    
     font-weight: normal;
     font-size: rem($font-size-primary);
   }
@@ -80,27 +80,27 @@
     justify-content: space-around;
     text-align: left;
     .type {
-      font-family: 'PingFang SC';
+      
       width: 33%;
       font-weight: normal;
       color: $text-color-primary;
     }
     .status {
-      font-family: 'PingFang SC';
+      
       width: 33%;
       font-weight: normal;
       // color: var(--color-text-primary);
     }
     .money {
       width: 33%;
-      font-family: 'PingFang SC';
+      
       font-weight: 600;
       font-size: rem($font-size-middle);
       color: $error-color;
     }
     .time {
       width: 33%;
-      font-family: 'PingFangSC-Regular';
+      
       font-weight: normal;
       color: $text-color-secondary;
     }
