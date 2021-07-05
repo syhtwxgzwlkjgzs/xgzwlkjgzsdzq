@@ -68,7 +68,7 @@ class SiteAction extends SiteStore {
         return;
       }
     } else {
-      if (['pages/index/index', 'subPages/home/index'].includes(pageUrl)) {
+      if (['pages/index/index', 'pages/home/index'].includes(pageUrl)) {
         return;
       }
     }

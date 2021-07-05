@@ -56,7 +56,7 @@ class WXSelect extends Component {
         });
         this.props.user.updateUserInfo(uid);
         redirectTo({
-          url: `/subPages/home/index`
+          url: `/pages/home/index`
         });
         return;
       }
@@ -81,7 +81,7 @@ class WXSelect extends Component {
           redirectTo({ url: '/subPages/user/supplementary/index' });
           return;
         }
-        redirectTo({ url: '/subPages/home/index' });
+        redirectTo({ url: '/pages/home/index' });
         return;
       }
 

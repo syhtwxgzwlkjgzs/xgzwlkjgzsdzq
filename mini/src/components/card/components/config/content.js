@@ -1,8 +1,8 @@
 import htmlparser2 from 'htmlparser2';
 import { getByteLen } from '../../utils';
 import replaceStringInRegex from '@common/utils/replace-string-in-regex';
-import priceShare from '../../../../public/dzq-img/admin-logo-pc.png';
-import lookMore from '../../../../public/dzq-img/look-more.png';
+import priceShare from '../../card-img/admin-logo-pc.jpg';
+import lookMore from '../../card-img/look-more.jpg';
 
 import {
   posterFrameWidth,

@@ -39,7 +39,7 @@ class H5OthersPage extends React.Component {
   onShow = async () => {
     const { id = '' } = getCurrentInstance().router.params;
     if (!id) {
-      Router.replace({ url: '/subPages/home/index' });
+      Router.replace({ url: '/pages/home/index' });
     }
     if (!this.targetUserId) {
       this.targetUserId = id;

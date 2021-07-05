@@ -40,7 +40,7 @@ class BottomNavBar extends React.Component {
   componentDidMount() {
     const { curr = 'home' } = this.props
     const tabs = [
-      { icon: 'HomeOutlined', text: '首页', active: this.checkCurrActiveTab(curr, 'home'), router: '/subPages/home/index' },
+      { icon: 'HomeOutlined', text: '首页', active: this.checkCurrActiveTab(curr, 'home'), router: '/pages/home/index' },
       { icon: 'FindOutlined', text: '发现', active: this.checkCurrActiveTab(curr, 'search'), router: '/subPages/search/index' },
       { icon: 'PlusOutlined', router: '/subPages/thread/post/index' },
       { icon: 'MailOutlined', text: '消息', active: this.checkCurrActiveTab(curr, 'message'), router: '/subPages/message/index' },

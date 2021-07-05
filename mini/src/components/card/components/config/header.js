@@ -1,8 +1,6 @@
 import { getByteLen } from '../../utils'
-import eyeImg from '../../../../public/dzq-img/eye.png'
-import position from '../../../../public/dzq-img/position.png'
-import defaultAvatar from '../../../../public/dzq-img/default-avatar.png'
-import anonymous from '../../../../public/dzq-img/anonymous.png'
+import eyeImg from '../../card-img/eye.png'
+import position from '../../card-img/position.png'
 import { posterFrameWidth, posterWidth, descriptionY, positionIconWidth, eyeIconWidth, nameAndTagsY, posterPadding, avatarWidth, userInfoHeight, descriptionStartsX, baseX, minGap } from './constants';
 import browser from '../../../../../../common/utils/browser'
 
