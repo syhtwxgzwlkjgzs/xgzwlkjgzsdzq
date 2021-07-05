@@ -10,16 +10,20 @@
 
 .top_bg {
   height: rem(180);
-  background-color: $primary-color;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  z-index: $zindex-backtotop;
   .top_bg_image {
-    position: absolute;
     top: 0;
     left: 0;
     width: 65%;
   }
 }
 .content{
+  position: relative;
   background: $body-bg-color;
+  z-index: $zindex-backtotop;
   // 用户信息 start
   .user_info{
     height: rem(167);

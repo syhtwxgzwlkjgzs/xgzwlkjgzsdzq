@@ -125,7 +125,6 @@ class HomeHeader extends React.Component {
     const {
       bgColor,
       hideInfo = false,
-      hideLogo = false,
       showToolbar = false,
       style = {},
       digest = null,
@@ -146,7 +145,6 @@ class HomeHeader extends React.Component {
           className={`
             ${styles.container} 
             ${mode ? styles[`container_mode_${mode}`] : ''} 
-            ${hideLogo ? styles['hide_logo'] : ''}
           `}
           style={{ ...style, ...this.getBgHeaderStyle(bgColor) }}
         >
@@ -172,15 +170,6 @@ class HomeHeader extends React.Component {
                 <Icon name="LeftOutlined" />
               </View>
               <View style={this.getTopBarTitleStyle()} className={styles.fullScreenTitle}>{ fullScreenTitle }</View>
-            </View>
-          )}
-          {!hideLogo && (
-            <View className={`${styles.logoBox} ${mode === 'join' ? styles['join-logo'] : ''}`}>
-              <Image
-                className={styles.logo}
-                mode="aspectFit"
-                src={this.getLogo()}
-              />
             </View>
           )}
           {digest && (
