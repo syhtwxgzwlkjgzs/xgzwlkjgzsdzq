@@ -97,7 +97,13 @@ class Header extends React.Component {
     const { site } = this.props;
 
     if (site?.webConfig?.setSite?.siteLogo !== '') {
-      return <img className={styles.siteLogo} src={site?.webConfig?.setSite?.siteLogo} onClick={() => this.handleRouter('/')} />;
+      return (
+        <img
+          className={styles.siteLogo}
+          src={site?.webConfig?.setSite?.siteLogo}
+          onClick={() => this.handleRouter('/')}
+        />
+      );
     }
     return <img className={styles.siteLogo} src="/dzq-img/admin-logo-pc.png" onClick={() => this.handleRouter('/')} />;
   }
