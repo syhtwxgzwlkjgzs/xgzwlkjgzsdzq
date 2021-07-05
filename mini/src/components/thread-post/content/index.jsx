@@ -37,7 +37,7 @@ const Index = forwardRef(({
       <View className={styles['container-inner']}>
         <Textarea
           ref={ref}
-          className={(bottomHeight > 0 || showEmoji) ? styles['textarea-editing'] : styles.textarea}
+          className={(bottomHeight > 0 || showEmoji || !!value) ? styles['textarea-editing'] : styles.textarea}
           placeholderClass={styles['textarea-placeholder']}
           value={value}
           disabled={disabled}
