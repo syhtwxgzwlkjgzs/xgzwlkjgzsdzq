@@ -27,6 +27,7 @@ import QcCode from '@components/qcCode';
 import RenderThreadContent from './content';
 import RenderCommentList from './comment-list';
 import goToLoginPage from '@common/utils/go-to-login-page';
+import classNames from 'classnames';
 
 @inject('site')
 @inject('user')
@@ -727,9 +728,8 @@ class ThreadPCPage extends React.Component {
     const isSelf = this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === threadStore?.threadData?.userId;
     // 是否匿名
     const isAnonymous = threadStore?.threadData?.isAnonymous;
-
     return (
-      <div className={`${layout.bodyRigth}}`}>
+      <div className={`${layout.bodyRigth}`}>
         {isReady && !isApproved && (
           <div className={layout.examinePosition}></div>
         )}
@@ -777,7 +777,7 @@ class ThreadPCPage extends React.Component {
     //   // newText = newText.replace(/\n/g, '');
     //   console.log(newText);
     // }
-
+    const isAnonymous = threadStore?.threadData?.isAnonymous;
     return (
       <div>
         <ShowTop showContent={this.props.thread?.threadData?.isStick} setTop={this.state.setTop}></ShowTop>
@@ -792,7 +792,9 @@ class ThreadPCPage extends React.Component {
           right={this.renderRight()}
           isShowLayoutRefresh={isCommentReady}
           ready={() => this.onBaseLayoutReady()}
-          rightClassName={layout.positionSticky}
+          rightClassName={classNames(layout.positionSticky, {
+            'is-userinfo-show': !isAnonymous,
+          })}
           className="detail"
         >
           {this.renderContent()}

@@ -11,6 +11,11 @@
 .positionSticky {
   top: 0 !important;
 }
+:global {
+  .is-userinfo-show {
+    top: -316px !important;
+  }
+}
 
 .bottom {
   margin-top: rem($margin-10);

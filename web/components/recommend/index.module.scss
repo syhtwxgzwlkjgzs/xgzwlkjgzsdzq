@@ -40,16 +40,17 @@
   }
 }
 :global {
-  .home {
+  .home,
+  .detail {
     @include widthAndHeightMedia($media-min-width, $media-min-height) {
       @include item;
     }
   }
-  .detail {
-    @include widthAndHeightMedia($media-min-width, $media-detail-min-height) {
-      @include item;
-    }
-  }
+  // .detail {
+  //   @include widthAndHeightMedia($media-min-width, $media-detail-min-height) {
+  //     @include item;
+  //   }
+  // }
 }
 
 .recommendBox {

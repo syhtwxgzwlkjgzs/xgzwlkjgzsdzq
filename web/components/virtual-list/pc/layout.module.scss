@@ -23,99 +23,74 @@
   @include media('xl-pc') {
     .center {
       width: rem(750) !important;
-      left: calc(300px + 50vw - 710px + 20px) !important;
+      left: calc((100vw - 750px - 300px - 330px - 40px) / 2 + 320px) !important;
     }
 
     .left {
       margin-right: rem(20);
       width: rem(300);
-      top: 77px;
-      left: calc(50vw - 710px);
+      top: 80px;
+      left: calc((100vw - 750px - 300px - 330px - 40px) / 2);
     }
 
     .right {
       margin-left: rem(20);
       width: rem(330);
-      top: 77px;
-      right: calc(50vw - 710px);
+      top: 80px;
+      right: calc((100vw - 750px - 300px - 330px - 40px) / 2);
     }
   }
 
   @include media('l-pc') {
     .center {
       width: 52% !important;
-      left: calc(21.4% + 20px) !important;
+      left: calc((100vw - 52% - 20% - 22% - 2.8%) / 2 + 21.4%) !important;
     }
 
     .left {
       margin-right: 1.4%;
       width: 20%;
-      top: 77px;
-      left: 20px;
+      top: 80px;
+      left: calc((100vw - 52% - 20% - 22% - 2.8%) / 2);
     }
 
     .right {
       margin-left: 1.4%;
       width: 22%;
-      top: 77px;
-      right: 20px;
+      top: 80px;
+      right: calc((100vw - 52% - 20% - 22% - 2.8%) / 2);
     }
   }
 
   @include media('s-pc') {
     .center {
       width: 44% !important;
-      left: calc(24% + 14px + 1%) !important;
+      left: calc((100vw - 44% - 24% - 27% - 2%) / 2 + 25%) !important;
     }
 
     .left {
       margin-right: 1%;
       width: 24%;
-      top: 74px;
-      left: 14px;
+      top: 70px;
+      left: calc((100vw - 44% - 24% - 27% - 2%) / 2);
     }
 
     .right {
       margin-left: 0.9%;
       width: 27%;
-      top: 74px;
-      right: 14px;
-    }
-  }
-
-  // 自适应高度
-  :global {
-    @include heightMedia(660px, 580px) {
-      .right-recommend-item:nth-last-child(-n + 2) {
-        display: none;
-      }
-    }
-    @include heightMedia(580px, 500px) {
-      .right-recommend-item:nth-last-child(-n + 3) {
-        display: none;
-      }
-    }
-    @include heightMedia(500px, 420px) {
-      .right-recommend-item:nth-last-child(-n + 4) {
-        display: none;
-      }
-    }
-    // 如果小于默认高度不吸顶
-    @include heightMedia(415px) {
-      .baselayout-right {
-        // position: static;
-      }
+      top: 70px;
+      right: calc((100vw - 44% - 24% - 27% - 2%) / 2);
     }
   }
 }
 
 .scrollArea {
   overflow: hidden overlay !important;
-  @include scrollbar();
+  // @include scrollbar();
 
-  // 滚动条上的滚动滑块
-  &::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 4px;
-  }
+  // // 滚动条上的滚动滑块
+  // &::-webkit-scrollbar-thumb {
+  //   background: rgba(0, 0, 0, 0.5);
+  //   border-radius: 4px;
+  // }
 }
