@@ -43,7 +43,6 @@ export { default as readPostCategories } from './thread-post/read-post-categorie
 export { default as smsVerify } from './smsVerify';
 export { default as smsResetPwd } from './smsResetPassword';
 export { default as createAttachment } from './thread-post/create-attachment';
-export { default as readUserLoginDisplay } from './readUserLoginDisplay';
 export { default as smsBind } from './smsBind';
 export { default as h5WechatCodeLogin } from './login/h5WechatCodeLogin';
 export { default as h5QrcodeLogin } from './login/h5QrcodeLogin';

@@ -70,11 +70,7 @@ class WeixinBindH5Page extends React.Component {
       }
       const { router } = this.props;
       bindLoading = true;
-      const res = await h5WechatCodeBind({
-        url: '/apiv3/users/wechat/h5.bind',
-        method: 'GET',
-        ...opts,
-      });
+      const res = await h5WechatCodeBind(opts);
       bindLoading = false;
 
       // 落地页开关打开
