@@ -4,6 +4,7 @@
   width: 100%;
   position: relative;
   // min-width: rem(652);
+  margin-bottom: rem(10);
   .contnetTop {
     width: 100%;
     background: var(--color-white);
@@ -13,7 +14,7 @@
   }
 }
 .noBorder {
-    border-bottom: none;
+  border-bottom: none !important;
 }
 .topWrapper {
   width: 100%;
@@ -91,19 +92,19 @@
 }
 
 .TopNewsBox {
-    padding: rem($padding-2n) 0;
-    margin: 0 rem($margin-6n);
-    @include media('l-pc') {
-      margin: 0 rem($padding-4n);
-    }
-    @include media('s-pc') {
-      margin: 0 rem($padding-4n);
-    }
-    border-bottom: 1px solid var(--border-line-color);
+  padding: rem($padding-2n) 0;
+  margin: 0 rem($margin-6n);
+  @include media('l-pc') {
+    margin: 0 rem($padding-4n);
+  }
+  @include media('s-pc') {
+    margin: 0 rem($padding-4n);
+  }
+  border-bottom: 1px solid var(--border-line-color);
 }
 .topNewContent {
-    padding: rem($padding-10) 0;
-    margin: 0 rem($margin-6n);
-    border-bottom-left-radius: rem(5);
-    border-bottom-right-radius: rem(5);
+  padding: rem($padding-10) 0;
+  margin: 0 rem($margin-6n);
+  border-bottom-left-radius: rem(5);
+  border-bottom-right-radius: rem(5);
 }

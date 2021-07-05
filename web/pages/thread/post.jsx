@@ -565,7 +565,7 @@ class PostPage extends React.Component {
 
     const { images, video, files, audio } = postData;
     if (!(postData.contentText || video.id || audio.id || Object.values(images).length
-      || Object.values(files).length)) {
+      || Object.values(files).length) && !isDraft) {
       this.postToast('请至少填写您要发布的内容或者上传图片、附件、视频、语音');
       return;
     }
@@ -692,6 +692,7 @@ class PostPage extends React.Component {
         this.props.vlist.resetPosition();
         this.props.baselayout.setJumpingToTop();
         this.props.index.addThread(data);
+        this.props.index.getReadCategories(); // 发帖后分类数据更新
       }
     }
   };

@@ -46,7 +46,7 @@ const Index = ({ message, user, site: { webConfig, envConfig }, dialogId: _dialo
     if (dialogId) {
       setIsSubmiting(true);
       ret = await createDialogMsg({
-        dialogId,
+        dialogId: parseInt(dialogId),
         ...data,
       });
       setIsSubmiting(false);
@@ -78,7 +78,7 @@ const Index = ({ message, user, site: { webConfig, envConfig }, dialogId: _dialo
 
   // 为图片发送空消息
   const submitEmptyImage = dialogId => createDialogMsg({
-    dialogId,
+    dialogId: parseInt(dialogId),
     isImage: true,
   });
 

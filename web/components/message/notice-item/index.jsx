@@ -56,6 +56,9 @@ class Index extends Component {
     if (item.type === 'threadrewarded') {
       return '悬赏了你';
     }
+    if (item.type === 'threadrewardedexpired') {
+      return `悬赏到期，未领取金额${item.amount}元被退回`;
+    }
   };
 
   // 账号信息前置语
