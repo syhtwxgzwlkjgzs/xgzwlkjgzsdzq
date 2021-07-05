@@ -11,6 +11,7 @@
     .dzq-textarea {
       border: none;
       border-radius: rem($border-radius-small) rem($border-radius-small) 0 0;
+      padding-bottom: rem($padding-2n);
       .dzq-textarea__inner {
         padding: rem($padding-3n) rem($padding-4n);
         font-size: rem($font-size-middle);
