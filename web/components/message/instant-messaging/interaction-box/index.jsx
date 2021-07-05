@@ -53,14 +53,17 @@ const InteractionBox = (props) => {
                 }}
                 onBlur={(e) => {
                   recordCursor(e);
+                  setTimeout(() => {
+                    inputBoxRef.current.scrollIntoView(false);
+                  }, 300);
                 }}
                 onFocus={() => {
                   setTimeout(() => {
                     inputBoxRef.current.scrollIntoViewIfNeeded(false);
                     setTimeout(() => {
                       scrollEnd();
-                    }, 300);
-                  }, 100);
+                    }, 500);
+                  }, 300);
                 }}
               />
               <div className={styles.tools}>
