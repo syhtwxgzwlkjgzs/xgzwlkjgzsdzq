@@ -105,7 +105,7 @@ class WXAuthorization extends Component {
                 </Button>
                 : <></>
               }
-              <View className={layout.functionalRegion}>
+              <Button className={layout.exit}>
                 <Navigator openType='exit' target='miniProgram' className={layout.clickBtn} onClick={() => {
                   this.setState({
                     loginTitle: '已取消登录'
@@ -114,7 +114,7 @@ class WXAuthorization extends Component {
                 }}>
                   退出
                 </Navigator>
-              </View>
+              </Button>
             </View>
           </View>
         {/* </MemoToastProvider> */}

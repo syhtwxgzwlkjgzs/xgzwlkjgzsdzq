@@ -44,19 +44,19 @@ class WXAuthorizationPage extends React.Component {
                 </>
               : <></>
           }
-          <div className={layout.functionalRegion}>
-              <span className={layout.clickBtn} onClick={() => {
-                this.setState({
-                  loginTitle: '已取消登录'
-                });
-                this.props.h5QrCode.isBtn = false;
-                window.wx && window.wx.ready(() => {
-                  wx.closeWindow();
-                });
-              }}>
-                退出
-              </span>
-            </div>
+          <Button
+            className={layout.exit}
+            onClick={() => {
+              this.setState({
+                loginTitle: '已取消登录'
+              });
+              this.props.h5QrCode.isBtn = false;
+              window.wx && window.wx.ready(() => {
+                wx.closeWindow();
+              });
+            }}>
+            退出
+          </Button>
         </div>
       </div>
     );

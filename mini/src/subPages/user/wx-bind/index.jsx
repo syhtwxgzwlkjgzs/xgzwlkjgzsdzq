@@ -101,14 +101,14 @@ class WXBind extends Component {
                 </Button>
                 : <></>
               }
-              <View className={layout.functionalRegion}>
+              <Button className={layout.exit}>
                 <Navigator openType='exit' target='miniProgram' className={layout.clickBtn} onClick={() => {
                   this.props.h5QrCode.bindTitle = '已取消绑定';
                   this.props.h5QrCode.isBtn = false;
                 }}>
                   退出
                 </Navigator>
-              </View>
+              </Button>
             </View>
           </View>
         {/* </MemoToastProvider> */}
