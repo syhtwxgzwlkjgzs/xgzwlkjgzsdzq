@@ -2,23 +2,7 @@
  * 业务中用到的颜色以及字体、层级关系、间距等都从此变量文件中获取，不要直接在业务中存在css变量的使用
  */
 // ------ Font 字体 --------
-$font-family: 'PingFang SC',
-  'BlinkMacSystemFont',
-  'Helvetica Neue',
-  'Arial',
-  'Hiragino Sans GB',
-  'STHeiti',
-  'Microsoft YaHei',
-  'Microsoft JhengHei',
-  'Source Han Sans SC',
-  'Noto Sans CJK SC',
-  'Source Han Sans CN',
-  'Noto Sans SC',
-  'Source Han Sans TC',
-  'Noto Sans CJK TC',
-  'WenQuanYi Micro Hei',
-  'SimSun',
-  sans-serif;
+$font-family: "-apple-system","BlinkMacSystemFont","Segoe UI","Roboto","Helvetica Neue","Arial","Noto Sans","Liberation Sans","sans-serif","Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
 
 $font-size-small: 12px;
 $font-size-base: 14px;

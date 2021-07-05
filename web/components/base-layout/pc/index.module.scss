@@ -17,13 +17,6 @@
   }
 }
 
-
-.autoHeight {
-  min-height: 100vh;
-  ;
-  height: auto !important;
-}
-
 .body {
   width: 100%;
   min-width: rem(800);
@@ -345,8 +338,8 @@
     .search-result-post,
     .search-result-user {
       .pop-topic div:nth-child(1),
-      .pop-topic div:nth-child(n+1),
-      .pop-topic div:nth-child(n+2) {
+      .pop-topic div:nth-child(n + 1),
+      .pop-topic div:nth-child(n + 2) {
         display: flex;
       }
       @include heightMedia(650px, 595px) {
@@ -498,8 +491,8 @@
         }
       }
       .pop-topic div:nth-child(1),
-      .pop-topic div:nth-child(n+1),
-      .pop-topic div:nth-child(n+2) {
+      .pop-topic div:nth-child(n + 1),
+      .pop-topic div:nth-child(n + 2) {
         display: flex;
       }
       @include heightMedia(830px, 775px) {
@@ -568,11 +561,61 @@
   // padding: rem(20) 0;
 }
 
-
-
 .list {
   width: 100%;
   flex: 1;
   display: flex;
   justify-content: center;
+}
+
+// 接入虚拟滚动采用fixed方式进行布局
+.list.fixed {
+  .left {
+    position: fixed;
+  }
+
+  .center {
+    position: relative;
+    left: -12px;
+  }
+
+  .right {
+    position: fixed;
+  }
+
+  @include media('xl-pc') {
+    .left {
+      top: 77px;
+      left: calc(50vw - 710px);
+    }
+
+    .right {
+      top: 77px;
+      right: calc(50vw - 710px);
+    }
+  }
+
+  @include media('l-pc') {
+    .left {
+      top: 77px;
+      left: 20px;
+    }
+
+    .right {
+      top: 77px;
+      right: 20px;
+    }
+  }
+
+  @include media('s-pc') {
+    .left {
+      top: 74px;
+      left: 14px;
+    }
+
+    .right {
+      top: 74px;
+      right: 14px;
+    }
+  }
 }

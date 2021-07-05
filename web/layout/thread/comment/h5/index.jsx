@@ -377,6 +377,7 @@ class CommentH5Page extends React.Component {
       canDelete: commentData?.canDelete,
       canEssence: false,
       canStick: false,
+      isAdmini: this.props?.user?.isAdmini,
     };
 
     // 更多弹窗界面

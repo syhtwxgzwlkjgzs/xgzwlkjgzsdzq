@@ -22,54 +22,65 @@ import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-stor
 @inject('invite')
 @observer
 class RegisterH5Page extends React.Component {
-    handleRegisterBtnClick = async () => {
-      try {
-        const { router, site: { webConfig } = {} } = this.props;
-        this.props.userRegister.code = this.props.invite.getInviteCode(router);
-        this.props.userRegister.verifyForm();
-        const registerCaptcha = webConfig?.setReg?.registerCaptcha;
-        if (registerCaptcha) {
-          await this.showCaptcha();
-        }
+  handleRegisterBtnClick = async () => {
+    try {
+      const { router, site: { webConfig } = {}, commonLogin } = this.props;
+      if (!commonLogin.loginLoading) {
+        return;
+      }
+      this.props.userRegister.code = this.props.invite.getInviteCode(router);
+      this.props.userRegister.verifyForm();
+      const registerCaptcha = webConfig?.setReg?.registerCaptcha;
+      if (registerCaptcha) {
+        await this.showCaptcha();
+      }
 
-        await this.toRegister();
-      } catch (e) {
-        Toast.error({
-          content: e.Message,
-          hasMask: false,
-          duration: 1000,
-        });
-      }
+      await this.toRegister();
+    } catch (e) {
+      Toast.error({
+        content: e.Message,
+        hasMask: false,
+        duration: 1000,
+      });
     }
-    async showCaptcha() {
-      // 验证码实例为空，则创建实例
-      try {
-        const { captchaRandStr, captchaTicket } = await this.props.showCaptcha();
-        this.props.userRegister.captchaRandStr = captchaRandStr;
-        this.props.userRegister.captchaTicket = captchaTicket;
-      } catch (e) {
-        Toast.error({
-          content: e.Message,
-          hasMask: false,
-          duration: 1000,
-        });
-      }
+  }
+  async showCaptcha() {
+    // 验证码实例为空，则创建实例
+    try {
+      const { captchaRandStr, captchaTicket } = await this.props.showCaptcha();
+      this.props.userRegister.captchaRandStr = captchaRandStr;
+      this.props.userRegister.captchaTicket = captchaTicket;
+    } catch (e) {
+      Toast.error({
+        content: e.Message,
+        hasMask: false,
+        duration: 1000,
+      });
     }
+  }
+
+  componentWillUnmount() {
+    this.props.userRegister.reset();
+  }
 
   toRegister = async () => {
+    const { commonLogin, userRegister } = this.props;
     try {
+      commonLogin.loginLoading = false;
       this.props.invite.inviteCode;
-      const resp = await this.props.userRegister.register();
+      const resp = await userRegister.register();
       const uid = get(resp, 'uid', '');
       this.props.user.updateUserInfo(uid);
       Toast.success({
         content: '注册成功',
         hasMask: false,
         onClose: (() => {
+          commonLogin.loginLoading = true;
           window.location.href = '/';
         }),
       });
     } catch (e) {
+      commonLogin.loginLoading = true;
       // 跳转补充信息页
       if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
         const uid = get(e, 'uid', '');
@@ -109,7 +120,7 @@ class RegisterH5Page extends React.Component {
     const { site, commonLogin } = this.props;
     const { platform } = site;
     // 接受监听一下协议的数据，不能去掉，去掉后协议的点击无反应
-    const { protocolVisible } = commonLogin;
+    const { protocolVisible, loginLoading } = commonLogin;
     return (
       <PcBodyWrap>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
@@ -153,8 +164,16 @@ class RegisterH5Page extends React.Component {
             onChange={(e) => {
               this.props.userRegister.nickname = e.target.value;
             }}
+            onEnter={this.handleRegisterBtnClick}
           />
-          <Button id="register-btn" className={platform === 'h5' ? layout.button : layout.pc_button} type="primary" onClick={this.handleRegisterBtnClick}>
+          <Button
+            disabled={this.props.userRegister.isInfoNotCpl}
+            loading={!loginLoading}
+            id="register-btn"
+            className={platform === 'h5' ? layout.button : layout.pc_button}
+            type="primary"
+            onClick={this.handleRegisterBtnClick}
+          >
             注册
           </Button>
           <div className={platform === 'h5' ? layout.functionalRegion : layout.pc_functionalRegion}>

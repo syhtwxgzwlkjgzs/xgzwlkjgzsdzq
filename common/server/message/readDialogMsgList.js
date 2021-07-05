@@ -1,25 +1,9 @@
-// import {createOrdersCreate} from '@discuzq/sdk/dist/api/pay/create-orderscreate';
-import api from '../api';
-
 /**
- * 获取私信对话的消息列表
- * TODO: 待更新到sdk
+ * 获取具体对话的私信内容列表
  */
-export default async function _readDialogMsgList(opts, ctx = null) {
-  try {
-    const { params = {}, data = {}, ...others } = opts;
-    const options = {
-      url: 'apiv3/dialog/message',
-      method: 'GET',
-      params,
-      data,
-      __context: ctx,
-      ...others,
-    };
-    const result = await api.http(options);
-    return result;
-  } catch (error) {
-    return error;
-  }
-}
+import { readDialogMessageList } from '@discuzq/sdk/dist/api/notice/read-dialog-message-list';
 
+export default async function _readDialogMsgList(opts, ctx = null) {
+  const res = await readDialogMessageList({ ...opts, __context: ctx });
+  return res;
+}

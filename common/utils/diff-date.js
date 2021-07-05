@@ -9,7 +9,10 @@ export const diffDate = function (time, referenceTime) {
   const timestamp = new Date(time).getTime();
   const refTimestamp = referenceTime ? new Date(referenceTime).getTime() : Date.now();
 
-  const diffTimestamp = refTimestamp - timestamp;
+  let diffTimestamp = refTimestamp - timestamp;
+  if (diffTimestamp <= 0) { // 兼容小米手机出现1s以内的负值情况
+    diffTimestamp = 0;
+  }
   const diffSenconds = Math.floor(diffTimestamp / 1000);
   const diffMinutes = Math.floor(diffSenconds / 60);
   const diffHours = Math.floor(diffSenconds / 3600);

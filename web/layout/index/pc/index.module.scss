@@ -21,7 +21,6 @@
     overflow: hidden;
   }
 }
-
 .themeBox {
   overflow: hidden;
   margin-top: rem($margin-10);
@@ -61,12 +60,12 @@
   margin-bottom: $margin-10;
   padding: 0 rem($padding-6n);
   box-sizing: border-box;
-  .header{
+  .header {
     padding: $padding-4n 0;
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    .avatar{
+    .avatar {
       width: rem(38);
       height: rem(38);
       border-radius: 50%;
@@ -81,20 +80,34 @@
       flex: 1;
       border-radius: $border-radius-small;
       animation: loading 6s linear infinite;
-      background-image: linear-gradient(50deg, $box-color-placeholder, $box-color-placeholder 52%, #fff 55%, $box-color-placeholder 58%, $box-color-placeholder);
+      background-image: linear-gradient(
+        50deg,
+        $box-color-placeholder,
+        $box-color-placeholder 52%,
+        #fff 55%,
+        $box-color-placeholder 58%,
+        $box-color-placeholder
+      );
       background-size: 400% 100%;
     }
   }
-  .content{
+  .content {
     height: rem(24);
     background: $box-color-placeholder;
     border-radius: $border-radius-small;
     margin-top: rem($margin-4n);
     animation: loading 6s linear infinite;
-    background-image: linear-gradient(50deg, $box-color-placeholder, $box-color-placeholder 52%, #fff 55%, $box-color-placeholder 58%, $box-color-placeholder);
+    background-image: linear-gradient(
+      50deg,
+      $box-color-placeholder,
+      $box-color-placeholder 52%,
+      #fff 55%,
+      $box-color-placeholder 58%,
+      $box-color-placeholder
+    );
     background-size: 400% 100%;
   }
-  .footer{
+  .footer {
     margin-top: rem($margin-4n);
     border-top: 1px solid $box-color-placeholder;
     display: flex;
@@ -112,11 +125,9 @@
 
 @keyframes loading {
   0% {
-      background-position: 400% 50%
+    background-position: 400% 50%;
   }
   to {
-      background-position: 0% 50%
+    background-position: 0% 50%;
   }
 }
-
-

@@ -1,10 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import ThreadContent from '@components/thread';
 import { observer } from 'mobx-react';
 
 export default observer((props) => {
-  const { data, isLast } = props;
-
   const ref = useRef(null);
 
   useEffect(() => {
@@ -17,11 +14,6 @@ export default observer((props) => {
     } catch (error) {
       // console.log(error);
     }
-  };
-
-  const recomputeRowHeights = (data) => {
-    props.recomputeRowHeights(data);
-    measure();
   };
 
   const callback = () => {
@@ -46,16 +38,7 @@ export default observer((props) => {
 
   return (
     <div ref={ref}>
-      <ThreadContent
-        onContentHeightChange={measure}
-        onImageReady={measure}
-        onVideoReady={measure}
-        key={data.threadId}
-        showBottomStyle={!isLast}
-        data={data}
-        // className={styles.listItem}
-        recomputeRowHeights={(data) => recomputeRowHeights(data)}
-      />
+      {props.children}
     </div>
   );
 });

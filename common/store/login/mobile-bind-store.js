@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, computed, action } from 'mobx';
 import { smsBind, smsSend } from '@server';
 import { get } from '../../utils/get';
 import setAccessToken from '../../utils/set-access-token';
@@ -122,6 +122,10 @@ export default class mobileBindStore {
       if (!this.code) {
         throw MOBILE_BIND_STORE_ERRORS.NO_VERIFY_CODE;
       }
+    }
+
+    @computed get isInfoComplete() {
+      return this.mobile && this.code;
     }
 
     @action

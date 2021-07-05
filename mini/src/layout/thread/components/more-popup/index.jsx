@@ -9,7 +9,7 @@ import styles from './index.module.scss';
 const InputPop = (props) => {
   const { visible, onSubmit, onClose, onOperClick, permissions = {}, statuses = {}, shareData, isShowShare } = props;
 
-  const { canEdit, canDelete, canEssence, canStick, canShare, canCollect } = permissions;
+  const { canEdit, canDelete, canEssence, canStick, canShare, canCollect, isAdmini } = permissions;
   const { isEssence, isStick, isCollect } = statuses;
 
   const [essence, setEssence] = useState(isEssence);
@@ -110,7 +110,7 @@ const InputPop = (props) => {
                 <View className={styles.text}>微信分享</View>
               </View>
             )}
-            {!isShowShare && (
+            {!isShowShare && !isAdmini && (
               <View className={styles.moreItem} onClick={() => onOperClick('report')}>
                 <View className={styles.icon}>
                   <Icon name="WarnOutlined" size={20}></Icon>
