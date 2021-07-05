@@ -8,6 +8,7 @@ import UserCenterPost from '@components/user-center-post';
 import UserCenterAction from '@components/user-center-action';
 import UserCenterThreads from '@components/user-center-threads';
 import BaseLayout from '@components/base-layout';
+import { withRouter } from 'next/router';
 
 @inject('site')
 @inject('user')
@@ -39,12 +40,12 @@ class H5MyPage extends React.Component {
     }
   };
 
-  onRefresh = () => {
+  onRefresh = async () => {
     const { isLoading } = this.state;
 
     // 避免第一次进入页面时，触发了上拉加载
     if (!isLoading) {
-      return this.fetchUserThreads;
+      return await this.fetchUserThreads();
     }
     return Promise.resolve();
   };
@@ -68,16 +69,27 @@ class H5MyPage extends React.Component {
     }
   };
 
+  beforeRouterChange = (url) => {
+    // 如果不是进入 thread 详情页面
+    if (!/thread\//.test(url)) {
+      this.props.user.clearUserThreadsInfo();
+    }
+  }
+
   componentDidMount = async () => {
+    this.props.router.events.on('routeChangeStart', this.beforeRouterChange);
+
     if (this.props.user.id) {
       await this.props.user.updateUserInfo(this.props.user.id);
 
       try {
-        this.props.user.userThreadsPage = 1;
-        this.props.user.userThreadsTotalCount = 0;
-        this.props.user.userThreadsTotalPage = 1;
-
-        await this.fetchUserThreads();
+        // 如果当前数据被清理，重新请求最新的数据
+        if (!this.props.user.userThreads[1]) {
+          this.props.user.userThreadsPage = 1;
+          this.props.user.userThreadsTotalCount = 0;
+          this.props.user.userThreadsTotalPage = 1;
+          await this.fetchUserThreads();
+        }
       } catch (e) {
         console.error(e);
         if (e.Code) {
@@ -93,7 +105,7 @@ class H5MyPage extends React.Component {
 
   componentWillUnmount = () => {
     this.unMount = true;
-    this.props.user.clearUserThreadsInfo();
+    this.props.router.events.off('routeChangeStart', this.beforeRouterChange);
   };
 
   formatUserThreadsData = (userThreads) => {
@@ -111,6 +123,7 @@ class H5MyPage extends React.Component {
     return (
       <BaseLayout
         curr={'my'}
+        pageName="my"
         showHeader={false}
         showTabBar={true}
         onRefresh={this.onRefresh}
@@ -137,7 +150,7 @@ class H5MyPage extends React.Component {
             </div>
 
             <div className={styles.threadItemContainer}>
-              {!isLoading && formattedUserThreads?.length > 0 && <UserCenterThreads data={formattedUserThreads} />}
+              {formattedUserThreads?.length > 0 && <UserCenterThreads data={formattedUserThreads} />}
             </div>
           </div>
         </div>
@@ -146,4 +159,4 @@ class H5MyPage extends React.Component {
   }
 }
 
-export default H5MyPage;
+export default withRouter(H5MyPage);

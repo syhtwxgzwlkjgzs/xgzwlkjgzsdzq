@@ -6,6 +6,7 @@ import { readThreadList } from '@server';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import isServer from '@common/utils/is-server';
 import ViewAdapter from '@components/view-adapter';
+import { withRouter } from 'next/router';
 
 @inject('site')
 @inject('index')
@@ -53,6 +54,7 @@ class Index extends React.Component {
   }
 
   async componentDidMount() {
+    this.props.router.events.on('routeChangeStart', this.beforeRouterChange);
     const { index } = this.props;
     const hasThreadsData = !!index.threads;
     if (!hasThreadsData) {
@@ -74,7 +76,10 @@ class Index extends React.Component {
         });
       }
     }
-    this.listenRouterChangeAndClean();
+  }
+
+  componentWillUnmount() {
+    this.props.router.events.off('routeChangeStart', this.beforeRouterChange);
   }
 
   clearStoreThreads = () => {
@@ -82,17 +87,10 @@ class Index extends React.Component {
     index.setThreads(null);
   };
 
-  listenRouterChangeAndClean() {
-    // FIXME: 此种写法不好
-    if (!isServer()) {
-      window.addEventListener('popstate', this.clearStoreThreads, false);
-    }
-  }
-
-  componentWillUnmount() {
-    this.clearStoreThreads();
-    if (!isServer()) {
-      window.removeEventListener('popstate', this.clearStoreThreads);
+  beforeRouterChange = (url) => {
+    // 如果不是进入 thread 详情页面
+    if (!/thread\//.test(url)) {
+      this.clearStoreThreads();
     }
   }
 
@@ -137,4 +135,4 @@ class Index extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(Index);
+export default withRouter(HOCFetchSiteData(Index));
