@@ -4,17 +4,17 @@
   position: relative;
   width: 100%;
   height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  // display: flex;
+  // flex-direction: column;
+  // align-items: center;
   background: $body-bg-color;
   overflow: hidden;
 
-  scrollbar-width: none; /* Firefox */
-  scrollbar-color: transparent transparent; /* Firefox */
-  ::-webkit-scrollbar {
-    display: none; /* Chrome Safari */
-  }
+  // scrollbar-width: none; /* Firefox */
+  // scrollbar-color: transparent transparent; /* Firefox */
+  // ::-webkit-scrollbar {
+  //   display: none; /* Chrome Safari */
+  // }
 }
 
 .body {
@@ -130,7 +130,7 @@
   }
 
   @include media('s-pc') {
-    padding-top: rem($padding-4n);
+    padding-top: rem($padding-10);
 
     &.col-1 {
       .center {
@@ -227,16 +227,15 @@
 .container {
   :global {
     .detail {
-      @include widthAndHeightMedia($media-min-width, $media-detail-min-height) {
+      @include widthAndHeightMedia($media-min-width, $media-min-height) {
         @include common;
       }
-      // 如果小于默认高度不吸顶
-      @include heightMedia($media-min-height) {
-        // .baselayout-right {
-        //   position: static;
-        // }
+      @include heightMedia(500px) {
+        .baselayout-right.is-userinfo-show {
+          top: 0 !important;
+        }
       }
-      @include heightMedia(890px) {
+      @include heightMedia($media-second-height) {
         .qrcode {
           display: none;
         }
@@ -249,48 +248,34 @@
       .right-recommend-item:nth-child(n+1) {
         display: block;
       }
-      @include heightMedia(785px) {
+      @include heightMedia(700px) {
         .right-recommend-item:nth-last-child(-n + 2) {
           display: none;
         }
       }
-      @include heightMedia(720px) {
+      @include heightMedia(690px) {
         .right-recommend-item:nth-last-child(-n + 3) {
           display: none;
         }
       }
-      @include heightMedia(640px) {
+      @include heightMedia(625px) {
         .right-recommend-item:nth-last-child(-n + 4) {
           display: none;
         }
       }
-      @include heightMedia(560px) {
-        .baselayout-right {
-          position: static;
+      @include heightMedia(565px) {
+        .right-recommend-item:nth-last-child(-n + 5) {
+          display: none;
+        }
+      }
+      @include heightMedia(500px) {
+        .recommend {
+          display: none;
         }
       }
     }
 
     .home {
-      @include media('xl-pc') {
-        .baselayout-left {
-          margin-right: rem(24);
-        }
-      }
-
-      @include media('l-pc') {
-        .baselayout-left {
-          margin-right: calc(1.4% + 4px);
-          width: calc(20% - 4px);
-        }
-      }
-
-      @include media('s-pc') {
-        .baselayout-left {
-          margin-right: calc(1% + 4px);
-          width: calc(24% - 4px);
-        }
-      }
       @include widthAndHeightMedia($media-min-width, $media-min-height) {
         .dzq-menu {
           &-item,
@@ -315,7 +300,7 @@
         }
         @include common;
       }
-      @include heightMedia(720px) {
+      @include heightMedia($media-second-height) {
         .qrcode {
           display: none;
         }
@@ -323,10 +308,30 @@
           margin-top: 0;
         }
       }
-      // 如果小于默认高度不吸顶
+      .right-recommend-item:nth-child(1),
+      .right-recommend-item:nth-child(n+1) {
+        display: block;
+      }
+
       @include heightMedia(590px) {
-        .baselayout-right {
-          position: static;
+        .right-recommend-item:nth-last-child(-n + 2) {
+          display: none;
+        }
+      }
+
+      @include heightMedia(520px) {
+        .right-recommend-item:nth-last-child(-n + 3) {
+          display: none;
+        }
+      }
+      @include heightMedia(450px) {
+        .right-recommend-item:nth-last-child(-n + 4) {
+          display: none;
+        }
+      }
+      @include heightMedia(380px) {
+        .right-recommend-item:nth-last-child(-n + 5) {
+          display: none;
         }
       }
     }

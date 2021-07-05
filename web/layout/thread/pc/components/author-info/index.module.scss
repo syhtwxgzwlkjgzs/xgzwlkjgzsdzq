@@ -119,7 +119,7 @@
   }
 
   // 嵌套的真深
-  @include widthAndHeightMedia($media-min-width, $media-detail-min-height) {
+  @include widthAndHeightMedia($media-min-width, $media-min-height) {
     padding: $padding-3n 14px;
     .header {
       padding-bottom: $padding-3n;

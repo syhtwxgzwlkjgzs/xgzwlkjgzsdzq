@@ -172,7 +172,7 @@ class UserCenterFans extends React.Component {
       data: null,
       success: false,
     };
-  }
+  };
 
   unFollowUser = async ({ id }) => {
     const res = await deleteFollow({ data: { id, type: 1 } });
@@ -199,7 +199,7 @@ class UserCenterFans extends React.Component {
       data: null,
       success: false,
     };
-  }
+  };
 
   async componentDidMount() {
     // 第一次加载完后，才允许加载更多页面
