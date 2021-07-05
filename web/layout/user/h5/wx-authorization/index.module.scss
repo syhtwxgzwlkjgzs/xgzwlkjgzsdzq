@@ -5,6 +5,17 @@
   .button {
     @include button;
   }
+  .exit {
+    @include button;
+    @include button_exit;
+    &:hover {
+      @include button_exit;
+    }
+    &:active{
+      @include button_exit;
+    }
+    margin-top: $margin-4n;
+  }
 }
 .content {
   @include content;

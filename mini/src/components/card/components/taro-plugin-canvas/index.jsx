@@ -29,7 +29,6 @@ export default class CanvasDrawer extends React.Component {
                     resolve(result);
                 })
                     .catch(err => {
-                    console.log(err);
                     reject(err);
                 });
             });
@@ -176,7 +175,6 @@ export default class CanvasDrawer extends React.Component {
                 },
                 fail: (error) => {
                     const { errMsg } = error;
-                    console.log(errMsg);
                     if (errMsg === 'canvasToTempFilePath:fail:create bitmap failed') {
                         count += 1;
                         if (count <= 3) {

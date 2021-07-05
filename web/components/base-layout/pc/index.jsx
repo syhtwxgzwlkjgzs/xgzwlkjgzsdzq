@@ -35,6 +35,7 @@ const baseLayoutWhiteList = ['home', 'search'];
 const BaseLayout = forwardRef((props, ref) => {
   // UI设置相关 left-children-right 对应三列布局
   const {
+    noHeader = false,
     header = null,
     left = null,
     children = null,
@@ -137,10 +138,9 @@ const BaseLayout = forwardRef((props, ref) => {
   if (disabledList) {
     content = children;
   }
-
   return (
     <div className={`${styles.container}`}>
-      {(header && header({ ...props })) || <Header onSearch={onSearch} />}
+      {!noHeader ? ((header && header({ ...props })) || <Header onSearch={onSearch} />) : null}
 
       <div className={`${styles.body} ${cls} ${props.className}`}>
         {content}

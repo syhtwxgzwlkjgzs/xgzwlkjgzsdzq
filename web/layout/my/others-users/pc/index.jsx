@@ -26,6 +26,7 @@ class PCMyPage extends React.Component {
       showFansPopup: false, // 是否弹出粉丝框
       showFollowPopup: false, // 是否弹出关注框
       fetchUserInfoLoading: true,
+      fetchUserThreadsLoading: true,
     };
   }
 
@@ -33,7 +34,7 @@ class PCMyPage extends React.Component {
     const { query } = this.props.router;
     const id = this.props.user?.id;
     if (!query.id || query.id === 'undefined') {
-      Router.replace({ url: '/' })
+      Router.replace({ url: '/' });
     }
     if (String(id) === query.id) {
       Router.replace({ url: '/my' });
@@ -62,13 +63,14 @@ class PCMyPage extends React.Component {
     if (query.id) {
       this.setState({
         fetchUserInfoLoading: true,
+        fetchUserThreadsLoading: true
       });
       this.props.user.removeTargetUserInfo();
       await this.props.user.getTargetUserInfo(query.id);
-      await this.fetchTargetUserThreads();
       this.setState({
         fetchUserInfoLoading: false,
       });
+      await this.fetchTargetUserThreads();
     }
   };
 
@@ -80,6 +82,9 @@ class PCMyPage extends React.Component {
     const { query } = this.props.router;
     if (query.id) {
       await this.props.user.getTargetUserThreads(query.id);
+      this.setState({
+        fetchUserThreadsLoading: false,
+      });
     }
     return;
   };
@@ -117,7 +122,7 @@ class PCMyPage extends React.Component {
   };
 
   renderContent = () => {
-    const { fetchUserInfoLoading } = this.state;
+    const { fetchUserThreadsLoading } = this.state;
     const { user } = this.props;
     const { targetUserThreads, targetUserThreadsTotalCount, targetUserThreadsPage, targetUserThreadsTotalPage } = user;
     return (
@@ -127,7 +132,7 @@ class PCMyPage extends React.Component {
           type="normal"
           bigSize={true}
           isShowMore={false}
-          isLoading={fetchUserInfoLoading}
+          isLoading={fetchUserThreadsLoading}
           leftNum={`${targetUserThreadsTotalCount}个主题`}
           noData={!this.formatUserThreadsData(targetUserThreads)?.length}
           mold="plane"

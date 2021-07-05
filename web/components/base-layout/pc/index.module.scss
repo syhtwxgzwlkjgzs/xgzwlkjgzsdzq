@@ -165,6 +165,9 @@
       }
     }
   }
+  @include heightMedia($media-min-height) {
+    padding-top: rem($padding-10);
+  }
 
   .center {
     position: relative;

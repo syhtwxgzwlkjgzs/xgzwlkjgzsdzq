@@ -12,42 +12,13 @@ import deepClone from '@common/utils/deep-clone';
 import { handleString2Arr, getSelectedCategoryIds } from '@common/utils/handleCategory';
 import DynamicLoading from '@components/dynamic-loading';
 import dynamic from 'next/dynamic';
-
+import Placeholder from './components/dynamic-vlist/placeholder';
 const DynamicVListLoading = dynamic(
   () => import('./components/dynamic-vlist'),
   { loading: (res) => {
       return (
           <div style={{width: '100%', maxWidth: '1420px'}}>
-              <DynamicLoading data={res} style={{padding: '0 0 20px 0'}} loadComponent={
-                <div style={{width: '100%'}}>
-                  <div className={styles.placeholder}>
-                    <div className={styles.header}>
-                      <div className={styles.avatar}/>
-                      <div className={styles.box}/>
-                    </div>
-                    <div className={styles.content}/>
-                    <div className={styles.content}/>
-                    <div className={styles.footer}>
-                      <div className={styles.box}/>
-                      <div className={styles.box}/>
-                      <div className={styles.box}/>
-                    </div>
-                  </div>
-                  <div className={styles.placeholder}>
-                    <div className={styles.header}>
-                      <div className={styles.avatar}/>
-                      <div className={styles.box}/>
-                    </div>
-                    <div className={styles.content}/>
-                    <div className={styles.content}/>
-                    <div className={styles.footer}>
-                      <div className={styles.box}/>
-                      <div className={styles.box}/>
-                      <div className={styles.box}/>
-                    </div>
-                  </div>
-                </div>
-              }/>
+              <DynamicLoading data={res} style={{padding: '0 0 20px 0'}} loadComponent={<Placeholder/>}/>
           </div>
       )
     } }

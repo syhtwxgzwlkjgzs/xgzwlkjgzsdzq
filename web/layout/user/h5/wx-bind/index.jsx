@@ -47,17 +47,17 @@ class WeixinBindH5Page extends React.Component {
                 </>
               : <></>
           }
-          <div className={layout.functionalRegion}>
-            <span className={layout.clickBtn} onClick={() => {
+          <Button
+            className={layout.exit}
+            onClick={() => {
               this.props.h5QrCode.bindTitle = '已取消绑定';
               this.props.h5QrCode.isBtn = false;
               window.wx && window.wx.ready(() => {
                 wx.closeWindow();
               });
             }}>
-              退出
-            </span>
-          </div>
+            退出
+          </Button>
         </div>
       </div>
     );
@@ -70,11 +70,7 @@ class WeixinBindH5Page extends React.Component {
       }
       const { router } = this.props;
       bindLoading = true;
-      const res = await h5WechatCodeBind({
-        url: '/apiv3/users/wechat/h5.bind',
-        method: 'GET',
-        ...opts,
-      });
+      const res = await h5WechatCodeBind(opts);
       bindLoading = false;
 
       // 落地页开关打开

@@ -10,7 +10,8 @@ import { inject, observer } from 'mobx-react';
 function withShare(opts = {}) {
   // 设置默认
   const defalutTitle = 'Discuz!Q';
-  const defalutPath = 'pages/index/index';
+  let defalutPath = 'pages/index/index';
+  defalutPath = `/pages/index/index?path=${encodeURIComponent(defalutPath)}`;
   let menus = [];
   const { needShareline = true, needLogin = true } = opts;
   menus = ['shareAppMessage'];
@@ -43,18 +44,7 @@ function withShare(opts = {}) {
         if (this.getShareData && typeof this.getShareData === 'function') {
           shareData = this.getShareData({ ...data, from: res.from });
         }
-        let { title = defalutTitle, path = '', imageUrl = '' } = shareData;
-
-        if (path === '') {
-          try {
-            const $instance = Taro.getCurrentInstance();
-            const { router } = $instance;
-            const currPath = router.path;
-            path = currPath;
-          } catch (err) {
-            path = defalutPath;
-          }
-        }
+        const { title = defalutTitle, path = defalutPath, imageUrl = '' } = shareData;
         const encodePath = `/pages/index/index?path=${encodeURIComponent(path)}`;
         return {
           title,
