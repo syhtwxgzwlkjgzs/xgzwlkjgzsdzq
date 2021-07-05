@@ -14,14 +14,17 @@ class UserCenterPost extends React.Component {
   render() {
     const { user } = this.props;
     return (
-      <div className={styles.userCenterPost} onClick={() => {
-        Router.push({ url: '/thread/post' });
-      }}>
+      <div
+        className={styles.userCenterPost}
+        onClick={() => {
+          Router.push({ url: '/thread/post' });
+        }}
+      >
         <div className={styles.userCenterPostTitle}>发帖</div>
         <div className={styles.userCenterPostContent}>
           <div className={styles.userCenterPostAvatar}>
             {/* <Avatar text={'黑'} circle /> */}
-            <Avatar image={user.avatarUrl} name={user.username} circle/>
+            <Avatar image={user.avatarUrl} name={user.nickname} circle />
           </div>
           <div
             style={{
@@ -33,7 +36,7 @@ class UserCenterPost extends React.Component {
                 <Input
                   style={{
                     width: '100%',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
                   }}
                   className={styles.postInput}
                   disabled
