@@ -22,7 +22,7 @@ class NotFindPage extends Component {
     const pages = Taro.getCurrentPages();
     if (pages.length === 1) {
       Router.redirect({
-        url: '/subPages/home/index'
+        url: '/pages/home/index'
       });
     } else {
       Router.back()

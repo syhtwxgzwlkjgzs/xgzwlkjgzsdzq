@@ -50,7 +50,7 @@ class WXBind extends Component {
           redirectTo({ url: '/subPages/user/supplementary/index' });
           return;
         }
-        redirectTo({ url: '/subPages/home/index' });
+        redirectTo({ url: '/pages/home/index' });
         return;
       }
 

@@ -130,7 +130,7 @@ class Detail extends React.Component {
         // 不是作者自己。跳回首页
         if (!currentUserId || !userId || currentUserId !== userId) {
           Taro.redirectTo({
-            url: `/subPages/home/index`,
+            url: `/pages/home/index`,
           });
           return;
         }

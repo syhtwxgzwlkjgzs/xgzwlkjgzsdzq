@@ -85,7 +85,7 @@ class Index extends React.Component {
           Router.push({ url: '/subPages/user/status/index?statusCode=-4009' });
           break;
         case JUMP_TO_HOME_INDEX:// 到首页
-          Router.redirect({ url: '/subPages/home/index' });
+          Router.redirect({ url: '/pages/home/index' });
           break;
         case JUMP_TO_PAY_SITE:// 到付费加入页面
           Router.push({ url: '/subPages/forum/partner-invite/index' });
@@ -162,7 +162,7 @@ class Index extends React.Component {
             params,
             fail: () => {
               Router.redirect({
-                url: '/subPages/home/index'
+                url: '/pages/home/index'
               });
             }
           });
@@ -172,13 +172,13 @@ class Index extends React.Component {
             url: decodeURIComponent(router.params.path),
             fail: () => {
               Router.redirect({
-                url: '/subPages/home/index'
+                url: '/pages/home/index'
               });
             }
           });
         } else {
           Router.redirect({
-            url: '/subPages/home/index'
+            url: '/pages/home/index'
           });
         }
       } else {

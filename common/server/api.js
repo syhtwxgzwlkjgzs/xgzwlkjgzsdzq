@@ -180,7 +180,7 @@ http.interceptors.response.use((res) => {
       if (process.env.DISCUZ_ENV === 'web') {
         url = '/';
       } else {
-        url = '/subPages/home/index'
+        url = '/pages/home/index'
       }
       Router.replace({
         url

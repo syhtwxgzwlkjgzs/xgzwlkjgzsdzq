@@ -6,12 +6,12 @@ const config = {
   // 首页和详情页在主包
   pages: [
     'pages/index/index',
+    'pages/home/index',
   ],
   subPackages: [
     {
       root: 'subPages',
       pages: [
-        'home/index',
         '404/index',
         '500/index',
         'no-install/index',
