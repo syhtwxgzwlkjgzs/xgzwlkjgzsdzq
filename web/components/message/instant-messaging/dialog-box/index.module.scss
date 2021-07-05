@@ -29,14 +29,14 @@
 .h5DialogBox {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 93px);
+  height: calc(100% - 93px);
   overflow-y: auto;
 }
 
 .h5DialogBox-emoji {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 314px);
+  height: calc(100% - 314px);
   overflow-y: auto;
 }
 
