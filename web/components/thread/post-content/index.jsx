@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
-import { Button, Icon, RichText } from '@discuzq/design';
+import { Button, Icon, RichText, ImagePreviewer } from '@discuzq/design';
 import { noop } from '../utils';
 
 import fuzzyCalcContentLength from '@common/utils/fuzzy-calc-content-length';
@@ -41,6 +41,9 @@ const Index = ({
   const [contentTooLong, setContentTooLong] = useState(false);
   const [cutContentForDisplay, setCutContentForDisplay] = useState('');
   const [showMore, setHiddenMore] = useState(!useShowMore);
+  const [visible, setVisible] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
+  const ImagePreviewerRef = React.useRef(null);
   const contentWrapperRef = useRef(null);
   const texts = {
     showMore: '查看更多',
@@ -77,9 +80,22 @@ const Index = ({
       return;
     }
     e && e.stopPropagation();
-
-    onRedirectToDetail();
+    if(!e?.target?.getAttribute('src')) onRedirectToDetail();
   };
+
+
+  useEffect(() => {
+    if (visible && ImagePreviewerRef && ImagePreviewerRef.current) {
+      ImagePreviewerRef.current.show();
+    }
+  }, [visible]);
+
+  const handleImgClick = (e) => {
+    if(e?.attribs?.src) {
+      setVisible(true);
+      setImageUrl(e.attribs.src);
+    }
+  }
 
   const getCutContentForDisplay = (maxContentLength) => {
     const ctn = filterContent;
@@ -131,7 +147,18 @@ const Index = ({
             // onImgsLoaded={onImgsLoaded}
             content={useShowMore && cutContentForDisplay ? cutContentForDisplay : urlToLink(filterContent)}
             onClick={handleClick}
+            onImgClick={handleImgClick}
           />
+          {visible && (
+            <ImagePreviewer
+              ref={ImagePreviewerRef}
+              onClose={() => {
+                setVisible(false);
+              }}
+              imgUrls={[imageUrl]}
+              currentUrl={imageUrl}
+            />
+          )}
         </div>
       </div>
       {!loading && useShowMore && !showMore && (
