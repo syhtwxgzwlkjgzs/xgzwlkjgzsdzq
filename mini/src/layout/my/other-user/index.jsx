@@ -145,6 +145,7 @@ class H5OthersPage extends React.Component {
         immediateCheck={true}
         onRefresh={this.fetchTargetUserThreads}
         noMore={targetUserThreadsTotalPage < targetUserThreadsPage}
+        showLoadingInCenter={!this.formatUserThreadsData(targetUserThreads).length}
       >
         <View className={styles.mobileLayout}>
           {this.renderTitleContent()}

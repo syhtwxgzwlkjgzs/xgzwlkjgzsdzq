@@ -45,7 +45,7 @@ export default class index extends Component {
         hasMask: false,
       });
     }
-  }
+  };
 
   onShow = async () => {
     if (this.props.user.id) {
@@ -98,6 +98,12 @@ export default class index extends Component {
   }
 
   getTopBarTitleStyle() {
+    return {
+      position: 'fixed',
+      top: `${this.getStatusBarHeight()}px`,
+      left: '50%',
+      transform: 'translate(-50%, 8px)',
+    };
   }
 
   // 渲染顶部title

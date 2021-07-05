@@ -25,6 +25,24 @@ const Index = ({ message }) => {
     list.forEach(({
       amount, cashActualAmount, content, createdAt, id, threadId, threadTitle, type, userAvatar, userId, username, nickname, orderType, threadUserAvatar, threadUsername, threadUserNickname
     }) => {
+      let _avatar = userAvatar;
+      let _userId = userId;
+      let _username = username;
+      let _nickname = nickname;
+      switch (type) {
+        case 'threadrewarded':
+          _avatar = threadUserAvatar;
+          _username = threadUsername;
+          _nickname = threadUserNickname;
+          break;
+        case 'threadrewardedexpired':
+          _avatar = '';
+          _userId = '';
+          _username = '悬赏过期退回';
+          _nickname = '悬赏过期退回';
+          break;
+      }
+
       newList.push({
         amount: amount || cashActualAmount || 0,
         content: threadTitle || content,
@@ -32,10 +50,10 @@ const Index = ({ message }) => {
         id,
         threadId,
         type,
-        avatar: type === "threadrewarded" ? threadUserAvatar : userAvatar,
-        userId,
-        username: type === "threadrewarded" ? threadUsername : username,
-        nickname: type === "threadrewarded" ? threadUserNickname : nickname,
+        avatar: _avatar,
+        userId: _userId,
+        username: _username,
+        nickname: _nickname,
         orderType,
       });
     });

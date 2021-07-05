@@ -4,14 +4,13 @@
 import React, { Component } from 'react';
 import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
-import Avatar from '@discuzq/design/dist/components/avatar/index';
 import RichText from '@discuzq/design/dist/components/rich-text/index';
+import Avatar from '@components/avatar';
 import UnreadRedDot from '@components/unread-red-dot';
 import { inject, observer } from 'mobx-react';
 import classNames from 'classnames';
 import styles from './index.module.scss';
 
-import stringToColor from '@common/utils/string-to-color';
 import { diffDate } from '@common/utils/diff-date';
 import { handleLink } from '@components/thread/utils';
 import s9e from '@common/utils/s9e';
@@ -32,16 +31,6 @@ class Index extends Component {
     return avatar;
   }
 
-  // 获取头像背景色
-  getBackgroundColor = (name) => {
-    return name ? stringToColor(name.toUpperCase()[0]) : "#8590a6";
-  }
-
-  // 未读消息数
-  getUnReadCount = (count) => {
-    return count > 99 ? '99+' : (count || null);
-  };
-
   // 针对财务消息，获取后缀提示语
   getFinancialTips = (item) => {
     if (item.type === 'rewarded') {
@@ -53,6 +42,9 @@ class Index extends Component {
     }
     if (item.type === 'threadrewarded') {
       return '悬赏了你';
+    }
+    if (item.type === 'threadrewardedexpired') {
+      return `悬赏到期，未领取金额${item.amount}元被退回`;
     }
   };
 
@@ -136,16 +128,7 @@ class Index extends Component {
             onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
           >
             <UnreadRedDot type='avatar' unreadCount={item.unreadCount}>
-              {avatarUrl
-                ? <Avatar image={avatarUrl} circle={true} />
-                : <Avatar
-                  text={item.nickname}
-                  circle={true}
-                  style={{
-                    backgroundColor: this.getBackgroundColor(item.nickname)
-                  }}
-                />
-              }
+              <Avatar image={avatarUrl} name={item.nickname} />
             </UnreadRedDot>
           </View>
           {/* 详情 */}
