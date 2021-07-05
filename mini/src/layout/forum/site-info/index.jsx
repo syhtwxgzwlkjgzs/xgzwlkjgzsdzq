@@ -16,6 +16,7 @@ class SiteInfo extends Component {
     const { siteIntroduction } = site;
 
     return (
+    <View className={layout.wrap}>
       <View className={layout.site}>
         <SectionTitle
           isShowMore={false}
@@ -23,7 +24,8 @@ class SiteInfo extends Component {
           title="站点介绍"
           onShowMore={this.redirectToSearchResultUser}
         />
-        <View className={layout.site_introduce}>{siteIntroduction}</View>
+      <View className={layout.site_introduce}>{siteIntroduction}</View>
+      </View>
         <View className={layout.site_status}>
           <View className={layout.site_status_list}>
             <View className={layout.site_status_label}>更新</View>
