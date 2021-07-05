@@ -231,14 +231,6 @@
     left: rem(16);
     bottom: 0;
   }
-  .refreshView {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: $font-size-primary;
-    color: $text-color-placeholder;
-    padding: $padding-4n;
-  }
 }
 
 .footer {
@@ -263,7 +255,6 @@
     color: $white;
     background-color: $primary-color;
     border: none;
-    font-family: 'PingFang SC';
     font-weight: normal;
     font-size: rem($font-size-middle);
   }

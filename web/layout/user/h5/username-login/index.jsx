@@ -31,6 +31,10 @@ class UsernameH5Login extends React.Component {
     this.props.userLogin.password = e.target.value;
   };
 
+  componentWillUnmount() {
+    this.props.userLogin.reset();
+  }
+
   loginErrorHandler = async (e) => {
     // 跳转补充信息页
     if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {

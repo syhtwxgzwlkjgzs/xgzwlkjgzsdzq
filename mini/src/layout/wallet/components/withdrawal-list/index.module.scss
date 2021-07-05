@@ -12,13 +12,11 @@
   padding-bottom: 6px;
   color: $text-color-primary;
   .text {
-    font-family: 'PingFangSC-Regular';
     font-size: $font-size-primary;
     text-align: left;
     line-height: 16px;
   }
   .money {
-    font-family: 'PingFang SC';
     font-weight: 600;
     font-size: $font-size-middle;
     text-align: left;
@@ -28,7 +26,6 @@
 .footer {
   display: flex;
   justify-content: space-between;
-  font-family: 'PingFangSC-Regular';
   font-weight: normal;
   font-size: $font-size-label;
   .time {
@@ -50,7 +47,6 @@
 }
 
 .serialNumber {
-  font-family: 'PingFangSC-Regular';
   font-weight: normal;
   font-size: $font-size-label;
   text-align: left;

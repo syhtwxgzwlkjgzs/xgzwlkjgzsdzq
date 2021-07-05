@@ -50,6 +50,19 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: $comment-bg-color;
+    padding: 0 rem($padding-4n);
+    min-height: 52px;
+
+    .status {
+      font-weight: normal;
+      color: $text-color-regular;
+      font-size: rem($font-size-primary);
+
+      .icon {
+        margin-left: rem(9);
+      }
+    }
   }
 
   :global {
@@ -127,7 +140,6 @@
     color: $white;
     background-color: $primary-color;
     border: none;
-    font-family: 'PingFang SC';
     font-weight: normal;
     font-size: rem($font-size-middle);
   }

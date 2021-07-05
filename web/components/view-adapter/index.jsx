@@ -8,13 +8,13 @@ import CustomHead from '@components/custom-head';
 class ViewAdapter extends React.Component {
 
     renderView() {
-        const { pc, h5, title='', keywords='', description = '' } = this.props;
+        const { pc, h5, title='', keywords='', description = '', showSiteName = true } = this.props;
         const { site } = this.props;
         const { platform } = site;
         const curr = platform === 'pc' ? (pc || null) : (h5 || null);
         return (
             <>
-                <CustomHead title={title} keywords={keywords} description={description}/>
+                <CustomHead title={title} keywords={keywords} description={description} showSiteName={showSiteName}/>
                 {curr}
             </>
         );

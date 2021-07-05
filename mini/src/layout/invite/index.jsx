@@ -9,6 +9,7 @@ import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
 import layout from './index.module.scss';
 import bgImage from './../../../../web/public/dzq-img/invite-banner-bg.png';
+import NoMoreDataTip from '@components/no-more-data-tip';
 
 @inject('site')
 @inject('user')
@@ -103,9 +104,7 @@ class InviteH5Page extends React.Component {
                 {
                   inviteData?.inviteUsersList?.length
                     ? <></>
-                    : <View className={layout.refreshView}>
-                        <View>没有更多内容了</View>
-                      </View>
+                    : <NoMoreDataTip />
                 }
               </View>
             </View>
