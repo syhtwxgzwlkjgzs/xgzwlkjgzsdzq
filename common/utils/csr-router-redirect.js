@@ -2,7 +2,6 @@ import Router from '@discuzq/sdk/dist/router';
 import typeofFn from '@common/utils/typeof';
 
 export default function csrRouterRedirect() {
-    console.log('csrRouterRedirect')
     if (process.env.DISCUZ_RUN === 'static') {
         let routerMap = process.env.ROUTER_MAP;
         if ( typeofFn.isString(routerMap) ) {
