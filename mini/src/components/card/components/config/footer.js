@@ -11,7 +11,8 @@ export const getFooterConfig = ({ baseHeight, codeUrl, siteName }) => {
   return {
     height: baseLineHeight + miniCodeWidth,
     config: {
-      texts: [desc, siteDesc],
+      blocks: [siteDesc],
+      texts: [desc],
       images: [image],
     },
   };
@@ -43,15 +44,19 @@ const handleDesc = (baseHeight) => ({
 
 // 站点描述
 const handleSiteDes = (baseHeight, siteName) => ({
+  x: 0,
+  y: baseHeight + baseLineHeight + miniCodeWidth + miniCodeRight + 28,
+  text: {
     text: `来自${siteName}`,
     color: '#8590A6',
-    x: 276,
-    y: baseHeight + baseLineHeight + miniCodeWidth + miniCodeRight + 48,
-    lineHeight: 78,
     fontSize: 24,
     zIndex: 20,
     lineNum: 1,
-    textAlign: 'left',
-    baseLine: 'top',
+    baseLine: 'bottom',
+    textAlign: 'center',
     fontFamily: 'PingFang SC',
+  },
+  height: 78,
+  width: 710,
+
   });
