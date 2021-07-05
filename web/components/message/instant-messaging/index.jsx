@@ -309,6 +309,7 @@ const Index = (props) => {
   // 切换username时，停止当前轮询，用于pc端对话页右下角点击切换聊天用户的场景
   useEffect(() => {
     listDataLengthRef.current = 0;
+    setTypingValue('');
     clearPolling();
   }, [username]);
 
