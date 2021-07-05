@@ -27,17 +27,17 @@
   justify-content: space-between;
   align-items: center;
   background-color: $comment-bg-color;
-  padding: 0 rem($padding-4n);
+  padding: 0 $padding-4n;
   min-height: 52px;
 
   .status {
     font-family: 'PingFangSC-Regular';
     font-weight: normal;
     color: $text-color-regular;
-    font-size: rem($font-size-primary);
+    font-size: $font-size-primary;
 
     .icon {
-      margin-left: rem(9);
+      margin-left: 9px;
     }
   }
 }
@@ -50,19 +50,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: $comment-bg-color;
-    padding: 0 rem($padding-4n);
-    min-height: 52px;
-
-    .status {
-      font-weight: normal;
-      color: $text-color-regular;
-      font-size: rem($font-size-primary);
-
-      .icon {
-        margin-left: rem(9);
-      }
-    }
   }
 
   :global {
@@ -75,7 +62,7 @@
     }
 
     .dzq-tabs__content {
-      padding-top: rem(1);
+      padding-top: 1px;
       padding-left: 0;
       padding-right: 0;
     }
@@ -84,7 +71,7 @@
       padding-bottom: 15px !important;
       font-family: 'PingFang SC';
       font-weight: 600;
-      font-size: rem($font-size-primary);
+      font-size: $font-size-primary;
       line-height: 20px;
     }
 
@@ -135,13 +122,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: rem(42);
-    border-radius: rem($border-radius-small);
+    height: 42px;
+    border-radius: $border-radius-small;
     color: $white;
     background-color: $primary-color;
     border: none;
     font-weight: normal;
-    font-size: rem($font-size-middle);
+    font-size: $font-size-middle;
   }
 }
 
