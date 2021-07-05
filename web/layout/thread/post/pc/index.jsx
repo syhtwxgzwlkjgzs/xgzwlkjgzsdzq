@@ -181,7 +181,8 @@ class ThreadPCPage extends React.Component {
             </div>
             <ClassifyPopup pc />
             <div className={styles.footer}>
-              <Button type="info" disabled={this.props.postType === "isEdit"} onClick={() => this.props.handleDraft()}>保存至草稿箱</Button>
+              <Button type="info" disabled={this.props.postType === "isEdit" && !postData.isDraft}
+                onClick={() => this.props.handleDraft()}>保存至草稿箱</Button>
               <Button type="primary" onClick={() => this.props.handleSubmit()}>发布</Button>
             </div>
           </div>

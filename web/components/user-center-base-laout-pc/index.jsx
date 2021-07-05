@@ -111,7 +111,11 @@ const Index = forwardRef((props, ref) => {
   return (
     <div className={styles.container}>
       {(header && header({ ...props })) || <Header onSearch={onSearch} />}
-      <List {...props} platform="pc" className={styles.list} wrapperClass={`${styles.wrapper} ${slideRight ? styles.slideWrap : ''}`}
+      <List
+        {...props}
+        platform="pc"
+        className={styles.list}
+        wrapperClass={`${styles.wrapper} ${slideRight ? styles.slideWrap : ''}`}
         ref={listRef}
         onScroll={({ scrollTop }) => {
           setScrollTop(scrollTop);
@@ -142,40 +146,43 @@ const Index = forwardRef((props, ref) => {
               )}
               {showHeaderLoading && (
                 <div className={styles.spinLoading}>
-                  <Spin type="spinner">加载中...</Spin>
+                  <Spin size={16} type="spinner">
+                    加载中...
+                  </Spin>
                 </div>
               )}
             </div>
           </div>
         )}
-        {
-          slideRight
-            ? <>
-                <div className={styles.center}>
-                  {typeof children === 'function' ? children({ ...props }) : children}
-                  {onRefresh && showLayoutRefresh && <RefreshView noMore={noMore} />}
-                </div>
+        {slideRight ? (
+          <>
+            <div className={styles.center}>
+              {typeof children === 'function' ? children({ ...props }) : children}
+              {onRefresh && showLayoutRefresh && <RefreshView noMore={noMore} />}
+            </div>
 
-                {(right || showRight) && (
-                  <div className={styles.right}>{typeof right === 'function' ? right({ ...props }) : right}</div>
-                )}
-              </>
-            : <div className={styles.content}>
-                {showLeft && (
-                  <div className={styles.left}>{typeof left === 'function' ? useCallback(left({ ...props }), []) : left}</div>
-                )}
-
-                <div className={styles.center}>
-                  {typeof children === 'function' ? children({ ...props }) : children}
-                  {onRefresh && showLayoutRefresh && <RefreshView noMore={noMore} />}
-                </div>
-
-                {(right || showRight) && (
-                  <div className={styles.right}>{typeof right === 'function' ? right({ ...props }) : right}</div>
-                )}
+            {(right || showRight) && (
+              <div className={styles.right}>{typeof right === 'function' ? right({ ...props }) : right}</div>
+            )}
+          </>
+        ) : (
+          <div className={styles.content}>
+            {showLeft && (
+              <div className={styles.left}>
+                {typeof left === 'function' ? useCallback(left({ ...props }), []) : left}
               </div>
-        }
+            )}
 
+            <div className={styles.center}>
+              {typeof children === 'function' ? children({ ...props }) : children}
+              {onRefresh && showLayoutRefresh && <RefreshView noMore={noMore} />}
+            </div>
+
+            {(right || showRight) && (
+              <div className={styles.right}>{typeof right === 'function' ? right({ ...props }) : right}</div>
+            )}
+          </div>
+        )}
       </List>
 
       {scrollTop > 100 && <BacktoTop onClick={handleBacktoTop} />}

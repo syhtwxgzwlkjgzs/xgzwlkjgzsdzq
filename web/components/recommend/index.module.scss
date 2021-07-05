@@ -14,6 +14,44 @@
     color: var(--color-text-primary);
   }
 }
+
+@mixin item() {
+  .right-recommend-item {
+    p {
+      font-size: $font-size-primary !important;
+    }
+
+    >div:first-child {
+      padding-top: $padding-10 !important;
+    }
+
+    >div:last-child {
+      margin-top: $margin-2n !important;
+    }
+  }
+
+  .right-recommend-title {
+    font-size: $font-size-primary !important;
+  }
+
+  .right-recommend-switch {
+    height: 42px !important;
+    padding-top: $padding-2n !important;
+  }
+}
+:global {
+  .home {
+    @include widthAndHeightMedia($media-min-width, $media-min-height) {
+      @include item;
+    }
+  }
+  .detail {
+    @include widthAndHeightMedia($media-min-width, $media-detail-min-height) {
+      @include item;
+    }
+  }
+}
+
 .recommendBox {
   cursor: pointer;
   width: 100%;

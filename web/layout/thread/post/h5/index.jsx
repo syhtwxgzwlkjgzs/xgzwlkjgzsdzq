@@ -241,6 +241,7 @@ class ThreadCreate extends React.Component {
           {/* 图片 */}
           {(currentAttachOperation === THREAD_TYPE.image || Object.keys(postData.images).length > 0) && (
             <ImageUpload
+              className={styles.imageUpload}
               fileList={Object.values(postData.images)}
               onChange={fileList => this.props.handleUploadChange(fileList, THREAD_TYPE.image)}
               onComplete={(ret, file) => this.props.handleUploadComplete(ret, file, THREAD_TYPE.image)}
