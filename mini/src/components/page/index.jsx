@@ -13,7 +13,7 @@ import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvid
 import Taro from '@tarojs/taro';
 import { REVIEWING } from '@common/store/login/util';
 
-const INDEX_URL = '/pages/home/index';
+const INDEX_URL = '/subPages/home/index';
 const PARTNER_INVITE_URL = '/subPages/forum/partner-invite/index';
 const WX_AUTH_URL = '/subPages/user/wx-auth/index';
 const BIND_NICKNAME_URL = '/subPages/user/bind-nickname/index';

@@ -110,7 +110,7 @@ class HomeHeader extends React.Component {
     Router.back({
       fail: () => {
         Router.redirect({
-          url: '/pages/home/index'
+          url: '/subPages/home/index'
         });
       }
     });

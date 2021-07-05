@@ -87,7 +87,7 @@ class PartnerInviteH5Page extends React.Component {
   }
 
   gotoIndex = () => {
-    Router.redirect({ url: '/pages/home/index' });
+    Router.redirect({ url: '/subPages/home/index' });
   };
 
   handleJoinSite = () => {

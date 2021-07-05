@@ -24,7 +24,7 @@ class SiteError extends Component {
           <Image className={styles.img} src={imgError}/>
           <Text className={styles.text}>服务器错误 SERVER ERROR</Text>
           <View className={styles.fixedBox}>
-            <Button onClick={() => {Router.redirect({url: '/pages/home/index'});}} size='large' className={styles.btn} type='primary'>回到首页</Button>
+            <Button onClick={() => {Router.redirect({url: '/subPages/home/index'});}} size='large' className={styles.btn} type='primary'>回到首页</Button>
           </View>
         </View>
       </Page>
