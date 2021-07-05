@@ -17,6 +17,9 @@
   border: none !important;
   background-color: $white;
 
+  .vditor-reset ol {
+    list-style-type: decimal;
+  }
   &.no-focus {
     .vditor-toolbar {
       display: none !important;
@@ -38,7 +41,7 @@
       display: block;
       line-height: $font-line-height-middle;
       font-size: $font-size-middle;
-      
+
       color: $text-color-primary;
     }
 
@@ -65,7 +68,7 @@
       margin-bottom: 0;
       line-height: $font-line-height-middle;
       font-size: $font-size-middle;
-      
+
     }
 
     strong {
@@ -83,7 +86,7 @@
       margin-bottom: 0;
       line-height: $font-line-height-middle;
       font-size: $font-size-middle;
-      
+
     }
 
     strong {
