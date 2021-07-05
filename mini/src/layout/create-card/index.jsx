@@ -3,7 +3,7 @@ import React from 'react'
 import Taro, { getCurrentInstance, EventChannel } from '@tarojs/taro';
 import { inject, observer } from 'mobx-react';
 import {getMiniCode} from '@server'
-// import defaultLogo from '../../public/dzq-img/default-logo.png'
+import defaultLogo from '../../public/dzq-img/default-logo.png'
 
 @inject('index')
 @inject('user')
@@ -27,7 +27,7 @@ class Index extends React.Component {
             const res = await  getMiniCode(data)
             this.setState({miniCode: res})
         } catch {
-            this.setState({miniCode: 'https://imgcache.qq.com/operation/dianshi/other/default-logo.3f797f9e3a8779f7d1d0e5cc54613eaa29fb2b51.png'})
+            this.setState({miniCode: defaultLogo})
         }
     }
     render () {

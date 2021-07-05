@@ -1,6 +1,6 @@
 import { getByteLen } from '../../utils'
-// import eyeImg from '../../card-img/eye.png'
-// import position from '../../card-img/position.png'
+import eyeImg from '../../card-img/eye.png'
+import position from '../../card-img/position.png'
 import { posterFrameWidth, posterWidth, descriptionY, positionIconWidth, eyeIconWidth, nameAndTagsY, posterPadding, avatarWidth, userInfoHeight, descriptionStartsX, baseX, minGap } from './constants';
 import browser from '../../../../../../common/utils/browser'
 
@@ -135,9 +135,9 @@ const handleDesc = (thread) => {
       offset = 0
     }
     // 观看数量开始
-    const viewIconStartsX = descriptionStartsX +
-                            diffTimeLength +
-                            positionLength +
+    const viewIconStartsX = descriptionStartsX + 
+                            diffTimeLength + 
+                            positionLength + 
                             minGap * length +
                             (positionLength === positionMaxLength ? positionIconWidth : 0);
     const descTexts = [
@@ -171,7 +171,7 @@ const handleDesc = (thread) => {
     const descImages = [
         // eye
         {
-            url: 'https://imgcache.qq.com/operation/dianshi/other/eye.18fc9732bfdddfc40520c8ab8875ecd4c42a7c2d.png',
+            url: eyeImg,
             x: viewIconStartsX,
             y: descriptionY + 6 + offset,
             height: 20 + 2,
@@ -199,7 +199,7 @@ const handleDesc = (thread) => {
         descImages.push(
             // position
             {
-                url: 'https://imgcache.qq.com/operation/dianshi/other/position.4ccb1372522ffd4667b9b574041e24816b86cc8c.png',
+                url: position,
                 x: positionIconStartsX,
                 y: descriptionY + parseInt(minGap / 2), // 增加2个像素来对齐安卓位置图标
                 height: 26,

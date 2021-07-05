@@ -1,8 +1,8 @@
 import htmlparser2 from 'htmlparser2';
 import { getByteLen } from '../../utils';
 import replaceStringInRegex from '@common/utils/replace-string-in-regex';
-// import priceShare from '../../card-img/admin-logo-pc.jpg';
-// import lookMore from '../../card-img/look-more.jpg';
+import priceShare from '../../card-img/admin-logo-pc.jpg';
+import lookMore from '../../card-img/look-more.jpg';
 
 import {
   posterFrameWidth,
@@ -45,7 +45,7 @@ const handlePrice = (thread) => {
       images: [
         // 站点logo
         {
-          url: 'https://imgcache.qq.com/operation/dianshi/other/admin-logo-pc.cf9d50dcb6cfbe052d0dd06d0d2086d3e0385a60.jpg',
+          url: priceShare,
           x: 96,
           y: 228,
           width: 518,
@@ -169,7 +169,7 @@ const handleLookMore = (baseHeight = 0, contentTextHeight = {}, imagesHeight = {
       images: [
         // 扫码查看全部内容
         {
-          url: 'https://imgcache.qq.com/operation/dianshi/other/look-more.a4a1759a8356b1846cd29d49dd53a132ee1d404b.jpg',
+          url: lookMore,
           height: baseLineHeight - 16,
           width: 260,
           x: 236,

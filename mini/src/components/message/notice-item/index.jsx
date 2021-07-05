@@ -16,7 +16,7 @@ import { handleLink } from '@components/thread/utils';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import PropTypes from 'prop-types';
-// import defaultFavicon from '../../../public/dzq-img/default-favicon.png';
+import defaultFavicon from '../../../public/dzq-img/default-favicon.png';
 
 @inject('site')
 @observer
@@ -26,7 +26,7 @@ class Index extends Component {
     const { type, site } = this.props;
     const url = site?.webConfig?.setSite?.siteFavicon;
     if (type === 'thread') {
-      return url || 'https://imgcache.qq.com/operation/dianshi/other/default-favicon.6636c2611dca24e71ce7b8738a130727e23a998f.png';
+      return url || defaultFavicon;
     }
     return avatar;
   }

@@ -2,19 +2,12 @@ import htmlparser2 from 'htmlparser2'
 import { getByteLen } from '../utils'
 import Taro from '@tarojs/taro'
 import replaceStringInRegex from '@common/utils/replace-string-in-regex';
-// import eyeImg from '../../../public/dzq-img/eye.png'
-// import position from '../../../public/dzq-img/position.png'
-// import defaultAvatar from '../../../public/dzq-img/default-avatar.png'
+import eyeImg from '../../../public/dzq-img/eye.png'
+import position from '../../../public/dzq-img/position.png'
+import defaultAvatar from '../../../public/dzq-img/default-avatar.png'
 import anonymous from '../../../public/dzq-img/anonymous.png'
-// import priceShare f/rom '../../../public/dzq-img/admin-logo-pc.png'
-// import lookMore from '../../../public/dzq-img/look-more.png'
-
-
-const priceShare = 'https://imgcache.qq.com/operation/dianshi/other/admin-logo-pc.48cf9e0977ad4973bc4902a0dd96a147796c86d4.png';
-// const anonymous = '';
-const defaultAvatar = 'https://imgcache.qq.com/operation/dianshi/other/default-avatar.5ace5a1b361571baf2ffb7677b0c931154691f3e.png';
-const position = 'https://imgcache.qq.com/operation/dianshi/other/position.4ccb1372522ffd4667b9b574041e24816b86cc8c.png';
-const eyeImg = 'https://imgcache.qq.com/operation/dianshi/other/eye.18fc9732bfdddfc40520c8ab8875ecd4c42a7c2d.png';
+import priceShare from '../../../public/dzq-img/admin-logo-pc.png'
+import lookMore from '../../../public/dzq-img/look-more.png'
 
 const posterFrameWidth = 8;
 const posterWidth = 710 - posterFrameWidth * 2;
@@ -82,7 +75,7 @@ const getConfig = async ({
         attachlength = 650
     }
     // 显示查看更多
-    const { overHeightImage, overHeightText, overHeight } = handleOverHeight(userInfoHeight, imgHeight, contentHeight, titleHeight)
+    const { overHeightImage, overHeightText, overHeight } = handleOverHeight(userInfoHeight, imgHeight, contentHeight, titleHeight) 
     const returnObj = {
         width: posterWidth,
         height: userInfoHeight + titleHeight + contentHeight + imgHeight + overHeight + 50 + 192 + 52 + 48 + 48 + 74,
@@ -158,7 +151,7 @@ const getConfig = async ({
                 zIndex: 10,
                 baseLine: 'top'
             },
-            // 内容
+            // 内容 
             {
                 text: content,
                 x: posterPadding,
@@ -284,7 +277,7 @@ const handleImage = (thread, contentHeight, titleHeight) => {
     }
     return Promise.all(promiseArray)
 }
-// 处理头像的高度
+// 处理头像的高度 
 const handleTitle = (thread) => {
     if(thread.displayTag.isPrice) {
         return {
