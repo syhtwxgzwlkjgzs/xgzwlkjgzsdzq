@@ -200,7 +200,7 @@ function Home(props, ref) {
       props.vlist.setPosition(scrollTop);
     }
 
-    if (scrollTop + clientHeight + clientHeight >= scrollHeight && !loadData) {
+    if (((scrollTop + (clientHeight) + 3000) >= scrollHeight) && !loadData) {
       loadData = true;
       if (props.loadNextPage) {
         const promise = props.loadNextPage();

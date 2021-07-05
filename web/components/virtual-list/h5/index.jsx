@@ -182,11 +182,18 @@ function VList(props, ref) {
       props.vlist.setPosition(scrollTop);
     }
     // if (scrollTop + (clientHeight * 4) >= scrollHeight && !loadData) {
-    if (((scrollTop + (clientHeight * 4)) >= scrollHeight) && !loadData) {
+    if (((scrollTop + clientHeight + 1000) >= scrollHeight) && !loadData) {
       loadData = true;
-      props.loadNextPage().finally(() => {
-        loadData = false;
-      });
+      if (props.loadNextPage) {
+        const promise = props.loadNextPage();
+        if (promise) {
+          promise.finally(() => {
+            loadData = false;
+          });
+        } else {
+          loadData = false;
+        }
+      }
     }
   };
 
