@@ -13,45 +13,102 @@ import { handleString2Arr, getSelectedCategoryIds } from '@common/utils/handleCa
 import DynamicLoading from '@components/dynamic-loading';
 import dynamic from 'next/dynamic';
 
-const DynamicVListLoading = dynamic(
-  () => import('./components/dynamic-vlist'),
-  { loading: (res) => {
-      return (
-          <div style={{width: '100%', maxWidth: '1420px'}}>
-              <DynamicLoading data={res} style={{padding: '0 0 20px 0'}} loadComponent={
-                <div style={{width: '100%'}}>
-                  <div className={styles.placeholder}>
-                    <div className={styles.header}>
-                      <div className={styles.avatar}/>
-                      <div className={styles.box}/>
-                    </div>
-                    <div className={styles.content}/>
-                    <div className={styles.content}/>
-                    <div className={styles.footer}>
-                      <div className={styles.box}/>
-                      <div className={styles.box}/>
-                      <div className={styles.box}/>
-                    </div>
+const DynamicVListLoading = dynamic(() => import('./components/dynamic-vlist'), {
+  loading: (res) => {
+    return (
+      <div style={{ width: '100%', maxWidth: '1420px' }}>
+        <DynamicLoading
+          data={res}
+          style={{ padding: '0 0 20px 0', flex: 1 }}
+          loadComponent={
+            <div style={{ width: '100%', display: 'flex' }}>
+              {/* 左边 */}
+              <div style={{ flex: 1 }}>
+                <div className={styles.placeholder}>
+                  <div className={styles.header}>
+                    <div className={styles.avatar} />
+                    <div className={styles.box} />
                   </div>
-                  <div className={styles.placeholder}>
-                    <div className={styles.header}>
-                      <div className={styles.avatar}/>
-                      <div className={styles.box}/>
-                    </div>
-                    <div className={styles.content}/>
-                    <div className={styles.content}/>
-                    <div className={styles.footer}>
-                      <div className={styles.box}/>
-                      <div className={styles.box}/>
-                      <div className={styles.box}/>
-                    </div>
+                  <div className={styles.content} />
+                  <div className={styles.content} />
+                  <div className={styles.content} />
+                  <div className={styles.content} />
+                  <div className={styles.content} />
+                  <div className={styles.footer}>
+                    <div className={styles.box} />
+                    <div className={styles.box} />
+                    <div className={styles.box} />
                   </div>
                 </div>
-              }/>
-          </div>
-      )
-    } }
-)
+              </div>
+              {/* 中间 */}
+              <div style={{ flex: 2, padding: '0 20px' }}>
+                <div className={styles.placeholder}>
+                  <div className={styles.header}>
+                    <div className={styles.avatar} />
+                    <div className={styles.box} />
+                  </div>
+                  <div className={styles.content} />
+                  <div className={styles.content} />
+                  <div className={styles.footer}>
+                    <div className={styles.box} />
+                    <div className={styles.box} />
+                    <div className={styles.box} />
+                  </div>
+                </div>
+                <div className={styles.placeholder}>
+                  <div className={styles.header}>
+                    <div className={styles.avatar} />
+                    <div className={styles.box} />
+                  </div>
+                  <div className={styles.content} />
+                  <div className={styles.content} />
+                  <div className={styles.footer}>
+                    <div className={styles.box} />
+                    <div className={styles.box} />
+                    <div className={styles.box} />
+                  </div>
+                </div>
+              </div>
+              {/* 右边 */}
+              <div style={{ flex: 1 }}>
+                <div className={styles.placeholder}>
+                  <div className={styles.header}>
+                    <div className={styles.avatar} />
+                    <div className={styles.box} />
+                  </div>
+                  <div className={styles.content} />
+                  <div className={styles.content} />
+                  <div className={styles.content} />
+                  <div className={styles.content} />
+                  <div className={styles.content} />
+                  <div className={styles.footer}>
+                    <div className={styles.box} />
+                    <div className={styles.box} />
+                    <div className={styles.box} />
+                  </div>
+                </div>
+                <div className={styles.placeholder}>
+                  <div className={styles.header}>
+                    <div className={styles.avatar} />
+                    <div className={styles.box} />
+                  </div>
+                  <div className={styles.content} />
+                  <div className={styles.content} />
+                  <div className={styles.footer}>
+                    <div className={styles.box} />
+                    <div className={styles.box} />
+                    <div className={styles.box} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        />
+      </div>
+    );
+  },
+});
 
 @inject('site')
 @inject('user')
