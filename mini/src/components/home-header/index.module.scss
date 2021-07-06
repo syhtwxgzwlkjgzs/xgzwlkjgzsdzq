@@ -38,6 +38,7 @@
       display: flex;
       align-items: center;
       flex-direction: row;
+      z-index: $zindex-tooltip;
       :global(.dzq-icon){
         font-size: $font-size-middle-extra !important;
         font-weight: bold;
