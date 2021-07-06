@@ -33,7 +33,6 @@ class Withdrawal extends React.Component {
     this.setState({
       inputValue: datas ? datas[0] : '',
     });
-    this.getmoneyNum(datas ? datas[0] : '');
   };
 
   initState = () => {
@@ -45,38 +44,13 @@ class Withdrawal extends React.Component {
     });
   };
 
-  // 获得输入的提现金额
-  getmoneyNum = (data) => {
-    if (Number(data) >= 1) {
-      this.setState({
-        withdrawalAmount: data,
-      });
-
-      if (Number(this.state.withdrawalAmount) > this.props.wallet?.availableAmount) {
-        this.setState({
-          moneyOverThanAmount: true,
-        });
-      }
-    } else {
-      this.setState({
-        withdrawalAmount: 0,
-        moneyOverThanAmount: false,
-      });
-    }
-  };
-
   // 提现到微信钱包
   moneyToWeixin = async () => {
-    if (
-      !this.state.withdrawalAmount ||
-      parseFloat(this.state.withdrawalAmount) < parseFloat(this.props.site.cashMinSum)
-    ) {
-      return Toast.warning({ content: '不得小于最低提现金额' });
-    }
+    if (this.getDisabeledButton()) return;
 
     this.props.wallet
       .createWalletCash({
-        money: this.state.withdrawalAmount,
+        money: this.state.inputValue,
       })
       .then(async (res) => {
         Toast.success({
@@ -102,10 +76,17 @@ class Withdrawal extends React.Component {
     // this.setState({ visible: !this.state.visible });
   };
 
-  render() {
+  // 获取禁用逻辑
+  getDisabeledButton = () => {
     const { inputValue } = this.state;
     const btnDisabled =
-      !inputValue || parseFloat(this.state.withdrawalAmount) > parseFloat(this.props.wallet?.availableAmount);
+      !inputValue ||
+      parseFloat(inputValue) > parseFloat(this.props.wallet?.walletAvaAmount) ||
+      parseFloat(inputValue) < parseFloat(this.props.site?.cashMinSum);
+    return btnDisabled;
+  };
+
+  render() {
     return (
       <>
         <Header />
@@ -117,7 +98,6 @@ class Withdrawal extends React.Component {
             </div>
             <div className={styles.moneyInput}>
               <MoneyInput
-                // getmoneyNum={data => this.getmoneyNum(data)}
                 inputValue={this.state.inputValue}
                 onChange={this.onChange}
                 updateState={this.updateState}
@@ -129,10 +109,15 @@ class Withdrawal extends React.Component {
           </div>
           <div
             className={classNames(styles.footer, {
-              [styles.bgBtnColor]: !btnDisabled,
+              [styles.bgBtnColor]: !this.getDisabeledButton(),
             })}
           >
-            <Button type={'primary'} className={styles.button} onClick={this.moneyToWeixin} disabled={btnDisabled}>
+            <Button
+              type={'primary'}
+              className={styles.button}
+              onClick={this.moneyToWeixin}
+              disabled={this.getDisabeledButton()}
+            >
               提现到微信钱包
             </Button>
           </div>
