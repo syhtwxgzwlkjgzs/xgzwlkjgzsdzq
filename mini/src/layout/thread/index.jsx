@@ -920,9 +920,9 @@ class ThreadH5Page extends React.Component {
                       replyAvatarClick={(comment, reply, floor) => this.replyAvatarClick(comment, reply, floor)}
                       onAboptClick={(data) => this.onAboptClick(data)}
                     ></RenderCommentList>
-                      {/* <View className={layout.noMore}> */}
+                    <View className={layout.noMore}>
                       <BottomView type="line" isError={isCommentListError} noMore={isNoMore}></BottomView>
-                      {/* </View> */}
+                    </View>
                   </Fragment>
                 ) : (
                   <LoadingTips isError={isCommentListError} type="init"></LoadingTips>
