@@ -125,8 +125,8 @@ class HomeHeader extends React.Component {
     const {
       bgColor,
       hideInfo = false,
-      hideLogo = false,
       showToolbar = false,
+      hideLogo = false,
       style = {},
       digest = null,
       mode = '',
@@ -146,7 +146,6 @@ class HomeHeader extends React.Component {
           className={`
             ${styles.container} 
             ${mode ? styles[`container_mode_${mode}`] : ''} 
-            ${hideLogo ? styles['hide_logo'] : ''}
           `}
           style={{ ...style, ...this.getBgHeaderStyle(bgColor) }}
         >
