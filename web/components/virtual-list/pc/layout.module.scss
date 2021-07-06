@@ -28,7 +28,7 @@
 
     .left {
       margin-right: rem(20);
-      width: rem(300);
+      width: 296px;
       top: 80px;
       left: calc((100vw - 750px - 300px - 330px - 40px) / 2);
     }
@@ -49,7 +49,7 @@
 
     .left {
       margin-right: 1.4%;
-      width: 20%;
+      width: calc(20% - 4px);
       top: 80px;
       left: calc((100vw - 52% - 20% - 22% - 2.8%) / 2);
     }
@@ -70,7 +70,7 @@
 
     .left {
       margin-right: 1%;
-      width: 24%;
+      width: calc(24% - 4px);
       top: 70px;
       left: calc((100vw - 44% - 24% - 27% - 2%) / 2);
     }
@@ -80,6 +80,15 @@
       width: 27%;
       top: 70px;
       right: calc((100vw - 44% - 24% - 27% - 2%) / 2);
+    }
+  }
+  @include heightMedia($media-min-height) {
+    .left {
+      top: 70px;
+    }
+
+    .right {
+      top: 70px;
     }
   }
 }

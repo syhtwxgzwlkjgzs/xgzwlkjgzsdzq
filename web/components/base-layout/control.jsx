@@ -61,8 +61,9 @@ const BaseLayoutControl = forwardRef((props, ref) => {
         listRef.current.jumpToScrollTop(jumpTo);
       } else {
         if(baselayout[pageName] > 0) {
-          if (pageName !== 'search' || (pageName === 'search' && jumpTo !== -1)) {
-            // 需要一部触发，可能存在列表没有渲染出来
+          if (pageName !== 'search' || // 首页在PC和H5都适用阅读区域跳转
+              (pageName === 'search' && site.platform === 'h5')) { // 搜索页只适用H5页面阅读区域跳转
+            // 需要异步触发，可能存在列表没有渲染出来
             setTimeout(() => {
               listRef.current.jumpToScrollTop(baselayout[pageName]);
             });

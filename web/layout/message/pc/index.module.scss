@@ -28,7 +28,7 @@
     //   }
     // }
 
-    @include heightMedia(895px, 840px) {
+    @include heightMedia(1005px, 895px) {
       .user-center-follow-list {
         max-height: 435px !important;
       }
