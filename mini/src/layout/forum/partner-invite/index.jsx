@@ -205,7 +205,7 @@ class PartnerInviteH5Page extends React.Component {
               {siteMode === 'pay' ? (
                 <View className={layout.bottom_title}>
                   { user.isLogin() ? <></> : <View>新用户加入 <View className={layout.tips}>¥{sitePrice}</View></View> }
-                  <View className={!user.isLogin() && siteExpire ? layout.expire : ''}>有效期{ user.isLogin() ? '：' : ' '}<View className={layout.tips}>{siteExpire ? `${siteExpire}天` : '永久'}</View></View>
+                  <View className={!user.isLogin() ? layout.expire : ''}>有效期{ user.isLogin() ? '：' : ' '}<View className={layout.tips}>{siteExpire ? `${siteExpire}天` : '永久'}</View></View>
                 </View>
               ) :
                 <></>
