@@ -233,6 +233,9 @@
     .detail {
       @include widthAndHeightMedia($media-min-width, $media-min-height) {
         @include common;
+        .baselayout-right.is-userinfo-show {
+          top: -220px !important;
+        }
       }
       @include heightMedia(500px) {
         .baselayout-right.is-userinfo-show {
