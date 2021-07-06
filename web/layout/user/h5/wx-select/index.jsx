@@ -60,10 +60,6 @@ class WXSelectH5Page extends React.Component {
                   },
                 });
                 checkUserStatus(res);
-                Toast.success({
-                  content: res.msg,
-                  duration: 1000,
-                });
                 if (res.code === 0) {
                   const accessToken = get(res, 'data.accessToken', '');
                   const uid = get(res, 'data.uid', '');
@@ -72,7 +68,13 @@ class WXSelectH5Page extends React.Component {
                     accessToken,
                   });
                   this.props.user.updateUserInfo(uid);
-                  window.location.href = '/';
+                  Toast.success({
+                    content: '登录成功',
+                    duration: 1000,
+                    onClose: () => {
+                      window.location.href = '/';
+                    }
+                  });
                   return;
                 }
                 throw {
@@ -98,9 +100,9 @@ class WXSelectH5Page extends React.Component {
                   this.props.router.push(`/user/status?statusCode=${error.Code}&statusMsg=${error.Message}`);
                   return;
                 }
-                if (error.Code) {
-                  throw error;
-                }
+                Toast.error({
+                  content: error.Message || '网络错误',
+                });
                 throw {
                   Code: 'ulg_9999',
                   Message: '网络错误',
