@@ -40,7 +40,7 @@ class InviteH5Page extends React.Component {
       <>
         <View class={layout.scroll}>
           {/* 头部全屏的背景图片 end */}
-          <HomeHeader hideInfo showToolbar fullScreenTitle="推广邀请" />
+          <HomeHeader hideInfo showToolbar hideLogo fullScreenTitle="推广邀请" />
           {/* 头部全屏的背景图片 */}
           <View className={layout.top_bg}>
             <Image src={bgImage} className={layout.top_bg_image} />
