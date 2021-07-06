@@ -32,6 +32,8 @@ import RenderThreadContent from './content';
 import RenderCommentList from './comment-list';
 import classNames from 'classnames';
 
+import BottomView from '@components/list/BottomView';
+
 @inject('site')
 @inject('user')
 @inject('thread')
@@ -713,8 +715,7 @@ class ThreadH5Page extends React.Component {
                     onEditClick={(comment) => this.onEditClick(comment)}
                     replyAvatarClick={(comment, reply, floor) => this.replyAvatarClick(comment, reply, floor)}
                   ></RenderCommentList>
-                  {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
-                  {isNoMore && <NoMore className={layout.noMore} empty={totalCount === 0}></NoMore>}
+                  <BottomView noMoreType="line" isError={isCommentListError} noMore={isNoMore}></BottomView>
                 </Fragment>
               ) : (
                 <LoadingTips isError={isCommentListError} type="init"></LoadingTips>
