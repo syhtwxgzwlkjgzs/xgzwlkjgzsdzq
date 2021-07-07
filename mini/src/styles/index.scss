@@ -2,3 +2,7 @@
 @import '@common/styles/theme/index.scss'; // 主题样式
 @import '@discuzq/design/dist/styles/index.scss';
 @import './reset.scss';
+
+page {
+    font-family: $font-family;
+}

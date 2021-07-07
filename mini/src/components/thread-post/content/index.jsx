@@ -13,6 +13,7 @@
  */
 import React, { memo, forwardRef } from 'react';
 import { View, Textarea } from '@tarojs/components';
+import classNames from 'classnames';
 import styles from './index.module.scss';
 
 import PropTypes from 'prop-types';
@@ -37,7 +38,10 @@ const Index = forwardRef(({
       <View className={styles['container-inner']}>
         <Textarea
           ref={ref}
-          className={(bottomHeight > 0 || showEmoji) ? styles['textarea-editing'] : styles.textarea}
+          className={classNames(styles.textarea, {
+            [styles['textarea-editing']]: !!value,
+            [styles['textarea-max-height']]: bottomHeight > 0 || showEmoji,
+          })}
           placeholderClass={styles['textarea-placeholder']}
           value={value}
           disabled={disabled}

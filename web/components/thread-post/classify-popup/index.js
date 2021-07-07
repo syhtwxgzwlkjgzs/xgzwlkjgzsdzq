@@ -24,8 +24,10 @@ const ClassifyPopup = (props) => {
     if (item.children && !item.children.length) handleClose();
   };
   const handleChildClick = (item) => {
-    setSelectedChild(item);
-    props?.threadPost.setPostData({ categoryId: item.pid || selected.pid });
+    if (item.pid !== selectedChild.pid) {
+      setSelectedChild(item);
+      props?.threadPost.setPostData({ categoryId: item.pid || selected.pid });
+    }
     handleClose();
   };
 

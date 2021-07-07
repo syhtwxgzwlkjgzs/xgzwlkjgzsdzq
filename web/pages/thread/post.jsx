@@ -378,9 +378,12 @@ class PostPage extends React.Component {
   }
 
   checkFileType = (file, supportType) => {
-    const { name } = file;
-    const arr = (name || '')?.toLowerCase()?.split('.');
-    const prefix = arr[arr.length - 1];
+    const { name, imageType } = file;
+    let prefix = imageType;
+    if (!imageType) {
+      const arr = (name || '')?.toLowerCase()?.split('.');
+      prefix = arr[arr.length - 1];
+    }
     if (supportType.indexOf(prefix) === -1) return false;
     return true;
   };
@@ -562,7 +565,7 @@ class PostPage extends React.Component {
 
     const { images, video, files, audio } = postData;
     if (!(postData.contentText || video.id || audio.id || Object.values(images).length
-      || Object.values(files).length)) {
+      || Object.values(files).length) && !isDraft) {
       this.postToast('请至少填写您要发布的内容或者上传图片、附件、视频、语音');
       return;
     }
@@ -689,6 +692,7 @@ class PostPage extends React.Component {
         this.props.vlist.resetPosition();
         this.props.baselayout.setJumpingToTop();
         this.props.index.addThread(data);
+        this.props.index.getReadCategories(); // 发帖后分类数据更新
       }
     }
   };
@@ -715,8 +719,10 @@ class PostPage extends React.Component {
 
   handleEditorBoxScroller = (top = 0) => {
     const editorbox = document.querySelector('#post-inner');
+    const editorContent = document.querySelector('#dzq-vditor');
     const rect = editorbox.getBoundingClientRect();
-    const gap = this.props.site?.isPc ? top - rect.top : top;
+    if (top < editorContent.clientHeight) top = editorContent.clientHeight;
+    const gap = this.props.site?.isPc ? rect.top - top : top;
     editorbox.scrollTo({ top: gap, behavior: 'smooth' });
   };
 

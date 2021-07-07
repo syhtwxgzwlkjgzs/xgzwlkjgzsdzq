@@ -51,6 +51,9 @@ export default function replaceStringInRegex(text, type, newSubstr) {
     case "list":
       newText = newText.replace(/<ol[^<>]*>|<(ul|li)[^<>]*>/g, newSubstr);
       newText = newText.replace(/<\/(li|ul|ol)>/g, newSubstr);
+    case "code":
+      newText = newText.replace(/<code>[\s\S]*?<\/code>/g, newSubstr);
+      newText = newText.replace(/<pre>[\s\S]*?<\/pre>/g, newSubstr);
     default:
       break;
   }

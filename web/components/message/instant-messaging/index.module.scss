@@ -12,9 +12,11 @@
 }
 
 .h5Page {
-  position: relative;
-  border-top: $border-solid-1;
-  height: calc(100vh - 41px);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
   background-color: $body-bg-color;
 }
 
@@ -27,7 +29,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-family: "PingFang SC";
     font-size: $font-size-large;
     color: $text-color-primary;
     font-weight: 600;

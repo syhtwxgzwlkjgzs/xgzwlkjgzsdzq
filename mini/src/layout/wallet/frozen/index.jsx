@@ -70,6 +70,7 @@ class FrozenAmount extends React.Component {
           noMore={this.state.page > this.state.totalPage}
           hasOnScrollToLower={true}
           height={this.state.height}
+          showLoadingInCenter={!this.listRenderDataFilter().length}
         >
           <View className={styles.header}>
             <View className={styles.record}>共有{this.state.totalCount}条记录</View>

@@ -7,4 +7,13 @@ module.exports = {
       ts: false,
     }],
   ],
+  plugins: [
+    [
+      "@discuzq/discuz-babel-plugin-import",
+      {
+        "libraryName": "@discuzq/design",
+        "libraryDirectory": "dist/components"
+      }
+    ]
+  ]
 };

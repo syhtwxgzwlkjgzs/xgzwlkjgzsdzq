@@ -39,12 +39,12 @@ class HomeHeader extends React.Component {
 
   getLogo() {
     // 站点加入页面logo图片定制
-    const { mode } = this.props;
-    if (mode === 'join') {
+    const { mode, site } = this.props;
+    const siteHeaderLogo = get(site, 'webConfig.setSite.siteHeaderLogo', '');
+    if (mode === 'join' && !siteHeaderLogo) {
       return joinLogoImg;
     }
 
-    const { site } = this.props;
     const siteData = site.webConfig || {};
     if (siteData.setSite?.siteHeaderLogo) {
       return siteData.setSite.siteHeaderLogo;
@@ -125,8 +125,8 @@ class HomeHeader extends React.Component {
     const {
       bgColor,
       hideInfo = false,
-      hideLogo = false,
       showToolbar = false,
+      hideLogo = false,
       style = {},
       digest = null,
       mode = '',
@@ -146,7 +146,6 @@ class HomeHeader extends React.Component {
           className={`
             ${styles.container} 
             ${mode ? styles[`container_mode_${mode}`] : ''} 
-            ${hideLogo ? styles['hide_logo'] : ''}
           `}
           style={{ ...style, ...this.getBgHeaderStyle(bgColor) }}
         >

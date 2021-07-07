@@ -36,9 +36,9 @@ export default class Page extends React.Component {
   constructor(props) {
     super(props);
     const { noWithLogin, withLogin, user, site } = this.props;
-    // if (!site.isMiniProgramOpen) {
-    //   return;
-    // }
+    if (!site.isMiniProgramOpen) {
+      return;
+    }
 
     // 是否必须登录
     if (withLogin && !user.isLogin()) {
@@ -115,16 +115,14 @@ export default class Page extends React.Component {
       // 访问指定页面，经过登陆、付费等操作完成后，跳回主页
       const initialPage = site.getInitialPage();
       if (initialPage) {
+        if (initialPage.includes(path)) {
+          site.clearInitialPage();
+        }
         if (path === INDEX_URL) {
           site.clearInitialPage();
           Router.redirect({
             url: initialPage,
           });
-          return false;
-        }
-
-        if (initialPage.includes(path)) {
-          site.clearInitialPage();
           return false;
         }
       }
@@ -155,28 +153,29 @@ export default class Page extends React.Component {
   }
 
   render() {
-    // if (!this.props.site.isMiniProgramOpen) {
-    //   return (
-    //     <Popup position="center" visible={true} onClose={()=> {}}>
-    //       <View className={styles.container}>
-    //         <View className={styles.deleteTips}>
-    //           <View className={styles.tips}>提示</View>
-    //           <View className={styles.content}>未开启小程序配置</View>
-    //         </View>
-    //         <View className={styles.btn}>
-    //           <Button type='primary' className={styles.exit} onClick={() => {}}>
-    //             <Navigator openType='exit' target='miniProgram' className={styles.navigator}>
-    //               关闭
-    //             </Navigator>
-    //           </Button>
-    //         </View>
-    //       </View>
-    //     </Popup>
-    //   );
-    // }
+    if (!this.props.site.isMiniProgramOpen) {
+      return (
+        <Popup position="center" visible={true} onClose={()=> {}}>
+          <View className={styles.container}>
+            <View className={styles.deleteTips}>
+              <View className={styles.tips}>提示</View>
+              <View className={styles.content}>管理员未开启小程序配置，暂不支持小程序访问</View>
+            </View>
+            <View className={styles.btn}>
+              <Button type='primary' className={styles.exit} onClick={() => {}}>
+                <Navigator openType='exit' target='miniProgram' className={styles.navigator}>
+                  关闭
+                </Navigator>
+              </Button>
+            </View>
+          </View>
+        </Popup>
+      );
+    }
 
+    // 如果被劫持到其它页面，则不展示当前页
     if (!this.isPass()) {
-      return <></>;
+      return null;
     }
 
     const { site, disabledToast, className = '' } = this.props;

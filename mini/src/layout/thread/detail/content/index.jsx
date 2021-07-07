@@ -252,9 +252,9 @@ const RenderThreadContent = inject('user')(
           )}
 
           {/* 标签 */}
-          {threadStore?.threadData?.categoryName && (
+          {(threadStore?.threadData?.parentCategoryName || threadStore?.threadData?.categoryName) && (
             <View className={styles.tag} onClick={onTagClick}>
-              {threadStore?.threadData?.categoryName}
+              {threadStore?.threadData?.parentCategoryName || threadStore?.threadData?.categoryName}
             </View>
           )}
 

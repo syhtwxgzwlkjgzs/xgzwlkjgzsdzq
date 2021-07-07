@@ -114,9 +114,24 @@ function VList(props, ref) {
       case 'header':
         return props.children;
       case 'footer':
-        return <BottomView noMore={props.noMore} isError={props.requestError} errorText={props.errorText} type='line' platform={props.platform}></BottomView>;
+        return (
+          <BottomView
+            noMore={props.noMore}
+            isError={props.requestError}
+            errorText={props.errorText}
+            type="line"
+            platform={props.platform}
+          ></BottomView>
+        );
       default:
-        return <Item data={data} isLast={index === list?.length - 2} measure={measure} recomputeRowHeights={(data) => recomputeRowHeights(index, data)} />;
+        return (
+          <Item
+            data={data}
+            isLast={index === list?.length - 2}
+            measure={measure}
+            recomputeRowHeights={(data) => recomputeRowHeights(index, data)}
+          />
+        );
     }
   };
 
@@ -167,11 +182,18 @@ function VList(props, ref) {
       props.vlist.setPosition(scrollTop);
     }
     // if (scrollTop + (clientHeight * 4) >= scrollHeight && !loadData) {
-    if (((scrollTop + (clientHeight * 4)) >= scrollHeight) && !loadData) {
+    if (((scrollTop + clientHeight + 1000) >= scrollHeight) && !loadData) {
       loadData = true;
-      props.loadNextPage().finally(() => {
-        loadData = false;
-      });
+      if (props.loadNextPage) {
+        const promise = props.loadNextPage();
+        if (promise) {
+          promise.finally(() => {
+            loadData = false;
+          });
+        } else {
+          loadData = false;
+        }
+      }
     }
   };
 

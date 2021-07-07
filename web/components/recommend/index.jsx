@@ -7,6 +7,7 @@ import BottomView from '@components/list/BottomView';
 import isServer from '@common/utils/is-server';
 import { debounce } from '@common/utils/throttle-debounce';
 import replaceStringInRegex from '@common/utils/replace-string-in-regex';
+import classNames from 'classnames';
 
 @inject('index')
 @observer
@@ -71,11 +72,11 @@ class Index extends React.Component {
     const { filterCount = 5 } = this.props
     const { isError, errorText } = this.state
     return (
-      <div className={style.recommend} style={{
+      <div className={`${style.recommend} recommend`} style={{
         /* stylelint-disable */
         // maxHeight: (this.state.windowSize?.innerHeight - 80) || '600px'
       }}>
-        <div className={style.recommendContent}>推荐内容</div>
+        <div className={`${style.recommendContent} right-recommend-title`}>推荐内容</div>
         { (recommendsStatus === 'loading' || recommendsStatus === 'error' || !recommends?.length) && (
             <BottomView isBox isError={isError} errorText={errorText} noMore={recommendsStatus === 'none' && !recommends?.length} loadingText='正在加载' noMoreText='暂无数据' />
         )}
@@ -131,7 +132,7 @@ class Index extends React.Component {
               </div>
           )})
         }
-        {(recommendsStatus === 'none'|| recommendsStatus === 'error') && <div className={style.recommendSwitch}>
+        {(recommendsStatus === 'none'|| recommendsStatus === 'error') && <div className={classNames(style.recommendSwitch, 'right-recommend-switch')}>
           <div className={style.switchBox} onClick={this.changeBatch}>
             <Icon name="RenovateOutlined" className={style.switchIcon} size={14}/>换一批
           </div>

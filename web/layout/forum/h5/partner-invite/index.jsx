@@ -2,16 +2,12 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 import '@discuzq/design/dist/styles/index.scss';
-import HomeHeader from '@components/home-header';
-import List from '@components/list';
-import { Button, Toast, Avatar, Spin, Icon } from '@discuzq/design';
+import { Button, Toast, Avatar, Icon } from '@discuzq/design';
 import { get } from '@common/utils/get';
-import PopularContents from '../../../search/h5/components/popular-contents';
 import SiteInfo from './site-info';
 import { readUser } from '@server';
 import PayBox from '@components/payBox';
 import { numberFormat } from '@common/utils/number-format';
-import { getSiteUpdateTime } from '@common/utils/get-site-uptade-time';
 import PartnerInviteWrap from './partner-invite-wrap';
 import Copyright from '@components/copyright';
 import PartnerInviteHot from './partner-invite-hot';
@@ -185,7 +181,7 @@ class PartnerInviteH5Page extends React.Component {
           {siteMode === 'pay' ? (
             <div className={layout.bottom_title}>
               { user.isLogin() ? <></> : <span>新用户加入 <span className={layout.tips}>¥{sitePrice}</span></span> }
-              { siteExpire ? <span className={!user.isLogin() && siteExpire ? layout.expire : ''}>有效期{ user.isLogin() ? '：' : ' '}<span className={layout.tips}>{siteExpire}天 </span></span> : <></> }
+              <span className={!user.isLogin() ? layout.expire : ''}>有效期{ user.isLogin() ? '：' : ' '}<span className={layout.tips}>{siteExpire ? `${siteExpire}天` : '永久'}</span></span>
             </div>
           ) : <></>}
         </div>
@@ -282,7 +278,7 @@ class PartnerInviteH5Page extends React.Component {
                   {siteMode === 'pay' ? (
                     <div className={layout.bottom_title}>
                       { user.isLogin() ? <></> : <span>新用户加入 <span className={layout.tips}>¥{sitePrice}</span></span> }
-                      { siteExpire ? <span className={!user.isLogin() && siteExpire ? layout.expire : ''}>有效期{ user.isLogin() ? '：' : ' '}<span className={layout.tips}>{siteExpire}天 </span></span> : <></> }
+                      <span className={!user.isLogin() ? layout.expire : ''}>有效期{ user.isLogin() ? '：' : ' '}<span className={layout.tips}>{siteExpire ? `${siteExpire}天` : '永久'}</span></span>
                     </div>
                   ) : <></>}
                   <Button className={layout.bottom_button} onClick={this.handleJoinSite}>

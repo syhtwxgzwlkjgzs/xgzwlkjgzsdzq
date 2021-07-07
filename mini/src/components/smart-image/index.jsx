@@ -9,7 +9,7 @@ const SmartImg = ({level, autoSize = false, type, src, onClick, mode = '', noSma
     const [isLong, changeIsLong] = useState(false);
 
     const imgSrc = useMemo(() => {
-        if (noSmart) return src;
+        if (noSmart) return calcCosImageQuality(src, type, 0);
         return calcCosImageQuality(src, type, level);
     }, [noSmart, src, type, level])
     

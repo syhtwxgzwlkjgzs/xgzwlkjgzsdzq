@@ -67,7 +67,7 @@ class Index extends React.Component {
       // 没有查看权限，且未登录，需要去登录
       if (!canViewPost && !this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+        goToLoginPage({ url: '/user/login' });
         return;
       }
 
@@ -196,6 +196,9 @@ class Index extends React.Component {
       const { threadId = '' } = this.props.data || {};
 
       this.props.index.updateAssignThreadInfo(threadId, { updateType: 'openedMore', openedMore: true });
+
+      const { recomputeRowHeights = noop } = this.props;
+      recomputeRowHeights();
     }
 
     render() {

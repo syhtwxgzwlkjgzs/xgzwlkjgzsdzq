@@ -27,9 +27,9 @@ class Index extends Component {
           <Image className={styles.img} src={imgClose}/>
           <Text className={styles.main}>关闭已站点</Text>
           {closeSiteConfig && <Text className={styles.sub}>{closeSiteConfig.detail}</Text>}
-          <View className={styles.fixedBox}>
+          {/* <View className={styles.fixedBox}>
             <Button onClick={() => {Router.push({url: '/user/login'});}} size='large' className={styles.btn} type='primary'>管理员登录</Button>
-          </View>
+          </View> */}
         </View>
       </Page>
     );

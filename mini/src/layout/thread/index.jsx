@@ -850,6 +850,7 @@ class ThreadH5Page extends React.Component {
       canStick: threadStore?.threadData?.ability?.canStick,
       canShare: this.props.user.isLogin(),
       canCollect: this.props.user.isLogin(),
+      isAdmini: this.props?.user?.isAdmini,
     };
 
     // 更多弹窗界面
@@ -919,9 +920,9 @@ class ThreadH5Page extends React.Component {
                       replyAvatarClick={(comment, reply, floor) => this.replyAvatarClick(comment, reply, floor)}
                       onAboptClick={(data) => this.onAboptClick(data)}
                     ></RenderCommentList>
-                      <View className={layout.noMore}>
-                        <BottomView isError={isCommentListError} noMore={isNoMore}></BottomView>
-                      </View>
+                    <View className={layout.noMore}>
+                      <BottomView type="line" isError={isCommentListError} noMore={isNoMore}></BottomView>
+                    </View>
                   </Fragment>
                 ) : (
                   <LoadingTips isError={isCommentListError} type="init"></LoadingTips>
@@ -1026,12 +1027,14 @@ class ThreadH5Page extends React.Component {
             ></RewardPopup>
 
             {/* 采纳弹层 */}
-            <AboptPopup
-              rewardAmount={parseContent?.REWARD?.money} // 需要传入剩余悬赏金额
-              visible={this.state.showAboptPopup}
-              onCancel={() => this.onAboptCancel()}
-              onOkClick={(data) => this.onAboptOk(data)}
-            ></AboptPopup>
+            {parseContent?.REWARD?.money && (
+              <AboptPopup
+                rewardAmount={parseContent?.REWARD?.money} // 需要传入剩余悬赏金额
+                visible={this.state.showAboptPopup}
+                onCancel={() => this.onAboptCancel()}
+                onOkClick={(data) => this.onAboptOk(data)}
+              ></AboptPopup>
+            )}
           </Fragment>
         )}
       </View>

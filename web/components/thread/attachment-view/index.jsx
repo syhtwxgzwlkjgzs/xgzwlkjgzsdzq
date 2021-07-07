@@ -51,7 +51,7 @@ const Index = ({
         }
         callback(url);
       } else {
-        Toast.info({ content: res?.msg });
+        if(res?.msg || res?.Message) Toast.info({ content: res?.msg || res?.Message });
       }
     }).catch((error) => {
       Toast.info({ content: '获取下载链接失败' });

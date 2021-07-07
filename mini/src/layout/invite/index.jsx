@@ -9,6 +9,7 @@ import '@discuzq/design/dist/styles/index.scss';
 import HomeHeader from '@components/home-header';
 import layout from './index.module.scss';
 import bgImage from './../../../../web/public/dzq-img/invite-banner-bg.png';
+import NoMoreDataTip from '@components/no-more-data-tip';
 
 @inject('site')
 @inject('user')
@@ -38,12 +39,12 @@ class InviteH5Page extends React.Component {
     return (
       <>
         <View class={layout.scroll}>
+          {/* 头部全屏的背景图片 end */}
+          <HomeHeader hideInfo showToolbar hideLogo fullScreenTitle="推广邀请" />
           {/* 头部全屏的背景图片 */}
           <View className={layout.top_bg}>
             <Image src={bgImage} className={layout.top_bg_image} />
           </View>
-          {/* 头部全屏的背景图片 end */}
-          <HomeHeader hideInfo hideLogo showToolbar fullScreenTitle="推广邀请" />
           <View className={layout.content}>
             {/* 用户信息 start */}
             <View className={layout.user_info}>
@@ -103,9 +104,7 @@ class InviteH5Page extends React.Component {
                 {
                   inviteData?.inviteUsersList?.length
                     ? <></>
-                    : <View className={layout.refreshView}>
-                        <View>没有更多内容了</View>
-                      </View>
+                    : <NoMoreDataTip />
                 }
               </View>
             </View>

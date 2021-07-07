@@ -12,7 +12,7 @@ class MessageAction extends MessageStore {
   // 把对话消息设置为已读
   @action.bound
   async updateDialog(dialogId) {
-    updateDialog({ data: { dialogId } });
+    updateDialog({ data: { dialogId: parseInt(dialogId) } });
   }
 
   // 获取未读消息数量
@@ -23,10 +23,10 @@ class MessageAction extends MessageStore {
     if (code === 0) {
       const { unreadNotifications = 0, typeUnreadNotifications, dialogNotifications = 0 } = data;
       const { threadrewardedexpired = 0, receiveredpacket = 0, related = 0, replied = 0, system = 0, withdrawal = 0, liked = 0, rewarded = 0, threadrewarded = 0 } = typeUnreadNotifications;
-      // threadrewardedexpired, withdrawal, 悬赏过期、提现不在消息中心展示，未读总数需要减去此类型消息的未读数
-      this.totalUnread = unreadNotifications - threadrewardedexpired - withdrawal + dialogNotifications;
+      // withdrawal,提现不在消息中心展示，未读总数需要减去此类型消息的未读数
+      this.totalUnread = unreadNotifications - withdrawal + dialogNotifications;
       this.threadUnread = system;
-      this.financialUnread = receiveredpacket + rewarded + threadrewarded;
+      this.financialUnread = receiveredpacket + rewarded + threadrewarded + threadrewardedexpired;
       this.accountUnread = related + replied + liked;
       this.atUnread = related;
       this.replyUnread = replied;
@@ -107,8 +107,8 @@ class MessageAction extends MessageStore {
   // 获取财务消息
   @action.bound
   async readFinancialMsgList(page = 1) {
-    // threadrewardedexpired 悬赏过期，产品经理说不展示;withdrawal 提现信息放入钱包，不在消息展示
-    const ret = await readMsgList(this.assemblyParams(page, 'rewarded,threadrewarded,receiveredpacket'));
+    // withdrawal 提现信息放入钱包，不在消息展示
+    const ret = await readMsgList(this.assemblyParams(page, 'rewarded,threadrewarded,receiveredpacket,threadrewardedexpired'));
     this.setMsgList(page, 'financialMsgList', ret);
   }
 
@@ -140,7 +140,7 @@ class MessageAction extends MessageStore {
           perPage: 200,
           page,
           filter: {
-            dialogId,
+            dialogId: parseInt(dialogId),
           },
         },
       });

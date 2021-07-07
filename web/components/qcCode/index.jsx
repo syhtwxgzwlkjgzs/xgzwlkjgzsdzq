@@ -1,6 +1,7 @@
 import React from 'react';
 import style from './index.module.scss';
 import { inject, observer } from 'mobx-react';
+import classNames from 'classnames';
 
 @inject('site')
 @observer
@@ -37,7 +38,7 @@ class Index extends React.Component {
     const { siteName } = this.state
 
     return (
-      <div className={style.code}>
+      <div className={classNames(style.code, 'qrcode')}>
         <div className={style.codeBox} ref={this.qrCode}></div>
         <div className={style.codeText}>
           <p className={style.codeTextVisit}>{subTitle}</p>

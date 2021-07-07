@@ -8,7 +8,8 @@ export default function (cloneList, showFileList, type, site) {
   const { supportFileExt, supportImgExt, supportMaxSize } = webConfig.setAttach;
   if (type === 'file') {
     // 当前选择附件的类型大小
-    const fileType = cloneList[0].name.match(/\.(.+)$/i)[1].toLocaleLowerCase();
+    const arr = cloneList[0].name.split('.').pop();
+    const fileType = arr.toLocaleLowerCase();
     const fileSize = cloneList[0].size;
     // 判断合法性
     const isLegalType = supportFileExt.toLocaleLowerCase().includes(fileType);

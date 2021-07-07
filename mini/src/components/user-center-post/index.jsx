@@ -25,7 +25,7 @@ class UserCenterPost extends React.Component {
         <View className={styles.userCenterPostTitle}>发帖</View>
         <View className={styles.userCenterPostContent}>
           <View className={styles.userCenterPostAvatar}>
-          <Avatar image={user.avatarUrl} name={user.username} circle/>
+            <Avatar image={user.avatarUrl} name={user.nickname} circle />
           </View>
           <View
             style={{

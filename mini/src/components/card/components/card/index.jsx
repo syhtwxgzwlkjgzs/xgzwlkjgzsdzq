@@ -3,7 +3,6 @@ import Taro from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import TaroCanvasDrawer from '../taro-plugin-canvas'; // npm 引入方式
 import styles from './index.module.scss'
-import { getConfig } from '../config';
 
 export default class Simple extends React.Component {
   constructor(props) {
@@ -17,48 +16,21 @@ export default class Simple extends React.Component {
       canvasStatus: null,
     }
   }
-  static getDerivedStateFromProps(nextProps) {
-    if (nextProps.obj.miniCode) {
-      const { obj, heightdefill } = nextProps
-      const { texts, blocks, images, width, height, backgroundColor } = getConfig({ ...obj, heightdefill, codeUrl: nextProps.obj.miniCode })
+  static getDerivedStateFromProps(props, state) {
+    if(props.config && props.config !== state.config) {
       return {
         canvasStatus: true,
-        config: {
-          width,
-          height,
-          backgroundColor,
-          texts: [
-            ...texts,
-            {
-              text: `${obj.content}`,
-              x: 40,
-              y: 161,
-              width: 620,
-              height: 520 - obj.contentHeight,
-              fontSize: 28,
-              lineHeight: 46,
-              textAlign: 'left',
-              zIndex: 10,
-              lineNum: 12,
-              color: '#333333',
-              baseLine: 'top'
-            },
-          ],
-          blocks,
-          images,
-        }
+        config: props.config
       }
     }
-    return null;
+    return null
   }
-
 
   componentDidMount() {
     Taro.showLoading({
       title: '绘制中...'
     })
   }
-
 
   // 绘制成功回调函数 （必须实现）=> 接收绘制结果、重置 TaroCanvasDrawer 状态
   onCreateSuccess = (result) => {
@@ -102,15 +74,13 @@ export default class Simple extends React.Component {
     return (
       <View className={styles.painter}>
         <View className={styles.canvanBox}>
-          <View className={styles.cent}>
-            <Image
+        <Image
               className={styles.centImage}
               src={this.state.shareImage}
               mode='widthFix'
               lazy-load
               onClick={this.preView}
             />
-          </View>
           {
             this.state.canvasStatus &&
             (

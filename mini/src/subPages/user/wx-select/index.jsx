@@ -43,10 +43,8 @@ class WXSelect extends Component {
           inviteCode
         },
       });
-      checkUserStatus(res);
-      Toast.success({
-        content: res.code + res.msg,
-      });
+
+      // @TODO 登录逻辑待重构
       if (res.code === 0) {
         const accessToken = get(res, 'data.accessToken', '');
         const uid = get(res, 'data.uid', '');
@@ -55,8 +53,18 @@ class WXSelect extends Component {
           accessToken,
         });
         this.props.user.updateUserInfo(uid);
-        redirectTo({
-          url: `/pages/home/index`
+      }
+      
+      checkUserStatus(res);
+      if (res.code === 0) {
+        Toast.success({
+          content: '登录成功',
+          duration: 1000,
+          onClose: () => {
+            redirectTo({
+              url: `/pages/home/index`
+            });
+          }
         });
         return;
       }
@@ -95,9 +103,9 @@ class WXSelect extends Component {
         });
         return;
       }
-      if (error.Code) {
-        throw error;
-      }
+      Toast.error({
+        content: error.Message || '网络错误',
+      });
       throw {
         Code: 'ulg_9999',
         Message: '网络错误',

@@ -26,7 +26,7 @@
         border: solid rem(3) $white;
     }
     .name {
-        font-family: 'PingFangSC-Regular';
+        
         font-weight: normal;
         font-size: rem($font-size-middle);
         line-height: rem(16.8);
@@ -43,14 +43,13 @@
     color: $white;
     text-align: center;
     .moneyTitle {
-        font-family: 'PingFangSC-Regular';
+        
         font-weight: normal;
         font-size: rem($font-size-primary);
         line-height: rem(16.8);
         padding: rem($padding-2n) 0;
     }
     .moneyNum {
-        font-family: "PingFang SC";
         font-weight: 600;
         font-size: rem(30);
         line-height: rem($font-line-height-large);
@@ -61,14 +60,13 @@
     color: $white;
     text-align: left;
     .moneyTitle {
-        font-family: 'PingFangSC-Regular';
+        
         font-weight: normal;
         font-size: rem($font-size-primary);
         line-height: rem(16.8);
         padding: rem($padding-2n) 0;
     }
     .moneyNum {
-        font-family: "PingFang SC";
         font-weight: 600;
         font-size: rem(30);
         line-height: rem($font-line-height-large);
@@ -81,7 +79,7 @@
     color: $white;
     text-align: center;
     .statusTitle {
-        font-family: 'PingFangSC-Regular';
+        
         font-weight: normal;
         font-size: rem($font-size-primary);
         line-height: rem($font-line-height-primary);
@@ -94,7 +92,7 @@
         }
     }
     .statusNum {
-        font-family: 'PingFang SC';
+        
         font-weight: normal;
         font-size: rem($font-size-large);
         line-height: rem(16.8);
@@ -108,14 +106,14 @@
     color: $white;
     text-align: left;
     .statusTitle {
-        font-family: 'PingFangSC-Regular';
+        
         font-weight: normal;
         font-size: rem($font-size-primary);
         line-height: rem($font-line-height-primary);
 
     }
     .statusNum {
-        font-family: 'PingFang SC';
+        
         font-weight: normal;
         font-size: rem($font-size-large);
         line-height: rem(16.8);

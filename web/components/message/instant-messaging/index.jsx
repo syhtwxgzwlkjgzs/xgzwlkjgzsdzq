@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable no-param-reassign */
 import React, { useState, useEffect, useRef, useMemo } from 'react';
@@ -12,7 +13,6 @@ import wxChooseImage from '@common/utils/wx-choose-image';
 import { createAttachment } from '@common/server';
 import { getMessageTimestamp } from '@common/utils/get-message-timestamp';
 import calcCosImageQuality from '@common/utils/calc-cos-image-quality';
-import browser from '@common/utils/browser';
 import styles from './index.module.scss';
 
 const Index = (props) => {
@@ -63,7 +63,7 @@ const Index = (props) => {
     if (dialogId) {
       setIsSubmiting(true);
       ret = await createDialogMsg({
-        dialogId,
+        dialogId: parseInt(dialogId),
         ...data,
       });
       setIsSubmiting(false);
@@ -93,7 +93,7 @@ const Index = (props) => {
 
   // 为图片发送空消息
   const submitEmptyImage = dialogId => createDialogMsg({
-    dialogId,
+    dialogId: parseInt(dialogId),
     isImage: true,
   });
 
@@ -104,8 +104,8 @@ const Index = (props) => {
 
   // 触发图片选择
   const uploadImage = async () => {
-    if (browser.env('weixin')) {
-      const files = await wxChooseImage();
+    const files = await wxChooseImage();
+    if (files.length) {
       onImgChange('', files);
     } else {
       uploadRef.current.click();
@@ -115,7 +115,7 @@ const Index = (props) => {
   // 检查文件类型和体积
   const checkFile = (file) => {
     if (!webConfig) return false;
-    const imageType = file.name.match(/\.([^\.]+)$/)[1].toLocaleLowerCase();
+    const imageType = file.type.replace('image/', '');
     const imageSize = file.size;
     const isLegalType = supportImgExt.toLocaleLowerCase().includes(imageType);
     const isLegalSize = imageSize > 0 && imageSize < supportMaxSize * 1024 * 1024;
@@ -170,21 +170,15 @@ const Index = (props) => {
           file.imageUrl = img.src;
           file.imageWidth = img.width;
           file.imageHeight = img.height;
-          if (!wxFiles) {
-            file.failMsg = checkFile(file);
-          }
+          file.failMsg = checkFile(file);
           resolve();
         };
 
-        if (wxFiles) {
-          img.src = file.localId;
-        } else {
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = (e) => {
-            img.src = e.target.result;
-          };
-        }
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (e) => {
+          img.src = e.target.result;
+        };
       })
     )));
 
@@ -230,11 +224,7 @@ const Index = (props) => {
       });
     }
     const formData = new FormData();
-    if (file.serverId) {
-      formData.append('mediaId', file.serverId);
-    } else {
-      formData.append('file', file);
-    }
+    formData.append('file', file);
     formData.append('type', 1);
     formData.append('dialogMessageId', file.dialogMessageId);
     const ret = await createAttachment(formData);
@@ -265,7 +255,7 @@ const Index = (props) => {
       if (!item.isImageLoading && item.imageUrl) {
         const [path] = item.imageUrl.split('?');
         const type = path.substr(path.indexOf('.') + 1);
-        item.renderUrl = calcCosImageQuality(item.imageUrl, type, 3);
+        item.renderUrl = calcCosImageQuality(item.imageUrl, type, 7);
       }
 
       return {
@@ -278,7 +268,8 @@ const Index = (props) => {
         ownedBy: user.id === item.userId ? 'myself' : 'itself',
         nickname: item.user.username,
       };
-    }).filter(item => (item.imageUrl || item.text)).reverse();
+    }).filter(item => (item.imageUrl || item.text))
+      .reverse();
 
     // 消息数有变化，即有新消息，此时把滚动条滚动到底部
     if (listData.length > listDataLengthRef.current) {
@@ -318,6 +309,7 @@ const Index = (props) => {
   // 切换username时，停止当前轮询，用于pc端对话页右下角点击切换聊天用户的场景
   useEffect(() => {
     listDataLengthRef.current = 0;
+    setTypingValue('');
     clearPolling();
   }, [username]);
 
@@ -375,7 +367,7 @@ const Index = (props) => {
   if (isPC) {
     return (
       <BaseLayout
-        className={"mymessage-page"}
+        className={'mymessage-page'}
         right={props.rightContent}
         showRefresh={false}
         immediateCheck={false}
@@ -383,7 +375,7 @@ const Index = (props) => {
       >
         {mainContent}
       </BaseLayout>
-    )
+    );
   }
 
   return mainContent;
