@@ -23,9 +23,11 @@ class Index extends React.Component {
   }
 
   getShareData(data) {
-    const { site } = this.props
-    const defalutTitle = site.webConfig?.setSite?.siteName || ''
+    const { site, user } = this.props
+    const siteTitle = site.webConfig?.setSite?.siteName || ''    
     const defalutPath = 'pages/index/index'
+    const { nickname } = user?.userInfo || ''
+    const defalutTitle = `${nickname}邀请你加入${siteTitle}`
     if (data.from === 'timeLine') {
       return {
         title: defalutTitle
