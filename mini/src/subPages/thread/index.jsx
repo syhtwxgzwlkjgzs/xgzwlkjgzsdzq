@@ -7,6 +7,7 @@ import ThreadMiniPage from '@layout/thread/index';
 // import PayBoxProvider from '@components/payBox/payBoxProvider';
 import withShare from '@common/utils/withShare/withShare';
 import ErrorMiniPage from '../../layout/error/index';
+import { priceShare } from '@common/utils/priceShare';
 
 // const MemoToastProvider = React.memo(ToastProvider);
 @inject('site')
@@ -34,25 +35,26 @@ class Detail extends React.Component {
 
   // 页面分享
   getShareData(data) {
-    const { title, threadId } = this.props.thread.threadData;
-    const defalutTitle = title;
-    const defalutPath = `/subPages/thread/index?id=${threadId}`;
+    const { threadId, isAnonymous } = this.props.thread.threadData;
+    const {isPrice} = this.props.thread.threadData.displayTag
+    const defalutTitle = this.props.thread.title;
+    const path = `/subPages/thread/index?id=${threadId}`;
     if (data.from === 'timeLine') {
       return {
         title: defalutTitle,
       };
     }
-    if (data.from === 'menu') {
-      return {
+    if (data.from === 'menu')  {
+      return priceShare({isAnonymous, isPrice, path}) || {
         title: defalutTitle,
-        path: defalutPath,
+        path,
       };
     }
     this.props.thread.shareThread(threadId, this.props.index, this.props.search, this.props.topic);
     
-    return {
+    return  priceShare({isAnonymous, isPrice, path}) || {
       title: defalutTitle,
-      path: defalutPath,
+      path,
     };
   }
 

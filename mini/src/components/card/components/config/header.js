@@ -122,7 +122,7 @@ const handleDesc = (thread) => {
         positionLength = positionMaxLength;
     }
     // 处理发布时间宽度
-    const diffTimeLength = getByteLen(thread.diffTime) * descriptionFontSize;
+    const diffTimeLength = getByteLen(thread.diffTime.substr(0, 10)) * descriptionFontSize;
     let length = 8
     // 计算观看数量的间隔
     if(positionLength) {
@@ -143,7 +143,7 @@ const handleDesc = (thread) => {
     const descTexts = [
         // 时间，比如：40分钟前
         {
-            text: thread.diffTime,
+            text: thread.diffTime.substr(0, 10),
             color: '#8590A6',
             x: descriptionStartsX,
             y: descriptionY,
