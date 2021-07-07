@@ -37,6 +37,7 @@ class IndexH5Page extends React.Component {
     };
     this.tabsRef = createRef();
     this.headerRef = createRef(null);
+    this.isChange = true
   }
 
   setNavigationBarStyle = () => {
@@ -242,8 +243,20 @@ class IndexH5Page extends React.Component {
         <View style={{display: isClickTab ? 'none' : 'block'}}>
           {this.renderHeaderContent()}
 
-          <ThreadList data={pageData} isClickTab={isClickTab} wholePageIndex={currentPage - 1} />
-
+          {
+            !this.isChange ? (
+              <ThreadList data={pageData} isClickTab={isClickTab} wholePageIndex={currentPage - 1} />
+            ) : (
+              pageData?.map((item, index) => (
+                <ThreadContent
+                  key={`${item.threadId}-${item.updatedAt}`}
+                  showBottomStyle={index !== pageData.length - 1}
+                  data={item}
+                  className={styles.listItem}
+                />
+              ))
+            )
+          }
         </View>
 
         <FilterView
@@ -255,40 +268,6 @@ class IndexH5Page extends React.Component {
           permissions={user.threadExtendPermissions}
         />
       </BaseLayout>
-    //   <>
-    //     <VirtualList
-    //     ref={this.list}
-    //     data={pageData}
-    //     onRefresh={this.onRefresh}
-    //     requestError={threadError.isError}
-    //     errorText={threadError.errorText}
-    //     currentPage={currentPage}
-    //     totalPage={totalPage}
-    //     noMore={!isClickTab && currentPage >= totalPage}
-    //     onScroll={this.handleScroll}
-    //     curr='home'
-    //     onClickTabBar={this.handleClickTabBar}
-    //     isClickTab={isClickTab}
-    //   >
-    //     <HomeHeader ref={this.headerRef} />
-
-    //     <IndexTabs onClickTab={this.onClickTab} searchClick={this.searchClick} />
-        
-    //     <View style={{display: isClickTab ? 'none' : 'block'}}>
-    //       {this.renderHeaderContent()}
-    //     </View>
-    //   </VirtualList>
-      
-      
-    //   <FilterView
-    //     data={currentCategories}
-    //     current={filter}
-    //     onCancel={this.onClose}
-    //     visible={this.state.visible}
-    //     onSubmit={this.changeFilter}
-    //     permissions={user.threadExtendPermissions}
-    //   />
-    // </>
     );
   }
 }
