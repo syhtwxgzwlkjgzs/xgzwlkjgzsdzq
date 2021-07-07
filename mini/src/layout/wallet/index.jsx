@@ -362,14 +362,6 @@ class WalletH5Page extends React.Component {
     );
   };
 
-  renderFooter = () => {
-    <View className={layout.footer}>
-      <Button className={layout.button} onClick={this.toWithrawal} type="primary">
-        提现
-      </Button>
-    </View>;
-  };
-
   render() {
     const tabList = [
       [
@@ -419,7 +411,6 @@ class WalletH5Page extends React.Component {
           noMore={this.state.page > this.state.totalPage}
           onRefresh={this.loadMore}
           className={layout.container}
-          footer={this.renderFooter()}
           immediateCheck
           showHeader={false}
           showLoadingInCenter={!this.getWalletList().length}
@@ -432,7 +423,6 @@ class WalletH5Page extends React.Component {
               onFrozenAmountClick={() => this.onFrozenAmountClick()}
             ></WalletInfo>
           </View>
-
           <View className={layout.choiceTime}>
             <View className={layout.status} onClick={this.handleTypeSelectorClick}>
               <Text className={layout.text}>{this.renderSelectedType()}</Text>
@@ -445,7 +435,6 @@ class WalletH5Page extends React.Component {
               <Icon name="UnderOutlined" size={12} className={layout.icon}></Icon>
             </View>
           </View>
-
           {/* 列表展示区 */}
           <View className={layout.tabs}>
             <Tabs scrollable={true} className={layout.tabList} onActive={this.onTabActive}>
@@ -471,7 +460,11 @@ class WalletH5Page extends React.Component {
                 />
               ))}
           </View>
-
+          <View className={layout.footer}>
+            <Button className={layout.button} onClick={this.toWithrawal} type="primary">
+              提现
+            </Button>
+          </View>
           {/* 条件过滤 */}
           <FilterView
             value={this.state.selectType}
