@@ -226,7 +226,6 @@ export default class index extends Component {
 
   // 处理图片加载错误
   handleImgFetchingError = () => {
-    console.log('image error');
     this.setState({
       imageShow: false,
     });
@@ -410,7 +409,7 @@ export default class index extends Component {
           <div>
             <div className={styles.payTab_top}>
               <Radio.Group value={this.props.payBox.payWay} onChange={this.handleChangePaymentType}>
-                {this.props.site.isWechatPayOpen && (
+                {this.props.site.isWechatPayOpen && this.props.site.wechatEnv !== 'none' && (
                   <Radio name={'weixin'} className={`${styles.payTab} `}>
                     微信支付
                   </Radio>
