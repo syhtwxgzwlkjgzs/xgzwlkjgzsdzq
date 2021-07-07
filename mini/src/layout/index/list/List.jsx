@@ -6,6 +6,7 @@ import Taro from '@tarojs/taro';
 import { inject, observer, Observer } from 'mobx-react';
 
 @inject('index')
+@inject('baselayout')
 @observer
 export default class List extends React.Component {
     constructor(props) {
@@ -29,6 +30,12 @@ export default class List extends React.Component {
 
         const observerObj = Taro.createIntersectionObserver().relativeToViewport({ top: 2 * windowHeight, bottom: 2 * windowHeight });
         observerObj.observe(`#virtual-list-${pageIndex}`, (res) => {
+            // 视频全屏判断
+            const { baselayout } = that.props
+            if (baselayout.videoFullScreenStatus === "inFullScreen") {
+                return
+            }
+
             const isHidden = res.intersectionRatio <= 0
 
             const { displays } = that.state
@@ -40,6 +47,7 @@ export default class List extends React.Component {
                     displays: newDisplays
                 })
             }
+            
         });
 
         this.observerObjs[pageIndex] = observerObj

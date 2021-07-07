@@ -11,7 +11,7 @@ import ImageDisplay from './image-display';
 import Packet from './packet';
 import styles from './index.module.scss';
 import { View, Text } from '@tarojs/components';
-import { getElementRect, randomStr } from './utils'
+import { getElementRect, randomStr, noop } from './utils'
 
 /**
  * 帖子内容组件
@@ -23,10 +23,16 @@ import { getElementRect, randomStr } from './utils'
 const Index = (props) => {
   const { title = '', payType, price, paid, attachmentPrice } = props.data || {};
   const needPay = useMemo(() => payType !== 0 && !paid, [paid, payType]);
-  const { onClick, onPay, relativeToViewport, changeHeight } = props;
+  const { 
+    onClick, 
+    onPay, 
+    relativeToViewport = true, 
+    changeHeight = noop, 
+    useShowMore = true, 
+    setUseShowMore = noop 
+  } = props;
 
   const wrapperId= useRef(`thread-wrapper-${randomStr()}`)
-  const [wrapperSty, setWrapperSty] = useState({})
 
   // 标题显示37个字符
   const newTitle = useMemo(() => {
@@ -35,16 +41,6 @@ const Index = (props) => {
     }
     return title;
   }, [title]);
-
-  // useEffect(() => {
-  //   if (relativeToViewport) {
-  //     setWrapperSty({})
-  //   } else {
-  //     getElementRect(wrapperId.current).then(res => {
-  //       setWrapperSty({ height: `${res?.height}px` })
-  //     })
-  //   }
-  // }, [relativeToViewport])
 
   // 帖子属性内容
   const renderThreadContent = ({ content: data, attachmentPrice, payType, paid } = {}) => {
@@ -68,6 +64,8 @@ const Index = (props) => {
             onRedirectToDetail={onClick} 
             relativeToViewport={relativeToViewport}
             changeHeight={changeHeight}
+            useShowMore={useShowMore}
+            setUseShowMore={setUseShowMore}
           />
         )}
         {videoData && (

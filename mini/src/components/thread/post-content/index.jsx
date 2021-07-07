@@ -39,6 +39,7 @@ const Index = ({
   customHoverBg = false,
   relativeToViewport = true,
   changeHeight = noop,
+  setUseShowMore = noop,
   ...props
 }) => {
   // 内容是否超出屏幕高度
@@ -46,8 +47,6 @@ const Index = ({
   const [cutContentForDisplay, setCutContentForDisplay] = useState("");
   const [showMore, setHiddenMore] = useState(!useShowMore);
   const contentWrapperRef = useRef(null);
-  const [richTextH, setRichTextH] = useState({})
-  const richTextId= useRef(`rich-text-${randomStr()}`)
 
   const texts = {
     showMore: '查看更多',
@@ -71,6 +70,7 @@ const Index = ({
       // 内容过长直接跳转到详情页面
       onRedirectToDetail && onRedirectToDetail();
     } else {
+      setUseShowMore()
       setHiddenMore(true);
     }
   }, [contentTooLong]);

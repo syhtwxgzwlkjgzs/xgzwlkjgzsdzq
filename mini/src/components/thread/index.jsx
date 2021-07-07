@@ -23,21 +23,17 @@ import { getElementRect, randomStr } from './utils'
 @inject('topic')
 @observer
 class Index extends React.Component {
-    
-
+  
     constructor(props) {
       super(props);
 
       this.state = {
         isSendingLike: false,
-        minHeight: 0
+        minHeight: 0,
+        useShowMore: true
       }
 
       this.threadStyleId = `thread-style-id-${randomStr()}`
-
-      this.textH = 0
-
-      this.videoH = 0
   }
 
     componentDidMount() {
@@ -47,39 +43,11 @@ class Index extends React.Component {
       this.setState({ minHeight: height })
     }
 
+    setUseShowMore = () => {
+      this.setState({ useShowMore: false })
+    }
+
     changeHeight = () => {
-      // if (!height || height === 'NaN') {
-      //   return
-      // }
-
-      // const minHeight = getImmutableTypeHeight(this.props.data)
-      // let newHeight = Number(height)
-      // let h = 0
-
-      // if (type === 'text') {
-      //   this.textH = newHeight
-        
-      //   if (this.videoH !== 0) {
-      //     h = this.videoH - 193
-      //   }
-        
-      // }
-
-      // if (type === 'video') {
-      //   if (height && height !== 'NaN') {
-      //     this.videoH = newHeight;
-      //   }
-        
-
-      //   if (this.textH !== 0) {
-      //     h = this.textH
-      //   }
-
-      //   h -= 193
-      // }
-
-      // this.setState({ minHeight: minHeight + newHeight + h})
-
       getElementRect(this.threadStyleId).then(res => {
         this.setState({ minHeight: res?.height })
       })
@@ -244,7 +212,7 @@ class Index extends React.Component {
       const { isEssence, isPrice, isRedPack, isReward } = displayTag;
       const {getShareData, getShareContent} = this.props.user
       const {shareNickname, shareAvatar, shareThreadid, shareContent} = this.props.user
-      const { minHeight } = this.state
+      const { minHeight, useShowMore } = this.state
 
       // console.log(`thread data`, data)
       return (
@@ -272,7 +240,17 @@ class Index extends React.Component {
                 {isShowIcon && <View className={styles.headerIcon} onClick={unifyOnClick || this.onClickHeaderIcon}><Icon name='CollectOutlinedBig' className={styles.collectIcon}></Icon></View>}
             </View>
 
-            <ThreadCenterView text={text} data={data} onClick={unifyOnClick || this.onClick} onPay={unifyOnClick || this.onPay} platform={platform} relativeToViewport={relativeToViewport} changeHeight={this.changeHeight} />
+            <ThreadCenterView 
+              text={text} 
+              data={data} 
+              onClick={unifyOnClick || this.onClick} 
+              onPay={unifyOnClick || this.onPay} 
+              platform={platform} 
+              relativeToViewport={relativeToViewport} 
+              changeHeight={this.changeHeight}
+              useShowMore={useShowMore}
+              setUseShowMore={this.setUseShowMore}
+            />
 
             <BottomEvent
               userImgs={likeReward.users}
