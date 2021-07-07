@@ -108,6 +108,7 @@ const DialogBox = (props, ref) => {
         visible={previewerVisibled}
         onClose={() => {
           setPreviewerVisibled(false);
+          document.body.className = '';
         }}
         imgUrls={imagePreviewerUrls}
         currentUrl={defaultImg}
