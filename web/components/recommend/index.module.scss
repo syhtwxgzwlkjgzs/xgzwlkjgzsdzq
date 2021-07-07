@@ -52,6 +52,12 @@
   //   }
   // }
 }
+@include heightMedia(625px) {
+  .recommendBottomView {
+    height: auto !important;
+    max-height: 400px;
+  }
+}
 
 .recommendBox {
   cursor: pointer;
