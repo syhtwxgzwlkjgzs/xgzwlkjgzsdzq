@@ -40,11 +40,18 @@ const Index = (props) => {
             const isHidden = res.intersectionRatio <= 0
             setFixedTab(isHidden)
         });
-      }
+    }
 
+    const handleClickTab = (e) => {
+      if (!fixedTab) {
+        return
+      }
+      const { onClickTab } = this.props
+      onClickTab(e)
+    }
 
     const renderTabs = () => {
-        const { index, site, onClickTab, searchClick } = props;
+        const { index, onClickTab, searchClick } = props;
 
         const { categories = [], activeCategoryId, currentCategories } = index;
     
@@ -80,7 +87,7 @@ const Index = (props) => {
       };
     
       const renderFixedTabs = () => {
-        const { index, site, onClickTab, searchClick } = props;
+        const { index, site, searchClick } = props;
         const { categories = [], activeCategoryId, currentCategories } = index;
     
         return (
@@ -94,7 +101,7 @@ const Index = (props) => {
                   className={styles.tabsBox}
                   scrollable
                   type="primary"
-                  onActive={onClickTab}
+                  onActive={handleClickTab}
                   activeId={activeCategoryId}
                   external={
                     <View onClick={searchClick} className={styles.tabIcon}>
