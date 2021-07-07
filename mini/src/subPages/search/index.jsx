@@ -10,6 +10,7 @@ import { priceShare } from '@common/utils/priceShare';
 @inject('topic')
 @inject('index')
 @inject('user')
+@inject('site')
 @observer
 @withShare({
   needShareline: false
@@ -25,8 +26,12 @@ class Index extends React.Component {
     await search.getSearchData();
   }
   getShareData (data) {
+    const { site } = this.props
+    const siteName = site.webConfig?.setSite?.siteName || ''
     if(data.from === 'menu') {
       return {
+        title: `${siteName} - 在这里，发现更多热门内容`,
+        path: '/subPages/search/index'
       }
     }
     const { title, path, comeFrom, threadId, isAnonymous, isPrice} = data
