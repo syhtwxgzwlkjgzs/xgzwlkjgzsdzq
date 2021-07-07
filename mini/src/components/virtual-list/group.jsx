@@ -10,6 +10,8 @@ import { throttle } from '@common/utils/throttle-debounce.js';
 import BottomNavBar from '@components/bottom-nav-bar'
 import { useMemo } from 'react';
 import List from './List';
+import { inject, observer, Observer } from 'mobx-react';
+
 
 /**
  * 列表组件，集成上拉刷新能力
@@ -37,7 +39,8 @@ const VirtualList = forwardRef(({
   currentPage,
   curr,
   onClickTabBar,
-  isClickTab
+  isClickTab,
+  index
 }, ref) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -248,7 +251,9 @@ const VirtualList = forwardRef(({
   }
 
   return (
-    <ScrollView
+    <Observer>{
+      () => (
+<ScrollView
       scrollY
       className={`${styles.container} ${className} ${showLoadingInCenter ? styles.wrapperH5Center : ''}`}
       onScrollToLower={onTouchMove}
@@ -274,6 +279,10 @@ const VirtualList = forwardRef(({
 
         <BottomNavBar onClick={onClickTabBar} placeholder curr={curr} />
     </ScrollView>
+      )
+      }
+    
+    </Observer>
   );
 });
-export default React.memo(VirtualList);
+export default inject('index')(observer(VirtualList));

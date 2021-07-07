@@ -1,0 +1,123 @@
+import React from 'react';
+import { useState } from 'react';
+import { inject, observer } from 'mobx-react';
+import Icon from '@discuzq/design/dist/components/icon/index';
+import Tabs from '@discuzq/design/dist/components/tabs/index';
+import { View } from '@tarojs/components'
+import { getWindowHeight, randomStr, handleAttachmentData } from '@components/thread/utils'
+import { useRef } from 'react';
+import styles from '../../index.module.scss';
+import NavBar from '../nav-bar';
+import { useEffect } from 'react';
+import Taro from '@tarojs/taro';
+
+
+const Index = (props) => {
+    const [fixedTab, setFixedTab] = useState(false)
+    const tabsId = useRef(`tabs-id-${randomStr()}`)
+    const observerObj = useRef(null)
+
+    useEffect(() => {
+        const { currentCategories = [] } = props.index || {};
+
+        if (currentCategories?.length && !observerObj.current) {
+            setTimeout(() => {
+                observePage()
+            }, 10);
+        }
+
+        return () => {
+            if (observerObj.current) {
+                observerObj.current.disconnect(); // 关闭观察器
+            }
+        }
+        
+    }, [props.index?.currentCategories])
+
+    const observePage = () => {
+        observerObj.current = Taro.createIntersectionObserver().relativeToViewport({ top: 100 });
+        observerObj.current.observe(`#${tabsId.current}`, (res) => {
+            const isHidden = res.intersectionRatio <= 0
+            setFixedTab(isHidden)
+        });
+      }
+
+
+    const renderTabs = () => {
+        const { index, site, onClickTab, searchClick } = props;
+
+        const { categories = [], activeCategoryId, currentCategories } = index;
+    
+        return (
+          <>
+            {categories?.length > 0 && (
+              <>
+              <View
+                id={tabsId.current}
+                className={styles.homeContent}
+              >
+                <Tabs
+                  className={styles.tabsBox}
+                  scrollable
+                  type="primary"
+                  onActive={onClickTab}
+                  activeId={activeCategoryId}
+                  external={
+                    <View onClick={searchClick} className={styles.tabIcon}>
+                      <Icon name="SecondaryMenuOutlined" className={styles.buttonIcon} size={16} />
+                    </View>
+                  }
+                >
+                  {currentCategories?.map((item, index) => (
+                    <Tabs.TabPanel key={index} id={item.pid} label={item.name} />
+                  ))}
+                </Tabs>
+              </View>
+              </>
+            )}
+          </>
+        );
+      };
+    
+      const renderFixedTabs = () => {
+        const { index, site, onClickTab, searchClick } = props;
+        const { categories = [], activeCategoryId, currentCategories } = index;
+    
+        return (
+          <View className={styles.fixed} style={{ opacity: !fixedTab ? '0' : '1' }}>
+            <NavBar title={site?.webConfig?.setSite?.siteName || ''} />
+            {categories?.length > 0 && (
+              <View
+                className={`${styles.homeContent}`}
+              >
+                <Tabs
+                  className={styles.tabsBox}
+                  scrollable
+                  type="primary"
+                  onActive={onClickTab}
+                  activeId={activeCategoryId}
+                  external={
+                    <View onClick={searchClick} className={styles.tabIcon}>
+                      <Icon name="SecondaryMenuOutlined" className={styles.buttonIcon} size={16} />
+                    </View>
+                  }
+                >
+                  {currentCategories?.map((item, index) => (
+                    <Tabs.TabPanel key={index} id={item.pid} label={item.name} />
+                  ))}
+                </Tabs>
+              </View>
+            )}
+          </View>
+        );
+      }
+
+    return (
+        <View>
+            { renderTabs() }
+            { renderFixedTabs() }
+        </View>
+    )
+}
+
+export default inject('site', 'index')(observer(Index))
