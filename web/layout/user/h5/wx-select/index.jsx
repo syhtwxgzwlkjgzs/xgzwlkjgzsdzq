@@ -19,7 +19,7 @@ import { isExtFieldsOpen } from '@common/store/login/util';
 @observer
 class WXSelectH5Page extends React.Component {
   render() {
-    const { router, invite } = this.props;
+    const { router, invite, commonLogin } = this.props;
     const { sessionToken, nickname, avatarUrl } = router.query;
     return (
       <div className={layout.container}>
@@ -51,6 +51,10 @@ class WXSelectH5Page extends React.Component {
             onClick={async () => {
               const inviteCode = invite.getInviteCode(router);
               try {
+                if (!commonLogin.loginLoading) {
+                  return;
+                }
+                commonLogin.loginLoading = false;
                 const res = await usernameAutoBind({
                   timeout: 10000,
                   params: {
@@ -59,6 +63,7 @@ class WXSelectH5Page extends React.Component {
                     inviteCode,
                   },
                 });
+                commonLogin.loginLoading = true;
                 checkUserStatus(res);
                 if (res.code === 0) {
                   const accessToken = get(res, 'data.accessToken', '');
@@ -82,6 +87,7 @@ class WXSelectH5Page extends React.Component {
                   Message: res.msg,
                 };
               } catch (error) {
+                commonLogin.loginLoading = true;
                 // 跳转补充信息页
                 if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
                   if (isExtFieldsOpen(this.props.site)) {
