@@ -214,7 +214,6 @@ class Index extends React.Component {
       const {shareNickname, shareAvatar, shareThreadid, shareContent} = this.props.user
       const { minHeight, useShowMore } = this.state
 
-      // console.log(`thread data`, data)
       return (
         <View className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`} style={{ minHeight: `${minHeight}px` }} id={this.threadStyleId}>
           {

@@ -28,7 +28,7 @@ export default class List extends React.Component {
 
         const that = this
 
-        const observerObj = Taro.createIntersectionObserver().relativeToViewport({ top: 2 * windowHeight, bottom: 2 * windowHeight });
+        const observerObj = Taro.createIntersectionObserver().relativeToViewport({ top: 3 * windowHeight, bottom: 3 * windowHeight });
         observerObj.observe(`#virtual-list-${pageIndex}`, (res) => {
             // 视频全屏判断
             const { baselayout } = that.props
@@ -53,29 +53,13 @@ export default class List extends React.Component {
         this.observerObjs[pageIndex] = observerObj
     }
 
-    resetData = () => {
-        this.observerObjs = []
-        this.setState({ displays: [] })
-    }
-
-    // componentDidUpdate(prevProps, prevState, snapshot){
-    //     const { dataSource: oldDataSource } = prevProps
-    //     const { dataSource, wholePageIndex } = this.props
-    //     const { displays } = this.state
-
-    //     if (dataSource.length !== oldDataSource.length && dataSource.length > displays.length) {
-    //         setTimeout(() => {
-    //             this.observePage(wholePageIndex)
-    //         }, 10)
-    //     }
-    // }
-
     componentWillUnmount() {
         this.observerObjs.forEach(observer => {
             observer?.disconnect()
         })
 
-        this.resetData()
+        this.observerObjs = []
+        this.setState({ displays: [] })
     }
 
     render () {
