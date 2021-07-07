@@ -23,7 +23,7 @@ const DialogBox = (props, ref) => {
     if (isImageLoading) {
       [width, height] = getMessageImageSize(imageWidth, imageHeight, isPC);
     } else {
-      const size = imageUrl.match(/\?width=(\d+)&height=(\d+)$/);
+      const size = imageUrl.match(/width=(\d+)&height=(\d+)$/);
       if (size) {
         [width, height] = getMessageImageSize(size[1], size[2], isPC);
       }
