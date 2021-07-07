@@ -163,12 +163,12 @@ const Index = ({
       return null;
     }, [imgData, firstImgData]);
 
-  const sty = useMemo(() => {
-    return { display: relativeToViewport ? 'block' : 'none' }
-  }, [relativeToViewport])
+  // const sty = useMemo(() => {
+  //   return { display: relativeToViewport ? 'block' : 'none' }
+  // }, [relativeToViewport])
 
   return (
-    <View className={`${styles.container}`} style={sty}>
+    <View className={`${styles.container}`}>
       {ImageView}
       {visible && (
         <ImagePreviewer

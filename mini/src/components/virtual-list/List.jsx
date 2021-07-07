@@ -54,7 +54,7 @@ export default class List extends React.Component {
                     displays: newDisplays
                 })
 
-                that.handleHeight(pageIndex, isHidden, that)
+                // that.handleHeight(pageIndex, isHidden, that)
             }
         });
     }
@@ -66,7 +66,7 @@ export default class List extends React.Component {
 
         if (dataSource.length !== oldDataSource.length && dataSource.length > displays.length) {
             setTimeout(() => {
-                this.handleHeight()
+                // this.handleHeight()
                 this.observePage(wholePageIndex)
             }, 10)
         }
@@ -81,7 +81,7 @@ export default class List extends React.Component {
                 {
                     dataSource?.map((item, index) => {
                         return (
-                        <View id={`virtual-list-${index}`} style={heights[index] || {}}>
+                        <View id={`virtual-list-${index}`}>
                         {
                             item?.map((subItem, subIndex) => (<Thread data={subItem} key={subIndex} relativeToViewport={displays[index]} />))
                         }

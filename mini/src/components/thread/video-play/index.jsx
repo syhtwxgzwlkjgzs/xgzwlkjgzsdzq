@@ -31,6 +31,7 @@ const Index = ({
   money = 0,
   status = 0,
   onPay = noop,
+  changeHeight = noop,
   baselayout = {},
   v_width = null,
   v_height = null,
@@ -92,6 +93,8 @@ const Index = ({
       });
       setWidth(width);
       setHeight(height);
+
+      changeHeight({ type: 'video', height })
     })
   }, []);
 

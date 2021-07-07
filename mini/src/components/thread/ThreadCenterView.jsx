@@ -24,7 +24,7 @@ import placehold from '../../public/dzq-img/placehold.jpg'
 const Index = (props) => {
   const { title = '', payType, price, paid, attachmentPrice } = props.data || {};
   const needPay = useMemo(() => payType !== 0 && !paid, [paid, payType]);
-  const { onClick, onPay, relativeToViewport } = props;
+  const { onClick, onPay, relativeToViewport, changeHeight } = props;
 
   const wrapperId= useRef(`thread-wrapper-${randomStr()}`)
   const [wrapperSty, setWrapperSty] = useState({})
@@ -84,6 +84,7 @@ const Index = (props) => {
             onPay={onPay} 
             onRedirectToDetail={onClick} 
             relativeToViewport={relativeToViewport}
+            changeHeight={changeHeight}
           />
         )}
         {videoData && (
@@ -97,6 +98,7 @@ const Index = (props) => {
               isPay={needPay}
               status={videoData.status}
               relativeToViewport={relativeToViewport}
+              changeHeight={changeHeight}
             />
           </WrapperView>
         )}

@@ -38,6 +38,7 @@ const Index = ({
   loading,
   customHoverBg = false,
   relativeToViewport = true,
+  changeHeight = noop,
   ...props
 }) => {
   // 内容是否超出屏幕高度
@@ -117,13 +118,12 @@ const Index = ({
 
   useEffect(() => {
     if (relativeToViewport) {
-      setRichTextH({})
-    } else {
       getElementRect(richTextId.current).then(res => {
         setRichTextH({ height: `${res?.height}px` })
+        changeHeight({ type: 'text', height: res?.height })
       })
     }
-  }, [relativeToViewport])
+  }, [showMore, relativeToViewport])
 
   return (
     <View id={richTextId.current} style={richTextH} className={styles.container} {...props}>
