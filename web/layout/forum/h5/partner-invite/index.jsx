@@ -181,7 +181,7 @@ class PartnerInviteH5Page extends React.Component {
           {siteMode === 'pay' ? (
             <div className={layout.bottom_title}>
               { user.isLogin() ? <></> : <span>新用户加入 <span className={layout.tips}>¥{sitePrice}</span></span> }
-              <span className={!user.isLogin() && siteExpire ? layout.expire : ''}>有效期{ user.isLogin() ? '：' : ' '}<span className={layout.tips}>{siteExpire ? `${siteExpire}天` : '永久'}</span></span>
+              <span className={!user.isLogin() ? layout.expire : ''}>有效期{ user.isLogin() ? '：' : ' '}<span className={layout.tips}>{siteExpire ? `${siteExpire}天` : '永久'}</span></span>
             </div>
           ) : <></>}
         </div>
@@ -278,7 +278,7 @@ class PartnerInviteH5Page extends React.Component {
                   {siteMode === 'pay' ? (
                     <div className={layout.bottom_title}>
                       { user.isLogin() ? <></> : <span>新用户加入 <span className={layout.tips}>¥{sitePrice}</span></span> }
-                      <span className={!user.isLogin() && siteExpire ? layout.expire : ''}>有效期{ user.isLogin() ? '：' : ' '}<span className={layout.tips}>{siteExpire ? `${siteExpire}天` : '永久'}</span></span>
+                      <span className={!user.isLogin() ? layout.expire : ''}>有效期{ user.isLogin() ? '：' : ' '}<span className={layout.tips}>{siteExpire ? `${siteExpire}天` : '永久'}</span></span>
                     </div>
                   ) : <></>}
                   <Button className={layout.bottom_button} onClick={this.handleJoinSite}>
