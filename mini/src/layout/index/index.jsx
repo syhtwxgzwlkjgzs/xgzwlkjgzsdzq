@@ -37,7 +37,7 @@ class IndexH5Page extends React.Component {
     };
     this.tabsRef = createRef();
     this.headerRef = createRef(null);
-    this.isChange = true
+    this.isChange = false
   }
 
   setNavigationBarStyle = () => {

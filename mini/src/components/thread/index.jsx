@@ -47,7 +47,7 @@ class Index extends React.Component {
       this.setState({ minHeight: height })
     }
 
-    changeHeight = ({ type, height }) => {
+    changeHeight = () => {
       // if (!height || height === 'NaN') {
       //   return
       // }
