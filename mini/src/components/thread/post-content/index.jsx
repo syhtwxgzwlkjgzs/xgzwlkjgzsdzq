@@ -118,15 +118,12 @@ const Index = ({
 
   useEffect(() => {
     if (relativeToViewport) {
-      getElementRect(richTextId.current).then(res => {
-        setRichTextH({ height: `${res?.height}px` })
-        changeHeight({ type: 'text', height: res?.height })
-      })
+      changeHeight()
     }
   }, [showMore, relativeToViewport])
 
   return (
-    <View id={richTextId.current} style={richTextH} className={styles.container} {...props}>
+    <View className={styles.container} {...props}>
       <View
         ref={contentWrapperRef}
         className={`${styles.contentWrapper} ${showHideCover ? styles.hideCover : ''} ${customHoverBg ? styles.bg : ''}`}

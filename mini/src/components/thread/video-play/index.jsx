@@ -81,21 +81,23 @@ const Index = ({
   }
 
   useEffect(() => {
-    getElementRect(videoId.current).then(res => {
-      const info = Taro.getSystemInfoSync();
-
-      const { width, height } = calcVideoSize({
-        parentWidth: res?.width || 343,
-        v_width,
-        v_height,
-        viewHeight: info.windowHeight
-      });
-      setWidth(width);
-      setHeight(height);
-
-      changeHeight({ type: 'video', height })
-    })
-  }, []);
+    if (relativeToViewport) {
+      getElementRect(videoId.current).then(res => {
+        const info = Taro.getSystemInfoSync();
+  
+        const { width, height } = calcVideoSize({
+          parentWidth: res?.width || 343,
+          v_width,
+          v_height,
+          viewHeight: info.windowHeight
+        });
+        setWidth(width);
+        setHeight(height);
+  
+        changeHeight()
+      })
+    }
+  }, [relativeToViewport]);
 
   return (
     <View id={videoId.current} className={styles.container} style={{ 
