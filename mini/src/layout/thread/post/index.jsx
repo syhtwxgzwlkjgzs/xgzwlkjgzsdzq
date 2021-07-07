@@ -49,11 +49,12 @@ class Index extends Component {
 
   componentWillMount() { }
 
+
   async componentDidMount() {
     this.getNavHeight();
     this.redirectToHome();
     await this.fetchCategories(); // 请求分类
-    const { params } = getCurrentInstance().router;
+    const { params } = this.inst.router;
     const id = parseInt(params.id);
     if (id) { // 请求主题
       this.setState({ threadId: id })
@@ -82,6 +83,8 @@ class Index extends Component {
     this.props.thread.reset();
   }
 
+  inst = getCurrentInstance();
+
   getNavHeight() {
     const { statusBarHeight } = Taro.getSystemInfoSync();
     const menubtnRect = Taro.getMenuButtonBoundingClientRect();
@@ -107,7 +110,7 @@ class Index extends Component {
 
   async fetchCategories() { // 若当前store内分类列表数据为空，则主动请求分类
     const { readPostCategory } = this.props.threadPost;
-    const { params } = getCurrentInstance().router;
+    const { params } = this.inst.router;
     // const categories = this.props.threadPost?.getCurrentCategories();
     await readPostCategory(params.id);
   }
@@ -416,7 +419,9 @@ class Index extends Component {
   handleCaptchaResult = (result) => {
     this.ticket = result.ticket;
     this.randstr = result.randstr;
-    this.handleSubmit();
+    const { router } = this.inst;
+    // 当前页面才进行提交操作，避免其他页面引起的多余的提交
+    if (router.path.indexOf('subPages/thread/post/index') > -1) this.handleSubmit();
   }
 
   // 验证码点击关闭的回调
@@ -581,7 +586,7 @@ class Index extends Component {
 
   setIndexPageData = () => {
     const { threadId, data } = this.state;
-    const { params } = getCurrentInstance().router;
+    const { params } = this.inst.router;
     // 更新帖子到首页列表
     if (params && params.id) {
       this.props.index.updateAssignThreadAllData(threadId, data);
