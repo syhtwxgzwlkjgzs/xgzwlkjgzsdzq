@@ -234,7 +234,7 @@ const Index = ({ message, user, site: { webConfig, envConfig }, dialogId: _dialo
 
       let [width, height] = [150, 150]; // 兼容没有返回图片尺寸的旧图片
       if (item.imageUrl) {
-        const size = item.imageUrl.match(/\?width=(\d+)&height=(\d+)$/);
+        const size = item.imageUrl.match(/width=(\d+)&height=(\d+)$/);
         if (size) {
           [width, height] = getMessageImageSize(size[1], size[2]); // 计算图片显示尺寸
         } else if (item.isImageLoading) {
