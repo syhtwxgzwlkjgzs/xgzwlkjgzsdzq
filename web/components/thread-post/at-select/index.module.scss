@@ -45,7 +45,14 @@
       background: $body-bg-color;
       border-radius: $border-radius-small;
       box-sizing: border-box;
-
+      :global(.dzq-input__inner) {
+        font-size: 14px;
+        line-height: 24px;
+        color: #0b0b37;
+        &::placeholder {
+          color: $text-color-placeholder;
+        }
+      }
       .icon-box {
         flex: 0 0 32px;
         height: 32px;
