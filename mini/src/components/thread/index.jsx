@@ -165,7 +165,9 @@ class Index extends React.Component {
           this.props.search.updatePayThreadInfo(thread?.threadId, data)
           this.props.topic.updatePayThreadInfo(thread?.threadId, data)
           this.props.user.updatePayThreadInfo(thread?.threadId, data)
-          this.props.dispatch(thread?.threadId, data);
+          if(typeof this.props.dispatch === "function") {
+            this.props.dispatch(thread?.threadId, data);
+          }
         }
       }
     }, 1000);
@@ -244,6 +246,7 @@ class Index extends React.Component {
       const {shareNickname, shareAvatar, shareThreadid, shareContent} = this.props.user
       const { minHeight } = this.state
 
+      // console.log(`thread data`, data)
       return (
         <View className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`} style={{ minHeight: `${minHeight}px` }} id={this.threadStyleId}>
           {
