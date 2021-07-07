@@ -64,9 +64,8 @@ export default class List extends React.Component {
     }
 
     render () {
-        const { dataSource } = this.props
+        const { dataSource, dispatch } = this.props
         const { displays } = this.state
-
         return (
             <>
                 {
@@ -74,7 +73,7 @@ export default class List extends React.Component {
                         return (
                         <View id={`virtual-list-${index}`}>
                         {
-                            item?.map((subItem, subIndex) => (<Thread data={subItem} key={subIndex} relativeToViewport={displays[index]} />))
+                            item?.map((subItem, subIndex) => (<Thread data={subItem} key={subIndex} relativeToViewport={displays[index]} dispatch={dispatch}/>))
                         }
                         </View>
                     )})

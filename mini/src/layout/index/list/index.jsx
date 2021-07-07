@@ -47,8 +47,19 @@ const VirtualList = ({
         setDataSource([])
     }
 
-  const dispatch = (listData) => {
-    setDataSource(listData)
+  const dispatch = (threadId, updatedThreadData) => {
+    if(!threadId || !updatedThreadData) return;
+
+    let newArr = [ ...dataSource ];
+    newArr.forEach((subArr) => {
+      for(let i = 0; i < subArr.length; i++) {
+        if(subArr[i].threadId === threadId) {
+          subArr[i] = updatedThreadData;
+          break;
+        }
+      }
+    });
+    setDataSource(newArr);
   }
 
   return (

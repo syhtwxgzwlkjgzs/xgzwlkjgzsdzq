@@ -165,6 +165,7 @@ class Index extends React.Component {
           this.props.search.updatePayThreadInfo(thread?.threadId, data)
           this.props.topic.updatePayThreadInfo(thread?.threadId, data)
           this.props.user.updatePayThreadInfo(thread?.threadId, data)
+          this.props.dispatch(thread?.threadId, data);
         }
       }
     }, 1000);
