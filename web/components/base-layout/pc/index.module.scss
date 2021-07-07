@@ -208,10 +208,22 @@
 
 @mixin common() {
   .qrcode {
-    padding: $padding-2n $padding-4n;
-
+    padding: $padding-10 $padding-2n;
+    >div {
+      &:first-child {
+        height: 68px;
+        margin-right: $margin-10;
+      }
+      canvas,
+      img {
+        width: 68px !important;
+      }
+    }
     p {
       font-size: $font-size-primary;
+      &:last-child {
+        margin-top: $margin-1n;
+      }
     }
   }
 
