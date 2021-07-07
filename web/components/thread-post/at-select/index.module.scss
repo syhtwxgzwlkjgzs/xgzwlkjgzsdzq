@@ -46,9 +46,9 @@
       border-radius: $border-radius-small;
       box-sizing: border-box;
       :global(.dzq-input__inner) {
-        font-size: 14px;
-        line-height: 24px;
-        color: #0b0b37;
+        font-size: var(--font-size-primary);
+        line-height: var($font-line-height-base);
+        color: var(--color-text-primary);
         &::placeholder {
           color: $text-color-placeholder;
         }
