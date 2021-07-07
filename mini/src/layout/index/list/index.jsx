@@ -18,6 +18,7 @@ const VirtualList = ({
 }) => {
   const [dataSource, setDataSource] = useState([]);
   const windowHeight = useRef(null)
+  const listRef = useRef(null)
 
   // 处理分组数据
   useEffect(() => {
@@ -34,6 +35,19 @@ const VirtualList = ({
       }
     
   }, [data?.length])
+
+//   通知子组件去监听
+  useEffect(() => {
+    if (dataSource?.length && listRef?.current) {
+        const length = dataSource.length - 1
+        const { displays } = listRef.current.state
+        if (dataSource?.length > displays?.length) {
+            setTimeout(() => {
+                listRef?.current?.observePage(length)
+            }, 10);
+        }
+    }
+  }, [dataSource, listRef?.current])
 
   // 获取屏幕高度
   useEffect(() => {
@@ -63,12 +77,19 @@ const VirtualList = ({
   }
 
   return (
-        <List 
-        dataSource={dataSource} 
-        wholePageIndex={wholePageIndex} 
-        windowHeight={windowHeight.current} 
-        dispatch={dispatch}
-        />
+      <>
+        {
+            !isClickTab && <List 
+                ref={(e) => { listRef.current = e }}
+                dataSource={dataSource} 
+                wholePageIndex={wholePageIndex} 
+                windowHeight={windowHeight.current} 
+                dispatch={dispatch}
+                isClickTab={isClickTab}
+            />
+        }
+      </>
+    
   );
 }
 export default VirtualList;

@@ -45,22 +45,29 @@ export default class List extends React.Component {
         this.observerObjs[pageIndex] = observerObj
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot){
-        const { dataSource: oldDataSource } = prevProps
-        const { dataSource, wholePageIndex } = this.props
-        const { displays } = this.state
-
-        if (dataSource.length !== oldDataSource.length && dataSource.length > displays.length) {
-            setTimeout(() => {
-                this.observePage(wholePageIndex)
-            }, 10)
-        }
+    resetData = () => {
+        this.observerObjs = []
+        this.setState({ displays: [] })
     }
+
+    // componentDidUpdate(prevProps, prevState, snapshot){
+    //     const { dataSource: oldDataSource } = prevProps
+    //     const { dataSource, wholePageIndex } = this.props
+    //     const { displays } = this.state
+
+    //     if (dataSource.length !== oldDataSource.length && dataSource.length > displays.length) {
+    //         setTimeout(() => {
+    //             this.observePage(wholePageIndex)
+    //         }, 10)
+    //     }
+    // }
 
     componentWillUnmount() {
         this.observerObjs.forEach(observer => {
             observer?.disconnect()
         })
+
+        this.resetData()
     }
 
     render () {
@@ -73,7 +80,7 @@ export default class List extends React.Component {
                         return (
                         <View id={`virtual-list-${index}`}>
                         {
-                            item?.map((subItem, subIndex) => (<Thread data={subItem} key={`${item.threadId}-${item.updatedAt}`} relativeToViewport={displays[index]} dispatch={dispatch}/>))
+                            item?.map((subItem, subIndex) => (<Thread data={subItem} key={`${subItem.threadId}-${subItem.updatedAt}`} relativeToViewport={displays[index]} dispatch={dispatch}/>))
                         }
                         </View>
                     )})
