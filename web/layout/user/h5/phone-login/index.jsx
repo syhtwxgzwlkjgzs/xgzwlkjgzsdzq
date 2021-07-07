@@ -97,7 +97,7 @@ class LoginPhoneH5Page extends React.Component {
           this.props.commonLogin.sessionToken = e.sessionToken;
           const resp = await genMiniScheme();
           if (resp.code === 0) {
-            window.location.href = `${get(resp, 'data.openLink', '')}?sessionToken=${e.sessionToken}`;
+            window.location.href = `${get(resp, 'data.openLink', '')}&sessionToken=${e.sessionToken}`;
             return;
           }
           Toast.error({
