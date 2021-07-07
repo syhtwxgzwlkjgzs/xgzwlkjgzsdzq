@@ -12,7 +12,6 @@ import Packet from './packet';
 import styles from './index.module.scss';
 import { View, Text } from '@tarojs/components';
 import { getElementRect, randomStr } from './utils'
-import placehold from '../../public/dzq-img/placehold.jpg'
 
 /**
  * 帖子内容组件
@@ -36,22 +35,6 @@ const Index = (props) => {
     }
     return title;
   }, [title]);
-
-
-  const images = useMemo(() => {
-    const { imageData } = handleAttachmentData(props.data.content);
-
-    if (imageData?.length) {
-      const newImageData = imageData.map(item => {
-        return { ...item }
-      })
-      return relativeToViewport ? imageData : newImageData.map(item => { 
-        item.thumbUrl = placehold
-        return item
-      })
-    }
-    return []
-  }, [relativeToViewport])
 
   // useEffect(() => {
   //   if (relativeToViewport) {

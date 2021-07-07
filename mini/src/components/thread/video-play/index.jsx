@@ -8,7 +8,6 @@ import { View, Text, Image } from '@tarojs/components'
 import { getElementRect, randomStr } from '../utils'
 import Taro from '@tarojs/taro';
 import calcVideoSize from '@common/utils/calc-video-size';
-import placehold from '../../../public/dzq-img/placehold.jpg'
 
 /**
  * 视频
@@ -105,7 +104,6 @@ const Index = ({
     }}>
       {
         width && ( 
-          relativeToViewport ? 
           <Video
             className={styles.videoBox}
             onReady={onReady}
@@ -116,7 +114,7 @@ const Index = ({
             height={`${height}px`}
             poster={coverUrl}
             duration={time}
-          /> : <Image src={placehold} mode='aspectFill' style={{ height: '100%', width: '100%' }}></Image>
+          />
         )
       }
       {/* 视频蒙层 已付费时隐藏 未付费时显示 */}

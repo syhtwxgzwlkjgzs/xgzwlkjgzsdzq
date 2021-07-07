@@ -48,41 +48,41 @@ class Index extends React.Component {
     }
 
     changeHeight = ({ type, height }) => {
-      if (!height || height === 'NaN') {
-        return
-      }
+      // if (!height || height === 'NaN') {
+      //   return
+      // }
 
-      const minHeight = getImmutableTypeHeight(this.props.data)
-      let newHeight = Number(height)
-      let h = 0
+      // const minHeight = getImmutableTypeHeight(this.props.data)
+      // let newHeight = Number(height)
+      // let h = 0
 
-      if (type === 'text') {
-        this.textH = newHeight
+      // if (type === 'text') {
+      //   this.textH = newHeight
         
-        if (this.videoH !== 0) {
-          h = this.videoH - 193
-        }
+      //   if (this.videoH !== 0) {
+      //     h = this.videoH - 193
+      //   }
         
-      }
+      // }
 
-      if (type === 'video') {
-        if (height && height !== 'NaN') {
-          this.videoH = newHeight;
-        }
+      // if (type === 'video') {
+      //   if (height && height !== 'NaN') {
+      //     this.videoH = newHeight;
+      //   }
         
 
-        if (this.textH !== 0) {
-          h = this.textH
-        }
+      //   if (this.textH !== 0) {
+      //     h = this.textH
+      //   }
 
-        h -= 193
-      }
+      //   h -= 193
+      // }
 
-      this.setState({ minHeight: minHeight + newHeight + h})
+      // this.setState({ minHeight: minHeight + newHeight + h})
 
-      // getElementRect(this.threadStyleId).then(res => {
-      //   debugger
-      // })
+      getElementRect(this.threadStyleId).then(res => {
+        this.setState({ minHeight: res?.height })
+      })
     }
 
     // 评论
