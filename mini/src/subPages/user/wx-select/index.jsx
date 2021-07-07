@@ -43,7 +43,8 @@ class WXSelect extends Component {
           inviteCode
         },
       });
-      checkUserStatus(res);
+
+      // @TODO 登录逻辑待重构
       if (res.code === 0) {
         const accessToken = get(res, 'data.accessToken', '');
         const uid = get(res, 'data.uid', '');
@@ -52,6 +53,10 @@ class WXSelect extends Component {
           accessToken,
         });
         this.props.user.updateUserInfo(uid);
+      }
+      
+      checkUserStatus(res);
+      if (res.code === 0) {
         Toast.success({
           content: '登录成功',
           duration: 1000,
