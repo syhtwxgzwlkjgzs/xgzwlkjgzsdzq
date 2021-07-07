@@ -46,7 +46,7 @@ const Index = (props) => {
       if (!fixedTab) {
         return
       }
-      const { onClickTab } = this.props
+      const { onClickTab } = props
       onClickTab(e)
     }
 
