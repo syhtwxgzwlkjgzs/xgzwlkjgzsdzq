@@ -53,14 +53,15 @@ class Index extends React.Component {
 
     changeHeight = (params) => {
       // 保存视频高度
-      if (params?.type === 'video') {
+      const { videoH } = this.state
+      if (params?.type === 'video' && videoH === 0) {
         this.setState({ videoH: params['height'] })
-      } else {
-        // 更新帖子组件高度
-        getElementRect(this.threadStyleId).then(res => {
-          this.setState({ minHeight: res?.height })
-        })
       }
+
+      // 更新帖子组件高度
+      getElementRect(this.threadStyleId).then(res => {
+        this.setState({ minHeight: res?.height })
+      })
     }
 
     // 评论
