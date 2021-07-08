@@ -26,6 +26,7 @@ import {
   JUMP_TO_SUPPLEMENTARY,
   OPERATING_FREQUENCY
 } from '@common/constants/site';
+import jump from '@common/utils/jump';
 
 let globalToast = null;
 const api = apiIns({
@@ -87,7 +88,7 @@ http.interceptors.response.use((res) => {
   const { data, status, statusText } = res;
   // 如果4002将重定向到登录
   // if (data.Code === -4002) {
-  //   Router.redirect({url: '/user/login'});
+  //   jump.saveAndLogin();
   // }
   let url = null;
   switch (data.Code) {
@@ -97,14 +98,7 @@ http.interceptors.response.use((res) => {
       // 未登陆时，帖子列表接口返回无权限，跳转登陆
       // TODO: 没有开启小程序配置时，在小程序里不要做跳转
       if (!res?.config?.headers?.authorization && ~res?.config?.url.indexOf('/thread.list')) {
-        if (process.env.DISCUZ_ENV === 'web') {
-          url = '/user/login';
-        } else {
-          url = '/subPages/user/wx-auth/index';
-        }
-        Router.push({
-          url
-        });
+        jump.saveAndLogin();
       }
       break;
     }
@@ -121,14 +115,7 @@ http.interceptors.response.use((res) => {
     }
     case JUMP_TO_LOGIN: {
       clearLoginStatus();
-      if (process.env.DISCUZ_ENV === 'web') {
-        window.location.replace('/user/login');
-      } else {
-        url = '/subPages/user/wx-auth/index'
-      }
-      Router.replace({
-        url
-      });
+      jump.saveAndLogin();
       break;
     }
     case JUMP_TO_REGISTER: {

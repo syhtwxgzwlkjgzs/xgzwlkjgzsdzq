@@ -49,10 +49,7 @@ function getCurrentUrl() {
 }
 
 // 跳转登录页
-function gotoLogin() {
-  const url = isWeb() ? '/user/login' : '/subPages/user/wx-auth/index';
-  Router.redirect({ url });
-}
+
 
 class Jump {
   // 跳转地址
@@ -108,6 +105,11 @@ class Jump {
     console.log(113, 'Jump.clearUrl');
   };
 
+  gotoLogin = () => {
+    const url = isWeb() ? '/user/login' : '/subPages/user/wx-auth/index';
+    Router.redirect({ url });
+  };
+
   // 保存当前地址
   saveCurrentUrl = () => {
     const url = getCurrentUrl();
@@ -132,7 +134,7 @@ class Jump {
     isForce && this.clear();
     this.saveCurrentUrl();
 
-    gotoLogin();
+    this.gotoLogin();
   };
 
   // 恢复登录前的跳转。优先级：记录页 > defaultPage > 主页

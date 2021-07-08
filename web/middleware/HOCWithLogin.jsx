@@ -2,7 +2,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import isServer from '@common/utils/is-server';
-import Router from '@discuzq/sdk/dist/router';
+import jump from '@common/utils/jump';
 
 // 只能登陆状态才能进入
 export default function HOCWithLogin(Component) {
@@ -43,7 +43,7 @@ export default function HOCWithLogin(Component) {
     componentDidMount() {
       const { user } = this.props;
       if (!user.loginStatus) {
-        Router.redirect({url: '/user/login'});
+        jump.saveAndLogin();
       }
     }
 
@@ -51,7 +51,7 @@ export default function HOCWithLogin(Component) {
       const { user } = this.props;
 
       if (!user.loginStatus) {
-        Router.redirect({url: '/user/login'});
+        jump.saveAndLogin();
       }
     }
 

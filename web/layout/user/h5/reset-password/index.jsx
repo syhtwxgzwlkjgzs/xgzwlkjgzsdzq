@@ -10,6 +10,7 @@ import { get } from '@common/utils/get';
 import PcBodyWrap from '../components/pc-body-wrap';
 import layout from './index.module.scss';
 import HOCTencentCaptcha from '@middleware/HOCTencentCaptcha';
+import jump from '@common/utils/jump';
 
 @inject('site')
 @inject('user')
@@ -71,7 +72,7 @@ class ResetPasswordH5Page extends React.Component {
 
       setTimeout(() => {
         commonLogin.loginLoading = true;
-        this.props.router.push('/user/login');
+        jump.gotoLogin()
       }, 1000);
     } catch (e) {
       this.props.commonLogin.loginLoading = true;

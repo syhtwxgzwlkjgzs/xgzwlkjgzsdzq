@@ -67,7 +67,7 @@ class PartnerInviteH5Page extends React.Component {
   handleJoinSite = async () => {
     const { user, site, router } = this.props;
     if (!user?.isLogin()) {
-      router.push('/user/login');
+      jump.saveAndLogin();
       return;
     }
     const { setSite: { siteMode, sitePrice, siteName } = {} } = site.webConfig;
@@ -96,7 +96,7 @@ class PartnerInviteH5Page extends React.Component {
     clearLoginStatus();
     this.props.user.removeUserInfo();
     this.props.site.webConfig.user = null;
-    this.props.router.push('/user/login');
+    jump.gotoLogin();
   }
 
   // 右侧 - 潮流话题 粉丝 版权信息

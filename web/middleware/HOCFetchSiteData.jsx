@@ -199,7 +199,7 @@ export default function HOCFetchSiteData(Component) {
           break;
         case JUMP_TO_LOGIN:// 到登录页
           clearLoginStatus();
-          window.location.replace('/user/login');
+          jump.gotoLogin();
           break;
         case JUMP_TO_REGISTER:// 到注册页
           clearLoginStatus();

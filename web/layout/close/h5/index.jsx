@@ -5,6 +5,7 @@ import Header from '@components/header';
 import {Button} from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
+import jump from '@common/utils/jump';
 
 @inject('site')
 @observer
@@ -19,7 +20,7 @@ class H5CloseSite extends React.Component {
         <h1 className={styles.main}>关闭已站点</h1>
         {closeSiteConfig && <p className={styles.sub}>{closeSiteConfig.detail}</p>}
         {false && <div className={styles.fixedBox}>
-          <Button onClick={() => {Router.push({url: '/user/login'});}} size='large' className={styles.btn} type='primary'>管理员登录</Button>
+          <Button onClick={jump.saveAndLogin} size='large' className={styles.btn} type='primary'>管理员登录</Button>
         </div>}
       </div>
     );

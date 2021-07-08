@@ -6,7 +6,7 @@ import { get } from '@common/utils/get';
 import H5PayBox from './h5';
 import PCPayBox from './pc';
 import { Toast } from '@discuzq/design';
-import Router from '@discuzq/sdk/dist/router';
+import jump from '@common/utils/jump';
 
 class PayBoxEmitter extends EventEmitter {}
 
@@ -36,7 +36,7 @@ export default class PayBox extends Component {
         content: '需要登录后才可以进行支付',
         duration: 2000,
       });
-      Router.push({ url: '/user/login' });
+      jump.saveAndLogin();
       return;
     }
     if (Number(get(options, 'data.amount', 0)) < 0.1) {
