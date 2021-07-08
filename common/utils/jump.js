@@ -120,7 +120,7 @@ class Jump {
   // 保存当前地址，并跳转目标地址
   saveAndRedirect = (targetUrl, isForce) => {
     console.log(114, 'saveAndRedirect', targetUrl);
-    isForce && this.clear();
+    typeof isForce === 'boolean' && isForce && this.clear();
 
     this.saveCurrentUrl();
     Router.redirect({
@@ -131,7 +131,7 @@ class Jump {
   // 自动记录当前的地址，再跳转登录页
   saveAndLogin = (isForce) => {
     console.log(115, 'saveAndLogin');
-    isForce && this.clear();
+    typeof isForce === 'boolean' && isForce && this.clear();
     this.saveCurrentUrl();
 
     this.gotoLogin();
@@ -142,6 +142,7 @@ class Jump {
     const url = this.getUrl() || defaultPage || (isWeb ? '/' : '/pages/home/index');
 
     Router.redirect({ url });
+    console.log('jump恢复url', url)
     this.clear();
 
     console.log(116, 'restore', url);
