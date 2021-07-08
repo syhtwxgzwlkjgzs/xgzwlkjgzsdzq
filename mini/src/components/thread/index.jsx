@@ -14,6 +14,7 @@ import { debounce, noop } from './utils'
 import { View, Text } from '@tarojs/components'
 import { getImmutableTypeHeight } from './getHeight'
 import { getElementRect, randomStr } from './utils'
+import Skeleton from './skeleton';
 
 @inject('site')
 @inject('index')
@@ -41,6 +42,8 @@ class Index extends React.Component {
       const height = getImmutableTypeHeight(this.props.data)
 
       this.setState({ minHeight: height })
+
+      this.changeHeight()
     }
 
     setUseShowMore = () => {
@@ -217,7 +220,7 @@ class Index extends React.Component {
       return (
         <View className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`} style={{ minHeight: `${minHeight}px` }} id={this.threadStyleId}>
           {
-          relativeToViewport && (
+          relativeToViewport ? (
             <>
             <View className={styles.header} onClick={unifyOnClick || this.onClick}>
                 <UserInfo
@@ -275,7 +278,7 @@ class Index extends React.Component {
               user={this.props.user}
             />
             </>
-          )
+          ) : <Skeleton style={{ minHeight: `${minHeight}px` }} />
         }
         </View>
       );
