@@ -5,7 +5,7 @@ import Button from '@discuzq/design/dist/components/button/index';
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import imgClose from '../../../../web/public/dzq-img/close.png';
-import jump from '@common/utils/jump';
+import LoginHelper from '@common/utils/login-helper'
 @inject('site')
 @observer
 class Index extends Component {
@@ -29,7 +29,7 @@ class Index extends Component {
           <Text className={styles.main}>关闭已站点</Text>
           {closeSiteConfig && <Text className={styles.sub}>{closeSiteConfig.detail}</Text>}
           {/* <View className={styles.fixedBox}>
-            <Button onClick={jump.saveAndLogin} size='large' className={styles.btn} type='primary'>管理员登录</Button>
+            <Button onClick={LoginHelper.saveAndLogin} size='large' className={styles.btn} type='primary'>管理员登录</Button>
           </View> */}
         </View>
       </Page>

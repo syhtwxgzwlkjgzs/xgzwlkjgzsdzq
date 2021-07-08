@@ -29,7 +29,7 @@ import {
   JUMP_TO_SUPPLEMENTARY,
   REVIEWING_USER_WHITE_LIST_WEB,
 } from '@common/constants/site';
-import jump from '@common/utils/jump';
+import LoginHelper from '@common/utils/login-helper'
 
 // 获取全站数据
 export default function HOCFetchSiteData(Component) {
@@ -178,7 +178,7 @@ export default function HOCFetchSiteData(Component) {
 
       const CODE_NEED_SAVE = [JUMP_TO_LOGIN, JUMP_TO_REGISTER, JUMP_TO_AUDIT, JUMP_TO_REFUSE, JUMP_TO_DISABLED, JUMP_TO_SUPPLEMENTARY, JUMP_TO_PAY_SITE];
       if (CODE_NEED_SAVE.includes(result.code)) {
-        jump.saveCurrentUrl();
+        LoginHelper.saveCurrentUrl();
       }
 
       switch (result.code) {
@@ -199,7 +199,7 @@ export default function HOCFetchSiteData(Component) {
           break;
         case JUMP_TO_LOGIN:// 到登录页
           clearLoginStatus();
-          jump.gotoLogin();
+          LoginHelper.gotoLogin();
           break;
         case JUMP_TO_REGISTER:// 到注册页
           clearLoginStatus();
@@ -231,13 +231,13 @@ export default function HOCFetchSiteData(Component) {
     // 检查跳转
     checkJump() {
       const { router } = this.props;
-      const jumpPage = jump.getUrl();
+      const jumpPage = LoginHelper.getUrl();
       if (jumpPage) {
         const urlObj = new URL(jumpPage);
         if (urlObj.pathname === router.asPath) { // 目标地址已达到，清空即可
-          jump.clear()
+          LoginHelper.clear()
         } else if (router.asPath === '/') { // 被重定向到首页，取出跳转地址，跳转
-          jump.restore();
+          LoginHelper.restore();
           return false;
         }
       }
@@ -273,13 +273,13 @@ export default function HOCFetchSiteData(Component) {
           if (!site.isOffiaccountOpen && !site.isMiniProgramOpen) {
             // 绑定手机: 开启短信，没有绑定手机号
             if (router.asPath !== '/user/bind-phone' && site.isSmsOpen && !user.mobile) {
-              jump.saveAndRedirect( '/user/bind-phone' );
+              LoginHelper.saveAndRedirect( '/user/bind-phone' );
               return false;
             }
           }
           // 绑定昵称：没有昵称
           if (router.asPath !== '/user/bind-nickname' && !user.nickname) {
-            jump.saveAndRedirect( '/user/bind-nickname' );
+            LoginHelper.saveAndRedirect( '/user/bind-nickname' );
             return false;
           }
           // 账号审核中的 用户只能访问 首页 + 帖子详情页，以及用户状态提示页
@@ -302,7 +302,7 @@ export default function HOCFetchSiteData(Component) {
           const code = router.query.inviteCode;
           const query = code ? `?inviteCode=${code}` : '';
           if (!user?.paid) {
-            jump.saveAndRedirect(`/forum/partner-invite${query}`);
+            LoginHelper.saveAndRedirect(`/forum/partner-invite${query}`);
             return false;
           }
         }

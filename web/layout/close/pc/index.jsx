@@ -7,7 +7,7 @@ import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
 import isServer from '@common/utils/is-server';
 import Copyright from '@components/copyright';
-import jump from '@common/utils/jump';
+import LoginHelper from '@common/utils/login-helper'
 
 @inject('site')
 @observer
@@ -30,7 +30,7 @@ class PCCloseSite extends React.Component {
           <img className={styles.img} src='/dzq-img/close.png'/>
           <h1 className={styles.main}>关闭已站点</h1>
           {closeSiteConfig && <p className={styles.sub}>{closeSiteConfig.detail}</p>}
-          {false && <Button onClick={jump.saveAndLogin} size='large' className={styles.btn} type='primary'>管理员登录</Button>}
+          {false && <Button onClick={LoginHelper.saveAndLogin} size='large' className={styles.btn} type='primary'>管理员登录</Button>}
         </div>
         <Copyright center line/>
       </div>

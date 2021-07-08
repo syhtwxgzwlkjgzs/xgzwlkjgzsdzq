@@ -20,7 +20,7 @@ function validateUrl(url) {
       const { pathname, hash, search } = new URL(url);
       return !(pathname === '/' && !hash && !search);
     } catch (err) {
-      console.erro('Jump is setting a invalid url', err);
+      console.erro('LoginHelper is setting a invalid url', err);
       return false;
     }
   }
@@ -49,7 +49,7 @@ function getCurrentUrl() {
 
 // 跳转登录页
 
-class Jump {
+class LoginHelper {
   // 跳转地址
   constructor() {
     this.url = '';
@@ -139,4 +139,4 @@ class Jump {
   };
 }
 
-export default new Jump();
+export default new LoginHelper();

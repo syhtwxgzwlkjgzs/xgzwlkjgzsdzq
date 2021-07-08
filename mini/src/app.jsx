@@ -4,7 +4,7 @@ import initializeStore from '@common/store';
 import Taro from '@tarojs/taro'
 import Router from '@discuzq/sdk/dist/router';
 import setTitle from '@common/utils/setTitle';
-import jump from '@common/utils/jump';
+import LoginHelper from '@common/utils/login-helper'
 
 import './app.scss';
 
@@ -89,7 +89,7 @@ class App extends Component {
         }
       }
       
-      jump.setUrl(targetUrl);
+      LoginHelper.setUrl(targetUrl);
     } catch(err) {
       console.log('savePageJump', err);
     }

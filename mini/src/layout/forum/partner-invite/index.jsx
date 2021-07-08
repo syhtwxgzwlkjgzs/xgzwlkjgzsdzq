@@ -20,7 +20,7 @@ import { simpleRequest } from '@common/utils/simple-request';
 import Router from '@discuzq/sdk/dist/router';
 import { getCurrentInstance } from '@tarojs/taro';
 import { readUser } from '@server';
-import jump from '@common/utils/jump';
+import LoginHelper from '@common/utils/login-helper'
 
 @inject('site')
 @inject('index')
@@ -94,7 +94,7 @@ class PartnerInviteH5Page extends React.Component {
   handleJoinSite = () => {
     const { user, site } = this.props;
     if (!user?.isLogin()) {
-      jump.saveAndLogin();
+      LoginHelper.saveAndLogin();
       return;
     }
 

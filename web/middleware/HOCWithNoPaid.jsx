@@ -3,7 +3,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import isServer from '@common/utils/is-server';
 import Router from '@discuzq/sdk/dist/router';
-import jump from '@common/utils/jump';
+import LoginHelper from '@common/utils/login-helper'
 
 
 // 只能非登陆状态才能进入
@@ -46,7 +46,7 @@ export default function HOCWithNoPaid(Component) {
     handlePaidUserRedirect() {
       const { router, user } = this.props;
       if (user?.paid && router.asPath === '/forum/partner-invite') {
-        jump.restore();
+        LoginHelper.restore();
       }
     }
 

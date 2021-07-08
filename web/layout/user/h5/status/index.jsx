@@ -8,7 +8,7 @@ import Header from '@components/header';
 import layout from './index.module.scss';
 import PcBodyWrap from '../components/pc-body-wrap';
 import clearLoginStatus from '@common/utils/clear-login-status';
-import jump from '@/common/utils/jump';
+import LoginHelper from '@/common/utils/login-helper';
 
 @inject('site')
 @inject('user')
@@ -48,7 +48,7 @@ class StatusH5Page extends React.Component {
       clearLoginStatus();
       user.removeUserInfo();
       site.webConfig.user = null;
-      jump.gotoLogin();
+      LoginHelper.gotoLogin();
     }
   }
 

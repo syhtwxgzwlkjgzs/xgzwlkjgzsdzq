@@ -5,7 +5,7 @@
  * 具体见：https://nextjs.org/docs/api-reference/next/router#router-object
  */
 
-import jump from './jump';
+import LoginHelper from './login-helper';
 
 // export default function goToLoginPage(options) {
 //   // 默认跳转路径
@@ -19,4 +19,4 @@ import jump from './jump';
 //   });
 // }
 
-export default jump.saveAndLogin;
+export default LoginHelper.saveAndLogin;

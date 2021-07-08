@@ -24,6 +24,7 @@ import {
   SITE_NO_INSTALL,
   MINI_SITE_JOIN_WHITE_LIST
 } from '@common/constants/site';
+import LoginHelper from '@common/utils/login-helper';
 
 const PARTNER_INVITE_URL = '/subPages/forum/partner-invite/index';
 const CLOSE_URL = '/subPage/close/index';
@@ -68,12 +69,12 @@ class Index extends React.Component {
         case JUMP_TO_LOGIN:// 到登录页
           clearLoginStatus();
           this.initSiteData(); // 重新获取数据
-          jump.gotoLogin();
+          LoginHelper.gotoLogin();
           break;
         case JUMP_TO_REGISTER:// 到注册页
           clearLoginStatus();
           this.initSiteData(); // 重新获取数据
-          jump.gotoLogin();
+          LoginHelper.gotoLogin();
           break;
         case JUMP_TO_AUDIT:// 到审核页
           Router.push({ url: '/subPages/user/status/index?statusCode=2' });
