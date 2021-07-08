@@ -11,7 +11,6 @@ import styles from './index.module.scss';
 import PropTypes from 'prop-types';
 
 import List from '@components/list';
-import DDialog from '@components/dialog';
 
 @inject('threadPost')
 @observer
@@ -146,15 +145,10 @@ class TopicSelect extends Component {
     );
 
     if (pc) return (
-      <DDialog
-        visible={visible}
-        className={styles.pc}
-        onClose={cancelTopic}
-        title="#添加话题#"
-        isCustomBtn={true}
-      >
+      <div className={styles.pc}>
+        <div className={styles.pcHeader}>#添加话题#</div>
         {content}
-      </DDialog>
+      </div>
     );
 
     return (
