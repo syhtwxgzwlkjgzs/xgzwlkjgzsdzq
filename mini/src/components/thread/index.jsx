@@ -39,11 +39,6 @@ class Index extends React.Component {
   }
 
     componentDidMount() {
-
-      const height = getImmutableTypeHeight(this.props.data)
-
-      this.setState({ minHeight: height })
-
       this.changeHeight()
     }
 
@@ -61,6 +56,9 @@ class Index extends React.Component {
       // 更新帖子组件高度
       getElementRect(this.threadStyleId).then(res => {
         this.setState({ minHeight: res?.height })
+      }).catch(() => {
+        const height = getImmutableTypeHeight(this.props.data)
+        this.setState({ minHeight: height })
       })
     }
 
