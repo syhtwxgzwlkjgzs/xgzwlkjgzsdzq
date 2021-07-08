@@ -232,11 +232,9 @@ export default function HOCFetchSiteData(Component) {
     checkJump() {
       const { router } = this.props;
       const jumpPage = jump.getUrl();
-      console.log(900, router.asPath, jumpPage)
       if (jumpPage) {
         const urlObj = new URL(jumpPage);
         if (urlObj.pathname === router.asPath) { // 目标地址已达到，清空即可
-          console.log('检查清理')
           jump.clear()
         } else if (router.asPath === '/') { // 被重定向到首页，取出跳转地址，跳转
           jump.restore();
@@ -297,7 +295,6 @@ export default function HOCFetchSiteData(Component) {
         if (site?.webConfig?.setSite?.siteMode === 'pay') {
           // 付费加入: 付费状态下，未登录的用户、登录了但是没有付费的用户，访问不是白名单的页面会跳入到付费加入
           if (WEB_SITE_JOIN_WHITE_LIST.some(path => router.asPath.match(path))) {
-            console.log('site模式检查', router.asPath)
             this.checkJump();
             return true;
           }
@@ -311,7 +308,6 @@ export default function HOCFetchSiteData(Component) {
         }
       }
 
-      console.log('整体检查', router.asPath)
       return this.checkJump();
     }
 
@@ -328,7 +324,6 @@ export default function HOCFetchSiteData(Component) {
     }
 
     render() {
-      console.log(999, typeof window !== 'undefined' && window.location.href);
       const { isNoSiteData, isPass } = this.state;
       const { site } = this.props;
       // CSR不渲染任何内容

@@ -42,14 +42,12 @@ function getCurrentUrl() {
     if (Object.keys(options).length > 0) {
       url = `${url}?${options.entries(([key, value]) => `${key}=${value}`).join('&')}`;
     }
-    console.log(120, 'getMiniUrl', url);
   }
 
   return url;
 }
 
 // 跳转登录页
-
 
 class Jump {
   // 跳转地址
@@ -59,7 +57,6 @@ class Jump {
 
   // 记录地址
   setUrl = (url) => {
-    console.log(111, 'Jump.setUrl', url);
     // 如果已存在跳转地址，不能在此写入，除非先清空
     if (this.getUrl()) {
       console.log('jump url already exists');
@@ -90,7 +87,6 @@ class Jump {
     } else if (this.url) {
       url = `${this.url.startsWith('/') ? '' : '/'}${this.url}`;
     }
-    console.log(112, 'Jump.getUrl', url);
 
     return url;
   };
@@ -102,7 +98,6 @@ class Jump {
     } else {
       this.url = '';
     }
-    console.log(113, 'Jump.clearUrl');
   };
 
   gotoLogin = () => {
@@ -119,7 +114,6 @@ class Jump {
 
   // 保存当前地址，并跳转目标地址
   saveAndRedirect = (targetUrl, isForce) => {
-    console.log(114, 'saveAndRedirect', targetUrl);
     typeof isForce === 'boolean' && isForce && this.clear();
 
     this.saveCurrentUrl();
@@ -130,7 +124,6 @@ class Jump {
 
   // 自动记录当前的地址，再跳转登录页
   saveAndLogin = (isForce) => {
-    console.log(115, 'saveAndLogin');
     typeof isForce === 'boolean' && isForce && this.clear();
     this.saveCurrentUrl();
 
@@ -142,10 +135,7 @@ class Jump {
     const url = this.getUrl() || defaultPage || (isWeb ? '/' : '/pages/home/index');
 
     Router.redirect({ url });
-    console.log('jump恢复url', url)
     this.clear();
-
-    console.log(116, 'restore', url);
   };
 }
 
