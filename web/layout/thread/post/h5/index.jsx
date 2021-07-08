@@ -179,7 +179,7 @@ class ThreadCreate extends React.Component {
 
   // 分类
   handleCategoryClick = () => {
-    this.props.handleSetState({ categoryChooseShow: true });
+    this.props.handleSetState({ categoryChooseShow: true, currentDefaultOperation: '' });
   };
 
   // 顶部导航栏点击后拦截回调
@@ -307,7 +307,7 @@ class ThreadCreate extends React.Component {
             />
           )}
         </div>
-        <div id="post-bottombar" className={styles['post-bottombar']} onClick={e => e.stopPropagation()}>
+        <div id="post-bottombar" className={styles['post-bottombar']}>
           {/* 插入位置 */}
           {(permissions?.insertPosition?.enable && webConfig?.lbs?.lbs) && (
             <div id="post-position" className={styles['position-box']}>
