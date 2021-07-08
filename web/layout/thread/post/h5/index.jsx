@@ -229,7 +229,7 @@ class ThreadCreate extends React.Component {
             onChange={this.props.handleVditorChange}
             onFocus={(action, event) => {
               this.setBottomFixed(action, event);
-              this.props.handleSetState({ isVditorFocus: true });
+              this.props.handleSetState({ isVditorFocus: true, currentDefaultOperation: '' });
             }}
             onBlur={() => {
               this.props.handleSetState({ isVditorFocus: false });
