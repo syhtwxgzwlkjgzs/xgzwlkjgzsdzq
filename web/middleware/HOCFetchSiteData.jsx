@@ -29,6 +29,7 @@ import {
   JUMP_TO_SUPPLEMENTARY,
   REVIEWING_USER_WHITE_LIST_WEB,
 } from '@common/constants/site';
+import jump from '@common/utils/jump';
 
 // 获取全站数据
 export default function HOCFetchSiteData(Component) {
@@ -177,7 +178,7 @@ export default function HOCFetchSiteData(Component) {
 
       const CODE_NEED_SAVE = [JUMP_TO_LOGIN, JUMP_TO_REGISTER, JUMP_TO_AUDIT, JUMP_TO_REFUSE, JUMP_TO_DISABLED, JUMP_TO_SUPPLEMENTARY, JUMP_TO_PAY_SITE];
       if (CODE_NEED_SAVE.includes(result.code)) {
-        this.saveInitialPage();
+        jump.saveCurrentUrl();
       }
 
       switch (result.code) {
@@ -227,20 +228,6 @@ export default function HOCFetchSiteData(Component) {
       }
     }
 
-    saveInitialPage() {
-      const { site } = this.props;
-
-      if (!site.getInitialPage()) {
-        site.setInitialPage(window.location.href);
-      }
-    }
-
-    saveAndRedirect(url) {
-      this.saveInitialPage(url);
-
-      Router.redirect({ url });
-    }
-
     // 检查是否满足渲染条件
     isPass() {
       const { site, router, user } = this.props;
@@ -270,13 +257,13 @@ export default function HOCFetchSiteData(Component) {
           if (!site.isOffiaccountOpen && !site.isMiniProgramOpen) {
             // 绑定手机: 开启短信，没有绑定手机号
             if (router.asPath !== '/user/bind-phone' && site.isSmsOpen && !user.mobile) {
-              this.saveAndRedirect( '/user/bind-phone' );
+              jump.saveAndRedirect( '/user/bind-phone' );
               return false;
             }
           }
           // 绑定昵称：没有昵称
           if (router.asPath !== '/user/bind-nickname' && !user.nickname) {
-            this.saveAndRedirect( '/user/bind-nickname' );
+            jump.saveAndRedirect( '/user/bind-nickname' );
             return false;
           }
           // 账号审核中的 用户只能访问 首页 + 帖子详情页，以及用户状态提示页
@@ -298,31 +285,23 @@ export default function HOCFetchSiteData(Component) {
           return true;
         }
 
-        // if (!user?.isLogin()) {
-        //   Router.redirect({ url: '/user/login' });
-        //   return false;
-        // }
         const code = router.query.inviteCode;
         const query = code ? `?inviteCode=${code}` : '';
         if (!user?.paid) {
-          this.saveAndRedirect(`/forum/partner-invite${query}`);
+          jump.saveAndRedirect(`/forum/partner-invite${query}`);
           return false;
         }
 
         // 访问指定页面，经过登陆、付费等操作完成后，跳回主页
-        if (router.asPath === '/') {
-          const initialPage = site.getInitialPage();
-          if (initialPage) {
-            const urlObj = new URL(initialPage);
-            if (urlObj.pathname !== router.asPath) {
-              site.clearInitialPage();
-              Router.redirect({
-                url: initialPage,
-              });
-              return false;
-            } else {
-              site.clearInitialPage();
-            }
+        const jumpPage = jump.getUrl();
+        console.log(900, router.asPath, jumpPage)
+        if (jumpPage) {
+          const urlObj = new URL(jumpPage);
+          if (urlObj.pathname === router.asPath) { // 目标地址已达到，清空即可
+            jump.clear()
+          } else if (router.asPath === '/') { // 被重定向到首页，取出跳转地址，跳转
+            jump.restore();
+            return false;
           }
         }
       }
@@ -343,6 +322,7 @@ export default function HOCFetchSiteData(Component) {
     }
 
     render() {
+      console.log(999, typeof window !== 'undefined' && window.location.href);
       const { isNoSiteData, isPass } = this.state;
       const { site } = this.props;
       // CSR不渲染任何内容

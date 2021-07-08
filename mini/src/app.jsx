@@ -4,6 +4,7 @@ import initializeStore from '@common/store';
 import Taro from '@tarojs/taro'
 import Router from '@discuzq/sdk/dist/router';
 import setTitle from '@common/utils/setTitle';
+import jump from '@common/utils/jump';
 
 import './app.scss';
 
@@ -88,21 +89,11 @@ class App extends Component {
         }
       }
       
-      const { site } = this.store;
-      site.setInitialPage(targetUrl);
+      jump.setUrl(targetUrl);
     } catch(err) {
       console.log('savePageJump', err);
     }
   }
-
-  /**
-   * 程序切后台时触发
-   */
-  // componentDidHide() {
-  //   // 关闭小程序，清空跳转
-  //   const { site } = this.store;
-  //   site.clearInitialPage();
-  // }
 
   /**
    * 程序要打开的页面不存在时触发

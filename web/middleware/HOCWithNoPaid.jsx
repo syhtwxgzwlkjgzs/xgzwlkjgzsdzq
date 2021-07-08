@@ -3,6 +3,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import isServer from '@common/utils/is-server';
 import Router from '@discuzq/sdk/dist/router';
+import jump from '@common/utils/jump';
 
 
 // 只能非登陆状态才能进入
@@ -41,18 +42,20 @@ export default function HOCWithNoPaid(Component) {
       super(props);
     }
 
-    componentDidMount() {
-      const { user } = this.props;
-      if (user?.paid) {
-        Router.redirect({url: '/'});
+    // 已付费用户滞留付费页处理
+    handlePaidUserRedirect() {
+      const { router, user } = this.props;
+      if (user?.paid && router.asPath === '/forum/partner-invite') {
+        jump.restore();
       }
     }
 
+    componentDidMount() {
+      this.handlePaidUserRedirect();
+    }
+
     componentDidUpdate() {
-      const { user } = this.props;
-      if (user?.paid) {
-        Router.redirect({url: '/'});
-      }
+      this.handlePaidUserRedirect();
     }
 
     render() {

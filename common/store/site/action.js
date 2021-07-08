@@ -2,8 +2,6 @@ import { action } from 'mobx';
 import { readForum } from '@server';
 import SiteStore from './store';
 
-const INITIAL_PAGE_LABEL = '_initialPage';
-
 class SiteAction extends SiteStore {
   constructor(props) {
     super(props);
@@ -54,52 +52,6 @@ class SiteAction extends SiteStore {
       return true;
     }
     return false;
-  }
-
-
-  // 记录用户访问的初始地址，用户登陆、付费等操作后跳回
-  _initialPage = '';
-  @action
-  setInitialPage(pageUrl) {
-    // 不带参数的首页地址，不做记录
-    if (process.env.DISCUZ_ENV === 'web') {
-      const { pathname, hash, search } = new URL(pageUrl);
-      if (pathname === '/' && !hash && !search) {
-        return;
-      }
-    } else {
-      if (['pages/index/index', 'pages/home/index'].includes(pageUrl)) {
-        return;
-      }
-    }
-
-    // 区分web记录地址
-    if (process.env.DISCUZ_ENV === 'web' && window?.sessionStorage) {
-      window.sessionStorage.setItem(INITIAL_PAGE_LABEL, pageUrl);
-    } else {
-      this._initialPage = pageUrl;
-    }
-  }
-  @action
-  clearInitialPage() {
-    if (process.env.DISCUZ_ENV === 'web' && window?.sessionStorage) {
-      window.sessionStorage.removeItem(INITIAL_PAGE_LABEL);
-    } else {
-      this._initialPage = '';
-    }
-  }
-  @action
-  getInitialPage() {
-    let url = '';
-
-    if (process.env.DISCUZ_ENV === 'web') {
-      url = window?.sessionStorage ? window.sessionStorage.getItem(INITIAL_PAGE_LABEL) : this._initialPage;
-    } else if (this._initialPage) {
-      url = `${this._initialPage.startsWith('/')  ? '' : '/'}${this._initialPage}`
-    }
-
-
-    return url;
   }
 }
 

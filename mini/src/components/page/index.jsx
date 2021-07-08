@@ -12,6 +12,7 @@ import { MINI_SITE_JOIN_WHITE_LIST, REVIEWING_USER_WHITE_LIST } from '@common/co
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Taro from '@tarojs/taro';
 import { REVIEWING } from '@common/store/login/util';
+import jump from '@common/utils/jump';
 
 const INDEX_URL = '/pages/home/index';
 const PARTNER_INVITE_URL = '/subPages/forum/partner-invite/index';
@@ -113,16 +114,13 @@ export default class Page extends React.Component {
       }
 
       // 访问指定页面，经过登陆、付费等操作完成后，跳回主页
-      const initialPage = site.getInitialPage();
-      if (initialPage) {
-        if (initialPage.includes(path)) {
-          site.clearInitialPage();
+      const jumpUrl = jump.getUrl();
+      if (jumpUrl) {
+        if (jumpUrl.includes(path)) {
+          jump.clear();
         }
         if (path === INDEX_URL) {
-          site.clearInitialPage();
-          Router.redirect({
-            url: initialPage,
-          });
+          jump.restore();
           return false;
         }
       }
