@@ -228,10 +228,28 @@ export default function HOCFetchSiteData(Component) {
       }
     }
 
+    // 检查跳转
+    checkJump() {
+      const { router } = this.props;
+      const jumpPage = jump.getUrl();
+      console.log(900, router.asPath, jumpPage)
+      if (jumpPage) {
+        const urlObj = new URL(jumpPage);
+        if (urlObj.pathname === router.asPath) { // 目标地址已达到，清空即可
+          jump.clear()
+        } else if (router.asPath === '/') { // 被重定向到首页，取出跳转地址，跳转
+          jump.restore();
+          return false;
+        }
+      }
+      return true;
+    }
+
     // 检查是否满足渲染条件
     isPass() {
       const { site, router, user } = this.props;
       const { isNoSiteData } = this.state;
+      console.log(10, !!(site && site.webConfig))
       if (site && site.webConfig) {
         isNoSiteData && this.setState({
           isNoSiteData: false,
@@ -275,38 +293,23 @@ export default function HOCFetchSiteData(Component) {
           }
         }
 
-        if (site?.webConfig?.setSite?.siteMode !== 'pay') {
-          return true;
-        }
-
         // 以下为付费模式相关判断
-        // 付费加入: 付费状态下，未登录的用户、登录了但是没有付费的用户，访问不是白名单的页面会跳入到付费加入
-        if (WEB_SITE_JOIN_WHITE_LIST.some(path => router.asPath.match(path))) {
-          return true;
-        }
+        if (site?.webConfig?.setSite?.siteMode === 'pay') {
+          // 付费加入: 付费状态下，未登录的用户、登录了但是没有付费的用户，访问不是白名单的页面会跳入到付费加入
+          if (WEB_SITE_JOIN_WHITE_LIST.some(path => router.asPath.match(path))) {
+            return this.checkJump();;
+          }
 
-        const code = router.query.inviteCode;
-        const query = code ? `?inviteCode=${code}` : '';
-        if (!user?.paid) {
-          jump.saveAndRedirect(`/forum/partner-invite${query}`);
-          return false;
-        }
-
-        // 访问指定页面，经过登陆、付费等操作完成后，跳回主页
-        const jumpPage = jump.getUrl();
-        console.log(900, router.asPath, jumpPage)
-        if (jumpPage) {
-          const urlObj = new URL(jumpPage);
-          if (urlObj.pathname === router.asPath) { // 目标地址已达到，清空即可
-            jump.clear()
-          } else if (router.asPath === '/') { // 被重定向到首页，取出跳转地址，跳转
-            jump.restore();
+          const code = router.query.inviteCode;
+          const query = code ? `?inviteCode=${code}` : '';
+          if (!user?.paid) {
+            jump.saveAndRedirect(`/forum/partner-invite${query}`);
             return false;
           }
         }
       }
 
-      return true;
+      return this.checkJump();
     }
 
     // 过滤多余参数
