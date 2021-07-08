@@ -16,7 +16,6 @@ import jump from '@common/utils/jump';
 
 const INDEX_URL = '/pages/home/index';
 const PARTNER_INVITE_URL = '/subPages/forum/partner-invite/index';
-const WX_AUTH_URL = '/subPages/user/wx-auth/index';
 const BIND_NICKNAME_URL = '/subPages/user/bind-nickname/index';
 const CLOSE_URL = '/subPage/close/index';
 const PAGE_404_URL = '/subPages/404/index';
@@ -43,7 +42,7 @@ export default class Page extends React.Component {
 
     // 是否必须登录
     if (withLogin && !user.isLogin()) {
-      Router.redirect({ url: WX_AUTH_URL });
+      jump.saveAndLogin();
     }
 
     // 是否必须不登录

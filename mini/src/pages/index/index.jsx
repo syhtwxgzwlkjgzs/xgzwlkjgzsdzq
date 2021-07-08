@@ -68,12 +68,12 @@ class Index extends React.Component {
         case JUMP_TO_LOGIN:// 到登录页
           clearLoginStatus();
           this.initSiteData(); // 重新获取数据
-          Router.reLaunch({ url: '/subPages/user/wx-auth/index' });
+          jump.gotoLogin();
           break;
         case JUMP_TO_REGISTER:// 到注册页
           clearLoginStatus();
           this.initSiteData(); // 重新获取数据
-          Router.reLaunch({ url: '/subPages/user/wx-auth/index' });
+          jump.gotoLogin();
           break;
         case JUMP_TO_AUDIT:// 到审核页
           Router.push({ url: '/subPages/user/status/index?statusCode=2' });

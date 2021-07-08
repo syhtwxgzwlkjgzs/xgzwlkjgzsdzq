@@ -20,6 +20,7 @@ import { simpleRequest } from '@common/utils/simple-request';
 import Router from '@discuzq/sdk/dist/router';
 import { getCurrentInstance } from '@tarojs/taro';
 import { readUser } from '@server';
+import jump from '@common/utils/jump';
 
 @inject('site')
 @inject('index')
@@ -93,7 +94,7 @@ class PartnerInviteH5Page extends React.Component {
   handleJoinSite = () => {
     const { user, site } = this.props;
     if (!user?.isLogin()) {
-      Router.redirect({ url: '/subPages/user/wx-auth/index' });
+      jump.saveAndLogin();
       return;
     }
 

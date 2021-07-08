@@ -123,11 +123,8 @@ http.interceptors.response.use((res) => {
       if (process.env.DISCUZ_ENV === 'web') {
         window.location.replace('/user/register');
       } else {
-        url = '/subPages/user/wx-auth/index'
+        jump.saveAndLogin();
       }
-      Router.replace({
-        url
-      });
       break;
     }
     case JUMP_TO_AUDIT: {
