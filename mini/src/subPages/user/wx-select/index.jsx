@@ -33,7 +33,12 @@ class WXSelect extends Component {
 
   handleAutobindCallback = async () => {
     const { sessionToken, inviteCode: inviteCodeFromParams } = getCurrentInstance().router.params;
+    const { commonLogin } = this.props;
     try {
+      if (!commonLogin.loginLoading) {
+        return;
+      }
+      commonLogin.loginLoading = false;
       const inviteCode = inviteCodeFromParams || this.props.invite.getInviteCode()
       const res = await usernameAutoBind({
         timeout: 10000,
@@ -43,6 +48,7 @@ class WXSelect extends Component {
           inviteCode
         },
       });
+      commonLogin.loginLoading = true;
 
       // @TODO 登录逻辑待重构
       if (res.code === 0) {
@@ -82,6 +88,7 @@ class WXSelect extends Component {
         Message: res.msg,
       };
     } catch (error) {
+      commonLogin.loginLoading = true;
       // 注册信息补充
       if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
         if (isExtFieldsOpen(this.props.site)) {

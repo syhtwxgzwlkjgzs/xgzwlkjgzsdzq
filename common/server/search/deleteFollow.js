@@ -1,21 +1,10 @@
-// import {deleteDeny} from '@discuzq/sdk/dist/api/user/delete-deny';
-import api from '../api';
+import { deleteFollow } from '@discuzq/sdk/dist/api/search/delete-follow';
 
-
-export default async function _createFollow(opts, ctx = null) {
-    try {
-      const { params = {}, data = {}, ...others } = opts;
-      const options = {
-        url: '/apiv3/follow.delete', // 请求地址
-        method: 'POST',
-        params,
-        data,
-        __context: ctx,
-        ...others,
-      };
-      const result = await api.http(options);
-      return result;
-    } catch (error) {
-      return error;
-    }
-  }
+/** 删除我的关注/我的粉丝
+ * @param {object} params
+ * @returns object
+ */
+export default async function _deleteFollow(opts, ctx = null) {
+  const res = await deleteFollow({ ...opts, __context: ctx });
+  return res;
+}
