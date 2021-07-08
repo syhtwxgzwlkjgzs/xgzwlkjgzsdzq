@@ -152,6 +152,7 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
   const chooseFile = () => {
     Taro.chooseMessageFile({
       count: 9,
+      type: 'file',
       success(res) {
         checkWithUpload(res.tempFiles, false)
       }
