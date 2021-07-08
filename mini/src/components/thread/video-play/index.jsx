@@ -94,7 +94,7 @@ const Index = ({
         setWidth(width);
         setHeight(height);
   
-        changeHeight()
+        changeHeight({ type: 'video', height })
       })
     }
   }, [relativeToViewport]);

@@ -29,7 +29,7 @@ const Index = (props) => {
     relativeToViewport = true, 
     changeHeight = noop, 
     useShowMore = true, 
-    setUseShowMore = noop 
+    setUseShowMore = noop,
   } = props;
 
   const wrapperId= useRef(`thread-wrapper-${randomStr()}`)
@@ -43,7 +43,7 @@ const Index = (props) => {
   }, [title]);
 
   // 帖子属性内容
-  const renderThreadContent = ({ content: data, attachmentPrice, payType, paid } = {}) => {
+  const renderThreadContent = ({ content: data } = {}, videoH = 0) => {
     const {
       text,
       imageData,
@@ -69,7 +69,7 @@ const Index = (props) => {
           />
         )}
         {videoData && (
-          <WrapperView onClick={onClick}>
+          <WrapperView onClick={onClick} videoH={videoH}>
             <VideoPlay
               url={videoData.mediaUrl}
               coverUrl={videoData.coverUrl}
@@ -119,7 +119,7 @@ const Index = (props) => {
           </View>
         )}
 
-        {renderThreadContent(props.data)}
+        {renderThreadContent(props.data, props.videoH)}
       </View>
 
       {needPay && (
@@ -141,9 +141,18 @@ const Index = (props) => {
 export default React.memo(Index);
 
 // 处理
-const WrapperView = ({ children, onClick }) => {
+const WrapperView = ({ children, onClick, videoH = 0 }) => {
+  const [styleH, setStyleH] = useState({})
+  useEffect(() => {
+    if (videoH > 0) {
+      setStyleH({ minHeight: `${videoH}px` })
+    } else {
+      setStyleH({})
+    }
+  }, [videoH])
+
   return (
-    <View className={styles.wrapperView}>
+    <View className={styles.wrapperView} style={styleH}>
       {children}
       <View className={styles.placeholder} onClick={onClick}></View>
     </View>

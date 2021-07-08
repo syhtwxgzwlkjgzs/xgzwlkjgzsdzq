@@ -31,7 +31,8 @@ class Index extends React.Component {
       this.state = {
         isSendingLike: false,
         minHeight: 0,
-        useShowMore: true
+        useShowMore: true,
+        videoH: 0
       }
 
       this.threadStyleId = `thread-style-id-${randomStr()}`
@@ -50,10 +51,16 @@ class Index extends React.Component {
       this.setState({ useShowMore: false })
     }
 
-    changeHeight = () => {
-      getElementRect(this.threadStyleId).then(res => {
-        this.setState({ minHeight: res?.height })
-      })
+    changeHeight = (params) => {
+      // 保存视频高度
+      if (params?.type === 'video') {
+        this.setState({ videoH: params['height'] })
+      } else {
+        // 更新帖子组件高度
+        getElementRect(this.threadStyleId).then(res => {
+          this.setState({ minHeight: res?.height })
+        })
+      }
     }
 
     // 评论
@@ -215,7 +222,7 @@ class Index extends React.Component {
       const { isEssence, isPrice, isRedPack, isReward } = displayTag;
       const {getShareData, getShareContent} = this.props.user
       const {shareNickname, shareAvatar, shareThreadid, shareContent} = this.props.user
-      const { minHeight, useShowMore } = this.state
+      const { minHeight, useShowMore, videoH } = this.state
 
       return (
         <View className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`} style={{ minHeight: `${minHeight}px` }} id={this.threadStyleId}>
@@ -252,6 +259,7 @@ class Index extends React.Component {
               changeHeight={this.changeHeight}
               useShowMore={useShowMore}
               setUseShowMore={this.setUseShowMore}
+              videoH={videoH}
             />
 
             <BottomEvent
