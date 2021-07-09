@@ -51,8 +51,8 @@ export default class ReplyList extends React.Component {
       <div className={styles.replyList}>
         <div className={styles.replyListAvatar} onClick={() => {this.avatarClick(2)}}>
           <Avatar
-            image={this.props.data?.user?.avatar}
-            name={this.props.data?.user?.nickname || this.props.data?.user?.userName || ''}
+            image={(this.props.data?.user?.nickname || this.props.data?.user?.userName) && this.props.data?.user?.avatar}
+            name={this.props.data?.user?.nickname || this.props.data?.user?.userName || '异'}
             circle={true}
             size="small"
           ></Avatar>
@@ -68,14 +68,14 @@ export default class ReplyList extends React.Component {
                   <div className={styles.replyedAvatar} onClick={() => {this.avatarClick(3)}}>
                     <Avatar
                       className={styles.avatar}
-                      image={this.props.data.commentUser.avatar}
-                      name={this.props.data.commentUser.nickname || this.props.data.replyUser.userName || ''}
+                      image={(this.props.data.commentUser.nickname || this.props.data.commentUser.userName) && this.props.data.commentUser.avatar}
+                      name={this.props.data.commentUser.nickname || this.props.data.replyUser.userName || '异'}
                       circle={true}
                       size="small"
                     ></Avatar>
                   </div>
                   <span className={styles.replyedUserName} onClick={() => {this.avatarClick(3)}}>
-                    {this.props.data.commentUser.nickname || this.props.data.commentUser.userName}
+                    {this.props.data.commentUser.nickname || this.props.data.commentUser.userName || '用户异常'}
                   </span>
                 </div>
               ) : (
