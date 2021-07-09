@@ -356,15 +356,7 @@ class UserCenterFollows extends React.Component {
 
   render() {
     return (
-      <div
-        className={this.props.className + ' user-center-follow-list'}
-        ref={this.containerRef}
-        style={{
-          height: '100%',
-          overflow: 'scroll',
-          ...this.props.style,
-        }}
-      >
+      <>
         {this.props.messageMode && (
           <div className={styles.searchInputWrapper}>
             <Input
@@ -375,71 +367,80 @@ class UserCenterFollows extends React.Component {
             />
           </div>
         )}
-
-        {followerAdapter(this.props.dataSource || this.state.follows).map((user, index) => {
-          if (index + 1 > this.props.limit) return null;
-          return (
-            <div key={user.id} className="user-center-follow-item">
-              <UserCenterFriends
-                id={user.id}
-                customActionArea={this.props.customActionArea}
-                type={this.judgeFollowsStatus(user)}
-                imgUrl={user.avatar}
-                withHeaderUserInfo={this.props.isPc}
-                onContainerClick={this.props.onContainerClick}
-                userName={user.nickName}
-                userGroup={user.groupName}
-                followHandler={this.followUser}
-                unFollowHandler={this.unFollowUser}
-                itemStyle={this.props.itemStyle}
-                customActionArea={
-                  this.props.messageMode ? (
-                    <Button
-                      className={styles.messageButton}
-                      type={'primary'}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        Router.replace({
-                          url: `/message?page=chat&username=${user.userName}&nickname=${user.nickName}`,
-                        });
-                      }}
-                    >
-                      <div className={styles.messageButtonContent}>
-                        <Icon size={12} name={'CommentOutlined'} />
-                        <span>立即聊天</span>
-                      </div>
-                    </Button>
-                  ) : null
-                }
-              />
-              {this.props.splitElement}
-            </div>
-          );
-        })}
         <div
-          className={`${friendsStyle.friendWrap} ${styles.friendWrap} ${styles['display-none']} user-center-follow-mini`}
+          className={this.props.className + ' user-center-follow-list'}
+          ref={this.containerRef}
+          style={{
+            height: '100%',
+            overflow: 'scroll',
+            ...this.props.style,
+          }}
         >
           {followerAdapter(this.props.dataSource || this.state.follows).map((user, index) => {
             if (index + 1 > this.props.limit) return null;
             return (
-              <div key={user.id + index} className={friendsStyle.friendItem}>
-                <div className={friendsStyle.friendAvatar}>
-                  <Avatar image={user.avatar} userId={user.id} circle name={user.userName} />
-                </div>
-                <div className={friendsStyle.friendTextInfo}>{user.userName}</div>
+              <div key={user.id} className="user-center-follow-item">
+                <UserCenterFriends
+                  id={user.id}
+                  customActionArea={this.props.customActionArea}
+                  type={this.judgeFollowsStatus(user)}
+                  imgUrl={user.avatar}
+                  withHeaderUserInfo={this.props.isPc}
+                  onContainerClick={this.props.onContainerClick}
+                  userName={user.nickName}
+                  userGroup={user.groupName}
+                  followHandler={this.followUser}
+                  unFollowHandler={this.unFollowUser}
+                  itemStyle={this.props.itemStyle}
+                  customActionArea={
+                    this.props.messageMode ? (
+                      <Button
+                        className={styles.messageButton}
+                        type={'primary'}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          Router.replace({
+                            url: `/message?page=chat&username=${user.userName}&nickname=${user.nickName}`,
+                          });
+                        }}
+                      >
+                        <div className={styles.messageButtonContent}>
+                          <Icon size={12} name={'CommentOutlined'} />
+                          <span>立即聊天</span>
+                        </div>
+                      </Button>
+                    ) : null
+                  }
+                />
+                {this.props.splitElement}
               </div>
             );
           })}
-        </div>
-        {followerAdapter(this.props.dataSource || this.state.follows).length === 0 && !this.state.loading && (
-          <NoData defaultShow={true} />
-        )}
-        {this.state.loading && (
-          <div className={styles.loadMoreContainer}>
-            <Spin type={'spinner'}>加载中 ...</Spin>
+          <div
+            className={`${friendsStyle.friendWrap} ${styles.friendWrap} ${styles['display-none']} user-center-follow-mini`}
+          >
+            {followerAdapter(this.props.dataSource || this.state.follows).map((user, index) => {
+              if (index + 1 > this.props.limit) return null;
+              return (
+                <div key={'id' + user.id} className={friendsStyle.friendItem}>
+                  <div className={friendsStyle.friendAvatar}>
+                    <Avatar image={user.avatar} userId={user.id} circle name={user.userName} />
+                  </div>
+                  <div className={friendsStyle.friendTextInfo}>{user.userName}</div>
+                </div>
+              );
+            })}
           </div>
-        )}
-      </div>
+          {followerAdapter(this.props.dataSource || this.state.follows).length === 0 && !this.state.loading && (
+            <NoData defaultShow={true} />
+          )}
+          {this.state.loading && (
+            <div className={styles.loadMoreContainer}>
+              <Spin type={'spinner'}>加载中 ...</Spin>
+            </div>
+          )}
+        </div>
+      </>
     );
   }
 }
