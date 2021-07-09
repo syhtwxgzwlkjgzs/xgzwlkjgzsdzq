@@ -121,7 +121,10 @@ class Index extends Component {
     const avatarUrl = this.getAvatar(item.avatar);
 
     return (
-      <div className={styles.wrapper} onClick={(e) => this.toDetailOrChat(e, item)}>
+      <div
+        className={classNames(styles.wrapper, isPC && isLast && styles['set-radius'])}
+        onClick={(e) => this.toDetailOrChat(e, item)}
+      >
         {/* 默认block */}
         <div className={isPC ? styles['block-pc'] : styles.block}>
           {/* 头像 */}
