@@ -152,7 +152,7 @@ export default class index extends Component {
               />
             </View>
 
-            {!isLoading && formattedUserThreads?.map((item, index) => <Thread data={item} key={index} />)}
+            {!isLoading && formattedUserThreads?.map((item, index) => <Thread data={item} key={`${item.threadId}-${item.updatedAt}`} />)}
           </View>
         </View>
       </BaseLayout>

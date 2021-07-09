@@ -264,6 +264,7 @@ class PostPage extends React.Component {
    * @param {object} data 要设置的数据
    */
   handleAttachClick = (item, data) => {
+    this.setState({ currentDefaultOperation: '' });
     if (!this.checkAudioRecordStatus()) return;
 
     const { isPc } = this.props.site;
