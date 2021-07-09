@@ -32,7 +32,7 @@ const Index = ({
   payAmount = 0,
   onPay,
   onRedirectToDetail = noop,
-  loading,
+  loading = true,
   customHoverBg = false,
   ...props
 }) => {
