@@ -7,7 +7,7 @@ import styles from './index.module.scss';
 import { withRouter } from 'next/router';
 import Router from '@discuzq/sdk/dist/router';
 import GetQueryString from '../../../../common/utils/get-query-string';
-
+import ViewAdapter from '@components/view-adapter';
 @inject('user')
 @observer
 class index extends Component {
@@ -98,14 +98,20 @@ class index extends Component {
 
   render() {
     return (
-      <div
-        style={{
-          height: this.state.height,
-        }}
-      >
-        <Header />
-        {this.state.renderComponent && this.getRenderComponent()}
-      </div>
+      <ViewAdapter
+        h5={
+          <div
+            style={{
+              height: this.state.height,
+            }}
+          >
+            <Header />
+            {this.state.renderComponent && this.getRenderComponent()}
+          </div>
+        }
+        pc={null}
+        title={'粉丝列表'}
+      />
     );
   }
 }
