@@ -1,15 +1,21 @@
 @import '@common/styles/index.scss';
 
-.noImageAvatar {
-    width: 36px;
-    height: 36px;
+.avatarWrapper {
+    // width: 36px;
+    // height: 36px;
     border-radius: 50%;
-    background: $text-color-secondary;
+    background: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
     text {
         color: $white;
         font-size: $font-size-middle;
+    }
+    :global {
+        .dzq-avatar__img {
+            border-radius: 50%;
+            background-color: transparent;
+        }
     }
 }

@@ -46,14 +46,14 @@ export default function avatar(props) {
 
   if (image && image !== '') {
     return (
-      <View onClick={clickHandle} >
+      <View onClick={clickHandle} className={styles.avatarWrapper}>
         <Avatar className={className} circle={circle} image={currAvatarImage} size={size}></Avatar>
       </View>
     );
   }
 
   return (
-    <View onClick={clickHandle} className={styles.noImageAvatar}>
+    <View onClick={clickHandle} className={styles.avatarWrapper}>
       <Avatar className={className} circle={circle} text={userName} size={size}></Avatar>
     </View>
   );
