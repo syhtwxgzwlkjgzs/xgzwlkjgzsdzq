@@ -130,7 +130,7 @@ const Index = ({
         onClick={!showMore ? onShowMore : handleClick}
       >
         <View className={styles.content}>
-          {relativeToViewport && <RichText content={(useShowMore && cutContentForDisplay) ? cutContentForDisplay : urlToLink(filterContent)} onClick={handleClick} />}
+          <RichText content={(useShowMore && cutContentForDisplay) ? cutContentForDisplay : urlToLink(filterContent)} onClick={handleClick} />
         </View>
       </View>
       {!loading && useShowMore && !showMore && (

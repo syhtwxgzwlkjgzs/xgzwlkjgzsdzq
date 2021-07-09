@@ -1,96 +1,94 @@
-import React, { createRef } from 'react';
-import PullDownRefresh from '@discuzq/design/dist/components/pullDownRefresh/index';
-import ScrollView from '@discuzq/design/dist/components/scrollView/index';
-import BaseList from '@components/list';
-
-import styles from './index.module.scss';
-import { View, Text } from '@tarojs/components';
+import React, { useEffect, useRef, useState } from 'react';
+import { arrTrans, getWindowHeight } from './utils';
+import List from './List';
 
 /**
- * 列表组件
- * @prop {function} onRefresh 刷新事件
- * @prop {function} onScrollBottom 到达底部事件
- * @prop {string} containerClassName 覆盖container className 用于设置list高度
- * @prop {boolean} refreshing 是否刷新中 必填 否则上面刷新块不会消失
- * @prop {Data[]} data 数据
- * @prop {function} renderItem 渲染行
- *  @param {{index:number, data: Data}} args 参数
- * ...props 其他ScrollView props
+ * 列表组件，集成上拉刷新能力
+ * @prop {function} height 容器高度
+ * @prop {function} className 容器样式
+ * @param {string} noMore 无更多数据
+ * @prop {function} onRefresh 触底触发事件，需返回promise
+ * @prop {function} showRefresh 是否启用上拉刷新
  */
-class List extends React.PureComponent {
-  state = {
-    height: 0,
-  };
-  listRef = createRef();
-  loadHeightCount = 0; // 防止ssr获取dom节点高度失败问题，最多重新获取2次
+const VirtualList = ({
+  data,
+  isClickTab,
+  wholePageIndex
+}) => {
+  const [dataSource, setDataSource] = useState([]);
+  const windowHeight = useRef(null)
+  const listRef = useRef(null)
 
-  componentDidMount() {
-    this.loadHeight();
-  }
+  // 处理分组数据
+  useEffect(() => {
+      if (!data?.length) {
+        resetAllData()
+      } else {
+        const arr = arrTrans(10, data)
+        const length = arr.length
+        if (arr.length) {
+          const newArr = dataSource.slice()
+          newArr.push(arr[length - 1]) 
+          setDataSource(newArr)    
+        }
+      }
+    
+  }, [data?.length])
 
-  loadHeight = () => {
-    const el = this.listRef.current;
-    if (el && el.clientHeight) {
-      this.setState({
-        height: el.clientHeight,
-      });
-    } else if (this.loadHeightCount < 2) {
-      setTimeout(() => {
-        this.loadHeight();
-      }, 100);
+//   通知子组件去监听
+  useEffect(() => {
+    if (dataSource?.length && listRef?.current) {
+        const length = dataSource.length - 1
+        const { displays } = listRef.current.state
+        if (dataSource?.length > displays?.length) {
+            setTimeout(() => {
+                listRef?.current?.observePage(length)
+            }, 10);
+        }
     }
-    this.loadHeightCount += 1;
-  };
+  }, [dataSource, listRef?.current])
 
-  emptyFunction() {}
+  // 获取屏幕高度
+  useEffect(() => {
+    getWindowHeight().then((res) => {
+      windowHeight.current = res
+    })
+  }, [])
 
-  renderDiv() {
-    return <View />;
+    //   当源数据为空时，重置组件数据
+    const resetAllData = () => {
+        setDataSource([])
+    }
+
+  const dispatch = (threadId, updatedThreadData) => {
+    if(!threadId || !updatedThreadData) return;
+
+    let newArr = [ ...dataSource ];
+    newArr.forEach((subArr) => {
+      for(let i = 0; i < subArr.length; i++) {
+        if(subArr[i].threadId === threadId) {
+          subArr[i] = updatedThreadData;
+          break;
+        }
+      }
+    });
+    setDataSource(newArr);
   }
 
-  render() {
-    const {
-      onRefresh,
-      refreshing,
-      chlidren,
-      data = [],
-      renderItem,
-      onScrollBottom,
-      containerClassName,
-      onPullingUp,
-      noMore,
-    } = this.props;
-    const { height } = this.state;
-    const { emptyFunction, renderDiv } = this;
-    const composeClassName = `${styles.container} ${containerClassName || styles.list}`;
-
-    // return (
-    //   <div className={composeClassName} ref={this.listRef}>
-    //     {!!height && (
-    //       <PullDownRefresh onRefresh={onRefresh} isFinished={!refreshing} height={height}>
-    //         <ScrollView
-    //           height={height}
-    //           rowCount={data.length}
-    //           rowData={data}
-    //           rowRenderer={renderItem || renderDiv}
-    //           renderBottom={renderDiv}
-    //           isRowLoaded={emptyFunction}
-    //           onPullingUp={emptyFunction}
-    //           onScrollBottom={onScrollBottom}
-    //           {...props}
-    //         >
-    //           {chlidren}
-    //         </ScrollView>
-    //       </PullDownRefresh>
-    //     )}
-    //   </div>
-    // );
-    return (
-      <BaseList className={composeClassName} onRefresh={onPullingUp} noMore={noMore}>
-        {data && data.map((_, index) => renderItem({ data, index })) }
-      </BaseList>
-    );
-  }
+  return (
+      <>
+        {
+            !isClickTab && <List 
+                ref={(e) => { listRef.current = e }}
+                dataSource={dataSource} 
+                wholePageIndex={wholePageIndex} 
+                windowHeight={windowHeight.current} 
+                dispatch={dispatch}
+                isClickTab={isClickTab}
+            />
+        }
+      </>
+    
+  );
 }
-
-export default List;
+export default VirtualList;

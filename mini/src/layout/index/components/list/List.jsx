@@ -1,11 +1,11 @@
 import React from 'react';
-import { ScrollView, View } from '@tarojs/components';
+import { View } from '@tarojs/components';
 import Thread from '@components/thread';
-import { getElementRect, arrTrans, getWindowHeight, randomStr } from './utils';
 import Taro from '@tarojs/taro';
-import { inject, observer, Observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 
 @inject('index')
+@inject('baselayout')
 @observer
 export default class List extends React.Component {
     constructor(props) {
@@ -27,8 +27,14 @@ export default class List extends React.Component {
 
         const that = this
 
-        const observerObj = Taro.createIntersectionObserver().relativeToViewport({ top: 2 * windowHeight, bottom: 2 * windowHeight });
+        const observerObj = Taro.createIntersectionObserver().relativeToViewport({ top: 3 * windowHeight, bottom: 3 * windowHeight });
         observerObj.observe(`#virtual-list-${pageIndex}`, (res) => {
+            // 视频全屏判断
+            const { baselayout } = that.props
+            if (baselayout.videoFullScreenStatus === "inFullScreen") {
+                return
+            }
+
             const isHidden = res.intersectionRatio <= 0
 
             const { displays } = that.state
@@ -40,33 +46,24 @@ export default class List extends React.Component {
                     displays: newDisplays
                 })
             }
+            
         });
 
         this.observerObjs[pageIndex] = observerObj
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot){
-        const { dataSource: oldDataSource } = prevProps
-        const { dataSource, wholePageIndex } = this.props
-        const { displays } = this.state
-
-        if (dataSource.length !== oldDataSource.length && dataSource.length > displays.length) {
-            setTimeout(() => {
-                this.observePage(wholePageIndex)
-            }, 10)
-        }
     }
 
     componentWillUnmount() {
         this.observerObjs.forEach(observer => {
             observer?.disconnect()
         })
+
+        this.observerObjs = []
+        this.setState({ displays: [] })
     }
 
     render () {
-        const { dataSource } = this.props
+        const { dataSource, dispatch } = this.props
         const { displays } = this.state
-
         return (
             <>
                 {
@@ -74,7 +71,7 @@ export default class List extends React.Component {
                         return (
                         <View id={`virtual-list-${index}`}>
                         {
-                            item?.map((subItem, subIndex) => (<Thread data={subItem} key={subIndex} relativeToViewport={displays[index]} />))
+                            item?.map((subItem, subIndex) => (<Thread data={subItem} key={`${subItem.threadId}-${subItem.updatedAt}`} relativeToViewport={displays[index]} dispatch={dispatch}/>))
                         }
                         </View>
                     )})

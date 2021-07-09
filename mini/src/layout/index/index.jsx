@@ -13,9 +13,8 @@ import { getSelectedCategoryIds } from '@common/utils/handleCategory';
 import Taro from '@tarojs/taro';
 import { debounce } from '@common/utils/throttle-debounce.js';
 import styles from './index.module.scss';
-import VirtualList from '@components/virtual-list/group';
 import IndexTabs from './components/tabs'
-import ThreadList from './list'
+import ThreadList from './components/list'
 @inject('site')
 @inject('user')
 @inject('index')
