@@ -160,11 +160,12 @@ class WalletAction extends WalletStore {
       };
 
       const filter = {
-        start_time: time.getMonthStartAndEnd(date)[0],
-        end_time: time.getMonthStartAndEnd(date)[1],
+        startTime: time.getMonthStartAndEnd(date)[0],
+        endTime: time.getMonthStartAndEnd(date)[1],
       };
+
       if (type !== 'all') {
-        filter.cash_status = [type];
+        filter.cashStatus = [type];
       }
 
       Object.assign(param, {
