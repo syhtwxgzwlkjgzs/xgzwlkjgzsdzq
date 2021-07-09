@@ -25,7 +25,7 @@ function validateUrl(url) {
       const { pathname, hash, search } = new URL(url);
       return !(pathname === '/' && !hash && !search);
     } catch (err) {
-      console.error('LoginHelper is setting a invalid url', err);
+      console.error('LoginHelper is setting a invalid url', url, err);
       return false;
     }
   }
@@ -118,12 +118,14 @@ class LoginHelper {
     this.setUrl(url);
   };
 
-  // 保存当前地址，并跳转目标地址
+  // 保存当前地址，并跳转目标地址targetUrl
   saveAndRedirect = (targetUrl, isForce) => {
     typeof isForce === 'boolean' && isForce && this.clear();
+    this.saveCurrentUrl();
 
-    this.setUrl(targetUrl);
-    this.gotoLogin();
+    Router.redirect({
+      url: targetUrl
+    });
   };
 
   // 自动记录当前的地址，再跳转登录页
