@@ -41,6 +41,38 @@ $ npm install
 $ npm run build:weapp
 ```
 
+## 如何更新
+
+### 使用git下载代码
+
+使用命令行进入本仓库目录，运行以下命令
+
+```bash
+// 更新仓库代码
+$ git pull origin master
+
+// 更新dzq3.0核心依赖
+$ npm run update
+
+// 更新其他依赖
+$ npm install
+
+// 重新构建
+$ npm run build:weapp
+```
+
+### 使用zip下载代码
+
+如果使用zip下载代码包，运行以下命令
+
+```bash
+// 更新其他依赖
+$ npm install
+
+// 重新构建
+$ npm run build:weapp
+```
+
 ## 发布
 
 编译后的小程序源代码在`mini/dist`下，可以直接使用`微信开发者工具`打开后进行提交审核
