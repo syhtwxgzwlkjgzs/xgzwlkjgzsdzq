@@ -15,6 +15,11 @@ function isSessionStorage() {
 
 // 跳转地址校验
 function validateUrl(url) {
+  if (typeof url !== 'string') {
+    console.log('LoginHelper Error: the url is not a string', url);
+    return false;
+  }
+
   if (isWeb()) {
     try {
       const { pathname, hash, search } = new URL(url);
@@ -24,6 +29,7 @@ function validateUrl(url) {
       return false;
     }
   }
+
   return !['pages/index/index', 'pages/home/index'].includes(url);
 }
 
@@ -116,10 +122,8 @@ class LoginHelper {
   saveAndRedirect = (targetUrl, isForce) => {
     typeof isForce === 'boolean' && isForce && this.clear();
 
-    this.saveCurrentUrl();
-    Router.redirect({
-      url: targetUrl,
-    });
+    this.setUrl(targetUrl);
+    this.gotoLogin();
   };
 
   // 自动记录当前的地址，再跳转登录页
