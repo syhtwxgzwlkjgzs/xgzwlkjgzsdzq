@@ -358,14 +358,24 @@ class RenderCommentList extends React.Component {
   replyAvatarClick(reply, comment, floor) {
     if (floor === 2) {
       const { userId } = reply;
-      if(!userId) return;
-      this.props.router.push(`/user/${userId}`)
+      if (!userId) return;
+      this.props.router.push(`/user/${userId}`);
     }
     if (floor === 3) {
       const { commentUserId } = reply;
-      if(!commentUserId) return;
-      this.props.router.push(`/user/${commentUserId}`)
+      if (!commentUserId) return;
+      this.props.router.push(`/user/${commentUserId}`);
     }
+  }
+
+  onFocus(e) {
+    if (!this.props.user.isLogin()) {
+      e && e.stopPropagation();
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+    return true;
   }
 
   render() {
@@ -409,6 +419,10 @@ class RenderCommentList extends React.Component {
             onSubmit={(value, imageList) => this.props.onPublishClick(value, imageList)}
             initValue={this.state.inputValue}
             placeholder={this.state.placeholder}
+            onFocus={(e) => this.onFocus(e)}
+            onEmojiIconClick={() => this.onFocus()}
+            onAtIconClick={() => this.onFocus()}
+            onPcitureIconClick={() => this.onFocus()}
           ></CommentInput>
         </div>
 
@@ -427,7 +441,7 @@ class RenderCommentList extends React.Component {
                 data={val}
                 key={val.id}
                 avatarClick={(userId) => this.onUserClick(userId)}
-                replyAvatarClick={(reply,floor) =>this.replyAvatarClick(reply,val,floor)}
+                replyAvatarClick={(reply, floor) => this.replyAvatarClick(reply, val, floor)}
                 likeClick={() => this.likeClick(val)}
                 replyClick={() => this.replyClick(val)}
                 deleteClick={() => this.deleteClick(val)}
