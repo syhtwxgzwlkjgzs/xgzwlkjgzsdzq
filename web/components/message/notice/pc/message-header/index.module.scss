@@ -3,6 +3,7 @@
 .wrapper {
   background: $white;
   padding: 0 $padding-6n;
+  border-radius: $border-radius-small $border-radius-small 0 0;
 
   .wrapper-inner {
     height: rem(73px);
