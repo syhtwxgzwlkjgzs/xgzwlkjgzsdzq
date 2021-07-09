@@ -10,6 +10,7 @@ import BaseLayout from '@components/base-layout';
 import UserCenterPost from '../../components/user-center-post';
 import SectionTitle from '@components/section-title';
 import Taro, { getCurrentInstance, eventCenter } from '@tarojs/taro';
+import ImagePreviewer from '@discuzq/design/dist/components/image-previewer/index';
 @inject('user')
 @observer
 export default class index extends Component {
@@ -17,6 +18,7 @@ export default class index extends Component {
     super(props);
     this.state = {
       isLoading: true,
+      isPreviewBgVisible: false, // 是否预览背景图片
     };
   }
 
@@ -117,12 +119,28 @@ export default class index extends Component {
     );
   };
 
+  handlePreviewBgImage = (e) => {
+    e && e.stopPropagation();
+    this.setState({
+      isPreviewBgVisible: !this.state.isPreviewBgVisible,
+    });
+  };
+
+  getBackgroundUrl = () => {
+    let backgroundUrl = '/dzq-img/my-default-header-img.jpg';
+    if (this.props.user?.backgroundUrl) {
+      backgroundUrl = this.props.user?.backgroundUrl;
+    } else if (this.props.isOtherPerson && this.props.user?.targetUserBackgroundUrl) {
+      backgroundUrl = this.props.user.targetUserBackgroundUrl;
+    }
+    return backgroundUrl;
+  };
+
   render() {
     const { isLoading } = this.state;
     const { user } = this.props;
     const { userThreads, userThreadsTotalCount, userThreadsPage, userThreadsTotalPage } = user;
     const formattedUserThreads = this.formatUserThreadsData(userThreads);
-
     return (
       <BaseLayout
         showHeader={false}
@@ -133,7 +151,9 @@ export default class index extends Component {
       >
         <View className={styles.mobileLayout}>
           {this.renderTitleContent()}
-          <UserCenterHeaderImage />
+          <View onClick={this.handlePreviewBgImage}>
+            <UserCenterHeaderImage />
+          </View>
           <UserCenterHead />
           <View className={styles.unit}>
             <UserCenterAction />
@@ -155,6 +175,14 @@ export default class index extends Component {
             {!isLoading && formattedUserThreads?.map((item, index) => <Thread data={item} key={index} />)}
           </View>
         </View>
+        {this.state.isPreviewBgVisible && (
+          <ImagePreviewer
+            visible={this.state.isPreviewBgVisible}
+            onClose={this.handlePreviewBgImage}
+            imgUrls={['/dzq-img/my-default-header-img.jpg']}
+            currentUrl={'/dzq-img/my-default-header-img.jpg'}
+          />
+        )}
       </BaseLayout>
     );
   }
