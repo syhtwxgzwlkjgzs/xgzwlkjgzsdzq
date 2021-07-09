@@ -91,9 +91,17 @@ class UserAction extends SiteStore {
   diffPicAndUpdateUserInfo(data) {
     const transformedData = Object.assign({}, data);
 
+    // 如下操作是为了避免因为签名导致的图片重加载问题
     if (data.backgroundUrl && this.backgroundUrl) {
       const originBackgroundFilename = this.backgroundUrl?.split('?')[0];
       const nextBackgroundFilename = data.backgroundUrl?.split('?')[0];
+
+      const originAvatarFilename = this.avatarUrl?.split('?')[0];
+      const nextAvatarFilename = data.avatarUrl?.split('?')[0];
+
+      if (originAvatarFilename === nextAvatarFilename) {
+        transformedData.avatarUrl = this.avatarUrl;
+      }
 
       if (originBackgroundFilename === nextBackgroundFilename) {
         transformedData.backgroundUrl = this.backgroundUrl;
