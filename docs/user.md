@@ -61,6 +61,32 @@ $ npm install
 $ npm run build:weapp
 ```
 
+### 注意！！！
+如果修改过你小程序的域名和appid，在每一次拉取代码更新时，会存在`冲突`的情况导致无法成功更新代码。一般情况下会存在冲突的文件如下：
+- ./mini/common/config/prod.js
+- ./mini/project.config.json
+
+可以通过以下命令将修改的代码暂时保存起来，更新后再恢复。
+```bash
+$ git add .
+$ git stash
+
+// 运行代码更新
+$ git pull origin master
+
+// 恢复你修改的配置
+$ git stash pop
+
+// 更新dzq3.0核心依赖
+$ npm run update
+
+// 更新其他依赖
+$ npm install
+
+// 重新构建
+$ npm run build:weapp
+```
+
 ### 使用zip下载代码
 
 如果使用zip下载代码包，运行以下命令
