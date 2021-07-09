@@ -179,8 +179,8 @@ export default class index extends Component {
           <ImagePreviewer
             visible={this.state.isPreviewBgVisible}
             onClose={this.handlePreviewBgImage}
-            imgUrls={['/dzq-img/my-default-header-img.jpg']}
-            currentUrl={'/dzq-img/my-default-header-img.jpg'}
+            imgUrls={[this.getBackgroundUrl()]}
+            currentUrl={this.getBackgroundUrl()}
           />
         )}
       </BaseLayout>
