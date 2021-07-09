@@ -283,7 +283,7 @@ class UserCenterFans extends React.Component {
                     imgUrl={user.avatar}
                     withHeaderUserInfo={this.props.isPc}
                     onContainerClick={this.props.onContainerClick}
-                    userName={user.userName}
+                    nickName={user.nickName}
                     userGroup={user.groupName}
                     followHandler={this.followUser}
                     itemStyle={this.props.itemStyle}
