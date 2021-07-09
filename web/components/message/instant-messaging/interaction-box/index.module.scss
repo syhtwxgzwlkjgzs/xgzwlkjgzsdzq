@@ -55,7 +55,7 @@
 }
 
 .pcInteractionBox {
-  @include im-pagebed;
+  padding: 0 $padding-6n;
   border-top: $border-solid-1;
 
   .tools {
