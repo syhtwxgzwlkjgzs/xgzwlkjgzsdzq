@@ -178,7 +178,11 @@ class PCMyPage extends React.Component {
           mold="plane"
         >
           {formattedUserThreads?.map((item, index) => (
-            <Thread data={item} key={index} className={index === 0 && styles.threadStyle} />
+            <Thread
+              data={item}
+              key={`${item.threadId}-${item.updatedAt}`}
+              className={index === 0 && styles.threadStyle}
+            />
           ))}
         </SidebarPanel>
       </div>
