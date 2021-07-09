@@ -47,16 +47,18 @@ class Index extends React.Component {
 
   render() {
     const { pageData } = this.state.users || {};
+    const { topicsError } = this.props.search || {};
     const { isError, errorText } = this.state
     const { className = '' } = this.props;
+
     return (
       <SidebarPanel
         title="活跃用户"
         onShowMore={this.redirectToSearchResultUser}
         isLoading={!pageData}
         noData={!pageData?.length}
-        isError={isError}
-        errorText={errorText}
+        isError={topicsError.isError || isError}
+        errorText={topicsError.errorText || errorText}
         className={className}
       >
         <ActiveUsers data={pageData} direction='left' onItemClick={this.onUserClick}/>
