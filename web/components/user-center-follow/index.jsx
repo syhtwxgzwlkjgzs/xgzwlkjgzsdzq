@@ -372,7 +372,7 @@ class UserCenterFollows extends React.Component {
           ref={this.containerRef}
           style={{
             height: '100%',
-            overflow: 'scroll',
+            overflowY: 'scroll',
             ...this.props.style,
           }}
         >
