@@ -33,7 +33,7 @@
         }
       }
       .dzq-icon{
-        color: $text-color-secondary;
+        color: $icon-color-light;
       }
     }
   }
@@ -61,10 +61,12 @@
   .tools {
     padding: rem($margin-4n) 0;
     position: relative;
-  }
 
-  .emoj {
-    margin-left: rem($margin-1n);
+    :global{
+      .dzq-icon{
+        color: $icon-color-light;
+      }
+    }
   }
 
   .pictureUpload {
@@ -85,6 +87,7 @@
   }
 
   .submitBtn {
+    width: rem(100px);
     padding: rem($padding-2n) rem($padding-6n);
     margin: rem($margin-4n) 0;
   }
