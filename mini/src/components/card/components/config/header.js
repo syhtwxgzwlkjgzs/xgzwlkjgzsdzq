@@ -22,6 +22,7 @@ export const getHeaderConfig = ({ thread }) => {
           images: [ ...descImages ],
       }
     };
+    
     if(!thread.user.avatar || thread.isAnonymous) {
       headerConfig.config.blocks.push(avatarBlock);
     } else {
@@ -36,7 +37,7 @@ const handleAvatar = (thread) => {
   const avatar = thread.user.avatar || ''
   let avatarBlock = {};
   let avatarImage = {};
-  if(!avatar) {
+  if(!avatar || thread.isAnonymous) {
     avatarBlock = getAvatarBlock(thread);
   } else {
     avatarImage = getAvatarImage(thread);
@@ -49,7 +50,10 @@ const handleAvatar = (thread) => {
 
 // 处理头像
 const getAvatarBlock = (thread) => {
-  const {nickname} = thread.user
+  let {nickname} = thread.user
+  if(thread.isAnonymous) {
+    nickname = '匿'
+  }
   const name = nickname.charAt(0)
   return {
     x: baseX,
