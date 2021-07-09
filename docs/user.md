@@ -1,9 +1,3 @@
-## 环境
-
-建议使用环境如下：
-- node: 14.x.x
-- npm: 6.14.x
-
 ## 使用
 
 建议使用git clone命令进行下载，方便后续更新。
@@ -15,6 +9,7 @@ $ git clone https://gitee.com/Discuz/discuz-fe.git
 ## 安装项目依赖
 
 ```bash
+$ cd discuz-fe
 $ cd ./mini
 $ npm install
 ```
@@ -26,6 +21,31 @@ $ npm install --registry=http://mirrors.cloud.tencent.com/npm/
 // 永久生效
 $ npm config set registry http://mirrors.cloud.tencent.com/npm/
 ```
+
+## 小程序构建
+
+- 修改`mini/project.config.json`文件中的appid为自己的appid
+- 修改`common/config/prod.js`中的域名指向
+
+```js
+module.exports = {
+  TITLE: 'Discuz!Q',
+  COMMON_BASE_URL: process.env.DISCUZ_ENV === 'web' ? '' : '你的网站域名',
+};
+```
+- 进行小程序编译
+
+```bash
+$ cd ./mini
+$ npm install
+$ npm run build:weapp
+```
+
+## 发布
+
+编译后的小程序源代码在`mini/dist`下，可以直接使用`微信开发者工具`打开后进行提交审核
+
+## 常见问题
 
 如果遇到以下问题：
 ```bash
@@ -46,32 +66,18 @@ npm ERR! Fix the upstream dependency conflict, or retry
 npm ERR! this command with --force, or --legacy-peer-deps
 npm ERR! to accept an incorrect (and potentially broken) dependency resolution.
 npm ERR! 
-npm ERR! See /Users/samwu/.npm/eresolve-report.txt for a full report.
+npm ERR! See /Users/xxx/.npm/eresolve-report.txt for a full report.
 
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /Users/xxx/.npm/_logs/2021-07-02T17_24_15_418Z-debug.log
 ```
 
-可以尝试使用以下命令：
-```bash
-npm cache clean --force && npm i --legacy-peer-deps
+这是因为node的版本太高`（高于14）`，请暂时使用node 14版本来编译。
+
+如果你使用的是M1芯片的Mac，请先安装NVM，然后使用NVM来安装ARM版本的node 14
+
 ```
-
-## 小程序构建
-
-- 修改`project.config.json`文件中的appid为自己的appid
-- 修改`prod.js`中的域名指向
-
-```js
-module.exports = {
-  TITLE: 'Discuz!Q',
-  COMMON_BASE_URL: process.env.DISCUZ_ENV === 'web' ? '' : '你的网站域名',
-};
-```
-- 进行小程序编译
-
-```bash
-$ cd ./mini
-$ npm install
-$ npm run build:weapp
+$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+$ nvm install v14
+$ node -v
 ```

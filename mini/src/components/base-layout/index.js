@@ -92,35 +92,36 @@ const BaseLayout = (props) => {
     const playingAudioDom = baselayout.playingAudioDom;
 
     if (e?.detail?.scrollTop && pageName) baselayout[pageName] = e.detail.scrollTop;
-
-    Taro.getSystemInfo({
-      success(res) {
-
-        if (playingVideoDom) {
-          Taro.createSelectorQuery()
-          .select(`#${playingVideoDom}`)
-          .boundingClientRect((rect) => { 
-            if(rect.top > res.windowHeight || rect.bottom < 0) {
-              Taro.createVideoContext(playingVideoDom)?.pause();
-              baselayout.playingVideoDom = "";
-            }
-          }).exec();
+    
+    if (playingVideoDom || playingAudioDom) {
+      Taro.getSystemInfo({
+        success(res) {
+  
+          if (playingVideoDom) {
+            Taro.createSelectorQuery()
+            .select(`#${playingVideoDom}`)
+            .boundingClientRect((rect) => { 
+              if(rect.top > res.windowHeight || rect.bottom < 0) {
+                Taro.createVideoContext(playingVideoDom)?.pause();
+                baselayout.playingVideoDom = "";
+              }
+            }).exec();
+          }
+  
+          if(playingAudioDom) {
+            Taro.createSelectorQuery()
+              .select(`#${baselayout?.playingAudioWrapperId}`)
+              .boundingClientRect((rect) => {
+              if(rect.top > res.windowHeight || rect.bottom < 0) {
+                baselayout.playingAudioDom.pause();
+                baselayout.playingAudioDom = null;
+              }
+            }).exec();
+          }
+  
         }
-
-        if(playingAudioDom) {
-          Taro.createSelectorQuery()
-            .select(`#${baselayout?.playingAudioWrapperId}`)
-            .boundingClientRect((rect) => {
-            if(rect.top > res.windowHeight || rect.bottom < 0) {
-              baselayout.playingAudioDom.pause();
-              baselayout.playingAudioDom = null;
-            }
-          }).exec();
-        }
-
-      }
-    });
-
+      });
+    }
   }, 50);
 
   return (

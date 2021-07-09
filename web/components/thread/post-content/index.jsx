@@ -30,7 +30,7 @@ const Index = ({
   payAmount = 0,
   onPay,
   onRedirectToDetail = noop,
-  loading,
+  loading = true,
   usePointer = true,
   customHoverBg = false,
   onContentHeightChange = noop,

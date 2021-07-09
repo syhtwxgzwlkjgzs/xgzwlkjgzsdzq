@@ -36,13 +36,13 @@
 
     @include heightMedia(895px, 840px) {
       .user-center-follow-list {
-        max-height: 380px !important;
+        max-height: 330px !important;
       }
     }
 
     @include heightMedia(840px, 785px) {
       .user-center-follow-list {
-        max-height: 325px !important;
+        max-height: 285px !important;
       }
     }
 

@@ -12,7 +12,7 @@ export default function HOCWeixin(Component) {
       this.state = {
         isWeiXin: false,
       };
-      if (isServer() || !this.props.site.isOffiaccountOpen) return;
+      if (isServer() || !this.props.site.isOffiaccountOpen || this.props.site.isMiniProgramOpen) return;
       // 如果在微信环境内，则直接拉起登录
       if (isWeiXin()) {
         this.target = Toast.loading({

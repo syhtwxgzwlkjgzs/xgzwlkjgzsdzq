@@ -13,6 +13,8 @@ import { getSelectedCategoryIds } from '@common/utils/handleCategory';
 import Taro from '@tarojs/taro';
 import { debounce } from '@common/utils/throttle-debounce.js';
 import styles from './index.module.scss';
+import IndexTabs from './components/tabs'
+import ThreadList from '@components/virtual-list'
 @inject('site')
 @inject('user')
 @inject('index')
@@ -29,10 +31,12 @@ class IndexH5Page extends React.Component {
       fixedTab: false,
       navBarHeight: 64,
       headerHeight: 210,
-      isClickTab: false
+      isClickTab: false,
+      windowHeight: 0
     };
     this.tabsRef = createRef();
     this.headerRef = createRef(null);
+    this.isChange = false
   }
 
   setNavigationBarStyle = () => {
@@ -213,7 +217,7 @@ class IndexH5Page extends React.Component {
     const { index, user } = this.props;
     const { isFinished, isClickTab } = this.state;
     const { threads = {}, currentCategories, filter, threadError } = index;
-    const { currentPage, totalPage, pageData } = threads || {};
+    const { currentPage = 1, totalPage, pageData } = threads || {};
 
     return (
       <BaseLayout
@@ -233,19 +237,25 @@ class IndexH5Page extends React.Component {
       >
         <HomeHeader ref={this.headerRef} />
 
-        {this.renderTabs()}
+        <IndexTabs onClickTab={this.onClickTab} searchClick={this.searchClick} />
 
         <View style={{display: isClickTab ? 'none' : 'block'}}>
           {this.renderHeaderContent()}
 
-          {pageData?.map((item, index) => (
-              <ThreadContent
-                key={`${item.threadId}-${item.updatedAt}`}
-                showBottomStyle={index !== pageData.length - 1}
-                data={item}
-                className={styles.listItem}
-              />
-            ))}
+          {
+            !this.isChange ? (
+              <ThreadList data={pageData} isClickTab={isClickTab} wholePageIndex={currentPage - 1} />
+            ) : (
+              pageData?.map((item, index) => (
+                <ThreadContent
+                  key={`${item.threadId}-${item.updatedAt}`}
+                  showBottomStyle={index !== pageData.length - 1}
+                  data={item}
+                  className={styles.listItem}
+                />
+              ))
+            )
+          }
         </View>
 
         <FilterView
