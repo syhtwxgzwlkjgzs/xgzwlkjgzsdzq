@@ -25,7 +25,7 @@ function validateUrl(url) {
       const { pathname, hash, search } = new URL(url);
       return !(pathname === '/' && !hash && !search);
     } catch (err) {
-      console.erro('LoginHelper is setting a invalid url', err);
+      console.error('LoginHelper is setting a invalid url', err);
       return false;
     }
   }
