@@ -12,7 +12,7 @@ import { MINI_SITE_JOIN_WHITE_LIST, REVIEWING_USER_WHITE_LIST } from '@common/co
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Taro from '@tarojs/taro';
 import { REVIEWING } from '@common/store/login/util';
-import LoginHelper from '@common/utils/login-helper'
+import LoginHelper from '@common/utils/login-helper';
 
 const INDEX_URL = '/pages/home/index';
 const PARTNER_INVITE_URL = '/subPages/forum/partner-invite/index';

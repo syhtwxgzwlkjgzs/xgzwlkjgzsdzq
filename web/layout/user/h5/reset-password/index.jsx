@@ -10,7 +10,7 @@ import { get } from '@common/utils/get';
 import PcBodyWrap from '../components/pc-body-wrap';
 import layout from './index.module.scss';
 import HOCTencentCaptcha from '@middleware/HOCTencentCaptcha';
-import LoginHelper from '@common/utils/login-helper'
+import LoginHelper from '@common/utils/login-helper';
 
 @inject('site')
 @inject('user')

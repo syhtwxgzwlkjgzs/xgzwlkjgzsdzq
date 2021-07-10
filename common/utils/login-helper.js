@@ -1,4 +1,5 @@
 import Router from '@discuzq/sdk/dist/router';
+import { getCurrentInstance } from '@tarojs/taro';
 
 // 记录用户访问的初始地址，用户登陆、付费等操作后跳回
 const JUMP_URL_LABEL = '__jump_url';
@@ -25,7 +26,7 @@ function validateUrl(url) {
       // 相对地址转绝对地址
       let absUrl = url;
       if (url.startsWith('/')) {
-        absUrl = `${window.location.origin}${url}`
+        absUrl = `${window.location.origin}${url}`;
       }
 
       const { pathname, hash, search } = new URL(absUrl);
@@ -48,15 +49,13 @@ function getCurrentUrl() {
     url = window.location.href;
   } else {
     // 小程序
-    const pages = getCurrentPages();
-    const { route, options } = pages[pages.length - 1];
-
-    url = route;
-    if (Object.keys(options).length > 0) {
-      url = `${url}?${options.entries(([key, value]) => `${key}=${value}`).join('&')}`;
+    const { path, params } = getCurrentInstance().router;
+    url = path;
+    if (Object.keys(params).length > 0) {
+      url = `${url}?${Object.entries(params).map(([key, value]) => `${key}=${value}`).join('&')}`;
     }
   }
-  console.log('LoginHelper: getCurrentUrl', url)
+  console.log('LoginHelper: getCurrentUrl', url);
 
   return url;
 }
@@ -88,7 +87,7 @@ class LoginHelper {
     } else {
       this.url = url;
     }
-    console.log('LoginHelper: setUrl', url)
+    console.log('LoginHelper: setUrl', url);
 
     return true;
   };
@@ -102,7 +101,7 @@ class LoginHelper {
     } else if (this.url) {
       url = `${this.url.startsWith('/') ? '' : '/'}${this.url}`;
     }
-    console.log('LoginHelper: getUrl', url)
+    console.log('LoginHelper: getUrl', url);
 
     return url;
   };
@@ -114,7 +113,7 @@ class LoginHelper {
     } else {
       this.url = '';
     }
-    console.log('LoginHelper: clear')
+    console.log('LoginHelper: clear');
   };
 
   gotoLogin = () => {
@@ -127,7 +126,7 @@ class LoginHelper {
     const url = getCurrentUrl();
 
     this.setUrl(url);
-    console.log('LoginHelper: saveCurrentUrl', url)
+    console.log('LoginHelper: saveCurrentUrl', url);
   };
 
   // 保存当前地址，并跳转目标地址targetUrl
@@ -136,9 +135,9 @@ class LoginHelper {
     this.saveCurrentUrl();
 
     Router.redirect({
-      url: targetUrl
+      url: targetUrl,
     });
-    console.log('LoginHelper: saveAndRedirect', targetUrl)
+    console.log('LoginHelper: saveAndRedirect', targetUrl);
   };
 
   // 自动记录当前的地址，再跳转登录页
@@ -151,13 +150,13 @@ class LoginHelper {
   };
 
   // 指定登陆后跳转到redirectUrl页面(默认清空当前的记录的跳转地址)
-  setAndLogin = (redirectUrl) =>  {
+  setAndLogin = (redirectUrl) => {
     this.clear();
     this.setUrl(redirectUrl);
 
     this.gotoLogin();
     console.log('LoginHelper: setAndLogin');
-  }
+  };
 
   // 恢复登录前的跳转。优先级：记录页 > defaultPage > 主页
   restore = (defaultPage) => {
@@ -165,7 +164,7 @@ class LoginHelper {
 
     Router.redirect({ url });
     this.clear();
-    console.log('LoginHelper: restore', url)
+    console.log('LoginHelper: restore', url);
   };
 }
 

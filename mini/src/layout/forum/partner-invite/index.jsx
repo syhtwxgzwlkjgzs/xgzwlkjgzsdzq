@@ -17,10 +17,9 @@ import layout from './index.module.scss';
 import SiteInfo from '../site-info';
 import PayBox from '@components/payBox';
 import { simpleRequest } from '@common/utils/simple-request';
-import Router from '@discuzq/sdk/dist/router';
 import { getCurrentInstance } from '@tarojs/taro';
 import { readUser } from '@server';
-import LoginHelper from '@common/utils/login-helper'
+import LoginHelper from '@common/utils/login-helper';
 
 @inject('site')
 @inject('index')
@@ -87,10 +86,6 @@ class PartnerInviteH5Page extends React.Component {
     }
   }
 
-  gotoIndex = () => {
-    Router.redirect({ url: '/pages/home/index' });
-  };
-
   handleJoinSite = () => {
     const { user, site } = this.props;
     if (!user?.isLogin()) {
@@ -109,15 +104,19 @@ class PartnerInviteH5Page extends React.Component {
         },
         isAnonymous: false, // 是否匿名
         success: async () => {
-        await user.updateUserInfo(user.id);
-        await site.getSiteInfo();
-        this.gotoIndex();
-      }, // 支付成功回调
+          await user.updateUserInfo(user.id);
+          await site.getSiteInfo();
+          // page组件做了跳转拦截。此处需要先判断一下当前是否仍滞留付费页，如果非滞留，则恢复登录前页面
+          const path = getCurrentInstance().router.path;
+          if (path === '/subPages/forum/partner-invite/index') {
+            LoginHelper.restore();
+          }
+        }, // 支付成功回调
         completed: (orderInfo) => {}, // 支付完成回调(成功或失败)
       });
       return;
     }
-    this.gotoIndex();
+    LoginHelper.restore();
   };
 
   render() {

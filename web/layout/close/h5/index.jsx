@@ -5,7 +5,7 @@ import Header from '@components/header';
 import {Button} from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
-import LoginHelper from '@common/utils/login-helper'
+import LoginHelper from '@common/utils/login-helper';
 
 @inject('site')
 @observer

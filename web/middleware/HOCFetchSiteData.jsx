@@ -29,7 +29,7 @@ import {
   JUMP_TO_SUPPLEMENTARY,
   REVIEWING_USER_WHITE_LIST_WEB,
 } from '@common/constants/site';
-import LoginHelper from '@common/utils/login-helper'
+import LoginHelper from '@common/utils/login-helper';
 
 // 获取全站数据
 export default function HOCFetchSiteData(Component) {

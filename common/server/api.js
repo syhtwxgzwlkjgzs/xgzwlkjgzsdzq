@@ -26,7 +26,7 @@ import {
   JUMP_TO_SUPPLEMENTARY,
   OPERATING_FREQUENCY
 } from '@common/constants/site';
-import LoginHelper from '@common/utils/login-helper'
+import LoginHelper from '@common/utils/login-helper';
 
 let globalToast = null;
 const api = apiIns({

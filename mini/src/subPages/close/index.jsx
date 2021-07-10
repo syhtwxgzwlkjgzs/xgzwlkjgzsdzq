@@ -5,7 +5,7 @@ import Button from '@discuzq/design/dist/components/button/index';
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import imgClose from '../../../../web/public/dzq-img/close.png';
-import LoginHelper from '@common/utils/login-helper'
+import LoginHelper from '@common/utils/login-helper';
 @inject('site')
 @observer
 class Index extends Component {

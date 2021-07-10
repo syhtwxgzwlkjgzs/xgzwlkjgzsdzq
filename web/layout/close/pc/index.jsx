@@ -7,7 +7,7 @@ import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
 import isServer from '@common/utils/is-server';
 import Copyright from '@components/copyright';
-import LoginHelper from '@common/utils/login-helper'
+import LoginHelper from '@common/utils/login-helper';
 
 @inject('site')
 @observer

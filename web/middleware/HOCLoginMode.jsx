@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject } from 'mobx-react';
 import isServer from '@common/utils/is-server';
-import LoginHelper from '@common/utils/login-helper'
+import LoginHelper from '@common/utils/login-helper';
 
 /** *
  * 在不同登录模式下，限制可以进入的登录路由

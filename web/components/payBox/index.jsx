@@ -6,7 +6,7 @@ import { get } from '@common/utils/get';
 import H5PayBox from './h5';
 import PCPayBox from './pc';
 import { Toast } from '@discuzq/design';
-import LoginHelper from '@common/utils/login-helper'
+import LoginHelper from '@common/utils/login-helper';
 
 class PayBoxEmitter extends EventEmitter {}
 

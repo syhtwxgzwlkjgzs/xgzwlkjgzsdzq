@@ -16,7 +16,7 @@ import pclayout from './pc.module.scss';
 import mlayout from './index.module.scss';
 import browser from '@common/utils/browser';
 import clearLoginStatus from '@common/utils/clear-login-status';
-import LoginHelper from '@common/utils/login-helper'
+import LoginHelper from '@common/utils/login-helper';
 
 @inject('site')
 @inject('index')

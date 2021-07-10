@@ -14,7 +14,7 @@ import PayConfirmed from './pay-confirmed';
 import PayPwd from './payPwd';
 // import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import { get } from '../../../../common/utils/get';
-import LoginHelper from '@common/utils/login-helper'
+import LoginHelper from '@common/utils/login-helper';
 
 class PayBoxEmitter extends EventEmitter {}
 
