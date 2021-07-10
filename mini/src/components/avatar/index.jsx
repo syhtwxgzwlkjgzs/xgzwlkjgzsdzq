@@ -4,6 +4,8 @@ import { View } from '@tarojs/components';
 import { useCallback } from 'react';
 import calcCosImageQuality from '@common/utils/calc-cos-image-quality';
 
+import styles from './index.module.scss';
+
 export default function avatar(props) {
   const {
     userId = null,
@@ -44,14 +46,14 @@ export default function avatar(props) {
 
   if (image && image !== '') {
     return (
-      <View onClick={clickHandle}>
+      <View onClick={clickHandle} className={styles.avatarWrapper}>
         <Avatar className={className} circle={circle} image={currAvatarImage} size={size}></Avatar>
       </View>
     );
   }
 
   return (
-    <View onClick={clickHandle}>
+    <View onClick={clickHandle} className={styles.avatarWrapper}>
       <Avatar className={className} circle={circle} text={userName} size={size}></Avatar>
     </View>
   );

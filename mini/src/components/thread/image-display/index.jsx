@@ -10,7 +10,15 @@ import {calcImageType, calcImageDefaultType} from '@common/utils/calc-image-type
 const { Col, Row } = Flex
 
 // TODO 图片懒加载
-const Index = ({ imgData = [], flat = false, platform = 'h5', isPay = false, onPay = noop, onImageReady = () => {} }) => {
+const Index = ({ 
+  imgData = [], 
+  flat = false, 
+  platform = 'h5', 
+  isPay = false, 
+  onPay = noop, 
+  onImageReady = noop, 
+  relativeToViewport = true 
+}) => {
     const [visible, setVisible] = useState(false);
     const [defaultImg, setDefaultImg] = useState('');
     const ImagePreviewerRef = React.useRef(null);

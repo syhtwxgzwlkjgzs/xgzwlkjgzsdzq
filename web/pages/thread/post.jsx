@@ -694,6 +694,7 @@ class PostPage extends React.Component {
         this.props.baselayout.setJumpingToTop();
         this.props.index.addThread(data);
         this.props.index.getReadCategories(); // 发帖后分类数据更新
+        this.props.site.getSiteInfo(); // 发帖后分类中"全部"数据更新
       }
     }
   };

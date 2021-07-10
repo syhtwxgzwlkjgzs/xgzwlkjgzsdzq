@@ -3,10 +3,10 @@
 .container {
   background-color: var(--color-white);
   font-size: var(--font-size-middle);
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
+  // position: fixed;
+  // top: 0;
+  // right: 0;
+  // left: 0;
   z-index: $zindex-backtotop;
   transition: transform 0.2s ease-out;
   .statusBar {
