@@ -76,6 +76,7 @@ class UserCenterFollowsPc extends React.Component {
           noData={Number(followCount) === 0}
           title="关注"
           mold={'wrapper'}
+          messageMode={this.props.messageMode}
           leftNum={followCount}
           isShowMore={this.props.showMore}
           onShowMore={this.moreFollow}
@@ -101,6 +102,7 @@ class UserCenterFollowsPc extends React.Component {
                     },
                   });
                 }}
+                style={this.props.messageMode ? {padding: '0 16px'} : {}}
                 itemStyle={{
                   paddingLeft: 0,
                   paddingRight: 0,
