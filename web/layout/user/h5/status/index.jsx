@@ -8,7 +8,7 @@ import Header from '@components/header';
 import layout from './index.module.scss';
 import PcBodyWrap from '../components/pc-body-wrap';
 import clearLoginStatus from '@common/utils/clear-login-status';
-import LoginHelper from '@/common/utils/login-helper';
+import LoginHelper from '@common/utils/login-helper';
 
 @inject('site')
 @inject('user')
