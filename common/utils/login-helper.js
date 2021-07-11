@@ -1,5 +1,4 @@
 import Router from '@discuzq/sdk/dist/router';
-import { getCurrentInstance } from '@tarojs/taro';
 
 // 记录用户访问的初始地址，用户登陆、付费等操作后跳回
 const JUMP_URL_LABEL = '__jump_url';
@@ -49,10 +48,12 @@ function getCurrentUrl() {
     url = window.location.href;
   } else {
     // 小程序
-    const { path, params } = getCurrentInstance().router;
-    url = path;
-    if (Object.keys(params).length > 0) {
-      url = `${url}?${Object.entries(params).map(([key, value]) => `${key}=${value}`).join('&')}`;
+    const pages = getCurrentPages();
+    const { route, options } = pages[pages.length - 1];
+
+    url = route;
+    if (Object.keys(options).length > 0) {
+      url = `${route}?${Object.entries(options).map(([key, value]) => `${key}=${value}`).join('&')}`;
     }
   }
   console.log('LoginHelper: getCurrentUrl', url);
