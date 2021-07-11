@@ -580,7 +580,7 @@ class Index extends Component {
       return true;
     }
     Taro.hideLoading();
-    (!isDraft || isPay) && this.postToast(msg);
+    (!isDraft || !isPay) && this.postToast(msg);
     return false;
   }
 
