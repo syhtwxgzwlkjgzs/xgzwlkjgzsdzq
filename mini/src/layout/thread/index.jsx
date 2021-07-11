@@ -111,7 +111,7 @@ class ThreadH5Page extends React.Component {
           comeFrom: 'thread',
           threadId: id,
           title,
-          path: `/subPages/thread/index?id=${id}`,
+          path: `/indexPages/thread/index?id=${id}`,
         };
       }
     }
@@ -303,7 +303,7 @@ class ThreadH5Page extends React.Component {
     if (type === 'edit') {
       if (!this.props.thread?.threadData?.id) return;
       Taro.redirectTo({
-        url: `/subPages/thread/post/index?id=${this.props.thread?.threadData?.id}}`,
+        url: `/indexPages/thread/post/index?id=${this.props.thread?.threadData?.id}}`,
       });
     }
 
@@ -549,7 +549,7 @@ class ThreadH5Page extends React.Component {
       comeFrom: 'thread',
       threadId: this.props.thread?.threadData?.id,
       title: '',
-      path: `/subPages/thread/index?id=${this.props.thread?.threadData?.id}`
+      path: `/indexPages/thread/index?id=${this.props.thread?.threadData?.id}`
     }
     this.setState({shareData:shareData});
   }*/
@@ -769,7 +769,7 @@ class ThreadH5Page extends React.Component {
       this.props.index.refreshHomeData({ categoryIds: [categoryId] });
     }
     Taro.redirectTo({
-      url: '/pages/home/index',
+      url: '/indexPages/home/index',
     });
   }
 

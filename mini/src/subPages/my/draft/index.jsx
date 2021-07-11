@@ -39,7 +39,7 @@ class Index extends Component {
     return;
   };
 
-  handleEdit = (item) => Taro.navigateTo({ url: `/subPages/thread/post/index?id=${item.threadId}` });
+  handleEdit = (item) => Taro.navigateTo({ url: `/indexPages/thread/post/index?id=${item.threadId}` });
 
   handleDelete = async (item) => {
     // 删除草稿事件

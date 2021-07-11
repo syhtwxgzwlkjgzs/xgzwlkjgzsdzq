@@ -85,7 +85,7 @@ class Index extends React.Component {
           Router.push({ url: '/subPages/user/status/index?statusCode=-4009' });
           break;
         case JUMP_TO_HOME_INDEX:// 到首页
-          Router.redirect({ url: '/pages/home/index' });
+          Router.redirect({ url: '/indexPages/home/index' });
           break;
         case JUMP_TO_PAY_SITE:// 到付费加入页面
           Router.push({ url: '/subPages/forum/partner-invite/index' });
@@ -96,7 +96,7 @@ class Index extends React.Component {
         case SITE_NO_INSTALL:// 未安装站点
           Router.push({ url: '/subPages/no-install/index' });
           break;
-        default: 
+        default:
           Router.redirect({url: '/subPages/500/index'});
           clearLoginStatus();
           Toast.error({
@@ -118,7 +118,7 @@ class Index extends React.Component {
 
       let webConfig;
       if ( !site.webConfig ) {
-        // 获取站点信息  
+        // 获取站点信息
         const siteResult = await readForum({});
         // 检查站点状态
         const isPass = this.setAppCommonStatus(siteResult);
@@ -162,7 +162,7 @@ class Index extends React.Component {
             params,
             fail: () => {
               Router.redirect({
-                url: '/pages/home/index'
+                url: '/indexPages/home/index'
               });
             }
           });
@@ -172,13 +172,13 @@ class Index extends React.Component {
             url: decodeURIComponent(router.params.path),
             fail: () => {
               Router.redirect({
-                url: '/pages/home/index'
+                url: '/indexPages/home/index'
               });
             }
           });
         } else {
           Router.redirect({
-            url: '/pages/home/index'
+            url: '/indexPages/home/index'
           });
         }
       } else {
@@ -193,7 +193,7 @@ class Index extends React.Component {
     const { site, user } = this.props;
     const { path } = Taro.getCurrentInstance().router;
     const siteMode = site?.webConfig?.setSite?.siteMode;
-    
+
     if (site?.webConfig) {
       // 关闭站点
       if (site.closeSiteConfig) {

@@ -107,7 +107,7 @@ const InputPop = (props) => {
   const onAtIconClick = () => {
     // setShowAt(!showAt);
     Taro.navigateTo({
-      url: '/subPages/thread/selectAt/index?type=thread',
+      url: '/indexPages/thread/selectAt/index?type=thread',
     });
     setShowEmojis(false);
     setShowPicture(false);
