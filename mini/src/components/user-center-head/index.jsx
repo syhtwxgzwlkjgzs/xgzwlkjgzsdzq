@@ -5,6 +5,7 @@ import Button from '@discuzq/design/dist/components/button/index';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import Spin from '@discuzq/design/dist/components/spin/index';
+import ImagePreviewer from '@discuzq/design/dist/components/image-previewer/index';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import Router from '@discuzq/sdk/dist/router';
 import { getCurrentInstance } from '@tarojs/taro';
@@ -20,6 +21,7 @@ class index extends Component {
     super(props);
     this.state = {
       isFollowedLoading: false, // 是否点击关注
+      isPreviewAvatar: false, // 是否预览头像
     };
   }
 
@@ -195,6 +197,14 @@ class index extends Component {
     return { icon, text };
   };
 
+  // 点击头像预览
+  handlePreviewAvatar = (e) => {
+    e && e.stopPropagation();
+    this.setState({
+      isPreviewAvatar: !this.state.isPreviewAvatar,
+    });
+  };
+
   render() {
     const { targetUser } = this.props.user;
     const user = this.props.isOtherPerson ? targetUser || {} : this.props.user;
@@ -202,7 +212,7 @@ class index extends Component {
       <View className={styles.h5box}>
         {/* 上 */}
         <View className={styles.h5boxTop}>
-          <View className={styles.headImgBox}>
+          <View className={styles.headImgBox} onClick={this.handlePreviewAvatar}>
             <Avatar image={user.avatarUrl} size="big" name={user.username} />
           </View>
           {/* 粉丝|关注|点赞 */}
@@ -288,6 +298,14 @@ class index extends Component {
             <Icon name="ShieldOutlined" />
             <Text>{user.isDeny ? '解除屏蔽' : '屏蔽'}</Text>
           </View>
+        )}
+        {this.state.isPreviewAvatar && (
+          <ImagePreviewer
+            visible={this.state.isPreviewAvatar}
+            onClose={this.handlePreviewAvatar}
+            imgUrls={[user.avatarUrl]}
+            currentUrl={user.avatarUrl}
+          />
         )}
       </View>
     );
