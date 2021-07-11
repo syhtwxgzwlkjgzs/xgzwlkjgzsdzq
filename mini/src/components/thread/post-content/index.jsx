@@ -35,7 +35,7 @@ const Index = ({
   payAmount = 0,
   onPay,
   onRedirectToDetail = noop,
-  loading = true,
+  loading,
   customHoverBg = false,
   relativeToViewport = true,
   changeHeight = noop,
