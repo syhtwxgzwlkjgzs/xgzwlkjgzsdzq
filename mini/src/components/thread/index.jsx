@@ -24,7 +24,7 @@ import Skeleton from './skeleton';
 @inject('topic')
 @observer
 class Index extends React.Component {
-  
+
     constructor(props) {
       super(props);
 
@@ -78,7 +78,7 @@ class Index extends React.Component {
 
       if (threadId !== '') {
         this.props.thread.positionToComment()
-        Router.push({url: `/subPages/thread/index?id=${threadId}`})
+        Router.push({url: `/indexPages/thread/index?id=${threadId}`})
       } else {
         console.log('帖子不存在');
       }
@@ -88,7 +88,7 @@ class Index extends React.Component {
       e && e.stopPropagation();
       this.handlePraise()
     }
-    
+
     handlePraise = debounce(() => {
 
       if(this.state.isSendingLike) return;
@@ -160,7 +160,7 @@ class Index extends React.Component {
 
       if (threadId !== '') {
         this.props.thread.isPositionToComment = false;
-        Router.push({url: `/subPages/thread/index?id=${threadId}`})
+        Router.push({url: `/indexPages/thread/index?id=${threadId}`})
 
         this.props.index.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
         this.props.search.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
@@ -248,13 +248,13 @@ class Index extends React.Component {
                 {isShowIcon && <View className={styles.headerIcon} onClick={unifyOnClick || this.onClickHeaderIcon}><Icon name='CollectOutlinedBig' className={styles.collectIcon}></Icon></View>}
             </View>
 
-            <ThreadCenterView 
-              text={text} 
-              data={data} 
-              onClick={unifyOnClick || this.onClick} 
-              onPay={unifyOnClick || this.onPay} 
-              platform={platform} 
-              relativeToViewport={relativeToViewport} 
+            <ThreadCenterView
+              text={text}
+              data={data}
+              onClick={unifyOnClick || this.onClick}
+              onPay={unifyOnClick || this.onPay}
+              platform={platform}
+              relativeToViewport={relativeToViewport}
               changeHeight={this.changeHeight}
               useShowMore={useShowMore}
               setUseShowMore={this.setUseShowMore}

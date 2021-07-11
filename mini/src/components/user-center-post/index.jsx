@@ -19,7 +19,7 @@ class UserCenterPost extends React.Component {
       <View
         className={styles.userCenterPost}
         onClick={() => {
-          Router.push({ url: '/subPages/thread/post/index' });
+          Router.push({ url: '/indexPages/thread/post/index' });
         }}
       >
         <View className={styles.userCenterPostTitle}>发帖</View>

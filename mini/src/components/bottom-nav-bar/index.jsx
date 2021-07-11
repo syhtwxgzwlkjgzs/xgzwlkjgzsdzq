@@ -18,7 +18,7 @@ import { unreadUpdateInterval } from '@common/constants/message';
 const routes = [
   'pages/index/index',
   'subPages/search/index',
-  'subPages/thread/post/index',
+  'indexPages/thread/post/index',
   'subPages/message/index',
   'subPages/my/index'
 ]
@@ -40,9 +40,9 @@ class BottomNavBar extends React.Component {
   componentDidMount() {
     const { curr = 'home' } = this.props
     const tabs = [
-      { icon: 'HomeOutlined', text: '首页', active: this.checkCurrActiveTab(curr, 'home'), router: '/pages/home/index' },
+      { icon: 'HomeOutlined', text: '首页', active: this.checkCurrActiveTab(curr, 'home'), router: '/indexPages/home/index' },
       { icon: 'FindOutlined', text: '发现', active: this.checkCurrActiveTab(curr, 'search'), router: '/subPages/search/index' },
-      { icon: 'PlusOutlined', router: '/subPages/thread/post/index' },
+      { icon: 'PlusOutlined', router: '/indexPages/thread/post/index' },
       { icon: 'MailOutlined', text: '消息', active: this.checkCurrActiveTab(curr, 'message'), router: '/subPages/message/index' },
       { icon: 'ProfessionOutlined', text: '我的', active: this.checkCurrActiveTab(curr, 'my'), router: '/subPages/my/index' },
     ]
@@ -62,7 +62,7 @@ class BottomNavBar extends React.Component {
   }
 
   handleClick = (i, idx) => {
-    if (i.router === '/subPages/thread/post/index') {
+    if (i.router === '/indexPages/thread/post/index') {
       const { permissions } = this.props.user;
       if (permissions && permissions.createThread && !permissions.createThread.enable) {
         Taro.showToast({ title: '您暂无发帖权限', icon: 'none' });
