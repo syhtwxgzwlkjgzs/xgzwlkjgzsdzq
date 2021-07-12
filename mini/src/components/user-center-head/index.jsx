@@ -29,6 +29,8 @@ class index extends Component {
     isOtherPerson: false, // 表示是否是其他人
   };
 
+  previewerRef = React.createRef(null);
+
   // 点击屏蔽
   handleChangeShield = throttle((isDeny) => {
     const { id } = getCurrentInstance().router.params;
@@ -197,12 +199,17 @@ class index extends Component {
     return { icon, text };
   };
 
+  showPreviewerRef = () => {
+    if (this.previewerRef.current) {
+      this.props.updatePreviewImageStatus && this.props.updatePreviewImageStatus(true);
+      this.previewerRef.current.show();
+    }
+  };
+
   // 点击头像预览
   handlePreviewAvatar = (e) => {
     e && e.stopPropagation();
-    this.setState({
-      isPreviewAvatar: !this.state.isPreviewAvatar,
-    });
+    this.showPreviewerRef();
   };
 
   render() {
@@ -212,7 +219,7 @@ class index extends Component {
       <View className={styles.h5box}>
         {/* 上 */}
         <View className={styles.h5boxTop}>
-          <View className={styles.headImgBox} onClick={this.handlePreviewAvatar}>
+          <View className={styles.headImgBox} onClick={user.avatarUrl && this.handlePreviewAvatar}>
             <Avatar image={user.avatarUrl} size="big" name={user.nickname} />
           </View>
           {/* 粉丝|关注|点赞 */}
@@ -299,13 +306,8 @@ class index extends Component {
             <Text>{user.isDeny ? '解除屏蔽' : '屏蔽'}</Text>
           </View>
         )}
-        {user.avatarUrl && this.state.isPreviewAvatar && (
-          <ImagePreviewer
-            visible={this.state.isPreviewAvatar}
-            onClose={this.handlePreviewAvatar}
-            imgUrls={[user.avatarUrl]}
-            currentUrl={user.avatarUrl}
-          />
+        {user.avatarUrl && (
+          <ImagePreviewer ref={this.previewerRef} imgUrls={[user.avatarUrl]} currentUrl={user.avatarUrl} />
         )}
       </View>
     );

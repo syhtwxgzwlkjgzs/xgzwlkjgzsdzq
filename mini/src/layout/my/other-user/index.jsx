@@ -27,6 +27,7 @@ class H5OthersPage extends React.Component {
     // 因为这里的 onShow 的 flag 是路由，导致如果进入多个用户信息页面，重复触发了
     // 一个页面只负责一个用户 id，用此 flag 来解决重复加载的问题
     this.targetUserId = null;
+    this.isPreivewImage = null;
   }
 
   $instance = getCurrentInstance();
@@ -38,6 +39,10 @@ class H5OthersPage extends React.Component {
     // 监听
     eventCenter.on(onShowEventId, this.onShow);
   }
+
+  updatePreviewImageStatus = (bol) => {
+    this.isPreivewImage = bol;
+  };
 
   onShow = async () => {
     const { id = '' } = getCurrentInstance().router.params;
@@ -55,6 +60,11 @@ class H5OthersPage extends React.Component {
       return;
     }
     if (this.targetUserId) {
+      // 如果是预览图片操作 就不需要重新更新状态
+      if (this.isPreivewImage) {
+        this.isPreivewImage = false;
+        return;
+      }
       this.setState({
         fetchUserInfoLoading: true,
       });
@@ -146,22 +156,6 @@ class H5OthersPage extends React.Component {
     return backgroundUrl;
   };
 
-  /**
-   * 控制预览图片窗口显示隐藏
-   * @param {Boolean} visible true显示 false不显示
-   * @param {Function} calback 处理的回调
-   */
-  togglePreviewBgVisible = ({ visible, calback }) => {
-    this.setState(
-      {
-        isPreviewBgVisible: visible,
-      },
-      () => {
-        if (calback && typeof calback === 'function') calback();
-      },
-    );
-  };
-
   showPreviewerRef = () => {
     if (this.previewerRef.current) {
       this.previewerRef.current.show();
@@ -171,17 +165,8 @@ class H5OthersPage extends React.Component {
   handlePreviewBgImage = (e) => {
     e && e.stopPropagation();
     if (!this.getBackgroundUrl()) return;
-    this.togglePreviewBgVisible({
-      visible: true,
-      calback: this.showPreviewerRef(),
-    });
-  };
-
-  // 预览窗口关闭回调
-  onCloseImagePreview = () => {
-    this.togglePreviewBgVisible({
-      visible: false,
-    });
+    this.isPreivewImage = true;
+    this.showPreviewerRef();
   };
 
   render() {
@@ -205,7 +190,11 @@ class H5OthersPage extends React.Component {
               <View onClick={this.handlePreviewBgImage}>
                 <UserCenterHeaderImage isOtherPerson={true} />
               </View>
-              <UserCenterHead platform={platform} isOtherPerson={true} />
+              <UserCenterHead
+                updatePreviewImageStatus={this.updatePreviewImageStatus}
+                platform={platform}
+                isOtherPerson={true}
+              />
             </>
           )}
 
@@ -231,11 +220,9 @@ class H5OthersPage extends React.Component {
             </View>
           </View>
         </View>
-        {this.getBackgroundUrl() && this.state.isPreviewBgVisible && (
+        {this.getBackgroundUrl() && (
           <ImagePreviewer
             ref={this.previewerRef}
-            visible={this.state.isPreviewBgVisible}
-            onClose={this.onCloseImagePreview}
             imgUrls={[this.getBackgroundUrl()]}
             currentUrl={this.getBackgroundUrl()}
           />
