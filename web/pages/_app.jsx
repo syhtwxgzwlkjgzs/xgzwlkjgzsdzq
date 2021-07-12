@@ -52,18 +52,18 @@ class DzqApp extends App {
 
   componentDidMount() {
     console.log(process.env.DISCUZ_BUILDINFO);
-    if ( window.performance ) {
+    if (window.performance) {
       monitor.call('reportTime', {
         eventName: 'fist-render',
-        duration: Date.now() - performance.timing.navigationStart
+        duration: Date.now() - performance.timing.navigationStart,
       });
     }
-    
+
     this.initOretation();
     window.addEventListener('resize', this.updateSize);
     csrRouterRedirect();
     this.listenRouterChangeAndClean();
-    this.props.router.events.on('routeChangeStart', this.setWXShare);    
+    this.props.router.events.on('routeChangeStart', this.setWXShare);
   }
 
   componentWillUnmount() {
@@ -75,14 +75,14 @@ class DzqApp extends App {
 
   // 每次跳转，都会设置默认的分享配置
   setWXShare() {
-    const {site} = this.appStore;
-    const {webConfig} = site;
-    if ( webConfig ) {
+    const { site } = this.appStore;
+    const { webConfig } = site;
+    if (webConfig) {
       try {
-        const {setSite} = webConfig;
-        const {siteTitle, siteIntroduction, siteFavicon} = setSite;
-        setWxShare(siteTitle, siteIntroduction, window.location.origin, siteFavicon);
-      } catch(err) {
+        const { setSite } = webConfig;
+        const { siteName, siteIntroduction, siteFavicon } = setSite;
+        setWxShare(siteName, siteIntroduction, window.location.origin, siteFavicon);
+      } catch (err) {
         setWxShare('Discuz!Q', 'Discuz!Q', window.location.origin, null);
       }
     }
@@ -98,13 +98,13 @@ class DzqApp extends App {
   // 移动端检测横屏
   initOretation() {
     this.toastInstance?.destroy();
-    
+
     if (browser.env('mobile') && !browser.env('iPad')) {
       const isVertical = detectH5Orient();
       if (!isVertical) {
         this.toastInstance = Toast.info({
           content: '为了更好的体验，请使用竖屏浏览',
-          duration: 5000
+          duration: 5000,
         });
       }
     }

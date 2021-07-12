@@ -46,10 +46,10 @@ class IndexH5Page extends React.Component {
 
   handleWeiXinShare = async () => {
     const { site, user } = this.props;
-    const {webConfig} = site;
-    const {setSite} = webConfig;
-    const {siteTitle, siteIntroduction, siteFavicon} = setSite;
-    setWxShare(`${user.userInfo && user.userInfo.nickname ? `【${user.userInfo.nickname}】` : ''}邀请你加入【${siteTitle}】`, siteIntroduction, window.location.href, siteFavicon);
+    const { webConfig } = site;
+    const { setSite } = webConfig;
+    const { siteName, siteIntroduction, siteFavicon } = setSite;
+    setWxShare(`${user.userInfo && user.userInfo.nickname ? `${user.userInfo.nickname}` : ''}邀请你加入${siteName}`, siteIntroduction, window.location.href, siteFavicon);
   };
 
   // 点击更多弹出筛选
