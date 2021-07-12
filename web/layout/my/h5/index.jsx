@@ -125,12 +125,15 @@ class H5MyPage extends React.Component {
   };
 
   getBackgroundUrl = () => {
-    let backgroundUrl = '/dzq-img/my-default-header-img.jpg';
-    if (this.props.user?.backgroundUrl) {
+    let backgroundUrl = null;
+    if (this.props.isOtherPerson) {
+      if (this.props.user?.targetUserBackgroundUrl) {
+        backgroundUrl = this.props.user.targetUserBackgroundUrl;
+      }
+    } else {
       backgroundUrl = this.props.user?.backgroundUrl;
-    } else if (this.props.isOtherPerson && this.props.user?.targetUserBackgroundUrl) {
-      backgroundUrl = this.props.user.targetUserBackgroundUrl;
     }
+    if (!backgroundUrl) return false;
     return backgroundUrl;
   };
 
@@ -176,7 +179,7 @@ class H5MyPage extends React.Component {
             </div>
           </div>
         </div>
-        {this.state.isPreviewBgVisible && (
+        {this.getBackgroundUrl() && this.state.isPreviewBgVisible && (
           <ImagePreviewer
             visible={this.state.isPreviewBgVisible}
             onClose={this.handlePreviewBgImage}
