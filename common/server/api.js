@@ -121,7 +121,7 @@ http.interceptors.response.use((res) => {
     case JUMP_TO_REGISTER: {
       clearLoginStatus();
       if (process.env.DISCUZ_ENV === 'web') {
-        window.location.replace('/user/register');
+        LoginHelper.saveAndRedirect('/user/register');
       } else {
         LoginHelper.saveAndLogin();
       }
@@ -188,9 +188,7 @@ http.interceptors.response.use((res) => {
       } else {
         url = '/subPages/forum/partner-invite/index'
       }
-      Router.push({
-        url
-      });
+      LoginHelper.saveAndRedirect(url);
       break;
     }
     case SITE_NO_INSTALL: {
@@ -210,9 +208,7 @@ http.interceptors.response.use((res) => {
       } else {
         url = '/subPages/user/supplementary/index';
       }
-      Router.push({
-        url
-      });
+      LoginHelper.saveAndRedirect(url);
       break;
     }
     case OPERATING_FREQUENCY: {

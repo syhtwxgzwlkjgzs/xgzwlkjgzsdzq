@@ -4,7 +4,6 @@ import Router from '@discuzq/sdk/dist/router';
 const JUMP_URL_LABEL = '__jump_url';
 const HOME_PAGE_PC = '/';
 const HOME_PAGE_MINI = '/indexPages/home/index';
-const INDEX_PAGE_MINI = '/pages/index/index'
 
 // web环境判断
 function isWeb() {
