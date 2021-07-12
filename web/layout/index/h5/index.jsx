@@ -41,8 +41,7 @@ class IndexH5Page extends React.Component {
 
   DynamicVListLoading = dynamic(
     () => import('./components/dynamic-vlist'),
-    { loading: (res) => {
-        return (
+    { loading: (res) => (
             <div>
                 <HomeHeader ref={this.headerRef} />
                 <DynamicLoading data={res} style={{padding: '0 0 20px 0'}} loadComponent={
@@ -76,8 +75,7 @@ class IndexH5Page extends React.Component {
                   </div>
                 }/>
             </div>
-        )
-      } }
+        ) },
   )
 
   componentDidMount() {
@@ -92,10 +90,10 @@ class IndexH5Page extends React.Component {
 
   handleWeiXinShare = async () => {
     const { site, user } = this.props;
-    const {webConfig} = site;
-    const {setSite} = webConfig;
-    const {siteTitle, siteIntroduction, siteFavicon} = setSite;
-    setWxShare(`${user.userInfo && user.userInfo.nickname ? `【${user.userInfo.nickname}】` : ''}邀请你加入【${siteTitle}】`, siteIntroduction, window.location.href, siteFavicon);
+    const { webConfig } = site;
+    const { setSite } = webConfig;
+    const { siteName, siteIntroduction, siteFavicon } = setSite;
+    setWxShare(`${user.userInfo && user.userInfo.nickname ? `${user.userInfo.nickname}` : ''}邀请你加入${siteName}`, siteIntroduction, window.location.href, siteFavicon);
   };
 
   // 点击更多弹出筛选
@@ -143,7 +141,7 @@ class IndexH5Page extends React.Component {
   // 上拉加载更多
   onRefresh = () => {
     const { dispatch = () => {} } = this.props;
-    if(!this.props.index?.threads?.pageData?.length) return; // 防止第一页还没加载出来，用户使劲滚动页面到底部触发请求第二页
+    if (!this.props.index?.threads?.pageData?.length) return; // 防止第一页还没加载出来，用户使劲滚动页面到底部触发请求第二页
     return dispatch('moreData');
   };
 
