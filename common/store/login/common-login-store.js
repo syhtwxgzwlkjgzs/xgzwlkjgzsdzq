@@ -33,6 +33,16 @@ export default class commonLoginStore {
     @observable loginLoading = true;
 
     @action
+    setLoginLoading(loginLoading) {
+      this.loginLoading = loginLoading;
+    }
+
+    @action
+    reset = () => {
+      this.loginLoading = true;
+    }
+
+    @action
     setStatusCountDown(countDown) {
       this.statusCountDown = countDown;
     }

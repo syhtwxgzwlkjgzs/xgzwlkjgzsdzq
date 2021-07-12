@@ -213,7 +213,7 @@ class index extends Component {
         {/* 上 */}
         <View className={styles.h5boxTop}>
           <View className={styles.headImgBox} onClick={this.handlePreviewAvatar}>
-            <Avatar image={user.avatarUrl} size="big" name={user.username} />
+            <Avatar image={user.avatarUrl} size="big" name={user.nickname} />
           </View>
           {/* 粉丝|关注|点赞 */}
           <View className={styles.userMessageList}>
@@ -299,7 +299,7 @@ class index extends Component {
             <Text>{user.isDeny ? '解除屏蔽' : '屏蔽'}</Text>
           </View>
         )}
-        {this.state.isPreviewAvatar && (
+        {user.avatarUrl && this.state.isPreviewAvatar && (
           <ImagePreviewer
             visible={this.state.isPreviewAvatar}
             onClose={this.handlePreviewAvatar}
