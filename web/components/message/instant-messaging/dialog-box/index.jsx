@@ -74,7 +74,14 @@ const DialogBox = (props, ref) => {
   }
 
   return (
-    <div className={isPC ? styles.pcDialogBox : (showEmoji ? styles['h5DialogBox-emoji'] : styles.h5DialogBox)} ref={ref}>
+    <div
+      className={classnames({
+        [styles.pcDialogBox]: isPC,
+        [styles.h5DialogBox]: !isPC,
+        [styles['h5DialogBox-emoji']]: !isPC && showEmoji,
+      })}
+      ref={ref}
+    >
       <div className={styles.box__inner}>
         {messagesList.map((item) => {
           const { id, timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl, userId, nickname } = item;

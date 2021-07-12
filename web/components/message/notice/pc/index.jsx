@@ -28,7 +28,8 @@ const Index = ({ rightContent, infoIdx, totalCount, list, noMore, topCard = null
       <div ref={contentRef}>
         <MessageHeader info={sidebarData[infoIdx]} totalCount={totalCount} />
         {topCard}
-        {list.map(item => <NoticeItem key={item.id} item={item} {...other} />)}
+        {list.map((item, index) => <NoticeItem key={item.id} isLast={list.length === (index + 1)}
+          item={item} {...other} />)}
       </div>
     </BaseLayout>
   )

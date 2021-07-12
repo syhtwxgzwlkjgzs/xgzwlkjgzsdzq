@@ -32,7 +32,7 @@ class Index extends Component {
         duration: 1000,
         onClose: () => {
           navigateTo({
-            url: `/pages/home/index`
+            url: `/indexPages/home/index`
           });
         }
       });
@@ -44,7 +44,7 @@ class Index extends Component {
           redirectTo({ url: '/subPages/user/supplementary/index' });
           return;
         }
-        redirectTo({ url: '/pages/home/index' });
+        redirectTo({ url: '/indexPages/home/index' });
         return;
       }
 

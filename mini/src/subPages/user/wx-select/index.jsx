@@ -60,7 +60,7 @@ class WXSelect extends Component {
         });
         this.props.user.updateUserInfo(uid);
       }
-      
+
       checkUserStatus(res);
       if (res.code === 0) {
         Toast.success({
@@ -68,7 +68,7 @@ class WXSelect extends Component {
           duration: 1000,
           onClose: () => {
             redirectTo({
-              url: `/pages/home/index`
+              url: `/indexPages/home/index`
             });
           }
         });
@@ -96,7 +96,7 @@ class WXSelect extends Component {
           redirectTo({ url: '/subPages/user/supplementary/index' });
           return;
         }
-        redirectTo({ url: '/pages/home/index' });
+        redirectTo({ url: '/indexPages/home/index' });
         return;
       }
 

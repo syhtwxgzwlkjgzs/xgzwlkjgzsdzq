@@ -133,7 +133,7 @@ const Index = ({
           <RichText content={(useShowMore && cutContentForDisplay) ? cutContentForDisplay : urlToLink(filterContent)} onClick={handleClick} />
         </View>
       </View>
-      {!loading && useShowMore && !showMore && (
+      {loading !== undefined && !loading && useShowMore && !showMore && (
         <View className={styles.showMore} onClick={onShowMore}>
           <View className={styles.hidePercent}>{texts.showMore}</View>
           <Icon className={styles.icon} name="RightOutlined" size={12} />

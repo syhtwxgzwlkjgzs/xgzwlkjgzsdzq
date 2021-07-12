@@ -1,15 +1,34 @@
 @import "../vars.scss";
+@mixin custom-scrollbar() {
+  &::-webkit-scrollbar {
+    display: block;
+    width: 4px;
+  }
+  &:hover {
+    &::-webkit-scrollbar {
+      display: block;
+      width: 4px;
+      border-radius: $border-radius-small;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: $border-color;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $border-shadow-color;
+      border-radius: 4px;
+    }
+  }
+}
 
 .pcDialogBox {
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  @include scrollbar();
-  &::-webkit-scrollbar {
-    display: block !important;
-    width: 8px;
-  }
+  padding: 0 $padding-4n;
+  @include custom-scrollbar();
 
   .box__inner {
     // height: 100%;
@@ -34,13 +53,10 @@
 }
 
 .h5DialogBox-emoji {
-  display: flex;
-  flex-direction: column;
   height: calc(100% - 314px);
-  overflow-y: auto;
 }
 
-.h5DialogBox .box__inner, .h5DialogBox-emoji .box__inner {
+.h5DialogBox .box__inner {
   padding: 0 $padding-4n;
 
   .itself {
@@ -169,8 +185,6 @@
     cursor: pointer;
   }
 }
-
-
 
 @keyframes loading {
   from {
