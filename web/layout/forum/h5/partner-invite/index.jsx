@@ -16,6 +16,7 @@ import pclayout from './pc.module.scss';
 import mlayout from './index.module.scss';
 import browser from '@common/utils/browser';
 import clearLoginStatus from '@common/utils/clear-login-status';
+import LoginHelper from '@common/utils/login-helper';
 
 @inject('site')
 @inject('index')
@@ -66,7 +67,7 @@ class PartnerInviteH5Page extends React.Component {
   handleJoinSite = async () => {
     const { user, site, router } = this.props;
     if (!user?.isLogin()) {
-      router.push('/user/login');
+      LoginHelper.saveAndLogin();
       return;
     }
     const { setSite: { siteMode, sitePrice, siteName } = {} } = site.webConfig;
@@ -81,21 +82,21 @@ class PartnerInviteH5Page extends React.Component {
         success: async () => {
           await user.updateUserInfo(user.id);
           await site.getSiteInfo();
-          router.replace('/');
+          // 支付完成并更新状态数据后，HocWithNoPaid组件会自动将页面导向主页
         }, // 支付成功回调
         completed: (orderInfo) => {
         }, // 支付完成回调(成功或失败)
       });
-      return;
+    } else {
+      LoginHelper.restore();
     }
-    window.location.href = '/';
   }
 
   logout = () => {
     clearLoginStatus();
     this.props.user.removeUserInfo();
     this.props.site.webConfig.user = null;
-    this.props.router.push('/user/login');
+    LoginHelper.gotoLogin();
   }
 
   // 右侧 - 潮流话题 粉丝 版权信息
