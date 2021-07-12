@@ -399,7 +399,7 @@ class ThreadPCPage extends React.Component {
     const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
     if (success) {
       Toast.success({
-        content: '评论成功',
+        content: msg,
       });
 
       // 更新帖子中的评论数据
@@ -453,7 +453,7 @@ class ThreadPCPage extends React.Component {
     const { success, msg } = await this.props.comment.updateComment(params, this.props.thread);
     if (success) {
       Toast.success({
-        content: '修改成功',
+        content: msg,
       });
       this.setState({
         showCommentInput: false,

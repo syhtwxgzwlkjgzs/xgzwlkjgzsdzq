@@ -285,7 +285,7 @@ class RenderCommentList extends React.Component {
         inputValue: '',
       });
       Toast.success({
-        content: '回复成功',
+        content: msg,
       });
       return true;
     }

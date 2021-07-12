@@ -269,7 +269,7 @@ class CommentPCPage extends React.Component {
         commentId: null,
       });
       Toast.success({
-        content: '回复成功',
+        content: msg,
       });
       return true;
     }

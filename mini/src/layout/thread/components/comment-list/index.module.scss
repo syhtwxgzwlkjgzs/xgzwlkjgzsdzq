@@ -59,14 +59,24 @@
         border-radius: $border-radius-small;
         background: $body-bg-color;
 
-        .commentListName {
-          max-width: 100px;
-          font-weight: bold;
-          font-size: $font-size-primary;
-          line-height: 20px;
-          text-align: left;
-          color: $text-color-primary;
-          @include text-ellipsis();
+        .commentHeader {
+          display: flex;
+          justify-content: space-between;
+          
+          .commentListName {
+            max-width: 100px;
+            font-weight: bold;
+            font-size: $font-size-primary;
+            line-height: 20px;
+            text-align: left;
+            color: $text-color-primary;
+            @include text-ellipsis();
+          }
+          .isApproved {
+            font-size: $font-size-primary;
+            color: $error-color;
+            line-height: rem(20);
+          }
         }
         .commentListText {
           margin-top: $margin-1n;

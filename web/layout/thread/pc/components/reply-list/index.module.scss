@@ -12,15 +12,25 @@
       padding-right: rem($padding-4n);
       border-radius: rem($border-radius-small);
       background-color: $comment-bg-color;
-      .replyListName {
-        padding-top: rem($padding-2n);
-        padding-left: rem($padding-3n);
-        padding-right: rem($padding-3n);
-        font-weight: $font-weight-regular;
-        font-size: rem($font-size-primary);
-        line-height: rem(20);
-        text-align: left;
-        color: $text-color-primary;
+      .replyHeader {
+        display: flex;
+        justify-content: space-between;
+
+        .replyListName {
+          padding-top: rem($padding-2n);
+          padding-left: rem($padding-3n);
+          padding-right: rem($padding-3n);
+          font-weight: $font-weight-regular;
+          font-size: rem($font-size-primary);
+          line-height: rem(20);
+          text-align: left;
+          color: $text-color-primary;
+        }
+        .isApproved {
+          font-size: $font-size-primary;
+          color: $error-color;
+          padding-top: $padding-2n;
+        }
       }
 
       .replyListText {

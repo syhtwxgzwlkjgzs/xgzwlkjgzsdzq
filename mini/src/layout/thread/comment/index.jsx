@@ -336,7 +336,7 @@ class CommentH5Page extends React.Component {
         inputText: '请输入内容',
       });
       Toast.success({
-        content: '回复成功',
+        content: msg,
       });
       return true;
     }

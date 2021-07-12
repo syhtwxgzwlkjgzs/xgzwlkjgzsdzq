@@ -512,7 +512,7 @@ class ThreadH5Page extends React.Component {
       }
 
       Toast.success({
-        content: '评论成功',
+        content: msg,
       });
       this.setState({
         showCommentInput: false,
@@ -538,7 +538,7 @@ class ThreadH5Page extends React.Component {
     const { success, msg } = await this.props.comment.updateComment(params, this.props.thread);
     if (success) {
       Toast.success({
-        content: '修改成功',
+        content: msg,
       });
       this.setState({
         showCommentInput: false,
@@ -656,7 +656,7 @@ class ThreadH5Page extends React.Component {
         inputValue: '',
       });
       Toast.success({
-        content: '回复成功',
+        content: msg,
       });
       return true;
     }
