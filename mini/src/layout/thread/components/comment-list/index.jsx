@@ -164,9 +164,6 @@ class CommentList extends React.Component {
           </View>
           <View className={styles.commentListContent}>
             <View className={styles.commentListContentText}>
-              {/* <View className={styles.commentListName} onClick={() => this.avatarClick()}>
-                {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
-              </View> */}
               <View className={styles.commentHeader}>
                 <View className={styles.commentListName}>
                   {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}

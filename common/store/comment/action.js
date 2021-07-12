@@ -257,7 +257,7 @@ class CommentAction extends CommentStore {
       const isApproved = res.data.isApproved === 1;
 
       return {
-        msg: isApproved ? '回复成功' : '您发布的内容正在审核中',
+        msg: isApproved ? '回复成功' : '您回复的内容正在审核中',
         success: true,
       };
     }
