@@ -154,8 +154,8 @@ class CommentList extends React.Component {
           {/* 评论用户头像 */}
           <View className={styles.commentListAvatar} onClick={() => this.avatarClick()}>
             <Avatar
-              image={this.props?.data?.user?.avatar}
-              name={this.props.data?.user?.nickname || this.props.data?.user?.userName || ''}
+              image={(this.props.data?.user?.nickname || this.props.data?.user?.userName) && this.props?.data?.user?.avatar}
+              name={this.props.data?.user?.nickname || this.props.data?.user?.userName || '异'}
               circle={true}
             ></Avatar>
           </View>

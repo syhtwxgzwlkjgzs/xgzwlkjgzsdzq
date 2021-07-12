@@ -671,7 +671,7 @@ class ThreadH5Page extends React.Component {
           <Header></Header>
           {isReady && !isApproved && (
             <div className={layout.examine}>
-              <Icon className={layout.tipsIcon} name="WarnOutlined"></Icon>
+              <Icon className={layout.tipsIcon} name="TipsOutlined"></Icon>
               <span className={layout.tipsText}>内容正在审核中，审核通过后才能正常显示！</span>
             </div>
           )}

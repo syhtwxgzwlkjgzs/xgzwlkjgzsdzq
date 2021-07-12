@@ -156,8 +156,8 @@ class CommentList extends React.Component {
         <div className={styles.content}>
           <div className={styles.commentListAvatar} >
             <Avatar
-              image={this.props.data?.user?.avatar}
-              name={this.props.data?.user?.nickname || this.props.data?.user?.userName || ''}
+              image={(this.props.data?.user?.nickname || this.props.data?.user?.userName) && this.props.data?.user?.avatar}
+              name={this.props.data?.user?.nickname || this.props.data?.user?.userName || '异'}
               circle={true}
               userId={this.props.data?.user?.id}
               isShowUserInfo={this.props.isShowOne}

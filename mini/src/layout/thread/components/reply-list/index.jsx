@@ -72,8 +72,8 @@ export default class ReplyList extends React.Component {
       <View className={styles.replyList}>
         <View className={styles.replyListAvatar} onClick={() => {this.avatarClick(2)}}>
           <Avatar
-            image={this.props?.data?.user?.avatar}
-            name={this.props?.data?.user?.nickname || this?.props?.data?.user?.userName || ''}
+            image={(this.props.data?.user?.nickname || this.props.data?.user?.userName) && this.props?.data?.user?.avatar}
+            name={this.props?.data?.user?.nickname || this?.props?.data?.user?.userName || '异'}
             circle={true}
             size="small"
           ></Avatar>
@@ -90,14 +90,14 @@ export default class ReplyList extends React.Component {
                   <View className={styles.replyedAvatar} onClick={() => {this.avatarClick(3)}}>
                     <Avatar
                       className={styles.avatar}
-                      image={this.props.data.commentUser.avatar}
-                      name={this.props.data.commentUser.nickname || this.props.data.commentUser.userName || ''}
+                      image={(this.props.data.commentUser.nickname || this.props.data.commentUser.userName) && this.props.data.commentUser.avatar}
+                      name={this.props.data.commentUser.nickname || this.props.data.commentUser.userName || '异'}
                       circle={true}
                       size="small"
                     ></Avatar>
                   </View>
                   <Text className={styles.replyedUserName} onClick={() => {this.avatarClick(3)}}>
-                    {this.props.data.commentUser.nickname || this.props.data.commentUser.userName}
+                    {this.props.data.commentUser.nickname || this.props.data.commentUser.userName || '用户异常'}
                   </Text>
                 </View>
               ) : (
