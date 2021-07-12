@@ -32,7 +32,7 @@ import {
 import LoginHelper from '@common/utils/login-helper';
 
 // 获取全站数据
-export default function HOCFetchSiteData(Component) {
+export default function HOCFetchSiteData(Component, _isPass) {
   @inject('site')
   @inject('user')
   @observer
@@ -161,7 +161,12 @@ export default function HOCFetchSiteData(Component) {
       }
 
       user.updateLoginStatus(loginStatus);
-      this.setState({ isPass: this.isPass() });
+      let defaultPass = this.isPass();
+      // 自定义pass逻辑
+      if ( _isPass && defaultPass) {
+        defaultPass = _isPass(defaultPass);
+      }
+      this.setState({ isPass: defaultPass });
 
       // 初始化分享配置
       const isInit = await initWXSDK(siteConfig && siteConfig.passport && siteConfig.passport.offiaccountOpen);
