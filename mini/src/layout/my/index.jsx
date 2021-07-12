@@ -123,18 +123,28 @@ export default class index extends Component {
 
   handlePreviewBgImage = (e) => {
     e && e.stopPropagation();
-    if (this.previewerRef.current) {
-      this.previewerRef.current.show();
-    }
+    this.setState(
+      {
+        isPreviewBgVisible: !this.state.isPreviewBgVisible,
+      },
+      () => {
+        if (this.previewerRef.current) {
+          this.previewerRef.current.show();
+        }
+      },
+    );
   };
 
   getBackgroundUrl = () => {
-    let backgroundUrl = '/dzq-img/my-default-header-img.jpg';
-    if (this.props.user?.backgroundUrl) {
+    let backgroundUrl = null;
+    if (this.props.isOtherPerson) {
+      if (this.props.user?.targetUserBackgroundUrl) {
+        backgroundUrl = this.props.user.targetUserBackgroundUrl;
+      }
+    } else {
       backgroundUrl = this.props.user?.backgroundUrl;
-    } else if (this.props.isOtherPerson && this.props.user?.targetUserBackgroundUrl) {
-      backgroundUrl = this.props.user.targetUserBackgroundUrl;
     }
+    if (!backgroundUrl) return false;
     return backgroundUrl;
   };
 
@@ -180,13 +190,15 @@ export default class index extends Component {
               ))}
           </View>
         </View>
-        <ImagePreviewer
-          ref={this.previewerRef}
-          visible={this.state.isPreviewBgVisible}
-          onClose={this.handlePreviewBgImage}
-          imgUrls={[this.getBackgroundUrl()]}
-          currentUrl={this.getBackgroundUrl()}
-        />
+        {this.getBackgroundUrl() && this.state.isPreviewBgVisible && (
+          <ImagePreviewer
+            ref={this.previewerRef}
+            visible={this.state.isPreviewBgVisible}
+            onClose={this.handlePreviewBgImage}
+            imgUrls={[this.getBackgroundUrl()]}
+            currentUrl={this.getBackgroundUrl()}
+          />
+        )}
       </BaseLayout>
     );
   }

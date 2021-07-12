@@ -12,6 +12,7 @@ import { View, Text } from '@tarojs/components';
 import Taro, { getCurrentInstance, eventCenter } from '@tarojs/taro';
 import SectionTitle from '@components/section-title';
 import BottomView from '@components/list/BottomView';
+import ImagePreviewer from '@discuzq/design/dist/components/image-previewer/index';
 
 @inject('site')
 @inject('user')
@@ -29,6 +30,8 @@ class H5OthersPage extends React.Component {
   }
 
   $instance = getCurrentInstance();
+
+  previewerRef = React.createRef(null);
 
   componentWillMount() {
     const onShowEventId = this.$instance.router.onShow;
@@ -134,6 +137,29 @@ class H5OthersPage extends React.Component {
     );
   };
 
+  getBackgroundUrl = () => {
+    let backgroundUrl = null;
+    if (this.props.user?.targetUserBackgroundUrl) {
+      backgroundUrl = this.props.user.targetUserBackgroundUrl;
+    }
+    if (!backgroundUrl) return false;
+    return backgroundUrl;
+  };
+
+  handlePreviewBgImage = (e) => {
+    e && e.stopPropagation();
+    this.setState(
+      {
+        isPreviewBgVisible: true,
+      },
+      () => {
+        if (this.previewerRef.current) {
+          this.previewerRef.current.show();
+        }
+      },
+    );
+  };
+
   render() {
     const { site, user } = this.props;
     const { platform } = site;
@@ -152,7 +178,9 @@ class H5OthersPage extends React.Component {
           {this.state.fetchUserInfoLoading && <BottomView isBox loadingText="加载中..." />}
           {!this.state.fetchUserInfoLoading && (
             <>
-              <UserCenterHeaderImage isOtherPerson={true} />
+              <View onClick={this.handlePreviewBgImage}>
+                <UserCenterHeaderImage isOtherPerson={true} />
+              </View>
               <UserCenterHead platform={platform} isOtherPerson={true} />
             </>
           )}
@@ -179,6 +207,15 @@ class H5OthersPage extends React.Component {
             </View>
           </View>
         </View>
+        {this.getBackgroundUrl() && this.state.isPreviewBgVisible && (
+          <ImagePreviewer
+            ref={this.previewerRef}
+            visible={this.state.isPreviewBgVisible}
+            onClose={this.handlePreviewBgImage}
+            imgUrls={[this.getBackgroundUrl()]}
+            currentUrl={this.getBackgroundUrl()}
+          />
+        )}
       </BaseLayout>
     );
   }
