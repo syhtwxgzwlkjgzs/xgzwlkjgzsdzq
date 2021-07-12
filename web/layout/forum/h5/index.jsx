@@ -46,7 +46,7 @@ class ForumH5Page extends React.Component {
 
   render() {
     const { site, forum } = this.props;
-    const { platform } = site;
+    const { platform, envConfig } = site;
     const { usersPageData = [], isNoMore } = forum;
     // 站点介绍
     const siteIntroduction = get(site, 'webConfig.setSite.siteIntroduction', '');
@@ -126,7 +126,7 @@ class ForumH5Page extends React.Component {
           {/* 当前版本 start */}
           <div className={layout.list}>
             <div className={layout.label}>当前版本</div>
-            <div className={layout.right}>v3.21.0713</div>
+            <div className={layout.right}>{envConfig.version || '暂无版本号'}</div>
           </div>
           {/* 当前版本 end */}
         </div>
