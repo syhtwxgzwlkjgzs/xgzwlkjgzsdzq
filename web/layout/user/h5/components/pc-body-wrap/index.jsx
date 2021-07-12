@@ -1,7 +1,6 @@
 import React from 'react';
 import { inject } from 'mobx-react';
 import layout from './index.module.scss';
-import { copyright } from '../../constants/copyright';
 import BaseLayout from '@components/base-layout';
 
 @inject('site')
