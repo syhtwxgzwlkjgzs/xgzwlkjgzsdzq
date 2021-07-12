@@ -165,6 +165,15 @@ class ThreadPCPage extends React.Component {
                       clickTopic={val => this.props.handleSetState({ topic: val })}
                     />
                   )}
+                  {/* 插入 at 关注的人 */}
+                  {currentDefaultOperation === defaultOperation.at && (
+                    <AtSelect
+                      pc
+                      visible={currentDefaultOperation === defaultOperation.at}
+                      getAtList={list => this.props.handleAtListChange(list)}
+                      onCancel={() => this.props.handleSetState({ currentDefaultOperation: '' })}
+                    />
+                  )}
                 </DefaultToolbar>
                 <div className={styles.divider}></div>
                 <AttachmentToolbar
@@ -222,15 +231,6 @@ class ThreadPCPage extends React.Component {
               cancel={() => {
                 this.props.handleSetState({ curPaySelect: '', currentDefaultOperation: '' });
               }}
-            />
-          )}
-          {/* 插入 at 关注的人 */}
-          {currentDefaultOperation === defaultOperation.at && (
-            <AtSelect
-              pc
-              visible={currentDefaultOperation === defaultOperation.at}
-              getAtList={list => this.props.handleAtListChange(list)}
-              onCancel={() => this.props.handleSetState({ currentDefaultOperation: '' })}
             />
           )}
           {/* 插入红包 */}
