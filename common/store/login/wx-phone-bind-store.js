@@ -177,8 +177,6 @@ export default class wxPhoneBindStore {
 
       try {
         const smsLoginResp = await transitionSmsBind({
-          url: 'apiv3/users/wechat/transition/sms.bind',
-
           data: {
             mobile: this.mobile,
             code: this.code,
