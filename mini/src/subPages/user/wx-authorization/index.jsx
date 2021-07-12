@@ -25,6 +25,7 @@ class WXAuthorization extends Component {
     this.state = {
       loginTitle: `你确定要授权登录${props.site.siteName}吗？`
     }
+    this.props.h5QrCode.isBtn = true;
   }
 
   async componentDidMount() {
