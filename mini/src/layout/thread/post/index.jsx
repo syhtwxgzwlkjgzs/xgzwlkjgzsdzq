@@ -725,8 +725,8 @@ class Index extends Component {
       height: `${navInfo.navHeight}px`,
       paddingTop: `${navInfo.statusBarHeight}px`,
     }
-    const contentStyle = {
-      marginTop: navInfo.statusBarHeight > 30 ? `${navInfo.navHeight / 2}px` : '0px',
+    const containerStyle = {
+      paddingTop: `${navInfo.statusBarHeight + navInfo.navHeight}px`
     }
     let defaultToolbarStyle = {}
     if (showEmoji || bottomHeight) defaultToolbarStyle = { paddingBottom: '0px', height: '45px' };
@@ -734,7 +734,7 @@ class Index extends Component {
     const headTitle = get(site, 'webConfig.setSite.siteName', '');
     return (
       <>
-        <View className={styles.container}>
+        <View className={styles.container} style={containerStyle}>
           {/* 自定义顶部导航条 */}
           <View className={styles.topBar} style={navStyle}>
             <Icon name="RightOutlined" onClick={() => this.handlePageJump(false)} />
@@ -744,7 +744,7 @@ class Index extends Component {
           </View>
 
           {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
-          <View className={styles.content} style={contentStyle} onClick={this.handleContentFocus}>
+          <View className={styles.content} onClick={this.handleContentFocus}>
             <View id="thread-post-content">
               <Title
                 value={postData.title}
