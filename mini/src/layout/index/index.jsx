@@ -1,14 +1,11 @@
 import React, { createRef } from 'react';
 import { inject, observer } from 'mobx-react';
-import Icon from '@discuzq/design/dist/components/icon/index';
-import Tabs from '@discuzq/design/dist/components/tabs/index';
 import { View } from '@tarojs/components'
 import ThreadContent from '../../components/thread';
 import HomeHeader from '../../components/home-header';
 import FilterView from './components/filter-view';
 import BaseLayout from '../../components/base-layout';
 import TopNew from './components/top-news';
-import NavBar from './components/nav-bar';
 import { getSelectedCategoryIds } from '@common/utils/handleCategory';
 import Taro from '@tarojs/taro';
 import { debounce } from '@common/utils/throttle-debounce.js';
