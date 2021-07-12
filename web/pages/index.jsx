@@ -136,7 +136,7 @@ export default HOCFetchSiteData(Index, (pass) => {
   // 因部署方式的问题，所有路径第一次访问都会访问index.html，导致会出现首页渲染出来之后跳转到制定的url地址，为了防止这种情况，对首页的渲染做一次判断，如果url不是首页连接，将不渲染首页。
   if (!isServer()) {
     const pathname = window.location.pathname;
-    if (pathname === '/' || pathnamee === '/index') {
+    if (pathname === '/' || pathname === '/index') {
       return true;
     } else {
       return false;
