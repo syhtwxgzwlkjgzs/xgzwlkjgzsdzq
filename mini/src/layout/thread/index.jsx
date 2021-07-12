@@ -269,6 +269,12 @@ class ThreadH5Page extends React.Component {
 
   // 点击分享
   onShareClick = () => {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+      return;
+    }
+
     this.setState({
       isShowShare: true,
       showMorePopup: true,
