@@ -6,4 +6,6 @@
 }
 .pc_bottom {
   @include pc_bottom;
+  height: auto;
+  padding: 0;
 }
