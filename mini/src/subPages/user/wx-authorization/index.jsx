@@ -23,9 +23,9 @@ class WXAuthorization extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isBtn: true,
       loginTitle: `你确定要授权登录${props.site.siteName}吗？`
     }
-    this.props.h5QrCode.isBtn = true;
   }
 
   async componentDidMount() {
@@ -59,7 +59,9 @@ class WXAuthorization extends Component {
         this.setState({
           loginTitle: '已成功登录'
         })
-        this.props.h5QrCode.isBtn = false;
+        this.setState({
+          isBtn: false,
+        });
         return;
       }
       checkUserStatus(res);
@@ -71,7 +73,9 @@ class WXAuthorization extends Component {
       this.setState({
         loginTitle: '登录失败，请刷新二维码重新扫码'
       });
-      this.props.h5QrCode.isBtn = false;
+      this.setState({
+        isBtn: false,
+      });
       Toast.error({
         content: error.Message,
       });
@@ -96,7 +100,7 @@ class WXAuthorization extends Component {
                 {nickname ? `${nickname}，` : ''}{this.state.loginTitle}
               </View>
               {
-                this.props.h5QrCode.isBtn
+                this.state.isBtn
                 ? <Button
                   className={layout.button}
                   type="primary"
@@ -111,7 +115,9 @@ class WXAuthorization extends Component {
                   this.setState({
                     loginTitle: '已取消登录'
                   })
-                  this.props.h5QrCode.isBtn = false;
+                  this.setState({
+                    isBtn: false,
+                  })
                 }}>
                   退出
                 </Navigator>
