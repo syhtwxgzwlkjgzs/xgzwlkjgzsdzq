@@ -415,3 +415,34 @@ class UserCenterFollows extends React.Component {
                 {this.props.splitElement}
               </div>
             );
+          })}
+          <div
+            className={`${friendsStyle.friendWrap} ${styles.friendWrap} ${styles['display-none']} user-center-follow-mini`}
+          >
+            {followerAdapter(this.props.dataSource || this.state.follows).map((user, index) => {
+              if (index + 1 > this.props.limit) return null;
+              return (
+                <div key={'id' + user.id} className={friendsStyle.friendItem}>
+                  <div className={friendsStyle.friendAvatar}>
+                    <Avatar image={user.avatar} userId={user.id} circle name={user.nickName} />
+                  </div>
+                  <div className={friendsStyle.friendTextInfo}>{user.nickName}</div>
+                </div>
+              );
+            })}
+          </div>
+          {followerAdapter(this.props.dataSource || this.state.follows).length === 0 && !this.state.loading && (
+            <NoData defaultShow={true} />
+          )}
+          {this.state.loading && (
+            <div className={styles.loadMoreContainer}>
+              <Spin type={'spinner'}>加载中 ...</Spin>
+            </div>
+          )}
+        </div>
+      </>
+    );
+  }
+}
+
+export default UserCenterFollows;
