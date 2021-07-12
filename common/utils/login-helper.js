@@ -161,7 +161,7 @@ class LoginHelper {
 
   // 恢复登录前的跳转。优先级：记录页 > defaultPage > 主页
   restore = (defaultPage) => {
-    const url = this.getUrl() || defaultPage || (isWeb ? '/' : '/pages/home/index');
+    const url = this.getUrl() || defaultPage || (isWeb() ? '/' : '/pages/home/index');
 
     Router.redirect({ url });
     this.clear();
