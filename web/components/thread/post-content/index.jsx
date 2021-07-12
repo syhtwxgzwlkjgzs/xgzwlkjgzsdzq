@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { Icon, RichText, ImagePreviewer } from '@discuzq/design';
 import { noop } from '../utils';
+import classnames from 'classnames';
 
 import fuzzyCalcContentLength from '@common/utils/fuzzy-calc-content-length';
 import s9e from '@common/utils/s9e';
@@ -22,6 +23,7 @@ const PostContent = ({
   useShowMore = true, // 是否需要"查看更多"
   onRedirectToDetail = noop,
   customHoverBg = false,
+  usePointer = true,
   onOpen = noop,
   ...props
 }) => {
@@ -54,7 +56,7 @@ const PostContent = ({
         onRedirectToDetail && onRedirectToDetail();
       } else {
         onOpen();
-        setShowMore(true);
+        setShowMore(false);
       }
     },
     [contentTooLong],
@@ -116,10 +118,10 @@ const PostContent = ({
   }, [filterContent]);
 
   return (
-    <div className={styles.container} {...props}>
+    <div className={classnames(styles.container, usePointer ? styles.usePointer : '')} {...props}>
       <div
         ref={contentWrapperRef}
-        className={`${styles.contentWrapper} ${useShowMore && showMore ? styles.hideCover : ''} ${customHoverBg ? styles.bg : ''}`}
+        className={`${styles.contentWrapper} ${(useShowMore && showMore) ? styles.hideCover : ''} ${customHoverBg ? styles.bg : ''}`}
         onClick={showMore ? onShowMore : handleClick}
       >
         <div className={styles.content}>

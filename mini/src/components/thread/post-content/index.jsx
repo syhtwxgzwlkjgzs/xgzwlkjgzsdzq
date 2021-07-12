@@ -54,7 +54,7 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
       onRedirectToDetail && onRedirectToDetail();
     } else {
       setUseShowMore()
-      setShowMore(true);
+      setShowMore(false);
     }
   }, [contentTooLong]);
 
