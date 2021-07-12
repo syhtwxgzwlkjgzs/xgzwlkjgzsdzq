@@ -38,8 +38,7 @@ class IndexPCPage extends React.Component {
       isShowDefault: this.checkIsOpenDefaultTab(),
     };
 
-    // 存储最新的数据，以便于点击刷新时，可以直接赋值
-    this.newThread = {};
+   
     this.enabledVList = true; // 开启虚拟列表
 
     // 轮询定时器
@@ -93,15 +92,18 @@ class IndexPCPage extends React.Component {
       }).then((res) => {
         const { totalCount = 0 } = res?.data || {};
         const newConNum = totalCount - nowTotal;
-        const { visible = false, conNum = 0 } = this.state;
+        const { conNum = 0, visible } = this.state;
 
         if (newConNum > conNum) {
           this.setState({
             visible: true,
             conNum: newConNum,
           });
-          // 缓存新数据
-          this.newThread = res?.data;
+        } else if (visible) {
+          this.setState({
+            visible: false,
+            conNum: 0,
+          });
         }
       });
     }
@@ -156,26 +158,12 @@ class IndexPCPage extends React.Component {
 
   goRefresh = () => {
     const { dispatch = () => {} } = this.props;
-
-    if (this.newThread?.pageData?.length) {
-      // 若有缓存值，就取缓存值
-      dispatch('update-page', { page: 1 });
-      this.props.index.setThreads(deepClone(this.newThread));
-      // 清空缓存
-      this.newThread = {};
+    dispatch('refresh-thread').then((res) => {
       this.setState({
         visible: false,
         conNum: 0,
       });
-    } else {
-      // 没有缓存值，直接请求网络
-      dispatch('refresh-thread').then((res) => {
-        this.setState({
-          visible: false,
-          conNum: 0,
-        });
-      });
-    }
+    });
   };
 
   // 发帖

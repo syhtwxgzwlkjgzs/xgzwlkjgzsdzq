@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Tabs from '@discuzq/design/dist/components/tabs/index';
 import { View } from '@tarojs/components'
-import { getWindowHeight, randomStr, handleAttachmentData } from '@components/thread/utils'
+import { randomStr } from '@components/thread/utils'
 import { useRef } from 'react';
 import styles from '../../index.module.scss';
 import NavBar from '../nav-bar';
