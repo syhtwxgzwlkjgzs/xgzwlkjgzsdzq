@@ -120,7 +120,7 @@ class ForumH5Page extends React.Component {
           {/* 当前版本 start */}
           <View className={layout.list}>
             <View className={layout.label}>当前版本</View>
-            <View className={layout.right}>v3.20210610v1</View>
+            <View className={layout.right}>v3.21.0713</View>
           </View>
           {/* 当前版本 end */}
         </View>
