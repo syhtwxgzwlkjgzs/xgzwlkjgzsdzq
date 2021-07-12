@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Popup, Button, Input, Icon } from '@discuzq/design';
+import { Popup, Button, Input, Icon, Toast } from '@discuzq/design';
 import styles from './index.module.scss';
 import className from 'classnames';
 
 const InputPop = (props) => {
-  const { visible, onOkClick, onCancel } = props;
+  const { visible, onOkClick } = props;
 
   const [value, setValue] = useState('');
 
@@ -19,8 +19,25 @@ const InputPop = (props) => {
     setValue(item);
   };
 
+  const onCancel = () => {
+    typeof props?.onCancel === 'function' && props.onCancel();
+    typeof props?.onCancel === 'function' && setValue('');
+  }
+
   const onSubmitClick = async () => {
-    if (value === '' || Number(value) <= 0 || Number(value) > 1000000) return;
+    if (value === '' || Number(value) <= 0 || Number(value) > 1000000) {
+      if (value === '' || Number(value) <= 0) {
+        Toast.error({
+          content: '金额不能为0',
+        });
+      }
+      if (Number(value) > 1000000) {
+        Toast.error({
+          content: '金额不能超过100万',
+        });
+      }
+      return;
+    };
     if (typeof onOkClick === 'function') {
       try {
         const success = await onOkClick(value);

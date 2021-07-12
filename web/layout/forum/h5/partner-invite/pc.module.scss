@@ -155,9 +155,12 @@
   width: rem(1100);
   background-color: $primary-color;
   margin-top: $margin-5n;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: center;
   .logo {
     height: 74px;
-    margin: 0 calc(50% - 220px);
+    margin: 0 auto;
     margin-top: $margin-4n * 2;
   }
 }

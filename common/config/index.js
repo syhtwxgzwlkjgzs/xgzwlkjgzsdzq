@@ -1,4 +1,6 @@
-const config = {};
+const config = {
+  version: 'v3.21.0713'
+};
 
 module.exports = function () {
   if (process.env.NODE_ENV === 'development') {

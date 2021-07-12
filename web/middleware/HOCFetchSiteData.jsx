@@ -167,8 +167,8 @@ export default function HOCFetchSiteData(Component) {
       const isInit = await initWXSDK(siteConfig && siteConfig.passport && siteConfig.passport.offiaccountOpen);
       if ( isInit && siteConfig && siteConfig.setSite ) {
         const {setSite} = siteConfig;
-        const {siteTitle, siteIntroduction, siteFavicon} = setSite;
-        setWxShare(siteTitle, siteIntroduction, window.location.href, siteFavicon);
+        const {siteName, siteIntroduction, siteFavicon} = setSite;
+        setWxShare(siteName, siteIntroduction, window.location.href, siteFavicon);
       }
       
     }

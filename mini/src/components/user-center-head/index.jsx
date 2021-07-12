@@ -131,7 +131,7 @@ class index extends Component {
     clearLoginStatus();
     this.props.user.removeUserInfo();
     this.props.site.getSiteInfo();
-    Router.reLaunch({ url: '/indexPages/home/index' });
+    Router.reLaunch({ url: '/subPages/forum/partner-invite/index' });
   };
 
   // 点击粉丝列表
