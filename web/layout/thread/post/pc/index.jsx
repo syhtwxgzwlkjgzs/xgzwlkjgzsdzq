@@ -156,6 +156,15 @@ class ThreadPCPage extends React.Component {
                     show={currentDefaultOperation === defaultOperation.emoji}
                     emojis={threadPost.emojis}
                     onClick={this.props.handleEmojiClick} />
+                  {/* 插入选中的话题 */}
+                  {currentDefaultOperation === defaultOperation.topic && (
+                    <TopicSelect
+                      pc
+                      visible={currentDefaultOperation === defaultOperation.topic}
+                      cancelTopic={() => this.props.handleSetState({ currentDefaultOperation: '' })}
+                      clickTopic={val => this.props.handleSetState({ topic: val })}
+                    />
+                  )}
                 </DefaultToolbar>
                 <div className={styles.divider}></div>
                 <AttachmentToolbar
@@ -222,15 +231,6 @@ class ThreadPCPage extends React.Component {
               visible={currentDefaultOperation === defaultOperation.at}
               getAtList={list => this.props.handleAtListChange(list)}
               onCancel={() => this.props.handleSetState({ currentDefaultOperation: '' })}
-            />
-          )}
-          {/* 插入选中的话题 */}
-          {currentDefaultOperation === defaultOperation.topic && (
-            <TopicSelect
-              pc
-              visible={currentDefaultOperation === defaultOperation.topic}
-              cancelTopic={() => this.props.handleSetState({ currentDefaultOperation: '' })}
-              clickTopic={val => this.props.handleSetState({ topic: val })}
             />
           )}
           {/* 插入红包 */}
