@@ -48,8 +48,6 @@ class ForumH5Page extends React.Component {
     const { site, forum } = this.props;
     const { platform } = site;
     const { usersPageData = [], isNoMore } = forum;
-    // 站点介绍
-    const siteIntroduction = get(site, 'webConfig.setSite.siteIntroduction', '');
     // 创建时间
     const siteInstall = get(site, 'webConfig.setSite.siteInstall', '');
     // 站点模式
@@ -64,8 +62,8 @@ class ForumH5Page extends React.Component {
           {/* 站点介绍 start */}
           <div className={layout.list}>
             <div className={layout.label}>站点介绍</div>
-            <div className={layout.right} title={siteIntroduction}>
-              <span className={layout.list_text_ellipsis}>{siteIntroduction}</span>
+            <div className={layout.right} title={site.siteIntroduction}>
+              <span className={layout.list_text_ellipsis}>{site.siteIntroduction}</span>
             </div>
           </div>
           {/* 站点介绍 end */}
