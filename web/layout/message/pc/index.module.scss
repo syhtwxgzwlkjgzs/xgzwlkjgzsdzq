@@ -16,45 +16,33 @@
 */
 :global {
   .mymessage-page {
-    // @include heightMedia(785px, 730px) {
-    //   .user-center-follow-item:nth-last-child(-n + 2) {
-    //     display: none;
-    //   }
-    // }
-
-    // @include heightMedia(730px, 675px) {
-    //   .user-center-follow-item:nth-last-child(-n + 3) {
-    //     display: none;
-    //   }
-    // }
-
     @include heightMedia(1005px, 895px) {
       .user-center-follow-list {
-        max-height: 435px !important;
+        max-height: 375px !important;
       }
     }
 
     @include heightMedia(895px, 840px) {
       .user-center-follow-list {
-        max-height: 330px !important;
+        max-height: 270px !important;
       }
     }
 
     @include heightMedia(840px, 785px) {
       .user-center-follow-list {
-        max-height: 285px !important;
+        max-height: 225px !important;
       }
     }
 
     @include heightMedia(785px, 730px) {
       .user-center-follow-list {
-        max-height: 270px !important;
+        max-height: 210px !important;
       }
     }
 
     @include heightMedia(730px, 675px) {
       .user-center-follow-list {
-        max-height: 215px !important;
+        max-height: 155px !important;
       }
     }
 

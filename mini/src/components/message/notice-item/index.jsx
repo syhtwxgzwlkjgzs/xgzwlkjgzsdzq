@@ -95,7 +95,7 @@ class Index extends Component {
     let url = "";
     const { type } = this.props;
     if (item.threadId) {
-      url = `/subPages/thread/index?id=${item.threadId}`;
+      url = `/indexPages/thread/index?id=${item.threadId}`;
     }
     if (type === 'chat') {
       url = `/subPages/message/index?page=chat&dialogId=${item.dialogId}&nickname=${item.nickname || ''}`;

@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import SectionTitle from '@components/section-title';
 import BottomView from '@components/list/BottomView';
 import styles from './index.module.scss';
+import classNames from 'classnames';
 
 /**
  * PC端，右侧边栏面板组件（容器）
@@ -28,7 +29,8 @@ const WrapperContent = (props) => {
     platform = 'pc',
     isNeedBottom = true,
     errorText = '',
-    isError = false
+    isError = false,
+    messageMode = false,
   } = props;
 
   const isNoData = useMemo(() => !children || !!noData, [noData, children]);
@@ -42,8 +44,11 @@ const WrapperContent = (props) => {
   }, [platform, type]);
 
   return (
-    <div className={`${styles.container} ${pcStyle} ${className} ${isNeedBottom && styles.bottom}`}>
-      {header || <SectionTitle bigSize={platform === 'pc'} {...props} />}
+    <div className={classNames(styles.container, pcStyle, className, {
+      [styles.bottom]: isNeedBottom,
+      [styles['clear-padding']]: messageMode,
+    })}>
+      {header || <SectionTitle bigSize={platform === 'pc'} titleStyle={messageMode ? { margin: '0 16px' } : {}} {...props} />}
       {(!isLoading && !isNoData) ? children : <BottomView isError={isError} errorText={errorText} noMore={!isLoading && isNoData} loadingText='正在加载' />}
       {footer}
     </div>

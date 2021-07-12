@@ -14,7 +14,7 @@ const index = ({setShow, tipData, data, index, getShareData, shareNickname, shar
         comeFrom:'thread',
         threadId,
         title:threadTitle,
-        path: `/subPages/thread/index?id=${threadId}`,
+        path: `/indexPages/thread/index?id=${threadId}`,
         isAnonymous: thread.isAnonymous,
         isPrice: thread.displayTag.isPrice,
     }
@@ -41,7 +41,7 @@ const index = ({setShow, tipData, data, index, getShareData, shareNickname, shar
     // 当页面被隐藏时（去分享）,收起弹窗
     // TODO 最好是做成点击按钮之后，就收起弹窗
     useDidHide(() => {
-        setShow(false) 
+        setShow(false)
     })
     useDidShow(() => {
         if(shareThreadid === threadId) {

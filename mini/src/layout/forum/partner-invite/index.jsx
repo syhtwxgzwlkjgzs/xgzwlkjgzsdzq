@@ -60,7 +60,7 @@ class PartnerInviteH5Page extends React.Component {
           invitorAvatar: avatar,
         });
       }
-      
+
       const usersList = await simpleRequest('readUsersList', {
         params: {
           filter: {
@@ -200,7 +200,7 @@ class PartnerInviteH5Page extends React.Component {
             ) : (
               <></>
             )}
-            
+
             <View className={layout.bottom_button_wrap}>
               {siteMode === 'pay' ? (
                 <View className={layout.bottom_title}>

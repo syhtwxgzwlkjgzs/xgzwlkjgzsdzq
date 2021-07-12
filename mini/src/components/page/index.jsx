@@ -14,7 +14,7 @@ import Taro from '@tarojs/taro';
 import { REVIEWING } from '@common/store/login/util';
 import LoginHelper from '@common/utils/login-helper';
 
-const INDEX_URL = '/pages/home/index';
+const INDEX_URL = '/indexPages/home/index';
 const PARTNER_INVITE_URL = '/subPages/forum/partner-invite/index';
 const BIND_NICKNAME_URL = '/subPages/user/bind-nickname/index';
 const CLOSE_URL = '/subPage/close/index';

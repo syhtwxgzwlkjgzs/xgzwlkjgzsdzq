@@ -22,7 +22,7 @@ const Index = ({
         comeFrom:'thread',
         threadId: threadId,
         title:threadTitle,
-        path: `/subPages/thread/index?id=${threadId}`
+        path: `/indexPages/thread/index?id=${threadId}`
     }
     return (
 

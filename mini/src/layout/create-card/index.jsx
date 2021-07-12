@@ -21,7 +21,7 @@ class Index extends React.Component {
     async componentDidMount(){
         const {threadId} = this.thread
         const data = {
-            path: `/subPages/thread/index?id=${threadId}`
+            path: `/indexPages/thread/index?id=${threadId}`
         }
         try {
             const res = await  getMiniCode(data)

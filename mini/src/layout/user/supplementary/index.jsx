@@ -100,7 +100,7 @@ class SupplementaryH5Page extends React.Component {
   };
 
   gotoIndex = () => {
-    Router.push({ url: '/pages/home/index' });
+    Router.push({ url: '/indexPages/home/index' });
   };
 
   submit() {
