@@ -190,6 +190,15 @@ class PartnerInviteH5Page extends React.Component {
     );
   }
 
+  getBgHeaderStyle() {
+    const { site: { webConfig = {} } } = this.props;
+    const siteBackgroundImage = get(webConfig, 'setSite.siteBackgroundImage', '');
+
+    if (siteBackgroundImage) {
+      return { backgroundImage: `url(${siteBackgroundImage})` };
+    }
+  }
+
   contentHeader = () => {
     const { site: { platform, webConfig = {} } } = this.props;
     if (platform === 'h5') {
@@ -197,17 +206,18 @@ class PartnerInviteH5Page extends React.Component {
     }
     const siteAuthor = get(webConfig, 'setSite.siteAuthor.username', '');
     const siteInstall = get(webConfig, 'setSite.siteInstall', '');
+    const siteHeaderLogo = get(webConfig, 'setSite.siteHeaderLogo', '');
     // 兼容ios
     const [siteTimer] = siteInstall.split(' ');
     const startDate = Date.parse(siteTimer);
     const endDate = Date.parse(new Date());
     const createDays = numberFormat(parseInt(Math.abs(startDate  -  endDate) / 1000 / 60 / 60 / 24, 10));
     return (
-      <div className={pclayout.content_header}>
+      <div className={pclayout.content_header} style={{...this.getBgHeaderStyle()}}>
         <img
             className={pclayout.logo}
             mode="aspectFit"
-            src='/dzq-img/join-banner-bg.png'
+            src={siteHeaderLogo || '/dzq-img/join-banner-bg.png'}
         />
         <ul className={pclayout.joinInfo}>
           <li className={pclayout.item}>
