@@ -38,7 +38,7 @@ class Detail extends React.Component {
     const { threadId, isAnonymous } = this.props.thread.threadData;
     const {isPrice} = this.props.thread.threadData.displayTag
     const defalutTitle = this.props.thread.title;
-    const path = `/subPages/thread/index?id=${threadId}`;
+    const path = `/indexPages/thread/index?id=${threadId}`;
     if (data.from === 'timeLine') {
       return {
         title: defalutTitle,
@@ -51,7 +51,7 @@ class Detail extends React.Component {
       };
     }
     this.props.thread.shareThread(threadId, this.props.index, this.props.search, this.props.topic);
-    
+
     return  priceShare({isAnonymous, isPrice, path}) || {
       title: defalutTitle,
       path,
@@ -132,7 +132,7 @@ class Detail extends React.Component {
         // 不是作者自己。跳回首页
         if (!currentUserId || !userId || currentUserId !== userId) {
           Taro.redirectTo({
-            url: `/pages/home/index`,
+            url: `/indexPages/home/index`,
           });
           return;
         }

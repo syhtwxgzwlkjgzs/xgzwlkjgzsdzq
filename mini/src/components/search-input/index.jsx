@@ -47,12 +47,13 @@ const SearchInput = ({
   }
 
   const onEnter = (e) => {
+    const val = e.target.value || "";
     if(timeoutID !== null) {
       clearTimeout(timeoutID);
       setTimeoutID(null);
     }
     setTimeoutID(setTimeout(() => {
-      onSearch(e.target.value);
+      onSearch(val);
     }, 500));
   }
 
@@ -63,11 +64,6 @@ const SearchInput = ({
     setValue('');
     setIsShow(false)
   }
-
-  const inputClick = throttle((e) => {
-    const val = e.target.value || "";
-    onSearch(val)
-  }, 300);
 
   return (
     <View className={`${styles.container} ${!isShowBottom && styles.hiddenBottom}`}>
@@ -80,7 +76,7 @@ const SearchInput = ({
           onInput={e => inputChange(e)}
           className={styles.input}
           confirmType='search'
-          onConfirm={e => inputClick(e)}
+          onConfirm={e => onEnter(e)}
           placeholderClass={styles.placeholder}
           ref={inputRef}
         />

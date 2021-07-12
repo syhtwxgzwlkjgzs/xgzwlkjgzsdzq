@@ -110,6 +110,10 @@
           width: $width !important;
           height: $width !important;
         }
+        .dzq-upload__area,
+        .dzq-upload-list-card__item.is-error {
+          margin-right: 1vw;
+        }
       }
     }
   }

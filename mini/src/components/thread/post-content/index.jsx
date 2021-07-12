@@ -12,6 +12,9 @@ import { View, Text, Image } from '@tarojs/components'
 import styles from './index.module.scss';
 import { urlToLink } from '@common/utils/replace-url-to-a';
 
+import { getElementRect, randomStr } from '../utils'
+
+
 /**
  * 帖子内容展示
  * @prop {string}   content 内容
@@ -34,6 +37,9 @@ const Index = ({
   onRedirectToDetail = noop,
   loading,
   customHoverBg = false,
+  relativeToViewport = true,
+  changeHeight = noop,
+  setUseShowMore = noop,
   ...props
 }) => {
   // 内容是否超出屏幕高度
@@ -64,6 +70,7 @@ const Index = ({
       // 内容过长直接跳转到详情页面
       onRedirectToDetail && onRedirectToDetail();
     } else {
+      setUseShowMore()
       setHiddenMore(true);
     }
   }, [contentTooLong]);
@@ -109,6 +116,12 @@ const Index = ({
     }
   }, [filterContent]);
 
+  useEffect(() => {
+    if (relativeToViewport) {
+      changeHeight()
+    }
+  }, [showMore, relativeToViewport])
+
   return (
     <View className={styles.container} {...props}>
       <View
@@ -120,7 +133,7 @@ const Index = ({
           <RichText content={(useShowMore && cutContentForDisplay) ? cutContentForDisplay : urlToLink(filterContent)} onClick={handleClick} />
         </View>
       </View>
-      {!loading && useShowMore && !showMore && (
+      {loading !== undefined && !loading && useShowMore && !showMore && (
         <View className={styles.showMore} onClick={onShowMore}>
           <View className={styles.hidePercent}>{texts.showMore}</View>
           <Icon className={styles.icon} name="RightOutlined" size={12} />

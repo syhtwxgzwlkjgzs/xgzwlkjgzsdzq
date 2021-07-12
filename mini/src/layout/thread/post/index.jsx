@@ -103,7 +103,7 @@ class Index extends Component {
     if (permissions && permissions.createThread && !permissions.createThread.enable) {
       this.postToast('暂无发帖权限, 即将回到首页');
       setTimeout(() => {
-        Taro.redirectTo({ url: '/pages/home/index' })
+        Taro.redirectTo({ url: '/indexPages/home/index' })
       }, 1000)
     }
   }
@@ -141,7 +141,7 @@ class Index extends Component {
       //   this.postToast('已经支付的帖子不支持编辑');
       //   const timer = setTimeout(() => {
       //     clearTimeout(timer);
-      //     Taro.redirectTo({ url: `/subPages/thread/index?id=${id}` });
+      //     Taro.redirectTo({ url: `/indexPages/thread/index?id=${id}` });
       //   }, 1000);
       //   return;
       // }
@@ -238,11 +238,11 @@ class Index extends Component {
         if (!this.state.canEditReward) {
           return this.postToast('再编辑时不可操作悬赏');
         }
-        nextRoute = '/subPages/thread/selectReward/index';
+        nextRoute = '/indexPages/thread/selectReward/index';
         this.resetOperationType();
         break;
       case THREAD_TYPE.goods:
-        nextRoute = '/subPages/thread/selectProduct/index';
+        nextRoute = '/indexPages/thread/selectProduct/index';
         this.resetOperationType();
         break;
       case THREAD_TYPE.redPacket:
@@ -250,25 +250,25 @@ class Index extends Component {
         if (!this.state.canEditRedpacket) {
           return this.postToast('再编辑时不可操作红包');
         }
-        nextRoute = '/subPages/thread/selectRedpacket/index';
+        nextRoute = '/indexPages/thread/selectRedpacket/index';
         break;
       case THREAD_TYPE.paid:
         this.setState({ showPaidOption: true });
         this.resetOperationType();
         break;
       case THREAD_TYPE.paidPost:
-        nextRoute = `/subPages/thread/selectPayment/index?paidType=${THREAD_TYPE.paidPost}`;
+        nextRoute = `/indexPages/thread/selectPayment/index?paidType=${THREAD_TYPE.paidPost}`;
         this.setState({ showPaidOption: false })
         break;
       case THREAD_TYPE.paidAttachment:
-        nextRoute = `/subPages/thread/selectPayment/index?paidType=${THREAD_TYPE.paidAttachment}`;
+        nextRoute = `/indexPages/thread/selectPayment/index?paidType=${THREAD_TYPE.paidAttachment}`;
         this.setState({ showPaidOption: false });
         break;
       case THREAD_TYPE.at:
-        nextRoute = '/subPages/thread/selectAt/index';
+        nextRoute = '/indexPages/thread/selectAt/index';
         break;
       case THREAD_TYPE.topic:
-        nextRoute = '/subPages/thread/selectTopic/index';
+        nextRoute = '/indexPages/thread/selectTopic/index';
         break;
       case THREAD_TYPE.draft:
         this.setState({ showDraftOption: true });
@@ -421,7 +421,7 @@ class Index extends Component {
     this.randstr = result.randstr;
     const { router } = this.inst;
     // 当前页面才进行提交操作，避免其他页面引起的多余的提交
-    if (router.path.indexOf('subPages/thread/post/index') > -1) this.handleSubmit();
+    if (router.path.indexOf('indexPages/thread/post/index') > -1) this.handleSubmit();
   }
 
   // 验证码点击关闭的回调
@@ -526,7 +526,7 @@ class Index extends Component {
         success: async () => {
           this.setIndexPageData();
           if (this.state.threadId)
-            Taro.redirectTo({ url: `/subPages/thread/index?id=${this.state.threadId}` });
+            Taro.redirectTo({ url: `/indexPages/thread/index?id=${this.state.threadId}` });
         },
       });
       return;
@@ -575,12 +575,12 @@ class Index extends Component {
         this.setIndexPageData();
       }
       this.postToast('发布成功', 'success');
-      if (!isDraft) Taro.redirectTo({ url: `/subPages/thread/index?id=${data.threadId}` });
+      if (!isDraft) Taro.redirectTo({ url: `/indexPages/thread/index?id=${data.threadId}` });
       // }
       return true;
     }
     Taro.hideLoading();
-    (!isDraft || isPay) && this.postToast(msg);
+    (!isDraft || !isPay) && this.postToast(msg);
     return false;
   }
 
@@ -672,7 +672,7 @@ class Index extends Component {
     const { postType, threadId } = this.state;
     // 已发布主题再编辑，不可保存草稿
     if (postType === "isEdit") {
-      return Taro.redirectTo({ url: `/subPages/thread/index?id=${threadId}` });
+      return Taro.redirectTo({ url: `/indexPages/thread/index?id=${threadId}` });
     }
 
     if (!this.checkAudioRecordStatus()) return;

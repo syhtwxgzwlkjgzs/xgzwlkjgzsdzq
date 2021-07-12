@@ -161,7 +161,7 @@ const Index = ({
           )}
         </div>
       </div>
-      {!loading && useShowMore && !showMore && (
+      {loading !== undefined && !loading && useShowMore && !showMore && (
         <div className={styles.showMore} onClick={onShowMore}>
           <div className={styles.hidePercent}>{texts.showMore}</div>
           <Icon className={styles.icon} name="RightOutlined" size={12} />

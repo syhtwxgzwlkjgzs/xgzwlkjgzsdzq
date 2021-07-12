@@ -74,6 +74,10 @@ const CommentInput = inject('site')((props) => {
   };
 
   const onEmojiIconClick = async () => {
+    if (typeof props.onEmojiIconClick === 'function' && !props.onEmojiIconClick()) {
+      return;
+    }
+
     setShowEmojis(!showEmojis);
     setShowAt(false);
 
@@ -88,11 +92,19 @@ const CommentInput = inject('site')((props) => {
   };
 
   const onAtIconClick = () => {
+    if (typeof props.onAtIconClick === 'function' && !props.onAtIconClick()) {
+      return;
+    }
+
     setShowAt(!showAt);
     setShowEmojis(false);
   };
 
   const onPcitureIconClick = () => {
+    if (typeof props.onPcitureIconClick === 'function' && !props.onPcitureIconClick()) {
+      return;
+    }
+
     setShowPicture(!showPicture);
     setShowEmojis(false);
     setShowAt(false);
@@ -186,6 +198,10 @@ const CommentInput = inject('site')((props) => {
     });
   };
 
+  const onFocus = (e) => {
+    typeof props.onFocus === 'function' && props.onFocus(e);
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.main}>
@@ -199,6 +215,7 @@ const CommentInput = inject('site')((props) => {
           placeholder={placeholderState}
           disabled={loading}
           forwardedRef={textareaRef}
+          onFocus={onFocus}
         ></Textarea>
 
         {showPicture && (
@@ -221,7 +238,7 @@ const CommentInput = inject('site')((props) => {
       {showAt && <AtSelect pc visible={showAt} getAtList={onAtListChange} onCancel={onAtIconClick} />}
 
       <div className={styles.footer}>
-        {showEmojis && <Emoji pc show={showEmojis} emojis={emojis} onClick={onEmojiClick} atTop={false}/>}
+        {showEmojis && <Emoji pc show={showEmojis} emojis={emojis} onClick={onEmojiClick} atTop={false} />}
 
         <div className={styles.linkBtn}>
           <Icon

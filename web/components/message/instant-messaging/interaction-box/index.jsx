@@ -106,7 +106,7 @@ const InteractionBox = (props) => {
               emojis={threadPost.emojis}
               onClick={insertEmoji}
             />
-            <div className={styles.emoj}>
+            <div>
               <Icon name="SmilingFaceOutlined" size={20} onClick={(e) => {
                 e.stopPropagation();
                 setShowEmoji(!showEmoji);
