@@ -59,16 +59,11 @@ module.exports = {
                   //   console.log(111, module.resource);
                   // }
 
-                  if (module.resource === '/Users/joneeeeli/Desktop/code/tencent/newdzq/discuz-fe/mini/node_modules/@discuzq/design/dist/components/spin/layouts/mini.js') {
-                    chunks.forEach(chunk => {
-                      console.log(111, chunk.name);
-                    });
-
-
-
-                  }
-
-
+                  // if (module.resource === '/Users/joneeeeli/Desktop/code/tencent/newdzq/discuz-fe/mini/node_modules/@discuzq/design/dist/components/spin/layouts/mini.js') {
+                  //   chunks.forEach(chunk => {
+                  //     console.log(111, chunk.name);
+                  //   });
+                  // }
                   const isNoOnlySubpackRequired = chunks.find(chunk => !(/\bindexPages\b/.test(chunk.name) || /\bsubPages\b/.test(chunk.name)))
                   return !isNoOnlySubpackRequired
                 },

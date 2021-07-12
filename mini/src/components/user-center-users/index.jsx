@@ -213,7 +213,7 @@ class UserCenterUsers extends React.Component {
                 imgUrl={user.avatar}
                 withHeaderUserInfo={this.props.isPc}
                 onContainerClick={this.props.onContainerClick}
-                userName={user.username}
+                nickName={user.nickname}
                 userGroup={user.groupName}
                 followHandler={this.followUser}
                 itemStyle={this.props.itemStyle}

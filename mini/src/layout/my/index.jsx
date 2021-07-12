@@ -24,6 +24,8 @@ export default class index extends Component {
 
   $instance = getCurrentInstance();
 
+  previewerRef = React.createRef(null);
+
   componentWillMount() {
     const onShowEventId = this.$instance.router.onShow;
     // 监听
@@ -121,9 +123,9 @@ export default class index extends Component {
 
   handlePreviewBgImage = (e) => {
     e && e.stopPropagation();
-    this.setState({
-      isPreviewBgVisible: !this.state.isPreviewBgVisible,
-    });
+    if (this.previewerRef.current) {
+      this.previewerRef.current.show();
+    }
   };
 
   getBackgroundUrl = () => {
@@ -172,17 +174,19 @@ export default class index extends Component {
               />
             </View>
 
-            {!isLoading && formattedUserThreads?.map((item, index) => <Thread data={item} key={`${item.threadId}-${item.updatedAt}`} />)}
+            {!isLoading &&
+              formattedUserThreads?.map((item, index) => (
+                <Thread data={item} key={`${item.threadId}-${item.updatedAt}`} />
+              ))}
           </View>
         </View>
-        {this.state.isPreviewBgVisible && (
-          <ImagePreviewer
-            visible={this.state.isPreviewBgVisible}
-            onClose={this.handlePreviewBgImage}
-            imgUrls={[this.getBackgroundUrl()]}
-            currentUrl={this.getBackgroundUrl()}
-          />
-        )}
+        <ImagePreviewer
+          ref={this.previewerRef}
+          visible={this.state.isPreviewBgVisible}
+          onClose={this.handlePreviewBgImage}
+          imgUrls={[this.getBackgroundUrl()]}
+          currentUrl={this.getBackgroundUrl()}
+        />
       </BaseLayout>
     );
   }

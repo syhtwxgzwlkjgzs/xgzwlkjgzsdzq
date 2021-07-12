@@ -387,7 +387,7 @@ class UserCenterFollows extends React.Component {
                   imgUrl={user.avatar}
                   withHeaderUserInfo={this.props.isPc}
                   onContainerClick={this.props.onContainerClick}
-                  userName={user.nickName}
+                  nickName={user.nickName}
                   userGroup={user.groupName}
                   followHandler={this.followUser}
                   unFollowHandler={this.unFollowUser}
@@ -424,9 +424,9 @@ class UserCenterFollows extends React.Component {
               return (
                 <div key={'id' + user.id} className={friendsStyle.friendItem}>
                   <div className={friendsStyle.friendAvatar}>
-                    <Avatar image={user.avatar} userId={user.id} circle name={user.userName} />
+                    <Avatar image={user.avatar} userId={user.id} circle name={user.nickName} />
                   </div>
-                  <div className={friendsStyle.friendTextInfo}>{user.userName}</div>
+                  <div className={friendsStyle.friendTextInfo}>{user.nickName}</div>
                 </div>
               );
             })}

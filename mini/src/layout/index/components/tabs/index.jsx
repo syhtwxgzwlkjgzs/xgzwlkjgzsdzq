@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef, useImperativeHandle } from 'react';
 import { useState } from 'react';
 import { inject, observer } from 'mobx-react';
 import Icon from '@discuzq/design/dist/components/icon/index';
@@ -12,10 +12,17 @@ import { useEffect } from 'react';
 import Taro from '@tarojs/taro';
 
 
-const Index = (props) => {
+const Index = forwardRef((props, ref) => {
     const [fixedTab, setFixedTab] = useState(false)
     const tabsId = useRef(`tabs-id-${randomStr()}`)
     const observerObj = useRef(null)
+
+    useImperativeHandle(
+      ref,
+      () => ({
+        changeFixedTab,
+      }),
+    );
 
     useEffect(() => {
         const { currentCategories = [] } = props.index || {};
@@ -33,6 +40,12 @@ const Index = (props) => {
         }
         
     }, [props.index?.currentCategories])
+
+    const changeFixedTab = () => {
+      if (fixedTab) {
+        setFixedTab(false)
+      }
+    }
 
     const observePage = () => {
         observerObj.current = Taro.createIntersectionObserver().relativeToViewport({ top: 100 });
@@ -125,6 +138,6 @@ const Index = (props) => {
             { renderFixedTabs() }
         </View>
     )
-}
+})
 
 export default inject('site', 'index')(observer(Index))
