@@ -96,4 +96,4 @@ const updateViewCountInStores = async (threadId = null) => {
 }
 
 
-export { isViewed, addViewed, updateViewCountInStores };
+export { isViewed, addViewed, updateViewCountInStores, STORAGE_KEY };
