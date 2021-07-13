@@ -140,6 +140,7 @@ class CommentAction extends CommentStore {
       }
 
       return {
+        isApproved: isApproved,
         msg: isApproved ? '评论成功' : '您发布的内容正在审核中',
         success: true,
       };
@@ -196,6 +197,7 @@ class CommentAction extends CommentStore {
       const isApproved = res.data.isApproved === 1;
 
       return {
+        isApproved: isApproved,
         msg: isApproved ? '修改成功' : '您修改的内容正在审核中',
         success: true,
       };
@@ -257,6 +259,7 @@ class CommentAction extends CommentStore {
       const isApproved = res.data.isApproved === 1;
 
       return {
+        isApproved: isApproved,
         msg: isApproved ? '回复成功' : '您回复的内容正在审核中',
         success: true,
       };

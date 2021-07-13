@@ -265,7 +265,7 @@ class RenderCommentList extends React.Component {
         });
     }
 
-    const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
+    const { success, msg, isApproved } = await this.props.comment.createReply(params, this.props.thread);
 
     if (success) {
       this.setState({
@@ -273,9 +273,15 @@ class RenderCommentList extends React.Component {
         inputValue: '',
         commentId: null,
       });
-      Toast.success({
-        content: msg,
-      });
+      if (isApproved) {
+        Toast.success({
+          content: msg,
+        });
+      } else {
+        Toast.warning({
+          content: msg,
+        });
+      }
       return true;
     }
 
