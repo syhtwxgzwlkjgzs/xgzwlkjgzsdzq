@@ -213,8 +213,22 @@ class SearchAction extends SearchStore {
  * @returns {object} 处理结果
  */
  @action
-  async getThreadList({ search = '', perPage = 10, page = 1, params = {} } = {}) {
-    const result = await readThreadList({ params: { sequence: '0', filter: { sort: '3', search }, perPage, page, ...params } });
+  async getThreadList({ search = undefined, isSite = undefined, removeThreadIds = undefined, perPage = 10, page = 1, params = {} } = {}) {
+    const payload = {
+      params: {
+        sequence: '0',
+        filter: {
+          sort: '3',
+          search,
+          isSite,
+          removeThreadIds
+        },
+        perPage,
+        page,
+        ...params
+      }
+    }
+    const result = await readThreadList(payload);
 
     if (result.code === 0 && result.data) {
       if (this.threads && result.data.pageData && page !== 1) {
