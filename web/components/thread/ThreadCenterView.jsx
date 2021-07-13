@@ -104,15 +104,13 @@ const Index = (props) => {
                 type={1}
                 money={rewardData.money}
                 onClick={onClick}
-                updateViewCount={updateViewCount}
               />}
-              {redPacketData && <Packet money={redPacketData.money || 0} onClick={onClick} condition={redPacketData.condition} updateViewCount={updateViewCount} />}
+              {redPacketData && <Packet money={redPacketData.money || 0} onClick={onClick} condition={redPacketData.condition} />}
               {goodsData && <ProductItem
                   image={goodsData.imagePath}
                   amount={goodsData.price}
                   title={goodsData.title}
                   onClick={onClick}
-                  updateViewCount={updateViewCount}
               />}
               {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} updateViewCount={updateViewCount}/>}
               {fileData?.length > 0 && <AttachmentView threadId={threadId} attachments={fileData} onPay={onPay} isPay={needPay} updateViewCount={updateViewCount}/>}
