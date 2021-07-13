@@ -19,11 +19,20 @@ class Index extends React.Component {
   page = 1;
   perPage = 10;
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      repeatedIds: []
+    }
+  }
+
   async componentDidMount() {
     const { search, router } = this.props;
     const { keyword = '' } = getCurrentInstance().router.params;
-      this.page = 1;
-      await search.getThreadList({ search: keyword });
+    this.page = 1;
+    const res = await search.getThreadList({ search: keyword });
+
+    this.handleFirstRequest(res)
   }
   getShareData (data) {
     const shareData = data.target?.dataset?.shareData
@@ -56,9 +65,27 @@ class Index extends React.Component {
     } else if (type === 'moreData') {
       this.page += 1;
     }
-    await search.getThreadList({ search: data, perPage: this.perPage, page: this.page });
+    const res = await search.getThreadList({ search: data, perPage: this.perPage, page: this.page });
+    if (this.page === 1) {
+      this.handleFirstRequest(res)
+    }
+
     return;
   }
+
+  handleFirstRequest = (res) => {
+    if (!res) {
+      return
+    }
+
+    const ids = res.pageData?.map(item => item.threadId)
+    this.setState({ repeatedIds: ids })
+
+    if (ids.length < 10) {
+      this.dispatch('moreData', keyword, { repeatedIds: ids })
+    }
+  }
+
   render() {
     return (
       <Page>

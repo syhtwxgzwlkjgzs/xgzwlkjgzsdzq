@@ -178,6 +178,8 @@ class SearchAction extends SearchStore {
         } else {
           this.searchThreadsError = { isError: true, errorText: msg || '加载失败' }
         }
+
+        return
       }
 
       const pageData = [...firstRes.pageData, ...data.pageData]
