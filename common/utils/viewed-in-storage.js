@@ -1,3 +1,5 @@
+import Storage from '@common/utils/storage'
+
 /**
  * sessionStorage中存储页面帖子被观看过的信息，用于记录分析浏览量等信息
  *
@@ -6,14 +8,15 @@
  */
 
 const STORAGE_KEY = "__dzq_thread_viewed";
+const storage = new Storage({ storageType: "session" });
 
 const isViewed = function (threadId = null) {
   if(!threadId) return -1;
   threadId += ''; // 统一为字符串
-  let viewedObj = JSON.parse(sessionStorage.getItem(STORAGE_KEY));
+  let viewedObj = JSON.parse(storage.get(STORAGE_KEY));
   if(!viewedObj) {
     viewedObj = { threads: [] };
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(viewedObj));
+    storage.set(STORAGE_KEY, JSON.stringify(viewedObj));
     return -1;
   }
 
@@ -50,7 +53,7 @@ const addViewed = function (threadId = null) {
   threadId += ''; // 统一为字符串
 
   const viewedIdx = isViewed(threadId);
-  const viewedObj = JSON.parse(sessionStorage.getItem(STORAGE_KEY));
+  const viewedObj = JSON.parse(storage.get(STORAGE_KEY));
   const { threads } = viewedObj;
 
   if(!threads) return;
@@ -63,7 +66,7 @@ const addViewed = function (threadId = null) {
     viewedAt: new Date().getTime(),
   });
   viewedObj.threads = [...threads];
-  sessionStorage.setItem(STORAGE_KEY, JSON.stringify(viewedObj));
+  storage.set(STORAGE_KEY, JSON.stringify(viewedObj));
 }
 
 
