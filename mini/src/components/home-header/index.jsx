@@ -11,6 +11,9 @@ import logoImg from '../../../../web/public/dzq-img/admin-logo-x2.png';
 import joinLogoImg from '../../../../web/public/dzq-img/join-banner-bg.png';
 import { numberFormat } from '@common/utils/number-format';
 import SiteShare from '../site-share';
+import Toast from '@discuzq/design/dist/components/toast';
+import goToLoginPage from '@common/utils/go-to-login-page';
+
 /**
  * 帖子头部
  * @prop {string} bgColor 背景颜色
@@ -54,6 +57,13 @@ class HomeHeader extends React.Component {
     return logoImg;
   }
   handleShareClick = () => {
+    const { user } = this.props
+    // 对没有登录的先登录
+    if (!user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+      return;
+    }
     this.setState({ show: true })
   }
   getSiteInfo() {
