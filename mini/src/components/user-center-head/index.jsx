@@ -306,8 +306,12 @@ class index extends Component {
             <Text>{user.isDeny ? '解除屏蔽' : '屏蔽'}</Text>
           </View>
         )}
-        {user.avatarUrl && (
-          <ImagePreviewer ref={this.previewerRef} imgUrls={[user.avatarUrl]} currentUrl={user.avatarUrl} />
+        {user.originalAvatarUrl && (
+          <ImagePreviewer
+            ref={this.previewerRef}
+            imgUrls={[user.originalAvatarUrl]}
+            currentUrl={user.originalAvatarUrl}
+          />
         )}
       </View>
     );
