@@ -27,16 +27,26 @@
         border-radius: rem($border-radius-small);
         background-color: $body-bg-color;
 
-        .commentListName {
-          padding-top: rem($padding-2n);
-          padding-left: rem($padding-3n);
-          padding-right: rem($padding-3n);
-          font-weight: $font-weight-regular;
-          font-size: rem($font-size-primary);
-          line-height: rem(20);
-          text-align: left;
-          color: $text-color-primary;
+        .commentHeader {
+          display: flex;
+          justify-content: space-between;
+          .commentListName {
+            padding-top: rem($padding-2n);
+            padding-left: rem($padding-3n);
+            padding-right: rem($padding-3n);
+            font-weight: $font-weight-regular;
+            font-size: rem($font-size-primary);
+            line-height: rem(20);
+            text-align: left;
+            color: $text-color-primary;
+          }
+          .isApproved {
+            font-size: $font-size-primary;
+            color: $error-color;
+            padding: $padding-2n $padding-3n 0;
+          }
         }
+
         .commentListText {
           padding-bottom: rem($padding-2n);
           padding-left: rem($padding-3n);

@@ -262,15 +262,21 @@ class CommentPCPage extends React.Component {
         });
     }
 
-    const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
+    const { success, msg, isApproved } = await this.props.comment.createReply(params, this.props.thread);
 
     if (success) {
       this.setState({
         commentId: null,
       });
-      Toast.success({
-        content: '回复成功',
-      });
+      if (isApproved) {
+        Toast.success({
+          content: msg,
+        });
+      } else {
+        Toast.warning({
+          content: msg,
+        });
+      }
       return true;
     }
 

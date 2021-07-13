@@ -417,7 +417,7 @@ class ThreadH5Page extends React.Component {
         });
     }
 
-    const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
+    const { success, msg, isApproved } = await this.props.comment.createComment(params, this.props.thread);
     if (success) {
       // 更新帖子中的评论数据
       this.props.thread.updatePostCount(this.props.thread.totalCount);
@@ -431,10 +431,16 @@ class ThreadH5Page extends React.Component {
         // 评论获得红包帖，更新帖子数据
         this.props.thread.fetchThreadDetail(id);
       }
+      if (isApproved) {
+        Toast.success({
+          content: msg,
+        });
+      } else {
+        Toast.warning({
+          content: msg,
+        });
+      }
 
-      Toast.success({
-        content: '评论成功',
-      });
       this.setState({
         showCommentInput: false,
       });
@@ -456,11 +462,17 @@ class ThreadH5Page extends React.Component {
       content: val,
       attachments: [],
     };
-    const { success, msg } = await this.props.comment.updateComment(params, this.props.thread);
+    const { success, msg, isApproved } = await this.props.comment.updateComment(params, this.props.thread);
     if (success) {
-      Toast.success({
-        content: '修改成功',
-      });
+      if (isApproved) {
+        Toast.success({
+          content: msg,
+        });
+      } else {
+        Toast.warning({
+          content: msg,
+        });
+      }
       this.setState({
         showCommentInput: false,
       });
