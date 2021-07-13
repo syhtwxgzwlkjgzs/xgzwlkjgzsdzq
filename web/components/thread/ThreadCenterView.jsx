@@ -35,7 +35,8 @@ const Index = (props) => {
       onClick,
       onPay,
       onOpen,
-      platform
+      platform,
+      updateViewCount
     } = props
 
     // 标题显示37个字符
@@ -65,7 +66,7 @@ const Index = (props) => {
               {text && <PostContent
                 onContentHeightChange={props.onContentHeightChange}
                 content={text}
-                threadId={threadId}
+                updateViewCount={updateViewCount}
                 useShowMore={!openedMore}
                 onRedirectToDetail={onClick}
                 onOpen={onOpen}/>
@@ -82,7 +83,7 @@ const Index = (props) => {
                     isPay={needPay}
                     status={videoData.status}
                     onVideoReady={props.onVideoReady}
-                    threadId={threadId}
+                    updateViewCount={updateViewCount}
                   />
                 </WrapperView>
                 
@@ -95,7 +96,7 @@ const Index = (props) => {
                       onPay={onPay}
                       onClickMore={onClick} 
                       onImageReady={props.onImageReady}
-                      threadId={threadId}
+                      updateViewCount={updateViewCount}
                   />
                   )
               }
@@ -103,18 +104,18 @@ const Index = (props) => {
                 type={1}
                 money={rewardData.money}
                 onClick={onClick}
-                threadId={threadId}
+                updateViewCount={updateViewCount}
               />}
-              {redPacketData && <Packet money={redPacketData.money || 0} onClick={onClick} condition={redPacketData.condition} threadId={threadId} />}
+              {redPacketData && <Packet money={redPacketData.money || 0} onClick={onClick} condition={redPacketData.condition} updateViewCount={updateViewCount} />}
               {goodsData && <ProductItem
                   image={goodsData.imagePath}
                   amount={goodsData.price}
                   title={goodsData.title}
                   onClick={onClick}
-                  threadId={threadId}
+                  updateViewCount={updateViewCount}
               />}
-              {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} />}
-              {fileData?.length > 0 && <AttachmentView threadId={threadId} attachments={fileData} onPay={onPay} isPay={needPay} />}
+              {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} updateViewCount={updateViewCount}/>}
+              {fileData?.length > 0 && <AttachmentView threadId={threadId} attachments={fileData} onPay={onPay} isPay={needPay} updateViewCount={updateViewCount}/>}
           </>
         );
     }

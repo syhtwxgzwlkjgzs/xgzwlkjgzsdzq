@@ -30,6 +30,7 @@ const Index = ({
   v_width = null,
   v_height = null,
   onVideoReady = noop,
+  updateViewCount = noop,
 }) => {
   let player = null;
   const ref = useRef();
@@ -41,6 +42,7 @@ const Index = ({
   };
 
   const onPlay = (e) => {
+    updateViewCount();
     if(player && e && baselayout) {
       // 暂停之前正在播放的音视频
       if(baselayout.playingVideoDom) {

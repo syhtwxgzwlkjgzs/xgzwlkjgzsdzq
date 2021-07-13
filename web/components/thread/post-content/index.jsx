@@ -8,7 +8,6 @@ import fuzzyCalcContentLength from '@common/utils/fuzzy-calc-content-length';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import { urlToLink } from '@common/utils/replace-url-to-a';
-import { updateViewCountInStores } from '@common/utils/viewcount-in-storage';
 
 import styles from './index.module.scss';
 
@@ -27,10 +26,7 @@ const PostContent = ({
   customHoverBg = false,
   usePointer = true,
   onOpen = noop,
-  threadId = null,
-  index,
-  search,
-  topic,
+  updateViewCount = noop,
   ...props
 }) => {
   // 内容是否超出屏幕高度
@@ -57,7 +53,7 @@ const PostContent = ({
   const onShowMore = useCallback(
     (e) => {
       e && e.stopPropagation();
-      updateViewCountInStores(threadId, [index, search, topic]);
+      updateViewCount();
       if (contentTooLong) {
         // 内容过长直接跳转到详情页面
         onRedirectToDetail && onRedirectToDetail();
@@ -87,7 +83,7 @@ const PostContent = ({
 
   // 点击富文本中的图片
   const handleImgClick = (e) => {
-    updateViewCountInStores(threadId, [index, search, topic]);
+    updateViewCount();
     if(e?.attribs?.src) {
       setImageVisible(true);
       setImageUrl(e.attribs.src);
@@ -160,4 +156,4 @@ const PostContent = ({
   );
 }
 
-export default inject('index', 'search', 'topic')(observer(PostContent));
+export default React.memo(PostContent);

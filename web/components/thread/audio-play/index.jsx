@@ -12,13 +12,14 @@ import { noop } from '../utils';
  * @prop {function} goCheckAudio 音频点击事件
  */
 
-const Index = ({ isPay = false, url, onPay = noop, baselayout }) => {
+const Index = ({ isPay = false, url, onPay = noop, baselayout, updateViewCount = noop }) => {
 
   const audioRef = useRef();
   const audioWrapperRef = useRef();
 
   const onPlay = () => {
     const audioContext = audioRef?.current?.getState()?.audioCtx;
+    updateViewCount();
     if(audioContext && baselayout && audioRef && audioWrapperRef) {
       // 音频在帖子中间，要找到音频相对于BaseLayout的具体地址
       const threadTextHeight = audioWrapperRef?.current?.parentNode?.previousElementSibling?.offsetHeight || 0;
