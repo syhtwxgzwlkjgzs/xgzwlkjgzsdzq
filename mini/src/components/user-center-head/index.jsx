@@ -71,6 +71,7 @@ class index extends Component {
             this.setState({
               isFollowedLoading: false,
             });
+            return;
           }
           await this.props.user.getTargetUserInfo(id);
           Toast.success({
@@ -105,6 +106,7 @@ class index extends Component {
             this.setState({
               isFollowedLoading: false,
             });
+            return;
           }
           await this.props.user.getTargetUserInfo(id);
           Toast.success({

@@ -11,6 +11,8 @@ import UserCenterPost from '../../components/user-center-post';
 import SectionTitle from '@components/section-title';
 import Taro, { getCurrentInstance, eventCenter } from '@tarojs/taro';
 import ImagePreviewer from '@discuzq/design/dist/components/image-previewer/index';
+import classnames from 'classnames';
+
 @inject('user')
 @observer
 export default class index extends Component {
@@ -19,6 +21,7 @@ export default class index extends Component {
     this.state = {
       isLoading: true,
       isPreviewBgVisible: false, // 是否预览背景图片
+      isNormalTitle: false, // 是否显示不透明 title 
     };
   }
 
@@ -102,18 +105,37 @@ export default class index extends Component {
   }
 
   getTopBarTitleStyle() {
+    if (this.state.isNormalTitle) {
+      return {
+        position: 'fixed',
+        top: 0,
+        height: `${this.getStatusBarHeight() + 50}px`,
+        left: '50%',
+        transform: 'translate(-50%)',
+        color: 'black',
+        zIndex: 1,
+        width: '100%',
+        backgroundColor: 'white',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingTop: `${this.getStatusBarHeight() - 8}px`,
+      }
+    }
+
     return {
       position: 'fixed',
       top: `${this.getStatusBarHeight()}px`,
       left: '50%',
       transform: 'translate(-50%, 8px)',
+      zIndex: 1
     };
   }
 
   // 渲染顶部title
   renderTitleContent = () => {
     return (
-      <View className={styles.topBar}>
+      <View className={classnames(styles.topBar)}>
         <View style={this.getTopBarTitleStyle()} className={styles.fullScreenTitle}>
           我的主页
         </View>
@@ -155,6 +177,18 @@ export default class index extends Component {
     const formattedUserThreads = this.formatUserThreadsData(userThreads);
     return (
       <BaseLayout
+        onScroll={e => {
+          const currentScrollTop = e.detail.scrollTop;
+          if (currentScrollTop > 170) {
+            this.setState({
+              isNormalTitle: true
+            })
+          } else {
+            this.setState({
+              isNormalTitle: false
+            })
+          }
+        }}
         showHeader={false}
         showTabBar
         noMore={!isLoading && userThreadsPage >= userThreadsTotalPage}
