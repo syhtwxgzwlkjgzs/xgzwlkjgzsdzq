@@ -1,6 +1,6 @@
 import { action, computed } from 'mobx';
 import IndexStore from './store';
-import { readCategories, readStickList, readThreadList, updatePosts, createThreadShare, readRecommends } from '@server';
+import { readCategories, readStickList, readThreadList, updatePosts, createThreadShare, readRecommends, getViewCount } from '@server';
 import typeofFn from '@common/utils/typeof';
 import { isViewed, addViewed } from '@common/utils/viewed-in-storage';
 import threadReducer from '../thread/reducer';
@@ -409,7 +409,7 @@ class IndexAction extends IndexStore {
    * @returns
    */
   @action
-  updateAssignThreadInfo(threadId, obj = {}) {
+  async updateAssignThreadInfo(threadId, obj = {}) {
     const targetThread = this.findAssignThread(threadId);
     if (!targetThread || targetThread.length === 0) return;
 
@@ -448,12 +448,16 @@ class IndexAction extends IndexStore {
       data.likeReward.shareCount = data.likeReward.shareCount + 1;
     }
 
-    // 更新分享
+    // 更新帖子浏览量
     if (updateType === 'viewCount') {
-      if(!isViewed(data?.threadId)) {
-        data.viewCount = data.viewCount + 1;
-        addViewed(data?.threadId);
+      // debugger;
+      if(isViewed(data?.threadId) === -1) { // storage中没找到帖子
+        // 更新后台数据
+        const res = await getViewCount({ params: { threadId } });
+        data.viewCount = res.data.viewCount;
       }
+      // 更新storage中浏览数据
+      addViewed(data?.threadId);
     }
 
     if (this.threads?.pageData) {
