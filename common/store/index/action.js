@@ -1,8 +1,7 @@
 import { action, computed } from 'mobx';
 import IndexStore from './store';
-import { readCategories, readStickList, readThreadList, updatePosts, createThreadShare, readRecommends, getViewCount } from '@server';
+import { readCategories, readStickList, readThreadList, updatePosts, createThreadShare, readRecommends } from '@server';
 import typeofFn from '@common/utils/typeof';
-import { isViewed, addViewed } from '@common/utils/viewed-in-storage';
 import threadReducer from '../thread/reducer';
 import { getCategoryName, getActiveId, getCategories, handleString2Arr } from '@common/utils/handleCategory'
 import replaceStringInRegex from '../../utils/replace-string-in-regex'
@@ -409,7 +408,7 @@ class IndexAction extends IndexStore {
    * @returns
    */
   @action
-  async updateAssignThreadInfo(threadId, obj = {}) {
+  updateAssignThreadInfo(threadId, obj = {}) {
     const targetThread = this.findAssignThread(threadId);
     if (!targetThread || targetThread.length === 0) return;
 
@@ -450,14 +449,7 @@ class IndexAction extends IndexStore {
 
     // 更新帖子浏览量
     if (updateType === 'viewCount') {
-      // debugger;
-      if(isViewed(data?.threadId) === -1) { // storage中没找到帖子
-        // 更新后台数据
-        const res = await getViewCount({ params: { threadId } });
-        data.viewCount = res.data.viewCount;
-      }
-      // 更新storage中浏览数据
-      addViewed(data?.threadId);
+      data.viewCount = updatedInfo.viewCount;
     }
 
     if (this.threads?.pageData) {

@@ -1,4 +1,5 @@
-import Storage from '@common/utils/storage'
+import Storage from '@common/utils/storage';
+import { getViewCount } from '@server';
 
 /**
  * sessionStorage中存储页面帖子被观看过的信息，用于记录分析浏览量等信息
@@ -10,7 +11,7 @@ import Storage from '@common/utils/storage'
 const STORAGE_KEY = "__dzq_thread_viewed";
 const storage = new Storage({ storageType: "session" });
 
-const isViewed = function (threadId = null) {
+const isViewed = (threadId = null) => {
   if(!threadId) return -1;
   threadId += ''; // 统一为字符串
   let viewedObj = JSON.parse(storage.get(STORAGE_KEY));
@@ -48,7 +49,7 @@ const isViewed = function (threadId = null) {
  *    }
  * }
  */
-const addViewed = function (threadId = null) {
+const addViewed = (threadId = null) => {
   if(!threadId) return ;
   threadId += ''; // 统一为字符串
 
@@ -70,4 +71,39 @@ const addViewed = function (threadId = null) {
 }
 
 
-export { isViewed, addViewed };
+const updateViewCountInStores = async (threadId = null, stores = []) => {
+  if(!threadId || !stores || !stores.length) return ;
+  threadId += ''; // 统一为字符串
+
+  try {
+    let newViewCount = -1;
+
+    if(isViewed(threadId) === -1) { // storage中没找到帖子
+      // 更新后台数据
+      const res = await getViewCount({ params: { threadId } });
+      if(res.code === 0) {
+        newViewCount = res.data.viewCount;
+      } else {
+        console.error(res?.msg);
+      }
+    }
+    // 更新storage中浏览数据
+    addViewed(threadId);
+
+    for(const store of stores) {
+      if(!store || typeof store !== 'object') continue;
+      if(newViewCount !== -1) {
+        console.log(`store`, store)
+        console.log(`newViewCount`, newViewCount)
+        store.updateAssignThreadInfo(parseInt(threadId), { updateType: 'viewCount', updatedInfo: { viewCount: newViewCount } })
+      }
+    }
+
+  } catch (error) {
+    console.error(error);
+  }
+
+}
+
+
+export { isViewed, addViewed, updateViewCountInStores };
