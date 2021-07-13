@@ -12,9 +12,16 @@ const InputPop = (props) => {
 
   const [value, setValue] = useState('');
   const [refresh, setRefresh] = useState(true); // 手动刷新
+  const [maxLength, setMaxLength] = useState(7); // 手动刷新
 
   const onInputChange = (val) => {
     const arr = val.match(/([1-9]\d{0,6}|0)(\.\d{0,2})?/);
+    const spot = arr ? arr[0].indexOf('.') : -1;
+    if(spot !== -1) {
+      setMaxLength(spot + 3);
+    } else {
+      setMaxLength(7);
+    }    
     setValue( arr ? arr[0] : '');
     setRefresh(!refresh);
   };
@@ -66,6 +73,7 @@ const InputPop = (props) => {
           <Input
             mode="number"
             placeholder="金额"
+            maxLength={maxLength}
             className={styles.input}
             value={value}
             onChange={(e) => onInputChange(e.target.value)}
