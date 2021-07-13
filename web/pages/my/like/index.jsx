@@ -5,6 +5,7 @@ import IndexPCPage from '@layout/my/like/pc';
 import ViewAdapter from '@components/view-adapter';
 import { readThreadList, readTopicsList } from '@server';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
+import HOCWithLogin from '@middleware/HOCWithLogin';
 import isServer from '@common/utils/is-server';
 import { withRouter } from 'next/router';
 
@@ -157,4 +158,4 @@ class Index extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default withRouter(HOCFetchSiteData(Index));
+export default withRouter(HOCFetchSiteData(HOCWithLogin(Index)));
