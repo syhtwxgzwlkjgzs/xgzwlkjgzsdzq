@@ -1,4 +1,4 @@
-import Storage from '@common/utils/storage';
+import Storage from '@common/utils/session-storage';
 import { getViewCount } from '@server';
 
 /**
@@ -14,8 +14,10 @@ const storage = new Storage({ storageType: "session" });
 const isViewed = (threadId = null) => {
   if(!threadId) return -1;
   threadId += ''; // 统一为字符串
-  let viewedObj = JSON.parse(storage.get(STORAGE_KEY));
-  if(!viewedObj) {
+
+  const value = storage.get(STORAGE_KEY) || `{}`
+  let viewedObj = JSON.parse(value);
+  if(!viewedObj || !Object.keys(viewedObj).length) {
     viewedObj = { threads: [] };
     storage.set(STORAGE_KEY, JSON.stringify(viewedObj));
     return -1;
