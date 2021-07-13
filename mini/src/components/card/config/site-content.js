@@ -1,0 +1,134 @@
+import titleImg from '../card-img/title.jpg'
+import { getByteLen } from '../utils';
+import rectangle from '../card-img/rectangle.png'
+import { posterWidth } from './constants';
+import lookMore from '../card-img/look-more.jpg';
+
+export const getContentConfig = ({baseHeight, data}) => {
+    const maxLineNum = 6 // 最大高度1900，最大行数60行
+    const Title = handleTitle(baseHeight)
+    const line = handleLines(baseHeight)
+    const TitleImg = handleTitleImg(baseHeight)
+    const {config: introduction, height: contentHeight} = handleSiteIntroduction(data, baseHeight, maxLineNum)
+    const contentConfig = {
+        height: 142 + contentHeight,
+        config: {
+            texts: [
+                Title,
+                introduction
+            ],
+            blocks: [],
+            images: [
+                TitleImg
+            ],
+            lines: [
+                line
+            ]
+        }
+    } 
+    if(contentHeight / 48 >= maxLineNum) {
+        const {rectangleConfig, lookmoreConfig} = handleOverHeight(baseHeight ,contentHeight)
+        contentConfig.config.images.push(rectangleConfig)
+        contentConfig.config.images.push(lookmoreConfig)
+        contentConfig.height += 40
+    }
+    return contentConfig
+}
+// 返回站点介绍
+const handleTitle = (baseHeight) => {
+    // 站点介绍距离上方的距离
+    const titleHeight = 32
+    return {
+        text: '站点介绍',
+        y: baseHeight + titleHeight,
+        x: 76,
+        fontFamily: "PingFang SC Semibold",
+        fontSize: 32,
+        lineHeight: 48,
+        textAlign: 'left',
+        color: '#0b0b37',
+        zIndex: 20,
+        baseLine: 'top',
+    }
+}
+// 返回站点介绍前的图片
+const handleTitleImg = (baseHeight) => {
+    // 站点介绍距离上方的距离
+    const titleHeight = 32
+    return {
+        url: titleImg,
+        x: 32,
+        y: baseHeight + titleHeight,
+        width: 28,
+        height: 32,
+        zIndex: 10,
+    }
+}
+// 站点信息下边的线
+const handleLines = (baseHeight) => {
+    const lineHeight = 108
+    return {
+        startX: 32,
+        startY: lineHeight + baseHeight,
+        endX: 686,
+        endY: lineHeight + baseHeight,
+        width: 2,
+        color: '#eee'
+    }
+}
+// 处理站点介绍，
+const handleSiteIntroduction = (data, baseHeight, maxLineNum) => {
+    const textHeight = 146
+    let {siteIntroduction} = data.webConfig?.setSite
+    const contentWidth = 646
+    if(!siteIntroduction) {
+        // siteIntroduction = '暂无介绍'
+        siteIntroduction =`Discuz！Q官方站点，是中文 PC 互联网最知名的社区开源软件 Discuz!，在过去 15 年间，服务过超过 200 万网站客户。其推出的 UCenter、SupeSite，ECshop 等组件所代表的产品理念对今天移动互联网各类产品的技术架构至今仍有着深远的影响，毫不夸张的说，Discuz! 代表了互联网 2.0 时代里社交网络的最初形态。`
+    }
+    const length = getByteLen(siteIntroduction) * 14
+    let lineNum = Math.ceil(length / contentWidth)
+    if(lineNum > maxLineNum) {
+        lineNum = maxLineNum
+    }
+    return {
+        height: lineNum * 48,
+        config: {
+        text: siteIntroduction ,
+        y: textHeight + baseHeight,
+        x: 32,
+        width: contentWidth,
+        fontFamily: "PingFangSC-Regular ",
+        fontSize: 28,
+        lineHeight: 48,
+        textAlign: 'left',
+        color: '#0b0b37',
+        baseLine: 'top',
+        lineNum
+        }
+    }
+}
+// 处理高度超过1900的情况
+const handleOverHeight = (baseHeight ,contentHeight) => {
+    // 一行的行高为48
+    const lineHeight = 48
+    // 站点介绍文字距离上方距离
+    const textHeight = 146
+    return {
+        rectangleConfig: {
+            url: rectangle,
+            x: 0,
+            y: textHeight + baseHeight + contentHeight - 2 * lineHeight,
+            width: posterWidth,
+            height: 2 * lineHeight,
+            zIndex: 20,
+        },
+        lookmoreConfig: {
+            url: lookMore,
+            height: 40,
+            width: 260,
+            x: 236,
+            y: textHeight + baseHeight + contentHeight,
+            zIndex: 10,
+        }
+    }
+}

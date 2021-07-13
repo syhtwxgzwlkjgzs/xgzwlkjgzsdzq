@@ -137,14 +137,7 @@ const Index = ({
           ))
         }
       </View>
-
-      {show && <Popup
-        position="bottom"
-        visible={show}
-        onClose={onClose}
-      >
-        <ShareButton data={data} setShow={setShow} tipData={tipData} index={thread} shareContent={shareContent} getShareContent={getShareContent} shareThreadid={shareThreadid} shareAvatar={shareAvatar} shareNickname={shareNickname} getShareData={getShareData}></ShareButton>
-      </Popup>}
+      <ShareButton show={show} data={data} setShow={setShow} tipData={tipData} shareThreadid={shareThreadid} shareAvatar={shareAvatar} shareNickname={shareNickname} getShareData={getShareData}></ShareButton>
     </View>
   );
 };

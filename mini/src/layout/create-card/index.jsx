@@ -12,16 +12,21 @@ import defaultLogo from '../../public/dzq-img/default-logo.png'
 class Index extends React.Component {
     constructor(props) {
         super(props)
-        Taro.eventCenter.once('message:detail', (data) => this.thread = data)
+        Taro.eventCenter.once('message:detail', (data) => this.data = data)
         Taro.eventCenter.trigger('page:init')
         this.state = {
             miniCode: null
         }
     }
     async componentDidMount(){
-        const {threadId} = this.thread
-        const data = {
+        const {threadId} = this.data
+        let data = {
             path: `/indexPages/thread/index?id=${threadId}`
+        }
+        if(!threadId) { 
+            data = {
+                path: 'indexPages/home/index'
+            }
         }
         try {
             const res = await  getMiniCode(data)
@@ -31,9 +36,9 @@ class Index extends React.Component {
         }
     }
     render () {
-        const {userInfo} = this.props.user
+        const thread = this.data.threadId ? this.data : ''
         return (
-            <Card thread={this.thread} userInfo={userInfo} miniCode={this.state.miniCode}>
+            <Card thread={thread} miniCode={this.state.miniCode} data={this.data}>
 
             </Card>
         )

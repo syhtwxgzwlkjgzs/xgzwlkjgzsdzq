@@ -1,7 +1,7 @@
 import { getHeaderConfig } from './header';
 import { getFooterConfig } from './footer';
 import { getContentConfig } from './content';
-import { checkAndGetBase64Src } from '../../utils'
+import { checkAndGetBase64Src } from '../utils'
 
 const posterFrameWidth = 8;
 const posterWidth = 710 - posterFrameWidth * 2;
@@ -15,7 +15,6 @@ const getConfig = async ({ thread, miniCode, siteName }) => {
   const { height: contentHeight, config: contentConfig } = getContentConfig({ baseHeight: headerHeight, thread });
   const { height: footerHeight, config: footerConfig } = getFooterConfig({
     baseHeight: headerHeight + contentHeight,
-    thread,
     codeUrl,
     siteName,
   });

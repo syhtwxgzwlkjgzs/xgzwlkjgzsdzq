@@ -10,6 +10,7 @@ import { get } from '@common/utils/get';
 import logoImg from '../../../../web/public/dzq-img/admin-logo-x2.png';
 import joinLogoImg from '../../../../web/public/dzq-img/join-banner-bg.png';
 import { numberFormat } from '@common/utils/number-format';
+import SiteShare from '../site-share';
 /**
  * 帖子头部
  * @prop {string} bgColor 背景颜色
@@ -22,6 +23,7 @@ import { numberFormat } from '@common/utils/number-format';
 class HomeHeader extends React.Component {
   state = {
     visible: false,
+    show: false,
     height: 180,
   };
 
@@ -51,7 +53,9 @@ class HomeHeader extends React.Component {
     }
     return logoImg;
   }
-
+  handleShareClick = () => {
+    this.setState({ show: true })
+  }
   getSiteInfo() {
     const { site } = this.props;
     const { webConfig } = site;
@@ -82,7 +86,9 @@ class HomeHeader extends React.Component {
   onClose = () => {
     this.setState({ visible: false });
   };
-
+  onShareClose= () => {
+    this.setState({ show: false})
+  }
   getStatusBarHeight() {
     return wx?.getSystemInfoSync()?.statusBarHeight || 44;
   }
@@ -198,12 +204,13 @@ class HomeHeader extends React.Component {
                 <Text className={styles.text}>内容</Text>
                 <Text className={styles.content}>{countThreads}</Text>
               </View>
-              <Button className={styles.item} openType="share" plain="true" data-shareData={shareData}>
+              <View className={styles.item} onClick={this.handleShareClick} data-shareData={shareData}>
                 <Icon className={styles.shareIcon} name="ShareAltOutlined" />
                 <Text className={styles.shareText}>分享</Text>
-              </Button>
+              </View>
             </View>
           )}
+          <SiteShare show={this.state.show} onShareClose={this.onShareClose} site={site}></SiteShare>
           {mode === 'join' && (
             <view className={`${styles.siteInfo} ${styles.joinInfo}`}>
               <view className={styles.item}>
