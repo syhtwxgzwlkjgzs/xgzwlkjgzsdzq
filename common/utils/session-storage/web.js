@@ -1,19 +1,15 @@
-// import Taro from '@tarojs/taro';
-
-let storage = null;
-
 export default class Storage {
   constructor({ storageType }) {
 
+    this.storage = null;
+
     const isBrowser = typeof window !== 'undefined';
       if(storageType === "local") {
-        storage = isBrowser ? window.localStorage : {};
+        this.storage = isBrowser ? window.localStorage : {};
       } else {
-        storage = isBrowser ? window.sessionStorage : {};
+        this.storage = isBrowser ? window.sessionStorage : {};
       }
-
   }
-
 
   /**
    * 设置数据项
@@ -22,7 +18,7 @@ export default class Storage {
    */
   set(key, value) {
     try {
-      storage.setItem(key, value);
+        this.storage.setItem(key, value);
     } catch (error) {
       console.error(error);
     }
@@ -34,7 +30,7 @@ export default class Storage {
    */
   get(key) {
     try {
-        return storage.getItem(key);
+        return this.storage.getItem(key);
     } catch (error) {
       console.error(error);
     }
