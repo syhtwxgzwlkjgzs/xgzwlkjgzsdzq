@@ -89,10 +89,10 @@ class Index extends React.Component {
           Router.redirect({ url: '/indexPages/home/index' });
           break;
         case JUMP_TO_PAY_SITE:// 到付费加入页面
-          Router.push({ url: '/subPages/forum/partner-invite/index' });
+          LoginHelper.saveAndRedirect(PARTNER_INVITE_URL);
           break;
         case JUMP_TO_SUPPLEMENTARY:// 跳转到扩展字段页
-          Router.push({ url: '/subPages/user/supplementary/index' });
+          LoginHelper.saveAndRedirect('/subPages/user/supplementary/index');
           break;
         case SITE_NO_INSTALL:// 未安装站点
           Router.push({ url: '/subPages/no-install/index' });

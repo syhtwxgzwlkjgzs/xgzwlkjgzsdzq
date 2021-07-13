@@ -32,7 +32,7 @@ import {
 import LoginHelper from '@common/utils/login-helper';
 
 // 获取全站数据
-export default function HOCFetchSiteData(Component) {
+export default function HOCFetchSiteData(Component, _isPass) {
   @inject('site')
   @inject('user')
   @observer
@@ -161,7 +161,12 @@ export default function HOCFetchSiteData(Component) {
       }
 
       user.updateLoginStatus(loginStatus);
-      this.setState({ isPass: this.isPass() });
+      let defaultPass = this.isPass();
+      // 自定义pass逻辑
+      if ( _isPass && defaultPass) {
+        defaultPass = _isPass(defaultPass);
+      }
+      this.setState({ isPass: defaultPass });
 
       // 初始化分享配置
       const isInit = await initWXSDK(siteConfig && siteConfig.passport && siteConfig.passport.offiaccountOpen);
@@ -203,7 +208,7 @@ export default function HOCFetchSiteData(Component) {
           break;
         case JUMP_TO_REGISTER:// 到注册页
           clearLoginStatus();
-          window.location.replace('/user/register');
+          LoginHelper.saveAndRedirect('/user/register');
           break;
         case JUMP_TO_AUDIT:// 到审核页
           Router.push({ url: '/user/status?statusCode=2' });
@@ -215,13 +220,13 @@ export default function HOCFetchSiteData(Component) {
           Router.push({ url: '/user/status?statusCode=-4009' });
           break;
         case JUMP_TO_SUPPLEMENTARY:// 跳转到扩展字段页
-          Router.push({ url: '/user/supplementary' });
+          LoginHelper.saveAndRedirect('/user/supplementary');
           break;
         case JUMP_TO_HOME_INDEX:// 到首页
           Router.redirect({ url: '/' });
           break;
         case JUMP_TO_PAY_SITE:// 到付费加入页面
-          Router.push({ url: '/forum/partner-invite' });
+          LoginHelper.saveAndRedirect('/forum/partner-invite');
           break;
         default: Router.redirect({ url: '/500' });
           break;

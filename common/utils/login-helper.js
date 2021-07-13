@@ -2,6 +2,8 @@ import Router from '@discuzq/sdk/dist/router';
 
 // 记录用户访问的初始地址，用户登陆、付费等操作后跳回
 const JUMP_URL_LABEL = '__jump_url';
+const HOME_PAGE_PC = '/';
+const HOME_PAGE_MINI = '/indexPages/home/index';
 
 // web环境判断
 function isWeb() {
@@ -36,8 +38,7 @@ function validateUrl(url) {
     }
   }
 
-  // mini端首页地址
-  return !['pages/index/index', 'pages/home/index'].includes(url);
+  return true;
 }
 
 // 获取当前的url
@@ -161,7 +162,7 @@ class LoginHelper {
 
   // 恢复登录前的跳转。优先级：记录页 > defaultPage > 主页
   restore = (defaultPage) => {
-    const url = this.getUrl() || defaultPage || (isWeb ? '/' : '/pages/home/index');
+    const url = this.getUrl() || defaultPage || (isWeb() ? HOME_PAGE_PC : HOME_PAGE_MINI);
 
     Router.redirect({ url });
     this.clear();

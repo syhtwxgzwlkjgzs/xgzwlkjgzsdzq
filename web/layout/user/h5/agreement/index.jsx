@@ -6,7 +6,6 @@ import layout from './index.module.scss';
 import HomeHeader from '@components/home-header';
 import Header from '@components/header';
 import PcBodyWrap from '../components/pc-body-wrap';
-import * as protocolType from '../constants/protocol';
 
 const PROTOCAL = {
   PRIVACY: 'privacy',
