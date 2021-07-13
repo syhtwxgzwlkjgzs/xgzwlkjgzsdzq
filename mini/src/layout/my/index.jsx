@@ -121,22 +121,6 @@ export default class index extends Component {
     );
   };
 
-  /**
-   * 控制预览图片窗口显示隐藏
-   * @param {Boolean} visible true显示 false不显示
-   * @param {Function} calback 处理的回调
-   */
-  togglePreviewBgVisible = ({ visible, calback }) => {
-    this.setState(
-      {
-        isPreviewBgVisible: visible,
-      },
-      () => {
-        if (calback && typeof calback === 'function') calback();
-      },
-    );
-  };
-
   showPreviewerRef = () => {
     if (this.previewerRef.current) {
       this.previewerRef.current.show();
@@ -147,28 +131,18 @@ export default class index extends Component {
   handlePreviewBgImage = (e) => {
     e && e.stopPropagation();
     if (!this.getBackgroundUrl()) return;
-    this.togglePreviewBgVisible({
-      visible: true,
-      calback: this.showPreviewerRef(),
-    });
-  };
-
-  // 预览窗口关闭回调
-  onCloseImagePreview = () => {
-    this.togglePreviewBgVisible({
-      visible: false,
-    });
+    this.showPreviewerRef();
   };
 
   // 获取背景图片
   getBackgroundUrl = () => {
     let backgroundUrl = null;
     if (this.props.isOtherPerson) {
-      if (this.props.user?.targetUserBackgroundUrl) {
-        backgroundUrl = this.props.user.targetUserBackgroundUrl;
+      if (this.props.user?.targetOriginalBackGroundUrl) {
+        backgroundUrl = this.props.user.targetOriginalBackGroundUrl;
       }
     } else {
-      backgroundUrl = this.props.user?.backgroundUrl;
+      backgroundUrl = this.props.user?.originalBackGroundUrl;
     }
     if (!backgroundUrl) return false;
     return backgroundUrl;
@@ -216,11 +190,9 @@ export default class index extends Component {
               ))}
           </View>
         </View>
-        {this.getBackgroundUrl() && this.state.isPreviewBgVisible && (
+        {this.getBackgroundUrl() && (
           <ImagePreviewer
             ref={this.previewerRef}
-            visible={this.state.isPreviewBgVisible}
-            onClose={this.onCloseImagePreview}
             imgUrls={[this.getBackgroundUrl()]}
             currentUrl={this.getBackgroundUrl()}
           />
