@@ -28,6 +28,7 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
   relativeToViewport = true,
   changeHeight = noop,
   setUseShowMore = noop,
+  transformer = parsedDom => parsedDom,
   ...props
 }) => {
   // 内容是否超出屏幕高度
@@ -114,6 +115,7 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
           <RichText
             content={(useShowMore && cutContentForDisplay) ? cutContentForDisplay : urlToLink(filterContent)}
             onClick={handleClick}
+            transformer={transformer}
           />
         </View>
       </View>
