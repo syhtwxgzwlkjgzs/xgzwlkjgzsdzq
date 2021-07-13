@@ -127,11 +127,11 @@ class H5MyPage extends React.Component {
   getBackgroundUrl = () => {
     let backgroundUrl = null;
     if (this.props.isOtherPerson) {
-      if (this.props.user?.targetUserBackgroundUrl) {
-        backgroundUrl = this.props.user.targetUserBackgroundUrl;
+      if (this.props.user?.targetOriginalBackGroundUrl) {
+        backgroundUrl = this.props.user.targetOriginalBackGroundUrl;
       }
     } else {
-      backgroundUrl = this.props.user?.backgroundUrl;
+      backgroundUrl = this.props.user?.originalBackGroundUrl;
     }
     if (!backgroundUrl) return false;
     return backgroundUrl;
