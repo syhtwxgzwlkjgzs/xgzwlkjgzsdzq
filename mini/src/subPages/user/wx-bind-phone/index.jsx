@@ -41,6 +41,9 @@ class Index extends Component {
     // 卸载监听腾讯验证码事件
     Taro.eventCenter.off('captchaResult', this.handleCaptchaResult)
     Taro.eventCenter.off('closeChaReault', this.handleCloseChaReault)
+    // 重置数据
+    this.props.wxPhoneBind.reset();
+    this.props.commonLogin.reset();
   }
 
   // 验证码滑动成功的回调
@@ -92,22 +95,28 @@ class Index extends Component {
   }
 
   handleBindButtonClick = async () => {
-    const { wxPhoneBind } = this.props;
+    const { wxPhoneBind, commonLogin } = this.props;
     const { sessionToken } = getCurrentInstance()?.router?.params;
     try {
+      if (!commonLogin.loginLoading) {
+        return;
+      }
+      commonLogin.setLoginLoading(false);
       const resp = await wxPhoneBind.loginAndBind(sessionToken);
       const uid = get(resp, 'uid', '');
       this.props.user.updateUserInfo(uid);
+      commonLogin.setLoginLoading(true);
       Toast.success({
         content: '登录成功',
         duration: 1000,
         onClose: () => {
           navigateTo({
-            url: `/pages/home/index`
+            url: `/indexPages/home/index`
           });
         }
       });
     } catch (error) {
+      this.props.commonLogin.setLoginLoading(true);
       // 注册信息补充
       if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
         if (isExtFieldsOpen(this.props.site)) {
@@ -115,7 +124,7 @@ class Index extends Component {
           redirectTo({ url: '/subPages/user/supplementary/index' });
           return;
         }
-        redirectTo({ url: '/pages/home/index' });
+        redirectTo({ url: '/indexPages/home/index' });
         return;
       }
       // 跳转状态页
@@ -167,7 +176,7 @@ class Index extends Component {
             />
             {/* 输入框 end */}
             {/* 登录按钮 start */}
-            <Button className={layout.button} type="primary" onClick={this.handleBindButtonClick}>
+            <Button className={layout.button} loading={!commonLogin.loginLoading} type="primary" onClick={this.handleBindButtonClick}>
               登录并绑定
             </Button>
             {/* 登录按钮 end */}

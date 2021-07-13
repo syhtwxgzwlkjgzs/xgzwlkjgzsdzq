@@ -128,7 +128,7 @@ class IndexAction extends IndexStore {
    * @returns
    */
    @action
-   async deleteThreadsData({ id } = {}) {
+   async deleteThreadsData({ id } = {}, SiteStore) {
      if (id && this.threads) {
       //  删除列表
         const { pageData = [] } = this.threads;
@@ -144,6 +144,16 @@ class IndexAction extends IndexStore {
         if (this.sticks) {
           this.sticks = newSticksData;
         }
+
+        if (this.threads?.pageData || this.sticks) {
+          // 更新帖子总数
+          const totalCount = Number(this.threads.totalCount)
+          this.threads.totalCount = totalCount - 1
+        }
+
+        // 删除帖子后更新首页导航栏分类数据
+        this.getReadCategories();
+        SiteStore?.getSiteInfo && SiteStore.getSiteInfo(); // 删除帖子后分类中"全部"数据更新
      }
    }
 
@@ -466,6 +476,8 @@ class IndexAction extends IndexStore {
       if (pageData) {
         pageData.unshift(threadInfo);
         this.threads.pageData = this.threads.pageData.slice();
+        const totalCount = Number(this.threads.totalCount)
+        this.threads.totalCount = totalCount + 1
       }
     } else {
       this.updateAssignThreadAllData(threadId, threadInfo)

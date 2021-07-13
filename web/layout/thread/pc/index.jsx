@@ -330,7 +330,7 @@ class ThreadPCPage extends React.Component {
     this.setState({ showDeletePopup: false });
     const id = this.props.thread?.threadData?.id;
 
-    const { success, msg } = await this.props.thread.delete(id, this.props.index, this.props.search, this.props.topic);
+    const { success, msg } = await this.props.thread.delete(id, this.props.index, this.props.search, this.props.topic, this.props.site);
 
     if (success) {
       Toast.success({
@@ -777,7 +777,10 @@ class ThreadPCPage extends React.Component {
     //   // newText = newText.replace(/\n/g, '');
     //   console.log(newText);
     // }
+    // 是否匿名
     const isAnonymous = threadStore?.threadData?.isAnonymous;
+    // 是否作者本人
+    const isSelf = this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === threadStore?.threadData?.userId;
     return (
       <div>
         <ShowTop showContent={this.props.thread?.threadData?.isStick} setTop={this.state.setTop}></ShowTop>
@@ -794,6 +797,7 @@ class ThreadPCPage extends React.Component {
           ready={() => this.onBaseLayoutReady()}
           rightClassName={classNames(layout.positionSticky, {
             'is-userinfo-show': !isAnonymous,
+            'is-operate-show': !isSelf,
           })}
           className="detail"
         >

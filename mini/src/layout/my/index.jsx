@@ -10,6 +10,7 @@ import BaseLayout from '@components/base-layout';
 import UserCenterPost from '../../components/user-center-post';
 import SectionTitle from '@components/section-title';
 import Taro, { getCurrentInstance, eventCenter } from '@tarojs/taro';
+import ImagePreviewer from '@discuzq/design/dist/components/image-previewer/index';
 @inject('user')
 @observer
 export default class index extends Component {
@@ -17,10 +18,13 @@ export default class index extends Component {
     super(props);
     this.state = {
       isLoading: true,
+      isPreviewBgVisible: false, // 是否预览背景图片
     };
   }
 
   $instance = getCurrentInstance();
+
+  previewerRef = React.createRef(null);
 
   componentWillMount() {
     const onShowEventId = this.$instance.router.onShow;
@@ -117,12 +121,64 @@ export default class index extends Component {
     );
   };
 
+  /**
+   * 控制预览图片窗口显示隐藏
+   * @param {Boolean} visible true显示 false不显示
+   * @param {Function} calback 处理的回调
+   */
+  togglePreviewBgVisible = ({ visible, calback }) => {
+    this.setState(
+      {
+        isPreviewBgVisible: visible,
+      },
+      () => {
+        if (calback && typeof calback === 'function') calback();
+      },
+    );
+  };
+
+  showPreviewerRef = () => {
+    if (this.previewerRef.current) {
+      this.previewerRef.current.show();
+    }
+  };
+
+  //点击预览
+  handlePreviewBgImage = (e) => {
+    e && e.stopPropagation();
+    if (!this.getBackgroundUrl()) return;
+    this.togglePreviewBgVisible({
+      visible: true,
+      calback: this.showPreviewerRef(),
+    });
+  };
+
+  // 预览窗口关闭回调
+  onCloseImagePreview = () => {
+    this.togglePreviewBgVisible({
+      visible: false,
+    });
+  };
+
+  // 获取背景图片
+  getBackgroundUrl = () => {
+    let backgroundUrl = null;
+    if (this.props.isOtherPerson) {
+      if (this.props.user?.targetUserBackgroundUrl) {
+        backgroundUrl = this.props.user.targetUserBackgroundUrl;
+      }
+    } else {
+      backgroundUrl = this.props.user?.backgroundUrl;
+    }
+    if (!backgroundUrl) return false;
+    return backgroundUrl;
+  };
+
   render() {
     const { isLoading } = this.state;
     const { user } = this.props;
     const { userThreads, userThreadsTotalCount, userThreadsPage, userThreadsTotalPage } = user;
     const formattedUserThreads = this.formatUserThreadsData(userThreads);
-
     return (
       <BaseLayout
         showHeader={false}
@@ -133,7 +189,9 @@ export default class index extends Component {
       >
         <View className={styles.mobileLayout}>
           {this.renderTitleContent()}
-          <UserCenterHeaderImage />
+          <View onClick={this.handlePreviewBgImage}>
+            <UserCenterHeaderImage />
+          </View>
           <UserCenterHead />
           <View className={styles.unit}>
             <UserCenterAction />
@@ -152,9 +210,21 @@ export default class index extends Component {
               />
             </View>
 
-            {!isLoading && formattedUserThreads?.map((item, index) => <Thread data={item} key={`${item.threadId}-${item.updatedAt}`} />)}
+            {!isLoading &&
+              formattedUserThreads?.map((item, index) => (
+                <Thread data={item} key={`${item.threadId}-${item.updatedAt}`} />
+              ))}
           </View>
         </View>
+        {this.getBackgroundUrl() && this.state.isPreviewBgVisible && (
+          <ImagePreviewer
+            ref={this.previewerRef}
+            visible={this.state.isPreviewBgVisible}
+            onClose={this.onCloseImagePreview}
+            imgUrls={[this.getBackgroundUrl()]}
+            currentUrl={this.getBackgroundUrl()}
+          />
+        )}
       </BaseLayout>
     );
   }

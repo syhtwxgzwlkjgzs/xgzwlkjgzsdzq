@@ -79,6 +79,8 @@ class ThreadCreate extends React.Component {
   // 设置底部bar的样式
   setBottomBarStyle = (y = 0, action, event) => {
     const winHeight = getVisualViewpost();
+    // 阻止页面上拉带动操作栏位置变化。
+    if (window.innerHeight === winHeight && isIOS()) return;
     // 如果可视窗口不变，即没有弹起键盘不进行任何设置
     const vditorToolbar = document.querySelector('#dzq-vditor .vditor-toolbar');
     this.positionDisplay(action);
@@ -95,8 +97,6 @@ class ThreadCreate extends React.Component {
       }
     }
     this.moneyboxDisplay(false);
-    // 阻止页面上拉带动操作栏位置变化。放这里便于本地开发调试
-    // if (window.innerHeight === winHeight && isIOS()) return;
     this.setPostBox(action, event, y);
   }
 

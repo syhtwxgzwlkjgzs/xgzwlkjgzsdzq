@@ -84,6 +84,17 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
     return new Promise((resolve, reject) => {
       const tempFilePath = file.path || file.tempFilePath;
       const token = locals.get(constants.ACCESS_TOKEN_NAME);
+      const formData = {
+        'type': (() => {
+          switch (type) {
+            case THREAD_TYPE.image: return 1;
+            case THREAD_TYPE.file: return 0;
+          }
+        })(),
+      };
+      if (type === THREAD_TYPE.file) {
+        formData.name = file.name; // 附件文件名，用于后端替换file中的临时文件名
+      }
       Taro.uploadFile({
         url: `${envConfig.COMMON_BASE_URL}/apiv3/attachments`,
         filePath: tempFilePath,
@@ -92,14 +103,7 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
           'Content-Type': 'multipart/form-data',
           'authorization': `Bearer ${token}`
         },
-        formData: {
-          'type': (() => {
-            switch (type) {
-              case THREAD_TYPE.image: return 1;
-              case THREAD_TYPE.file: return 0;
-            }
-          })()
-        },
+        formData: formData,
         success(res) {
           if (res.statusCode === 200) {
             const ret = JSON.parse(res.data);

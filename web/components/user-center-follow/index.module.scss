@@ -17,8 +17,7 @@
 }
 
 .searchInputWrapper {
-  padding-top: rem($padding-2n);
-  padding-bottom: rem($padding-2n);
+  padding: $padding-2n $padding-4n;
   :global {
     .dzq-input {
       width: 100%;
@@ -56,6 +55,10 @@
   span {
     margin-left: rem(4);
   }
+}
+
+.friendWrap {
+  overflow: hidden;
 }
 
 .friendWrap.display-none {

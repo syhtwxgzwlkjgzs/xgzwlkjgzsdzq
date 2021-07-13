@@ -1,14 +1,11 @@
 import React, { createRef } from 'react';
 import { inject, observer } from 'mobx-react';
-import Icon from '@discuzq/design/dist/components/icon/index';
-import Tabs from '@discuzq/design/dist/components/tabs/index';
 import { View } from '@tarojs/components'
 import ThreadContent from '../../components/thread';
 import HomeHeader from '../../components/home-header';
 import FilterView from './components/filter-view';
 import BaseLayout from '../../components/base-layout';
 import TopNew from './components/top-news';
-import NavBar from './components/nav-bar';
 import { getSelectedCategoryIds } from '@common/utils/handleCategory';
 import Taro from '@tarojs/taro';
 import { debounce } from '@common/utils/throttle-debounce.js';
@@ -28,15 +25,12 @@ class IndexH5Page extends React.Component {
       filter: {},
       currentIndex: 'all',
       isFinished: true,
-      fixedTab: false,
-      navBarHeight: 64,
-      headerHeight: 210,
       isClickTab: false,
       windowHeight: 0
     };
-    this.tabsRef = createRef();
+    this.tabsRef = createRef(null);
     this.headerRef = createRef(null);
-    this.isChange = false
+    this.isNormal = false
   }
 
   setNavigationBarStyle = () => {
@@ -49,28 +43,6 @@ class IndexH5Page extends React.Component {
   componentDidMount() {
 
     this.setNavigationBarStyle();
-
-    let navBarHeight = 64
-    try {
-      const res = Taro.getSystemInfoSync()
-      const height = res?.statusBarHeight || 20
-      navBarHeight = 44 + height;
-
-      const headerId = this.headerRef?.current?.domRef?.current?.uid;
-      let headerHeight = 210;
-      if(headerId) { // 获取Header的高度
-        Taro.createSelectorQuery()
-        .select(`#${headerId}`)
-        .boundingClientRect((rect) => {
-          headerHeight = rect?.height || 210;
-        }).exec();
-      }
-      this.setState({ headerHeight });
-    } catch (e) {
-      // Do something when catch error
-    }
-
-    this.setState({ navBarHeight })
 
     // 是否有推荐
     const isDefault = this.props.site.checkSiteIsOpenDefautlThreadListData();
@@ -95,7 +67,7 @@ class IndexH5Page extends React.Component {
   };
 
   handleClickTabBar = (item, idx) => {
-    if(item?.router === "/pages/home/index") { // 点击首页刷新
+    if(item?.router === "/indexPages/home/index") { // 点击首页刷新
       this.changeFilter()
     }
   }
@@ -140,64 +112,9 @@ class IndexH5Page extends React.Component {
     return dispatch('moreData');
   };
 
-  handleScroll = (e) => {
-    const { scrollTop = 0 } = e?.detail || {};
-    const { headerHeight } = this.state;
-    const { fixedTab } = this.state;
-
-    // 只需要滚到临界点触发setState，而不是每一次滚动都触发
-    if(!fixedTab && scrollTop >= headerHeight) {
-      this.setState({fixedTab: true});
-    } else if(fixedTab && scrollTop < headerHeight) {
-      this.setState({fixedTab: false});
-    }
-
+  handleScrollToUpper = () => {
+    this.tabsRef?.current?.changeFixedTab()
   }
-
-  handleScrollToUpper = (e) => {
-    if(this.state.fixedTab) {
-      this.setState({fixedTab: false});
-    }
-  }
-
-  renderTabs = () => {
-    const { index, site } = this.props;
-    const { fixedTab, navBarHeight } = this.state;
-    const { categories = [], activeCategoryId, currentCategories } = index;
-
-    return (
-      <>
-        {categories?.length > 0 && (
-          <>
-          <View
-            ref={this.tabsRef}
-            className={`${styles.homeContent} ${fixedTab ? styles.fixed : ''}`}
-            style={{top: `${navBarHeight}px`}}
-          >
-            <Tabs
-              className={styles.tabsBox}
-              scrollable
-              type="primary"
-              onActive={this.onClickTab}
-              activeId={activeCategoryId}
-              external={
-                <View onClick={this.searchClick} className={styles.tabIcon}>
-                  <Icon name="SecondaryMenuOutlined" className={styles.buttonIcon} size={16} />
-                </View>
-              }
-            >
-              {currentCategories?.map((item, index) => (
-                <Tabs.TabPanel key={index} id={item.pid} label={item.name} />
-              ))}
-            </Tabs>
-          </View>
-          <NavBar title={site?.webConfig?.setSite?.siteName || ''} isShow={fixedTab} />
-          {fixedTab &&  <View className={styles.tabPlaceholder}></View>}
-          </>
-        )}
-      </>
-    );
-  };
 
   renderHeaderContent = () => {
     const { sticks = [] } = this.props.index || {};
@@ -235,15 +152,15 @@ class IndexH5Page extends React.Component {
         errorText={threadError.errorText}
         onClickTabBar={this.handleClickTabBar}
       >
-        <HomeHeader ref={this.headerRef} />
+        <HomeHeader />
 
-        <IndexTabs onClickTab={this.onClickTab} searchClick={this.searchClick} />
+        <IndexTabs onClickTab={this.onClickTab} searchClick={this.searchClick} ref={this.tabsRef} />
 
         <View style={{display: isClickTab ? 'none' : 'block'}}>
           {this.renderHeaderContent()}
 
           {
-            !this.isChange ? (
+            !this.isNormal ? (
               <ThreadList data={pageData} isClickTab={isClickTab} wholePageIndex={currentPage - 1} />
             ) : (
               pageData?.map((item, index) => (

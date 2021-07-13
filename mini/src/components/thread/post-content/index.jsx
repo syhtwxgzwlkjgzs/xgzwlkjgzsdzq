@@ -1,41 +1,29 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import RichText from '@discuzq/design/dist/components/rich-text/index';
-import Button from '@discuzq/design/dist/components/button/index';
 import { noop, handleLink } from '../utils'
 import Router from '@discuzq/sdk/dist/router';
 
 import fuzzyCalcContentLength from '@common/utils/fuzzy-calc-content-length';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
-import { View, Text, Image } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import styles from './index.module.scss';
 import { urlToLink } from '@common/utils/replace-url-to-a';
-
-import { getElementRect, randomStr } from '../utils'
 
 
 /**
  * 帖子内容展示
  * @prop {string}   content 内容
- * @prop {boolean}  useShowMore 是否显示查看更多
- * @prop {boolean}  isPayContent 是否付费内容
- * @prop {number}   hidePercent 隐藏内容的百分比 eg: 80
- * @prop {number}   payAmount 查看隐藏内容支付金额
- * @prop {function} onPay 付款点击事件
+ * @prop {boolean}  useShowMore 是否需要"查看更多"
  * @prop {function} onRedirectToDetail 跳转到详情页面，当点击内容或查看更多内容超出屏幕时跳转到详情页面
- * @prop {boolean}  loading
+ * @prop {function} onOpen 内容展开事件
  */
 
-const Index = ({
+ const PostContent = ({
   content,
   useShowMore = true,
-  isPayContent,
-  hidePercent = 0,
-  payAmount = 0,
-  onPay,
   onRedirectToDetail = noop,
-  loading = true,
   customHoverBg = false,
   relativeToViewport = true,
   changeHeight = noop,
@@ -43,25 +31,20 @@ const Index = ({
   ...props
 }) => {
   // 内容是否超出屏幕高度
-  const [contentTooLong, setContentTooLong] = useState(false);
-  const [cutContentForDisplay, setCutContentForDisplay] = useState("");
-  const [showMore, setHiddenMore] = useState(!useShowMore);
+  const [contentTooLong, setContentTooLong] = useState(false); // 超过1200个字符
+  const [cutContentForDisplay, setCutContentForDisplay] = useState('');
+  const [showMore, setShowMore] = useState(false); // 根据文本长度显示"查看更多"
   const contentWrapperRef = useRef(null);
 
   const texts = {
     showMore: '查看更多',
-    hidePercent: `剩余${hidePercent}%内容已隐藏`,
-    payButton: `支付${payAmount}元查看剩余内容`,
   };
   // 过滤内容
   const filterContent = useMemo(() => {
-    let newContent = content ? s9e.parse(content) : '暂无内容';
+    let newContent = content ? s9e.parse(content) : '';
     newContent = xss(newContent);
-
-    return !loading ? newContent : '内容加载中';
-  }, [content, loading]);
-  // 是否显示遮罩 是付费内容并且隐藏内容百分比大于0 或 显示查看更多并且查看更多状态为false 则显示遮罩
-  const showHideCover = !loading ? (isPayContent && hidePercent > 0) || (useShowMore && !showMore) : false;
+    return newContent;
+  }, [content]);
 
   const onShowMore = useCallback((e) => {
     e && e.stopPropagation();
@@ -71,7 +54,7 @@ const Index = ({
       onRedirectToDetail && onRedirectToDetail();
     } else {
       setUseShowMore()
-      setHiddenMore(true);
+      setShowMore(false);
     }
   }, [contentTooLong]);
 
@@ -87,6 +70,7 @@ const Index = ({
     }
   }
 
+  // 超过1200个字符，截断文本用于显示
   const getCutContentForDisplay = (maxContentLength) => {
     const ctn = filterContent;
     let ctnSubstring = ctn.substring(0, maxContentLength); // 根据长度截断
@@ -94,62 +78,53 @@ const Index = ({
     const cutPoint = (ctnSubstring.lastIndexOf("<img") > 0) ?
                       ctnSubstring.lastIndexOf("<img") : ctnSubstring.length;
 
-    ctnSubstring = ctnSubstring.substring(0, cutPoint)
+    ctnSubstring = ctnSubstring.substring(0, cutPoint);
     setCutContentForDisplay(ctnSubstring);
-  }
+  };
 
   useEffect(() => {
     const lengthInLine = parseInt((contentWrapperRef.current.offsetWidth || 704) / 16);
-    const length = fuzzyCalcContentLength(filterContent, lengthInLine);
-    const maxContentLength = lengthInLine * 6; // 如果默认长度是704，一共可容纳264个字符
 
-    if (length < maxContentLength && length <= 1200) { // 显示6行内容
-      setHiddenMore(true);
+    const length = fuzzyCalcContentLength(filterContent, lengthInLine); // 大致计算文本长度
+    const maxContentLength = lengthInLine * 6 / 2; // 如果默认长度是704，一共可容纳264个字符，rpx是px两倍
+
+    if (length < maxContentLength && length <= 1200) {
+      // 显示6行内容
+      setShowMore(false);
     } else {
-      setHiddenMore(false);
+      // 超过6行
+      setShowMore(true);
     }
-    if (length > 1200) {
-      if(useShowMore) getCutContentForDisplay(1200);
-      setContentTooLong(true)
+    if (length > 1200) { // 超过一页的超长文本
+      if (useShowMore) getCutContentForDisplay(1200);
+      setContentTooLong(true);
     } else {
-      setContentTooLong(false)
+      setContentTooLong(false);
     }
   }, [filterContent]);
-
-  useEffect(() => {
-    if (relativeToViewport) {
-      changeHeight()
-    }
-  }, [showMore, relativeToViewport])
-
+  
   return (
     <View className={styles.container} {...props}>
       <View
         ref={contentWrapperRef}
-        className={`${styles.contentWrapper} ${showHideCover ? styles.hideCover : ''} ${customHoverBg ? styles.bg : ''}`}
+        className={`${styles.contentWrapper} ${useShowMore && showMore ? styles.hideCover : ''} ${customHoverBg ? styles.bg : ''}`}
         onClick={!showMore ? onShowMore : handleClick}
       >
         <View className={styles.content}>
-          <RichText content={(useShowMore && cutContentForDisplay) ? cutContentForDisplay : urlToLink(filterContent)} onClick={handleClick} />
+          <RichText
+            content={(useShowMore && cutContentForDisplay) ? cutContentForDisplay : urlToLink(filterContent)}
+            onClick={handleClick}
+          />
         </View>
       </View>
-      {!loading && useShowMore && !showMore && (
+      {useShowMore && showMore && (
         <View className={styles.showMore} onClick={onShowMore}>
           <View className={styles.hidePercent}>{texts.showMore}</View>
           <Icon className={styles.icon} name="RightOutlined" size={12} />
-        </View>
-      )}
-      {!loading && showMore && isPayContent && (
-        <View className={styles.payInfo}>
-          <View className={styles.hidePercent}>{texts.hidePercent}</View>
-          {/* <Button type="primary" onClick={onPay} className={styles.payButton}>
-            <Image className={styles.payButtonIcon} />
-            {texts.payButton}
-          </Button> */}
         </View>
       )}
     </View>
   );
 };
 
-export default React.memo(Index);
+export default React.memo(PostContent);

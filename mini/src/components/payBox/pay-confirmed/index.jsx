@@ -69,13 +69,13 @@ export default class PayBox extends React.Component {
     const onShowEventId = this.$instance.router.onShow;
     // 监听
     eventCenter.on(onShowEventId, this.onShow);
-  }
+  };
 
   componentWillUnmount = () => {
     const onShowEventId = this.$instance.router.onShow;
     // 卸载
     eventCenter.off(onShowEventId, this.onShow);
-  }
+  };
 
   async componentDidMount() {
     const { id } = this.props?.user;
@@ -94,7 +94,7 @@ export default class PayBox extends React.Component {
     const { id } = this.props.user;
     await this.props.payBox.getWalletInfo(id);
     await this.props.user.updateUserInfo(id);
-  }
+  };
 
   walletPaySubText() {
     const canWalletPay = this.props.user?.canWalletPay;
@@ -178,14 +178,28 @@ export default class PayBox extends React.Component {
     this.props.payBox.payWay = null;
   };
 
+  // 获取按钮禁用状态
+  getDisabledWithButton = () => {
+    const { isSubmit } = this.state;
+    const canWalletPay = this.props.user?.canWalletPay;
+    const { options = {} } = this.props.payBox;
+    const { amount = 0 } = options;
+    let disabled = !this.props.payBox.payWay || isSubmit;
+    if (this.props.payBox.payWay === PAYWAY_MAP.WALLET) {
+      if (!canWalletPay) {
+        disabled = true;
+      }
+      if (Number(this.props.payBox?.walletAvaAmount) < Number(amount)) {
+        disabled = true;
+      }
+    }
+    return disabled;
+  };
+
   render() {
     const { options = {} } = this.props.payBox;
     const { payConfig, isSubmit } = this.state;
     const canWalletPay = this.props.user?.canWalletPay;
-    let disabled = !this.props.payBox.payWay || isSubmit;
-    if (this.props.payBox.payWay === PAYWAY_MAP.WALLET && !canWalletPay) {
-      disabled = true;
-    }
 
     return (
       <View className={styles.payBox}>
@@ -223,7 +237,7 @@ export default class PayBox extends React.Component {
         </View>
         <View className={styles.btnBox}>
           <Button
-            disabled={disabled}
+            disabled={this.getDisabledWithButton()}
             className={styles.btn}
             type="primary"
             size="large"

@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './index.module.scss';
-import { Divider, Spin, Toast } from '@discuzq/design';
+import { Divider, Spin, Toast, ImagePreviewer } from '@discuzq/design';
 import UserCenterHeaderImage from '@components/user-center-header-images';
 import UserCenterHead from '@components/user-center-head';
 import { inject, observer } from 'mobx-react';
@@ -19,6 +19,7 @@ class H5MyPage extends React.Component {
     this.isUnmount = false;
     this.state = {
       isLoading: true,
+      isPreviewBgVisible: false, // 是否预览背景图片
     };
   }
 
@@ -77,7 +78,7 @@ class H5MyPage extends React.Component {
     if (!/thread\//.test(url)) {
       this.props.user.clearUserThreadsInfo();
     }
-  }
+  };
 
   componentDidMount = async () => {
     this.props.router.events.on('routeChangeStart', this.beforeRouterChange);
@@ -116,13 +117,32 @@ class H5MyPage extends React.Component {
     return Object.values(userThreads).reduce((fullData, pageData) => [...fullData, ...pageData]);
   };
 
+  handlePreviewBgImage = (e) => {
+    e && e.stopPropagation();
+    this.setState({
+      isPreviewBgVisible: !this.state.isPreviewBgVisible,
+    });
+  };
+
+  getBackgroundUrl = () => {
+    let backgroundUrl = null;
+    if (this.props.isOtherPerson) {
+      if (this.props.user?.targetUserBackgroundUrl) {
+        backgroundUrl = this.props.user.targetUserBackgroundUrl;
+      }
+    } else {
+      backgroundUrl = this.props.user?.backgroundUrl;
+    }
+    if (!backgroundUrl) return false;
+    return backgroundUrl;
+  };
+
   render() {
     const { isLoading } = this.state;
     const { site, user } = this.props;
     const { platform } = site;
     const { userThreads, userThreadsTotalCount, userThreadsPage, userThreadsTotalPage } = user;
     const formattedUserThreads = this.formatUserThreadsData(userThreads);
-
     return (
       <BaseLayout
         curr={'my'}
@@ -134,7 +154,9 @@ class H5MyPage extends React.Component {
         immediateCheck
       >
         <div className={styles.mobileLayout}>
-          <UserCenterHeaderImage />
+          <div onClick={this.handlePreviewBgImage}>
+            <UserCenterHeaderImage />
+          </div>
           <UserCenterHead platform={platform} />
           <div className={styles.unit}>
             <UserCenterAction />
@@ -157,6 +179,14 @@ class H5MyPage extends React.Component {
             </div>
           </div>
         </div>
+        {this.getBackgroundUrl() && this.state.isPreviewBgVisible && (
+          <ImagePreviewer
+            visible={this.state.isPreviewBgVisible}
+            onClose={this.handlePreviewBgImage}
+            imgUrls={[this.getBackgroundUrl()]}
+            currentUrl={this.getBackgroundUrl()}
+          />
+        )}
       </BaseLayout>
     );
   }

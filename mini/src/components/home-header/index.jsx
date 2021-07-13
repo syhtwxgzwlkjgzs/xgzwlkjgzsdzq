@@ -110,7 +110,7 @@ class HomeHeader extends React.Component {
     Router.back({
       fail: () => {
         Router.redirect({
-          url: '/pages/home/index'
+          url: '/indexPages/home/index'
         });
       }
     });
@@ -144,8 +144,8 @@ class HomeHeader extends React.Component {
         <View
           ref={this.domRef}
           className={`
-            ${styles.container} 
-            ${mode ? styles[`container_mode_${mode}`] : ''} 
+            ${styles.container}
+            ${mode ? styles[`container_mode_${mode}`] : ''}
           `}
           style={{ ...style, ...this.getBgHeaderStyle(bgColor) }}
         >
