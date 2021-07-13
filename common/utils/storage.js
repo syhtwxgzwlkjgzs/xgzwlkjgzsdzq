@@ -1,7 +1,11 @@
 // import Taro from '@tarojs/taro';
 
 let storage = null;
+let taro = null;
 const isMini = process.env.DISCUZ_ENV === 'mini';
+if(isMini) {
+  // taro = require('@tarojs/taro');
+}
 
 export default class Storage {
   constructor({ storageType }) {
@@ -26,7 +30,9 @@ export default class Storage {
   set(key, value) {
     try {
       if(isMini) {
-        // Taro.setStorageSync(key, value)
+        if(taro) {
+          taro.setStorageSync(key, value);
+        }
       } else {
         storage.setItem(key, value);
       }
@@ -42,7 +48,9 @@ export default class Storage {
   get(key) {
     try {
       if(isMini) {
-        // Taro.getStorageSync(key)
+        if(taro) {
+          return taro.getStorageSync(key);
+        }
       } else {
         return storage.getItem(key);
       }

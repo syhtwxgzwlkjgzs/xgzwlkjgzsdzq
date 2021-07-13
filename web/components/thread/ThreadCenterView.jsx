@@ -65,7 +65,7 @@ const Index = (props) => {
               {text && <PostContent
                 onContentHeightChange={props.onContentHeightChange}
                 content={text}
-                onPay={onPay}
+                threadId={threadId}
                 useShowMore={!openedMore}
                 onRedirectToDetail={onClick}
                 onOpen={onOpen}/>
@@ -82,6 +82,7 @@ const Index = (props) => {
                     isPay={needPay}
                     status={videoData.status}
                     onVideoReady={props.onVideoReady}
+                    threadId={threadId}
                   />
                 </WrapperView>
                 
@@ -93,20 +94,24 @@ const Index = (props) => {
                       isPay={needPay}
                       onPay={onPay}
                       onClickMore={onClick} 
-                      onImageReady={props.onImageReady}/>
+                      onImageReady={props.onImageReady}
+                      threadId={threadId}
+                  />
                   )
               }
               {rewardData && <Packet
                 type={1}
                 money={rewardData.money}
                 onClick={onClick}
+                threadId={threadId}
               />}
-              {redPacketData && <Packet money={redPacketData.money || 0} onClick={onClick} condition={redPacketData.condition} />}
+              {redPacketData && <Packet money={redPacketData.money || 0} onClick={onClick} condition={redPacketData.condition} threadId={threadId} />}
               {goodsData && <ProductItem
                   image={goodsData.imagePath}
                   amount={goodsData.price}
                   title={goodsData.title}
                   onClick={onClick}
+                  threadId={threadId}
               />}
               {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} />}
               {fileData?.length > 0 && <AttachmentView threadId={threadId} attachments={fileData} onPay={onPay} isPay={needPay} />}

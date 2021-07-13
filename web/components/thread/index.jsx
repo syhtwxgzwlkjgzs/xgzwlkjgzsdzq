@@ -13,6 +13,7 @@ import ThreadCenterView from './ThreadCenterView';
 import { throttle } from '@common/utils/throttle-debounce';
 import { debounce } from './utils';
 import { noop } from '@components/thread/utils';
+import { updateViewCountInStores } from '@common/utils/viewcount-in-storage';
 
 @inject('site')
 @inject('index')
@@ -51,6 +52,8 @@ class Index extends React.Component {
           this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
           this.props.user.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
 
+          updateViewCountInStores(threadId, [this.props.index, this.props.search, this.props.topic]);
+
           const { recomputeRowHeights = noop } = this.props;
           recomputeRowHeights();
         }
@@ -69,6 +72,7 @@ class Index extends React.Component {
       const { threadId = '' } = this.props.data || {};
 
       if (threadId !== '') {
+        updateViewCountInStores(threadId, [this.props.index, this.props.search, this.props.topic]);
         this.props.thread.positionToComment();
         this.props.router.push(`/thread/${threadId}`);
       } else {
@@ -100,6 +104,8 @@ class Index extends React.Component {
           this.props.search.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
           this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
           this.props.user.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
+
+          updateViewCountInStores(threadId, [this.props.index, this.props.search, this.props.topic]);
 
           const { recomputeRowHeights = noop } = this.props;
           recomputeRowHeights();
@@ -137,6 +143,8 @@ class Index extends React.Component {
           this.props.topic.updatePayThreadInfo(thread?.threadId, data)
           this.props.user.updatePayThreadInfo(thread?.threadId, data)
 
+          updateViewCountInStores(threadId, [this.props.index, this.props.search, this.props.topic]);
+
           const { recomputeRowHeights = noop } = this.props;
           recomputeRowHeights(data);
         }
@@ -166,9 +174,7 @@ class Index extends React.Component {
         this.props.thread.isPositionToComment = false;
         this.props.router.push(`/thread/${threadId}`);
 
-        this.props.index.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
-        this.props.search.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
-        this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
+        updateViewCountInStores(threadId, [this.props.index, this.props.search, this.props.topic]);
       } else {
         console.log('帖子不存在');
       }
