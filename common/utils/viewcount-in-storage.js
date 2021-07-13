@@ -22,7 +22,7 @@ const isViewed = (threadId = null) => {
   }
 
   const viewedThreads = viewedObj.threads;
-  for(let i = 0; viewedThreads && i < viewedThreads.length; i++) {
+  for(let i = viewedThreads.length - 1; viewedThreads && i >= 0; i--) {
     const thread = viewedThreads[i];
     if(thread.id === threadId) {
       return i;
@@ -71,38 +71,26 @@ const addViewed = (threadId = null) => {
 }
 
 
-const updateViewCountInStores = async (threadId = null, stores = []) => {
-  if(!threadId || !stores || !stores.length) return ;
+const updateViewCountInStores = async (threadId = null) => {
+  if(!threadId) return ;
   threadId += ''; // 统一为字符串
-
   try {
-    let newViewCount = -1;
-
     if(isViewed(threadId) === -1) { // storage中没找到帖子
       // 更新后台数据
       const res = await getViewCount({ params: { threadId } });
       if(res.code === 0) {
-        newViewCount = res.data.viewCount;
+        // 更新storage中浏览数据
+        addViewed(threadId);
+        return res.data.viewCount;
       } else {
         console.error(res?.msg);
+        return null;
       }
     }
-    // 更新storage中浏览数据
-    addViewed(threadId);
-
-    for(const store of stores) {
-      if(!store || typeof store !== 'object') continue;
-      if(newViewCount !== -1) {
-        console.log(`store`, store)
-        console.log(`newViewCount`, newViewCount)
-        store.updateAssignThreadInfo(parseInt(threadId), { updateType: 'viewCount', updatedInfo: { viewCount: newViewCount } })
-      }
-    }
-
   } catch (error) {
     console.error(error);
+    return null;
   }
-
 }
 
 

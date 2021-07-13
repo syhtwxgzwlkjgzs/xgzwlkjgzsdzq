@@ -78,6 +78,7 @@ const Index = ({ imgData = [], flat = false, platform = 'h5', isPay = false, onP
     if (isPay) {
       onPay();
     } else {
+      updateViewCount();
       imgData.forEach((item) => {
         if (item.id === id) {
           setDefaultImg(item.url);
@@ -89,7 +90,7 @@ const Index = ({ imgData = [], flat = false, platform = 'h5', isPay = false, onP
 
   const onClickMore = (e) => {
     e.stopPropagation();
-
+    updateViewCount();
     setDefaultImg(imgData[4].url);
     setTimeout(() => {
       setVisible(true);

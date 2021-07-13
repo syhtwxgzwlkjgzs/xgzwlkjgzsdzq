@@ -15,6 +15,7 @@ import { debounce } from './utils';
 import { noop } from '@components/thread/utils';
 import { updateViewCountInStores } from '@common/utils/viewcount-in-storage';
 
+
 @inject('site')
 @inject('index')
 @inject('user')
@@ -52,8 +53,7 @@ class Index extends React.Component {
           this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
           this.props.user.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
 
-          updateViewCountInStores(threadId, [this.props.index, this.props.search, this.props.topic]);
-
+          this.updateViewCount();
           const { recomputeRowHeights = noop } = this.props;
           recomputeRowHeights();
         }
@@ -75,7 +75,7 @@ class Index extends React.Component {
       }
 
       if (threadId !== '') {
-        updateViewCountInStores(threadId, [this.props.index, this.props.search, this.props.topic]);
+        this.updateViewCount();
         this.props.thread.positionToComment();
         this.props.router.push(`/thread/${threadId}`);
       } else {
@@ -108,8 +108,7 @@ class Index extends React.Component {
           this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
           this.props.user.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
 
-          updateViewCountInStores(threadId, [this.props.index, this.props.search, this.props.topic]);
-
+          this.updateViewCount();
           const { recomputeRowHeights = noop } = this.props;
           recomputeRowHeights();
         }
@@ -146,8 +145,7 @@ class Index extends React.Component {
           this.props.topic.updatePayThreadInfo(thread?.threadId, data)
           this.props.user.updatePayThreadInfo(thread?.threadId, data)
 
-          updateViewCountInStores(threadId, [this.props.index, this.props.search, this.props.topic]);
-
+          this.updateViewCount();
           const { recomputeRowHeights = noop } = this.props;
           recomputeRowHeights(data);
         }
@@ -179,7 +177,7 @@ class Index extends React.Component {
         this.props.thread.isPositionToComment = false;
         this.props.router.push(`/thread/${threadId}`);
 
-        updateViewCountInStores(threadId, [this.props.index, this.props.search, this.props.topic]);
+        this.updateViewCount();
       } else {
         console.log('帖子不存在');
       }
@@ -205,6 +203,16 @@ class Index extends React.Component {
 
       const { recomputeRowHeights = noop } = this.props;
       recomputeRowHeights();
+    }
+
+    updateViewCount = async () => {
+      const { threadId = '' } = this.props.data || {};
+      const viewCount = await updateViewCountInStores(threadId);
+      if(viewCount) {
+        this.props.index.updateAssignThreadInfo(threadId, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
+        this.props.search.updateAssignThreadInfo(threadId, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
+        this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
+      }
     }
 
     render() {
@@ -267,6 +275,7 @@ class Index extends React.Component {
             onPay={unifyOnClick || this.onPay}
             platform={platform}
             onOpen={this.onOpen}
+            updateViewCount={this.updateViewCount}
           />
 
           <BottomEvent
