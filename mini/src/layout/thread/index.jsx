@@ -269,6 +269,12 @@ class ThreadH5Page extends React.Component {
 
   // 点击分享
   onShareClick = () => {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+      return;
+    }
+
     this.setState({
       isShowShare: true,
       showMorePopup: true,
@@ -869,7 +875,7 @@ class ThreadH5Page extends React.Component {
           {/* <Header></Header> */}
           {isReady && !isApproved && (
             <View className={layout.examine}>
-              <Icon className={layout.tipsIcon} name="WarnOutlined"></Icon>
+              <Icon className={layout.tipsIcon} name="TipsOutlined"></Icon>
               <Text className={layout.tipsText}>内容正在审核中，审核通过后才能正常显示！</Text>
             </View>
           )}

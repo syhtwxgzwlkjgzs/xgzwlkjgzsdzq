@@ -29,9 +29,10 @@ import {
   JUMP_TO_SUPPLEMENTARY,
   REVIEWING_USER_WHITE_LIST_WEB,
 } from '@common/constants/site';
+import LoginHelper from '@common/utils/login-helper';
 
 // 获取全站数据
-export default function HOCFetchSiteData(Component) {
+export default function HOCFetchSiteData(Component, _isPass) {
   @inject('site')
   @inject('user')
   @observer
@@ -160,14 +161,19 @@ export default function HOCFetchSiteData(Component) {
       }
 
       user.updateLoginStatus(loginStatus);
-      this.setState({ isPass: this.isPass() });
+      let defaultPass = this.isPass();
+      // 自定义pass逻辑
+      if ( _isPass && defaultPass) {
+        defaultPass = _isPass(defaultPass);
+      }
+      this.setState({ isPass: defaultPass });
 
       // 初始化分享配置
       const isInit = await initWXSDK(siteConfig && siteConfig.passport && siteConfig.passport.offiaccountOpen);
       if ( isInit && siteConfig && siteConfig.setSite ) {
         const {setSite} = siteConfig;
-        const {siteTitle, siteIntroduction, siteFavicon} = setSite;
-        setWxShare(siteTitle, siteIntroduction, window.location.href, siteFavicon);
+        const {siteName, siteIntroduction, siteFavicon} = setSite;
+        setWxShare(siteName, siteIntroduction, window.location.href, siteFavicon);
       }
       
     }
@@ -177,7 +183,7 @@ export default function HOCFetchSiteData(Component) {
 
       const CODE_NEED_SAVE = [JUMP_TO_LOGIN, JUMP_TO_REGISTER, JUMP_TO_AUDIT, JUMP_TO_REFUSE, JUMP_TO_DISABLED, JUMP_TO_SUPPLEMENTARY, JUMP_TO_PAY_SITE];
       if (CODE_NEED_SAVE.includes(result.code)) {
-        this.saveInitialPage();
+        LoginHelper.saveCurrentUrl();
       }
 
       switch (result.code) {
@@ -198,11 +204,11 @@ export default function HOCFetchSiteData(Component) {
           break;
         case JUMP_TO_LOGIN:// 到登录页
           clearLoginStatus();
-          window.location.replace('/user/login');
+          LoginHelper.gotoLogin();
           break;
         case JUMP_TO_REGISTER:// 到注册页
           clearLoginStatus();
-          window.location.replace('/user/register');
+          LoginHelper.saveAndRedirect('/user/register');
           break;
         case JUMP_TO_AUDIT:// 到审核页
           Router.push({ url: '/user/status?statusCode=2' });
@@ -214,31 +220,33 @@ export default function HOCFetchSiteData(Component) {
           Router.push({ url: '/user/status?statusCode=-4009' });
           break;
         case JUMP_TO_SUPPLEMENTARY:// 跳转到扩展字段页
-          Router.push({ url: '/user/supplementary' });
+          LoginHelper.saveAndRedirect('/user/supplementary');
           break;
         case JUMP_TO_HOME_INDEX:// 到首页
           Router.redirect({ url: '/' });
           break;
         case JUMP_TO_PAY_SITE:// 到付费加入页面
-          Router.push({ url: '/forum/partner-invite' });
+          LoginHelper.saveAndRedirect('/forum/partner-invite');
           break;
         default: Router.redirect({ url: '/500' });
           break;
       }
     }
 
-    saveInitialPage() {
-      const { site } = this.props;
-
-      if (!site.getInitialPage()) {
-        site.setInitialPage(window.location.href);
+    // 检查跳转
+    checkJump() {
+      const { router } = this.props;
+      const jumpPage = LoginHelper.getUrl();
+      if (jumpPage) {
+        const urlObj = new URL(jumpPage);
+        if (urlObj.pathname === router.asPath) { // 目标地址已达到，清空即可
+          LoginHelper.clear()
+        } else if (router.asPath === '/') { // 被重定向到首页，取出跳转地址，跳转
+          LoginHelper.restore();
+          return false;
+        }
       }
-    }
-
-    saveAndRedirect(url) {
-      this.saveInitialPage(url);
-
-      Router.redirect({ url });
+      return true;
     }
 
     // 检查是否满足渲染条件
@@ -270,13 +278,13 @@ export default function HOCFetchSiteData(Component) {
           if (!site.isOffiaccountOpen && !site.isMiniProgramOpen) {
             // 绑定手机: 开启短信，没有绑定手机号
             if (router.asPath !== '/user/bind-phone' && site.isSmsOpen && !user.mobile) {
-              this.saveAndRedirect( '/user/bind-phone' );
+              LoginHelper.saveAndRedirect( '/user/bind-phone' );
               return false;
             }
           }
           // 绑定昵称：没有昵称
           if (router.asPath !== '/user/bind-nickname' && !user.nickname) {
-            this.saveAndRedirect( '/user/bind-nickname' );
+            LoginHelper.saveAndRedirect( '/user/bind-nickname' );
             return false;
           }
           // 账号审核中的 用户只能访问 首页 + 帖子详情页，以及用户状态提示页
@@ -288,46 +296,24 @@ export default function HOCFetchSiteData(Component) {
           }
         }
 
-        if (site?.webConfig?.setSite?.siteMode !== 'pay') {
-          return true;
-        }
-
         // 以下为付费模式相关判断
-        // 付费加入: 付费状态下，未登录的用户、登录了但是没有付费的用户，访问不是白名单的页面会跳入到付费加入
-        if (WEB_SITE_JOIN_WHITE_LIST.some(path => router.asPath.match(path))) {
-          return true;
-        }
+        if (site?.webConfig?.setSite?.siteMode === 'pay') {
+          // 付费加入: 付费状态下，未登录的用户、登录了但是没有付费的用户，访问不是白名单的页面会跳入到付费加入
+          if (WEB_SITE_JOIN_WHITE_LIST.some(path => router.asPath.match(path))) {
+            this.checkJump();
+            return true;
+          }
 
-        // if (!user?.isLogin()) {
-        //   Router.redirect({ url: '/user/login' });
-        //   return false;
-        // }
-        const code = router.query.inviteCode;
-        const query = code ? `?inviteCode=${code}` : '';
-        if (!user?.paid) {
-          this.saveAndRedirect(`/forum/partner-invite${query}`);
-          return false;
-        }
-
-        // 访问指定页面，经过登陆、付费等操作完成后，跳回主页
-        if (router.asPath === '/') {
-          const initialPage = site.getInitialPage();
-          if (initialPage) {
-            const urlObj = new URL(initialPage);
-            if (urlObj.pathname !== router.asPath) {
-              site.clearInitialPage();
-              Router.redirect({
-                url: initialPage,
-              });
-              return false;
-            } else {
-              site.clearInitialPage();
-            }
+          const code = router.query.inviteCode;
+          const query = code ? `?inviteCode=${code}` : '';
+          if (!user?.paid) {
+            LoginHelper.saveAndRedirect(`/forum/partner-invite${query}`);
+            return false;
           }
         }
       }
 
-      return true;
+      return this.checkJump();
     }
 
     // 过滤多余参数

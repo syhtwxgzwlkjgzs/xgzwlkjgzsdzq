@@ -12,6 +12,7 @@ import { View, Text } from '@tarojs/components';
 import Taro, { getCurrentInstance, eventCenter } from '@tarojs/taro';
 import SectionTitle from '@components/section-title';
 import BottomView from '@components/list/BottomView';
+import ImagePreviewer from '@discuzq/design/dist/components/image-previewer/index';
 
 @inject('site')
 @inject('user')
@@ -29,6 +30,8 @@ class H5OthersPage extends React.Component {
   }
 
   $instance = getCurrentInstance();
+
+  previewerRef = React.createRef(null);
 
   componentWillMount() {
     const onShowEventId = this.$instance.router.onShow;
@@ -134,6 +137,53 @@ class H5OthersPage extends React.Component {
     );
   };
 
+  getBackgroundUrl = () => {
+    let backgroundUrl = null;
+    if (this.props.user?.targetUserBackgroundUrl) {
+      backgroundUrl = this.props.user.targetUserBackgroundUrl;
+    }
+    if (!backgroundUrl) return false;
+    return backgroundUrl;
+  };
+
+  /**
+   * 控制预览图片窗口显示隐藏
+   * @param {Boolean} visible true显示 false不显示
+   * @param {Function} calback 处理的回调
+   */
+  togglePreviewBgVisible = ({ visible, calback }) => {
+    this.setState(
+      {
+        isPreviewBgVisible: visible,
+      },
+      () => {
+        if (calback && typeof calback === 'function') calback();
+      },
+    );
+  };
+
+  showPreviewerRef = () => {
+    if (this.previewerRef.current) {
+      this.previewerRef.current.show();
+    }
+  };
+
+  handlePreviewBgImage = (e) => {
+    e && e.stopPropagation();
+    if (!this.getBackgroundUrl()) return;
+    this.togglePreviewBgVisible({
+      visible: true,
+      calback: this.showPreviewerRef(),
+    });
+  };
+
+  // 预览窗口关闭回调
+  onCloseImagePreview = () => {
+    this.togglePreviewBgVisible({
+      visible: false,
+    });
+  };
+
   render() {
     const { site, user } = this.props;
     const { platform } = site;
@@ -152,7 +202,9 @@ class H5OthersPage extends React.Component {
           {this.state.fetchUserInfoLoading && <BottomView isBox loadingText="加载中..." />}
           {!this.state.fetchUserInfoLoading && (
             <>
-              <UserCenterHeaderImage isOtherPerson={true} />
+              <View onClick={this.handlePreviewBgImage}>
+                <UserCenterHeaderImage isOtherPerson={true} />
+              </View>
               <UserCenterHead platform={platform} isOtherPerson={true} />
             </>
           )}
@@ -179,6 +231,15 @@ class H5OthersPage extends React.Component {
             </View>
           </View>
         </View>
+        {this.getBackgroundUrl() && this.state.isPreviewBgVisible && (
+          <ImagePreviewer
+            ref={this.previewerRef}
+            visible={this.state.isPreviewBgVisible}
+            onClose={this.onCloseImagePreview}
+            imgUrls={[this.getBackgroundUrl()]}
+            currentUrl={this.getBackgroundUrl()}
+          />
+        )}
       </BaseLayout>
     );
   }

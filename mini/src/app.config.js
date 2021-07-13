@@ -88,7 +88,7 @@
   "preloadRule": {
     "pages/index/index": {
       "network": "all",
-      "packages": ["indexPages", "subPages"]
+      "packages": ["indexPages"]
     }
   }
 };

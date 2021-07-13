@@ -131,7 +131,7 @@ class index extends Component {
     clearLoginStatus();
     this.props.user.removeUserInfo();
     this.props.site.getSiteInfo();
-    Router.reLaunch({ url: '/indexPages/home/index' });
+    Router.reLaunch({ url: '/subPages/forum/partner-invite/index' });
   };
 
   // 点击粉丝列表
@@ -213,7 +213,7 @@ class index extends Component {
         {/* 上 */}
         <View className={styles.h5boxTop}>
           <View className={styles.headImgBox} onClick={this.handlePreviewAvatar}>
-            <Avatar image={user.avatarUrl} size="big" name={user.username} />
+            <Avatar image={user.avatarUrl} size="big" name={user.nickname} />
           </View>
           {/* 粉丝|关注|点赞 */}
           <View className={styles.userMessageList}>
@@ -299,7 +299,7 @@ class index extends Component {
             <Text>{user.isDeny ? '解除屏蔽' : '屏蔽'}</Text>
           </View>
         )}
-        {this.state.isPreviewAvatar && (
+        {user.avatarUrl && this.state.isPreviewAvatar && (
           <ImagePreviewer
             visible={this.state.isPreviewAvatar}
             onClose={this.handlePreviewAvatar}

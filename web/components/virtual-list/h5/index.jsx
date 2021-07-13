@@ -182,7 +182,7 @@ function VList(props, ref) {
       props.vlist.setPosition(scrollTop);
     }
     // if (scrollTop + (clientHeight * 4) >= scrollHeight && !loadData) {
-    if (((scrollTop + clientHeight + 1000) >= scrollHeight) && !loadData) {
+    if (((scrollTop + clientHeight + 1000) >= scrollHeight) && !loadData && !props.noMore) {
       loadData = true;
       if (props.loadNextPage) {
         const promise = props.loadNextPage();

@@ -21,6 +21,7 @@ const ClassifyPopup = (props) => {
   };
   const handleClick = (item) => {
     setSelected(item);
+    setChildren(item);
     if (item.children && !item.children.length) handleClose();
   };
   const handleChildClick = (item) => {
@@ -31,11 +32,12 @@ const ClassifyPopup = (props) => {
     handleClose();
   };
 
-  const setChildren = (item) => {
-    let categoryId = item.pid;
+  const setChildren = (item, child = {}) => {
+    let categoryId = child.pid || item.pid;
     if (item.children && typeofFn.isArray(item.children.slice()) && item.children.length > 0) {
       setCategoryChildren(item.children);
-      if (!selectedChild?.pid) {
+      if (child.pid) setSelectedChild(child);
+      if (!(child.pid || selectedChild?.pid)) {
         setSelectedChild(item.children[0]);
         categoryId = item.children[0]?.pid;
       }
@@ -54,7 +56,7 @@ const ClassifyPopup = (props) => {
     if (!parent?.pid) return;
     props?.threadPost?.setCategorySelected(categorySelected);
     setSelected(parent);
-    setSelectedChild(child);
+    setChildren(parent, child);
   };
 
   useEffect(() => {
@@ -72,9 +74,9 @@ const ClassifyPopup = (props) => {
     setSeletedCategory(props?.threadPost?.postData?.categoryId);
   }, [props?.threadPost?.postData?.categoryId]);
 
-  useEffect(() => {
-    setChildren(selected);
-  }, [selected]);
+  // useEffect(() => {
+  //   setChildren(selected);
+  // }, [selected]);
 
   const clsWrapper = pc ? classNames(styles.pc, styles.wrapper) : styles.wrapper;
 

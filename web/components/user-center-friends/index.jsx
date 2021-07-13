@@ -13,7 +13,7 @@ class UserCenterFriends extends React.Component {
     imgUrl: '',
     type: 'follow',
     withHeaderUserInfo: false,
-    userName: null,
+    nickName: null,
     userGroup: null,
     itemStyle: {},
     itemWrapperStyle: {},
@@ -153,12 +153,12 @@ class UserCenterFriends extends React.Component {
                 userId={this.props.id}
                 isShowUserInfo={this.props.withHeaderUserInfo}
                 circle
-                name={this.props.userName}
+                name={this.props.nickName}
               />
             </div>
             <div className={styles.friendTextInfo}>
               <div className={styles.friendName}>
-                <span title={this.props.userName}>{this.props.userName}</span>
+                <span title={this.props.nickName}>{this.props.nickName}</span>
               </div>
               <div className={styles.friendGroup}>
                 <span title={this.props.userGroup}>{this.props.userGroup}</span>

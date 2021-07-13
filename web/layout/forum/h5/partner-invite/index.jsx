@@ -16,6 +16,7 @@ import pclayout from './pc.module.scss';
 import mlayout from './index.module.scss';
 import browser from '@common/utils/browser';
 import clearLoginStatus from '@common/utils/clear-login-status';
+import LoginHelper from '@common/utils/login-helper';
 
 @inject('site')
 @inject('index')
@@ -66,7 +67,7 @@ class PartnerInviteH5Page extends React.Component {
   handleJoinSite = async () => {
     const { user, site, router } = this.props;
     if (!user?.isLogin()) {
-      router.push('/user/login');
+      LoginHelper.saveAndLogin();
       return;
     }
     const { setSite: { siteMode, sitePrice, siteName } = {} } = site.webConfig;
@@ -81,21 +82,21 @@ class PartnerInviteH5Page extends React.Component {
         success: async () => {
           await user.updateUserInfo(user.id);
           await site.getSiteInfo();
-          router.replace('/');
+          // 支付完成并更新状态数据后，HocWithNoPaid组件会自动将页面导向主页
         }, // 支付成功回调
         completed: (orderInfo) => {
         }, // 支付完成回调(成功或失败)
       });
-      return;
+    } else {
+      LoginHelper.restore();
     }
-    window.location.href = '/';
   }
 
   logout = () => {
     clearLoginStatus();
     this.props.user.removeUserInfo();
     this.props.site.webConfig.user = null;
-    this.props.router.push('/user/login');
+    LoginHelper.gotoLogin();
   }
 
   // 右侧 - 潮流话题 粉丝 版权信息
@@ -190,6 +191,15 @@ class PartnerInviteH5Page extends React.Component {
     );
   }
 
+  getBgHeaderStyle() {
+    const { site: { webConfig = {} } } = this.props;
+    const siteBackgroundImage = get(webConfig, 'setSite.siteBackgroundImage', '');
+
+    if (siteBackgroundImage) {
+      return { backgroundImage: `url(${siteBackgroundImage})` };
+    }
+  }
+
   contentHeader = () => {
     const { site: { platform, webConfig = {} } } = this.props;
     if (platform === 'h5') {
@@ -197,17 +207,18 @@ class PartnerInviteH5Page extends React.Component {
     }
     const siteAuthor = get(webConfig, 'setSite.siteAuthor.username', '');
     const siteInstall = get(webConfig, 'setSite.siteInstall', '');
+    const siteHeaderLogo = get(webConfig, 'setSite.siteHeaderLogo', '');
     // 兼容ios
     const [siteTimer] = siteInstall.split(' ');
     const startDate = Date.parse(siteTimer);
     const endDate = Date.parse(new Date());
     const createDays = numberFormat(parseInt(Math.abs(startDate  -  endDate) / 1000 / 60 / 60 / 24, 10));
     return (
-      <div className={pclayout.content_header}>
+      <div className={pclayout.content_header} style={{...this.getBgHeaderStyle()}}>
         <img
             className={pclayout.logo}
             mode="aspectFit"
-            src='/dzq-img/join-banner-bg.png'
+            src={siteHeaderLogo || '/dzq-img/join-banner-bg.png'}
         />
         <ul className={pclayout.joinInfo}>
           <li className={pclayout.item}>

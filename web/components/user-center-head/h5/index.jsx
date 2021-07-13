@@ -302,7 +302,7 @@ class index extends Component {
             <span>{user.isDeny ? '解除屏蔽' : '屏蔽'}</span>
           </div>
         )}
-        {this.state.isPreviewAvatar && (
+        {user.avatarUrl && this.state.isPreviewAvatar && (
           <ImagePreviewer
             visible={this.state.isPreviewAvatar}
             onClose={this.handlePreviewAvatar}
