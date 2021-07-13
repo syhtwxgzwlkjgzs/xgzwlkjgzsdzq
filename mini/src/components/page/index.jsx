@@ -33,29 +33,27 @@ export default class Page extends React.Component {
     disabledToast: false,
   };
 
-  constructor(props) {
-    super(props);
-    const { noWithLogin, withLogin, user, site } = this.props;
+  // 检查是否满足渲染条件
+  isPass(noWait = false) {
+    const { noWithLogin, withLogin, site, user, commonLogin } = this.props;
+    const path = getCurrentInstance().router.path;
+    const siteMode = site?.webConfig?.setSite?.siteMode;
+
     if (!site.isMiniProgramOpen) {
-      return;
+      return false;
     }
 
     // 是否必须登录
     if (withLogin && !user.isLogin()) {
       LoginHelper.saveAndLogin();
+      return false;
     }
 
     // 是否必须不登录
     if (noWithLogin && user.isLogin()) {
       Router.redirect({ url: INDEX_URL });
+      return false;
     }
-  }
-
-  // 检查是否满足渲染条件
-  isPass(noWait = false) {
-    const { site, user, commonLogin } = this.props;
-    const path = getCurrentInstance().router.path;
-    const siteMode = site?.webConfig?.setSite?.siteMode;
 
     if (site?.webConfig) {
       // 关闭站点
