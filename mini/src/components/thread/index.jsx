@@ -193,9 +193,7 @@ class Index extends React.Component {
       const { ability } = this.props.data || {};
       const { canViewPost } = ability;
 
-      if (canViewPost) {
-        return true
-      } else {
+      if (!canViewPost) {
         const isLogin = this.props.user.isLogin()
         if (!isLogin) {
           Toast.info({ content: '请先登录!' });
@@ -205,6 +203,8 @@ class Index extends React.Component {
         }
         return false
       }
+
+      return true
     }
 
     render() {
