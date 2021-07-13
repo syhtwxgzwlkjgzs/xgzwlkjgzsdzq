@@ -13,11 +13,21 @@
       border-radius: rem($border-radius-small);
       background: $body-bg-color;
       .replyListName {
-        font-size: rem($font-size-primary);
-        font-weight: bold;
-        line-height: rem(20);
-        text-align: left;
-        color: $text-color-primary;
+        display: flex;
+        justify-content: space-between;
+
+        .replyListName {
+          font-size: rem($font-size-primary);
+          font-weight: bold;
+          line-height: rem(20);
+          text-align: left;
+          color: $text-color-primary;
+        }
+        .isApproved {
+          font-size: $font-size-primary;
+          color: $error-color;
+          line-height: rem(20);
+        }
       }
       .replyListText {
         margin-top: rem($margin-1n);
