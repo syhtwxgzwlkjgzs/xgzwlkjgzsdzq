@@ -152,9 +152,41 @@ class SearchAction extends SearchStore {
           }
 
           type === 0 ? this.setIndexThreads(code === 0 ? data : {}) : this.setSearchThreads(code === 0 ? data : {});
+
+          this.getThreadListAgain({ firstRes: data, search, type })
         })
     }
   };
+
+  // 如果热门内容数量不够，需要再请求
+  @action
+  getThreadListAgain({ firstRes, search, type }) {
+    const ids = firstRes.pageData.map(item => item.threadId)
+
+    // 发现页的最多展示10条数据，发现结果页最多展示3条数据
+    const isContinue = type === 1 ? ids.length < 3 : ids.length < 10
+    if (!isContinue) {
+      return
+    }
+    
+    readThreadList({ params: { filter: { sort: '4', search, repeatedIds: ids }, perPage: 10, page: 2 } })
+    .then((res) => {
+      const { code, data, msg } = res;
+      if (code !== 0) {
+        if (type === 0) {
+          this.indexThreadsError = { isError: true, errorText: msg || '加载失败' }
+        } else {
+          this.searchThreadsError = { isError: true, errorText: msg || '加载失败' }
+        }
+      }
+
+      const pageData = [...firstRes.pageData, ...data.pageData]
+
+      const newData = {...data, pageData }
+
+      type === 0 ? this.setIndexThreads(code === 0 ? newData : {}) : this.setSearchThreads(code === 0 ? newData : {});
+    })
+}
 
   /**
    * 发现模块 - 更多话题
@@ -213,8 +245,8 @@ class SearchAction extends SearchStore {
  * @returns {object} 处理结果
  */
  @action
-  async getThreadList({ search = '', perPage = 10, page = 1, params = {} } = {}) {
-    const result = await readThreadList({ params: { sequence: '0', filter: { sort: '3', search }, perPage, page, ...params } });
+  async getThreadList({ sort = '3', repeatedIds = [], search = '', perPage = 10, page = 1, params = {} } = {}) {
+    const result = await readThreadList({ params: { sequence: '0', filter: { sort, search, repeatedIds }, perPage, page, ...params } });
 
     if (result.code === 0 && result.data) {
       if (this.threads && result.data.pageData && page !== 1) {
@@ -229,6 +261,8 @@ class SearchAction extends SearchStore {
       return result.data;
     } else {
       this.threadsError = { isError: true, errorText: result?.msg || '加载失败' }
+
+      return Promise.reject(result?.msg || '加载失败');
     }
   };
 
