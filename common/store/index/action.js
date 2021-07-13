@@ -2,6 +2,7 @@ import { action, computed } from 'mobx';
 import IndexStore from './store';
 import { readCategories, readStickList, readThreadList, updatePosts, createThreadShare, readRecommends } from '@server';
 import typeofFn from '@common/utils/typeof';
+import { isViewed, addViewed } from '@common/utils/viewed-in-storage';
 import threadReducer from '../thread/reducer';
 import { getCategoryName, getActiveId, getCategories, handleString2Arr } from '@common/utils/handleCategory'
 import replaceStringInRegex from '../../utils/replace-string-in-regex'
@@ -449,7 +450,10 @@ class IndexAction extends IndexStore {
 
     // 更新分享
     if (updateType === 'viewCount') {
-      data.viewCount = data.viewCount + 1;
+      if(!isViewed(data?.threadId)) {
+        data.viewCount = data.viewCount + 1;
+        addViewed(data?.threadId);
+      }
     }
 
     if (this.threads?.pageData) {
