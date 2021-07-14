@@ -117,7 +117,7 @@ class Detail extends React.Component {
       const { site, thread } = this.props;
       const { webConfig } = site;
       const { setSite } = webConfig;
-      const { siteFavicon, siteIntroduction } = setSite;
+      const { siteHeaderLogo, siteIntroduction } = setSite;
       const { threadData } = thread;
       const { content, title, user: threadUser, payType } = threadData;
       const { text, indexes } = content;
@@ -185,7 +185,7 @@ class Detail extends React.Component {
 
       const desc = siteIntroduction && siteIntroduction !== '' ? siteIntroduction : '在这里，发现更多精彩内容';
       const shareTitle = title && title !== '' ? title : setSpecialTitle(text, threadUser, indexes);
-      const shareImg = setShareImg(threadUser, text, indexes, siteFavicon);
+      const shareImg = setShareImg(threadUser, text, indexes, siteHeaderLogo);
       setWxShare(shareTitle, desc, window.location.href, shareImg);
     } catch (err) {
       console.error('设置分享错误', err);
