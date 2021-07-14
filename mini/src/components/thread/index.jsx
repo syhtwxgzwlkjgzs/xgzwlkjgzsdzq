@@ -310,6 +310,7 @@ class Index extends React.Component {
               getShareContent = {getShareContent}
               data={data}
               user={this.props.user}
+              updateViewCount={this.updateViewCount}
             />
             </>
           ) : <Skeleton style={{ minHeight: `${minHeight}px` }} />

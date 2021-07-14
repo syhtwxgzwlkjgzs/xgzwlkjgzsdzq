@@ -303,6 +303,7 @@ class Index extends React.Component {
             isSendingLike={this.state.isSendingLike}
             tipData={{ postId, threadId, platform, payType }}
             platform={platform}
+            updateViewCount={this.updateViewCount}
           />
         </div>
       );
