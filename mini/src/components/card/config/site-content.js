@@ -3,6 +3,7 @@ import { getByteLen } from '../utils';
 import rectangle from '../card-img/rectangle.png'
 import { posterWidth } from './constants';
 import lookMore from '../card-img/look-more.jpg';
+import browser from '../../../../../common/utils/browser'
 
 export const getContentConfig = ({baseHeight, data}) => {
     const maxLineNum = 6 // 最大高度1900，最大行数60行
@@ -55,10 +56,14 @@ const handleTitle = (baseHeight) => {
 const handleTitleImg = (baseHeight) => {
     // 站点介绍距离上方的距离
     const titleHeight = 32
+    let offset = 0
+    if(browser.env('android')) {
+        offset = 3
+    }
     return {
         url: titleImg,
         x: 32,
-        y: baseHeight + titleHeight,
+        y: baseHeight + titleHeight + 3 + offset,
         width: 28,
         height: 32,
         zIndex: 10,
@@ -70,7 +75,7 @@ const handleLines = (baseHeight) => {
     return {
         startX: 32,
         startY: lineHeight + baseHeight,
-        endX: 686,
+        endX: posterWidth - 32,
         endY: lineHeight + baseHeight,
         width: 2,
         color: '#eee'

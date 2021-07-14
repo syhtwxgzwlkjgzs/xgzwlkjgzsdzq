@@ -47,7 +47,6 @@ const handleBgc = (setSite) => {
             y: 0,
             width: posterWidth,
             height: 364,
-            borderRadius: 20,
             borderColor: '#fff',
             zIndex: 10
         };
@@ -57,7 +56,6 @@ const handleBgc = (setSite) => {
         y: 0,
         width: posterWidth,
         height: 364,
-        borderRadius: 20,
         borderColor: '#fff',
         backgroundColor: '#2469f6',
         zIndex: 10
