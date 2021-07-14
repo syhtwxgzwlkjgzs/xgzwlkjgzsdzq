@@ -3,19 +3,19 @@ import Icon from '@discuzq/design/dist/components/icon/index';
 import Popup from '@discuzq/design/dist/components/popup/index';
 import Button from '@discuzq/design/dist/components/button/index';
 import className from 'classnames';
+import { useDidShow } from '@tarojs/taro'
 import { View } from '@tarojs/components';
 import styles from './index.module.scss';
+import { inject, observer } from 'mobx-react';
 
 const InputPop = (props) => {
-  const { visible, onSubmit, onClose, onOperClick, permissions = {}, statuses = {}, shareData, isShowShare } = props;
-
+  const { visible, onSubmit, onClose, onOperClick, permissions = {}, statuses = {}, shareData, isShowShare, thread, user } = props;
   const { canEdit, canDelete, canEssence, canStick, canShare, canCollect, isAdmini } = permissions;
   const { isEssence, isStick, isCollect } = statuses;
-
   const [essence, setEssence] = useState(isEssence);
   const [stick, setStick] = useState(isStick);
   const [collect, setCollect] = useState(isCollect);
-
+  const threadId = thread.threadData.id
   const buttonNumber = useMemo(
     () => (isShowShare ? 2 : 1 + canEdit + canDelete + canEssence + canStick + canShare + canCollect),
     [canEdit, canDelete, canEssence, canStick, canShare, canCollect, isShowShare],
@@ -32,9 +32,27 @@ const InputPop = (props) => {
   useEffect(() => {
     setCollect(isCollect);
   }, [isCollect]);
-
+  const handleClick = () => {
+    onClose()
+    const {nickname} = thread.threadData.user || ''
+    const {avatar} = thread.threadData.user || ''
+    if(thread.threadData.isAnonymous) {
+        user.getShareData({nickname, avatar, threadId})
+        thread.threadData.user.nickname = '匿名用户'
+        thread.threadData.user.avatar = ''
+    }
+  }
+  useDidShow(() => {
+    if(user.shareThreadid === threadId) {
+        if(thread.threadData.isAnonymous){
+          thread.threadData.user.nickname = user.shareNickname
+          thread.threadData.user.avatar = user.shareAvatar
+            user.getShareData({})
+        }
+    }
+})
   return (
-    <Popup position="bottom" visible={visible} onClose={onClose} customScroll={true}>
+    <Popup position="bottom" visible={visible} onClose={onClose} customScroll>
       <View className={styles.body}>
         <View className={styles.container}>
           <View className={className(styles.more, buttonNumber < 5 && styles.flex)}>
@@ -103,7 +121,7 @@ const InputPop = (props) => {
                   className={className(styles.icon)}
                   openType="share"
                   data-shareData={shareData}
-                  onClick={onClose}
+                  onClick={handleClick}
                 >
                   <Icon className={styles.icon} size="20" name="WeChatOutlined"></Icon>
                 </Button>
@@ -122,7 +140,7 @@ const InputPop = (props) => {
         </View>
 
         <View className={styles.button}>
-          <Button full={true} onClick={onSubmit} className={styles.cancel} type="default">
+          <Button full onClick={onSubmit} className={styles.cancel} type="default">
             取消
           </Button>
         </View>
@@ -131,4 +149,4 @@ const InputPop = (props) => {
   );
 };
 
-export default InputPop;
+export default inject('user')(observer(InputPop));
