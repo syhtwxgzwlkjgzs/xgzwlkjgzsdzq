@@ -7,6 +7,7 @@ import PCPage from '@layout/my/draft/pc';
 import { THREAD_LIST_FILTER_COMPLEX } from '@common/constants/index';
 import { Toast } from '@discuzq/design';
 import { withRouter } from 'next/router';
+import ViewAdapter from '@components/view-adapter';
 
 @inject('site')
 @inject('index')
@@ -55,18 +56,27 @@ class Draft extends React.Component {
     const { site } = this.props;
     const { platform } = site;
 
-    if (platform === 'pc') {
-      return <PCPage
-        dispatch={this.fetchData}
-        onEdit={item => this.handleEdit(item)}
-        onDelete={item => this.handleDelete(item)}
-      />;
-    }
-    return <H5Page
-      dispatch={this.fetchData}
-      onEdit={item => this.handleEdit(item)}
-      onDelete={item => this.handleDelete(item)}
-    />;
+
+    return (
+      <ViewAdapter
+        h5={
+          <H5Page
+            dispatch={this.fetchData}
+            onEdit={item => this.handleEdit(item)}
+            onDelete={item => this.handleDelete(item)}
+          />
+        }
+        pc={
+          <PCPage
+            dispatch={this.fetchData}
+            onEdit={item => this.handleEdit(item)}
+            onDelete={item => this.handleDelete(item)}
+          />
+        }
+        title={`我的草稿箱`}
+      />
+    );
+
   }
 }
 
