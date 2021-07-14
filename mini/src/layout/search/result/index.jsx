@@ -25,7 +25,7 @@ class SearchResultPage extends React.Component {
     };
 
     // 进入页面时搜索
-    this.searchData(keyword);
+    // this.searchData(keyword);
   }
 
   redirectToSearchResultPost = () => {

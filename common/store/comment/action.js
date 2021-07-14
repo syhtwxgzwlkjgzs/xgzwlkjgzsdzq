@@ -124,6 +124,7 @@ class CommentAction extends CommentStore {
       const newTotalCount = totalCount + 1;
       ThreadStore && ThreadStore.setTotalCount(newTotalCount);
       const newData = res.data;
+      const isApproved = res.data.isApproved === 1;
       newData.lastThreeComments = [];
 
       // 头部添加评论
@@ -139,7 +140,8 @@ class CommentAction extends CommentStore {
       }
 
       return {
-        msg: '评论成功',
+        isApproved: isApproved,
+        msg: isApproved ? '评论成功' : '您发布的内容正在审核中',
         success: true,
       };
     }
@@ -192,8 +194,11 @@ class CommentAction extends CommentStore {
         }
       });
 
+      const isApproved = res.data.isApproved === 1;
+
       return {
-        msg: '评论成功',
+        isApproved: isApproved,
+        msg: isApproved ? '修改成功' : '您修改的内容正在审核中',
         success: true,
       };
     }
@@ -251,9 +256,11 @@ class CommentAction extends CommentStore {
 
       // 更新回复列表
       this.addReplyToList(res.data);
+      const isApproved = res.data.isApproved === 1;
 
       return {
-        msg: '回复成功',
+        isApproved: isApproved,
+        msg: isApproved ? '回复成功' : '您回复的内容正在审核中',
         success: true,
       };
     }
