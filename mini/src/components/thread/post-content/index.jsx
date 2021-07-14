@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import RichText from '@discuzq/design/dist/components/rich-text/index';
+import ImagePreviewer from '@discuzq/design/dist/components/rich-text/index';
 import { noop, handleLink } from '../utils'
 import Router from '@discuzq/sdk/dist/router';
 
@@ -36,6 +37,9 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
   const [contentTooLong, setContentTooLong] = useState(false); // 超过1200个字符
   const [cutContentForDisplay, setCutContentForDisplay] = useState('');
   const [showMore, setShowMore] = useState(false); // 根据文本长度显示"查看更多"
+  const [imageVisible, setImageVisible] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
+  const ImagePreviewerRef = useRef(null); // 富文本中的图片也要支持预览
   const contentWrapperRef = useRef(null);
 
   const texts = {
@@ -70,6 +74,22 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
       Router.push({url})
     } else {
       onRedirectToDetail()
+    }
+  }
+
+  // 显示图片的预览
+  useEffect(() => {
+    if (imageVisible && ImagePreviewerRef && ImagePreviewerRef.current) {
+      ImagePreviewerRef.current.show();
+    }
+  }, [imageVisible]);
+
+  // 点击富文本中的图片
+  const handleImgClick = (e) => {
+    updateViewCount();
+    if(e?.attribs?.src) {
+      setImageVisible(true);
+      setImageUrl(e.attribs.src);
     }
   }
 
@@ -117,8 +137,19 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
           <RichText
             content={(useShowMore && cutContentForDisplay) ? cutContentForDisplay : urlToLink(filterContent)}
             onClick={handleClick}
+            onImgClick={handleImgClick}
             transformer={transformer}
           />
+          {imageVisible && (
+            <ImagePreviewer
+              ref={ImagePreviewerRef}
+              onClose={() => {
+                setImageVisible(false);
+              }}
+              imgUrls={[imageUrl]}
+              currentUrl={imageUrl}
+            />
+          )}
         </View>
       </View>
       {useShowMore && showMore && (
