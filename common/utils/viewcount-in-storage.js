@@ -11,7 +11,7 @@ import { getViewCount } from '@server';
 const STORAGE_KEY = "__dzq_thread_viewed";
 const storage = new Storage({ storageType: "session" });
 
-const isViewed = (threadId = null) => {
+const getViewedPos = (threadId = null) => {
   if(!threadId) return -1;
   threadId += ''; // 统一为字符串
 
@@ -51,18 +51,17 @@ const isViewed = (threadId = null) => {
  *    }
  * }
  */
-const addViewed = (threadId = null) => {
+const addViewedThread = (threadId = null, threadIndex) => {
   if(!threadId) return ;
   threadId += ''; // 统一为字符串
 
-  const viewedIdx = isViewed(threadId);
   const viewedObj = JSON.parse(storage.get(STORAGE_KEY));
   const { threads } = viewedObj;
 
   if(!threads) return;
 
-  if(viewedIdx >= 0) { // 删掉已看过的帖子
-    threads.splice(viewedIdx, 1);
+  if(threadIndex >= 0) { // 删掉已看过的帖子
+    threads.splice(threadIndex, 1);
   }
   threads.push({ // 看过的帖子信息放在队列尾部
     id: threadId,
@@ -77,12 +76,13 @@ const updateViewCountInStores = async (threadId = null) => {
   if(!threadId) return ;
   threadId += ''; // 统一为字符串
   try {
-    if(isViewed(threadId) === -1) { // storage中没找到帖子
+    const viewedThreadPos = getViewedPos(threadId);
+    if(viewedThreadPos === -1) { // storage中没找到帖子
       // 更新后台数据
       const res = await getViewCount({ params: { threadId } });
       if(res.code === 0) {
         // 更新storage中浏览数据
-        addViewed(threadId);
+        addViewedThread(threadId, viewedThreadPos);
         return res.data.viewCount;
       } else {
         console.error(res?.msg);
@@ -96,4 +96,4 @@ const updateViewCountInStores = async (threadId = null) => {
 }
 
 
-export { isViewed, addViewed, updateViewCountInStores, STORAGE_KEY };
+export { updateViewCountInStores, STORAGE_KEY };
