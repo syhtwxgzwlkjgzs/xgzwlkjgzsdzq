@@ -41,6 +41,7 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
   const [imageUrl, setImageUrl] = useState("");
   const ImagePreviewerRef = useRef(null); // 富文本中的图片也要支持预览
   const contentWrapperRef = useRef(null);
+  const clickedImageId = useRef(null);
 
   const texts = {
     showMore: '查看更多',
@@ -66,32 +67,34 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
   }, [contentTooLong]);
 
   const handleClick = (e, node) => {
-    e && e.stopPropagation();
     const {url, isExternaLink } = handleLink(node)
     if(isExternaLink) return
 
     if (url) {
       Router.push({url})
     } else {
-      onRedirectToDetail()
+      if(clickedImageId.current !== e.target.id) {
+        onRedirectToDetail()
+      }
     }
   }
 
-  // // 显示图片的预览
-  // useEffect(() => {
-  //   if (imageVisible && ImagePreviewerRef && ImagePreviewerRef.current) {
-  //     ImagePreviewerRef.current.show();
-  //   }
-  // }, [imageVisible]);
+  // 显示图片的预览
+  useEffect(() => {
+    if (imageVisible && ImagePreviewerRef && ImagePreviewerRef.current) {
+      ImagePreviewerRef.current.show();
+    }
+  }, [imageVisible]);
 
-  // // 点击富文本中的图片
-  // const handleImgClick = (e) => {
-  //   updateViewCount();
-  //   if(e?.attribs?.src) {
-  //     setImageVisible(true);
-  //     setImageUrl(e.attribs.src);
-  //   }
-  // }
+  // 点击富文本中的图片
+  const handleImgClick = (node, event) => {
+    updateViewCount();
+    if(node?.attribs?.src) {
+      setImageVisible(true);
+      setImageUrl(node.attribs.src);
+      clickedImageId.current = event?.target?.id;
+    }
+  }
 
   // 超过1200个字符，截断文本用于显示
   const getCutContentForDisplay = (maxContentLength) => {
@@ -137,13 +140,13 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
           <RichText
             content={(useShowMore && cutContentForDisplay) ? cutContentForDisplay : urlToLink(filterContent)}
             onClick={handleClick}
-            // onImgClick={handleImgClick}
+            onImgClick={handleImgClick}
             transformer={transformer}
           />
           {imageVisible && (
             <ImagePreviewer
               ref={ImagePreviewerRef}
-              onClose={() => {
+              onComplete={() => {
                 setImageVisible(false);
               }}
               imgUrls={[imageUrl]}
