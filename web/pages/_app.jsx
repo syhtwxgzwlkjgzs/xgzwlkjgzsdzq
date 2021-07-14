@@ -91,6 +91,10 @@ class DzqApp extends App {
 
   // 每次跳转，重新进行微信分享设置：（分享规则：https://docs.qq.com/sheet/DYWpnQkZZZFR3YWN3）
   setWXShare(route) {
+    if (!(window.wx && window.wx.hasDoneConfig)) {
+      return;
+    }
+
     const { site, user: { userInfo } } = this.appStore;
     const { webConfig: { setSite } } = site;
     const { siteName, siteIntroduction, siteHeaderLogo } = setSite;
@@ -116,19 +120,21 @@ class DzqApp extends App {
       return;
     }
 
-    // 他人主页
+    // 他人主页 - 业务处理
     if (route.match(/\/user\/\d+/)) {
       return;
     }
 
     // 我的主页
     if (route === '/my') {
-      title = `${nickname}的主页`;
-      img = avatarUrl;
-      desc = signature ?
-      (signature.length > 35 ? `${signature.substr(0, 35)}...` : signature) :
-      '在这里，发现更多精彩内容';
-      link = `${window.location.origin}/user/${id}`;
+      if (nickname) {
+        title = `${nickname}的主页`;
+        img = avatarUrl;
+        desc = signature ?
+        (signature.length > 35 ? `${signature.substr(0, 35)}...` : signature) :
+        '在这里，发现更多精彩内容';
+        link = `${window.location.origin}/user/${id}`;
+      }
     }
 
     // 发现页
@@ -152,11 +158,8 @@ class DzqApp extends App {
       link = `${window.location.origin}/message`;
     }
 
-
     // 设置分享
     setWxShare(title, desc, link, img);
-    console.log(11111111111111111111111111111111111111, title, desc, link, img)
-
   }
 
   // 出错捕获
