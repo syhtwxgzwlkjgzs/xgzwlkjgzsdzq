@@ -131,7 +131,7 @@ export default function HOCFetchSiteData(Component, _isPass) {
         if (!siteConfig) {
           const result = await readForum({});
           result.data && site.setSiteConfig(result.data);
-          
+
           // 设置全局状态
           this.setAppCommonStatus(result);
           siteConfig = result.data || null;
@@ -169,13 +169,13 @@ export default function HOCFetchSiteData(Component, _isPass) {
       this.setState({ isPass: defaultPass });
 
       // 初始化分享配置
-      const isInit = await initWXSDK(siteConfig && siteConfig.passport && siteConfig.passport.offiaccountOpen);
-      if ( isInit && siteConfig && siteConfig.setSite ) {
-        const {setSite} = siteConfig;
-        const {siteName, siteIntroduction, siteFavicon} = setSite;
-        setWxShare(siteName, siteIntroduction, window.location.href, siteFavicon);
-      }
-      
+      // const isInit = await initWXSDK(siteConfig && siteConfig.passport && siteConfig.passport.offiaccountOpen);
+      // if ( isInit && siteConfig && siteConfig.setSite ) {
+      //   const {setSite} = siteConfig;
+      //   const {siteName, siteIntroduction, siteFavicon} = setSite;
+      //   setWxShare(siteName, siteIntroduction, window.location.href, siteFavicon);
+      // }
+
     }
 
     setAppCommonStatus(result) {
