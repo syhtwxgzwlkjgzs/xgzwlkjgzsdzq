@@ -205,7 +205,7 @@ class SearchPCPage extends React.Component {
             isError={indexThreadsError.isError}
             errorText={indexThreadsError.errorText}
           >
-            {threadsPageData?.map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />)}
+            {threadsPageData?.filter((_, index) => index < 10).map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />)}
           </SidebarPanel>
         </div>
       </div>

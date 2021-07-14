@@ -1,4 +1,8 @@
 import Router from '@discuzq/sdk/dist/router';
+import {
+  WEB_SITE_JOIN_WHITE_LIST,
+  MINI_SITE_JOIN_WHITE_LIST
+} from '@common/constants/site';
 
 // 记录用户访问的初始地址，用户登陆、付费等操作后跳回
 const JUMP_URL_LABEL = '__jump_url';
@@ -18,7 +22,7 @@ function isSessionStorage() {
 // 跳转地址校验(不合法地址，以及不需要跳转的地址在此处理)
 function validateUrl(url) {
   if (typeof url !== 'string') {
-    console.log('LoginHelper Error: the url is not a string', url);
+    console.error('LoginHelper Error: the url is not a string', url);
     return false;
   }
 
@@ -30,15 +34,26 @@ function validateUrl(url) {
         absUrl = `${window.location.origin}${url}`;
       }
 
-      const { pathname, hash, search } = new URL(absUrl);
-      return !(pathname === '/' && !hash && !search);
+      const { pathname } = new URL(absUrl);
+      // 我的 页面在白名单，需要记录
+      if (pathname.startsWith('/my')) {
+        return true;
+      }
+      
+      return !WEB_SITE_JOIN_WHITE_LIST.some(item => pathname.startsWith(item));
     } catch (err) {
       console.error('LoginHelper is setting a invalid url', url, absUrl, err);
       return false;
     }
-  }
+  } else {
+    const miniUrl = url.startsWith('/') ? url : `/${url}`;
 
-  return true;
+    // 我的 页面在白名单，需要记录
+    if (miniUrl.startsWith('/subPages/my/index')) {
+      return true;
+    }
+    return !MINI_SITE_JOIN_WHITE_LIST.some(item => miniUrl.startsWith(item));
+  }
 }
 
 // 获取当前的url
@@ -57,7 +72,6 @@ function getCurrentUrl() {
       url = `${route}?${Object.entries(options).map(([key, value]) => `${key}=${value}`).join('&')}`;
     }
   }
-  console.log('LoginHelper: getCurrentUrl', url);
 
   return url;
 }
@@ -72,13 +86,6 @@ class LoginHelper {
 
   // 记录地址
   setUrl = (url) => {
-    // 如果已存在跳转地址，不能在此写入，除非先清空
-    if (this.getUrl()) {
-      console.log('jump url already exists');
-      return false;
-    }
-
-    // 不带参数的首页地址，不做记录
     if (!validateUrl(url)) {
       return false;
     }
@@ -89,7 +96,6 @@ class LoginHelper {
     } else {
       this.url = url;
     }
-    console.log('LoginHelper: setUrl', url);
 
     return true;
   };
@@ -103,7 +109,6 @@ class LoginHelper {
     } else if (this.url) {
       url = `${this.url.startsWith('/') ? '' : '/'}${this.url}`;
     }
-    console.log('LoginHelper: getUrl', url);
 
     return url;
   };
@@ -115,7 +120,6 @@ class LoginHelper {
     } else {
       this.url = '';
     }
-    console.log('LoginHelper: clear');
   };
 
   gotoLogin = () => {
@@ -128,36 +132,29 @@ class LoginHelper {
     const url = getCurrentUrl();
 
     this.setUrl(url);
-    console.log('LoginHelper: saveCurrentUrl', url);
   };
 
   // 保存当前地址，并跳转目标地址targetUrl
-  saveAndRedirect = (targetUrl, isForce) => {
-    typeof isForce === 'boolean' && isForce && this.clear();
+  saveAndRedirect = (targetUrl) => {
     this.saveCurrentUrl();
 
     Router.redirect({
       url: targetUrl,
     });
-    console.log('LoginHelper: saveAndRedirect', targetUrl);
   };
 
   // 自动记录当前的地址，再跳转登录页
-  saveAndLogin = (isForce) => {
-    typeof isForce === 'boolean' && isForce && this.clear();
+  saveAndLogin = () => {
     this.saveCurrentUrl();
 
     this.gotoLogin();
-    console.log('LoginHelper: saveAndLogin');
   };
 
   // 指定登陆后跳转到redirectUrl页面(默认清空当前的记录的跳转地址)
   setAndLogin = (redirectUrl) => {
-    this.clear();
     this.setUrl(redirectUrl);
 
     this.gotoLogin();
-    console.log('LoginHelper: setAndLogin');
   };
 
   // 恢复登录前的跳转。优先级：记录页 > defaultPage > 主页
@@ -166,8 +163,16 @@ class LoginHelper {
 
     Router.redirect({ url });
     this.clear();
-    console.log('LoginHelper: restore', url);
   };
+
+  // 清空跳转，进入首页
+  gotoIndex = () => {
+    this.clear();
+
+    Router.redirect({
+      url: isWeb() ? HOME_PAGE_PC : HOME_PAGE_MINI,
+    });
+  }
 }
 
 export default new LoginHelper();

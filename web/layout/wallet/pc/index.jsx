@@ -45,6 +45,14 @@ class ThreadPCPage extends React.Component {
     await getUserWalletInfo();
   }
 
+  componentWillUnmount = async () => {
+    this.setState({
+      page: 1,
+      totalPage: 1,
+    });
+    this.props.wallet.resetInfo();
+  }
+
   initStateAndFetch = () => {
     this.setState(
       {
@@ -331,7 +339,8 @@ class ThreadPCPage extends React.Component {
           <Tabs
             className="wallet-tabs"
             activeType={this.state.activeType}
-            handleTriggerSelectedTypes={this.handleTriggerSelectedTypes} />
+            handleTriggerSelectedTypes={this.handleTriggerSelectedTypes}
+          />
         </div>
         <div className={layout.copyright}>
           <Copyright />
@@ -358,82 +367,93 @@ class ThreadPCPage extends React.Component {
         noMore={this.state.page > this.state.totalPage}
         className={`mywallet-page ${layout.container}`}
       >
-          <div className={layout.bodyLeft}>
-            <div className={layout.header}>
-              <div className={layout.headerTitle}>
-                {activeType === 'income' ? <Icon name="TicklerOutlined" size="20" color="#3ac15f"></Icon> : ''}
-                {activeType === 'pay' ? <Icon name="WallOutlined" size="20" color="#2469f6"></Icon> : ''}
-                {activeType === 'withdrawal' ? <Icon name="TransferOutOutlined" size="20" color="#e02433"></Icon> : ''}
-                <div className={activeType === 'frozen' ? '' : layout.title}>{recordType[activeType]}</div>
-              </div>
+        <div className={layout.bodyLeft}>
+          <div className={layout.header}>
+            <div className={layout.headerTitle}>
+              {activeType === 'income' ? <Icon name="TicklerOutlined" size="20" color="#3ac15f"></Icon> : ''}
+              {activeType === 'pay' ? <Icon name="WallOutlined" size="20" color="#2469f6"></Icon> : ''}
+              {activeType === 'withdrawal' ? <Icon name="TransferOutOutlined" size="20" color="#e02433"></Icon> : ''}
+              <div className={activeType === 'frozen' ? '' : layout.title}>{recordType[activeType]}</div>
             </div>
-            <div className={layout.choice}>
-              <div className={layout.choiceLeft}>
-                {!(activeType === 'frozen') && (
-                  <>
-                    <div className={layout.choiceType}>
-                      <DatePicker
-                        locale={zhCN}
-                        selected={this.state.consumptionTime}
-                        showMonthYearPicker
-                        maxDate={new Date()}
-                        onCalendarClose={() => {
-                          this.setState({
-                            datePickerOpen: false,
-                          });
-                        }}
-                        onCalendarOpen={() => {
-                          this.setState({
-                            datePickerOpen: true,
-                          });
-                        }}
-                        onChange={(date) => {
-                          this.setState(
-                            {
-                              consumptionTime: date,
-                            },
-                            () => {
-                              this.initStateAndFetch();
-                            },
-                          );
-                        }}
-                        dateFormat="yyyy年MM月"
-                      />
-                      <Icon
-                        name={'RightOutlined'}
-                        size={12}
-                        className={classnames(layout.datePickerIcon, {
-                          [layout.datePickerIconOpen]: this.state.datePickerOpen,
-                        })}
-                      />
-                    </div>
-                    <div className={layout.choiceType}>
-                      <Dropdown
-                        onChange={this.handleChangeSelectedType}
-                        placement="right"
-                        trigger="click"
-                        menu={this.renderDropdownMenu()}
-                      >
-                        <div>{this.renderSelectedType()}</div>
-                      </Dropdown>
-                    </div>
-                  </>
-                )}
-                {activeType === 'frozen' && (
-                  <div className={layout.frozenText}>
-                    <span>涉及金额</span>
-                    <span className={layout.frozenAmount}>{walletInfo.freezeAmount} 元</span>
+          </div>
+          <div className={layout.choice}>
+            <div className={layout.choiceLeft}>
+              {!(activeType === 'frozen') && (
+                <>
+                  <div className={layout.choiceType}>
+                    <DatePicker
+                      locale={zhCN}
+                      selected={this.state.consumptionTime}
+                      showMonthYearPicker
+                      maxDate={new Date()}
+                      onCalendarClose={() => {
+                        this.setState({
+                          datePickerOpen: false,
+                        });
+                      }}
+                      onCalendarOpen={() => {
+                        this.setState({
+                          datePickerOpen: true,
+                        });
+                      }}
+                      onChange={(date) => {
+                        this.setState(
+                          {
+                            consumptionTime: date,
+                          },
+                          () => {
+                            this.initStateAndFetch();
+                          },
+                        );
+                      }}
+                      dateFormat="yyyy年MM月"
+                    />
+                    <Icon
+                      name={'RightOutlined'}
+                      size={12}
+                      className={classnames(layout.datePickerIcon, {
+                        [layout.datePickerIconOpen]: this.state.datePickerOpen,
+                      })}
+                    />
                   </div>
-                )}
-              </div>
-              {this.state.totalCount !== null && (
-                <div className={layout.recordNumber}>共有{this.state.totalCount}条记录</div>
+                  <div className={layout.choiceType}>
+                    <Dropdown
+                      onChange={this.handleChangeSelectedType}
+                      placement="right"
+                      trigger="click"
+                      menu={this.renderDropdownMenu()}
+                    >
+                      <div>{this.renderSelectedType()}</div>
+                    </Dropdown>
+                  </div>
+                </>
+              )}
+              {activeType === 'frozen' && (
+                <div className={layout.frozenText}>
+                  <span>涉及金额</span>
+                  <span className={layout.frozenAmount}>{walletInfo.freezeAmount} 元</span>
+                </div>
               )}
             </div>
-            <RecordList data={this.getRecordData()} activeType={this.state.activeType}></RecordList>
+            {this.state.totalCount !== null && (
+              <div className={layout.recordNumber}>共有{this.state.totalCount}条记录</div>
+            )}
+          </div>
+          <RecordList data={this.getRecordData()} activeType={this.state.activeType}></RecordList>
         </div>
         {/* 提现弹框 */}
-        <WithdrawalPop visible={this.state.showWithdrawalPopup} onClose={this.onClose} />
+        <WithdrawalPop
+          onCreateCash={() => {
+            this.setState({
+              page: 1,
+              totalPage: 1,
+            });
+            this.props.wallet.resetInfo();
+            this.fetcher()
+          }}
+          visible={this.state.showWithdrawalPopup}
+          onClose={this.onClose}
+        />
       </BaseLayout>
     );
   }

@@ -396,11 +396,17 @@ class ThreadPCPage extends React.Component {
         });
     }
 
-    const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
+    const { success, msg, isApproved } = await this.props.comment.createComment(params, this.props.thread);
     if (success) {
-      Toast.success({
-        content: '评论成功',
-      });
+      if (isApproved) {
+        Toast.success({
+          content: msg,
+        });
+      } else {
+        Toast.warning({
+          content: msg,
+        });
+      }
 
       // 更新帖子中的评论数据
       this.props.thread.updatePostCount(this.props.thread.totalCount);
@@ -450,11 +456,17 @@ class ThreadPCPage extends React.Component {
         });
     }
 
-    const { success, msg } = await this.props.comment.updateComment(params, this.props.thread);
+    const { success, msg, isApproved } = await this.props.comment.updateComment(params, this.props.thread);
     if (success) {
-      Toast.success({
-        content: '修改成功',
-      });
+      if (isApproved) {
+        Toast.success({
+          content: msg,
+        });
+      } else {
+        Toast.warning({
+          content: msg,
+        });
+      }
       this.setState({
         showCommentInput: false,
       });

@@ -94,6 +94,9 @@ class CommentList extends React.Component {
 
   render() {
     const { canDelete, canEdit, canLike, canHide } = this.generatePermissions(this.props.data);
+
+    // 评论内容是否通过审核
+    const isApproved = this.props?.data?.isApproved === 1;
     return (
       <div className={`${styles.commentList} dzq-comment`}>
         <div className={styles.header}>
@@ -142,8 +145,15 @@ class CommentList extends React.Component {
           {/*评论内容*/}
           <div className={styles.commentListContent}>
             <div className={styles.commentListContentText}>
-              <div className={styles.commentListName} onClick={() => this.avatarClick()}>
-                {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
+              <div className={styles.commentHeader}>
+                <div className={styles.commentListName}>
+                  {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
+                </div>
+                {!isApproved ? (
+                  <div className={styles.isApproved}>审核中</div>
+                ) : (
+                  <div></div>
+                )}
               </div>
               <div className={classNames(styles.commentListText)}>
                 <PostContent
