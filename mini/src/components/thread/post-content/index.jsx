@@ -67,6 +67,7 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
   }, [contentTooLong]);
 
   const handleClick = (e, node) => {
+    e && e.stopPropagation();
     const {url, isExternaLink } = handleLink(node)
     if(isExternaLink) return
 
