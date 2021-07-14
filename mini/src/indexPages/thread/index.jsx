@@ -89,7 +89,7 @@ class Detail extends React.Component {
     // this.props.thread.reset();
 
     if (id) {
-      this.getPageDate(id);
+      await this.getPageDate(id);
       this.updateViewCount(id);
     }
   }
