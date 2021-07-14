@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import { inject, observer } from 'mobx-react';
 import { Icon, RichText, ImagePreviewer } from '@discuzq/design';
 import { noop } from '../utils';
 import classnames from 'classnames';
@@ -25,6 +26,8 @@ const PostContent = ({
   customHoverBg = false,
   usePointer = true,
   onOpen = noop,
+  updateViewCount = noop,
+  transformer = parsedDom => parsedDom,
   ...props
 }) => {
   // 内容是否超出屏幕高度
@@ -51,6 +54,7 @@ const PostContent = ({
   const onShowMore = useCallback(
     (e) => {
       e && e.stopPropagation();
+      updateViewCount();
       if (contentTooLong) {
         // 内容过长直接跳转到详情页面
         onRedirectToDetail && onRedirectToDetail();
@@ -80,6 +84,7 @@ const PostContent = ({
 
   // 点击富文本中的图片
   const handleImgClick = (e) => {
+    updateViewCount();
     if(e?.attribs?.src) {
       setImageVisible(true);
       setImageUrl(e.attribs.src);
@@ -129,6 +134,7 @@ const PostContent = ({
             content={useShowMore && cutContentForDisplay ? cutContentForDisplay : urlToLink(filterContent)}
             onClick={handleClick}
             onImgClick={handleImgClick}
+            transformer={transformer}
           />
           {imageVisible && (
             <ImagePreviewer

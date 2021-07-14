@@ -28,6 +28,8 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
   relativeToViewport = true,
   changeHeight = noop,
   setUseShowMore = noop,
+  updateViewCount = noop,
+  transformer = parsedDom => parsedDom,
   ...props
 }) => {
   // 内容是否超出屏幕高度
@@ -48,6 +50,7 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
 
   const onShowMore = useCallback((e) => {
     e && e.stopPropagation();
+    updateViewCount();
 
     if (contentTooLong) {
       // 内容过长直接跳转到详情页面
@@ -114,6 +117,7 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
           <RichText
             content={(useShowMore && cutContentForDisplay) ? cutContentForDisplay : urlToLink(filterContent)}
             onClick={handleClick}
+            transformer={transformer}
           />
         </View>
       </View>
