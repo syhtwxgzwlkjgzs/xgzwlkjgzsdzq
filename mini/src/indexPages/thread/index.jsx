@@ -8,6 +8,7 @@ import ThreadMiniPage from '@layout/thread/index';
 import withShare from '@common/utils/withShare/withShare';
 import ErrorMiniPage from '../../layout/error/index';
 import { priceShare } from '@common/utils/priceShare';
+import { updateViewCountInStores } from '@common/utils/viewcount-in-storage';
 
 // const MemoToastProvider = React.memo(ToastProvider);
 @inject('site')
@@ -58,8 +59,28 @@ class Detail extends React.Component {
     };
   }
 
+  updateViewCount = async (threadId) => {
+    const viewCount = await updateViewCountInStores(threadId);
+    if (viewCount) {
+      this.props.thread.updateViewCount(viewCount);
+      this.props.index.updateAssignThreadInfo(threadId, {
+        updateType: 'viewCount',
+        updatedInfo: { viewCount },
+      });
+      this.props.search.updateAssignThreadInfo(threadId, {
+        updateType: 'viewCount',
+        updatedInfo: { viewCount },
+      });
+      this.props.topic.updateAssignThreadInfo(threadId, {
+        updateType: 'viewCount',
+        updatedInfo: { viewCount },
+      });
+    }
+  };
+
   async componentDidShow() {
     const { id } = getCurrentInstance().router.params;
+    
     // 判断缓存
     // const oldId = this.props?.thread?.threadData?.threadId;
     // if (Number(id) === oldId && id && oldId) {
@@ -69,6 +90,7 @@ class Detail extends React.Component {
 
     if (id) {
       this.getPageDate(id);
+      this.updateViewCount(id);
     }
   }
 

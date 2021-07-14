@@ -12,10 +12,14 @@ import ViewAdapter from '@components/view-adapter';
 import { Toast } from '@discuzq/design';
 import setWxShare from '@common/utils/set-wx-share';
 import htmlToString from '@common/utils/html-to-string';
+import { updateViewCountInStores } from '@common/utils/viewcount-in-storage';
 
 @inject('site')
 @inject('thread')
 @inject('user')
+@inject('index')
+@inject('topic')
+@inject('search')
 @observer
 class Detail extends React.Component {
   static async getInitialProps(ctx) {
@@ -85,8 +89,28 @@ class Detail extends React.Component {
 
     if (id) {
       this.getPageDate(id);
+      this.updateViewCount(id);
     }
   }
+
+  updateViewCount = async (threadId) => {
+    const viewCount = await updateViewCountInStores(threadId);
+    if (viewCount) {
+      this.props.thread.updateViewCount(viewCount);
+      this.props.index.updateAssignThreadInfo(threadId, {
+        updateType: 'viewCount',
+        updatedInfo: { viewCount },
+      });
+      this.props.search.updateAssignThreadInfo(threadId, {
+        updateType: 'viewCount',
+        updatedInfo: { viewCount },
+      });
+      this.props.topic.updateAssignThreadInfo(threadId, {
+        updateType: 'viewCount',
+        updatedInfo: { viewCount },
+      });
+    }
+  };
 
   handleWeiXinShare = async () => {
     try {
@@ -103,7 +127,6 @@ class Detail extends React.Component {
           const contentStr = htmlToString(text);
           if (contentStr && contentStr !== '') return contentStr;
         }
-
 
         const arr = [];
         if (indexes['101']) arr.push('图片');
@@ -253,7 +276,14 @@ class Detail extends React.Component {
       );
     }
 
-    return <ViewAdapter h5={<ThreadH5Page />} pc={<ThreadPCPage />} title={this.props?.thread?.title || ''} showSiteName={showSiteName}/>;
+    return (
+      <ViewAdapter
+        h5={<ThreadH5Page />}
+        pc={<ThreadPCPage />}
+        title={this.props?.thread?.title || ''}
+        showSiteName={showSiteName}
+      />
+    );
   }
 }
 

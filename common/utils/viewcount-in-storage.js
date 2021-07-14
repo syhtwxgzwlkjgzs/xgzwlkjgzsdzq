@@ -26,7 +26,7 @@ const getViewedPos = (threadId = null) => {
   const viewedThreads = viewedObj.threads;
   for(let i = viewedThreads.length - 1; viewedThreads && i >= 0; i--) {
     const thread = viewedThreads[i];
-    if(thread.id === threadId) {
+    if(`${thread.id}` === `${threadId}`) {
       return i;
     }
   }
