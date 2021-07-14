@@ -77,21 +77,21 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
     }
   }
 
-  // 显示图片的预览
-  useEffect(() => {
-    if (imageVisible && ImagePreviewerRef && ImagePreviewerRef.current) {
-      ImagePreviewerRef.current.show();
-    }
-  }, [imageVisible]);
+  // // 显示图片的预览
+  // useEffect(() => {
+  //   if (imageVisible && ImagePreviewerRef && ImagePreviewerRef.current) {
+  //     ImagePreviewerRef.current.show();
+  //   }
+  // }, [imageVisible]);
 
-  // 点击富文本中的图片
-  const handleImgClick = (e) => {
-    updateViewCount();
-    if(e?.attribs?.src) {
-      setImageVisible(true);
-      setImageUrl(e.attribs.src);
-    }
-  }
+  // // 点击富文本中的图片
+  // const handleImgClick = (e) => {
+  //   updateViewCount();
+  //   if(e?.attribs?.src) {
+  //     setImageVisible(true);
+  //     setImageUrl(e.attribs.src);
+  //   }
+  // }
 
   // 超过1200个字符，截断文本用于显示
   const getCutContentForDisplay = (maxContentLength) => {
@@ -137,7 +137,7 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
           <RichText
             content={(useShowMore && cutContentForDisplay) ? cutContentForDisplay : urlToLink(filterContent)}
             onClick={handleClick}
-            onImgClick={handleImgClick}
+            // onImgClick={handleImgClick}
             transformer={transformer}
           />
           {imageVisible && (
