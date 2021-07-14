@@ -56,16 +56,24 @@ class Index extends React.Component {
       path
     }
   }
-  dispatch = async (type, data) => {
+
+  dispatch = async (type, keyword, params) => {
     const { search } = this.props;
+    const { repeatedIds = [] } = params || this.state || {}
 
     if (type === 'refresh') {
       this.page = 1;
       search.setThreads(null);
+      this.setState({ repeatedIds: [] })
     } else if (type === 'moreData') {
       this.page += 1;
     }
-    const res = await search.getThreadList({ search: data, perPage: this.perPage, page: this.page });
+
+    // 根据page值，动态设置sort
+    const sort = this.page === 1 ? '3' : '4'
+
+    const res = await search.getThreadList({ search: keyword, repeatedIds, sort, perPage: this.perPage, page: this.page });
+
     if (this.page === 1) {
       this.handleFirstRequest(res)
     }
