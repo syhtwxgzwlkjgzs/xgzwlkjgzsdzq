@@ -4,11 +4,11 @@ export default class Storage {
     this.storage = null;
 
     const isBrowser = typeof window !== 'undefined';
-      if(storageType === "local") {
-        this.storage = isBrowser ? window.localStorage : {};
-      } else {
-        this.storage = isBrowser ? window.sessionStorage : {};
-      }
+    if(storageType === "local") {
+      this.storage = isBrowser ? window.localStorage : {};
+    } else {
+      this.storage = isBrowser ? window.sessionStorage : {};
+    }
   }
 
   /**

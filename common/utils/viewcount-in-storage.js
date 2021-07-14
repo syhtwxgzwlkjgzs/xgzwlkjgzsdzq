@@ -9,10 +9,11 @@ import { getViewCount } from '@server';
  */
 
 const STORAGE_KEY = "__dzq_thread_viewed";
-const storage = new Storage({ storageType: "session" });
+const STORAGE_TYPE = "session";
+const storage = new Storage({ storageType: STORAGE_TYPE });
 
 const getViewedPos = (threadId = null) => {
-  if(!threadId) return -1;
+  if(!threadId || !storage) return -1;
   threadId += ''; // 统一为字符串
 
   const value = storage.get(STORAGE_KEY) || `{}`
@@ -52,7 +53,7 @@ const getViewedPos = (threadId = null) => {
  * }
  */
 const addViewedThread = (threadId = null, threadIndex) => {
-  if(!threadId) return ;
+  if(!threadId || !storage) return ;
   threadId += ''; // 统一为字符串
 
   const viewedObj = JSON.parse(storage.get(STORAGE_KEY));
@@ -97,4 +98,4 @@ const updateViewCountInStores = async (threadId = null) => {
 }
 
 
-export { updateViewCountInStores, STORAGE_KEY };
+export { updateViewCountInStores, STORAGE_KEY, STORAGE_TYPE };
