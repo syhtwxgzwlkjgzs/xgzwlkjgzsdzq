@@ -59,7 +59,7 @@ const handleTitleImg = (baseHeight) => {
     let offset = 0
     if(browser.env('android')) {
         offset = 3
-    }
+      }
     return {
         url: titleImg,
         x: 32,
@@ -85,10 +85,10 @@ const handleLines = (baseHeight) => {
 const handleSiteIntroduction = (data, baseHeight, maxLineNum) => {
     const textHeight = 146
     let {siteIntroduction} = data.webConfig?.setSite
-    const contentWidth = 646
+    const contentWidth = posterWidth - 64
     if(!siteIntroduction) {
         // siteIntroduction = '暂无介绍'
-        siteIntroduction =`Discuz！Q官方站点，是中文 PC 互联网最知名的社区开源软件 Discuz!，在过去 15 年间，服务过超过 200 万网站客户。其推出的 UCenter、SupeSite，ECshop 等组件所代表的产品理念对今天移动互联网各类产品的技术架构至今仍有着深远的影响，毫不夸张的说，Discuz! 代表了互联网 2.0 时代里社交网络的最初形态。`
+        siteIntroduction =`Discuz!Q官方站点，是中文 PC 互联网最知名的社区开源软件 Discuz!，在过去 15 年间，服务过超过 200 万网站客户。其推出的 UCenter、SupeSite，ECshop 等组件所代表的产品理念对今天移动互联网各类产品的技术架构至今仍有着深远的影响，毫不夸张的说，Discuz! 代表了互联网 2.0 时代里社交网络的最初形态。`
     }
     const length = getByteLen(siteIntroduction) * 14
     let lineNum = Math.ceil(length / contentWidth)

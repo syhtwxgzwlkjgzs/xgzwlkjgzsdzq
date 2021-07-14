@@ -22,6 +22,7 @@ import goToLoginPage from '@common/utils/go-to-login-page';
 
 @inject('site')
 @inject('user')
+@inject('index')
 @observer
 class HomeHeader extends React.Component {
   state = {
@@ -41,7 +42,7 @@ class HomeHeader extends React.Component {
     }
     return bgColor ? { background: bgColor } : { background: '#2469f6' };
   }
-
+  
   getLogo() {
     // 站点加入页面logo图片定制
     const { mode, site } = this.props;
@@ -147,7 +148,8 @@ class HomeHeader extends React.Component {
       digest = null,
       mode = '',
       site,
-      fullScreenTitle = ''
+      fullScreenTitle = '',
+      index
     } = this.props;
     const { visible } = this.state;
     const { countUsers, countThreads, siteAuthor, createDays } = this.getSiteInfo();
@@ -155,7 +157,7 @@ class HomeHeader extends React.Component {
       title: site.webConfig?.setSite?.siteName || '',
       path: 'pages/index/index',
     };
-
+    index.setHiddenTabBar(this.state.show)
     return (
         <View
           ref={this.domRef}
