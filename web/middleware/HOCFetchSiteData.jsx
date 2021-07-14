@@ -97,7 +97,7 @@ export default function HOCFetchSiteData(Component, _isPass) {
 
     constructor(props) {
       super(props);
-      this.setWXShare = this.setWXShare.bind(this);
+      this.handleWxShare = this.handleWxShare.bind(this);
 
       let isNoSiteData;
       const { serverUser, serverSite, user, site } = props;
@@ -176,15 +176,15 @@ export default function HOCFetchSiteData(Component, _isPass) {
 
         // 微信分享全局处理
         // step1: 初始化分享配置，需要等forum接口及offiaccount/jssdk接口返回并完成wx.config后执行
-        this.setWXShare(this.props.router.asPath);
+        this.handleWxShare(this.props.router.asPath);
         // step2: 路由守卫，每次路由变更后根据分享规则重新进行分享配置
-        this.props.router.events.on('routeChangeComplete', this.setWXShare);
+        this.props.router.events.on('routeChangeComplete', this.handleWxShare);
 
       }
     }
 
     // 每次跳转，重新进行微信分享设置：（分享规则：https://docs.qq.com/sheet/DYWpnQkZZZFR3YWN3）
-    setWXShare(route) {
+    handleWxShare(route) {
       if (!(window.wx && window.wx.hasDoneConfig)) {
         return;
       }
@@ -230,11 +230,6 @@ export default function HOCFetchSiteData(Component, _isPass) {
           '在这里，发现更多精彩内容';
           link = `${window.location.origin}/user/${id}`;
         }
-      }
-
-      // 发现页
-      if (route.includes('/search')) {
-        title = '在这里，发现更多热门内容';
       }
 
       // 注册、登录、付费加入页
