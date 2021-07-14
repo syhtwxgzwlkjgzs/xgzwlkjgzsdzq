@@ -40,8 +40,11 @@ class BindPhoneH5Page extends React.Component {
 
   componentWillUnmount() {
     // 卸载监听腾讯验证码事件
-    Taro.eventCenter.off('captchaResult', this.handleCaptchaResult)
-    Taro.eventCenter.off('closeChaReault', this.handleCloseChaReault)
+    Taro.eventCenter.off('captchaResult', this.handleCaptchaResult);
+    Taro.eventCenter.off('closeChaReault', this.handleCloseChaReault);
+    // 重置数据
+    this.props.mobileBind.reset();
+    this.props.commonLogin.reset();
   }
 
   // 验证码滑动成功的回调
@@ -94,7 +97,12 @@ class BindPhoneH5Page extends React.Component {
 
   handleBindButtonClick = async () => {
     try {
+      const { commonLogin} = this.props;
+      if (!commonLogin.loginLoading) {
+        return;
+      }
       const { sessionToken, from = '' } = getCurrentInstance().router.params;
+      commonLogin.setLoginLoading(false);
       const resp = await this.props.mobileBind.bind(sessionToken);
       const uid = get(resp, 'uid', '');
 
@@ -105,6 +113,7 @@ class BindPhoneH5Page extends React.Component {
       } else {
         this.props.user.updateUserInfo(uid);
       }
+      commonLogin.setLoginLoading(true);
 
       Toast.success({
         content: IS_FROM_BIND_SOURCE ? '绑定成功' : '登录成功',
@@ -121,6 +130,7 @@ class BindPhoneH5Page extends React.Component {
         }
       });
     } catch (e) {
+      this.props.commonLogin.setLoginLoading(true);
       // 注册信息补充
       if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
         if (isExtFieldsOpen(this.props.site)) {
@@ -161,7 +171,7 @@ class BindPhoneH5Page extends React.Component {
   };
 
   render() {
-    const { mobileBind } = this.props;
+    const { mobileBind, commonLogin: { loginLoading } } = this.props;
     return (
       <Page>
         <View className={layout.container}>
@@ -181,7 +191,7 @@ class BindPhoneH5Page extends React.Component {
               codeTimeout={mobileBind.codeTimeout}
             />
             {/* 输入框 end */}
-            <Button className={layout.button} type="primary" onClick={this.handleBindButtonClick}>
+            <Button className={layout.button} type="primary" loading={!loginLoading} onClick={this.handleBindButtonClick}>
               {(this.state.from === 'userCenter' || this.state.from === 'paybox') ? '绑定' : '下一步'}
             </Button>
             {

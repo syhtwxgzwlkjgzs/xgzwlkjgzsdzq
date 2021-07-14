@@ -12,6 +12,7 @@ import { View, Text } from '@tarojs/components';
 import Taro, { getCurrentInstance, eventCenter } from '@tarojs/taro';
 import SectionTitle from '@components/section-title';
 import BottomView from '@components/list/BottomView';
+import ImagePreviewer from '@discuzq/design/dist/components/image-previewer/index';
 
 @inject('site')
 @inject('user')
@@ -26,15 +27,22 @@ class H5OthersPage extends React.Component {
     // 因为这里的 onShow 的 flag 是路由，导致如果进入多个用户信息页面，重复触发了
     // 一个页面只负责一个用户 id，用此 flag 来解决重复加载的问题
     this.targetUserId = null;
+    this.isPreivewImage = null;
   }
 
   $instance = getCurrentInstance();
+
+  previewerRef = React.createRef(null);
 
   componentWillMount() {
     const onShowEventId = this.$instance.router.onShow;
     // 监听
     eventCenter.on(onShowEventId, this.onShow);
   }
+
+  updatePreviewImageStatus = (bol) => {
+    this.isPreivewImage = bol;
+  };
 
   onShow = async () => {
     const { id = '' } = getCurrentInstance().router.params;
@@ -52,6 +60,11 @@ class H5OthersPage extends React.Component {
       return;
     }
     if (this.targetUserId) {
+      // 如果是预览图片操作 就不需要重新更新状态
+      if (this.isPreivewImage) {
+        this.isPreivewImage = false;
+        return;
+      }
       this.setState({
         fetchUserInfoLoading: true,
       });
@@ -134,6 +147,28 @@ class H5OthersPage extends React.Component {
     );
   };
 
+  getBackgroundUrl = () => {
+    let backgroundUrl = null;
+    if (this.props.user?.targetOriginalBackGroundUrl) {
+      backgroundUrl = this.props.user.targetOriginalBackGroundUrl;
+    }
+    if (!backgroundUrl) return false;
+    return backgroundUrl;
+  };
+
+  showPreviewerRef = () => {
+    if (this.previewerRef.current) {
+      this.previewerRef.current.show();
+    }
+  };
+
+  handlePreviewBgImage = (e) => {
+    e && e.stopPropagation();
+    if (!this.getBackgroundUrl()) return;
+    this.isPreivewImage = true;
+    this.showPreviewerRef();
+  };
+
   render() {
     const { site, user } = this.props;
     const { platform } = site;
@@ -152,8 +187,14 @@ class H5OthersPage extends React.Component {
           {this.state.fetchUserInfoLoading && <BottomView isBox loadingText="加载中..." />}
           {!this.state.fetchUserInfoLoading && (
             <>
-              <UserCenterHeaderImage isOtherPerson={true} />
-              <UserCenterHead platform={platform} isOtherPerson={true} />
+              <View onClick={this.handlePreviewBgImage}>
+                <UserCenterHeaderImage isOtherPerson={true} />
+              </View>
+              <UserCenterHead
+                updatePreviewImageStatus={this.updatePreviewImageStatus}
+                platform={platform}
+                isOtherPerson={true}
+              />
             </>
           )}
 
@@ -179,6 +220,13 @@ class H5OthersPage extends React.Component {
             </View>
           </View>
         </View>
+        {this.getBackgroundUrl() && (
+          <ImagePreviewer
+            ref={this.previewerRef}
+            imgUrls={[this.getBackgroundUrl()]}
+            currentUrl={this.getBackgroundUrl()}
+          />
+        )}
       </BaseLayout>
     );
   }

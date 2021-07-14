@@ -29,6 +29,8 @@ class index extends Component {
     isOtherPerson: false, // 表示是否是其他人
   };
 
+  previewerRef = React.createRef(null);
+
   // 点击屏蔽
   handleChangeShield = throttle((isDeny) => {
     const { id } = getCurrentInstance().router.params;
@@ -69,6 +71,7 @@ class index extends Component {
             this.setState({
               isFollowedLoading: false,
             });
+            return;
           }
           await this.props.user.getTargetUserInfo(id);
           Toast.success({
@@ -103,6 +106,7 @@ class index extends Component {
             this.setState({
               isFollowedLoading: false,
             });
+            return;
           }
           await this.props.user.getTargetUserInfo(id);
           Toast.success({
@@ -131,7 +135,7 @@ class index extends Component {
     clearLoginStatus();
     this.props.user.removeUserInfo();
     this.props.site.getSiteInfo();
-    Router.reLaunch({ url: '/indexPages/home/index' });
+    Router.reLaunch({ url: '/subPages/forum/partner-invite/index' });
   };
 
   // 点击粉丝列表
@@ -197,12 +201,17 @@ class index extends Component {
     return { icon, text };
   };
 
+  showPreviewerRef = () => {
+    if (this.previewerRef.current) {
+      this.props.updatePreviewImageStatus && this.props.updatePreviewImageStatus(true);
+      this.previewerRef.current.show();
+    }
+  };
+
   // 点击头像预览
   handlePreviewAvatar = (e) => {
     e && e.stopPropagation();
-    this.setState({
-      isPreviewAvatar: !this.state.isPreviewAvatar,
-    });
+    this.showPreviewerRef();
   };
 
   render() {
@@ -212,8 +221,8 @@ class index extends Component {
       <View className={styles.h5box}>
         {/* 上 */}
         <View className={styles.h5boxTop}>
-          <View className={styles.headImgBox} onClick={this.handlePreviewAvatar}>
-            <Avatar image={user.avatarUrl} size="big" name={user.username} />
+          <View className={styles.headImgBox} onClick={user.avatarUrl && this.handlePreviewAvatar}>
+            <Avatar image={user.avatarUrl} size="big" name={user.nickname} />
           </View>
           {/* 粉丝|关注|点赞 */}
           <View className={styles.userMessageList}>
@@ -299,12 +308,11 @@ class index extends Component {
             <Text>{user.isDeny ? '解除屏蔽' : '屏蔽'}</Text>
           </View>
         )}
-        {this.state.isPreviewAvatar && (
+        {user.originalAvatarUrl && (
           <ImagePreviewer
-            visible={this.state.isPreviewAvatar}
-            onClose={this.handlePreviewAvatar}
-            imgUrls={[user.avatarUrl]}
-            currentUrl={user.avatarUrl}
+            ref={this.previewerRef}
+            imgUrls={[user.originalAvatarUrl]}
+            currentUrl={user.originalAvatarUrl}
           />
         )}
       </View>

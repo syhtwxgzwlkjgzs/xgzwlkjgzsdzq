@@ -396,11 +396,17 @@ class ThreadPCPage extends React.Component {
         });
     }
 
-    const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
+    const { success, msg, isApproved } = await this.props.comment.createComment(params, this.props.thread);
     if (success) {
-      Toast.success({
-        content: '评论成功',
-      });
+      if (isApproved) {
+        Toast.success({
+          content: msg,
+        });
+      } else {
+        Toast.warning({
+          content: msg,
+        });
+      }
 
       // 更新帖子中的评论数据
       this.props.thread.updatePostCount(this.props.thread.totalCount);
@@ -450,11 +456,17 @@ class ThreadPCPage extends React.Component {
         });
     }
 
-    const { success, msg } = await this.props.comment.updateComment(params, this.props.thread);
+    const { success, msg, isApproved } = await this.props.comment.updateComment(params, this.props.thread);
     if (success) {
-      Toast.success({
-        content: '修改成功',
-      });
+      if (isApproved) {
+        Toast.success({
+          content: msg,
+        });
+      } else {
+        Toast.warning({
+          content: msg,
+        });
+      }
       this.setState({
         showCommentInput: false,
       });
@@ -777,7 +789,10 @@ class ThreadPCPage extends React.Component {
     //   // newText = newText.replace(/\n/g, '');
     //   console.log(newText);
     // }
+    // 是否匿名
     const isAnonymous = threadStore?.threadData?.isAnonymous;
+    // 是否作者本人
+    const isSelf = this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === threadStore?.threadData?.userId;
     return (
       <div>
         <ShowTop showContent={this.props.thread?.threadData?.isStick} setTop={this.state.setTop}></ShowTop>
@@ -794,6 +809,7 @@ class ThreadPCPage extends React.Component {
           ready={() => this.onBaseLayoutReady()}
           rightClassName={classNames(layout.positionSticky, {
             'is-userinfo-show': !isAnonymous,
+            'is-operate-show': !isSelf,
           })}
           className="detail"
         >

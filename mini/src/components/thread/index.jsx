@@ -66,15 +66,11 @@ class Index extends React.Component {
     onComment = (e) => {
       e && e.stopPropagation();
 
-      const { threadId = '', ability } = this.props.data || {};
-      const { canViewPost } = ability;
-
-      // 没有查看权限，且未登录，需要去登录
-      if (!canViewPost && !this.props.user.isLogin()) {
-        Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/subPages/user/wx-auth/index' });
-        return;
+      if (!this.allowEnter()) {
+        return
       }
+
+      const { threadId = '' } = this.props.data || {};
 
       if (threadId !== '') {
         this.props.thread.positionToComment()
@@ -150,13 +146,11 @@ class Index extends React.Component {
     }, 1000);
 
     onClick = (e) => {
-      const { threadId = '', ability } = this.props.data || {};
-      const { canViewPost } = ability;
-
-      if (!canViewPost) {
-        Toast.info({ content: '暂无权限查看详情，请联系管理员' });
+      if (!this.allowEnter()) {
         return
       }
+
+      const { threadId = '' } = this.props.data || {};
 
       if (threadId !== '') {
         this.props.thread.isPositionToComment = false;
@@ -192,6 +186,25 @@ class Index extends React.Component {
 
       const { onClickIcon = noop } = this.props;
       onClickIcon(e)
+    }
+
+    // 判断能否进入详情逻辑
+    allowEnter = () => {
+      const { ability } = this.props.data || {};
+      const { canViewPost } = ability;
+
+      if (!canViewPost) {
+        const isLogin = this.props.user.isLogin()
+        if (!isLogin) {
+          Toast.info({ content: '请先登录!' });
+          goToLoginPage({ url: '/user/login' });
+        } else {
+          Toast.info({ content: '暂无权限查看详情，请联系管理员' });
+        }
+        return false
+      }
+
+      return true
     }
 
     render() {
