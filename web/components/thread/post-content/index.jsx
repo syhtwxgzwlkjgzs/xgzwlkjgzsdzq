@@ -27,6 +27,7 @@ const PostContent = ({
   usePointer = true,
   onOpen = noop,
   updateViewCount = noop,
+  transformer = parsedDom => parsedDom,
   ...props
 }) => {
   // 内容是否超出屏幕高度
@@ -133,6 +134,7 @@ const PostContent = ({
             content={useShowMore && cutContentForDisplay ? cutContentForDisplay : urlToLink(filterContent)}
             onClick={handleClick}
             onImgClick={handleImgClick}
+            transformer={transformer}
           />
           {imageVisible && (
             <ImagePreviewer
