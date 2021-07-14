@@ -111,7 +111,7 @@ class SearchH5Page extends React.Component {
           mold='plane'
         >
           {
-            threadsPageData?.map((item, index) => <ThreadContent data={item} key={index} />)
+            threadsPageData?.filter((_, index) => index < 10).map((item, index) => <ThreadContent data={item} key={index} />)
           }
         </SidebarPanel>
       </BaseLayout>
