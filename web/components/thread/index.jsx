@@ -13,6 +13,8 @@ import ThreadCenterView from './ThreadCenterView';
 import { throttle } from '@common/utils/throttle-debounce';
 import { debounce } from './utils';
 import { noop } from '@components/thread/utils';
+import { updateViewCountInStores } from '@common/utils/viewcount-in-storage';
+
 
 @inject('site')
 @inject('index')
@@ -51,6 +53,7 @@ class Index extends React.Component {
           this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
           this.props.user.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
 
+          this.updateViewCount();
           const { recomputeRowHeights = noop } = this.props;
           recomputeRowHeights();
         }
@@ -61,17 +64,15 @@ class Index extends React.Component {
     onComment = (e) => {
       e && e.stopPropagation();
 
-      const { threadId = '', ability } = this.props.data || {};
-      const { canViewPost } = ability;
-
-      // 没有查看权限，且未登录，需要去登录
-      if (!canViewPost && !this.props.user.isLogin()) {
-        Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/user/login' });
+      // 判断是否可以进入详情页
+      if (!this.allowEnter()) {
         return;
       }
 
+      const { threadId = '' } = this.props.data || {};
+
       if (threadId !== '') {
+        this.updateViewCount();
         this.props.thread.positionToComment();
         this.props.router.push(`/thread/${threadId}`);
       } else {
@@ -104,6 +105,7 @@ class Index extends React.Component {
           this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
           this.props.user.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
 
+          this.updateViewCount();
           const { recomputeRowHeights = noop } = this.props;
           recomputeRowHeights();
         }
@@ -140,6 +142,7 @@ class Index extends React.Component {
           this.props.topic.updatePayThreadInfo(thread?.threadId, data)
           this.props.user.updatePayThreadInfo(thread?.threadId, data)
 
+          this.updateViewCount();
           const { recomputeRowHeights = noop } = this.props;
           recomputeRowHeights(data);
         }
@@ -158,22 +161,18 @@ class Index extends React.Component {
     }
 
     onClick = throttle(() => {
-
-      const { threadId = '', ability } = this.props.data || {};
-      const { canViewPost } = ability;
-
-      if (!canViewPost) {
-        Toast.info({ content: '暂无权限查看详情，请联系管理员' });
+      // 判断是否可以进入详情页
+      if (!this.allowEnter()) {
         return;
       }
+
+      const { threadId = '' } = this.props.data || {};
 
       if (threadId !== '') {
         this.props.thread.isPositionToComment = false;
         this.props.router.push(`/thread/${threadId}`);
 
-        this.props.index.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
-        this.props.search.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
-        this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
+        this.updateViewCount();
       } else {
         console.log('帖子不存在');
       }
@@ -199,6 +198,34 @@ class Index extends React.Component {
 
       const { recomputeRowHeights = noop } = this.props;
       recomputeRowHeights();
+    }
+
+    // 判断能否进入详情逻辑
+    allowEnter = () => {
+      const { ability } = this.props.data || {};
+      const { canViewPost } = ability;
+
+      if (!canViewPost) {
+        const isLogin = this.props.user.isLogin()
+        if (!isLogin) {
+          Toast.info({ content: '请先登录!' });
+          goToLoginPage({ url: '/user/login' });
+        } else {
+          Toast.info({ content: '暂无权限查看详情，请联系管理员' });
+        }
+        return false
+      }
+      return true
+    }
+
+    updateViewCount = async () => {
+      const { threadId = '' } = this.props.data || {};
+      const viewCount = await updateViewCountInStores(threadId);
+      if(viewCount) {
+        this.props.index.updateAssignThreadInfo(threadId, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
+        this.props.search.updateAssignThreadInfo(threadId, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
+        this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
+      }
     }
 
     render() {
@@ -261,6 +288,7 @@ class Index extends React.Component {
             onPay={unifyOnClick || this.onPay}
             platform={platform}
             onOpen={this.onOpen}
+            updateViewCount={this.updateViewCount}
           />
 
           <BottomEvent

@@ -35,6 +35,7 @@ const Index = ({
   v_width = null,
   v_height = null,
   relativeToViewport = true,
+  updateViewCount = noop,
 }) => {
   let player = null;
   const videoId = useRef(`video${randomStr()}`);
@@ -46,6 +47,7 @@ const Index = ({
   };
 
   const onPlay = (e) => {
+    updateViewCount();
     if(baselayout) {
 
       // 暂停之前正在播放的视频
