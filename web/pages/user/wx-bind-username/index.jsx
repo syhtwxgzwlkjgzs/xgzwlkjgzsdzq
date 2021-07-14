@@ -12,7 +12,7 @@ class WXBindUsername extends React.Component {
     return <ViewAdapter
               h5={<WXBindUsernameH5Page/>}
               pc={<></>}
-              title={`微信绑定用户名 - ${this.props.site?.siteName}`}
+              title={`微信绑定用户名`}
             />;
   }
 }
