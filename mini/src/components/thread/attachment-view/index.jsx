@@ -28,6 +28,7 @@ const Index = ({
   user = null,
   threadId = null,
   thread = null,
+  updateViewCount = noop,
 }) => {
   // 处理文件大小的显示
   const handleFileSize = (fileSize) => {
@@ -73,7 +74,7 @@ const Index = ({
         useState(Array.from({length: attachments.length}, () => false));
 
   const onDownLoad = (item, index) => {
-
+    updateViewCount();
     if (!isPay) {
 
       // 下载中
@@ -132,6 +133,7 @@ const Index = ({
   };
 
   const onLinkShare = (item, index) => {
+    updateViewCount();
     if (!isPay) {
       if(!item || !threadId) return;
 

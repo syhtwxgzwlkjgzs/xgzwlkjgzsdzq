@@ -96,15 +96,17 @@ class UserAction extends SiteStore {
       const originBackgroundFilename = this.backgroundUrl?.split('?')[0];
       const nextBackgroundFilename = data.backgroundUrl?.split('?')[0];
 
+      if (originBackgroundFilename === nextBackgroundFilename) {
+        transformedData.backgroundUrl = this.backgroundUrl;
+      }
+    }
+
+    if (data.avatarUrl && this.avatarUrl) {
       const originAvatarFilename = this.avatarUrl?.split('?')[0];
       const nextAvatarFilename = data.avatarUrl?.split('?')[0];
 
       if (originAvatarFilename === nextAvatarFilename) {
         transformedData.avatarUrl = this.avatarUrl;
-      }
-
-      if (originBackgroundFilename === nextBackgroundFilename) {
-        transformedData.backgroundUrl = this.backgroundUrl;
       }
     }
 
@@ -124,12 +126,38 @@ class UserAction extends SiteStore {
     return userInfo?.code === 0 && userInfo.data;
   }
 
+  @action
+  diffPicAndUpdateTargetUserInfo(data) {
+    const transformedData = Object.assign({}, data);
+
+    // 如下操作是为了避免因为签名导致的图片重加载问题
+    if (data.backgroundUrl && this.targetUserBackgroundUrl) {
+      const originBackgroundFilename = this.targetUserBackgroundUrl?.split('?')[0];
+      const nextBackgroundFilename = data.backgroundUrl?.split('?')[0];
+
+      if (originBackgroundFilename === nextBackgroundFilename) {
+        transformedData.backgroundUrl = this.targetUserBackgroundUrl;
+      }
+    }
+
+    if (data.avatarUrl && this.targetUserAvatarUrl) {
+      const originAvatarFilename = this.targetUserAvatarUrl?.split('?')[0];
+      const nextAvatarFilename = data.avatarUrl?.split('?')[0];
+
+      if (originAvatarFilename === nextAvatarFilename) {
+        transformedData.avatarUrl = this.targetUserAvatarUrl;
+      }
+    }
+
+    return transformedData;
+  }
+
   // 获取指定用户的用户信息，用于获取他人首页
   @action
   async getTargetUserInfo(id) {
     this.targetUserId = id;
     const userInfo = await this.getAssignUserInfo(id);
-    this.targetUser = userInfo;
+    this.targetUser = this.diffPicAndUpdateTargetUserInfo(userInfo);
     return userInfo;
   }
 

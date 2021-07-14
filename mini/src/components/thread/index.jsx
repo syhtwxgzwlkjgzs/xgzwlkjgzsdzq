@@ -15,6 +15,7 @@ import { View, Text } from '@tarojs/components'
 import { getImmutableTypeHeight } from './getHeight'
 import { getElementRect, randomStr } from './utils'
 import Skeleton from './skeleton';
+import { updateViewCountInStores } from '@common/utils/viewcount-in-storage';
 
 @inject('site')
 @inject('index')
@@ -73,6 +74,7 @@ class Index extends React.Component {
       const { threadId = '' } = this.props.data || {};
 
       if (threadId !== '') {
+        this.updateViewCount();
         this.props.thread.positionToComment()
         Router.push({url: `/indexPages/thread/index?id=${threadId}`})
       } else {
@@ -103,6 +105,8 @@ class Index extends React.Component {
           this.props.search.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
           this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
           this.props.user.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
+
+          this.updateViewCount();
         }
         this.setState({isSendingLike: false});
       });
@@ -138,6 +142,8 @@ class Index extends React.Component {
           this.props.search.updatePayThreadInfo(thread?.threadId, data)
           this.props.topic.updatePayThreadInfo(thread?.threadId, data)
           this.props.user.updatePayThreadInfo(thread?.threadId, data)
+
+          this.updateViewCount();
           if(typeof this.props.dispatch === "function") {
             this.props.dispatch(thread?.threadId, data);
           }
@@ -156,9 +162,7 @@ class Index extends React.Component {
         this.props.thread.isPositionToComment = false;
         Router.push({url: `/indexPages/thread/index?id=${threadId}`})
 
-        this.props.index.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
-        this.props.search.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
-        this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
+        this.updateViewCount();
       } else {
         console.log('帖子不存在');
       }
@@ -203,8 +207,17 @@ class Index extends React.Component {
         }
         return false
       }
-
       return true
+    }
+
+    updateViewCount = async () => {
+      const { threadId = '' } = this.props.data || {};
+      const viewCount = await updateViewCountInStores(threadId);
+      if(viewCount) {
+        this.props.index.updateAssignThreadInfo(threadId, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
+        this.props.search.updateAssignThreadInfo(threadId, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
+        this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
+      }
     }
 
     render() {
@@ -272,6 +285,7 @@ class Index extends React.Component {
               useShowMore={useShowMore}
               setUseShowMore={this.setUseShowMore}
               videoH={videoH}
+              updateViewCount={this.updateViewCount}
             />
 
             <BottomEvent
@@ -296,6 +310,7 @@ class Index extends React.Component {
               getShareContent = {getShareContent}
               data={data}
               user={this.props.user}
+              updateViewCount={this.updateViewCount}
             />
             </>
           ) : <Skeleton style={{ minHeight: `${minHeight}px` }} />

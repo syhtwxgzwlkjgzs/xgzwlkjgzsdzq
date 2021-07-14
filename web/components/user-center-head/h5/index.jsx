@@ -9,6 +9,7 @@ import { withRouter } from 'next/router';
 import { numberFormat } from '@common/utils/number-format';
 import browser from '@common/utils/browser';
 import throttle from '@common/utils/thottle.js';
+import LoginHelper from '@common/utils/login-helper.js';
 
 @inject('user')
 @inject('site')
@@ -131,7 +132,7 @@ class index extends Component {
 
   logout = () => {
     clearLoginStatus();
-    window.location.replace('/');
+    LoginHelper.gotoIndex();
   };
 
   // 点击粉丝列表

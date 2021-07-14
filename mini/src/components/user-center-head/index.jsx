@@ -12,6 +12,7 @@ import { getCurrentInstance } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
 import throttle from '@common/utils/thottle.js';
+import LoginHelper from '@common/utils/login-helper';
 
 @inject('site')
 @inject('user')
@@ -135,7 +136,12 @@ class index extends Component {
     clearLoginStatus();
     this.props.user.removeUserInfo();
     this.props.site.getSiteInfo();
-    Router.reLaunch({ url: '/subPages/forum/partner-invite/index' });
+    Router.reLaunch({ 
+      url: '/subPages/forum/partner-invite/index',
+      success: () => {
+        LoginHelper.clear();
+      }
+    });
   };
 
   // 点击粉丝列表

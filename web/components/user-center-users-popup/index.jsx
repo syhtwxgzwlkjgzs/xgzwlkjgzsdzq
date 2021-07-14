@@ -41,9 +41,9 @@ const Index = (props) => {
           </div>
           <div className={styles.titleHr}></div>
           {!id ? (
-            <UserCenterUsers onContainerClick={onContainerClick} />
+            <UserCenterUsers style={{ height: 'calc(100% - 60px)' }} onContainerClick={onContainerClick} />
           ) : (
-            <UserCenterUsers userId={id} onContainerClick={onContainerClick} />
+            <UserCenterUsers style={{ height: 'calc(100% - 60px)' }} userId={id} onContainerClick={onContainerClick} />
           )}
         </div>
       </div>
