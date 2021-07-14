@@ -169,7 +169,7 @@ export default function HOCFetchSiteData(Component, _isPass) {
       this.setState({ isPass: defaultPass });
 
       // 初始化分享配置
-      // const isInit = await initWXSDK(siteConfig && siteConfig.passport && siteConfig.passport.offiaccountOpen);
+      const isInit = await initWXSDK(siteConfig && siteConfig.passport && siteConfig.passport.offiaccountOpen);
       // if ( isInit && siteConfig && siteConfig.setSite ) {
       //   const {setSite} = siteConfig;
       //   const {siteName, siteIntroduction, siteFavicon} = setSite;
