@@ -35,14 +35,24 @@ function validateUrl(url) {
       }
 
       const { pathname } = new URL(absUrl);
-      return !WEB_SITE_JOIN_WHITE_LIST.some(url => pathname.includes(url));
+      // 我的 页面在白名单，需要记录
+      if (pathname.startsWith('/my')) {
+        return true;
+      }
+      
+      return !WEB_SITE_JOIN_WHITE_LIST.some(item => pathname.startsWith(item));
     } catch (err) {
       console.error('LoginHelper is setting a invalid url', url, absUrl, err);
       return false;
     }
   } else {
     const miniUrl = url.startsWith('/') ? url : `/${url}`;
-    return !MINI_SITE_JOIN_WHITE_LIST.some(url => miniUrl.includes(url));
+
+    // 我的 页面在白名单，需要记录
+    if (miniUrl.startsWith('/subPages/my/index')) {
+      return true;
+    }
+    return !MINI_SITE_JOIN_WHITE_LIST.some(item => miniUrl.startsWith(item));
   }
 }
 
@@ -77,13 +87,6 @@ class LoginHelper {
 
   // 记录地址
   setUrl = (url) => {
-    // 如果已存在跳转地址，不能在此写入，除非先清空
-    // if (this.getUrl()) {
-    //   console.log('jump url already exists');
-    //   return false;
-    // }
-
-    // 不带参数的首页地址，不做记录
     if (!validateUrl(url)) {
       return false;
     }
@@ -170,6 +173,15 @@ class LoginHelper {
     this.clear();
     console.log('LoginHelper: restore', url);
   };
+
+  // 清空跳转，进入首页
+  gotoIndex = () => {
+    this.clear();
+
+    Router.redirect({
+      url: isWeb() ? HOME_PAGE_PC : HOME_PAGE_MINI,
+    });
+  }
 }
 
 export default new LoginHelper();
