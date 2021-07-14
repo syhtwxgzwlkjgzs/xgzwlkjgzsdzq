@@ -22,7 +22,7 @@ function isSessionStorage() {
 // 跳转地址校验(不合法地址，以及不需要跳转的地址在此处理)
 function validateUrl(url) {
   if (typeof url !== 'string') {
-    console.log('LoginHelper Error: the url is not a string', url);
+    console.error('LoginHelper Error: the url is not a string', url);
     return false;
   }
 
@@ -72,7 +72,6 @@ function getCurrentUrl() {
       url = `${route}?${Object.entries(options).map(([key, value]) => `${key}=${value}`).join('&')}`;
     }
   }
-  console.log('LoginHelper: getCurrentUrl', url);
 
   return url;
 }
@@ -97,7 +96,6 @@ class LoginHelper {
     } else {
       this.url = url;
     }
-    console.log('LoginHelper: setUrl', url);
 
     return true;
   };
@@ -111,7 +109,6 @@ class LoginHelper {
     } else if (this.url) {
       url = `${this.url.startsWith('/') ? '' : '/'}${this.url}`;
     }
-    console.log('LoginHelper: getUrl', url);
 
     return url;
   };
@@ -123,7 +120,6 @@ class LoginHelper {
     } else {
       this.url = '';
     }
-    console.log('LoginHelper: clear');
   };
 
   gotoLogin = () => {
@@ -136,7 +132,6 @@ class LoginHelper {
     const url = getCurrentUrl();
 
     this.setUrl(url);
-    console.log('LoginHelper: saveCurrentUrl', url);
   };
 
   // 保存当前地址，并跳转目标地址targetUrl
@@ -146,7 +141,6 @@ class LoginHelper {
     Router.redirect({
       url: targetUrl,
     });
-    console.log('LoginHelper: saveAndRedirect', targetUrl);
   };
 
   // 自动记录当前的地址，再跳转登录页
@@ -154,7 +148,6 @@ class LoginHelper {
     this.saveCurrentUrl();
 
     this.gotoLogin();
-    console.log('LoginHelper: saveAndLogin');
   };
 
   // 指定登陆后跳转到redirectUrl页面(默认清空当前的记录的跳转地址)
@@ -162,7 +155,6 @@ class LoginHelper {
     this.setUrl(redirectUrl);
 
     this.gotoLogin();
-    console.log('LoginHelper: setAndLogin');
   };
 
   // 恢复登录前的跳转。优先级：记录页 > defaultPage > 主页
@@ -171,7 +163,6 @@ class LoginHelper {
 
     Router.redirect({ url });
     this.clear();
-    console.log('LoginHelper: restore', url);
   };
 
   // 清空跳转，进入首页
