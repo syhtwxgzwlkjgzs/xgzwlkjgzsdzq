@@ -207,6 +207,7 @@ class Index extends React.Component {
         }
         return false
       }
+      return true
     }
 
     updateViewCount = async () => {
