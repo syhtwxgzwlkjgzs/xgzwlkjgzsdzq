@@ -462,10 +462,10 @@ class SearchAction extends SearchStore {
           data.likeReward.shareCount = data.likeReward.shareCount + 1;
         }
 
-        // 更新帖子浏览量
-        if (updateType === 'viewCount') {
-          data.viewCount = updatedInfo.viewCount;
-        }
+        // // 更新帖子浏览量
+        // if (updateType === 'viewCount') {
+        //   data.viewCount = updatedInfo.viewCount;
+        // }
 
         if (store.pageData) {
           store.pageData[index] = data;
