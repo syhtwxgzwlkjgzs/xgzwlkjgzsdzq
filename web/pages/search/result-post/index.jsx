@@ -66,13 +66,13 @@ class Index extends React.Component {
     const res = await search.getThreadList({ search: keyword, repeatedIds, sort, perPage: this.perPage, page: this.page });
 
     if (this.page === 1) {
-      this.handleFirstRequest(res)
+      this.handleFirstRequest(res, keyword)
     }
 
     return;
   }
 
-  handleFirstRequest = (res) => {
+  handleFirstRequest = (res, keyword = '') => {
     if (!res) {
       return
     }

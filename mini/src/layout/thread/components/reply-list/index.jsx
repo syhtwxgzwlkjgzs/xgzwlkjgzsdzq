@@ -104,6 +104,10 @@ export default class ReplyList extends React.Component {
     return parsedDom;
   };
 
+  toCommentDetail = () => {
+    typeof this.props.toCommentDetail === 'function' && this.props.toCommentDetail()
+  }
+
   render() {
     const { canLike, canDelete, canHide } = this.generatePermissions(this.props.data);
 
@@ -144,6 +148,7 @@ export default class ReplyList extends React.Component {
               {/* 回复内容 */}
               <View className={classNames(styles.content)}>
                 <PostContent
+                  onRedirectToDetail={() => this.toCommentDetail()}
                   useShowMore={!!this.props.isShowOne}
                   content={this.props?.data?.content}
                   customHoverBg={true}

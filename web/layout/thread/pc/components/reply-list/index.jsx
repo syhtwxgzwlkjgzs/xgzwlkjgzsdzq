@@ -50,6 +50,10 @@ export default class ReplyList extends React.Component {
     typeof this.props.avatarClick === 'function' && this.props.avatarClick(floor);
   }
 
+  toCommentDetail = () => {
+    typeof this.props.toCommentDetail === 'function' && this.props.toCommentDetail()
+  }
+
   generatePermissions(data = {}) {
     return {
       canApprove: data.canApprove || false,
@@ -125,6 +129,7 @@ export default class ReplyList extends React.Component {
             <div className={styles.replyListText}>
               <div className={classnames(styles.content)}>
                 <PostContent
+                  onRedirectToDetail={() => this.toCommentDetail()}
                   useShowMore={!!this.props.isShowOne}
                   content={this.props?.data?.content}
                   customHoverBg={true}
