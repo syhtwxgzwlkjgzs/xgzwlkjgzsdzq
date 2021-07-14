@@ -67,9 +67,11 @@ class DzqApp extends App {
     this.listenRouterChangeAndClean();
     this.props.router.events.on('routeChangeStart', this.setWXShare);
 
-    window.addEventListener("beforeunload", () => {
-      if(STORAGE_TYPE === "session") sessionStorage.removeItem(STORAGE_KEY);
-    });
+    if (!isServer()) {
+      window.addEventListener("beforeunload", () => {
+        if(STORAGE_TYPE === "session") sessionStorage.removeItem(STORAGE_KEY);
+      });
+    }
   }
 
   componentWillUnmount() {
