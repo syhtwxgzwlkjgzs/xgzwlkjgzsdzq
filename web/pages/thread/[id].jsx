@@ -88,7 +88,7 @@ class Detail extends React.Component {
     const { id } = this.props.router.query;
 
     if (id) {
-      this.getPageDate(id);
+      await this.getPageDate(id);
       this.updateViewCount(id);
     }
   }
