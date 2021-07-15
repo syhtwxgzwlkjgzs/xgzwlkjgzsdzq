@@ -33,11 +33,22 @@ import VideoDisplay from '@components/thread-post/video-display';
 import MoneyDisplay from '@components/thread-post/money-display';
 import toolbarStyles from '@components/editor/toolbar/index.module.scss';
 
-function isIOS() {
+function judgeDeviceType() {
   const ua = window.navigator.userAgent.toLowerCase();
+  const isIOS = /ip[honead]{2,4}(?:.*os\s([\w]+)\slike\smac|;\sopera)/i.test(ua);
+  const isAndroid = /android/.test(ua);
+  const isMiuiBrowser = /miuibrowser/i.test(ua);
+  return {
+    isIOS,
+    isAndroid,
+    isMiuiBrowser,
+  };
+}
+
+function isIOSMiui() {
   // 判断是否是ios，或者小米默认浏览器
   // 小米默认浏览器键盘弹起问题
-  return /ip[honead]{2,4}(?:.*os\s([\w]+)\slike\smac|;\sopera)/i.test(ua) || /miuibrowser/i.test(ua);
+  return judgeDeviceType().isIOS || judgeDeviceType().isMiuiBrowser;
 }
 
 @inject('threadPost')
@@ -49,15 +60,24 @@ function isIOS() {
 class ThreadCreate extends React.Component {
   componentDidMount() {
     window.addEventListener('scroll', this.handler);
+    window.addEventListener('resize', this.androidHandler);
   }
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handler);
+    window.removeEventListener('resize', this.androidHandler);
   }
 
   handler = () => {
-    if (!isIOS()) return;
+    if (!isIOSMiui()) return;
     throttle(this.setBottomBarStyle(window.scrollY), 50);
+  }
+
+  androidHandler() {
+    const winHeight = getVisualViewpost();
+    if (judgeDeviceType().isAndroid && window.innerHeight === winHeight) {
+      this.clearBottomFixed();
+    }
   }
 
   // 定位的显示与影藏
@@ -81,11 +101,11 @@ class ThreadCreate extends React.Component {
   setBottomBarStyle = (y = 0, action, event) => {
     const winHeight = getVisualViewpost();
     // 阻止页面上拉带动操作栏位置变化。
-    if (window.innerHeight === winHeight && isIOS()) return;
+    if (window.innerHeight === winHeight && judgeDeviceType().isIOS) return;
     // 如果可视窗口不变，即没有弹起键盘不进行任何设置
     const vditorToolbar = document.querySelector('#dzq-vditor .vditor-toolbar');
     this.positionDisplay(action);
-    if (!isIOS()) {
+    if (!isIOSMiui()) {
       if (vditorToolbar && action === 'select') {
         vditorToolbar.style.position = 'fixed';
         vditorToolbar.style.bottom = '88px';
@@ -119,7 +139,7 @@ class ThreadCreate extends React.Component {
         if (clientY > postBoxHeight) {
           this.props.handleEditorBoxScroller(offsetTop);
           // 解决focus在编辑器之后页面被弹出导致底部工具栏上移的问题
-          if (isIOS()) window.scrollTo(0, 0);
+          if (isIOSMiui()) window.scrollTo(0, 0);
         }
       }
       // 这个需要放在这里的原因是避免滚动造成底部bar显示问题
@@ -151,7 +171,7 @@ class ThreadCreate extends React.Component {
       clearTimeout(timer);
       const winHeight = getVisualViewpost();
       const postBottombar = document.querySelector('#post-bottombar');
-      if (isIOS()) {
+      if (isIOSMiui()) {
         const bottombarHeight = this.getBottombarHeight(action);
         postBottombar.style.top = `${winHeight - bottombarHeight + y}px`;
       }
@@ -166,7 +186,6 @@ class ThreadCreate extends React.Component {
   }
   clearBottomFixed = () => {
     this.moneyboxDisplay(true);
-    // if (!isIOS()) return;
     const timer = setTimeout(() => {
       if (timer) clearTimeout(timer);
       const postBottombar = document.querySelector('#post-bottombar');
