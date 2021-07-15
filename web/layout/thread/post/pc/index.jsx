@@ -40,20 +40,39 @@ class ThreadPCPage extends React.Component {
       editorAtShow: false,
       topicStyle: {},
       atStyle: {},
+      lastindex: -1,
+      vditor: null,
     };
   }
 
-  hintCustom = (type, key, textareaPosition) => {
+  hintCustom = (type, key, textareaPosition, lastindex, vditor) => {
+    this.hintHide();
     if (type === '#') {
-      this.setState({ editorTopicShow: true, topicStyle: textareaPosition });
+      this.setState({ editorTopicShow: true, topicStyle: textareaPosition, lastindex, vditor });
     }
     if (type === '@') {
-      this.setState({ editorAtShow: true, atStyle: textareaPosition });
+      this.setState({ editorAtShow: true, atStyle: textareaPosition, lastindex, vditor });
     }
   };
 
   hintHide = () => {
     this.setState({ editorTopicShow: false, editorAtShow: false });
+  };
+
+  setEditorRange = () => {
+    const { range } = this.state.vditor[this.state.vditor.currentMode];
+    if (range) {
+      range.setStart(range.startContainer, this.state.lastindex);
+      range.deleteContents();
+      range.collapse(false);
+      this.setSelectionFocus(range);
+    }
+  };
+
+  setSelectionFocus = (range) => {
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
   };
 
   render() {
@@ -96,7 +115,8 @@ class ThreadPCPage extends React.Component {
                   onBlur={() => { }}
                   onInit={this.props.handleVditorInit}
                   setState={this.props.handleSetState}
-                  hintCustom={(type, key, textareaPosition) => this.hintCustom(type, key, textareaPosition)}
+                  hintCustom={(type, key, textareaPosition, lastindex, vditor) =>
+                    this.hintCustom(type, key, textareaPosition, lastindex, vditor)}
                   hintHide={this.hintHide}
                 />
                 {this.state.editorTopicShow
@@ -105,7 +125,10 @@ class ThreadPCPage extends React.Component {
                     visible={this.state.editorTopicShow}
                     style={this.state.topicStyle}
                     cancelTopic={this.hintHide}
-                    clickTopic={val => this.props.handleSetState({ topic: val })}
+                    clickTopic={(val) => {
+                      this.setEditorRange();
+                      this.props.handleSetState({ topic: val });
+                    }}
                   />
                 }
                 {this.state.editorAtShow
@@ -113,7 +136,10 @@ class ThreadPCPage extends React.Component {
                     pc
                     style={this.state.atStyle}
                     visible={this.state.editorAtShow}
-                    getAtList={list => this.props.handleAtListChange(list)}
+                    getAtList={(list) => {
+                      this.setEditorRange();
+                      this.props.handleAtListChange(list);
+                    }}
                     onCancel={this.hintHide}
                   />
                 }

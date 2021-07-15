@@ -192,16 +192,28 @@ export default function DVditor(props) {
     timeoutRecord();
   };
 
-  const getLineHeight = (editor, textareaPosition) => {
+  const getLineHeight = (editor, textareaPosition, type) => {
+    const postInner = document.querySelector('#post-inner');
+    const { width, height } = postInner.getBoundingClientRect();
     const { vditor } = editor;
     const editorElement = vditor[vditor.currentMode].element;
     const x = textareaPosition.left
       + (vditor.options.outline.position === 'left' ? vditor.outline.element.offsetWidth : 0);
     const y = textareaPosition.top;
     const lineHeight = parseInt(document.defaultView.getComputedStyle(editorElement, null).getPropertyValue('line-height'), 10);
+    let left = `${x}px`;
+    let right = 'auto';
+    if ((type === '@' && x + 300 > width) || (type === '#' && x + 404 > width)) {
+      right = '0px';
+      left = 'auto';
+    }
+    console.log(y, '----', height, Math.floor(y / height));
+    const yy = y - (height * Math.floor(y / height));
+
     return {
-      top: `${y + (lineHeight || 22) + 16}px`,
-      left: `${x}px`,
+      top: `${yy + (lineHeight || 22) + 16}px`,
+      left,
+      right,
     };
   };
 
@@ -273,21 +285,21 @@ export default function DVditor(props) {
           extend: pc ? [
             {
               key: '@',
-              hintCustom: (key, textareaPosition) => {
-                const position = getLineHeight(editor, textareaPosition);
-                hintCustom('@', key, position);
+              hintCustom: (key, textareaPosition, lastindex) => {
+                const position = getLineHeight(editor, textareaPosition, '@');
+                hintCustom('@', key, position, lastindex, editor.vditor);
               },
             },
             {
               key: '#',
-              hintCustom: (key, textareaPosition) => {
-                const position = getLineHeight(editor, textareaPosition);
-                hintCustom('#', key, position);
+              hintCustom: (key, textareaPosition, lastindex) => {
+                const position = getLineHeight(editor, textareaPosition, '#');
+                hintCustom('#', key, position, lastindex, editor.vditor);
               },
             },
           ] : [],
           hide() {
-            hintHide();
+            // hintHide();
           },
         },
       },
