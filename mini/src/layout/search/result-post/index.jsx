@@ -67,7 +67,7 @@ class SearchResultPostH5Page extends React.Component {
         </View>
         {
           pageData?.map((item, index) => (
-            <ThreadContent key={index} data={item} />
+            <ThreadContent key={`${item.threadId}-${item.updatedAt}`} data={item} />
           ))
         }
       </BaseLayout>

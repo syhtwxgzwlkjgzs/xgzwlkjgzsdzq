@@ -251,7 +251,7 @@ class SearchAction extends SearchStore {
     const result = await readThreadList({ params: { sequence: '0', filter: { sort, search, repeatedIds }, perPage, page, ...params } });
 
     if (result.code === 0 && result.data) {
-      if (this.threads && result.data.pageData && page !== 1) {
+      if (this.threads && result.data.pageData && (page !== 1 || sort === '4')) {
         this.threads.pageData.push(...result.data.pageData);
         const newPageData = this.threads.pageData.slice();
         this.setThreads({ ...result.data, pageData: newPageData });
