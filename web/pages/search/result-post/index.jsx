@@ -32,8 +32,8 @@ class Index extends React.Component {
     search.setThreads(null);
 
     this.state = {
-      repeatedIds: []
-    }
+      repeatedIds: [],
+    };
   }
 
   async componentDidMount() {
@@ -45,31 +45,31 @@ class Index extends React.Component {
     this.page = 1;
     const res = await search.getThreadList({ search: keyword });
 
-    this.handleFirstRequest(res)
+    this.handleFirstRequest(res);
   }
 
   dispatch = async (type, keyword, params) => {
     const { search } = this.props;
-    let { repeatedIds = [] } = params || this.state || {}
+    let { repeatedIds = [] } = params || this.state || {};
 
-    let sort = '3'
+    let sort = '3';
     if (type === 'refresh') {
       this.page = 1;
       search.setThreads(null);
-      repeatedIds = []
-      this.setState({ repeatedIds: [] })
+      repeatedIds = [];
+      this.setState({ repeatedIds: [] });
     } else if (type === 'moreData') {
       this.page += 1;
-      sort = '4'
+      sort = '4';
     } else if (type === 'repeated') {
       this.page = 1;
-      sort = '4'
+      sort = '4';
     }
 
     const res = await search.getThreadList({ search: keyword, repeatedIds, sort, perPage: this.perPage, page: this.page });
 
     if (sort === '3') {
-      this.handleFirstRequest(res, keyword)
+      this.handleFirstRequest(res, keyword);
     }
 
     return;
@@ -77,13 +77,12 @@ class Index extends React.Component {
 
   handleFirstRequest = (res, keyword = '') => {
     if (!res) {
-      return
+      return;
     }
 
-    const ids = res.pageData?.map(item => item.threadId)
-    this.setState({ repeatedIds: ids })
-
-    this.dispatch('repeated', keyword, { repeatedIds: ids })
+    const ids = res.pageData?.map(item => item.threadId);
+    this.setState({ repeatedIds: ids });
+    this.dispatch('repeated', keyword, { repeatedIds: ids });
   }
 
   render() {
