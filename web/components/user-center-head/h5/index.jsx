@@ -132,7 +132,8 @@ class index extends Component {
 
   logout = () => {
     clearLoginStatus();
-    LoginHelper.gotoIndex();
+    LoginHelper.clear();
+    window.location.replace('/');
   };
 
   // 点击粉丝列表
