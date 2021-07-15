@@ -95,7 +95,7 @@ class TopicSelect extends Component {
   );
 
   render() {
-    const { pc, visible = false, cancelTopic, threadPost } = this.props;
+    const { pc, visible = false, cancelTopic, threadPost, style = {} } = this.props;
     const { topics = [] } = threadPost;
     const { finish, keywords } = this.state;
     const platform = pc ? 'pc' : 'h5';
@@ -145,7 +145,7 @@ class TopicSelect extends Component {
     );
 
     if (pc) return (
-      <div className={styles.pc}>
+      <div className={styles.pc} style={style}>
         <div className={styles.pcHeader}>#添加话题#</div>
         {content}
       </div>

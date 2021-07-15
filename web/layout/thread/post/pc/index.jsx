@@ -32,6 +32,30 @@ import MoneyDisplay from '@components/thread-post/money-display';
 @inject('site')
 @observer
 class ThreadPCPage extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      editorTopicShow: false,
+      editorAtShow: false,
+      topicStyle: {},
+      atStyle: {},
+    };
+  }
+
+  hintCustom = (type, key, textareaPosition) => {
+    if (type === '#') {
+      this.setState({ editorTopicShow: true, topicStyle: textareaPosition });
+    }
+    if (type === '@') {
+      this.setState({ editorAtShow: true, atStyle: textareaPosition });
+    }
+  };
+
+  hintHide = () => {
+    this.setState({ editorTopicShow: false, editorAtShow: false });
+  };
+
   render() {
     const {
       threadPost,
@@ -57,7 +81,9 @@ class ThreadPCPage extends React.Component {
               onChange={title => this.props.setPostData({ title })}
             />
             <div className={styles.editor} onClick={this.props.handleVditorFocus}>
-              <div className={styles['editor-inner']} id="post-inner">
+              <div className={styles['editor-inner']} id="post-inner" onScroll={() => {
+                this.hintHide();
+              }}>
                 <DVditor
                   pc
                   value={postData.contentText}
@@ -70,7 +96,27 @@ class ThreadPCPage extends React.Component {
                   onBlur={() => { }}
                   onInit={this.props.handleVditorInit}
                   setState={this.props.handleSetState}
+                  hintCustom={(type, key, textareaPosition) => this.hintCustom(type, key, textareaPosition)}
+                  hintHide={this.hintHide}
                 />
+                {this.state.editorTopicShow
+                  && <TopicSelect
+                    pc
+                    visible={this.state.editorTopicShow}
+                    style={this.state.topicStyle}
+                    cancelTopic={this.hintHide}
+                    clickTopic={val => this.props.handleSetState({ topic: val })}
+                  />
+                }
+                {this.state.editorAtShow
+                  && <AtSelect
+                    pc
+                    style={this.state.atStyle}
+                    visible={this.state.editorAtShow}
+                    getAtList={list => this.props.handleAtListChange(list)}
+                    onCancel={this.hintHide}
+                  />
+                }
 
                 {/* 插入图片 */}
                 {(currentAttachOperation === THREAD_TYPE.image
@@ -148,7 +194,10 @@ class ThreadPCPage extends React.Component {
                   postData={postData}
                   permission={user.threadExtendPermissions}
                   value={currentDefaultOperation}
-                  onClick={(item, child) => this.props.handleDefaultIconClick(item, child)}
+                  onClick={(item, child) => {
+                    this.hintHide();
+                    this.props.handleDefaultIconClick(item, child);
+                  }}
                   onSubmit={this.props.handleSubmit}>
                   {/* 表情 */}
                   <Emoji
@@ -180,7 +229,10 @@ class ThreadPCPage extends React.Component {
                   pc
                   isOpenQcloudVod={this.props.site.isOpenQcloudVod}
                   postData={postData}
-                  onAttachClick={this.props.handleAttachClick}
+                  onAttachClick={() => {
+                    this.hintHide();
+                    this.props.handleAttachClick();
+                  }}
                   onVideoUpload={this.props.handleVideoUpload}
                   onUploadComplete={this.props.handleVideoUploadComplete}
                   permission={user.threadExtendPermissions}
@@ -197,7 +249,7 @@ class ThreadPCPage extends React.Component {
                 )}
               </div>
             </div>
-            <ClassifyPopup pc />
+            <ClassifyPopup pc onClick={this.hintHide} />
             <div className={styles.footer}>
               <Button type="info" disabled={this.props.postType === "isEdit" && !postData.isDraft}
                 onClick={() => this.props.handleDraft()}>保存至草稿箱</Button>

@@ -19,7 +19,9 @@ export default function DVditor(props) {
     onInit = () => { },
     onInput = () => { },
     setState = () => { },
-    onCountChange = () => {},
+    onCountChange = () => { },
+    hintCustom = () => { },
+    hintHide = () => { },
   } = props;
   const vditorId = 'dzq-vditor';
   let timeoutId = null;
@@ -190,6 +192,19 @@ export default function DVditor(props) {
     timeoutRecord();
   };
 
+  const getLineHeight = (editor, textareaPosition) => {
+    const { vditor } = editor;
+    const editorElement = vditor[vditor.currentMode].element;
+    const x = textareaPosition.left
+      + (vditor.options.outline.position === 'left' ? vditor.outline.element.offsetWidth : 0);
+    const y = textareaPosition.top;
+    const lineHeight = parseInt(document.defaultView.getComputedStyle(editorElement, null).getPropertyValue('line-height'), 10);
+    return {
+      top: `${y + (lineHeight || 22) + 16}px`,
+      left: `${x}px`,
+    };
+  };
+
   function initVditor() {
     // https://ld246.com/article/1549638745630#options
     const editor = new Vditor(
@@ -252,6 +267,27 @@ export default function DVditor(props) {
         preview: {
           theme: {
             current: '',
+          },
+        },
+        hint: {
+          extend: pc ? [
+            {
+              key: '@',
+              hintCustom: (key, textareaPosition) => {
+                const position = getLineHeight(editor, textareaPosition);
+                hintCustom('@', key, position);
+              },
+            },
+            {
+              key: '#',
+              hintCustom: (key, textareaPosition) => {
+                const position = getLineHeight(editor, textareaPosition);
+                hintCustom('#', key, position);
+              },
+            },
+          ] : [],
+          hide() {
+            hintHide();
           },
         },
       },
