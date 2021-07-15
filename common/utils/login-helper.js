@@ -169,9 +169,14 @@ class LoginHelper {
   gotoIndex = () => {
     this.clear();
 
-    Router.redirect({
-      url: isWeb() ? HOME_PAGE_PC : HOME_PAGE_MINI,
-    });
+    if (isWeb()) {
+      // ssr下必须使用location.replace重置跳转，否则登陆态异常
+      window.location.replace(HOME_PAGE_PC);
+    } else {
+      Router.redirect({
+        url: HOME_PAGE_MINI,
+      });
+    }
   }
 }
 
