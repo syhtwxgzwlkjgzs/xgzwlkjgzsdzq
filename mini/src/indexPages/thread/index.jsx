@@ -59,7 +59,8 @@ class Detail extends React.Component {
     };
   }
 
-  updateViewCount = async (threadId) => {
+  updateViewCount = async (id) => {
+    const threadId = Number(id);
     const viewCount = await updateViewCountInStores(threadId);
     if (viewCount) {
       this.props.thread.updateViewCount(viewCount);
