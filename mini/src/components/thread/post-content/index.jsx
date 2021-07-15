@@ -97,6 +97,11 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
     }
   }
 
+  // 点击富文本中的链接
+  const handleLinkClick = () => {
+    updateViewCount();
+  }
+
   // 超过1200个字符，截断文本用于显示
   const getCutContentForDisplay = (maxContentLength) => {
     const ctn = filterContent;
@@ -142,6 +147,7 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
             content={(useShowMore && cutContentForDisplay) ? cutContentForDisplay : urlToLink(filterContent)}
             onClick={handleClick}
             onImgClick={handleImgClick}
+            onLinkClick={handleLinkClick}
             transformer={transformer}
           />
           {imageVisible && (

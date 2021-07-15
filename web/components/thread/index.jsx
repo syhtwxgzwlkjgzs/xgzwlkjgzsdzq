@@ -172,7 +172,6 @@ class Index extends React.Component {
         this.props.thread.isPositionToComment = false;
         this.props.router.push(`/thread/${threadId}`);
 
-        this.updateViewCount();
       } else {
         console.log('帖子不存在');
       }
