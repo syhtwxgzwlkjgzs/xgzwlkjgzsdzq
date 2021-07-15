@@ -74,7 +74,6 @@ class Index extends React.Component {
       const { threadId = '' } = this.props.data || {};
 
       if (threadId !== '') {
-        this.updateViewCount();
         this.props.thread.positionToComment()
         Router.push({url: `/indexPages/thread/index?id=${threadId}`})
       } else {
@@ -162,7 +161,6 @@ class Index extends React.Component {
         this.props.thread.isPositionToComment = false;
         Router.push({url: `/indexPages/thread/index?id=${threadId}`})
 
-        this.updateViewCount();
       } else {
         console.log('帖子不存在');
       }
