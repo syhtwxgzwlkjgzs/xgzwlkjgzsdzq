@@ -1,6 +1,6 @@
 /* eslint-disable */
 // <p>&lt;p&gt;111&lt;/p&gt;</p>
-
+import getConfig from '@common/config';
 const tags = {
   topic: text => {
     if (!text) return;
@@ -39,7 +39,19 @@ const tags = {
         return `>`;
       });
     });
-  }
+  },
+  emotion: text => {  // 转义表情
+    if (!text) return;
+    const regexp = /:(?<value>[0-9A-Za-z]{2,20}):/gimu;
+    return text.replace(regexp, match => {
+      return match.replace(regexp, (content, value, text) => {
+       const config = getConfig() || {}
+       // 获取域名
+       const url = config.COMMON_BASE_URL || window.location.origin
+       return `<img style="display:inline-block;vertical-align:top" src="${url}/emoji/qq/${value}.gif" alt="${value}" class="qq-emotion">`;
+      });
+    });
+  },
 };
 function parse(text) {
   for (const tag in tags) {
