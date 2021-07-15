@@ -10,6 +10,7 @@ import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import { numberFormat } from '@common/utils/number-format';
 import LoginHelper from '@common/utils/login-helper';
+import MorePopop from '@components/more-popop';
 
 /**
  * 帖子头部
@@ -19,12 +20,14 @@ import LoginHelper from '@common/utils/login-helper';
 
  @inject('site')
  @inject('user')
+ @inject('index')
  @observer
 class HomeHeader extends React.Component {
   state = {
     visible: false,
     height: 180,
     loadWeiXin: false,
+    show: false,
   }
 
   domRef = React.createRef(null)
@@ -96,11 +99,22 @@ class HomeHeader extends React.Component {
       Toast.info({ content: '复制链接成功' });
     }
   }
-
   onClose = () => {
     this.setState({ visible: false });
   }
-
+  onCancel = () => {
+    this.setState({ show: false });
+  }
+  handleShare = () => {
+    this.onShare();
+    this.onCancel();
+  }
+  handleClick = () => {
+    this.setState({ show: true });
+  }
+  createCard = () => {
+    Router.push({ url: '/card' });
+  }
   componentDidMount() {
     this.setState({ loadWeiXin: isWeiXin() });
     if (this.domRef.current) {
@@ -160,11 +174,18 @@ class HomeHeader extends React.Component {
             <span className={styles.text}>内容</span>
             <span className={styles.content}>{countThreads}</span>
           </li>
-          <li className={styles.item} onClick={this.onShare}>
+          <li className={styles.item} onClick={this.handleClick}>
             <Icon className={styles.shareIcon} color="#fff" name="ShareAltOutlined"/>
             <span className={styles.shareText}>分享</span>
           </li>
         </ul>}
+        {this.state.show
+        && <MorePopop
+        show={this.state.show}
+        onClose={this.onCancel}
+        handleShare={this.handleShare}
+        createCard={this.createCard}
+        ></MorePopop>}
         {
           mode === 'join' && <ul className={`${styles.siteInfo} ${styles.joinInfo}`}>
             <li className={styles.item}>

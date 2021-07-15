@@ -1,0 +1,35 @@
+@import '@common/styles/index.scss';
+.container {
+  overflow: hidden;
+  height: rem(165);
+  position: relative;
+  background-repeat: no-repeat;
+  background-size: auto;
+  background-position: center;
+  .siteInfo {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 rem($padding-4n);
+    box-sizing: border-box;
+    position: absolute;
+    bottom: rem($font-line-height-primary);
+    .item {
+      display: flex;
+      align-items: center;
+    }
+    .text {
+      font-size: rem($font-size-middle);
+      line-height: rem(24);
+      color: var( --color-white);
+      font-weight: normal;
+      opacity: 0.6;
+    }
+    .content {
+      font-size: rem($font-size-middle);
+      color: var( --color-white);
+      font-weight: normal;
+      padding-left: rem($padding-2n);
+    }
+  }
+}

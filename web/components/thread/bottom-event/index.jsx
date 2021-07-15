@@ -1,8 +1,9 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import styles from './index.module.scss';
 import Tip from '../tip';
 import { Icon } from '@discuzq/design';
 import { noop } from '../utils';
+import MorePopop from '@components/more-popop';
 
 /**
  * 帖子底部内容
@@ -33,26 +34,34 @@ const Index = ({
       icon: 'LikeOutlined',
       name: '赞',
       event: onPraise,
-      type: 'like'
+      type: 'like',
     };
 
     return [praise, {
       icon: 'MessageOutlined',
       name: '评论',
       event: onComment,
-      type: 'commonet'
+      type: 'commonet',
     },
     {
       icon: 'ShareAltOutlined',
       name: '分享',
       event: onShare,
-      type: 'share'
+      type: 'share',
     }];
   }, [isLiked]);
-
-  const needHeight = useMemo(() => {
-    return userImgs.length !== 0 || comment > 0 || sharing > 0
-  }, [userImgs, comment, sharing])
+  // const handleClick = () => {
+  //   setShow(true);
+  // };
+  // const [show, setShow] = useState(false);
+  // const onClose = () => {
+  //   setShow(false);
+  // };
+  // const handleShare = () => {
+  //   onShare();
+  //   onClose();
+  // };
+  const needHeight = useMemo(() => userImgs.length !== 0 || comment > 0 || sharing > 0, [userImgs, comment, sharing]);
   return (
     <div>
       <div className={needHeight ? styles.user : styles.users}>
@@ -91,12 +100,13 @@ const Index = ({
                   name={item.icon}
                   size={16}>
                 </Icon>
-                <span className={isLiked && item.name ===  '赞' ? styles.fabulousCancel: styles.fabulousPost}>
+                <span className={isLiked && item.name ===  '赞' ? styles.fabulousCancel : styles.fabulousPost}>
                   {item.name}
                 </span>
               </div>
           ))
         }
+        {/* {show && <MorePopop show={show} handleShare={handleShare} onClose={onClose}></MorePopop>} */}
       </div>
     </div>
   );
