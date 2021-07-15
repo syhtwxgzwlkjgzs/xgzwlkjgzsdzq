@@ -33,6 +33,7 @@ class Index extends React.Component {
     onShare = (e) => {
       e && e.stopPropagation();
       Toast.info({ content: '复制链接成功' });
+      this.updateViewCount();
       this.handleShare();
     }
     handleShare = debounce(() => {
@@ -45,15 +46,14 @@ class Index extends React.Component {
 
       const { title = '', threadId = '', user } = this.props.data || {};
 
-      h5Share({path: `thread/${threadId}`});
-      this.props.index.updateThreadShare({ threadId }).then(result => {
+      h5Share({ path: `thread/${threadId}` });
+      this.props.index.updateThreadShare({ threadId }).then((result) => {
         if (result.code === 0) {
           this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
           this.props.search.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
           this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
           this.props.user.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
 
-          this.updateViewCount();
           const { recomputeRowHeights = noop } = this.props;
           recomputeRowHeights();
         }
@@ -82,11 +82,11 @@ class Index extends React.Component {
     // 点赞
     onPraise = (e) => {
       e && e.stopPropagation();
-      this.handlePraise()
+      this.updateViewCount();
+      this.handlePraise();
     }
     handlePraise = debounce(() => {
-
-      if(this.state.isSendingLike) return;
+      if (this.state.isSendingLike) return;
 
       // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
@@ -96,26 +96,26 @@ class Index extends React.Component {
       }
       const { data = {}, user } = this.props;
       const { threadId = '', isLike, postId } = data;
-      this.setState({isSendingLike: true});
-      this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } }).then(result => {
+      this.setState({ isSendingLike: true });
+      this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } }).then((result) => {
         if (result.code === 0 && result.data) {
           this.props.index.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
           this.props.search.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
           this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
           this.props.user.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
 
-          this.updateViewCount();
           const { recomputeRowHeights = noop } = this.props;
           recomputeRowHeights();
         }
-        this.setState({isSendingLike: false});
+        this.setState({ isSendingLike: false });
       });
     }, 1000)
 
     // 支付
     onPay = (e) => {
       e && e.stopPropagation();
-      this.handlePay()
+      this.updateViewCount();
+      this.handlePay();
     }
     handlePay = debounce(async () => {
       // 对没有登录的先做
@@ -136,12 +136,11 @@ class Index extends React.Component {
       if (success && thread?.threadId) {
         const { code, data } = await this.props.thread.fetchThreadDetail(thread?.threadId);
         if (code === 0 && data) {
-          this.props.index.updatePayThreadInfo(thread?.threadId, data)
-          this.props.search.updatePayThreadInfo(thread?.threadId, data)
-          this.props.topic.updatePayThreadInfo(thread?.threadId, data)
-          this.props.user.updatePayThreadInfo(thread?.threadId, data)
+          this.props.index.updatePayThreadInfo(thread?.threadId, data);
+          this.props.search.updatePayThreadInfo(thread?.threadId, data);
+          this.props.topic.updatePayThreadInfo(thread?.threadId, data);
+          this.props.user.updatePayThreadInfo(thread?.threadId, data);
 
-          this.updateViewCount();
           const { recomputeRowHeights = noop } = this.props;
           recomputeRowHeights(data);
         }
