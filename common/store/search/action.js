@@ -169,7 +169,7 @@ class SearchAction extends SearchStore {
       return
     }
     
-    readThreadList({ params: { filter: { sort: '4', search, repeatedIds: ids }, perPage: 10, page: 2 } })
+    readThreadList({ params: { filter: { sort: '4', search, repeatedIds: ids }, perPage: 10, page: 1 } })
     .then((res) => {
       const { code, data, msg } = res;
       if (code !== 0) {
