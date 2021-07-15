@@ -6,7 +6,6 @@ import { readThreadList } from '@server';
 import { Toast } from '@discuzq/design';
 import ViewAdapter from '@components/view-adapter';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
-import { debug } from 'webpack';
 
 @inject('site')
 @inject('search')
