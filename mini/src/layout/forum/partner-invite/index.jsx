@@ -21,6 +21,8 @@ import { getCurrentInstance } from '@tarojs/taro';
 import { readUser } from '@server';
 import LoginHelper from '@common/utils/login-helper';
 
+const MAX_THREAD_COUNT = 10
+
 @inject('site')
 @inject('index')
 @inject('forum')
@@ -34,49 +36,17 @@ class PartnerInviteH5Page extends React.Component {
     this.state = {
       invitorName: '',
       invitorAvatar: '/dzq-img/login-user.png',
+      isHot: false,
     };
   }
 
   async componentDidMount() {
     try {
-      const { forum, search, invite } = this.props;
-
-      // 获取url上的inviteCode
-      const { params } = getCurrentInstance().router;
-      const { inviteCode } = params;
-      if (inviteCode) {
-        invite.setInviteCode(inviteCode);
-        const inviteResp = await readUser({
-          params: {
-            pid: inviteCode.length === 32 ? 1 : inviteCode,
-          },
-        });
-
-        const nickname = get(inviteResp, 'data.nickname', '');
-        const avatar = get(inviteResp, 'data.avatarUrl', '');
-
-        this.setState({
-          invitorName: inviteCode.length === 32 ? '站长' : nickname,
-          invitorAvatar: avatar,
-        });
-      }
-
-      const usersList = await simpleRequest('readUsersList', {
-        params: {
-          filter: {
-            hot: 1,
-          },
-        },
-      });
-      const threadList = await search.getThreadList({
-        params: {
-          pay: 1,
-        },
-      });
-
-      forum.setUsersPageData(usersList);
-      forum.setThreadsPageData(threadList);
-      forum.setIsLoading(false);
+      await Promise.all([
+        this.initInviteCode(),
+        this.initUserList(),
+        this.initThreadList()
+      ]);
     } catch (e) {
       Toast.error({
         content: e?.Message || e,
@@ -84,6 +54,77 @@ class PartnerInviteH5Page extends React.Component {
         duration: 1000,
       });
     }
+
+    const { forum } = this.props;
+    forum.setIsLoading(false);
+  }
+
+  async initInviteCode() {
+    const { invite } = this.props;
+    const { params } = getCurrentInstance().router;
+    const { inviteCode } = params;
+
+    if (inviteCode) {
+      invite.setInviteCode(inviteCode);
+      const inviteResp = await readUser({
+        params: {
+          pid: inviteCode.length === 32 ? 1 : inviteCode,
+        },
+      });
+
+      const nickname = get(inviteResp, 'data.nickname', '');
+      const avatar = get(inviteResp, 'data.avatarUrl', '');
+
+      this.setState({
+        invitorName: inviteCode.length === 32 ? '站长' : nickname,
+        invitorAvatar: avatar,
+      });
+    }
+  }
+
+  async initUserList() {
+    const { forum } = this.props;
+    const usersList = await simpleRequest('readUsersList', {
+      params: {
+        filter: {
+          hot: 1,
+        },
+      },
+    });
+
+    forum.setUsersPageData(usersList);
+  }
+
+  async initThreadList() {
+    const { forum, search } = this.props;
+
+    // 1.获取后台设置的付费推荐内容，最多10条。pay===1时，后台默认返回10条，无法修改
+    const threadList = await search.getThreadList({
+      isSite: 1, // 后台设置的热门推荐
+      params: {
+        pay: 1,
+      },
+    });
+
+    // 2.推荐内容数量大于0则title为精彩内容预览，否则为热门内容预览
+    this.setState({
+      isHot: !(threadList?.pageData?.length > 0),
+    });
+
+    // 3.如果付费推荐少于MAX_THREAD_COUNT条，取热门推荐，凑齐MAX_THREAD_COUNT条
+    if (threadList?.pageData?.length < MAX_THREAD_COUNT) {
+      const removeThreadIds = threadList?.pageData?.map(item => item.threadId);
+      const hotThreads = await search.getThreadList({
+        removeThreadIds,
+        params: {
+          pay: 1,
+        },
+      });
+
+      threadList?.pageData?.push(...hotThreads?.pageData?.slice(0, MAX_THREAD_COUNT - threadList?.pageData?.length));
+    }
+
+    forum.setThreadsPageData(threadList);
   }
 
   handleJoinSite = () => {
@@ -100,7 +141,7 @@ class PartnerInviteH5Page extends React.Component {
           // data 中传递后台参数
           amount: sitePrice,
           title: siteName,
-          type: 1, // 站点付费注册
+          type: user?.userInfo?.expiredAt ? 8 : 1, // 续费传8，新付费传1.站点付费注册
         },
         isAnonymous: false, // 是否匿名
         success: async () => {
@@ -125,7 +166,10 @@ class PartnerInviteH5Page extends React.Component {
     const { webConfig } = site;
     const { setSite: { siteMode, siteExpire, sitePrice, siteMasterScale } = {} } = webConfig;
     const { usersPageData = [], threadsPageData = [], isLoading } = forum;
-    const { invitorName, invitorAvatar } = this.state;
+    const { invitorName, invitorAvatar, isHot } = this.state;
+
+    const icon = { type: 3, name: isHot ? 'HotOutlined' : 'WonderfulOutlined' };
+    const title = `${isHot ? '热门' : '精彩'}内容预览`
 
     return (
       <List className={layout.page} allowRefresh={false}>
@@ -161,8 +205,8 @@ class PartnerInviteH5Page extends React.Component {
           <View className={layout.hot}>
             <SectionTitle
               isShowMore={false}
-              icon={{ type: 3, name: 'HotOutlined' }}
-              title="热门内容预览"
+              icon={icon}
+              title={title}
               onShowMore={this.handleJoinSite}
             />
             {!isLoading && threadsPageData?.length ? (
@@ -211,7 +255,7 @@ class PartnerInviteH5Page extends React.Component {
                 <></>
               }
               <Button className={layout.bottom_button} onClick={this.handleJoinSite}>
-                { user.isLogin() ? `${siteMode === 'pay' ? `¥${sitePrice} ` : ''}立即加入` : '登录浏览更多内容'}
+                { user.isLogin() ? `${siteMode === 'pay' ? `¥${sitePrice} ` : ''}${user?.userInfo?.expiredAt ? '续费' : '立即'}加入` : '登录浏览更多内容'}
               </Button>
             </View>
           </View>
