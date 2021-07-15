@@ -169,7 +169,7 @@ class SearchAction extends SearchStore {
       return
     }
     
-    readThreadList({ params: { filter: { sort: '4', search, repeatedIds: ids }, perPage: 10, page: 2 } })
+    readThreadList({ params: { filter: { sort: '4', search, repeatedIds: ids }, perPage: 10, page: 1 } })
     .then((res) => {
       const { code, data, msg } = res;
       if (code !== 0) {
@@ -266,7 +266,7 @@ class SearchAction extends SearchStore {
     const result = await readThreadList(payload);
 
     if (result.code === 0 && result.data) {
-      if (this.threads && result.data.pageData && page !== 1) {
+      if (this.threads && result.data.pageData && (page !== 1 || sort === '4')) {
         this.threads.pageData.push(...result.data.pageData);
         const newPageData = this.threads.pageData.slice();
         this.setThreads({ ...result.data, pageData: newPageData });
