@@ -153,7 +153,7 @@ class SearchAction extends SearchStore {
 
           type === 0 ? this.setIndexThreads(code === 0 ? data : {}) : this.setSearchThreads(code === 0 ? data : {});
 
-          // this.getThreadListAgain({ firstRes: data, search, type })
+          this.getThreadListAgain({ firstRes: data, search, type })
         })
     }
   };
