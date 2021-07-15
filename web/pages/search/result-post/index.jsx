@@ -6,6 +6,7 @@ import { readThreadList } from '@server';
 import { Toast } from '@discuzq/design';
 import ViewAdapter from '@components/view-adapter';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
+import { debug } from 'webpack';
 
 @inject('site')
 @inject('search')
@@ -45,29 +46,32 @@ class Index extends React.Component {
     this.page = 1;
     const res = await search.getThreadList({ search: keyword });
 
-    // this.handleFirstRequest(res)
+    this.handleFirstRequest(res)
   }
 
   dispatch = async (type, keyword, params) => {
     const { search } = this.props;
-    const { repeatedIds = [] } = params || this.state || {}
+    let { repeatedIds = [] } = params || this.state || {}
 
+    let sort = '3'
     if (type === 'refresh') {
       this.page = 1;
       search.setThreads(null);
+      repeatedIds = []
       this.setState({ repeatedIds: [] })
     } else if (type === 'moreData') {
       this.page += 1;
+      sort = '4'
+    } else if (type === 'repeated') {
+      this.page = 1;
+      sort = '4'
     }
 
-    // 根据page值，动态设置sort
-    // const sort = this.page === 1 ? '3' : '4'
+    const res = await search.getThreadList({ search: keyword, repeatedIds, sort, perPage: this.perPage, page: this.page });
 
-    const res = await search.getThreadList({ search: keyword, perPage: this.perPage, page: this.page });
-
-    // if (this.page === 1) {
-    //   this.handleFirstRequest(res, keyword)
-    // }
+    if (sort === '3') {
+      this.handleFirstRequest(res, keyword)
+    }
 
     return;
   }
@@ -80,9 +84,7 @@ class Index extends React.Component {
     const ids = res.pageData?.map(item => item.threadId)
     this.setState({ repeatedIds: ids })
 
-    if (ids.length < 10) {
-      this.dispatch('moreData', keyword, { repeatedIds: ids })
-    }
+    this.dispatch('repeated', keyword, { repeatedIds: ids })
   }
 
   render() {
