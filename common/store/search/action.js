@@ -153,7 +153,7 @@ class SearchAction extends SearchStore {
 
           type === 0 ? this.setIndexThreads(code === 0 ? data : {}) : this.setSearchThreads(code === 0 ? data : {});
 
-          this.getThreadListAgain({ firstRes: data, search, type })
+          // this.getThreadListAgain({ firstRes: data, search, type })
         })
     }
   };
@@ -247,23 +247,8 @@ class SearchAction extends SearchStore {
  * @returns {object} 处理结果
  */
  @action
-  async getThreadList({ sort = '3', repeatedIds = [], search = '', isSite = undefined, removeThreadIds = undefined, perPage = 10, page = 1, params = {} } = {}) {
-    const payload = {
-      params: {
-        sequence: '0',
-        filter: {
-          sort,
-          search,
-          repeatedIds,
-          isSite,
-          removeThreadIds
-        },
-        perPage,
-        page,
-        ...params
-      }
-    }
-    const result = await readThreadList(payload);
+  async getThreadList({ sort = '3', search = '', perPage = 10, page = 1, params = {} } = {}) {
+    const result = await readThreadList({ params: { sequence: '0', filter: { sort, search }, perPage, page, ...params } });
 
     if (result.code === 0 && result.data) {
       if (this.threads && result.data.pageData && (page !== 1 || sort === '4')) {
@@ -477,10 +462,10 @@ class SearchAction extends SearchStore {
           data.likeReward.shareCount = data.likeReward.shareCount + 1;
         }
 
-        // 更新帖子浏览量
-        if (updateType === 'viewCount') {
-          data.viewCount = updatedInfo.viewCount;
-        }
+        // // 更新帖子浏览量
+        // if (updateType === 'viewCount') {
+        //   data.viewCount = updatedInfo.viewCount;
+        // }
 
         if (store.pageData) {
           store.pageData[index] = data;

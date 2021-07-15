@@ -6,7 +6,9 @@
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-  padding: $padding-3n 0;
+  // padding: $padding-3n 0;
+  padding-top: $padding-3n;
+  padding-bottom: $padding-3n;
   background-color: $white;
 
   .wrapper {
