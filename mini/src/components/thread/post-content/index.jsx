@@ -87,6 +87,13 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
     }
   }, [imageVisible]);
 
+  // 点击富文本中的链接
+  const handleLinkClick = () => {
+    updateViewCount();
+    setTimeout(() => { // 等待store更新完成后跳转
+    }, 500);
+  }
+
   // 点击富文本中的图片
   const handleImgClick = (node, event) => {
     updateViewCount();
