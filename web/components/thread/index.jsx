@@ -104,6 +104,7 @@ class Index extends React.Component {
           this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
           this.props.user.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
 
+          this.updateViewCount();
           const { recomputeRowHeights = noop } = this.props;
           recomputeRowHeights();
         }
