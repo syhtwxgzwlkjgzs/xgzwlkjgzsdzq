@@ -74,7 +74,6 @@ class Index extends React.Component {
       const { threadId = '' } = this.props.data || {};
 
       if (threadId !== '') {
-        this.updateViewCount();
         this.props.thread.positionToComment()
         Router.push({url: `/indexPages/thread/index?id=${threadId}`})
       } else {
