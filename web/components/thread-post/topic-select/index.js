@@ -11,7 +11,6 @@ import styles from './index.module.scss';
 import PropTypes from 'prop-types';
 
 import List from '@components/list';
-import DDialog from '@components/dialog';
 
 @inject('threadPost')
 @observer
@@ -135,7 +134,7 @@ class TopicSelect extends Component {
           immediateCheck={false}
           platform={platform}
         >
-          {keywords && !topics.length && this.renderItem({ content: keywords, newTopic: '新话题' })}
+          {keywords && topics.indexOf(keywords) && this.renderItem({ content: keywords, newTopic: '新话题' })}
           {topics.map(item => (
             <React.Fragment key={item.topicId}>
               {this.renderItem(item)}
@@ -146,15 +145,10 @@ class TopicSelect extends Component {
     );
 
     if (pc) return (
-      <DDialog
-        visible={visible}
-        className={styles.pc}
-        onClose={cancelTopic}
-        title="#添加话题#"
-        isCustomBtn={true}
-      >
+      <div className={styles.pc}>
+        <div className={styles.pcHeader}>#添加话题#</div>
         {content}
-      </DDialog>
+      </div>
     );
 
     return (
