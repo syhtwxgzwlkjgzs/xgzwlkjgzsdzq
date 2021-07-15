@@ -133,13 +133,21 @@ class index extends Component {
   }, 1000);
 
   logout = () => {
+    const paid = this.props.user?.paid;
+    let url = '';
     clearLoginStatus();
-    this.props.user.removeUserInfo();
-    this.props.site.getSiteInfo();
-    Router.reLaunch({ 
-      url: '/subPages/forum/partner-invite/index',
+
+    if(paid) {
+      url = '/pages/index/index'
+    }else {
+      url = '/subPages/forum/partner-invite/index';
+    }
+    Router.reLaunch({
+      url,
       success: () => {
         LoginHelper.clear();
+        this.props.user.removeUserInfo();
+        this.props.site.getSiteInfo();
       }
     });
   };
