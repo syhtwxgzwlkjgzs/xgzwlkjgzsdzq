@@ -11,7 +11,6 @@ import { getSelectedCategoryIds } from '@common/utils/handleCategory';
 import wxAuthorization from '../../user/h5/wx-authorization';
 // import VList from '@components/virtual-list/h5/index';
 import classnames from 'classnames';
-import setWxShare from '@common/utils/set-wx-share';
 // import DynamicVList from './components/dynamic-vlist';
 import dynamic from 'next/dynamic';
 
@@ -44,22 +43,10 @@ class IndexH5Page extends React.Component {
   }
 
   componentDidMount() {
-    // try {
-    //   this.handleWeiXinShare();
-    // } catch (error) {}
-
     // 是否有推荐
     const isDefault = this.props.site.checkSiteIsOpenDefautlThreadListData();
     this.props.index.setNeedDefault(isDefault);
   }
-
-  // handleWeiXinShare = async () => {
-  //   const { site, user } = this.props;
-  //   const { webConfig } = site;
-  //   const { setSite } = webConfig;
-  //   const { siteName, siteIntroduction, siteFavicon } = setSite;
-  //   setWxShare(`${user.userInfo && user.userInfo.nickname ? `${user.userInfo.nickname}` : ''}邀请你加入${siteName}`, siteIntroduction, window.location.href, siteFavicon);
-  // };
 
   // 点击更多弹出筛选
   searchClick = () => {

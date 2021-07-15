@@ -123,19 +123,21 @@ class Detail extends React.Component {
       const { text, indexes } = content;
       function setSpecialTitle(text, user, indexes = []) {
         // 全贴付费不能使用内容展示
-        if (payType !== 1) {
+        if (text) {
           const contentStr = htmlToString(text);
-          if (contentStr && contentStr !== '') return contentStr;
+          if (contentStr) {
+            return contentStr.length > 28 ? `${contentStr.substr(0, 28)}...` : contentStr;
+          };
         }
 
         const arr = [];
         if (indexes['101']) arr.push('图片');
         if (indexes['103']) arr.push('视频');
-        if (indexes['102']) arr.push('音频');
+        if (indexes['102']) arr.push('语音');
         if (indexes['108']) arr.push('附件');
         const contentLable = arr.length > 0 ? `${arr.join('/')}` : '内容';
-        const name = user && user.nickname ? `${user.nickname}` : '';
-        return `${name}分享的${contentLable}`;
+        const name = user && user.nickname ? `${user.nickname}` : '匿名用户';
+        return `${name}发布的${contentLable}`;
       }
 
       function setShareImg(threadUser, text, indexes = [], favicon) {

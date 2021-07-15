@@ -9,7 +9,6 @@ import { Popup, Input, Checkbox, Avatar, Button, Icon, Toast } from '@discuzq/de
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
-import DDialog from '@components/dialog';
 import List from '@components/list';
 
 import stringToColor from '@common/utils/string-to-color';
@@ -213,15 +212,10 @@ class AtSelect extends Component {
     );
 
     if (pc) return (
-      <DDialog
-        visible={visible}
-        className={styles.pc}
-        onClose={this.handleCancel}
-        isCustomBtn={true}
-        title="@圈友"
-      >
+      <div className={styles.pc}>
+        <div className={styles.pcHeader}>@圈友</div>
         {content}
-      </DDialog>
+      </div>
     );
 
     return (
