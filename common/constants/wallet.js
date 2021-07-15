@@ -34,7 +34,7 @@ export const INCOME_DETAIL_CONSTANTS = {
     code: '36,60,62,63,64',
   },
   REGISTER_INCOME: {
-    text: '注册分成收入',
+    text: '注册分成',
     code: 34,
   },
   WITHDRAW_FAIL: {
@@ -67,7 +67,7 @@ export const EXPAND_DETAIL_CONSTANTS = {
     code: ' 101,111,150',
   },
   SITE_EXPAND: {
-    text: '站点续费支出',
+    text: '站点续费',
     code: 71,
   },
   WITHDRAW_EXPAND: {
@@ -79,7 +79,7 @@ export const EXPAND_DETAIL_CONSTANTS = {
     code: 41,
   },
   ORDER_EXPAND: {
-    text: '合并订单支出',
+    text: '合并订单',
     code: 170,
   },
 };
