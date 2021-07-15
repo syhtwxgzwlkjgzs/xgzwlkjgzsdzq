@@ -111,7 +111,7 @@ class ThreadH5Page extends React.Component {
           comeFrom: 'thread',
           threadId: id,
           title,
-          path: `/subPages/thread/index?id=${id}`,
+          path: `/indexPages/thread/index?id=${id}`,
         };
       }
     }
@@ -269,6 +269,12 @@ class ThreadH5Page extends React.Component {
 
   // 点击分享
   onShareClick = () => {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+      return;
+    }
+
     this.setState({
       isShowShare: true,
       showMorePopup: true,
@@ -303,7 +309,7 @@ class ThreadH5Page extends React.Component {
     if (type === 'edit') {
       if (!this.props.thread?.threadData?.id) return;
       Taro.redirectTo({
-        url: `/subPages/thread/post/index?id=${this.props.thread?.threadData?.id}}`,
+        url: `/indexPages/thread/post/index?id=${this.props.thread?.threadData?.id}}`,
       });
     }
 
@@ -490,7 +496,7 @@ class ThreadH5Page extends React.Component {
         });
     }
 
-    const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
+    const { success, msg, isApproved } = await this.props.comment.createComment(params, this.props.thread);
     if (success) {
       // 更新帖子中的评论数据
       this.props.thread.updatePostCount(this.props.thread.totalCount);
@@ -505,9 +511,15 @@ class ThreadH5Page extends React.Component {
         this.props.thread.fetchThreadDetail(id);
       }
 
-      Toast.success({
-        content: '评论成功',
-      });
+      if (isApproved) {
+        Toast.success({
+          content: msg,
+        });
+      } else {
+        Toast.warning({
+          content: msg,
+        });
+      }
       this.setState({
         showCommentInput: false,
       });
@@ -529,11 +541,17 @@ class ThreadH5Page extends React.Component {
       content: val,
       attachments: [],
     };
-    const { success, msg } = await this.props.comment.updateComment(params, this.props.thread);
+    const { success, msg, isApproved } = await this.props.comment.updateComment(params, this.props.thread);
     if (success) {
-      Toast.success({
-        content: '修改成功',
-      });
+      if (isApproved) {
+        Toast.success({
+          content: msg,
+        });
+      } else {
+        Toast.warning({
+          content: msg,
+        });
+      }
       this.setState({
         showCommentInput: false,
       });
@@ -549,7 +567,7 @@ class ThreadH5Page extends React.Component {
       comeFrom: 'thread',
       threadId: this.props.thread?.threadData?.id,
       title: '',
-      path: `/subPages/thread/index?id=${this.props.thread?.threadData?.id}`
+      path: `/indexPages/thread/index?id=${this.props.thread?.threadData?.id}`
     }
     this.setState({shareData:shareData});
   }*/
@@ -642,16 +660,22 @@ class ThreadH5Page extends React.Component {
         });
     }
 
-    const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
+    const { success, msg, isApproved } = await this.props.comment.createReply(params, this.props.thread);
 
     if (success) {
       this.setState({
         showCommentInput: false,
         inputValue: '',
       });
-      Toast.success({
-        content: '回复成功',
-      });
+      if (isApproved) {
+        Toast.success({
+          content: msg,
+        });
+      } else {
+        Toast.warning({
+          content: msg,
+        });
+      }
       return true;
     }
 
@@ -769,7 +793,7 @@ class ThreadH5Page extends React.Component {
       this.props.index.refreshHomeData({ categoryIds: [categoryId] });
     }
     Taro.redirectTo({
-      url: '/pages/home/index',
+      url: '/indexPages/home/index',
     });
   }
 
@@ -869,7 +893,7 @@ class ThreadH5Page extends React.Component {
           {/* <Header></Header> */}
           {isReady && !isApproved && (
             <View className={layout.examine}>
-              <Icon className={layout.tipsIcon} name="WarnOutlined"></Icon>
+              <Icon className={layout.tipsIcon} name="TipsOutlined"></Icon>
               <Text className={layout.tipsText}>内容正在审核中，审核通过后才能正常显示！</Text>
             </View>
           )}

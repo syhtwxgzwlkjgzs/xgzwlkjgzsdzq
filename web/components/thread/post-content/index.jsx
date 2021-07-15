@@ -1,6 +1,8 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
-import { Button, Icon, RichText, ImagePreviewer } from '@discuzq/design';
+import { inject, observer } from 'mobx-react';
+import { Icon, RichText, ImagePreviewer } from '@discuzq/design';
 import { noop } from '../utils';
+import classnames from 'classnames';
 
 import fuzzyCalcContentLength from '@common/utils/fuzzy-calc-content-length';
 import s9e from '@common/utils/s9e';
@@ -12,69 +14,59 @@ import styles from './index.module.scss';
 /**
  * 帖子内容展示
  * @prop {string}   content 内容
- * @prop {boolean}  useShowMore 是否显示查看更多
- * @prop {boolean}  isPayContent 是否付费内容
- * @prop {number}   hidePercent 隐藏内容的百分比 eg: 80
- * @prop {number}   payAmount 查看隐藏内容支付金额
- * @prop {function} onPay 付款点击事件
+ * @prop {boolean}  useShowMore 是否需要"查看更多"
  * @prop {function} onRedirectToDetail 跳转到详情页面，当点击内容或查看更多内容超出屏幕时跳转到详情页面
  * @prop {function} onOpen 内容展开事件
- * @prop {boolean}  loading
  */
 
-const Index = ({
+const PostContent = ({
   content,
-  useShowMore = true,
-  isPayContent,
-  hidePercent = 0,
-  payAmount = 0,
-  onPay,
+  useShowMore = true, // 是否需要"查看更多"
   onRedirectToDetail = noop,
-  loading,
-  usePointer = true,
   customHoverBg = false,
-  onContentHeightChange = noop,
+  usePointer = true,
   onOpen = noop,
+  updateViewCount = noop,
+  transformer = parsedDom => parsedDom,
   ...props
 }) => {
   // 内容是否超出屏幕高度
-  const [contentTooLong, setContentTooLong] = useState(false);
+  const [contentTooLong, setContentTooLong] = useState(false); // 超过1200个字符
   const [cutContentForDisplay, setCutContentForDisplay] = useState('');
-  const [showMore, setHiddenMore] = useState(!useShowMore);
-  const [visible, setVisible] = useState(false);
+  const [showMore, setShowMore] = useState(false); // 根据文本长度显示"查看更多"
+  const [imageVisible, setImageVisible] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
-  const ImagePreviewerRef = React.useRef(null);
+  const ImagePreviewerRef = useRef(null); // 富文本中的图片也要支持预览
   const contentWrapperRef = useRef(null);
+
   const texts = {
     showMore: '查看更多',
-    hidePercent: `剩余${hidePercent}%内容已隐藏`,
-    payButton: `支付${payAmount}元查看剩余内容`,
   };
+
   // 过滤内容
   const filterContent = useMemo(() => {
-    let newContent = content ? s9e.parse(content) : '暂无内容';
+    let newContent = content ? s9e.parse(content) : '';
     newContent = xss(newContent);
+    return newContent;
+  }, [content]);
 
-    return !loading ? newContent : '内容加载中';
-  }, [content, loading]);
-  // 是否显示遮罩 是付费内容并且隐藏内容百分比大于0 或 显示查看更多并且查看更多状态为false 则显示遮罩
-  const showHideCover = !loading ? (isPayContent && hidePercent > 0) || (useShowMore && !showMore) : false;
-
+  // 点击"查看更多"
   const onShowMore = useCallback(
     (e) => {
       e && e.stopPropagation();
-
+      updateViewCount();
       if (contentTooLong) {
         // 内容过长直接跳转到详情页面
         onRedirectToDetail && onRedirectToDetail();
       } else {
         onOpen();
-        setHiddenMore(true);
+        setShowMore(false);
       }
     },
     [contentTooLong],
   );
 
+  // 点击帖子
   const handleClick = (e) => {
     if (e.target.localName === 'a') {
       return;
@@ -83,20 +75,23 @@ const Index = ({
     if(!e?.target?.getAttribute('src')) onRedirectToDetail();
   };
 
-
+  // 显示图片的预览
   useEffect(() => {
-    if (visible && ImagePreviewerRef && ImagePreviewerRef.current) {
+    if (imageVisible && ImagePreviewerRef && ImagePreviewerRef.current) {
       ImagePreviewerRef.current.show();
     }
-  }, [visible]);
+  }, [imageVisible]);
 
+  // 点击富文本中的图片
   const handleImgClick = (e) => {
+    updateViewCount();
     if(e?.attribs?.src) {
-      setVisible(true);
+      setImageVisible(true);
       setImageUrl(e.attribs.src);
     }
   }
 
+  // 超过1200个字符，截断文本用于显示
   const getCutContentForDisplay = (maxContentLength) => {
     const ctn = filterContent;
     let ctnSubstring = ctn.substring(0, maxContentLength); // 根据长度截断
@@ -109,16 +104,17 @@ const Index = ({
 
   useEffect(() => {
     const lengthInLine = parseInt((contentWrapperRef.current.offsetWidth || 704) / 16);
-    const length = fuzzyCalcContentLength(filterContent, lengthInLine);
+    const length = fuzzyCalcContentLength(filterContent, lengthInLine); // 大致计算文本长度
     const maxContentLength = lengthInLine * 6; // 如果默认长度是704，一共可容纳264个字符
 
     if (length < maxContentLength && length <= 1200) {
       // 显示6行内容
-      setHiddenMore(true);
+      setShowMore(false);
     } else {
-      setHiddenMore(false);
+      // 超过6行
+      setShowMore(true);
     }
-    if (length > 1200) {
+    if (length > 1200) { // 超过一页的超长文本
       if (useShowMore) getCutContentForDisplay(1200);
       setContentTooLong(true);
     } else {
@@ -126,34 +122,25 @@ const Index = ({
     }
   }, [filterContent]);
 
-  // const onImgsLoaded = () => {
-  //   onContentHeightChange(contentWrapperRef.current.clientHeight);
-  // };
-
-  useEffect(() => {
-    onContentHeightChange(contentWrapperRef.current.clientHeight);
-  }, [contentWrapperRef?.current?.clientHeight]);
-
   return (
-    // <div className={styles.container} {...props}>
-    <div className={`${styles.container} ${usePointer ? styles.usePointer : ''}`} {...props}>
+    <div className={classnames(styles.container, usePointer ? styles.usePointer : '')} {...props}>
       <div
         ref={contentWrapperRef}
-        className={`${styles.contentWrapper} ${showHideCover ? styles.hideCover : ''} ${customHoverBg ? styles.bg : ''}`}
-        onClick={!showMore ? onShowMore : handleClick}
+        className={`${styles.contentWrapper} ${(useShowMore && showMore) ? styles.hideCover : ''} ${customHoverBg ? styles.bg : ''}`}
+        onClick={showMore ? onShowMore : handleClick}
       >
         <div className={styles.content}>
           <RichText
-            // onImgsLoaded={onImgsLoaded}
             content={useShowMore && cutContentForDisplay ? cutContentForDisplay : urlToLink(filterContent)}
             onClick={handleClick}
             onImgClick={handleImgClick}
+            transformer={transformer}
           />
-          {visible && (
+          {imageVisible && (
             <ImagePreviewer
               ref={ImagePreviewerRef}
               onClose={() => {
-                setVisible(false);
+                setImageVisible(false);
               }}
               imgUrls={[imageUrl]}
               currentUrl={imageUrl}
@@ -161,23 +148,14 @@ const Index = ({
           )}
         </div>
       </div>
-      {!loading && useShowMore && !showMore && (
+      {useShowMore && showMore && (
         <div className={styles.showMore} onClick={onShowMore}>
           <div className={styles.hidePercent}>{texts.showMore}</div>
           <Icon className={styles.icon} name="RightOutlined" size={12} />
         </div>
       )}
-      {!loading && showMore && isPayContent && (
-        <div className={styles.payInfo}>
-          <div className={styles.hidePercent}>{texts.hidePercent}</div>
-          {/* <Button type="primary" onClick={onPay} className={styles.payButton}>
-            <img className={styles.payButtonIcon} />
-            {texts.payButton}
-          </Button> */}
-        </div>
-      )}
     </div>
   );
-};
+}
 
-export default React.memo(Index);
+export default React.memo(PostContent);

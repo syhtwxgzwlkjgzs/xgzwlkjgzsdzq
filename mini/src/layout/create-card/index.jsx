@@ -20,12 +20,15 @@ class Index extends React.Component {
     }
     async componentDidMount(){
         const {threadId} = this.thread
-        const data = {
-            path: `/subPages/thread/index?id=${threadId}`
-        }
         try {
-            const res = await  getMiniCode(data)
-            this.setState({miniCode: res})
+            const threadPath = `/indexPages/thread/index?id=${threadId}`;
+            const paramPath = `/pages/index/index?path=${encodeURIComponent(threadPath)}`;
+            const res = await getMiniCode({ params: { path: paramPath } });
+            if(res?.code === 0) {
+                this.setState({miniCode: res?.data});
+            } else {
+                this.setState({miniCode: defaultLogo});
+            }
         } catch {
             this.setState({miniCode: defaultLogo})
         }

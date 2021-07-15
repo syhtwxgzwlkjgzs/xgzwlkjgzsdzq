@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './index.module.scss';
-import { Divider, Spin } from '@discuzq/design';
+import { Divider, Spin, ImagePreviewer } from '@discuzq/design';
 import UserCenterHeaderImage from '@components/user-center-header-images';
 import UserCenterHead from '@components/user-center-head';
 import { inject, observer } from 'mobx-react';
@@ -21,14 +21,17 @@ class H5OthersPage extends React.Component {
     this.props.user.cleanTargetUserThreads();
     this.state = {
       fetchUserInfoLoading: true,
+      isPreviewBgVisible: false, // 是否预览背景图
     };
   }
+
+  targetUserId = null;
 
   componentDidMount = async () => {
     const { query } = this.props.router;
     const id = this.props.user?.id;
     if (!query.id || query.id === 'undefined') {
-      Router.replace({ url: '/' })
+      Router.replace({ url: '/' });
     }
     if (String(id) === query.id) {
       Router.replace({ url: '/my' });
@@ -36,11 +39,40 @@ class H5OthersPage extends React.Component {
     }
     if (query.id) {
       await this.props.user.getTargetUserInfo(query.id);
+      this.targetUserId = query.id;
       this.setState({
         fetchUserInfoLoading: false,
       });
     }
   };
+
+  // 用来处理浅路由跳转
+  componentDidUpdate = async () => {
+    const { query } = this.props.router;
+    const id = this.props.user?.id;
+    if (!query.id || query.id === 'undefined') {
+      Router.replace({ url: '/' });
+    }
+    if (String(id) === query.id) {
+      Router.replace({ url: '/my' });
+      return;
+    }
+
+    if (String(this.targetUserId) === String(query.id)) return;
+    this.targetUserId = query.id;
+    if (query.id) {
+      this.setState({
+        fetchUserInfoLoading: true,
+        fetchUserThreadsLoading: true
+      });
+      this.props.user.removeTargetUserInfo();
+      await this.props.user.getTargetUserInfo(query.id);
+      this.setState({
+        fetchUserInfoLoading: false,
+      });
+      await this.fetchTargetUserThreads();
+    }
+  }
 
   componentWillUnmount() {
     this.props.user.removeTargetUserInfo();
@@ -57,6 +89,22 @@ class H5OthersPage extends React.Component {
   formatUserThreadsData = (targetUserThreads) => {
     if (Object.keys(targetUserThreads).length === 0) return [];
     return Object.values(targetUserThreads).reduce((fullData, pageData) => [...fullData, ...pageData]);
+  };
+
+  handlePreviewBgImage = (e) => {
+    e && e.stopPropagation();
+    this.setState({
+      isPreviewBgVisible: !this.state.isPreviewBgVisible,
+    });
+  };
+
+  getBackgroundUrl = () => {
+    let backgroundUrl = null;
+    if (this.props.user?.targetOriginalBackGroundUrl) {
+      backgroundUrl = this.props.user?.targetOriginalBackGroundUrl;
+    }
+    if (!backgroundUrl) return false;
+    return backgroundUrl;
   };
 
   render() {
@@ -80,7 +128,9 @@ class H5OthersPage extends React.Component {
           )}
           {!this.state.fetchUserInfoLoading && (
             <>
-              <UserCenterHeaderImage isOtherPerson={true} />
+              <div onClick={this.handlePreviewBgImage}>
+                <UserCenterHeaderImage isOtherPerson={true} />
+              </div>
               <UserCenterHead platform={platform} isOtherPerson={true} />
             </>
           )}
@@ -96,13 +146,21 @@ class H5OthersPage extends React.Component {
             </div>
 
             <div className={styles.threadItemContainer}>
-              {this.formatUserThreadsData(targetUserThreads)
-              && this.formatUserThreadsData(targetUserThreads).length > 0 &&
-                <UserCenterThreads data={this.formatUserThreadsData(targetUserThreads)} />
-              }
+              {this.formatUserThreadsData(targetUserThreads) &&
+                this.formatUserThreadsData(targetUserThreads).length > 0 && (
+                  <UserCenterThreads data={this.formatUserThreadsData(targetUserThreads)} />
+                )}
             </div>
           </div>
         </div>
+        {this.getBackgroundUrl() && this.state.isPreviewBgVisible && (
+          <ImagePreviewer
+            visible={this.state.isPreviewBgVisible}
+            onClose={this.handlePreviewBgImage}
+            imgUrls={[this.getBackgroundUrl()]}
+            currentUrl={this.getBackgroundUrl()}
+          />
+        )}
       </BaseLayout>
     );
   }

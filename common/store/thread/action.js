@@ -27,6 +27,11 @@ class ThreadAction extends ThreadStore {
   }
 
   @action
+  updateViewCount(viewCount) {
+    this.threadData.viewCount = viewCount;
+  }
+
+  @action
   setScrollDistance(scrollDistance) {
     this.scrollDistance = scrollDistance;
   }
@@ -353,7 +358,7 @@ class ThreadAction extends ThreadStore {
    * @returns {object} 处理结果
    */
   @action
-  async delete(id, IndexStore, SearchStore, TopicStore) {
+  async delete(id, IndexStore, SearchStore, TopicStore, SiteStore) {
     if (!id) {
       return {
         msg: '参数不完整',
@@ -371,7 +376,7 @@ class ThreadAction extends ThreadStore {
       this.setThreadDetailField('isDelete', 1);
 
       // 删除帖子列表中的数据
-      IndexStore?.deleteThreadsData && IndexStore.deleteThreadsData({ id });
+      IndexStore?.deleteThreadsData && IndexStore.deleteThreadsData({ id }, SiteStore);
       SearchStore?.deleteThreadsData && SearchStore.deleteThreadsData({ id });
       TopicStore?.deleteThreadsData && TopicStore.deleteThreadsData({ id });
 

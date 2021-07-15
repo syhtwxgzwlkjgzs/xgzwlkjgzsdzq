@@ -12,10 +12,10 @@ import { MINI_SITE_JOIN_WHITE_LIST, REVIEWING_USER_WHITE_LIST } from '@common/co
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Taro from '@tarojs/taro';
 import { REVIEWING } from '@common/store/login/util';
+import LoginHelper from '@common/utils/login-helper';
 
-const INDEX_URL = '/pages/home/index';
+const INDEX_URL = '/indexPages/home/index';
 const PARTNER_INVITE_URL = '/subPages/forum/partner-invite/index';
-const WX_AUTH_URL = '/subPages/user/wx-auth/index';
 const BIND_NICKNAME_URL = '/subPages/user/bind-nickname/index';
 const CLOSE_URL = '/subPage/close/index';
 const PAGE_404_URL = '/subPages/404/index';
@@ -33,29 +33,27 @@ export default class Page extends React.Component {
     disabledToast: false,
   };
 
-  constructor(props) {
-    super(props);
-    const { noWithLogin, withLogin, user, site } = this.props;
+  // 检查是否满足渲染条件
+  isPass(noWait = false) {
+    const { noWithLogin, withLogin, site, user, commonLogin } = this.props;
+    const path = getCurrentInstance().router.path;
+    const siteMode = site?.webConfig?.setSite?.siteMode;
+
     if (!site.isMiniProgramOpen) {
-      return;
+      return false;
     }
 
     // 是否必须登录
     if (withLogin && !user.isLogin()) {
-      Router.redirect({ url: WX_AUTH_URL });
+      LoginHelper.saveAndLogin();
+      return false;
     }
 
     // 是否必须不登录
     if (noWithLogin && user.isLogin()) {
       Router.redirect({ url: INDEX_URL });
+      return false;
     }
-  }
-
-  // 检查是否满足渲染条件
-  isPass(noWait = false) {
-    const { site, user, commonLogin } = this.props;
-    const path = getCurrentInstance().router.path;
-    const siteMode = site?.webConfig?.setSite?.siteMode;
 
     if (site?.webConfig) {
       // 关闭站点
@@ -113,16 +111,13 @@ export default class Page extends React.Component {
       }
 
       // 访问指定页面，经过登陆、付费等操作完成后，跳回主页
-      const initialPage = site.getInitialPage();
-      if (initialPage) {
-        if (initialPage.includes(path)) {
-          site.clearInitialPage();
+      const jumpUrl = LoginHelper.getUrl();
+      if (jumpUrl) {
+        if (jumpUrl.includes(path)) {
+          LoginHelper.clear();
         }
         if (path === INDEX_URL) {
-          site.clearInitialPage();
-          Router.redirect({
-            url: initialPage,
-          });
+          LoginHelper.restore();
           return false;
         }
       }

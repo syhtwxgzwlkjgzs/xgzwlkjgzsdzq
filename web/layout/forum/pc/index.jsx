@@ -69,8 +69,6 @@ class ForumPCPage extends React.Component {
       user: { userInfo }
     } = this.props;
     const { platform } = site;
-    // 站点介绍
-    const siteIntroduction = get(site, 'webConfig.setSite.siteIntroduction', '');
     // 创建时间
     const siteInstall = get(site, 'webConfig.setSite.siteInstall', '');
     // 站点模式
@@ -133,7 +131,7 @@ class ForumPCPage extends React.Component {
           {/* 站点介绍 start */}
           <div className={layout.site_introduction}>
             <div className={layout.mode_title}>站点介绍</div>
-            <div className={layout.mode_text}>{siteIntroduction}</div>
+            <div className={layout.mode_text}>{site.siteIntroduction}</div>
           </div>
           {/* 站点介绍 end */}
           {/* 站点模式 start */}

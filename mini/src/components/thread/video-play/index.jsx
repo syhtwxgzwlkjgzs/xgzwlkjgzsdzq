@@ -4,7 +4,7 @@ import styles from './index.module.scss';
 import Video from '@discuzq/design/dist/components/video/index';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import { noop } from '../utils';
-import { View, Text } from '@tarojs/components'
+import { View, Text, Image } from '@tarojs/components'
 import { getElementRect, randomStr } from '../utils'
 import Taro from '@tarojs/taro';
 import calcVideoSize from '@common/utils/calc-video-size';
@@ -30,9 +30,12 @@ const Index = ({
   money = 0,
   status = 0,
   onPay = noop,
+  changeHeight = noop,
   baselayout = {},
   v_width = null,
-  v_height = null
+  v_height = null,
+  relativeToViewport = true,
+  updateViewCount = noop,
 }) => {
   let player = null;
   const videoId = useRef(`video${randomStr()}`);
@@ -44,6 +47,7 @@ const Index = ({
   };
 
   const onPlay = (e) => {
+    updateViewCount();
     if(baselayout) {
 
       // 暂停之前正在播放的视频
@@ -79,24 +83,31 @@ const Index = ({
   }
 
   useEffect(() => {
-    getElementRect(videoId.current).then(res => {
-      const info = Taro.getSystemInfoSync();
-
-      const { width, height } = calcVideoSize({
-        parentWidth: res?.width || 343,
-        v_width,
-        v_height,
-        viewHeight: info.windowHeight
-      });
-      setWidth(width);
-      setHeight(height);
-    })
-  }, []);
+    if (relativeToViewport) {
+      getElementRect(videoId.current).then(res => {
+        const info = Taro.getSystemInfoSync();
+  
+        const { width, height } = calcVideoSize({
+          parentWidth: res?.width || 343,
+          v_width,
+          v_height,
+          viewHeight: info.windowHeight
+        });
+        setWidth(width);
+        setHeight(height);
+  
+        changeHeight({ type: 'video', height })
+      })
+    }
+  }, [relativeToViewport]);
 
   return (
-    <View id={videoId.current} className={styles.container} style={{width: `${width}px`, height: `${height}px`}}>
+    <View id={videoId.current} className={styles.container} style={{ 
+      width: `${width}px`, 
+      height: `${height}px` 
+    }}>
       {
-        width && (
+        width && ( 
           <Video
             className={styles.videoBox}
             onReady={onReady}

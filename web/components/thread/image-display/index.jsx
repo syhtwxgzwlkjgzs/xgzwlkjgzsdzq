@@ -7,7 +7,7 @@ import {calcImageType, calcImageDefaultType} from '@common/utils/calc-image-type
 const { Col, Row } = Flex;
 
 // TODO 图片懒加载
-const Index = ({ imgData = [], flat = false, platform = 'h5', isPay = false, onPay = noop, onImageReady = () => {} }) => {
+const Index = ({ imgData = [], flat = false, platform = 'h5', isPay = false, onPay = noop, onImageReady = noop, updateViewCount = noop }) => {
   const [visible, setVisible] = useState(false);
   const [defaultImg, setDefaultImg] = useState('');
   const ImagePreviewerRef = React.useRef(null);
@@ -78,6 +78,7 @@ const Index = ({ imgData = [], flat = false, platform = 'h5', isPay = false, onP
     if (isPay) {
       onPay();
     } else {
+      updateViewCount();
       imgData.forEach((item) => {
         if (item.id === id) {
           setDefaultImg(item.url);
@@ -89,7 +90,7 @@ const Index = ({ imgData = [], flat = false, platform = 'h5', isPay = false, onP
 
   const onClickMore = (e) => {
     e.stopPropagation();
-
+    updateViewCount();
     setDefaultImg(imgData[4].url);
     setTimeout(() => {
       setVisible(true);

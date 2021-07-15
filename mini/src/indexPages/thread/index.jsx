@@ -8,6 +8,7 @@ import ThreadMiniPage from '@layout/thread/index';
 import withShare from '@common/utils/withShare/withShare';
 import ErrorMiniPage from '../../layout/error/index';
 import { priceShare } from '@common/utils/priceShare';
+import { updateViewCountInStores } from '@common/utils/viewcount-in-storage';
 
 // const MemoToastProvider = React.memo(ToastProvider);
 @inject('site')
@@ -38,7 +39,7 @@ class Detail extends React.Component {
     const { threadId, isAnonymous } = this.props.thread.threadData;
     const {isPrice} = this.props.thread.threadData.displayTag
     const defalutTitle = this.props.thread.title;
-    const path = `/subPages/thread/index?id=${threadId}`;
+    const path = `/indexPages/thread/index?id=${threadId}`;
     if (data.from === 'timeLine') {
       return {
         title: defalutTitle,
@@ -51,15 +52,35 @@ class Detail extends React.Component {
       };
     }
     this.props.thread.shareThread(threadId, this.props.index, this.props.search, this.props.topic);
-    
+
     return  priceShare({isAnonymous, isPrice, path}) || {
       title: defalutTitle,
       path,
     };
   }
 
+  updateViewCount = async (threadId) => {
+    // const viewCount = await updateViewCountInStores(threadId);
+    // if (viewCount) {
+    //   this.props.thread.updateViewCount(viewCount);
+    //   this.props.index.updateAssignThreadInfo(threadId, {
+    //     updateType: 'viewCount',
+    //     updatedInfo: { viewCount },
+    //   });
+    //   this.props.search.updateAssignThreadInfo(threadId, {
+    //     updateType: 'viewCount',
+    //     updatedInfo: { viewCount },
+    //   });
+    //   this.props.topic.updateAssignThreadInfo(threadId, {
+    //     updateType: 'viewCount',
+    //     updatedInfo: { viewCount },
+    //   });
+    // }
+  };
+
   async componentDidShow() {
     const { id } = getCurrentInstance().router.params;
+    
     // 判断缓存
     // const oldId = this.props?.thread?.threadData?.threadId;
     // if (Number(id) === oldId && id && oldId) {
@@ -68,7 +89,8 @@ class Detail extends React.Component {
     // this.props.thread.reset();
 
     if (id) {
-      this.getPageDate(id);
+      await this.getPageDate(id);
+      this.updateViewCount(id);
     }
   }
 
@@ -132,7 +154,7 @@ class Detail extends React.Component {
         // 不是作者自己。跳回首页
         if (!currentUserId || !userId || currentUserId !== userId) {
           Taro.redirectTo({
-            url: `/pages/home/index`,
+            url: `/indexPages/home/index`,
           });
           return;
         }

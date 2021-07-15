@@ -231,3 +231,7 @@
     cursor: unset !important;
   }
 }
+
+.set-radius{
+  border-radius:  0 0 $border-radius-small $border-radius-small;
+}

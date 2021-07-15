@@ -44,24 +44,45 @@ class Index extends Component {
     return avatar;
   };
 
-  // 针对财务消息，获取后缀提示语
-  getFinancialTips = (item) => {
-    if (item.type === 'rewarded') {
-      if (item.orderType === 3 || item.orderType === 7) return '支付了你';
-      return '打赏了你';
-    }
-    if (item.type === 'receiveredpacket') {
-      return '获取红包';
-    }
-    if (item.type === 'threadrewarded') {
-      return '悬赏了你';
-    }
-    if (item.type === 'threadrewardedexpired') {
-      return `悬赏到期，未领取金额${item.amount}元被退回`;
-    }
-  };
+  // 获取财务消息展示内容
+  getFinancialContent = () => {
+    const { item, site } = this.props;
 
-  // 账号信息前置语
+    let tips = '';
+    switch (item.type) {
+      case 'rewarded':
+        if (item.orderType === 1) return (<>
+          邀请{item.nickname}加入{site?.webConfig?.setSite?.siteName}
+        </>);
+        if (item.orderType === 3 || item.orderType === 7) tips = '支付了你';
+        tips = '打赏了你';
+        break;
+      case 'receiveredpacket':
+        tips = '获取红包';
+        break;
+      case 'threadrewarded':
+        tips = '悬赏了你';
+        break;
+      case 'threadrewardedexpired':
+        tips = `悬赏到期，未领取金额${item.amount}元被退回`;
+        break;
+    }
+
+    return (<>
+      在帖子"
+      <span
+        className={`${styles['financial-content']} ${styles['single-line']}`}
+        style={{
+          maxWidth: `${site.isPC ? '400px' : '90px'}`,
+          display: 'inline-block',
+          verticalAlign: 'bottom',
+        }}
+        dangerouslySetInnerHTML={{ __html: this.parseHTML() }}
+      />"中{tips}
+    </>)
+  }
+
+  // 帖子消息前置语
   getAccountTips = (item) => {
     switch (item.type) {
       case 'replied':
@@ -121,7 +142,10 @@ class Index extends Component {
     const avatarUrl = this.getAvatar(item.avatar);
 
     return (
-      <div className={styles.wrapper} onClick={(e) => this.toDetailOrChat(e, item)}>
+      <div
+        className={classNames(styles.wrapper, isPC && isLast && styles['set-radius'])}
+        onClick={(e) => this.toDetailOrChat(e, item)}
+      >
         {/* 默认block */}
         <div className={isPC ? styles['block-pc'] : styles.block}>
           {/* 头像 */}
@@ -178,17 +202,7 @@ class Index extends Component {
               {/* 财务内容 */}
               {type === 'financial' && (
                 <p className={styles['content-html']} style={isPC ? { paddingRight: '20px' } : {}}>
-                  在帖子"
-                  <span
-                    className={`${styles['financial-content']} ${styles['single-line']}`}
-                    style={{
-                      maxWidth: `${isPC ? '400px' : '90px'}`,
-                      display: 'inline-block',
-                      verticalAlign: 'bottom',
-                    }}
-                    dangerouslySetInnerHTML={{ __html: this.parseHTML() }}
-                  />
-                  "中{this.getFinancialTips(item)}
+                  {this.getFinancialContent()}
                 </p>
               )}
               {/* 私信、帖子、账户 */}

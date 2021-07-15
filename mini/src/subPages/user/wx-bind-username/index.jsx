@@ -21,22 +21,34 @@ import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-stor
 @inject('commonLogin')
 @observer
 class Index extends Component {
+  componentWillUnmount() {
+    this.props.userLogin.reset();
+    this.props.commonLogin.reset();
+  }
+
   handleBindButtonClick = async () => {
     try {
+      const { commonLogin } = this.props;
+      if (!commonLogin.loginLoading) {
+        return;
+      }
+      commonLogin.setLoginLoading(false);
       const resp = await this.props.userLogin.login();
       const uid = get(resp, 'data.uid', '');
       this.props.user.updateUserInfo(uid);
+      commonLogin.setLoginLoading(true);
       Toast.success({
         content: '登录成功',
         hasMask: false,
         duration: 1000,
         onClose: () => {
           navigateTo({
-            url: `/pages/home/index`
+            url: `/indexPages/home/index`
           });
         }
       });
     } catch (e) {
+      this.props.commonLogin.setLoginLoading(true);
       // 注册信息补充
       if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
         if (isExtFieldsOpen(this.props.site)) {
@@ -44,7 +56,7 @@ class Index extends Component {
           redirectTo({ url: '/subPages/user/supplementary/index' });
           return;
         }
-        redirectTo({ url: '/pages/home/index' });
+        redirectTo({ url: '/indexPages/home/index' });
         return;
       }
 
@@ -102,7 +114,7 @@ class Index extends Component {
             />
             {/* 输入框 end */}
             {/* 登录按钮 start */}
-            <Button className={layout.button} type="primary" onClick={this.handleBindButtonClick}>
+            <Button className={layout.button} loading={!commonLogin.loginLoading} type="primary" onClick={this.handleBindButtonClick}>
               登录并绑定
             </Button>
             {/* 登录按钮 end */}

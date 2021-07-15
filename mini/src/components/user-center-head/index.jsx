@@ -5,12 +5,14 @@ import Button from '@discuzq/design/dist/components/button/index';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import Spin from '@discuzq/design/dist/components/spin/index';
+import ImagePreviewer from '@discuzq/design/dist/components/image-previewer/index';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import Router from '@discuzq/sdk/dist/router';
 import { getCurrentInstance } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
 import throttle from '@common/utils/thottle.js';
+import LoginHelper from '@common/utils/login-helper';
 
 @inject('site')
 @inject('user')
@@ -20,12 +22,15 @@ class index extends Component {
     super(props);
     this.state = {
       isFollowedLoading: false, // 是否点击关注
+      isPreviewAvatar: false, // 是否预览头像
     };
   }
 
   static defaultProps = {
     isOtherPerson: false, // 表示是否是其他人
   };
+
+  previewerRef = React.createRef(null);
 
   // 点击屏蔽
   handleChangeShield = throttle((isDeny) => {
@@ -67,6 +72,7 @@ class index extends Component {
             this.setState({
               isFollowedLoading: false,
             });
+            return;
           }
           await this.props.user.getTargetUserInfo(id);
           Toast.success({
@@ -101,6 +107,7 @@ class index extends Component {
             this.setState({
               isFollowedLoading: false,
             });
+            return;
           }
           await this.props.user.getTargetUserInfo(id);
           Toast.success({
@@ -129,7 +136,12 @@ class index extends Component {
     clearLoginStatus();
     this.props.user.removeUserInfo();
     this.props.site.getSiteInfo();
-    Router.reLaunch({ url: '/pages/home/index' });
+    Router.reLaunch({ 
+      url: '/subPages/forum/partner-invite/index',
+      success: () => {
+        LoginHelper.clear();
+      }
+    });
   };
 
   // 点击粉丝列表
@@ -195,6 +207,19 @@ class index extends Component {
     return { icon, text };
   };
 
+  showPreviewerRef = () => {
+    if (this.previewerRef.current) {
+      this.props.updatePreviewImageStatus && this.props.updatePreviewImageStatus(true);
+      this.previewerRef.current.show();
+    }
+  };
+
+  // 点击头像预览
+  handlePreviewAvatar = (e) => {
+    e && e.stopPropagation();
+    this.showPreviewerRef();
+  };
+
   render() {
     const { targetUser } = this.props.user;
     const user = this.props.isOtherPerson ? targetUser || {} : this.props.user;
@@ -202,8 +227,8 @@ class index extends Component {
       <View className={styles.h5box}>
         {/* 上 */}
         <View className={styles.h5boxTop}>
-          <View className={styles.headImgBox}>
-            <Avatar image={user.avatarUrl} size="big" name={user.username} />
+          <View className={styles.headImgBox} onClick={user.avatarUrl && this.handlePreviewAvatar}>
+            <Avatar image={user.avatarUrl} size="big" name={user.nickname} />
           </View>
           {/* 粉丝|关注|点赞 */}
           <View className={styles.userMessageList}>
@@ -288,6 +313,13 @@ class index extends Component {
             <Icon name="ShieldOutlined" />
             <Text>{user.isDeny ? '解除屏蔽' : '屏蔽'}</Text>
           </View>
+        )}
+        {user.originalAvatarUrl && (
+          <ImagePreviewer
+            ref={this.previewerRef}
+            imgUrls={[user.originalAvatarUrl]}
+            currentUrl={user.originalAvatarUrl}
+          />
         )}
       </View>
     );

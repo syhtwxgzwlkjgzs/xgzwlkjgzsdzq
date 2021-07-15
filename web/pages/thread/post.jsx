@@ -264,6 +264,7 @@ class PostPage extends React.Component {
    * @param {object} data 要设置的数据
    */
   handleAttachClick = (item, data) => {
+    this.setState({ currentDefaultOperation: '' });
     if (!this.checkAudioRecordStatus()) return;
 
     const { isPc } = this.props.site;
@@ -693,6 +694,7 @@ class PostPage extends React.Component {
         this.props.baselayout.setJumpingToTop();
         this.props.index.addThread(data);
         this.props.index.getReadCategories(); // 发帖后分类数据更新
+        this.props.site.getSiteInfo(); // 发帖后分类中"全部"数据更新
       }
     }
   };

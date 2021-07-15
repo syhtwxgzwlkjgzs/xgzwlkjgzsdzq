@@ -4,6 +4,8 @@ import initializeStore from '@common/store';
 import Taro from '@tarojs/taro'
 import Router from '@discuzq/sdk/dist/router';
 import setTitle from '@common/utils/setTitle';
+import LoginHelper from '@common/utils/login-helper'
+import { STORAGE_KEY } from '@common/utils/viewcount-in-storage';
 
 import './app.scss';
 
@@ -88,21 +90,14 @@ class App extends Component {
         }
       }
       
-      const { site } = this.store;
-      site.setInitialPage(targetUrl);
+      LoginHelper.setUrl(targetUrl);
     } catch(err) {
       console.log('savePageJump', err);
     }
+    
+    // 清除帖子浏览计数
+    Taro.removeStorageSync(STORAGE_KEY)
   }
-
-  /**
-   * 程序切后台时触发
-   */
-  // componentDidHide() {
-  //   // 关闭小程序，清空跳转
-  //   const { site } = this.store;
-  //   site.clearInitialPage();
-  // }
 
   /**
    * 程序要打开的页面不存在时触发

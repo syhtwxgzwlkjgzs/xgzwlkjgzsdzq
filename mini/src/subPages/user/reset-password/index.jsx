@@ -8,6 +8,7 @@ import '@discuzq/design/dist/styles/index.scss';
 import PhoneInput from '@components/login/phone-input';
 import { toTCaptcha } from '@common/utils/to-tcaptcha'
 import { View } from '@tarojs/components';
+import Page from '@components/page';
 import layout from './index.module.scss';
 
 @inject('site')
@@ -33,8 +34,11 @@ class ResetPasswordH5Page extends React.Component {
 
   componentWillUnmount() {
     // 卸载监听腾讯验证码事件
-    Taro.eventCenter.off('captchaResult', this.handleCaptchaResult)
-    Taro.eventCenter.off('closeChaReault', this.handleCloseChaReault)
+    Taro.eventCenter.off('captchaResult', this.handleCaptchaResult);
+    Taro.eventCenter.off('closeChaReault', this.handleCloseChaReault);
+    // 重置数据
+    this.props.resetPassword.reset();
+    this.props.commonLogin.reset();
   }
 
   // 验证码滑动成功的回调
@@ -95,7 +99,13 @@ class ResetPasswordH5Page extends React.Component {
 
   handleResetPasswordButtonClick = async () => {
     try {
+      const { commonLogin} = this.props;
+      if (!commonLogin.loginLoading) {
+        return;
+      }
+      commonLogin.setLoginLoading(false);
       await this.props.resetPassword.resetPassword();
+      commonLogin.setLoginLoading(true);
 
       Toast.success({
         content: '重置密码成功',
@@ -103,11 +113,12 @@ class ResetPasswordH5Page extends React.Component {
         duration: 1000,
         onClose: () => {
           redirectTo({
-            url: `/pages/home/index`
+            url: `/indexPages/home/index`
           });
         }
       });
     } catch (e) {
+      this.props.commonLogin.setLoginLoading(true);
       Toast.error({
         content: e.Message,
         hasMask: false,
@@ -117,7 +128,9 @@ class ResetPasswordH5Page extends React.Component {
   };
 
   render() {
+    const { commonLogin: { loginLoading } } = this.props;
     return (
+      <Page>
       <View className={layout.container}>
         <View className={layout.content}>
           <View className={layout.title}>找回密码</View>
@@ -154,12 +167,14 @@ class ResetPasswordH5Page extends React.Component {
           <Button
             className={layout.button}
             type="primary"
+            loading={!loginLoading}
             onClick={this.handleResetPasswordButtonClick}
           >
             下一步
           </Button>
         </View>
       </View>
+      </Page>
     );
   }
 }

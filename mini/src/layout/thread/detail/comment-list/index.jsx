@@ -262,9 +262,14 @@ class RenderCommentList extends React.Component {
 
   // 跳转评论详情
   onCommentClick(data) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+      return;
+    }
     if (data.id && this.props.thread?.threadData?.id) {
       Taro.navigateTo({
-        url: `/subPages/thread/comment/index?id=${data.id}&threadId=${this.props.thread?.threadData?.id}`,
+        url: `/indexPages/thread/comment/index?id=${data.id}&threadId=${this.props.thread?.threadData?.id}`,
       });
       // 清空@ren数据
       this.props.thread.setCheckUser([]);
@@ -274,7 +279,7 @@ class RenderCommentList extends React.Component {
   // 点击采纳
   onAboptClick(data) {
     typeof this.props.onAboptClick === 'function' && this.props.onAboptClick(data);
-    
+
     // if (!this.props.user.isLogin()) {
     //   Toast.info({ content: '请先登录!' });
     //   goToLoginPage({ url: '/subPages/user/wx-auth/index' });

@@ -14,6 +14,7 @@ import PayConfirmed from './pay-confirmed';
 import PayPwd from './payPwd';
 // import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import { get } from '../../../../common/utils/get';
+import LoginHelper from '@common/utils/login-helper';
 
 class PayBoxEmitter extends EventEmitter {}
 
@@ -42,7 +43,7 @@ export default class PayBox extends Component {
         content: '需要登录后才可以进行支付',
         duration: 2000,
       });
-      Router.push({ url: '/user/login' });
+      LoginHelper.saveAndLogin();
       return;
     }
     if (Number(get(options, 'data.amount', 0)) < 0.1) {

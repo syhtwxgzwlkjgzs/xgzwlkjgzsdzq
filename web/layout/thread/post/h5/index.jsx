@@ -79,6 +79,8 @@ class ThreadCreate extends React.Component {
   // 设置底部bar的样式
   setBottomBarStyle = (y = 0, action, event) => {
     const winHeight = getVisualViewpost();
+    // 阻止页面上拉带动操作栏位置变化。
+    if (window.innerHeight === winHeight && isIOS()) return;
     // 如果可视窗口不变，即没有弹起键盘不进行任何设置
     const vditorToolbar = document.querySelector('#dzq-vditor .vditor-toolbar');
     this.positionDisplay(action);
@@ -95,8 +97,6 @@ class ThreadCreate extends React.Component {
       }
     }
     this.moneyboxDisplay(false);
-    // 阻止页面上拉带动操作栏位置变化。放这里便于本地开发调试
-    // if (window.innerHeight === winHeight && isIOS()) return;
     this.setPostBox(action, event, y);
   }
 
@@ -179,7 +179,7 @@ class ThreadCreate extends React.Component {
 
   // 分类
   handleCategoryClick = () => {
-    this.props.handleSetState({ categoryChooseShow: true });
+    this.props.handleSetState({ categoryChooseShow: true, currentDefaultOperation: '' });
   };
 
   // 顶部导航栏点击后拦截回调
@@ -229,7 +229,7 @@ class ThreadCreate extends React.Component {
             onChange={this.props.handleVditorChange}
             onFocus={(action, event) => {
               this.setBottomFixed(action, event);
-              this.props.handleSetState({ isVditorFocus: true });
+              this.props.handleSetState({ isVditorFocus: true, currentDefaultOperation: '' });
             }}
             onBlur={() => {
               this.props.handleSetState({ isVditorFocus: false });
@@ -307,7 +307,7 @@ class ThreadCreate extends React.Component {
             />
           )}
         </div>
-        <div id="post-bottombar" className={styles['post-bottombar']} onClick={e => e.stopPropagation()}>
+        <div id="post-bottombar" className={styles['post-bottombar']}>
           {/* 插入位置 */}
           {(permissions?.insertPosition?.enable && webConfig?.lbs?.lbs) && (
             <div id="post-position" className={styles['position-box']}>

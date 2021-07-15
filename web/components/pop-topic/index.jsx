@@ -47,6 +47,7 @@ class Index extends React.Component {
 
   render () {
     const { pageData } = this.state.topics || {};
+    const { topicsError } = this.props.search || {};
     const { isError, errorText } = this.state
 
     return (
@@ -55,8 +56,8 @@ class Index extends React.Component {
         isLoading={!pageData}
         noData={!pageData?.length}
         onShowMore={this.redirectToSearchResultTopic}
-        isError={isError}
-        errorText={errorText}
+        isError={topicsError.isError || isError}
+        errorText={topicsError.errorText || errorText}
       >
           <TrendingTopic className="pop-topic" data={pageData?.filter((_, index) => index < 8)} onItemClick={this.onTopicClick}/>
       </SidebarPanel>

@@ -199,7 +199,7 @@ class UserCenterUsers extends React.Component {
         style={{
           height: '100%',
           overflow: 'scroll',
-          ...this.props.styles,
+          ...this.props.style,
         }}
       >
         {this.state?.users?.map((user, index) => {
@@ -212,7 +212,7 @@ class UserCenterUsers extends React.Component {
                 imgUrl={user.avatar}
                 withHeaderUserInfo={this.props.isPc}
                 onContainerClick={this.props.onContainerClick}
-                userName={user.username}
+                nickName={user.nickname}
                 userGroup={user.groupName}
                 followHandler={this.followUser}
                 itemStyle={this.props.itemStyle}

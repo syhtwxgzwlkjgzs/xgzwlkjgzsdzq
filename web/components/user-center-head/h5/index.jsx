@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
-import { Button, Icon, Toast, Spin } from '@discuzq/design';
+import { Button, Icon, Toast, Spin, ImagePreviewer } from '@discuzq/design';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import { numberFormat } from '@common/utils/number-format';
 import browser from '@common/utils/browser';
 import throttle from '@common/utils/thottle.js';
+import LoginHelper from '@common/utils/login-helper.js';
 
 @inject('user')
 @inject('site')
@@ -18,6 +19,7 @@ class index extends Component {
     super(props);
     this.state = {
       isFollowedLoading: false, // 是否点击关注
+      isPreviewAvatar: false, // 是否预览头像
     };
   }
 
@@ -130,7 +132,7 @@ class index extends Component {
 
   logout = () => {
     clearLoginStatus();
-    window.location.replace('/');
+    LoginHelper.gotoIndex();
   };
 
   // 点击粉丝列表
@@ -193,6 +195,14 @@ class index extends Component {
     return { icon, text };
   };
 
+  // 点击头像预览
+  handlePreviewAvatar = (e) => {
+    e && e.stopPropagation();
+    this.setState({
+      isPreviewAvatar: !this.state.isPreviewAvatar,
+    });
+  };
+
   render() {
     const { site } = this.props;
     const { targetUser } = this.props.user;
@@ -202,8 +212,8 @@ class index extends Component {
       <div className={styles.h5box}>
         {/* 上 */}
         <div className={styles.h5boxTop}>
-          <div className={styles.headImgBox}>
-            <Avatar image={user.avatarUrl} size="big" name={user.nickname} level={1}/>
+          <div className={styles.headImgBox} onClick={this.handlePreviewAvatar}>
+            <Avatar image={user.avatarUrl} size="big" name={user.nickname} level={1} />
           </div>
           {/* 粉丝|关注|点赞 */}
           <div className={styles.userMessageList}>
@@ -268,16 +278,16 @@ class index extends Component {
                   <span className={styles.userBtnText}>编辑资料</span>
                 </div>
               </Button>
-              {
-                isHideLogout ? '' : (
-                  <Button full className={styles.btn} onClick={this.logout}>
-                    <div className={styles.actionButtonContentWrapper}>
-                      <Icon name="PoweroffOutlined" size={browser.env('ios') ? 14 : 16} />
-                      <span className={styles.userBtnText}>退出登录</span>
-                    </div>
-                  </Button>
-                )
-              }
+              {isHideLogout ? (
+                ''
+              ) : (
+                <Button full className={styles.btn} onClick={this.logout}>
+                  <div className={styles.actionButtonContentWrapper}>
+                    <Icon name="PoweroffOutlined" size={browser.env('ios') ? 14 : 16} />
+                    <span className={styles.userBtnText}>退出登录</span>
+                  </div>
+                </Button>
+              )}
             </>
           )}
         </div>
@@ -292,6 +302,14 @@ class index extends Component {
             <Icon name="ShieldOutlined" />
             <span>{user.isDeny ? '解除屏蔽' : '屏蔽'}</span>
           </div>
+        )}
+        {user.originalAvatarUrl && this.state.isPreviewAvatar && (
+          <ImagePreviewer
+            visible={this.state.isPreviewAvatar}
+            onClose={this.handlePreviewAvatar}
+            imgUrls={[user.originalAvatarUrl]}
+            currentUrl={user.originalAvatarUrl}
+          />
         )}
       </div>
     );

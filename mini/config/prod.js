@@ -1,5 +1,7 @@
 const miniConfig = require('../src/app.config');
 
+let a = 1;
+
 module.exports = {
   env: {
     NODE_ENV: '"production"',
@@ -30,7 +32,11 @@ module.exports = {
       ignoreOrder: true
     },
     addChunkPages (pages) {
-      const subPages = miniConfig.subPackages[0].pages;
+      const indexPages = miniConfig.subPackages[0].pages;
+      const subPages = miniConfig.subPackages[1].pages;
+      indexPages.map(page => {
+        pages.set(`indexPages/${page}`, ['indexPages/common']);
+      });
       subPages.map(page => {
         pages.set(`subPages/${page}`, ['subPages/common']);
       });
@@ -44,17 +50,44 @@ module.exports = {
         optimization: {
           splitChunks: {
             cacheGroups: {
-              subPagesCommon: {
-                name: 'subPages/common',
+              indexPagesCommon: {
+                name: 'indexPages/common',
                 minChunks: 2,
+                reuseExistingChunk: true,
                 test: (module, chunks) => {
-                  const isNoOnlySubpackRequired = chunks.find(chunk => !(/\bsubPages\b/.test(chunk.name)))
+                  // if (module.resource && module.resource.indexOf('discuzq/design') > -1) {
+                  //   console.log(111, module.resource);
+                  // }
+
+                  // if (module.resource === '/Users/joneeeeli/Desktop/code/tencent/newdzq/discuz-fe/mini/node_modules/@discuzq/design/dist/components/spin/layouts/mini.js') {
+                  //   chunks.forEach(chunk => {
+                  //     console.log(111, chunk.name);
+                  //   });
+                  // }
+                  const isNoOnlySubpackRequired = chunks.find(chunk => !(/\bindexPages\b/.test(chunk.name) || /\bsubPages\b/.test(chunk.name)))
                   return !isNoOnlySubpackRequired
                 },
                 priority: 200
-              }
-              // common: false,
-              // vendors: false
+              },
+              subPagesCommon: {
+                name: 'subPages/common',
+                minChunks: 2,
+                reuseExistingChunk: true,
+                test: (module, chunks) => {
+                  const isNoOnlySubpackRequired = chunks.find(chunk => !(/\bsubPages\b/.test(chunk.name) || /\bindexPages\b/.test(chunk.name)))
+                  return !isNoOnlySubpackRequired
+                },
+                priority: 1
+              },
+              vendors: {
+                name: 'vendors',
+                minChunks: 2,
+                reuseExistingChunk: true,
+                test: (module, chunks) => {
+                  return /[\\/]node_modules[\\/]/.test(module.resource);
+                },
+                priority: 200,
+              },
             }
           }
         }

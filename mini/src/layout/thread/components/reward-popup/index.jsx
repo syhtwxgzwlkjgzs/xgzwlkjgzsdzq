@@ -2,18 +2,26 @@ import React, { useState, useEffect } from 'react';
 import Popup from '@discuzq/design/dist/components/popup/index';
 import Button from '@discuzq/design/dist/components/button/index';
 import Input from '@discuzq/design/dist/components/input/index';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
 import className from 'classnames';
 
 const InputPop = (props) => {
-  const { visible, onOkClick, onCancel } = props;
+  const { visible, onOkClick } = props;
 
   const [value, setValue] = useState('');
   const [refresh, setRefresh] = useState(true); // 手动刷新
+  const [maxLength, setMaxLength] = useState(7); // 手动刷新
 
   const onInputChange = (val) => {
     const arr = val.match(/([1-9]\d{0,6}|0)(\.\d{0,2})?/);
+    const spot = arr ? arr[0].indexOf('.') : -1;
+    if(spot !== -1) {
+      setMaxLength(spot + 3);
+    } else {
+      setMaxLength(7);
+    }    
     setValue( arr ? arr[0] : '');
     setRefresh(!refresh);
   };
@@ -24,8 +32,25 @@ const InputPop = (props) => {
     setValue(item);
   };
 
+  const onCancel = () => {
+    typeof props?.onCancel === 'function' && props.onCancel();
+    typeof props?.onCancel === 'function' && setValue('');
+  }
+
   const onSubmitClick = async () => {
-    if (value === '' || Number(value) <= 0 || Number(value) > 1000000) return;
+    if (value === '' || Number(value) <= 0 || Number(value) > 1000000){
+      if (value === '' || Number(value) <= 0) {
+        Toast.error({
+          content: '金额不能为0',
+        });
+      }
+      if (Number(value) > 1000000) {
+        Toast.error({
+          content: '金额不能超过100万',
+        });
+      }
+      return;
+    };
     if (typeof onOkClick === 'function') {
       try {
         const success = await onOkClick(value);
@@ -48,6 +73,7 @@ const InputPop = (props) => {
           <Input
             mode="number"
             placeholder="金额"
+            maxLength={maxLength}
             className={styles.input}
             value={value}
             onChange={(e) => onInputChange(e.target.value)}

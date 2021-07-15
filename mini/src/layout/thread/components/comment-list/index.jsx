@@ -114,6 +114,9 @@ class CommentList extends React.Component {
   render() {
     const { canDelete, canEdit, canLike, canHide } = this.generatePermissions(this.props.data);
 
+    // 评论内容是否通过审核
+    const isApproved = this.props?.data?.isApproved === 1;
+    
     return (
       <View className={styles.commentList}>
         <View className={styles.header}>
@@ -154,15 +157,22 @@ class CommentList extends React.Component {
           {/* 评论用户头像 */}
           <View className={styles.commentListAvatar} onClick={() => this.avatarClick()}>
             <Avatar
-              image={this.props?.data?.user?.avatar}
-              name={this.props.data?.user?.nickname || this.props.data?.user?.userName || ''}
+              image={(this.props.data?.user?.nickname || this.props.data?.user?.userName) && this.props?.data?.user?.avatar}
+              name={this.props.data?.user?.nickname || this.props.data?.user?.userName || '异'}
               circle={true}
             ></Avatar>
           </View>
           <View className={styles.commentListContent}>
             <View className={styles.commentListContentText}>
-              <View className={styles.commentListName} onClick={() => this.avatarClick()}>
-                {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
+              <View className={styles.commentHeader}>
+                <View className={styles.commentListName}>
+                  {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
+                </View>
+                {!isApproved ? (
+                  <View className={styles.isApproved}>审核中</View>
+                ) : (
+                  <View></View>
+                )}
               </View>
               {/* 评论内容 */}
               <View className={classNames(styles.commentListText)}>
