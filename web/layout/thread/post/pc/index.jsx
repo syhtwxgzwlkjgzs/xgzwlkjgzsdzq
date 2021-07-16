@@ -255,9 +255,9 @@ class ThreadPCPage extends React.Component {
                   pc
                   isOpenQcloudVod={this.props.site.isOpenQcloudVod}
                   postData={postData}
-                  onAttachClick={() => {
+                  onAttachClick={(item, ...props) => {
                     this.hintHide();
-                    this.props.handleAttachClick();
+                    this.props.handleAttachClick(item, ...props);
                   }}
                   onVideoUpload={this.props.handleVideoUpload}
                   onUploadComplete={this.props.handleVideoUploadComplete}
