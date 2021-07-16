@@ -53,7 +53,7 @@
       background-color: $white;
     }
 
-    img[alt^=":"] {
+    img[alt$=":emoji"] {
       width: 30px;
     }
   }
