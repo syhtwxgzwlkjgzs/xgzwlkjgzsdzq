@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { arrTrans, getWindowHeight } from './utils';
 import List from './List';
+import { inject, observer } from 'mobx-react';
+import { useMemo } from 'react';
 
 /**
  * 列表组件，集成上拉刷新能力
@@ -13,7 +15,8 @@ import List from './List';
 const VirtualList = ({
   data,
   isClickTab,
-  wholePageIndex
+  wholePageIndex,
+  index: indexStore
 }) => {
   const [dataSource, setDataSource] = useState([]);
   const windowHeight = useRef(null)
@@ -25,15 +28,63 @@ const VirtualList = ({
         resetAllData()
       } else {
         const arr = arrTrans(10, data)
-        const length = arr.length
-        if (arr.length) {
+        const { changeInfo } = indexStore
+
+        if (changeInfo) {
+          const { type, thread } = changeInfo
+          if (type === 'delete' || type === 'add' || type === 'edit') {
+            let newArr = [ ...dataSource ];
+            const threadId = type === 'delete' ? thread : thread.threadId
+            const { pIndex, sIndex } = getThreadInfo(threadId)
+            if ((pIndex !== -1 && sIndex !== -1) || type === 'add') {
+              if (type === 'delete') {
+                newArr[pIndex].splice(sIndex, 1)
+              } else if (type === 'add') {
+                newArr[0].unshift(thread)
+              } else if (type === 'edit') {
+                newArr[pIndex][sIndex] = thread
+              }
+  
+              setDataSource(newArr) 
+            }
+          }
+        } else {
+          const length = arr.length
           const newArr = dataSource.slice()
-          newArr.push(arr[length - 1]) 
-          setDataSource(newArr)    
+          if (length && data.length > arrLength) {
+            newArr.push(arr[length - 1]) 
+            setDataSource(arr)    
+          }
         }
       }
-    
-  }, [data?.length])
+
+      indexStore.changeInfo = null
+  }, [data?.length, indexStore.changeInfo])
+
+
+  const getThreadInfo = (threadId) => {
+    let pIndex = -1
+    let sIndex = -1
+    let newArr = [ ...dataSource ];
+    newArr.forEach((subArr, index) => {
+      for(let i = 0; i < subArr.length; i++) {
+        if(subArr[i].threadId === threadId) {
+          pIndex = index
+          sIndex = i
+        }
+      }
+    });
+
+    return { pIndex, sIndex }
+  }
+
+  const arrLength = useMemo(() => {
+    let length = 0
+    dataSource.forEach(item => {
+      length += item.length
+    })
+    return length
+  }, [dataSource])
 
 //   通知子组件去监听
   useEffect(() => {
@@ -91,4 +142,5 @@ const VirtualList = ({
     
   );
 }
-export default VirtualList;
+
+export default inject('index')(observer(VirtualList));
