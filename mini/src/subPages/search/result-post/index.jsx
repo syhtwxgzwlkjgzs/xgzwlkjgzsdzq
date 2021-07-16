@@ -32,7 +32,7 @@ class Index extends React.Component {
     this.page = 1;
     const res = await search.getThreadList({ search: keyword });
 
-    this.handleFirstRequest(res)
+    // this.handleFirstRequest(res)
   }
   getShareData (data) {
     const shareData = data.target?.dataset?.shareData
@@ -70,13 +70,13 @@ class Index extends React.Component {
     }
 
     // 根据page值，动态设置sort
-    const sort = this.page === 1 ? '3' : '4'
+    // const sort = this.page === 1 ? '3' : '4'
 
-    const res = await search.getThreadList({ search: keyword, repeatedIds, sort, perPage: this.perPage, page: this.page });
+    const res = await search.getThreadList({ search: keyword, perPage: this.perPage, page: this.page });
 
-    if (this.page === 1) {
-      this.handleFirstRequest(res, keyword)
-    }
+    // if (this.page === 1) {
+    //   this.handleFirstRequest(res, keyword)
+    // }
 
     return;
   }

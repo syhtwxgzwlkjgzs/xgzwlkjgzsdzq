@@ -60,22 +60,22 @@ class Detail extends React.Component {
   }
 
   updateViewCount = async (threadId) => {
-    const viewCount = await updateViewCountInStores(threadId);
-    if (viewCount) {
-      this.props.thread.updateViewCount(viewCount);
-      this.props.index.updateAssignThreadInfo(threadId, {
-        updateType: 'viewCount',
-        updatedInfo: { viewCount },
-      });
-      this.props.search.updateAssignThreadInfo(threadId, {
-        updateType: 'viewCount',
-        updatedInfo: { viewCount },
-      });
-      this.props.topic.updateAssignThreadInfo(threadId, {
-        updateType: 'viewCount',
-        updatedInfo: { viewCount },
-      });
-    }
+    // const viewCount = await updateViewCountInStores(threadId);
+    // if (viewCount) {
+    //   this.props.thread.updateViewCount(viewCount);
+    //   this.props.index.updateAssignThreadInfo(threadId, {
+    //     updateType: 'viewCount',
+    //     updatedInfo: { viewCount },
+    //   });
+    //   this.props.search.updateAssignThreadInfo(threadId, {
+    //     updateType: 'viewCount',
+    //     updatedInfo: { viewCount },
+    //   });
+    //   this.props.topic.updateAssignThreadInfo(threadId, {
+    //     updateType: 'viewCount',
+    //     updatedInfo: { viewCount },
+    //   });
+    // }
   };
 
   async componentDidShow() {
