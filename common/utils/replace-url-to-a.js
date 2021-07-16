@@ -10,16 +10,20 @@ export function urlToLink(str) {
   // 匹配 img
   const imgReg = /<img[\s]*[^<>]*src="([\S]*[^\s<>"']*)"/ig;
 
-  str = str
-    .replace(preReg, (p, p1, p2) => `${p1}${encodeURIComponent(p2)}</code></pre>`)
-    .replace(codeReg, (p, p1, p2) => `${p1}${encodeURIComponent(p2)}</code>`)
-    .replace(imgReg, (p, p1) => `<img src="${encodeURIComponent(p1)}"`)
-    .replace(aReg, (p, p1) => `<a href="${encodeURIComponent(p1)}"`)
-    .replace(urlReg, website => `<a href="${website}" target="_blank">${website}</a>`)
-    .replace(preReg, (p, p1, p2)  => `${p1}${decodeURIComponent(p2)}</code></pre>`)
-    .replace(codeReg, (p, p1, p2) => `${p1}${decodeURIComponent(p2)}</code>`)
-    .replace(imgReg, p => `${decodeURIComponent(p)}`)
-    .replace(aReg, p => `${decodeURIComponent(p)}`);
+  try {
+    str = str
+      .replace(preReg, (p, p1, p2) => `${p1}${encodeURIComponent(p2)}</code></pre>`)
+      .replace(codeReg, (p, p1, p2) => `${p1}${encodeURIComponent(p2)}</code>`)
+      .replace(imgReg, (p, p1) => `<img src="${encodeURIComponent(p1)}"`)
+      .replace(aReg, (p, p1) => `<a href="${encodeURIComponent(p1)}"`)
+      .replace(urlReg, website => `<a href="${encodeURIComponent(website)}" target="_blank">${website}</a>`)
+      .replace(preReg, (p, p1, p2) => `${p1}${decodeURIComponent(p2)}</code></pre>`)
+      .replace(codeReg, (p, p1, p2) => `${p1}${decodeURIComponent(p2)}</code>`)
+      .replace(imgReg, p => `${decodeURIComponent(p)}`)
+      .replace(aReg, p => `${decodeURIComponent(p)}`);
+  } catch (error) {
+    console.error(error);
+  }
 
   return str;
 }
