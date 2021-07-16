@@ -113,9 +113,9 @@ class PartnerInviteH5Page extends React.Component {
 
     // 3.如果付费推荐少于MAX_THREAD_COUNT条，取热门推荐，凑齐MAX_THREAD_COUNT条
     if (threadList?.pageData?.length < MAX_THREAD_COUNT) {
-      const removeThreadIds = threadList?.pageData?.map(item => item.threadId);
+      const repeatedIds = threadList?.pageData?.map(item => item.threadId);
       const hotThreads = await search.getThreadList({
-        removeThreadIds,
+        repeatedIds,
         params: {
           pay: 1,
         },
