@@ -151,7 +151,7 @@ class AtSelect extends Component {
   }
 
   render() {
-    const { pc, visible } = this.props;
+    const { pc, visible, style = {} } = this.props;
     const { keywords, checkUser, finish } = this.state;
     const platform = pc ? 'pc' : 'h5';
     const content = (
@@ -212,7 +212,7 @@ class AtSelect extends Component {
     );
 
     if (pc) return (
-      <div className={styles.pc}>
+      <div className={styles.pc} style={style}>
         <div className={styles.pcHeader}>@圈友</div>
         {content}
       </div>
