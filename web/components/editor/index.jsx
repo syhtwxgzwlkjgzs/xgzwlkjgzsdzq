@@ -12,6 +12,7 @@ import { emojiVditorCompatibilityDisplay } from '@common/utils/emoji-regexp';
 import './index.scss';
 import '@discuzq/vditor/src/assets/scss/index.scss';
 import { Toast } from '@discuzq/design';
+import browser, { constants } from '@common/utils/browser';
 
 export default function DVditor(props) {
   const { pc, emoji = {}, atList = [], topic, value = '',
@@ -69,6 +70,10 @@ export default function DVditor(props) {
       value = emojiVditorCompatibilityDisplay(value);
       // setCursorPosition();
       html2mdInserValue(value);
+      // 解决安卓表情多次连续点击导致键盘弹起问题
+      if (browser.env(constants.ANDROID)) {
+        if (!pc && getSelection().rangeCount > 0) getSelection().removeAllRanges();
+      }
     }
   }, [emoji]);
 
