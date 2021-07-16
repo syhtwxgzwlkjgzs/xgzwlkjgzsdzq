@@ -75,9 +75,12 @@ class ThreadCreate extends React.Component {
 
   androidHandler() {
     const winHeight = getVisualViewpost();
-    if (judgeDeviceType().isAndroid && window.innerHeight === winHeight) {
-      this.clearBottomFixed();
-    }
+    if (!judgeDeviceType().isAndroid) return;
+    throttle(() => {
+      if (window.innerHeight === winHeight) {
+        this.clearBottomFixed();
+      }
+    }, 50);
   }
 
   // 定位的显示与影藏
