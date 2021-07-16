@@ -75,7 +75,7 @@ export default function DVditor(props) {
   useEffect(() => {
     if (atList && !atList.length) return;
     const users = atList.map((item) => {
-      if (item) return ` @${item} &nbsp;`;
+      if (item) return ` @${item} &nbsp; `;
       return '';
     });
     setState({ atList: [] });
@@ -89,7 +89,7 @@ export default function DVditor(props) {
     if (topic) {
       setState({ topic: '' });
       // setCursorPosition();
-      vditor.insertValue && vditor.insertValue(` ${topic} &nbsp;`);
+      vditor.insertValue && vditor.insertValue(` ${topic} &nbsp; `);
     }
   }, [topic]);
 
@@ -207,11 +207,16 @@ export default function DVditor(props) {
       right = '0px';
       left = 'auto';
     }
-    console.log(y, '----', height, Math.floor(y / height));
     const yy = y - (height * Math.floor(y / height));
-
+    let top = `${yy + (lineHeight || 22) + 16}px`;
+    let bottom = 'auto';
+    if ((type === '@' && height - yy < 150) || (type === '#' && height - yy < 190)) {
+      top = 'auto';
+      bottom = `${height - yy + (lineHeight || 22) + 40}px`;
+    }
     return {
-      top: `${yy + (lineHeight || 22) + 16}px`,
+      top,
+      bottom,
       left,
       right,
     };
@@ -299,7 +304,7 @@ export default function DVditor(props) {
             },
           ] : [],
           hide() {
-            // hintHide();
+            hintHide();
           },
         },
       },
