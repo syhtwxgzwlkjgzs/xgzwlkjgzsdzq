@@ -104,7 +104,7 @@ const Index = forwardRef((props, ref) => {
         const { categories = [], activeCategoryId, currentCategories } = index;
     
         return (
-          <View className={styles.fixed} style={{ opacity: !fixedTab ? '0' : '1' }}>
+          <View className={styles.fixed} style={{ opacity: !fixedTab ? '0' : '1', zIndex: !fixedTab ? '-1' : '1001' }}>
             <NavBar title={site?.webConfig?.setSite?.siteName || ''} />
             {categories?.length > 0 && (
               <View

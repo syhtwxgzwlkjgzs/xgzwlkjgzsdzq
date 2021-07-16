@@ -31,7 +31,7 @@ const VirtualList = ({
         const { changeInfo } = indexStore
 
         if (changeInfo) {
-          const { type, thread } = changeInfo
+          const { type = '', thread } = changeInfo
           if (type === 'delete' || type === 'add' || type === 'edit') {
             let newArr = [ ...dataSource ];
             const threadId = type === 'delete' ? thread : thread.threadId
