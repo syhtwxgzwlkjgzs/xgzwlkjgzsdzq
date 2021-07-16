@@ -12,6 +12,7 @@ import { get } from '@common/utils/get';
 import { getParamCode, getUserProfile } from '../common/utils'
 import layout from './index.module.scss';
 import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
+import LoginHelper from '@common/utils/login-helper';
 
 const NEED_BIND_OR_REGISTER_USER = -7016;
 @inject('site')
@@ -68,9 +69,7 @@ class MiniAuth extends React.Component {
       // 检查正常登陆后的其它状态码，并重置code
       checkUserStatus(resp);
       if (resp.code === 0) {
-        redirectTo({
-          url: `/indexPages/home/index`
-        });
+        LoginHelper.restore();
         return;
       }
       // 落地页开关打开
