@@ -99,11 +99,6 @@ class IndexPCPage extends React.Component {
             visible: true,
             conNum: newConNum,
           });
-        } else if (visible) {
-          this.setState({
-            visible: false,
-            conNum: 0,
-          });
         }
       });
     }
