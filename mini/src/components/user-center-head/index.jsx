@@ -33,10 +33,10 @@ class index extends Component {
   previewerRef = React.createRef(null);
 
   // 点击屏蔽
-  handleChangeShield = throttle((isDeny) => {
+  handleChangeShield = throttle(async (isDeny) => {
     const { id } = getCurrentInstance().router.params;
     if (isDeny) {
-      this.props.user.undenyUser(id);
+      await this.props.user.undenyUser(id);
       this.props.user.setTargetUserNotBeDenied();
       Toast.success({
         content: '解除屏蔽成功',
@@ -44,7 +44,7 @@ class index extends Component {
         duration: 1000,
       });
     } else {
-      this.props.user.denyUser(id);
+      await this.props.user.denyUser(id);
       this.props.user.setTargetUserDenied();
       Toast.success({
         content: '屏蔽成功',
@@ -136,11 +136,11 @@ class index extends Component {
     clearLoginStatus();
     this.props.user.removeUserInfo();
     this.props.site.getSiteInfo();
-    Router.reLaunch({ 
+    Router.reLaunch({
       url: '/subPages/forum/partner-invite/index',
       success: () => {
         LoginHelper.clear();
-      }
+      },
     });
   };
 
