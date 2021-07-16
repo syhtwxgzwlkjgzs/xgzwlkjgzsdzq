@@ -207,13 +207,14 @@ export default function DVditor(props) {
       right = '0px';
       left = 'auto';
     }
-    const yy = y - (height * Math.floor(y / height));
+    const yy = y - postInner.scrollTop;
     let top = `${yy + (lineHeight || 22) + 16}px`;
     let bottom = 'auto';
     if ((type === '@' && height - yy < 150) || (type === '#' && height - yy < 190)) {
       top = 'auto';
       bottom = `${height - yy + (lineHeight || 22) + 40}px`;
     }
+
     return {
       top,
       bottom,
