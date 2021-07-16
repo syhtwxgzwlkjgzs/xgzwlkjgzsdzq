@@ -78,10 +78,10 @@ export const EXPAND_DETAIL_CONSTANTS = {
     text: '打赏支出',
     code: 41,
   },
-  ORDER_EXPAND: {
-    text: '合并订单',
-    code: 170,
-  },
+  // ORDER_EXPAND: {
+  //   text: '合并订单',
+  //   code: 170,
+  // },
 };
 
 // 冻结类型
