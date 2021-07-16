@@ -100,7 +100,7 @@ class PartnerInviteH5Page extends React.Component {
 
     // 1.获取后台设置的付费推荐内容，最多10条。pay===1时，后台默认返回10条，无法修改
     const threadList = await search.getThreadList({
-      isSite: 1, // 后台设置的热门推荐
+      site: 1, // 后台设置的热门推荐
       params: {
         pay: 1,
       },
