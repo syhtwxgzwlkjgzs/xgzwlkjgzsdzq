@@ -136,6 +136,8 @@ class IndexAction extends IndexStore {
 
         if (this.threads?.pageData) {
           this.threads.pageData = newPageData;
+
+          this.changeInfo = { type: 'delete', thread: id }
         }
 
         // 删除置顶
@@ -370,6 +372,10 @@ class IndexAction extends IndexStore {
     if (!targetThread) return false;
     const { index, data } = targetThread;
     this.threads.pageData[index] = threadInfo;
+
+    // 小程序编辑
+    this.changeInfo = { type: 'edit', thread: threadInfo }
+
     return true;
   }
 
@@ -482,6 +488,9 @@ class IndexAction extends IndexStore {
         this.threads.pageData = this.threads.pageData.slice();
         const totalCount = Number(this.threads.totalCount)
         this.threads.totalCount = totalCount + 1
+
+        // 小程序
+        this.changeInfo = { type: 'add', thread: threadInfo }
       }
     } else {
       this.updateAssignThreadAllData(threadId, threadInfo)
