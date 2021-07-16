@@ -134,7 +134,7 @@ class TopicSelect extends Component {
           immediateCheck={false}
           platform={platform}
         >
-          {keywords && topics.indexOf(keywords) && this.renderItem({ content: keywords, newTopic: '新话题' })}
+          {keywords && topics.map(item => item.content).indexOf(keywords) === -1 && this.renderItem({ content: keywords, newTopic: '新话题' })}
           {topics.map(item => (
             <React.Fragment key={item.topicId}>
               {this.renderItem(item)}
