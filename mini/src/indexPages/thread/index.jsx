@@ -59,7 +59,8 @@ class Detail extends React.Component {
     };
   }
 
-  updateViewCount = async (threadId) => {
+  updateViewCount = async (id) => {
+    const threadId = Number(id);
     const viewCount = await updateViewCountInStores(threadId);
     if (viewCount) {
       this.props.thread.updateViewCount(viewCount);
@@ -80,7 +81,7 @@ class Detail extends React.Component {
 
   async componentDidShow() {
     const { id } = getCurrentInstance().router.params;
-    
+
     // 判断缓存
     // const oldId = this.props?.thread?.threadData?.threadId;
     // if (Number(id) === oldId && id && oldId) {

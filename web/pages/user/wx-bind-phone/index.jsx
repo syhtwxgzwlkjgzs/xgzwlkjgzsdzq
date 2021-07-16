@@ -12,7 +12,7 @@ class WXBindPhone extends React.Component {
     return <ViewAdapter
               h5={<WXBindPhoneH5Page/>}
               pc={<></>}
-              title={`微信绑定手机号 - ${this.props.site?.siteName}`}
+              title={`微信绑定手机号`}
             />;
   }
 }

@@ -169,7 +169,7 @@ class SearchAction extends SearchStore {
       return
     }
     
-    readThreadList({ params: { filter: { sort: '4', search, repeatedIds: ids }, perPage: 10, page: 2 } })
+    readThreadList({ params: { filter: { sort: '4', search, repeatedIds: ids }, perPage: 10, page: 1 } })
     .then((res) => {
       const { code, data, msg } = res;
       if (code !== 0) {
@@ -247,11 +247,11 @@ class SearchAction extends SearchStore {
  * @returns {object} 处理结果
  */
  @action
-  async getThreadList({ sort = '3', repeatedIds = [], search = '', perPage = 10, page = 1, params = {} } = {}) {
-    const result = await readThreadList({ params: { sequence: '0', filter: { sort, search, repeatedIds }, perPage, page, ...params } });
+  async getThreadList({ sort = '3', repeatedIds = [], search = '', perPage = 10, page = 1, params = {}, isSite = '' } = {}) {
+    const result = await readThreadList({ params: { sequence: '0', filter: { sort, search, repeatedIds, isSite }, perPage, page, ...params } });
 
     if (result.code === 0 && result.data) {
-      if (this.threads && result.data.pageData && page !== 1) {
+      if (this.threads && result.data.pageData && (page !== 1 || sort === '4')) {
         this.threads.pageData.push(...result.data.pageData);
         const newPageData = this.threads.pageData.slice();
         this.setThreads({ ...result.data, pageData: newPageData });
