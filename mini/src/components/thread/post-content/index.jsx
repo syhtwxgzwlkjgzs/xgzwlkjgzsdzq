@@ -41,6 +41,7 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
   const [imageUrl, setImageUrl] = useState("");
   const ImagePreviewerRef = useRef(null); // 富文本中的图片也要支持预览
   const contentWrapperRef = useRef(null);
+  const clickedImageId = useRef(null);
 
   const texts = {
     showMore: '查看更多',
@@ -73,7 +74,9 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
     if (url) {
       Router.push({url})
     } else {
-      onRedirectToDetail()
+      if(clickedImageId.current !== e.target.id) {
+        onRedirectToDetail()
+      }
     }
   }
 
@@ -85,11 +88,12 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
   }, [imageVisible]);
 
   // 点击富文本中的图片
-  const handleImgClick = (e) => {
+  const handleImgClick = (node, event) => {
     updateViewCount();
-    if(e?.attribs?.src) {
+    if(node?.attribs?.src) {
       setImageVisible(true);
-      setImageUrl(e.attribs.src);
+      setImageUrl(node.attribs.src);
+      clickedImageId.current = event?.target?.id;
     }
   }
 
@@ -143,7 +147,7 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
           {imageVisible && (
             <ImagePreviewer
               ref={ImagePreviewerRef}
-              onClose={() => {
+              onComplete={() => {
                 setImageVisible(false);
               }}
               imgUrls={[imageUrl]}

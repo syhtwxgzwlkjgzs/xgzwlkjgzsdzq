@@ -115,7 +115,7 @@ class Header extends React.Component {
 
   dropdownUserLogoutActionImpl = () => {
     clearLoginStatus();
-    window.location.replace('/');
+    LoginHelper.gotoIndex();
   };
 
   dropdownActionImpl = (action) => {
