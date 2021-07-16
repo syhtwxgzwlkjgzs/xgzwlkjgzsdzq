@@ -11,6 +11,7 @@ import BaseLayout from '@components/base-layout';
 import NoData from '@components/no-data';
 import { withRouter } from 'next/router';
 import Router from '@discuzq/sdk/dist/router';
+import setWxShare from '@common/utils/set-wx-share';
 
 @inject('site')
 @inject('user')
@@ -39,6 +40,7 @@ class H5OthersPage extends React.Component {
     }
     if (query.id) {
       await this.props.user.getTargetUserInfo(query.id);
+      this.setWeixinShare();
       this.targetUserId = query.id;
       this.setState({
         fetchUserInfoLoading: false,
@@ -67,11 +69,29 @@ class H5OthersPage extends React.Component {
       });
       this.props.user.removeTargetUserInfo();
       await this.props.user.getTargetUserInfo(query.id);
+      this.setWeixinShare();
       this.setState({
         fetchUserInfoLoading: false,
       });
       await this.fetchTargetUserThreads();
     }
+  }
+
+  // 设置微信分享内容
+  setWeixinShare() {
+    setTimeout(() => {
+      const { targetUser } = this.props.user;
+      if (targetUser) {
+        const { nickname, avatarUrl, signature, id } = targetUser;
+        const title = `${nickname}的主页`;
+        const img = avatarUrl;
+        const desc = signature ?
+        (signature.length > 35 ? `${signature.substr(0, 35)}...` : signature) :
+        '在这里，发现更多精彩内容';
+        const link = `${window.location.origin}/user/${id}`;
+        setWxShare(title, desc, link, img);
+      }
+    }, 500);
   }
 
   componentWillUnmount() {

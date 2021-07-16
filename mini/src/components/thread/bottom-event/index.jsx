@@ -73,6 +73,7 @@ const Index = ({
       goToLoginPage({ url: '/subPages/user/wx-auth/index' });
       return;
     }
+    updateViewCount();
     setShow(true)
   }
 
