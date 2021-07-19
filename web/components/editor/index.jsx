@@ -12,6 +12,7 @@ import { emojiVditorCompatibilityDisplay } from '@common/utils/emoji-regexp';
 import './index.scss';
 import '@discuzq/vditor/src/assets/scss/index.scss';
 import { Toast } from '@discuzq/design';
+import browser, { constants } from '@common/utils/browser';
 
 export default function DVditor(props) {
   const { pc, emoji = {}, atList = [], topic, value = '',
@@ -19,7 +20,9 @@ export default function DVditor(props) {
     onInit = () => { },
     onInput = () => { },
     setState = () => { },
-    onCountChange = () => {},
+    onCountChange = () => { },
+    hintCustom = () => { },
+    hintHide = () => { },
   } = props;
   const vditorId = 'dzq-vditor';
   let timeoutId = null;
@@ -67,13 +70,17 @@ export default function DVditor(props) {
       value = emojiVditorCompatibilityDisplay(value);
       // setCursorPosition();
       html2mdInserValue(value);
+      // 解决安卓表情多次连续点击导致键盘弹起问题
+      if (browser.env(constants.ANDROID)) {
+        if (!pc && getSelection().rangeCount > 0) getSelection().removeAllRanges();
+      }
     }
   }, [emoji]);
 
   useEffect(() => {
     if (atList && !atList.length) return;
     const users = atList.map((item) => {
-      if (item) return ` @${item} &nbsp;`;
+      if (item) return ` @${item} &nbsp; `;
       return '';
     });
     setState({ atList: [] });
@@ -87,7 +94,7 @@ export default function DVditor(props) {
     if (topic) {
       setState({ topic: '' });
       // setCursorPosition();
-      vditor.insertValue && vditor.insertValue(` ${topic} &nbsp;`);
+      vditor.insertValue && vditor.insertValue(` ${topic} &nbsp; `);
     }
   }, [topic]);
 
@@ -190,6 +197,37 @@ export default function DVditor(props) {
     timeoutRecord();
   };
 
+  const getLineHeight = (editor, textareaPosition, type) => {
+    const postInner = document.querySelector('#post-inner');
+    const { width, height } = postInner.getBoundingClientRect();
+    const { vditor } = editor;
+    const editorElement = vditor[vditor.currentMode].element;
+    const x = textareaPosition.left
+      + (vditor.options.outline.position === 'left' ? vditor.outline.element.offsetWidth : 0);
+    const y = textareaPosition.top;
+    const lineHeight = parseInt(document.defaultView.getComputedStyle(editorElement, null).getPropertyValue('line-height'), 10);
+    let left = `${x}px`;
+    let right = 'auto';
+    if ((type === '@' && x + 300 > width) || (type === '#' && x + 404 > width)) {
+      right = '0px';
+      left = 'auto';
+    }
+    const yy = y - postInner.scrollTop;
+    let top = `${yy + (lineHeight || 22) + 16}px`;
+    let bottom = 'auto';
+    if ((type === '@' && height - yy < 150) || (type === '#' && height - yy < 190)) {
+      top = 'auto';
+      bottom = `${height - yy + (lineHeight || 22) + 40}px`;
+    }
+
+    return {
+      top,
+      bottom,
+      left,
+      right,
+    };
+  };
+
   function initVditor() {
     // https://ld246.com/article/1549638745630#options
     const editor = new Vditor(
@@ -252,6 +290,27 @@ export default function DVditor(props) {
         preview: {
           theme: {
             current: '',
+          },
+        },
+        hint: {
+          extend: pc ? [
+            {
+              key: '@',
+              hintCustom: (key, textareaPosition, lastindex) => {
+                const position = getLineHeight(editor, textareaPosition, '@');
+                hintCustom('@', key, position, lastindex, editor.vditor);
+              },
+            },
+            {
+              key: '#',
+              hintCustom: (key, textareaPosition, lastindex) => {
+                const position = getLineHeight(editor, textareaPosition, '#');
+                hintCustom('#', key, position, lastindex, editor.vditor);
+              },
+            },
+          ] : [],
+          hide() {
+            hintHide();
           },
         },
       },

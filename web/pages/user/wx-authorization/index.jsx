@@ -12,7 +12,7 @@ class WXAuthorization extends React.Component {
     return <ViewAdapter
               h5={<WXAuthorizationPage/>}
               pc={<></>}
-              title={`授权登录 - ${this.props.site?.siteName}`}
+              title={`授权登录`}
             />;
   }
 }

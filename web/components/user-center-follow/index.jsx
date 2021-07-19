@@ -424,7 +424,7 @@ class UserCenterFollows extends React.Component {
               return (
                 <div key={'id' + user.id} className={friendsStyle.friendItem}>
                   <div className={friendsStyle.friendAvatar}>
-                    <Avatar image={user.avatar} userId={user.id} circle name={user.nickName} />
+                    <Avatar image={user.avatar} userId={user.id} circle text={user.nickName} />
                   </div>
                   <div className={friendsStyle.friendTextInfo}>{user.nickName}</div>
                 </div>
