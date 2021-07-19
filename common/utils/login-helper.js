@@ -138,7 +138,7 @@ class LoginHelper {
   saveAndRedirect = (targetUrl) => {
     this.saveCurrentUrl();
 
-    Router.redirect({
+    Router.reLaunch({
       url: targetUrl,
     });
   };
@@ -161,7 +161,7 @@ class LoginHelper {
   restore = (defaultPage) => {
     const url = this.getUrl() || defaultPage || (isWeb() ? HOME_PAGE_PC : HOME_PAGE_MINI);
 
-    Router.redirect({ url });
+    Router.reLaunch({ url });
     this.clear();
   };
 
@@ -173,7 +173,7 @@ class LoginHelper {
       // ssr下必须使用location.replace重置跳转，否则登陆态异常
       window.location.replace(HOME_PAGE_PC);
     } else {
-      Router.redirect({
+      Router.reLaunch({
         url: HOME_PAGE_MINI,
       });
     }
