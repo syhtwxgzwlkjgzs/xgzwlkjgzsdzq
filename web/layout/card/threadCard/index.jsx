@@ -5,7 +5,6 @@ import ImageDisplay from '@components/thread/image-display';
 import PostContent from '@components/thread/post-content';
 import UserInfo from '@components/thread/user-info';
 import styles from './index.module.scss';
-import Footer from '../footer';
 import Card from '../index';
 
 
@@ -29,7 +28,7 @@ const ThreadCard = inject('user', 'card')(observer((props) => {
   const content = useRef();
   const [overMaxHeight, setOverMaxHeight] = useState(false);
   useEffect(() => {
-    if (content.current.offsetHeight >= 1900) {
+    if (content.current.offsetHeight >= 100) {
       setOverMaxHeight(true);
     }
   }, []);
@@ -87,19 +86,18 @@ const ThreadCard = inject('user', 'card')(observer((props) => {
               <img src={priceImg} className={styles.priceimg}/>
             </div>
           )}
-          {overMaxHeight && (
+        </div>
+        {overMaxHeight && (
             <div className={styles.lookmoreBox}>
               <img src="/dzq-img/look-more.jpg" alt="扫码查看更多" className={styles.lookmoreImg}/>
             </div>
-          )}
+        )}
           {/* 标签 */}
           {(parentCategoryName || categoryName) && (
             <div className={styles.tag}>
               {parentCategoryName ? `${parentCategoryName}/${categoryName}` : categoryName}
             </div>
           )}
-        </div>
-        <Footer></Footer>
       </div>
       </Card>
   );

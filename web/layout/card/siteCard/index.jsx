@@ -5,7 +5,6 @@ import { inject, observer } from 'mobx-react';
 import { Avatar } from '@discuzq/design';
 import classNames from 'classnames';
 import calcCosImageQuality from '@common/utils/calc-cos-image-quality';
-import Footer from '../footer';
 @inject('site')
 @inject('user')
 @observer
@@ -52,7 +51,7 @@ class SiteCard extends React.Component {
     return this.logoImg;
   }
   componentDidMount = () => {
-    if (this.content.current.offsetHeight >= 10) {
+    if (this.content.current.offsetHeight >= 1900) {
       this.setState({ overMaxHeight: true });
     }
   }
@@ -124,7 +123,8 @@ class SiteCard extends React.Component {
             <div className={styles.contentText}>
               {siteIntroduction}
             </div>
-            {this.state.overMaxHeight && (
+          </div>
+          {this.state.overMaxHeight && (
             <div>
               <div className={styles.rectangleBox}>
                 <img src='dzq-img/rectangle.png' className={styles.rectangle}/>
@@ -133,9 +133,7 @@ class SiteCard extends React.Component {
                 <img src='/dzq-img/look-more.jpg' className={styles.lookmoreImg}/>
               </div>
             </div>
-            )}
-          </div>
-          <Footer></Footer>
+          )}
         </Card>
     );
   }

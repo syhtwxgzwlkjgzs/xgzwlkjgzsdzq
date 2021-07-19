@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { inject, observer } from 'mobx-react';
 import { getMiniCode } from '@server';
 import styles from './index.module.scss';
-const Index = ({ site }) => {
+const Index = ({ site, setReady }) => {
   const [miniCode, setMiniCode] = useState('');
   const defaultLogo = '/dzq-img/default-logo.png';
   const { siteName } = site.webConfig?.setSite || '';
@@ -19,6 +19,7 @@ const Index = ({ site }) => {
     } catch {
       setMiniCode(defaultLogo);
     }
+    setReady(true);
   }, []);
   return (
         <div className={styles.footerBox}>

@@ -96,6 +96,8 @@
   }
 }
 .contentBox {
+  max-height: 1900px;
+  overflow: hidden;
   padding: 16px;
   .contentHeader {
     margin-top: rem(3);

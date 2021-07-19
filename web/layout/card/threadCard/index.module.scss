@@ -22,6 +22,9 @@
     > * {
       margin-bottom: rem($margin-4n);
     }
+    :last-child {
+      margin-bottom: 0;
+    }
   }
   .imgBox {
     display: flex;

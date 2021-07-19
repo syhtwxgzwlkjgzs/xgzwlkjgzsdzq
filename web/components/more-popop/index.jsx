@@ -17,17 +17,17 @@ const index = ({ onClose, handleShare, show, createCard }) => (
                         <Icon name='PictureOutlinedBig' size={20}>
                         </Icon>
                     </div>
-                    <span className={styles.span}>
+                    <span className={styles.text}>
                         生成海报
                     </span>
                 </div>
                 <div className={styles.moreItem} onClick={handleShare}>
                     <div className={styles.icon}>
-                        <Icon name='WeChatOutlined' size={20}>
+                        <Icon name='PaperClipOutlined' size={20}>
                         </Icon>
                     </div>
-                    <span className={styles.span}>
-                        微信分享
+                    <span className={styles.text}>
+                        复制链接
                     </span>
                 </div>
             </div>

@@ -10,10 +10,12 @@
     width: 100%;
 }
 .imgbox {
+    box-sizing: border-box;
+    width: 100%;
     flex: 1;
-    margin: 10px 10px 74px 10px;
+    padding: 10px 10px 74px 10px;
     .centImage {
-        width: 355px;
+        width: 100%;
         display: block;
         border-radius: 10px;
         background: #fff;
