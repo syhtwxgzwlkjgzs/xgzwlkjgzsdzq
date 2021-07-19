@@ -15,14 +15,11 @@
 .fixed {
   width: 100%;
   position: fixed;
-  top: 0;
+  top: -300px;
   left: 0;
   z-index: $zindex-backtotop;
-  display: none;
   &.showUp {
-    z-index: $zindex-backtotop;
-    background-color: $white;
-    display: block;
+    top: 0;
   }
 }
 
