@@ -1,7 +1,7 @@
 /* eslint-disable */
 // <p>&lt;p&gt;111&lt;/p&gt;</p>
 import getConfig from '@common/config';
-const tags = {
+export const tags = {
   topic: text => {
     if (!text) return;
     const regexp = /<span\s*id="topic"\s*value="(?<value>\w+)"\s*>(?<string>[^<]+)<\/span>/gimu;
