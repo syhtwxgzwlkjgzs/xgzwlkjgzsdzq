@@ -710,7 +710,7 @@ class ThreadPCPage extends React.Component {
 
         {/* 回复详情内容 */}
         <div className={`${layout.bottom}`} ref={this.commentDataRef}>
-          {isCommentReady ? (
+          {isCommentReady && isApproved ? (
             <Fragment>
               <RenderCommentList
                 router={this.props.router}
@@ -722,7 +722,7 @@ class ThreadPCPage extends React.Component {
               {/* {this.state.isCommentLoading && <LoadingTips></LoadingTips>} */}
             </Fragment>
           ) : (
-            <LoadingTips isError={isCommentListError} type="init"></LoadingTips>
+            isApproved && <LoadingTips isError={isCommentListError} type="init"></LoadingTips>
           )}
         </div>
         {/* {isNoMore && <NoMore empty={totalCount === 0}></NoMore>} */}
