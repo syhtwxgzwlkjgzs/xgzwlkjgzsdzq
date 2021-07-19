@@ -125,8 +125,13 @@ class SiteCard extends React.Component {
               {siteIntroduction}
             </div>
             {this.state.overMaxHeight && (
-            <div className={styles.lookmoreBox}>
-              <img src='/dzq-img/look-more.jpg' className={styles.lookmoreImg}/>
+            <div>
+              <div className={styles.rectangleBox}>
+                <img src='dzq-img/rectangle.png' className={styles.rectangle}/>
+              </div>
+              <div className={styles.lookmoreBox}>
+                <img src='/dzq-img/look-more.jpg' className={styles.lookmoreImg}/>
+              </div>
             </div>
             )}
           </div>
