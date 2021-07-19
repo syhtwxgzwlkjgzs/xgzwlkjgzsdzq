@@ -136,7 +136,6 @@ class IndexAction extends IndexStore {
 
         if (this.threads?.pageData) {
           this.threads.pageData = newPageData;
-
           this.changeInfo = { type: 'delete', thread: id }
         }
 
@@ -347,6 +346,7 @@ class IndexAction extends IndexStore {
     const { index } = targetThread;
     if (this.threads?.pageData) {
       this.threads.pageData[index] = obj;
+      this.changeInfo = { type: 'pay', thread: threadId }
     }
   }
 
