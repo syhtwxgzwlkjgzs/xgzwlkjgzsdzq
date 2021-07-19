@@ -101,7 +101,7 @@ const Index = ({
       <div className={needHeight ? styles.operation : styles.operations}>
         {
           postList.map((item, index) => (
-              <div key={index} className={styles.fabulous} onClick={platform === 'h5' ? handleClick : item.event}>
+              <div key={index} className={styles.fabulous} onClick={platform === 'h5' && item.name === '分享' ? handleClick : item.event}>
                 <Icon
                   className={`${styles.icon} ${item.type} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`}
                   name={item.icon}

@@ -19,7 +19,7 @@ const Index = ({ children }) => {
     savePic(url);
   };
   if (!ready) {
-    Toast.info({ content: '正在绘制...' });
+    Toast.loading({ content: '正在绘制...' });
   }
   return (
     <div className={styles.contain}>
