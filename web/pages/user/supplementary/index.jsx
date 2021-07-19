@@ -10,7 +10,7 @@ class Supplementary extends React.Component {
     return <ViewAdapter
               h5={<SupplementaryPage/>}
               pc={<SupplementaryPage/>}
-              title={`补充信息 - ${this.props.site?.siteName}`}
+              title={`补充信息`}
             />;
   }
 }
