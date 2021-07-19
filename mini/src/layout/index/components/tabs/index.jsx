@@ -10,7 +10,7 @@ import styles from '../../index.module.scss';
 import NavBar from '../nav-bar';
 import { useEffect } from 'react';
 import Taro from '@tarojs/taro';
-
+import classNames from 'classnames';
 
 const Index = forwardRef((props, ref) => {
     const [fixedTab, setFixedTab] = useState(false)
@@ -99,9 +99,9 @@ const Index = forwardRef((props, ref) => {
       const renderFixedTabs = () => {
         const { index, site, searchClick } = props;
         const { categories = [], activeCategoryId, currentCategories } = index;
-    
+
         return (
-          <View className={styles.fixed} style={{ opacity: !fixedTab ? '0' : '1', zIndex: !fixedTab ? '-1' : '1001' }}>
+          <View className={classNames(styles.fixed, fixedTab ? styles.showUp : '')}>
             <NavBar title={site?.webConfig?.setSite?.siteName || ''} />
             {categories?.length > 0 && (
               <View
