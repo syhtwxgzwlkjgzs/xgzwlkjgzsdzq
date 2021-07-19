@@ -12,11 +12,11 @@
     "update": "dzq update"
   },
   "dependencies": {
-    "@discuzq/design": "^1.0.49",
+    "@discuzq/design": "^1.0.50",
     "@discuzq/discuz-babel-plugin-import": "0.0.1",
     "@discuzq/plugin": "^1.0.27",
     "@discuzq/sdk": "^1.0.27",
-    "@discuzq/vditor": "^1.0.23",
+    "@discuzq/vditor": "^1.0.24",
     "@sandstreamdev/react-swipeable-list": "^1.0.1",
     "@sentry/browser": "^6.4.1",
     "@sentry/react": "^6.4.1",

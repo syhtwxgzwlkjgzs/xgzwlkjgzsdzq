@@ -9,7 +9,7 @@ import styles from './index.module.scss';
 // const onePageCount = 35;
 
 export default function Emoji(props) {
-  const { emojis = [], onClick, show, pc, onEmojiBlur = () => {}, atTop = true } = props;
+  const { emojis = [], onClick, show, pc, onEmojiBlur = () => { }, atTop = true } = props;
   const [visible, setVisible] = useState(false);
   // const [page, setPage] = useState([]);
   // const pageCount = [...Array(onePageCount).keys()];
@@ -48,15 +48,17 @@ export default function Emoji(props) {
   const cls = pc ? styles.pc : styles.h5;
   return (
     <div ref={emojiRef} id="dzq-toolbar-emoji" className={`${styles['dzq-emoji']} ${cls} dzq-toolbar-emoji ${atTop ? '' : styles.atTop}`} style={{ display: visible ? 'block' : 'none' }}>
-      {emojis.map(item => <img className={styles['dzq-emoji__icon']}
-        key={item.code}
-        src={item.url}
-        onClick={(e) => {
-          e.stopPropagation();
-          // setVisible(false);
-          onClick(item);
-        }}
-      />)}
+      <div className={styles['dzq-emoji__inner']}>
+        {emojis.map(item => <img className={styles['dzq-emoji__icon']}
+          key={item.code}
+          src={item.url}
+          onClick={(e) => {
+            e.stopPropagation();
+            // setVisible(false);
+            onClick(item);
+          }}
+        />)}
+      </div>
     </div>
   );
   // return (

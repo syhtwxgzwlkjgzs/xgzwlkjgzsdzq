@@ -13,7 +13,7 @@ class LoginPhone extends React.Component {
     return <ViewAdapter
               h5={<LoginPhoneH5Page/>}
               pc={<LoginPhoneH5Page/>}
-              title={`手机号登录 - ${this.props.site?.siteName}`}
+              title={`手机号登录`}
             />;
   }
 }
