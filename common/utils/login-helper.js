@@ -160,9 +160,14 @@ class LoginHelper {
   // 恢复登录前的跳转。优先级：记录页 > defaultPage > 主页
   restore = (defaultPage) => {
     const url = this.getUrl() || defaultPage || (isWeb() ? HOME_PAGE_PC : HOME_PAGE_MINI);
-
-    Router.redirect({ url });
     this.clear();
+
+    Router.redirect({
+      url,
+      fail: () => {
+        this.gotoIndex();
+      }
+   });
   };
 
   // 清空跳转，进入首页
