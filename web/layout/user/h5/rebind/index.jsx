@@ -132,7 +132,7 @@ class RebindPage extends React.Component {
             {
               explain.map((item, index) => (
                 <div key={index} className={styles.rebind_explain_list}>
-                  <div className={styles.rebind_explain_index}>{index}</div>
+                  <div className={styles.rebind_explain_index}>{index + 1}</div>
                   <div className={styles.rebind_explain_value}>{item}</div>
                 </div>
               ))

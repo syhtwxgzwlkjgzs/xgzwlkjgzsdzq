@@ -49,6 +49,8 @@
         'user/wx-authorization/index',
         'user/supplementary/index',
         'user/reset-password/index',
+        'user/rebind/index',
+        'user/rebind-authorization/index',
         'wallet/index',
         'wallet/frozen/index',
         'wallet/withdrawal/index',

@@ -16,7 +16,7 @@ class RebindAuthorizationPage extends React.Component {
       currentStatus: '',
       statusInfo: {
         success: '扫码成功',
-        error: '网络错误'
+        error: '扫码失败'
       }
     };
   }
