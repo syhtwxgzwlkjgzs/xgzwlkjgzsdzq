@@ -36,7 +36,7 @@ class PartnerInviteH5Page extends React.Component {
     this.state = {
       invitorName: '',
       invitorAvatar: '/dzq-img/login-user.png',
-      isHot: false,
+      isHot: true,
     };
   }
 
@@ -106,23 +106,23 @@ class PartnerInviteH5Page extends React.Component {
       },
     });
 
-    // 2.推荐内容数量大于0则title为精彩内容预览，否则为热门内容预览
-    this.setState({
-      isHot: !(threadList?.pageData?.length > 0),
-    });
+    // // 2.推荐内容数量大于0则title为精彩内容预览，否则为热门内容预览
+    // this.setState({
+    //   isHot: !(threadList?.pageData?.length > 0),
+    // });
 
-    // 3.如果付费推荐少于MAX_THREAD_COUNT条，取热门推荐，凑齐MAX_THREAD_COUNT条
-    if (threadList?.pageData?.length < MAX_THREAD_COUNT) {
-      const repeatedIds = threadList?.pageData?.map(item => item.threadId);
-      const hotThreads = await search.getThreadList({
-        repeatedIds,
-        params: {
-          pay: 1,
-        },
-      });
+    // // 3.如果付费推荐少于MAX_THREAD_COUNT条，取热门推荐，凑齐MAX_THREAD_COUNT条
+    // if (threadList?.pageData?.length < MAX_THREAD_COUNT) {
+    //   const repeatedIds = threadList?.pageData?.map(item => item.threadId);
+    //   const hotThreads = await search.getThreadList({
+    //     repeatedIds,
+    //     params: {
+    //       pay: 1,
+    //     },
+    //   });
 
-      threadList?.pageData?.push(...hotThreads?.pageData?.slice(0, MAX_THREAD_COUNT - threadList?.pageData?.length));
-    }
+    //   threadList?.pageData?.push(...hotThreads?.pageData?.slice(0, MAX_THREAD_COUNT - threadList?.pageData?.length));
+    // }
 
     forum.setThreadsPageData(threadList);
   }
