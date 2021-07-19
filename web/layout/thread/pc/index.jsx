@@ -845,6 +845,7 @@ class ThreadPCPage extends React.Component {
           visible={this.state.showDeletePopup}
           onClose={() => this.setState({ showDeletePopup: false })}
           onBtnClick={() => this.delete()}
+          type='thread'
         ></DeletePopup>
 
         {/* 举报弹层 */}
