@@ -11,7 +11,6 @@ import styles from './index.module.scss';
 import PropTypes from 'prop-types';
 
 import List from '@components/list';
-import DDialog from '@components/dialog';
 
 @inject('threadPost')
 @observer
@@ -96,7 +95,7 @@ class TopicSelect extends Component {
   );
 
   render() {
-    const { pc, visible = false, cancelTopic, threadPost } = this.props;
+    const { pc, visible = false, cancelTopic, threadPost, style = {} } = this.props;
     const { topics = [] } = threadPost;
     const { finish, keywords } = this.state;
     const platform = pc ? 'pc' : 'h5';
@@ -135,7 +134,7 @@ class TopicSelect extends Component {
           immediateCheck={false}
           platform={platform}
         >
-          {keywords && !topics.length && this.renderItem({ content: keywords, newTopic: '新话题' })}
+          {keywords && topics.map(item => item.content).indexOf(keywords) === -1 && this.renderItem({ content: keywords, newTopic: '新话题' })}
           {topics.map(item => (
             <React.Fragment key={item.topicId}>
               {this.renderItem(item)}
@@ -146,15 +145,10 @@ class TopicSelect extends Component {
     );
 
     if (pc) return (
-      <DDialog
-        visible={visible}
-        className={styles.pc}
-        onClose={cancelTopic}
-        title="#添加话题#"
-        isCustomBtn={true}
-      >
+      <div className={styles.pc} style={style} id="dzq-toolbar-topic">
+        <div className={styles.pcHeader}>#添加话题#</div>
         {content}
-      </DDialog>
+      </div>
     );
 
     return (

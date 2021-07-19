@@ -632,24 +632,13 @@ class Index extends Component {
     }
   }
 
-  // 处理textarea聚焦
-  // onContentFocus = () => {
-  //   this.setState({
-  //     showEmoji: false,
-  //     operationType: 0,
-  //   });
-  // }
-
   // 点击空白区域自动聚焦文本框
   handleContentFocus = () => {
     if (this.contentRef && this.props.bottomHeight === 0) {
       this.contentRef.current.focus();
     }
 
-    this.setState({
-      showEmoji: false,
-      // operationType: 0,
-    });
+    this.props.pageScrollTo();
   }
 
   checkAudioRecordStatus() {
@@ -734,9 +723,9 @@ class Index extends Component {
     const headTitle = get(site, 'webConfig.setSite.siteName', '');
     return (
       <>
-        <View className={styles.container} style={containerStyle}>
+        <View className={styles.container} style={containerStyle} onClick={this.handleContentFocus}>
           {/* 自定义顶部导航条 */}
-          <View className={styles.topBar} style={navStyle}>
+          <View className={styles.topBar} style={navStyle} onClick={e => e.stopPropagation()}>
             <Icon name="RightOutlined" onClick={() => this.handlePageJump(false)} />
             <View className={styles['topBar-title']}>
               <View className={styles['topBar-title-inner']}>{ headTitle ?  `发布 - ${headTitle}` : '发布' }</View>
@@ -744,17 +733,14 @@ class Index extends Component {
           </View>
 
           {/* 内容区域，inclue标题、帖子文字、图片、附件、语音等 */}
-          <View className={styles.content} onClick={this.handleContentFocus}>
+          <View className={styles.content}>
             <View id="thread-post-content">
               <Title
                 value={postData.title}
                 show={isShowTitle}
                 onChange={this.onTitleChange}
                 onFocus={() => {
-                  this.setState({
-                    showEmoji: false,
-                    // operationType: 0,
-                  });
+                  this.setState({ showEmoji: false });
                 }}
               />
               <Content
@@ -764,7 +750,9 @@ class Index extends Component {
                 bottomHeight={bottomHeight}
                 maxLength={maxLength}
                 onChange={this.onContentChange}
-                // onFocus={this.onContentFocus}
+                onFocus={() => {
+                  this.setState({ showEmoji: false });
+                }}
                 onBlur={(e) => {
                   console.log('set', e.detail.cursor);
                   setCursorPosition(e.detail.cursor);
@@ -799,6 +787,7 @@ class Index extends Component {
           <View
             className={`${styles.toolbar} ${!bottomHeight && styles['toolbar-padding']}`}
             style={{ transform: `translateY(-${bottomHeight}px)`, bottom: bottomHeight ? 0 : '' }}
+            onClick={e => e.stopPropagation()}
           >
             {/* 插入内容tag展示区 */}
             <View className={styles.tags} style={{ display: bottomHeight ? 'none' : 'block' }}>
