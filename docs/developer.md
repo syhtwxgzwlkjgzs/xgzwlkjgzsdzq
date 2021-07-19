@@ -30,12 +30,12 @@ $ npm run build:weapp
 # web 端本地开发
 $ cd ./web
 $ npm install
-$ npm run dev:web
+$ npm run dev
 
 # 小程序端本地开发
 $ cd ./mini
 $ npm install
-$ npm run dev:mini
+$ npm run dev:weapp
 ```
 
 ## 目录结构
