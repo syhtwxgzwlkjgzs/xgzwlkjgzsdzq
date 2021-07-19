@@ -145,7 +145,7 @@ class TopicSelect extends Component {
     );
 
     if (pc) return (
-      <div className={styles.pc} style={style}>
+      <div className={styles.pc} style={style} id="dzq-toolbar-topic">
         <div className={styles.pcHeader}>#添加话题#</div>
         {content}
       </div>
