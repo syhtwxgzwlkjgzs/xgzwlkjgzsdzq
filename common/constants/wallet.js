@@ -18,7 +18,7 @@ export const INCOME_DETAIL_CONSTANTS = {
   // },
   CATCH_RETURN: {
     text: '异常退款',
-    code: '104,114,124,130,163,172',
+    code: '104,114,124,130,163,154',
   },
   OFFER_REWARD_INCOME: {
     text: '悬赏收入',
