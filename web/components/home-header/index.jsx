@@ -82,31 +82,20 @@ class HomeHeader extends React.Component {
 
     return siteInfo;
   }
-
-  onShare = () => {
-    const { user } = this.props;
-    if (!user.isLogin()) {
-      goToLoginPage({ url: '/user/login' });
-      return;
-    }
-
-    // 判断是否在微信浏览器
-    if (isWeiXin()) {
-      this.setState({ visible: true });
-    } else {
-      const title = document?.title || '';
-      h5Share(title);
-      Toast.info({ content: '复制链接成功' });
-    }
-  }
   onClose = () => {
     this.setState({ visible: false });
   }
   onCancel = () => {
     this.setState({ show: false });
   }
-  handleShare = () => {
-    this.onShare();
+  handleH5Share = () => {
+    const title = document?.title || '';
+    h5Share(title);
+    Toast.info({ content: '复制链接成功' });
+    this.onCancel();
+  }
+  handleWxShare = () => {
+    this.setState({ visible: true });
     this.onCancel();
   }
   handleClick = () => {
@@ -188,7 +177,8 @@ class HomeHeader extends React.Component {
         && <MorePopop
         show={this.state.show}
         onClose={this.onCancel}
-        handleShare={this.handleShare}
+        handleH5Share={this.handleH5Share}
+        handleWxShare={this.handleWxShare}
         createCard={this.createCard}
         ></MorePopop>}
         {

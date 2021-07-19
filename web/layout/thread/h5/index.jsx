@@ -540,22 +540,8 @@ class ThreadH5Page extends React.Component {
   async onShareClick() {
     // 判断是否在微信浏览器
     if (isWeiXin()) {
-      this.setState({ isShowWeiXinShare: true });
     } else {
-      Toast.info({ content: '复制链接成功' });
 
-      const { title = '' } = this.props.thread?.threadData || {};
-      h5Share({ title, path: `thread/${this.props.thread?.threadData?.threadId}` });
-
-      const id = this.props.thread?.threadData?.id;
-
-      const { success, msg } = await this.props.thread.shareThread(id);
-
-      if (!success) {
-        Toast.error({
-          content: msg,
-        });
-      }
     }
   }
   handleClick = () => {
@@ -569,13 +555,25 @@ class ThreadH5Page extends React.Component {
   onShareClose = () => {
     this.setState({ show: false });
   }
-  handleShare = () => {
-    const { user } = this.props;
-    if (!user.isLogin()) {
-      goToLoginPage({ url: '/user/login' });
-      return;
+  handleH5Share = async () => {
+    Toast.info({ content: '复制链接成功' });
+
+    const { title = '' } = this.props.thread?.threadData || {};
+    h5Share({ title, path: `thread/${this.props.thread?.threadData?.threadId}` });
+
+    const id = this.props.thread?.threadData?.id;
+
+    const { success, msg } = await this.props.thread.shareThread(id);
+
+    if (!success) {
+      Toast.error({
+        content: msg,
+      });
     }
-    this.onShareClick();
+    this.onShareClose();
+  }
+  handleWxShare = () => {
+    this.setState({ isShowWeiXinShare: true });
     this.onShareClose();
   }
   createCard = () => {
@@ -810,7 +808,8 @@ class ThreadH5Page extends React.Component {
         && <MorePopop
         show={this.state.show}
         onClose={this.onShareClose}
-        handleShare={this.handleShare}
+        handleH5Share={this.handleH5Share}
+        handleWxShare={this.handleWxShare}
         createCard={this.createCard}
         ></MorePopop>}
         {isReady && (

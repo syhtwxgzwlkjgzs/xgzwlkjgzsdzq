@@ -120,7 +120,13 @@ const Index = ({
           ))
         }
       </div>
-      {show && <MorePopop show={show} handleShare={handleShare} onClose={onClose} createCard={createCard}></MorePopop>}
+      {show && <MorePopop
+        show={show}
+        fromThread
+        handleShare={handleShare}
+        onClose={onClose}
+        createCard={createCard}>
+      </MorePopop>}
     </div>
   );
 };

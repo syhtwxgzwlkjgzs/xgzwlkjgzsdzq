@@ -3,7 +3,9 @@ import styles from './index.module.scss';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import classNames from 'classnames';
 import { Popup } from '@discuzq/design';
-const index = ({ onClose, handleShare, show, createCard }) => (
+import isWeiXin from '@common/utils/is-weixin';
+
+const index = ({ onClose, handleWxShare, handleH5Share, show, createCard, fromThread }) => (
       <Popup
         position="bottom"
         visible={show}
@@ -21,7 +23,7 @@ const index = ({ onClose, handleShare, show, createCard }) => (
                         生成海报
                     </span>
                 </div>
-                <div className={styles.moreItem} onClick={handleShare}>
+                <div className={styles.moreItem} onClick={handleH5Share}>
                     <div className={styles.icon}>
                         <Icon name='PaperClipOutlined' size={20}>
                         </Icon>
@@ -30,6 +32,17 @@ const index = ({ onClose, handleShare, show, createCard }) => (
                         复制链接
                     </span>
                 </div>
+                {isWeiXin() && !fromThread && (
+                <div className={styles.moreItem} onClick={handleWxShare}>
+                    <div className={styles.icon}>
+                        <Icon name='WeChatOutlined' size={20}>
+                        </Icon>
+                    </div>
+                    <span className={styles.text}>
+                        微信分享
+                    </span>
+                </div>
+                )}
             </div>
           </div>
             <div className={styles.button} >
