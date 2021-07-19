@@ -12,7 +12,7 @@ class ResetPassword extends React.Component {
     return <ViewAdapter
               h5={<ResetPasswordH5Page/>}
               pc={<ResetPasswordH5Page/>}
-              title={`找回密码 - ${this.props.site?.siteName}`}
+              title={`找回密码`}
             />;
   }
 }
