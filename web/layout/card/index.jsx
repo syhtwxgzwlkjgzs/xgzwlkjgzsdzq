@@ -39,7 +39,7 @@ const Index = ({ children }) => {
         </div>
       )}
       <div className={styles.shareBtn}>
-        <Button className={styles.btn} onClick={isWeiXin() ? '' : saveImg}>{shareText}</Button>
+        <Button className={`${styles.btn} ${isWeiXin() ? styles.btnWxBgc : styles.btnH5Bgc}`} onClick={isWeiXin() ? '' : saveImg}>{shareText}</Button>
       </div>
     </div>
   );
