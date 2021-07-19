@@ -32,13 +32,6 @@ const Index = forwardRef((props, ref) => {
                 observePage()
             }, 10);
         }
-
-        return () => {
-            if (observerObj.current) {
-                observerObj.current.disconnect(); // 关闭观察器
-            }
-        }
-        
     }, [props.index?.currentCategories])
 
     const changeFixedTab = () => {
@@ -48,11 +41,15 @@ const Index = forwardRef((props, ref) => {
     }
 
     const observePage = () => {
-        observerObj.current = Taro.createIntersectionObserver().relativeToViewport({ top: 100 });
-        observerObj.current.observe(`#${tabsId.current}`, (res) => {
-            const isHidden = res.intersectionRatio <= 0
-            setFixedTab(isHidden)
-        });
+      if (observerObj.current) {
+        observerObj.current.disconnect(); // 关闭观察器
+      }
+
+      observerObj.current = Taro.createIntersectionObserver().relativeToViewport({ top: 100 });
+      observerObj.current.observe(`#${tabsId.current}`, (res) => {
+          const isHidden = res.intersectionRatio <= 0
+          setFixedTab(isHidden)
+      });
     }
 
     const handleClickTab = (e) => {
