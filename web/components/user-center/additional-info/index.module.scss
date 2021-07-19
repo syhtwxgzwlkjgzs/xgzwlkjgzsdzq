@@ -1,0 +1,91 @@
+@import '@common/styles/index.scss';
+
+.additionalWrapper {
+  :global {
+    .dzq-modal__container {
+      width: rem(409);
+      height: rem(494);
+      border-radius: rem(var(--border-radius-small));
+      background: $white;
+      box-sizing: border-box;
+      padding: rem($padding-6n);
+    }
+    .dzq-modal__body {
+      padding: 0;
+    }
+  }
+}
+
+.additionalContainer {
+  .title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: rem($margin-6n);
+  }
+  .titleValue {
+    flex: 1;
+    text-align: center;
+    font-size: rem($font-size-middle);
+    color: $text-color-primary;
+    font-weight: var(--font-weight-regular);
+  }
+  .additionItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: rem($font-size-primary);
+    padding: rem($padding-4n) 0;
+    border-bottom: var(--border-border);
+    .additionLabel {
+      color: $text-color-regular;
+      height: rem(20);
+      line-height: rem(20);
+    }
+    .additionValue {
+      color: $text-color-primary;
+      height: rem(20);
+      line-height: rem(20);
+      .additionFile {
+        margin-left: rem($margin-1n);
+      }
+    }
+  }
+  .additionIdentityCard {
+    flex-direction: column;
+    .additionLabel {
+      align-self: flex-start;
+    }
+    .cardItem {
+      display: flex;
+      justify-content: space-between;
+      margin-top: rem($margin-4n);
+    }
+    .identityCard {
+      width: rem(166);
+      height: rem(104);
+      border-radius: rem(5);
+      background: #eee;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .iCardText {
+        position: absolute;
+        z-index: 1;
+        color: $text-color-regular;
+      }
+    }
+    .identityCard:nth-child(1) {
+      margin-right: rem($margin-5n);
+    }
+  }
+  .additionTips {
+    margin-top: rem(14);
+    color: $text-color-secondary;
+    font-size: rem($font-size-small);
+    .note {
+      color: $error-color;
+    }
+  }
+}

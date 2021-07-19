@@ -12,6 +12,7 @@ import UserCenterEditAccountPwd from '../../user-center-edit-account-pwd-pc';
 import UserCenterEditMobile from '../../user-center-edit-mobile-pc';
 import UserCenterEditPaypwd from '../../user-center-edit-paypwd-pc';
 import WechatRebindDialog from '../../user-center/rebind-wechat';
+import UserCenterAdditionalInfo from '../../user-center/additional-info/index';
 import Copyright from '@components/copyright';
 import { getClientHeight } from '@common/utils/get-client-height';
 import isServer from '@common/utils/is-server';
@@ -275,6 +276,27 @@ class index extends Component {
           operation: () => null,
           inputEditor: () => null,
         },
+        {
+          name: '补充信息',
+          display: 'show',
+          condition: () => true,
+          render: () => {
+            '查看';
+          },
+          operation: () => (
+            <p
+              onClick={() => {
+                this.setState({
+                  additionalUserInfoVisible: true,
+                });
+              }}
+              className={styles.pcEditNicknameCallMsodify}
+            >
+              查看
+            </p>
+          ),
+          inputEditor: () => null,
+        },
       ],
     };
     this.user = this.props.user || {};
@@ -375,7 +397,7 @@ class index extends Component {
       <div className={styles.pcEditBox} id={styles.pcEditContainer}>
         <Header className={styles.pcEditHeaser} />
         <div className={styles.pcEditContent}>
-          <div className={styles.pcEdit} style={{ height: pcEditHeight }}>
+          <div className={styles.pcEdit} style={{ height: pcEditHeight, minHeight: pcEditHeight }}>
             {/* 头部 */}
             <div>
               <UserCenterEditHeader />
@@ -424,6 +446,16 @@ class index extends Component {
               });
             }}
           /> */}
+          {this.state.additionalUserInfoVisible && (
+            <UserCenterAdditionalInfo
+              onClose={() => {
+                this.setState({
+                  additionalUserInfoVisible: false,
+                });
+              }}
+              visible={this.state.additionalUserInfoVisible}
+            />
+          )}
         </>
       </div>
     );
