@@ -22,11 +22,6 @@ const Index = ({ children }) => {
   if (!ready) {
     Toast.loading({ content: '正在绘制...' });
   }
-  let shareText = '保存到相册';
-  // 判断是否在微信浏览器中
-  if (isWeiXin()) {
-    shareText = '长按图片保存到相册';
-  }
   return (
     <div className={styles.contain}>
       <div className={styles.poster} ref={post}>
@@ -39,7 +34,11 @@ const Index = ({ children }) => {
         </div>
       )}
       <div className={styles.shareBtn}>
-        <Button className={`${styles.btn} ${isWeiXin() ? styles.btnWxBgc : styles.btnH5Bgc}`} onClick={isWeiXin() ? '' : saveImg}>{shareText}</Button>
+        {!isWeiXin() ? (
+          <Button className={styles.btn} onClick={isWeiXin() ? '' : saveImg}>保存到相册</Button>
+        ) : (
+          <div className={styles.wxBtn}>长按图片保存到相册</div>
+        )}
       </div>
     </div>
   );
