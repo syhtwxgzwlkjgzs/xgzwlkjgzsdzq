@@ -155,6 +155,9 @@
       }
     }
   }
+  .wrapper {
+    background-color: $white;
+  }
   .list {
     height: 170px !important;
     overflow: auto;
@@ -162,6 +165,7 @@
     background-color: $white;
     .list__inner {
       overflow-y: scroll !important;
+      background-color: $white;
 
       // 整个滚动条
       &::-webkit-scrollbar {
@@ -187,6 +191,17 @@
     .topic-item__inner {
       margin-left: 0;
       margin-right: $margin-2n;
+    }
+
+    &:hover {
+      .name {
+        color: $primary-color !important;
+      }
+    }
+    .name {
+      &:hover {
+        color: $primary-color !important;
+      }
     }
   }
 }
