@@ -38,11 +38,15 @@ const getTypeStr = (code) => {
   // const freezes = Object.values(FREEZE_TYPE)
 
   const types = [...incomes, ...expands]
-  types.forEach(item => {
-    if (`${item.code}`.indexOf(`${code}`) !== -1) {
-      text = item.text
+  for (let index = 0; index < types.length; index++) {
+    const element = types[index];
+
+    const codes = `${element.code}`.split(',').map(i => `${i}`)
+    if (codes.indexOf(`${code}`) !== -1) {
+      text = element.text
+      break
     }
-  })
+  }
 
   return text
 }
