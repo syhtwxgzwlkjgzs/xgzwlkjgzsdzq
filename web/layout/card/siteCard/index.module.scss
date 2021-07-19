@@ -1,0 +1,121 @@
+@import '@common/styles/index.scss';
+.container {
+  overflow: hidden;
+  height: rem(182);
+  position: relative;
+  background-repeat: no-repeat;
+  background-size: auto;
+  background-position: center;
+  .logoBox {
+    height: rem(69);
+    overflow: hidden;
+    line-height: rem(69);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .logo {
+      display: block;
+      max-height: rem(40);
+      margin: 0 auto;
+    }
+  }
+  .userInfoBox {
+    padding: rem(16) rem(16) rem(8) rem(8);
+    display: flex;
+    .customAvatar {
+      border: 1px solid #fff;
+      box-sizing: border-box;
+    }
+    .descBox {
+      display: flex;
+      margin-left: rem(8);
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-around;
+      .nickname {
+        font-family: "PingFangSC-Semibold ";
+        font-size: rem(14);
+        line-height: rem(17);
+        text-align: left;
+        color: #fff;
+        max-width: rem(200);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .sitename {
+        margin-top: rem(1);
+        font-family: "PingFangSC-Regular ";
+        font-size: rem(12);
+        line-height: rem(16);
+        text-align: left;
+        color: #fff;
+      }
+    }
+  }
+  .siteInfo {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 rem(3 * $padding-6n);
+    box-sizing: border-box;
+    position: absolute;
+    bottom: rem($font-line-height-primary);
+    .item {
+      display: flex;
+      align-items: center;
+    }
+    .text {
+      font-size: rem($font-size-middle);
+      line-height: rem(24);
+      color: var( --color-white);
+      font-weight: normal;
+      opacity: 0.6;
+    }
+    .content {
+      font-size: rem($font-size-middle);
+      color: var( --color-white);
+      font-weight: normal;
+      padding-left: rem($padding-2n);
+    }
+  }
+}
+.lookmoreBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .lookmoreImg {
+    height: rem(20);
+  }
+}
+.contentBox {
+  padding: 16px;
+  .contentHeader {
+    margin-top: rem(3);
+    .contentHeaderImg {
+      width: rem(14);
+      height: rem(16);
+      vertical-align: middle;
+    }
+    .contentHeaderText {
+      font-family: "PingFang SC Semibold";
+      font-size: rem(16);
+      line-height: rem(24);
+      text-align: left;
+      color: #0b0b37;
+      margin-left: rem(8);
+    }
+  }
+  .line {
+    margin: rem(16) 0;
+    height: 1px;
+    border-top: 1px solid #eee;
+  }
+  .contentText {
+    font-family: "PingFangSC-Regular ";
+    font-size: rem(14);
+    line-height: rem(24);
+    text-align: left;
+    color: #0b0b37;
+  }
+}

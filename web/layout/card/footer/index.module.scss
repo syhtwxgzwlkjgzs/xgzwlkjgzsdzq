@@ -1,0 +1,30 @@
+@import '@common/styles/index.scss';
+
+.footerBox {
+    padding: rem(10);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .footerImg {
+        width: rem(96);
+        height: rem(96);
+    }
+    .desc {
+        padding-top: rem(10);
+        font-family: "PingFangSC-Regular ";
+        font-size: rem(14);
+        line-height: rem(26);
+        text-align: left;
+        color: #0b0b37;
+    }
+    .siteName {
+        padding-top: rem(4);
+        padding-bottom: rem(20);
+        font-family: "PingFangSC-Regular ";
+        font-size: rem(12);
+        line-height: rem(26);
+        text-align: left;
+        color: #8590a6;
+    }
+}

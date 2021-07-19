@@ -407,7 +407,7 @@ class ThreadH5Page extends React.Component {
 
     if (imageList?.length) {
       params.attachments = imageList
-        .filter((item) => item.status === 'success' && item.response)
+        .filter(item => item.status === 'success' && item.response)
         .map((item) => {
           const { id } = item.response;
           return {
@@ -702,7 +702,7 @@ class ThreadH5Page extends React.Component {
               store={threadStore}
               fun={fun}
               onLikeClick={() => this.onLikeClick()}
-              onOperClick={(type) => this.onOperClick(type)}
+              onOperClick={type => this.onOperClick(type)}
               onCollectionClick={() => this.onCollectionClick()}
               onShareClick={() => this.onShareClick()}
               onReportClick={() => this.onReportClick()}
@@ -710,7 +710,7 @@ class ThreadH5Page extends React.Component {
               onTagClick={() => this.onTagClick()}
               onPayClick={() => this.onPayClick()}
               // onPayClick={() => this.onPayClick()}
-              onUserClick={(e) => this.onUserClick(e)}
+              onUserClick={e => this.onUserClick(e)}
             ></RenderThreadContent>
           ) : (
             <LoadingTips type="init"></LoadingTips>
@@ -723,8 +723,8 @@ class ThreadH5Page extends React.Component {
                 <Fragment>
                   <RenderCommentList
                     router={this.props.router}
-                    sort={(flag) => this.onSortChange(flag)}
-                    onEditClick={(comment) => this.onEditClick(comment)}
+                    sort={flag => this.onSortChange(flag)}
+                    onEditClick={comment => this.onEditClick(comment)}
                     replyAvatarClick={(comment, reply, floor) => this.replyAvatarClick(comment, reply, floor)}
                   ></RenderCommentList>
                   <BottomView noMoreType="line" isError={isCommentListError} noMore={isNoMore}></BottomView>
@@ -793,14 +793,14 @@ class ThreadH5Page extends React.Component {
               visible={this.state.showMorePopup}
               onClose={() => this.setState({ showMorePopup: false })}
               onSubmit={() => this.setState({ showMorePopup: false })}
-              onOperClick={(type) => this.onOperClick(type)}
+              onOperClick={type => this.onOperClick(type)}
             ></MorePopup>
 
             {/* 删除弹层 */}
             <DeletePopup
               visible={this.state.showDeletePopup}
               onClose={() => this.setState({ showDeletePopup: false })}
-              onBtnClick={(type) => this.onBtnClick(type)}
+              onBtnClick={type => this.onBtnClick(type)}
             ></DeletePopup>
             {/* 举报弹层 */}
 
@@ -810,14 +810,14 @@ class ThreadH5Page extends React.Component {
               inputText={this.inputText}
               visible={this.state.showReportPopup}
               onCancel={() => this.setState({ showReportPopup: false })}
-              onOkClick={(data) => this.onReportOk(data)}
+              onOkClick={data => this.onReportOk(data)}
             ></ReportPopup>
 
             {/* 打赏弹窗 */}
             <RewardPopup
               visible={this.state.showRewardPopup}
               onCancel={() => this.setState({ showRewardPopup: false })}
-              onOkClick={(value) => this.onRewardSubmit(value)}
+              onOkClick={value => this.onRewardSubmit(value)}
             ></RewardPopup>
 
             {/* 微信浏览器内分享弹窗 */}

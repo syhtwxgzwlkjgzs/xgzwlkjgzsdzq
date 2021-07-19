@@ -1,0 +1,60 @@
+@import '@common/styles/index.scss';
+
+.container {
+    background: $white;
+    padding: rem($padding-4n);
+  }
+  
+  .header {
+    background: $white;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .userInfo {
+    flex: 1;
+  }
+  
+  .body {
+    margin-top: rem($margin-6n);
+    max-height: 1900px;
+    overflow: hidden;
+    > * {
+      margin-bottom: rem($margin-4n);
+    }
+  }
+  .imgBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: rem(60) rem(48);
+    .priceimg {
+      width: rem(259);
+    }
+  }
+  .lookmoreBox {
+    margin: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .lookmoreImg {
+      height: rem(20);
+    }
+  }
+  .title {
+    color: $text-color-primary;
+    line-height: 21px;
+    font-weight: bold;
+    font-size: rem($font-size-middle);
+    word-break: break-all;
+  }
+  .tag {
+    display: inline-block;
+    color: $text-color-regular;
+    background: #f0f1f3; // TODO:token
+    font-size: rem($font-size-label);
+    padding: rem(6.5) rem($padding-1n);
+    border-radius: rem($border-radius-small);
+    margin-bottom: rem($padding-4n);
+    line-height: rem(12);
+  }

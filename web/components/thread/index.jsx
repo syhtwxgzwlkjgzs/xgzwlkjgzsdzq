@@ -22,9 +22,9 @@ import { updateViewCountInStores } from '@common/utils/viewcount-in-storage';
 @inject('thread')
 @inject('search')
 @inject('topic')
+@inject('card')
 @observer
 class Index extends React.Component {
-
     state = {
       isSendingLike: false,
     }
@@ -45,8 +45,8 @@ class Index extends React.Component {
 
       const { title = '', threadId = '', user } = this.props.data || {};
 
-      h5Share({path: `thread/${threadId}`});
-      this.props.index.updateThreadShare({ threadId }).then(result => {
+      h5Share({ path: `thread/${threadId}` });
+      this.props.index.updateThreadShare({ threadId }).then((result) => {
         if (result.code === 0) {
           this.props.index.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
           this.props.search.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
@@ -83,11 +83,10 @@ class Index extends React.Component {
     // 点赞
     onPraise = (e) => {
       e && e.stopPropagation();
-      this.handlePraise()
+      this.handlePraise();
     }
     handlePraise = debounce(() => {
-
-      if(this.state.isSendingLike) return;
+      if (this.state.isSendingLike) return;
 
       // 对没有登录的先登录
       if (!this.props.user.isLogin()) {
@@ -97,8 +96,8 @@ class Index extends React.Component {
       }
       const { data = {}, user } = this.props;
       const { threadId = '', isLike, postId } = data;
-      this.setState({isSendingLike: true});
-      this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } }).then(result => {
+      this.setState({ isSendingLike: true });
+      this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } }).then((result) => {
         if (result.code === 0 && result.data) {
           this.props.index.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
           this.props.search.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
@@ -109,14 +108,14 @@ class Index extends React.Component {
           const { recomputeRowHeights = noop } = this.props;
           recomputeRowHeights();
         }
-        this.setState({isSendingLike: false});
+        this.setState({ isSendingLike: false });
       });
     }, 1000)
 
     // 支付
     onPay = (e) => {
       e && e.stopPropagation();
-      this.handlePay()
+      this.handlePay();
     }
     handlePay = debounce(async () => {
       // 对没有登录的先做
@@ -137,10 +136,10 @@ class Index extends React.Component {
       if (success && thread?.threadId) {
         const { code, data } = await this.props.thread.fetchThreadDetail(thread?.threadId);
         if (code === 0 && data) {
-          this.props.index.updatePayThreadInfo(thread?.threadId, data)
-          this.props.search.updatePayThreadInfo(thread?.threadId, data)
-          this.props.topic.updatePayThreadInfo(thread?.threadId, data)
-          this.props.user.updatePayThreadInfo(thread?.threadId, data)
+          this.props.index.updatePayThreadInfo(thread?.threadId, data);
+          this.props.search.updatePayThreadInfo(thread?.threadId, data);
+          this.props.topic.updatePayThreadInfo(thread?.threadId, data);
+          this.props.user.updatePayThreadInfo(thread?.threadId, data);
 
           this.updateViewCount();
           const { recomputeRowHeights = noop } = this.props;
@@ -150,11 +149,11 @@ class Index extends React.Component {
     }, 1000)
 
     onClickUser = (e) => {
-      e && e.stopPropagation()
+      e && e.stopPropagation();
 
       const { user = {}, isAnonymous } = this.props.data || {};
-      if (!!isAnonymous) {
-        this.onClick()
+      if (isAnonymous) {
+        this.onClick();
       } else {
         this.props.router.push(`/user/${user?.userId}`);
       }
@@ -173,9 +172,9 @@ class Index extends React.Component {
         this.props.router.push(`/thread/${threadId}`);
 
         // this.updateViewCount();
-        this.props.index.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
-        this.props.search.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
-        this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
+        this.props.index.updateAssignThreadInfo(threadId, { updateType: 'viewCount' });
+        this.props.search.updateAssignThreadInfo(threadId, { updateType: 'viewCount' });
+        this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'viewCount' });
       } else {
         console.log('帖子不存在');
       }
@@ -191,7 +190,7 @@ class Index extends React.Component {
       e && e.stopPropagation();
 
       const { onClickIcon = noop } = this.props;
-      onClickIcon(e)
+      onClickIcon(e);
     }
 
     onOpen = () => {
@@ -209,16 +208,16 @@ class Index extends React.Component {
       const { canViewPost } = ability;
 
       if (!canViewPost) {
-        const isLogin = this.props.user.isLogin()
+        const isLogin = this.props.user.isLogin();
         if (!isLogin) {
           Toast.info({ content: '请先登录!' });
           goToLoginPage({ url: '/user/login' });
         } else {
           Toast.info({ content: '暂无权限查看详情，请联系管理员' });
         }
-        return false
+        return false;
       }
-      return true
+      return true;
     }
 
     updateViewCount = async () => {
@@ -232,7 +231,7 @@ class Index extends React.Component {
     }
 
     render() {
-      const { data, className = '', site = {}, showBottomStyle = true ,  collect = '', unifyOnClick = null, isShowIcon = false } = this.props;
+      const { data, card, className = '', site = {}, showBottomStyle = true,  collect = '', unifyOnClick = null, isShowIcon = false } = this.props;
       const { platform = 'pc' } = site;
 
       const { onContentHeightChange = noop, onImageReady = noop, onVideoReady = noop } = this.props;
@@ -295,6 +294,8 @@ class Index extends React.Component {
           />
 
           <BottomEvent
+            data={data}
+            card={card}
             userImgs={likeReward.users}
             wholeNum={likeReward.likePayCount || 0}
             comment={likeReward.postCount || 0}

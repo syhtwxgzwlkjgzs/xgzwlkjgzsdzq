@@ -4,6 +4,7 @@ import Tip from '../tip';
 import { Icon } from '@discuzq/design';
 import { noop } from '../utils';
 import MorePopop from '@components/more-popop';
+import Router from '@discuzq/sdk/dist/router';
 
 /**
  * 帖子底部内容
@@ -24,6 +25,8 @@ const Index = ({
   isSendingLike = false,
   tipData,
   platform,
+  card,
+  data,
   onShare = () => {},
   onComment = () => {},
   onPraise = () => {},
@@ -50,17 +53,21 @@ const Index = ({
       type: 'share',
     }];
   }, [isLiked]);
-  // const handleClick = () => {
-  //   setShow(true);
-  // };
-  // const [show, setShow] = useState(false);
-  // const onClose = () => {
-  //   setShow(false);
-  // };
-  // const handleShare = () => {
-  //   onShare();
-  //   onClose();
-  // };
+  const handleClick = () => {
+    setShow(true);
+  };
+  const [show, setShow] = useState(false);
+  const onClose = () => {
+    setShow(false);
+  };
+  const handleShare = () => {
+    onShare();
+    onClose();
+  };
+  const createCard = () => {
+    card.setThreadData(data);
+    Router.push({ url: '/card?from=thread' });
+  };
   const needHeight = useMemo(() => userImgs.length !== 0 || comment > 0 || sharing > 0, [userImgs, comment, sharing]);
   return (
     <div>
@@ -94,7 +101,7 @@ const Index = ({
       <div className={needHeight ? styles.operation : styles.operations}>
         {
           postList.map((item, index) => (
-              <div key={index} className={styles.fabulous} onClick={item.event}>
+              <div key={index} className={styles.fabulous} onClick={platform === 'h5' ? handleClick : item.event}>
                 <Icon
                   className={`${styles.icon} ${item.type} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`}
                   name={item.icon}
@@ -106,8 +113,8 @@ const Index = ({
               </div>
           ))
         }
-        {/* {show && <MorePopop show={show} handleShare={handleShare} onClose={onClose}></MorePopop>} */}
       </div>
+      {show && <MorePopop show={show} handleShare={handleShare} onClose={onClose} createCard={createCard}></MorePopop>}
     </div>
   );
 };
