@@ -23,7 +23,7 @@ class WXBind extends Component {
   constructor(props){
     super(props);
     this.state = {
-      currentStatus: 'error',
+      currentStatus: '',
       statusInfo: {
         success: '扫码成功',
         error: '扫码失败'
