@@ -134,13 +134,19 @@ class index extends Component {
 
   logout = () => {
     clearLoginStatus();
-    this.props.user.removeUserInfo();
-    this.props.site.getSiteInfo();
+    LoginHelper.clear();
+
+    const siteMode = this.props.site?.webConfig?.setSite?.siteMode;
+    const url = siteMode === 'pay' ? '/subPages/forum/partner-invite/index' : '/indexPages/home/index';
+
     Router.reLaunch({
-      url: '/subPages/forum/partner-invite/index',
-      success: () => {
-        LoginHelper.clear();
-      },
+      url,
+      complete: () => {
+        setTimeout(() => {
+          this.props.user.removeUserInfo();
+          this.props.site.getSiteInfo();
+        }, 300);
+      }
     });
   };
 
