@@ -246,10 +246,14 @@ class IndexAction extends IndexStore {
   @action.bound
   async getReadCategories() {
     const result = await readCategories();
-    if (result.code === 0 && result.data) {
-      const data = [...result.data];
-      this.setCategories(data);
-      return this.categories;
+    if (result.code === 0) {
+      if (result.data) {
+        const data = [...result.data];
+        this.setCategories(data);
+        return this.categories;
+      }
+      this.setCategories([]);
+      return []
     } else {
       this.categoryError = {
         isError: true,
