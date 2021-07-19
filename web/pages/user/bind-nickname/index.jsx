@@ -11,7 +11,7 @@ class BindNickname extends React.Component {
     return <ViewAdapter
               h5={<BindNicknameH5Page />}
               pc={<BindNicknameH5Page />}
-              title={`设置昵称 - ${this.props.site?.siteName}`}
+              title={`设置昵称`}
             />;
   }
 }
