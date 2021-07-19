@@ -94,6 +94,14 @@ const InputPop = (props) => {
                 <div className={styles.text}>分享</div>
               </div>
             )}
+            {canShare && (
+              <div className={styles.moreItem} onClick={() => onOperClick('post')}>
+                <div className={styles.icon}>
+                  <Icon name="PictureOutlinedBig" size={20}></Icon>
+                </div>
+                <div className={styles.text}>海报</div>
+              </div>
+            )}
             {!isAdmini && (
               <div className={styles.moreItem} onClick={() => onOperClick('report')}>
                 <div className={styles.icon}>

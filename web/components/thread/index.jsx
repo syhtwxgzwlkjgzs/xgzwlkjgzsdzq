@@ -231,7 +231,7 @@ class Index extends React.Component {
     }
 
     render() {
-      const { data, card, className = '', site = {}, showBottomStyle = true,  collect = '', unifyOnClick = null, isShowIcon = false } = this.props;
+      const { data, card, className = '', site = {}, showBottomStyle = true,  collect = '', unifyOnClick = null, isShowIcon = false, user: users } = this.props;
       const { platform = 'pc' } = site;
 
       const { onContentHeightChange = noop, onImageReady = noop, onVideoReady = noop } = this.props;
@@ -296,7 +296,7 @@ class Index extends React.Component {
           <BottomEvent
             data={data}
             card={card}
-            user={user}
+            user={users}
             userImgs={likeReward.users}
             wholeNum={likeReward.likePayCount || 0}
             comment={likeReward.postCount || 0}

@@ -106,15 +106,15 @@ class HomeHeader extends React.Component {
     this.setState({ show: false });
   }
   handleShare = () => {
+    this.onShare();
+    this.onCancel();
+  }
+  handleClick = () => {
     const { user } = this.props;
     if (!user.isLogin()) {
       goToLoginPage({ url: '/user/login' });
       return;
     }
-    this.onShare();
-    this.onCancel();
-  }
-  handleClick = () => {
     this.setState({ show: true });
   }
   createCard = () => {

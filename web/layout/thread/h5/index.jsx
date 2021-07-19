@@ -33,7 +33,7 @@ import RenderCommentList from './comment-list';
 import classNames from 'classnames';
 
 import BottomView from '@components/list/BottomView';
-
+import MorePopop from '@components/more-popop';
 @inject('site')
 @inject('user')
 @inject('thread')
@@ -42,6 +42,7 @@ import BottomView from '@components/list/BottomView';
 @inject('topic')
 @inject('search')
 @inject('vlist')
+@inject('card')
 @observer
 class ThreadH5Page extends React.Component {
   constructor(props) {
@@ -59,6 +60,7 @@ class ThreadH5Page extends React.Component {
       setTop: false, // 置顶
       showContent: '',
       // inputValue: '', // 评论内容
+      show: false, // 分享海报弹窗
     };
 
     this.perPage = 20;
@@ -269,6 +271,11 @@ class ThreadH5Page extends React.Component {
     // 分享
     if (type === 'share') {
       this.onShareClick();
+    }
+
+    // 海报
+    if (type === 'post') {
+      this.createCard();
     }
   };
 
@@ -551,7 +558,32 @@ class ThreadH5Page extends React.Component {
       }
     }
   }
-
+  handleClick = () => {
+    const { user } = this.props;
+    if (!user.isLogin()) {
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+    this.setState({ show: true });
+  }
+  onShareClose = () => {
+    this.setState({ show: false });
+  }
+  handleShare = () => {
+    const { user } = this.props;
+    if (!user.isLogin()) {
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+    this.onShareClick();
+    this.onShareClose();
+  }
+  createCard = () => {
+    const { card } = this.props;
+    const data = this.props.thread.threadData;
+    card.setThreadData(data);
+    Router.push({ url: '/card?from=thread' });
+  };
   // 付费支付
   async onPayClick() {
     if (!this.props.user.isLogin()) {
@@ -765,7 +797,7 @@ class ThreadH5Page extends React.Component {
                   name="CollectOutlinedBig"
                 ></Icon>
                 <Icon
-                  onClick={immediateDebounce(() => this.onShareClick(), 1000)}
+                  onClick={immediateDebounce(() => this.handleClick(), 1000)}
                   className={footer.icon}
                   size="20"
                   name="ShareAltOutlined"
@@ -774,7 +806,13 @@ class ThreadH5Page extends React.Component {
             </div>
           </div>
         )}
-
+        {this.state.show
+        && <MorePopop
+        show={this.state.show}
+        onClose={this.onShareClose}
+        handleShare={this.handleShare}
+        createCard={this.createCard}
+        ></MorePopop>}
         {isReady && (
           <Fragment>
             {/* 评论弹层 */}

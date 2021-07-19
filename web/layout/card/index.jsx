@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import styles from './index.module.scss';
 import { Button, Toast } from '@discuzq/design';
 import Footer from './footer';
+import isWeiXin from '@common/utils/is-weixin';
 
 const Index = ({ children }) => {
   const [url, setUrl] = useState('');
@@ -21,6 +22,11 @@ const Index = ({ children }) => {
   if (!ready) {
     Toast.loading({ content: '正在绘制...' });
   }
+  let shareText = '保存到相册';
+  // 判断是否在微信浏览器中
+  if (isWeiXin()) {
+    shareText = '长按图片保存到相册';
+  }
   return (
     <div className={styles.contain}>
       <div className={styles.poster} ref={post}>
@@ -33,7 +39,7 @@ const Index = ({ children }) => {
         </div>
       )}
       <div className={styles.shareBtn}>
-        <Button className={styles.btn} onClick={saveImg}>保存到相册</Button>
+        <Button className={styles.btn} onClick={isWeiXin() ? '' : saveImg}>{shareText}</Button>
       </div>
     </div>
   );
