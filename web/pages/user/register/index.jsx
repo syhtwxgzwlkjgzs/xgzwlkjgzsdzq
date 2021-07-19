@@ -13,7 +13,7 @@ class Register extends React.Component {
     return <ViewAdapter
               h5={<RegisterH5Page/>}
               pc={<RegisterH5Page/>}
-              title={`注册 - ${this.props.site?.siteName}`}
+              title={`注册`}
             />;
   }
 }

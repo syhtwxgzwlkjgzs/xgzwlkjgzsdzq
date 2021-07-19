@@ -14,7 +14,7 @@ class Forum extends React.Component {
     return <ViewAdapter
               h5={<ForumH5Page />}
               pc={<ForumPCPage />}
-              title={`站点信息 - ${this.props.site?.siteName}`}
+              title={`站点信息`}
             />;
   }
 }
