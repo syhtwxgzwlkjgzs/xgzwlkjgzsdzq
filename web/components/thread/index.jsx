@@ -296,6 +296,7 @@ class Index extends React.Component {
           <BottomEvent
             data={data}
             card={card}
+            user={user}
             userImgs={likeReward.users}
             wholeNum={likeReward.likePayCount || 0}
             comment={likeReward.postCount || 0}

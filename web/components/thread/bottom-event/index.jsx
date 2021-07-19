@@ -5,6 +5,7 @@ import { Icon } from '@discuzq/design';
 import { noop } from '../utils';
 import MorePopop from '@components/more-popop';
 import Router from '@discuzq/sdk/dist/router';
+import goToLoginPage from '@common/utils/go-to-login-page';
 
 /**
  * 帖子底部内容
@@ -27,6 +28,7 @@ const Index = ({
   platform,
   card,
   data,
+  user,
   onShare = () => {},
   onComment = () => {},
   onPraise = () => {},
@@ -54,6 +56,10 @@ const Index = ({
     }];
   }, [isLiked]);
   const handleClick = () => {
+    if (!user.isLogin()) {
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
     setShow(true);
   };
   const [show, setShow] = useState(false);
