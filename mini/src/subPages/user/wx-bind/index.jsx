@@ -11,7 +11,7 @@ import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus, isExtFieldsOpen
 import layout from './index.module.scss';
 import { getParamCode, getUserProfile } from '../common/utils';
 import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
-
+import LoginHelper from '@common/utils/login-helper';
 // const MemoToastProvider = React.memo(ToastProvider);
 
 @inject('site')
@@ -50,7 +50,7 @@ class WXBind extends Component {
           redirectTo({ url: '/subPages/user/supplementary/index' });
           return;
         }
-        redirectTo({ url: '/indexPages/home/index' });
+        LoginHelper.restore();
         return;
       }
 

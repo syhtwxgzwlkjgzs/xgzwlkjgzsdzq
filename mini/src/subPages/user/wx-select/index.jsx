@@ -13,6 +13,7 @@ import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus, isExtFieldsOpen
 import { get } from '@common/utils/get';
 import layout from './index.module.scss';
 import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
+import LoginHelper from '@common/utils/login-helper';
 
 const NEED_BIND_PHONE_FLAG = -8001;
 @inject('site')
@@ -67,9 +68,7 @@ class WXSelect extends Component {
           content: '登录成功',
           duration: 1000,
           onClose: () => {
-            redirectTo({
-              url: `/indexPages/home/index`
-            });
+            LoginHelper.restore();
           }
         });
         return;
@@ -96,7 +95,7 @@ class WXSelect extends Component {
           redirectTo({ url: '/subPages/user/supplementary/index' });
           return;
         }
-        redirectTo({ url: '/indexPages/home/index' });
+        LoginHelper.restore();
         return;
       }
 

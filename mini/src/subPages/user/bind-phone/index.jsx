@@ -12,7 +12,7 @@ import PhoneInput from '@components/login/phone-input'
 import { get } from '@common/utils/get';
 import layout from './index.module.scss';
 import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
-
+import LoginHelper from '@common/utils/login-helper';
 
 @inject('site')
 @inject('user')
@@ -124,9 +124,7 @@ class BindPhoneH5Page extends React.Component {
             navigateBack();
             return;
           }
-          redirectTo({
-            url: `/indexPages/home/index`
-          });
+          LoginHelper.restore();
         }
       });
     } catch (e) {
@@ -138,7 +136,7 @@ class BindPhoneH5Page extends React.Component {
           redirectTo({ url: '/subPages/user/supplementary/index' });
           return;
         }
-        redirectTo({ url: '/indexPages/home/index' });
+        LoginHelper.restore();
         return;
       }
 
