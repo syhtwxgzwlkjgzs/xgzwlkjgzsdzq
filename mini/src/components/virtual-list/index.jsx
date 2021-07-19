@@ -39,8 +39,12 @@ const VirtualList = ({
           const length = arr.length
           const newArr = dataSource.slice()
           if (length && data.length > arrLength) {
-            newArr.push(arr[length - 1]) 
-            setDataSource(arr)    
+            if (arrLength === 0) {
+              setDataSource(arr)
+            } else {
+              newArr.push(arr[length - 1]) 
+              setDataSource(newArr)
+            }
           }
         }
       }
