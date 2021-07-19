@@ -33,6 +33,7 @@ class Index extends React.Component {
     onShare = (e) => {
       e && e.stopPropagation();
       Toast.info({ content: '复制链接成功' });
+      this.updateViewCount();
       this.handleShare();
     }
     handleShare = debounce(() => {
@@ -53,7 +54,6 @@ class Index extends React.Component {
           this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
           this.props.user.updateAssignThreadInfo(threadId, { updateType: 'share', updatedInfo: result.data, user: user.userInfo });
 
-          this.updateViewCount();
           const { recomputeRowHeights = noop } = this.props;
           recomputeRowHeights();
         }
@@ -72,7 +72,6 @@ class Index extends React.Component {
       const { threadId = '' } = this.props.data || {};
 
       if (threadId !== '') {
-        this.updateViewCount();
         this.props.thread.positionToComment();
         this.props.router.push(`/thread/${threadId}`);
       } else {
@@ -83,6 +82,7 @@ class Index extends React.Component {
     // 点赞
     onPraise = (e) => {
       e && e.stopPropagation();
+      this.updateViewCount();
       this.handlePraise();
     }
     handlePraise = debounce(() => {
@@ -104,7 +104,6 @@ class Index extends React.Component {
           this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
           this.props.user.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
 
-          this.updateViewCount();
           const { recomputeRowHeights = noop } = this.props;
           recomputeRowHeights();
         }
@@ -115,6 +114,7 @@ class Index extends React.Component {
     // 支付
     onPay = (e) => {
       e && e.stopPropagation();
+      this.updateViewCount();
       this.handlePay();
     }
     handlePay = debounce(async () => {
@@ -141,7 +141,6 @@ class Index extends React.Component {
           this.props.topic.updatePayThreadInfo(thread?.threadId, data);
           this.props.user.updatePayThreadInfo(thread?.threadId, data);
 
-          this.updateViewCount();
           const { recomputeRowHeights = noop } = this.props;
           recomputeRowHeights(data);
         }
@@ -171,10 +170,6 @@ class Index extends React.Component {
         this.props.thread.isPositionToComment = false;
         this.props.router.push(`/thread/${threadId}`);
 
-        // this.updateViewCount();
-        this.props.index.updateAssignThreadInfo(threadId, { updateType: 'viewCount' });
-        this.props.search.updateAssignThreadInfo(threadId, { updateType: 'viewCount' });
-        this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'viewCount' });
       } else {
         console.log('帖子不存在');
       }
@@ -221,13 +216,14 @@ class Index extends React.Component {
     }
 
     updateViewCount = async () => {
-      // const { threadId = '' } = this.props.data || {};
-      // const viewCount = await updateViewCountInStores(threadId);
-      // if(viewCount) {
-      //   this.props.index.updateAssignThreadInfo(threadId, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
-      //   this.props.search.updateAssignThreadInfo(threadId, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
-      //   this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
-      // }
+      const { threadId = '' } = this.props.data || {};
+      const threadIdNumber = Number(threadId);
+      const viewCount = await updateViewCountInStores(threadIdNumber);
+      if(viewCount) {
+        this.props.index.updateAssignThreadInfo(threadIdNumber, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
+        this.props.search.updateAssignThreadInfo(threadIdNumber, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
+        this.props.topic.updateAssignThreadInfo(threadIdNumber, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
+      }
     }
 
     render() {

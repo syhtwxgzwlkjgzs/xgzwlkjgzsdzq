@@ -41,8 +41,11 @@ class Index extends Component {
         if (item.orderType === 1) return (<>
           邀请{item.nickname}加入{site?.webConfig?.setSite?.siteName}
         </>);
-        if (item.orderType === 3 || item.orderType === 7) tips = '支付了你';
-        tips = '打赏了你';
+        if (item.orderType === 3 || item.orderType === 7) {
+          tips = '支付了你';
+        } else {
+          tips = '打赏了你';
+        }
         break;
       case 'receiveredpacket':
         tips = '获取红包';

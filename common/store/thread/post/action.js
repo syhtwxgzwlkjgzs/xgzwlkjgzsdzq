@@ -190,6 +190,7 @@ class ThreadPostAction extends ThreadPostStore {
   @action.bound
   resetPostData() {
     this.postData = { ...initPostData };
+    this.currentSelectedToolbar = false;
     this.setCategorySelected();
   }
 

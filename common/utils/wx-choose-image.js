@@ -47,7 +47,7 @@ const wxChooseImage = () => new Promise(async (resolve) => {
   // 验证通过，接口可用，开始选择图片
   wx.chooseImage({
     count: 9,
-    sizeType: ['compressed'],
+    sizeType: ['original', 'compressed'],
     sourceType: ['album', 'camera'],
     success: async (res) => {
       const { localIds } = res;

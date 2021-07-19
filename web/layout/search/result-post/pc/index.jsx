@@ -67,7 +67,7 @@ class SearchResultPostH5Page extends React.Component {
         >
           {
             pageData?.map((item, index) => (
-              <ThreadContent className={index ===0 ? styles.borderRadius : ''} showBottom={false} data={item} key={index} />
+              <ThreadContent className={index ===0 ? styles.borderRadius : ''} showBottom={false} data={item} key={`${item.threadId}-${item.updatedAt}`} />
             ))
           }
         </SidebarPanel>

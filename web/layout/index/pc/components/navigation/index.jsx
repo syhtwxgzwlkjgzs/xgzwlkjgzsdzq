@@ -105,7 +105,7 @@ const Index = ({ categories = [], totalThreads = 0, onNavigationClick = noop, de
         categories?.length ?
           <CategoriesContent />
           :
-          <BottomView isBox isError={isError} errorText={errorText} noMore={false} loadingText='正在加载' noMoreText='暂无数据' />
+          <BottomView isBox isError={isError} errorText={errorText} noMore={categories?.length === 0} loadingText='正在加载' noMoreText='暂无数据' />
       }
     </Card>
   );
