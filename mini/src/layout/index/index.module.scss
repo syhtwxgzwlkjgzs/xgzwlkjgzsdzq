@@ -18,7 +18,14 @@
   top: 0;
   left: 0;
   z-index: $zindex-backtotop;
+  display: none;
+  &.showUp {
+    z-index: $zindex-backtotop;
+    background-color: $white;
+    display: block;
+  }
 }
+
 .homeContentTop {
   padding: 0 $padding-4n;
   background: $white;
