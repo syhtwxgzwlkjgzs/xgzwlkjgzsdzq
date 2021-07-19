@@ -105,6 +105,8 @@ class ThreadH5Page extends React.Component {
     // 当内容加载完成后，获取评论区所在的位置
     this.position = this.commentDataRef?.current?.offsetTop - 50;
 
+    this.setState({ loadWeiXin: isWeiXin() });
+
     // 是否定位到评论位置
     if (this.props?.thread?.isPositionToComment) {
       // TODO:需要监听帖子内容加载完成事件
@@ -115,8 +117,6 @@ class ThreadH5Page extends React.Component {
     }
     // 滚动到记录的指定位置
     this.threadBodyRef.current.scrollTo(0, this.props.thread.scrollDistance);
-
-    this.setState({ loadWeiXin: isWeiXin() });
   }
 
   componentDidUpdate() {

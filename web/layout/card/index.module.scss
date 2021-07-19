@@ -1,3 +1,5 @@
+@import '@common/styles/index.scss';
+
 .contain {
     background-color: #F5F7F8;
     height: 100vh;
@@ -43,5 +45,13 @@
         font-size: 16px;
         text-align: center;
         color: #fff;
+    }
+    .wxBtn {
+        margin-top: rem(20);
+        font-family: "PingFang SC";
+        font-size: 16px;
+        line-height: 24px;
+        text-align: left;
+        color: #0b0b37;
     }
 }

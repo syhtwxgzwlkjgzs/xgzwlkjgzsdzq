@@ -66,7 +66,7 @@ const Index = ({
   const onClose = () => {
     setShow(false);
   };
-  const handleShare = () => {
+  const handleH5Share = () => {
     onShare();
     onClose();
   };
@@ -123,7 +123,7 @@ const Index = ({
       {show && <MorePopop
         show={show}
         fromThread
-        handleShare={handleShare}
+        handleH5Share={handleH5Share}
         onClose={onClose}
         createCard={createCard}>
       </MorePopop>}
