@@ -35,21 +35,21 @@ const VirtualList = ({
           if (type === 'delete' || type === 'add' || type === 'edit' || type === 'pay') {
             setDataSource(arr) 
           }
+
+          indexStore.changeInfo = null
         } else {
           const length = arr.length
-          const newArr = dataSource.slice()
           if (length && data.length > arrLength) {
             if (arrLength === 0) {
               setDataSource(arr)
             } else {
+              const newArr = dataSource.slice()
               newArr.push(arr[length - 1]) 
               setDataSource(newArr)
             }
           }
         }
-      }
-
-      indexStore.changeInfo = null
+      } 
   }, [data?.length, indexStore.changeInfo])
 
 
