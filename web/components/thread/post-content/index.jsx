@@ -72,7 +72,10 @@ const PostContent = ({
       return;
     }
     e && e.stopPropagation();
-    if(!e?.target?.getAttribute('src')) onRedirectToDetail();
+    // 点击图片不跳转，图片不包含表情
+    if( !(e?.target?.getAttribute('src') && e?.target?.className?.indexOf("qq-emotion") === -1) ) {
+      onRedirectToDetail();
+    }
   };
 
   // 显示图片的预览
@@ -89,6 +92,13 @@ const PostContent = ({
       setImageVisible(true);
       setImageUrl(e.attribs.src);
     }
+  }
+
+  // 点击富文本中的链接
+  const handleLinkClick = () => {
+    updateViewCount();
+    setTimeout(() => { // 等待store更新完成后跳转
+    }, 500);
   }
 
   // 超过1200个字符，截断文本用于显示
@@ -134,6 +144,7 @@ const PostContent = ({
             content={useShowMore && cutContentForDisplay ? cutContentForDisplay : urlToLink(filterContent)}
             onClick={handleClick}
             onImgClick={handleImgClick}
+            onLinkClick={handleLinkClick}
             transformer={transformer}
           />
           {imageVisible && (

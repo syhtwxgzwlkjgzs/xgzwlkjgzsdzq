@@ -247,10 +247,14 @@ class IndexAction extends IndexStore {
   @action.bound
   async getReadCategories() {
     const result = await readCategories();
-    if (result.code === 0 && result.data) {
-      const data = [...result.data];
-      this.setCategories(data);
-      return this.categories;
+    if (result.code === 0) {
+      if (result.data) {
+        const data = [...result.data];
+        this.setCategories(data);
+        return this.categories;
+      }
+      this.setCategories([]);
+      return []
     } else {
       this.categoryError = {
         isError: true,
@@ -455,8 +459,7 @@ class IndexAction extends IndexStore {
 
     // 更新帖子浏览量
     if (updateType === 'viewCount') {
-      data.viewCount = data.viewCount + 1;
-      // data.viewCount = updatedInfo.viewCount;
+      data.viewCount = updatedInfo.viewCount;
     }
 
     if (this.threads?.pageData) {
