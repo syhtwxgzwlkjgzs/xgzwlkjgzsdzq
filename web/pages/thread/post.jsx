@@ -254,6 +254,7 @@ class PostPage extends React.Component {
 
   // 表情
   handleEmojiClick = (emoji) => {
+    debugger;
     this.setState({ emoji });
   };
 
