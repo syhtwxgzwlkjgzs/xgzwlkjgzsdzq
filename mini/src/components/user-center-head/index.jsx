@@ -133,21 +133,19 @@ class index extends Component {
   }, 1000);
 
   logout = () => {
-    const paid = this.props.user?.paid;
-    let url = '';
     clearLoginStatus();
+    LoginHelper.clear();
 
-    if(paid) {
-      url = '/pages/index/index'
-    }else {
-      url = '/subPages/forum/partner-invite/index';
-    }
+    const siteMode = this.props.site?.webConfig?.setSite?.siteMode;
+    const url = siteMode === 'pay' ? '/subPages/forum/partner-invite/index' : '/indexPages/home/index';
+
     Router.reLaunch({
       url,
-      success: () => {
-        LoginHelper.clear();
-        this.props.user.removeUserInfo();
-        this.props.site.getSiteInfo();
+      complete: () => {
+        setTimeout(() => {
+          this.props.user.removeUserInfo();
+          this.props.site.getSiteInfo();
+        }, 300);
       }
     });
   };
