@@ -88,6 +88,16 @@ class SearchPCPage extends React.Component {
     }
   }
   itemClick = (index) => {
+    const { hasTopics, hasUsers, hasThreads, isShowAll } = this.getStatus()
+
+    const disableClickTopic = !hasTopics && !isShowAll && index === 0
+    const disableClickUser = !hasUsers && !isShowAll && index === 1
+    const disableClickThread = !hasThreads && !isShowAll && index === 2
+    if (disableClickTopic || disableClickUser || disableClickThread) {
+      console.log(123);
+      return
+    }
+
     const HEADER_HEIGHT = 57;
     const STEPPER_PADDING = 24;
     let pos = -1, scrollTo = -1;
@@ -147,19 +157,37 @@ class SearchPCPage extends React.Component {
     this.setState({position: -1});
   }
 
-  // 中间 -- 潮流话题 活跃用户 热门内容
-  renderContent = () => {
-
-    const { indexTopics, indexUsers, indexThreads, indexTopicsError, indexUsersError, indexThreadsError } = this.props.search;
-    const userId = this.props.user?.userInfo?.id
-
-    const { pageData: topicsPageData } = indexTopics || {};
-    const { pageData: usersPageData } = indexUsers || {};
+  // 中间 -- 热门内容
+  renderContentHotThread = () => {
+    const { indexThreads, indexThreadsError } = this.props.search;
     const { pageData: threadsPageData } = indexThreads || {};
 
     return (
-      <div className={styles.searchContent}>
-        <div ref={this.treadingTopicRef}>
+        <div ref={this.hotTopicRef}>
+          <SidebarPanel
+            type='normal'
+            isLoading={!threadsPageData}
+            noData={!threadsPageData?.length}
+            title="热门内容"
+            icon={{ type: 3, name: 'HotOutlined' }}
+            onShowMore={this.redirectToSearchResultPost}
+            mold='plane'
+            isError={indexThreadsError.isError}
+            errorText={indexThreadsError.errorText}
+          >
+            {threadsPageData?.filter((_, index) => index < 10).map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />)}
+          </SidebarPanel>
+        </div>
+    )
+  }
+
+  // 中间 -- 潮流话题
+  renderContentPopTopic = () => {
+    const { indexTopics, indexTopicsError } = this.props.search;
+    const { pageData: topicsPageData } = indexTopics || {};
+
+    return (
+      <div ref={this.treadingTopicRef}>
           <SidebarPanel
             title="潮流话题"
             type='normal'
@@ -176,41 +204,63 @@ class SearchPCPage extends React.Component {
               ))}
             </div>
           </SidebarPanel>
-        </div>
-
-        <div ref={this.activeUsersRef}>
-          <SidebarPanel
-            title="活跃用户"
-            type='normal'
-            isLoading={!usersPageData}
-            noData={!usersPageData?.length}
-            onShowMore={this.redirectToSearchResultUser}
-            icon={{ type: 2, name: 'MemberOutlined' }}
-            isError={indexUsersError.isError}
-            errorText={indexUsersError.errorText}
-          >
-            <ActiveUsersMore data={usersPageData} onItemClick={this.onUserClick} onFollow={this.onFollow} userId={userId} />
-          </SidebarPanel>
-        </div>
-
-        <div ref={this.hotTopicRef}>
-          <SidebarPanel
-            type='normal'
-            isLoading={!threadsPageData}
-            noData={!threadsPageData?.length}
-            title="热门内容"
-            icon={{ type: 3, name: 'HotOutlined' }}
-            onShowMore={this.redirectToSearchResultPost}
-            mold='plane'
-            isError={indexThreadsError.isError}
-            errorText={indexThreadsError.errorText}
-          >
-            {threadsPageData?.filter((_, index) => index < 10).map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />)}
-          </SidebarPanel>
-        </div>
       </div>
     )
   }
+
+  // 中间 -- 活跃用户
+  renderContentActiveUser = () => {
+    const { indexUsers, indexUsersError } = this.props.search;
+    const userId = this.props.user?.userInfo?.id
+    const { pageData: usersPageData } = indexUsers || {};
+
+    return (
+      <div ref={this.activeUsersRef}>
+        <SidebarPanel
+          title="活跃用户"
+          type='normal'
+          isLoading={!usersPageData}
+          noData={!usersPageData?.length}
+          onShowMore={this.redirectToSearchResultUser}
+          icon={{ type: 2, name: 'MemberOutlined' }}
+          isError={indexUsersError.isError}
+          errorText={indexUsersError.errorText}
+        >
+          <ActiveUsersMore data={usersPageData} onItemClick={this.onUserClick} onFollow={this.onFollow} userId={userId} />
+        </SidebarPanel>
+      </div>
+    )
+  }
+
+  renderContent = () => {
+    const { hasTopics, hasUsers, hasThreads, isShowAll } = this.getStatus()
+
+    return (
+      <div className={styles.searchContent}>
+        { (isShowAll || hasTopics) && this.renderContentPopTopic() }
+        { (isShowAll || hasUsers) && this.renderContentActiveUser() }
+        { (isShowAll || hasThreads) && this.renderContentHotThread() }
+      </div>
+    )
+  }
+
+  // 获取数据状态
+  getStatus = () => {
+    const { indexTopics, indexUsers, indexThreads } = this.props.search;
+    const { pageData: topicsPageData } = indexTopics || {};
+    const { pageData: usersPageData } = indexUsers || {};
+    const { pageData: threadsPageData } = indexThreads || {};
+
+    const hasTopics = !!(topicsPageData?.length)
+    const hasUsers = !!(usersPageData?.length)
+    const hasThreads = !!(threadsPageData?.length)
+
+    // 都没有值，或者都有值，则显示全部
+    const isShowAll = (!hasTopics && !hasUsers && !hasThreads) || (hasTopics && hasUsers && hasThreads)
+
+    return { hasTopics, hasUsers, hasThreads, isShowAll }
+  }
+
   render() {
     return (
         <BaseLayout
