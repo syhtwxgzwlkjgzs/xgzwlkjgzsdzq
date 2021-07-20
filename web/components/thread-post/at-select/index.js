@@ -212,7 +212,7 @@ class AtSelect extends Component {
     );
 
     if (pc) return (
-      <div className={styles.pc} style={style}>
+      <div className={styles.pc} style={style} id="dzq-toolbar-at">
         <div className={styles.pcHeader}>@圈友</div>
         {content}
       </div>

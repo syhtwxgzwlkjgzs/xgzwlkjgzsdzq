@@ -72,7 +72,10 @@ const PostContent = ({
       return;
     }
     e && e.stopPropagation();
-    if(!e?.target?.getAttribute('src')) onRedirectToDetail();
+    // 点击图片不跳转，图片不包含表情
+    if( !(e?.target?.getAttribute('src') && e?.target?.className?.indexOf("qq-emotion") === -1) ) {
+      onRedirectToDetail();
+    }
   };
 
   // 显示图片的预览

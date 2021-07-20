@@ -76,6 +76,9 @@
       padding-right: 0;
       .dzq-submenu__title{
         line-height: 1;
+        div {
+          max-width: 93%;
+        }
       }
     }
     .dzq-submenu__icon {
@@ -87,9 +90,7 @@
 }
 
 .subMenuBox{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: block;
   width: 100%;
 }
 
@@ -113,9 +114,11 @@
 }
 
 .ellipsis {
+  display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 70%;
+  min-height: rem($font-size-base);
 }
 
 .verticalScrollbar {

@@ -1,4 +1,4 @@
-@import '@common/styles/index.scss';
+@import "@common/styles/index.scss";
 .dzq-emoji {
   position: absolute !important;
   bottom: 45px;
@@ -11,10 +11,20 @@
   border: $border-solid-1;
   background-color: var(--color-white);
 
+  &__inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   &__icon {
-    margin: 0 rem($margin-2n);
     width: rem(30);
     height: rem(30);
+    margin: rem(2);
+    &:last-child {
+      margin-right: auto;
+    }
   }
 
   &__slide {
@@ -36,17 +46,16 @@
   overflow-y: scroll;
   z-index: $zindex-dialog;
   .dzq-emoji__icon {
-    margin: 0 2px;
     cursor: pointer;
   }
   &::-webkit-scrollbar {
     width: 2px;
     height: 2px;
-    background-color: rgba(0, 0, 0, .09);
+    background-color: rgba(0, 0, 0, 0.09);
     border-radius: 100px;
   }
   &::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, .09);
+    background: rgba(0, 0, 0, 0.09);
     border-radius: 100px;
   }
 }
