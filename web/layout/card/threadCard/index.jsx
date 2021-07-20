@@ -69,7 +69,7 @@ const ThreadCard = inject('user', 'card')(observer((props) => {
           {title && <div className={styles.title}>{title}</div>}
 
           {/* 文字 */}
-          {text && <PostContent useShowMore={false} content={text || ''} />}
+          {text && <PostContent useShowMore={false} content={text || ''} className={styles.content}/>}
 
 
           {/* 图片 */}

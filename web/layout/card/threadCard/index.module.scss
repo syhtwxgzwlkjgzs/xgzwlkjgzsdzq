@@ -25,6 +25,12 @@
     :last-child {
       margin-bottom: 0;
     }
+    .content {
+      :global(a) {
+        text-decoration: none; 
+        border-bottom: 1px solid #2469f6; 
+      }
+    }
   }
   .imgBox {
     display: flex;
