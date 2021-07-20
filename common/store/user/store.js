@@ -44,6 +44,9 @@ class UserStore {
   // 换绑 QRCode
   @observable rebindQRCode = null;
 
+  // 换绑 QRCode是否有效
+  @observable isQrCodeValid = true;
+
   // 检索的目标用户，非自己
   @observable targetUser = null;
 

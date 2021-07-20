@@ -1041,6 +1041,7 @@ class UserAction extends SiteStore {
 
       // 5min，二维码失效
       setTimeout(() => {
+        this.isQrCodeValid = false;
         clearInterval(this.rebindTimer);
         if (onTimeOut) {
           onTimeOut();
@@ -1163,6 +1164,7 @@ class UserAction extends SiteStore {
   clearWechatRebindTimer = () => {
     clearInterval(this.rebindTimer);
     this.rebindQRCode = null;
+    this.isQrCodeValid = true;
   };
 }
 
