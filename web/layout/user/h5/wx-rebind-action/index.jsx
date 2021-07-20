@@ -8,21 +8,44 @@ import PcBodyWrap from '../components/pc-body-wrap';
 import styles from './index.module.scss';
 
 @inject('site')
+@inject('user')
 @observer
 class WXRebindActionPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       currentStatus: '',
-      statusInfo: {
-        success: '扫码成功',
-        error: '扫码失败'
-      }
+      errorTips: '扫码失败',
     };
+  }
+  async componentDidMount() {
+    try {
+      const { router, user } = this.props;
+      const { code, sessionId, sessionToken } = router.query;
+      const resp = await user.rebindWechatH5({
+        code,
+        sessionId,
+        sessionToken,
+      });
+      console.log(resp)
+      this.setState({
+        currentStatus: 'success'
+      });
+    } catch (e) {
+      this.setState({
+        currentStatus: 'error',
+        errorTips: e.Message || '扫码失败'
+      });
+      Toast.error({
+        content: e.Message || '扫码失败',
+        hasMask: false,
+        duration: 1000,
+      });
+    }
   }
 
   render() {
-    const { currentStatus, statusInfo } = this.state;
+    const { currentStatus, errorTips } = this.state;
     return (
       <PcBodyWrap>
         <div className={styles.container}>
@@ -30,7 +53,7 @@ class WXRebindActionPage extends React.Component {
           <div className={styles.content}>
               { currentStatus === 'success' && <Icon color='#3AC15F' name="SuccessOutlined" size={80} className={styles.statusIcon} /> }
               { currentStatus === 'error' && <Icon color='#E02433' name="WrongOutlined" size={80} className={styles.statusIcon} /> }
-              <p className={styles.statusBottom}>{ currentStatus && (currentStatus === 'success' ? statusInfo.success : statusInfo.error) }</p>
+              <p className={styles.statusBottom}>{ currentStatus && (currentStatus === 'success' ? '扫码成功' : errorTips) }</p>
               { !currentStatus && <LoadingBox style={{ minHeight: '100%' }} />}
           </div>
         </div>
