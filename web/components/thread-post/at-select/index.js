@@ -111,9 +111,10 @@ class AtSelect extends Component {
     const isFollow = this.state.keywords === '';
     const avatar = isFollow ? item?.user?.avatar : item.avatar;
     const username = isFollow ? item?.user?.userName : item.username;
+    const nickname = isFollow ? item?.user?.nickName : item.nickname;
     const groupName = isFollow ? item?.group?.groupName : item.groupName;
     const userId = isFollow ? item.user?.pid : item.userId;
-    return { avatar, username, groupName, userId };
+    return { avatar, username, groupName, userId, nickname };
   }
 
   renderItem() {
@@ -122,25 +123,25 @@ class AtSelect extends Component {
 
     if (data.length === 0) return null;
     return data.map((item) => {
-      const { avatar, username, groupName, userId } = this.formatData(item);
+      const { avatar, nickname, groupName, userId } = this.formatData(item);
 
       return (
         <div className={styles['at-item']} key={userId}>
           <div className={styles['at-item__inner']} >
-            <Checkbox name={username}>
+            <Checkbox name={nickname}>
               <div className={styles.avatar}>
                 {avatar
                   ? <Avatar image={avatar} />
                   : <Avatar
-                    text={username}
+                    text={nickname.toUpperCase()}
                     style={{
-                      backgroundColor: `#${this.getBackgroundColor(username)}`,
+                      backgroundColor: `#${this.getBackgroundColor(nickname)}`,
                     }}
                   />
                 }
               </div>
               <div className={styles.info}>
-                <div className={styles.username}>{username}</div>
+                <div className={styles.username}>{nickname}</div>
                 <div className={styles.group}>{groupName}</div>
               </div>
             </Checkbox>
