@@ -135,6 +135,10 @@ class index extends Component {
     Router.push({ url: '/my/edit/paypwd' });
   };
 
+  handleGoToAdditionalInfo = () => {
+    Router.push({ url: '/my/edit/additional-info' });
+  };
+
   render() {
     const { isConfirm } = this.state;
     // 条件都满足时才显示微信
@@ -201,6 +205,14 @@ class index extends Component {
               </div>
             </div>
           )}
+          <div className={styles.userCenterEditItem}>
+            <div className={styles.userCenterEditLabel}>
+              <label className={styles.userLabelName}>补充信息</label>
+            </div>
+            <div className={styles.userCenterEditValue} onClick={this.handleGoToAdditionalInfo}>
+              <Icon name="RightOutlined" size={12} />
+            </div>
+          </div>
         </div>
         {/* bottom */}
         <div className={styles.userCenterEditBottom}>

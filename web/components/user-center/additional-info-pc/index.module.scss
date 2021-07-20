@@ -1,25 +1,32 @@
 @import '@common/styles/index.scss';
 
 .additionalWrapper {
-  background-color: $white;
-  padding: $padding-4n;
-  padding-bottom: calc(16px + constant(safe-area-inset-bottom));
-  padding-bottom: calc(16px + env(safe-area-inset-bottom));
-  box-sizing: border-box;
+  :global {
+    .dzq-modal__container {
+      width: rem(409);
+      height: rem(494);
+      border-radius: rem(var(--border-radius-small));
+      background: $white;
+      box-sizing: border-box;
+      padding: rem($padding-6n);
+    }
+    .dzq-modal__body {
+      padding: 0;
+    }
+  }
 }
 
 .additionalContainer {
   .title {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    margin-top: $margin-2n;
-    height: 28px;
-    line-height: 28px;
-    margin-bottom: $margin-2n;
+    margin-bottom: rem($margin-6n);
   }
   .titleValue {
     flex: 1;
-    font-size: $font-size-large;
+    text-align: center;
+    font-size: rem($font-size-middle);
     color: $text-color-primary;
     font-weight: var(--font-weight-regular);
   }
@@ -27,20 +34,20 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: $font-size-primary;
-    padding: $padding-4n 0;
+    font-size: rem($font-size-primary);
+    padding: rem($padding-4n) 0;
     border-bottom: var(--border-border);
     .additionLabel {
       color: $text-color-regular;
-      height: 20px;
-      line-height: 20px;
+      height: rem(20);
+      line-height: rem(20);
     }
     .additionValue {
       color: $text-color-primary;
-      height: 20px;
-      line-height: 20px;
+      height: rem(20);
+      line-height: rem(20);
       .additionFile {
-        margin-left: $margin-1n;
+        margin-left: rem($margin-1n);
       }
     }
   }
@@ -52,12 +59,12 @@
     .cardItem {
       display: flex;
       justify-content: space-between;
-      margin-top: $margin-4n;
+      margin-top: rem($margin-4n);
     }
     .identityCard {
-      width: 166px;
-      height: 104px;
-      border-radius: 5px;
+      width: rem(166);
+      height: rem(104);
+      border-radius: rem(5);
       background: #eee;
       position: relative;
       display: flex;
@@ -70,13 +77,13 @@
       }
     }
     .identityCard:nth-child(1) {
-      margin-right: $margin-5n;
+      margin-right: rem($margin-5n);
     }
   }
   .additionTips {
-    margin-top: 14px;
+    margin-top: rem(14);
     color: $text-color-secondary;
-    font-size: $font-size-small;
+    font-size: rem($font-size-small);
     .note {
       color: $error-color;
     }

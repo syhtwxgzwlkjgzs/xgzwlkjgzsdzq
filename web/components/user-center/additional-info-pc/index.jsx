@@ -2,18 +2,17 @@ import React, { Component } from 'react';
 import styles from './index.module.scss';
 import { Spin, Input, Icon, Dialog, Toast, Button } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
-import Header from '@components/header';
 
 export default class UserCenterAdditionalInfo extends Component {
   render() {
     return (
-      <>
-        <Header />
-        <div className={styles.additionalWrapper}>
+      <div className={styles.additionalWrapper}>
+        <Dialog visible={this.props.visible} position="center" maskClosable={true} onClose={this.props.onClose}>
           <div className={styles.additionalContainer}>
             {/* 头部区域 */}
             <div className={styles.title}>
-              <span className={styles.titleValue}>您的补充信息已设置</span>
+              <span className={styles.titleValue}>补充信息</span>
+              <Icon size={12} color={'#8490A8'} onClick={this.props.onClose} name="CloseOutlined" />
             </div>
             {/* 内容区域 */}
             <div className={styles.additionalContent}>
@@ -54,8 +53,8 @@ export default class UserCenterAdditionalInfo extends Component {
               <span className={styles.note}>*</span>补充信息设置后不能修改，如有疑问请联系站长处理
             </p>
           </div>
-        </div>
-      </>
+        </Dialog>
+      </div>
     );
   }
 }
