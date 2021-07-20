@@ -13,7 +13,7 @@ const SearchPosts = ({ data, onItemClick }) => (
   <div className={styles.list}>
     {data.map((item, index) => (
         <div key={index}>
-          <ThreadContent showBottomStyle={false} className={styles.listItem} data={item} key={index} />
+          <ThreadContent showBottomStyle={false} className={styles.listItem} data={item} key={`${item.threadId}-${item.updatedAt}`} />
           <div className={styles.hr}></div>
         </div>
     ))}

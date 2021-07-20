@@ -62,7 +62,7 @@ export default class index extends Component {
             <CommonAccountContent currentPaymentData={options} />
             {/* 按钮区域-提交内容 */}
             <div className={styles.amountAddUp}>
-              合计：<span className={styles.amountMoney}>￥ {this.transMoneyToFixed(amount)} </span>
+              合计：<span className={styles.amountMoney}>￥{this.transMoneyToFixed(amount)} </span>
             </div>
             <div className={styles.amountSubmit}>
               <Button
