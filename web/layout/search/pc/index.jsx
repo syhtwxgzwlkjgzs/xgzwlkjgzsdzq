@@ -87,6 +87,7 @@ class SearchPCPage extends React.Component {
       })
     }
   }
+
   itemClick = (index) => {
     const { hasTopics, hasUsers, hasThreads, isShowAll } = this.getStatus()
 
@@ -124,6 +125,25 @@ class SearchPCPage extends React.Component {
     }
   }
 
+  handleScroll = ({ scrollTop = 0 } = {}) => {
+    if (isNaN(scrollTop)) {
+      return
+    }
+
+    const { topicHeight, userHeight, totalHeight } = this.getDivHeight()
+
+    if (scrollTop < topicHeight - 24) {
+      this.setState({ stepIndex: 0 })
+    } else if (scrollTop < topicHeight + userHeight - 24) {
+      this.setState({ stepIndex: 1 })
+    } else if (scrollTop < totalHeight - 24) {
+      this.setState({ stepIndex: 2 })
+    }
+
+    // 滑动之后，重置position
+    this.setState({position: -1});
+  }
+
   // 右侧 - 步骤条
   renderRight = () => {
     return (
@@ -132,29 +152,6 @@ class SearchPCPage extends React.Component {
         <Copyright/>
       </div>
     )
-  }
-  handleScroll = ({ scrollTop = 0 } = {}) => {
-    const HEADER_HEIGHT = 57;
-    const STEPPER_PADDING = 30;
-
-    const activeUsersPos = this.activeUsersRef?.current?.offsetTop || 0,
-          activeUsersScrollTo = activeUsersPos + parseInt(HEADER_HEIGHT / 2) - STEPPER_PADDING;
-
-    const hotTopicPos = this.hotTopicRef?.current?.offsetTop || 0,
-          hotTopicScrollTo = hotTopicPos + parseInt(HEADER_HEIGHT / 2) - STEPPER_PADDING;
-
-    if(!isNaN(scrollTop) && scrollTop >= 0) {
-      if(scrollTop < activeUsersScrollTo) {
-        this.setState({stepIndex: 0});
-      } else if(scrollTop < hotTopicScrollTo && scrollTop >= activeUsersScrollTo) {
-        this.setState({stepIndex: 1});
-      } else if(scrollTop >= hotTopicScrollTo) {
-        this.setState({stepIndex: 2});
-      }
-    }
-
-    // 滑动之后，重置position
-    this.setState({position: -1});
   }
 
   // 中间 -- 热门内容
@@ -259,6 +256,17 @@ class SearchPCPage extends React.Component {
     const isShowAll = (!hasTopics && !hasUsers && !hasThreads) || (hasTopics && hasUsers && hasThreads)
 
     return { hasTopics, hasUsers, hasThreads, isShowAll }
+  }
+
+  // 获取各模块的高度
+  getDivHeight = () => {
+    const topicHeight = this.treadingTopicRef.current?.clientHeight || 0;
+    const userHeight = this.activeUsersRef.current?.clientHeight || 0;
+    const threadHeight = this.hotTopicRef.current?.clientHeight || 0;
+
+    const totalHeight = topicHeight + userHeight + threadHeight
+
+    return { topicHeight, userHeight, threadHeight, totalHeight }
   }
 
   render() {
