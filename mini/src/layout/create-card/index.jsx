@@ -29,7 +29,7 @@ class Index extends React.Component {
             }
         }
         try {
-            const res = await  getMiniCode(data)
+            const res = await getMiniCode(data)
             this.setState({miniCode: res})
         } catch {
             this.setState({miniCode: defaultLogo})
