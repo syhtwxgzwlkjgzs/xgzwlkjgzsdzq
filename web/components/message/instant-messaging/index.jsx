@@ -296,6 +296,8 @@ const Index = (props) => {
   }, [username, dialogId]);
 
   useEffect(() => {
+    document.body.className = '';
+
     if (!threadPost.emojis.length) {
       threadPost.fetchEmoji();
     }

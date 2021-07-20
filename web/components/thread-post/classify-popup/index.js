@@ -11,7 +11,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
 
 const ClassifyPopup = (props) => {
-  const { pc, show, onVisibleChange } = props;
+  const { pc, show, onVisibleChange, onClick = () => {} } = props;
   const [categoryChildren, setCategoryChildren] = useState([]);
   const [selected, setSelected] = useState({});
   const [selectedChild, setSelectedChild] = useState({});
@@ -83,7 +83,7 @@ const ClassifyPopup = (props) => {
   const category = props.threadPost?.getCurrentCategories();
 
   const content = (
-    <div className={clsWrapper}>
+    <div className={clsWrapper} onClick={onClick}>
       <div className={styles['popup-title']}>
         {pc && <Icon name="MenuOutlined" size="16" />}
         选择分类

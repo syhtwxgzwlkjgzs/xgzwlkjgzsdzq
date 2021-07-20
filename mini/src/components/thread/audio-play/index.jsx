@@ -15,13 +15,14 @@ import parAudioImg from '../../../../../web/public/dzq-img/pay-audio.png';
  * @prop {function} goCheckAudio 音频点击事件
  */
 
-const Index = ({ isPay = false, url, onPay = noop, baselayout }) => {
+const Index = ({ isPay = false, url, onPay = noop, baselayout, updateViewCount = noop }) => {
 
   const audioRef = useRef();
   const audioWrapperRef = useRef();
 
   const onPlay = () => {
     const audioContext = audioRef?.current?.getState()?.audioCtx;
+    updateViewCount();
     if( audioContext && baselayout && audioWrapperRef) {
 
       // 暂停之前正在播放的视频

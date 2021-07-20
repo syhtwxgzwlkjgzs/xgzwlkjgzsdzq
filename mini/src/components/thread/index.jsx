@@ -15,6 +15,7 @@ import { View, Text } from '@tarojs/components'
 import { getImmutableTypeHeight } from './getHeight'
 import { getElementRect, randomStr } from './utils'
 import Skeleton from './skeleton';
+import { updateViewCountInStores } from '@common/utils/viewcount-in-storage';
 
 @inject('site')
 @inject('index')
@@ -66,15 +67,11 @@ class Index extends React.Component {
     onComment = (e) => {
       e && e.stopPropagation();
 
-      const { threadId = '', ability } = this.props.data || {};
-      const { canViewPost } = ability;
-
-      // 没有查看权限，且未登录，需要去登录
-      if (!canViewPost && !this.props.user.isLogin()) {
-        Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/subPages/user/wx-auth/index' });
-        return;
+      if (!this.allowEnter()) {
+        return
       }
+
+      const { threadId = '' } = this.props.data || {};
 
       if (threadId !== '') {
         this.props.thread.positionToComment()
@@ -86,7 +83,8 @@ class Index extends React.Component {
     // 点赞
     onPraise = (e) => {
       e && e.stopPropagation();
-      this.handlePraise()
+      this.updateViewCount();
+      this.handlePraise();
     }
 
     handlePraise = debounce(() => {
@@ -100,22 +98,23 @@ class Index extends React.Component {
       }
       const { data = {}, user } = this.props;
       const { threadId = '', isLike, postId } = data;
-      this.setState({isSendingLike: true});
-      this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } }).then(result => {
+      this.setState({ isSendingLike: true });
+      this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } }).then((result) => {
         if (result.code === 0 && result.data) {
           this.props.index.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
           this.props.search.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
           this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
           this.props.user.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
         }
-        this.setState({isSendingLike: false});
+        this.setState({ isSendingLike: false });
       });
     }, 1000)
 
     // 支付
     onPay = (e) => {
       // e && e.stopPropagation();
-      this.handlePay()
+      this.updateViewCount();
+      this.handlePay();
     }
     handlePay = debounce(async (e) => {
       // e && e.stopPropagation();
@@ -138,10 +137,11 @@ class Index extends React.Component {
       if (success && thread?.threadId) {
         const { code, data } = await this.props.thread.fetchThreadDetail(thread?.threadId);
         if (code === 0 && data) {
-          this.props.index.updatePayThreadInfo(thread?.threadId, data)
-          this.props.search.updatePayThreadInfo(thread?.threadId, data)
-          this.props.topic.updatePayThreadInfo(thread?.threadId, data)
-          this.props.user.updatePayThreadInfo(thread?.threadId, data)
+          this.props.index.updatePayThreadInfo(thread?.threadId, data);
+          this.props.search.updatePayThreadInfo(thread?.threadId, data);
+          this.props.topic.updatePayThreadInfo(thread?.threadId, data);
+          this.props.user.updatePayThreadInfo(thread?.threadId, data);
+
           if(typeof this.props.dispatch === "function") {
             this.props.dispatch(thread?.threadId, data);
           }
@@ -150,21 +150,16 @@ class Index extends React.Component {
     }, 1000);
 
     onClick = (e) => {
-      const { threadId = '', ability } = this.props.data || {};
-      const { canViewPost } = ability;
-
-      if (!canViewPost) {
-        Toast.info({ content: '暂无权限查看详情，请联系管理员' });
+      if (!this.allowEnter()) {
         return
       }
+
+      const { threadId = '' } = this.props.data || {};
 
       if (threadId !== '') {
         this.props.thread.isPositionToComment = false;
         Router.push({url: `/indexPages/thread/index?id=${threadId}`})
 
-        this.props.index.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
-        this.props.search.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
-        this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
       } else {
         console.log('帖子不存在');
       }
@@ -192,6 +187,35 @@ class Index extends React.Component {
 
       const { onClickIcon = noop } = this.props;
       onClickIcon(e)
+    }
+
+    // 判断能否进入详情逻辑
+    allowEnter = () => {
+      const { ability } = this.props.data || {};
+      const { canViewPost } = ability;
+
+      if (!canViewPost) {
+        const isLogin = this.props.user.isLogin()
+        if (!isLogin) {
+          Toast.info({ content: '请先登录!' });
+          goToLoginPage({ url: '/user/login' });
+        } else {
+          Toast.info({ content: '暂无权限查看详情，请联系管理员' });
+        }
+        return false
+      }
+      return true
+    }
+
+    updateViewCount = async () => {
+      const { threadId = '' } = this.props.data || {};
+      const threadIdNumber = Number(threadId);
+      const viewCount = await updateViewCountInStores(threadIdNumber);
+      if(viewCount) {
+        this.props.index.updateAssignThreadInfo(threadIdNumber, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
+        this.props.search.updateAssignThreadInfo(threadIdNumber, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
+        this.props.topic.updateAssignThreadInfo(threadIdNumber, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
+      }
     }
 
     render() {
@@ -259,6 +283,7 @@ class Index extends React.Component {
               useShowMore={useShowMore}
               setUseShowMore={this.setUseShowMore}
               videoH={videoH}
+              updateViewCount={this.updateViewCount}
             />
 
             <BottomEvent
@@ -283,6 +308,7 @@ class Index extends React.Component {
               getShareContent = {getShareContent}
               data={data}
               user={this.props.user}
+              updateViewCount={this.updateViewCount}
             />
             </>
           ) : <Skeleton style={{ minHeight: `${minHeight}px` }} />

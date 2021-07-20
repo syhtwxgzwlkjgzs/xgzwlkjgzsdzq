@@ -50,7 +50,6 @@ class UserStore {
   // 检索的目标用户id
   @observable targetUserId = null;
 
-
   @observable targetUserThreads = {};
   @observable targetUserThreadsPage = 1;
   @observable targetUserThreadsTotalCount = 0;
@@ -87,7 +86,6 @@ class UserStore {
   @observable userShieldPage = 1; // 页码
   @observable userShieldTotalPage = 1; // 总页数
   @observable userShieldTotalCount = 0; // 总条数
-
 
   @computed get userStatus() {
     return get(this.userInfo, 'status');
@@ -131,6 +129,11 @@ class UserStore {
     return get(this.userInfo, 'backgroundUrl');
   }
 
+  // 获取用户原背景图
+  @computed get originalBackGroundUrl() {
+    return get(this.userInfo, 'originalBackGroundUrl');
+  }
+
   // 用户签名
   @computed get signature() {
     return get(this.userInfo, 'signature');
@@ -139,6 +142,10 @@ class UserStore {
   // 用户头像
   @computed get avatarUrl() {
     return get(this.userInfo, 'avatarUrl');
+  }
+  // 用户原头像
+  @computed get originalAvatarUrl() {
+    return get(this.userInfo, 'originalAvatarUrl');
   }
 
   // 用户手机号
@@ -181,7 +188,6 @@ class UserStore {
     return get(this.userInfo, 'wxHeadImgUrl');
   }
 
-
   // 用户是否可以编辑用户名
   // 规则为一年一次
   @computed get canEditUsername() {
@@ -218,6 +224,11 @@ class UserStore {
     return get(this.targetUser, 'backgroundUrl');
   }
 
+  // 获取他人原背景图
+  @computed get targetOriginalBackGroundUrl() {
+    return get(this.targetUser, 'originalBackGroundUrl');
+  }
+
   // 目标用户签名
   @computed get targetUserSignature() {
     return get(this.targetUser, 'signature');
@@ -226,6 +237,11 @@ class UserStore {
   // 目标用户头像
   @computed get targetUserAvatarUrl() {
     return get(this.targetUser, 'avatarUrl');
+  }
+
+  // 获取他人原头像
+  @computed get targetOriginalAvatarUrl() {
+    return get(this.targetUser, 'originalAvatarUrl');
   }
 
   // 目标用户手机号
@@ -247,7 +263,6 @@ class UserStore {
   @computed get isAdmini() {
     return get(this.userInfo, 'group.pid') === 1;
   }
-
 
   // 发帖扩展的权限
   @computed get threadExtendPermissions() {

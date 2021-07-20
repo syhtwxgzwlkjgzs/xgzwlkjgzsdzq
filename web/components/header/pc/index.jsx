@@ -9,6 +9,7 @@ import Router from '@discuzq/sdk/dist/router';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import UnreadRedDot from '@components/unread-red-dot';
 import { unreadUpdateInterval } from '@common/constants/message';
+import LoginHelper from '@common/utils/login-helper';
 
 @inject('site')
 @inject('user')
@@ -114,7 +115,7 @@ class Header extends React.Component {
 
   dropdownUserLogoutActionImpl = () => {
     clearLoginStatus();
-    window.location.replace('/');
+    LoginHelper.gotoIndex();
   };
 
   dropdownActionImpl = (action) => {
@@ -215,7 +216,7 @@ class Header extends React.Component {
             </div>
             <div className={styles.right}>
               <div className={styles.iconList}>
-                <div className={styles.iconItem} onClick={() => this.handleRouter('/')}>
+                <div className={styles.iconItem} onClick={() => LoginHelper.gotoIndex()}>
                   <Icon
                     onClick={() => {
                       this.iconClickHandle('home');

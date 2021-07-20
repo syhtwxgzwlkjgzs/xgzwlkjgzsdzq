@@ -69,3 +69,16 @@
     @include text-ellipsis();
   }
 }
+
+.topBarFixed {
+  position: absolute;
+  top: 14px;
+  height: 100px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: $padding-4n;
+  box-sizing: border-box;
+  text-align: center;
+}

@@ -59,12 +59,21 @@
         border-radius: rem($border-radius-small);
         background: $body-bg-color;
 
-        .commentListName {
-          font-weight: bold;
-          font-size: rem($font-size-primary);
-          line-height: rem(20);
-          text-align: left;
-          color: $text-color-primary;
+        .commentHeader {
+          display: flex;
+          justify-content: space-between;
+          .commentListName {
+            font-weight: bold;
+            font-size: rem($font-size-primary);
+            line-height: rem(20);
+            text-align: left;
+            color: $text-color-primary;
+          }
+          .isApproved {
+            font-size: $font-size-primary;
+            color: $error-color;
+            line-height: rem(20);
+          }
         }
         .commentListText {
           margin-top: rem($margin-1n);

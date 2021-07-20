@@ -17,7 +17,8 @@ const Index = ({
   isPay = false, 
   onPay = noop, 
   onImageReady = noop, 
-  relativeToViewport = true 
+  relativeToViewport = true ,
+  updateViewCount = noop
 }) => {
     const [visible, setVisible] = useState(false);
     const [defaultImg, setDefaultImg] = useState('');
@@ -37,6 +38,7 @@ const Index = ({
       if (isPay) {
         onPay();
       } else {
+        updateViewCount();
         imgData.forEach((item) => {
           if (item.id === id) {
             setDefaultImg(item.url);
@@ -48,7 +50,7 @@ const Index = ({
 
     const onClickMore = (e) => {
       e.stopPropagation();
-
+      updateViewCount();
       setDefaultImg(imgData[4].url);
       setTimeout(() => {
         setVisible(true);

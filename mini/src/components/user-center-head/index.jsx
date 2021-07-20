@@ -12,6 +12,7 @@ import { getCurrentInstance } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import styles from './index.module.scss';
 import throttle from '@common/utils/thottle.js';
+import LoginHelper from '@common/utils/login-helper';
 
 @inject('site')
 @inject('user')
@@ -28,6 +29,8 @@ class index extends Component {
   static defaultProps = {
     isOtherPerson: false, // 表示是否是其他人
   };
+
+  previewerRef = React.createRef(null);
 
   // 点击屏蔽
   handleChangeShield = throttle((isDeny) => {
@@ -69,6 +72,7 @@ class index extends Component {
             this.setState({
               isFollowedLoading: false,
             });
+            return;
           }
           await this.props.user.getTargetUserInfo(id);
           Toast.success({
@@ -103,6 +107,7 @@ class index extends Component {
             this.setState({
               isFollowedLoading: false,
             });
+            return;
           }
           await this.props.user.getTargetUserInfo(id);
           Toast.success({
@@ -129,9 +134,20 @@ class index extends Component {
 
   logout = () => {
     clearLoginStatus();
-    this.props.user.removeUserInfo();
-    this.props.site.getSiteInfo();
-    Router.reLaunch({ url: '/subPages/forum/partner-invite/index' });
+    LoginHelper.clear();
+
+    const siteMode = this.props.site?.webConfig?.setSite?.siteMode;
+    const url = siteMode === 'pay' ? '/subPages/forum/partner-invite/index' : '/indexPages/home/index';
+
+    Router.reLaunch({
+      url,
+      complete: () => {
+        setTimeout(() => {
+          this.props.user.removeUserInfo();
+          this.props.site.getSiteInfo();
+        }, 300);
+      }
+    });
   };
 
   // 点击粉丝列表
@@ -197,12 +213,17 @@ class index extends Component {
     return { icon, text };
   };
 
+  showPreviewerRef = () => {
+    if (this.previewerRef.current) {
+      this.props.updatePreviewImageStatus && this.props.updatePreviewImageStatus(true);
+      this.previewerRef.current.show();
+    }
+  };
+
   // 点击头像预览
   handlePreviewAvatar = (e) => {
     e && e.stopPropagation();
-    this.setState({
-      isPreviewAvatar: !this.state.isPreviewAvatar,
-    });
+    this.showPreviewerRef();
   };
 
   render() {
@@ -212,7 +233,7 @@ class index extends Component {
       <View className={styles.h5box}>
         {/* 上 */}
         <View className={styles.h5boxTop}>
-          <View className={styles.headImgBox} onClick={this.handlePreviewAvatar}>
+          <View className={styles.headImgBox} onClick={user.avatarUrl && this.handlePreviewAvatar}>
             <Avatar image={user.avatarUrl} size="big" name={user.nickname} />
           </View>
           {/* 粉丝|关注|点赞 */}
@@ -295,16 +316,15 @@ class index extends Component {
             }}
             className={styles.shieldBtn}
           >
-            <Icon name="ShieldOutlined" />
-            <Text>{user.isDeny ? '解除屏蔽' : '屏蔽'}</Text>
+            <Icon name="ShieldOutlined" size={14} />
+            <Text className={styles.shieldText}>{user.isDeny ? '解除屏蔽' : '屏蔽'}</Text>
           </View>
         )}
-        {user.avatarUrl && this.state.isPreviewAvatar && (
+        {user.originalAvatarUrl && (
           <ImagePreviewer
-            visible={this.state.isPreviewAvatar}
-            onClose={this.handlePreviewAvatar}
-            imgUrls={[user.avatarUrl]}
-            currentUrl={user.avatarUrl}
+            ref={this.previewerRef}
+            imgUrls={[user.originalAvatarUrl]}
+            currentUrl={user.originalAvatarUrl}
           />
         )}
       </View>

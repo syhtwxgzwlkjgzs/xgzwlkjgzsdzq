@@ -21,6 +21,7 @@ const RenderThreadContent = inject('user')(
   observer((props) => {
     const { store: threadStore } = props;
     const { text, indexes } = threadStore?.threadData?.content || {};
+    const { parentCategoryName, categoryName } = threadStore?.threadData;
     const tipData = {
       postId: threadStore?.threadData?.postId,
       threadId: threadStore?.threadData?.threadId,
@@ -237,9 +238,9 @@ const RenderThreadContent = inject('user')(
           )}
 
           {/* 标签 */}
-          {(threadStore?.threadData?.parentCategoryName || threadStore?.threadData?.categoryName) && (
+          {(parentCategoryName || categoryName) && (
             <div className={styles.tag} onClick={onTagClick}>
-              {threadStore?.threadData?.parentCategoryName || threadStore?.threadData?.categoryName}
+              {parentCategoryName ? `${parentCategoryName}/${categoryName}` : categoryName}
             </div>
           )}
 

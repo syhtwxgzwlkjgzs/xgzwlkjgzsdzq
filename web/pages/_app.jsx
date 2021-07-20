@@ -14,10 +14,11 @@ import '../styles/index.scss';
 import CustomHead from '@components/custom-head';
 import Head from 'next/head';
 import monitor from '@common/utils/monitor';
-import setWxShare from '@common/utils/set-wx-share';
 import { detectH5Orient } from '@common/utils/detect-orient';
 import browser from '@common/utils/browser';
 import Toast from '@discuzq/design/dist/components/toast';
+import { STORAGE_KEY, STORAGE_TYPE } from '@common/utils/viewcount-in-storage';
+
 
 // if (!isServer()) {
 //   process.env.NODE_ENV === 'production' && sentry();
@@ -28,7 +29,6 @@ class DzqApp extends App {
     super(props);
     this.appStore = initializeStore();
     this.updateSize = this.updateSize.bind(this);
-    this.setWXShare = this.setWXShare.bind(this);
     this.toastInstance = null;
   }
 
@@ -63,28 +63,21 @@ class DzqApp extends App {
     window.addEventListener('resize', this.updateSize);
     csrRouterRedirect();
     this.listenRouterChangeAndClean();
-    this.props.router.events.on('routeChangeStart', this.setWXShare);
+
+    if (!isServer()) {
+      window.addEventListener("beforeunload", () => {
+        if(STORAGE_TYPE === "session") sessionStorage.removeItem(STORAGE_KEY);
+      });
+    }
   }
 
   componentWillUnmount() {
     if (!isServer()) {
       window.removeEventListener('resize', this.updateSize);
       window.removeEventListener('popstate', this.cleanImgViewer);
-    }
-  }
-
-  // 每次跳转，都会设置默认的分享配置
-  setWXShare() {
-    const { site } = this.appStore;
-    const { webConfig } = site;
-    if (webConfig) {
-      try {
-        const { setSite } = webConfig;
-        const { siteName, siteIntroduction, siteFavicon } = setSite;
-        setWxShare(siteName, siteIntroduction, window.location.origin, siteFavicon);
-      } catch (err) {
-        setWxShare('Discuz!Q', 'Discuz!Q', window.location.origin, null);
-      }
+      window.removeEventListener("beforeunload", () => {
+        if(STORAGE_TYPE === "session") sessionStorage.removeItem(STORAGE_KEY);
+      });
     }
   }
 

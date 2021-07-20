@@ -4,13 +4,15 @@ import Icon from '@discuzq/design/dist/components/icon/index';
 import Router from '@discuzq/sdk/dist/router';
 import browser from '@common/utils/browser';
 import { View, Text } from '@tarojs/components'
+import LoginHelper from '@common/utils/login-helper';
 
 export default function H5Header(props) {
   const { isBackCustom } = props;
   // todo
   const iconClickHandle = useCallback((type) => {
     switch (type) {
-      case 'home': Router.push({ url: '/' });
+      case 'home':
+        LoginHelper.gotoIndex();
         break;
       case 'msg': Router.push({ url: '/my/notice' });
         break;

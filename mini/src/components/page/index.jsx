@@ -111,16 +111,17 @@ export default class Page extends React.Component {
       }
 
       // 访问指定页面，经过登陆、付费等操作完成后，跳回主页
-      const jumpUrl = LoginHelper.getUrl();
-      if (jumpUrl) {
-        if (jumpUrl.includes(path)) {
-          LoginHelper.clear();
-        }
-        if (path === INDEX_URL) {
-          LoginHelper.restore();
-          return false;
-        }
-      }
+      // 大问题
+      // const jumpUrl = LoginHelper.getUrl();
+      // if (jumpUrl) {
+      //   if (jumpUrl.includes(path)) {
+      //     LoginHelper.clear();
+      //   }
+      //   if (path === INDEX_URL) {
+      //     LoginHelper.restore();
+      //     return false;
+      //   }
+      // }
     }
 
     return true;

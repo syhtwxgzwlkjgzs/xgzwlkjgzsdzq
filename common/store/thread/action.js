@@ -27,6 +27,11 @@ class ThreadAction extends ThreadStore {
   }
 
   @action
+  updateViewCount(viewCount) {
+    this.threadData.viewCount = viewCount;
+  }
+
+  @action
   setScrollDistance(scrollDistance) {
     this.scrollDistance = scrollDistance;
   }

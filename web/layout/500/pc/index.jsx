@@ -6,7 +6,9 @@ import {Button} from '@discuzq/design';
 import isServer from '@common/utils/is-server';
 import Router from '@discuzq/sdk/dist/router';
 import Copyright from '@components/copyright';
+import { ERROR_PAGE_TIPS } from '@common/constants/site';
 
+@inject('site')
 @observer
 class PC500Page extends React.Component {
   constructor(props) {
@@ -18,12 +20,13 @@ class PC500Page extends React.Component {
   }
   render() {
     const height = isServer() ? '100vh' : `${window.innerHeight - 160}px`;
+    const { site: { errPageType = '' } } = this.props;
     return (
       <div className={styles.body}>
         <Header/>
         <div className={styles.page} style={{height: height}}>
           <img className={styles.img} src='/dzq-img/error.png'/>
-          <p className={styles.text}>服务器错误 SERVER ERROR</p>
+          <p className={styles.text}>{ (errPageType && ERROR_PAGE_TIPS[errPageType]) || '未知错误'}</p>
           <Button onClick={this.goBackClickHandle} size='large' className={styles.btn} type='primary'>回到首页</Button>
         </div>
         <Copyright center line/>
