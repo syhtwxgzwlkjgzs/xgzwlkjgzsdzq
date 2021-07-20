@@ -1019,13 +1019,15 @@ class UserAction extends SiteStore {
 
   // 生成微信换绑二维码，仅在 PC 使用
   @action
-  genRebindQrCode = async (
+  genRebindQrCode = async ({
     scanSuccess = () => { },
     scanFail = () => { },
     onTimeOut = () => { },
-  ) => {
+    option = {}
+  }) => {
     clearInterval(this.rebindTimer);
-    const qrCodeRes = await wechatRebindQrCodeGen();
+    this.isQrCodeValid = true;
+    const qrCodeRes = await wechatRebindQrCodeGen(option);
 
     if (qrCodeRes.code === 0) {
       this.rebindQRCode = get(qrCodeRes, 'data.base64Img');
