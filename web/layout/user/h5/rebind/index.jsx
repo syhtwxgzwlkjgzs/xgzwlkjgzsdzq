@@ -14,8 +14,6 @@ import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-stor
 
 @inject('site')
 @inject('user')
-@inject('commonLogin')
-@inject('h5QrCode')
 @observer
 class RebindPage extends React.Component {
   constructor(props) {
@@ -29,12 +27,10 @@ class RebindPage extends React.Component {
       currentStatus: '',
       statusInfo: {
         success: '换绑成功',
-        error: '网络错误'
+        error: '换绑失败'
       }
     };
 
-    this.timer = null;
-    this.isDestroy = false;
   }
 
   async componentDidMount() {
@@ -42,35 +38,21 @@ class RebindPage extends React.Component {
   }
 
   componentWillUnmount() {
-    this.isDestroy = true;
-    clearInterval(this.timer);
+    this.props.user.clearWechatRebindTimer();
   }
 
   async generateQrCode() {
     try {
-      const { sessionToken, nickname } = this.props.router.query;
-      const { platform, wechatEnv } = this.props.site;
-      const qrCodeType = platform === 'h5' ? 'mobile_browser_bind' : 'pc_bind';
       const { user } = this.props;
-      let name = nickname;
-      if (user.loginStatus) {
-        this.props.commonLogin.setUserId(user.id);
-        name = user.nickname;
-      }
-
-      const redirectUri = `${wechatEnv === 'miniProgram' ? '/subPages/user/wx-auth/index' : `${window.location.origin}/user/wx-auth`}?loginType=${platform}&action=wx-bind&nickname=${name}`;
-      await this.props.h5QrCode.generate({
-        params: {
-          sessionToken,
-          type: wechatEnv === 'miniProgram' ? 'pc_bind_mini' : qrCodeType,
-          redirectUri: encodeURIComponent(redirectUri),
-        },
+      await user.genRebindQrCode( res =>{
+        this.setState({
+          currentStatus: 'success'
+        });
+      }, err => {
+        this.setState({
+          currentStatus: 'error'
+        });
       });
-      // 组件销毁后，不执行后面的逻辑
-      if (this.isDestroy) {
-        return;
-      }
-      this.queryLoginState(wechatEnv === 'miniProgram' ? 'pc_bind_mini' : qrCodeType);
     } catch (e) {
       Toast.error({
         content: e.Message,
@@ -80,46 +62,8 @@ class RebindPage extends React.Component {
     }
   }
 
-  queryLoginState(type) {
-    this.timer = setInterval(async () => {
-      try {
-        const res = await this.props.h5QrCode.bind({
-          type,
-          params: { sessionToken: this.props.h5QrCode.sessionToken },
-        });
-        const uid = get(res, 'data.uid');
-        this.props.user.updateUserInfo(uid);
-        // FIXME: 使用 window 跳转用来解决，获取 forum 在登录前后不同的问题，后续需要修改 store 完成
-        window.location.href = '/';
-        clearInterval(this.timer);
-      } catch (e) {
-        const { site, h5QrCode, commonLogin, router } = this.props;
-        if (h5QrCode.countDown > 0) {
-          h5QrCode.countDown = h5QrCode.countDown - 3;
-        } else {
-          clearInterval(this.timer);
-        }
-        if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
-          if (isExtFieldsOpen(site)) {
-            commonLogin.needToCompleteExtraInfo = true;
-            router.push('/user/supplementary');
-            return;
-          }
-          return window.location.href = '/';
-        }
-        // 跳转状态页
-        if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
-          const uid = get(e, 'uid', '');
-          uid && this.props.user.updateUserInfo(uid);
-          commonLogin.setStatusMessage(e.Code, e.Message);
-          router.push(`/user/status?statusCode=${e.Code}&statusMsg=${e.Message}`);
-        }
-      }
-    }, 3000);
-  }
-
   render() {
-    const { site, h5QrCode } = this.props;
+    const { site, user } = this.props;
     const { currentStatus, explain, statusInfo } = this.state;
     const { platform } = site;
 
@@ -162,8 +106,8 @@ class RebindPage extends React.Component {
             !currentStatus
             && <WeixinQrCode
                   refresh={() => {this.generateQrCode()}}
-                  isValid={h5QrCode.isQrCodeValid}
-                  orCodeImg={h5QrCode.qrCode}
+                  isValid={user.isQrCodeValid}
+                  orCodeImg={user.rebindQRCode}
                   orCodeTips='请用新微信扫码完成换绑'
                 />
           }
