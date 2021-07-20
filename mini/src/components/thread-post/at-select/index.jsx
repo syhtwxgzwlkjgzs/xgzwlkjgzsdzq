@@ -54,7 +54,7 @@ class AtSelect extends Component {
   async fetchUserList() {
     const { getUsersList } = this.props.search;
     const { page, perPage, keywords } = this.state;
-    const params = { search: keywords, type: 'username', page, perPage };
+    const params = { search: keywords, type: 'nickname', page, perPage };
     const ret = await getUsersList(params);
     const { code, data } = ret;
     if (code === 0) {
