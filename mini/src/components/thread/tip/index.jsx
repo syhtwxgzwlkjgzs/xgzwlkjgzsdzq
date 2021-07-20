@@ -6,22 +6,24 @@ import Icon from '@discuzq/design/dist/components/icon/index';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import { debounce } from '@common/utils/throttle-debounce.js';
+import { noop } from '../utils';
 
 /**
  * 帖子点赞、打赏视图
  * @prop {string}    imgs 头像数据数组
  */
 
-const Index = inject('index')(
-  observer(({ imgs = [], tipData = {}, wholeNum = 1, showMore = false, index, showCount = 5, unifyOnClick = null }) => {
-    const [visible, setVisible] = useState(false);
+ const Index = inject('index')(
+  observer(({ imgs = [], tipData = {}, wholeNum = 1,showMore=false, index, showCount = 5, unifyOnClick = null, updateViewCount = noop }) => {
+  const [visible, setVisible] = useState(false);
 
-    const onClick = debounce((e) => {
-      e.stopPropagation();
-      index.setHiddenTabBar(true);
-      index.setHasOnScrollToLower(false);
-      setVisible(true);
-    }, 200);
+  const onClick = debounce((e) => {
+    e.stopPropagation();
+    updateViewCount();
+    index.setHiddenTabBar(true)
+    index.setHasOnScrollToLower(false)
+    setVisible(true);
+  }, 200);
 
     const onHidden = () => {
       index.setHiddenTabBar(false);

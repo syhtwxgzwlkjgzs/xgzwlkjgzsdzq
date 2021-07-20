@@ -18,6 +18,7 @@ class Index extends React.Component {
   componentDidMount() {
     Taro.hideHomeButton();
   }
+  
   getShareData(data) {
     const { site } = this.props;
     const id = this.props.user?.id;

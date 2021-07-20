@@ -75,6 +75,9 @@ class IndexStore {
   @observable recommendsStatus = 'none'
 
   @observable topMenuIndex = '0'
+
+  // 小程序增删使用
+  @observable changeInfo = null
 }
 
 export default IndexStore;

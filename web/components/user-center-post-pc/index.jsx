@@ -65,7 +65,7 @@ class UserCenterPost extends React.Component {
                   <Icon color={'#8590A6'} size={20} name={'ShoppingCartOutlined'} />
                 </div>
               )}
-              {this.props.user.threadExtendPermissions.createThread && (
+              {this.props.user.threadExtendPermissions[THREAD_TYPE.reward] && (
                 <div className={styles.userCenterPostListItem}>
                   <Icon color={'#8590A6'} size={20} name={'QuestionOutlined'} />
                 </div>

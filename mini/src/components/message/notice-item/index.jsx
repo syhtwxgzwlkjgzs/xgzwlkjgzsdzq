@@ -31,24 +31,48 @@ class Index extends Component {
     return avatar;
   }
 
-  // 针对财务消息，获取后缀提示语
-  getFinancialTips = (item) => {
-    if (item.type === 'rewarded') {
-      if (item.orderType === 3 || item.orderType === 7) return '支付了你';
-      return '打赏了你';
-    }
-    if (item.type === 'receiveredpacket') {
-      return '获取红包';
-    }
-    if (item.type === 'threadrewarded') {
-      return '悬赏了你';
-    }
-    if (item.type === 'threadrewardedexpired') {
-      return `悬赏到期，未领取金额${item.amount}元被退回`;
-    }
-  };
+  // 获取财务消息展示内容
+  getFinancialContent = () => {
+    const { item, site } = this.props;
 
-  // 账号信息前置语
+    let tips = '';
+    switch (item.type) {
+      case 'rewarded':
+        if (item.orderType === 1) return (<>
+          邀请{item.nickname}加入{site?.webConfig?.setSite?.siteName}
+        </>);
+        if (item.orderType === 3 || item.orderType === 7) {
+          tips = '支付了你';
+        } else {
+          tips = '打赏了你';
+        }
+        break;
+      case 'receiveredpacket':
+        tips = '获取红包';
+        break;
+      case 'threadrewarded':
+        tips = '悬赏了你';
+        break;
+      case 'threadrewardedexpired':
+        tips = `悬赏到期，未领取金额${item.amount}元被退回`;
+        break;
+    }
+
+    return (<>
+      在帖子"
+      <View
+        className={`${styles['financial-content']} ${styles['single-line']}`}
+        style={{
+          maxWidth: `90px`,
+          display: 'inline-block',
+          verticalAlign: 'bottom'
+        }}
+        dangerouslySetInnerHTML={{ __html: this.parseHTML() }}
+      />"中{tips}
+    </>)
+  }
+
+  // 帖子消息前置语
   getAccountTips = (item) => {
     switch (item.type) {
       case 'replied':
@@ -162,20 +186,8 @@ class Index extends Component {
             <View className={classNames(styles.middle)}>
               {/* 财务内容 */}
               {type === 'financial' &&
-                <View
-                  className={styles['content-html']}
-                >
-                  在帖子"
-                  <View
-                    className={`${styles['financial-content']} ${styles['single-line']}`}
-                    style={{
-                      maxWidth: `90px`,
-                      display: 'inline-block',
-                      verticalAlign: 'bottom'
-                    }}
-                    dangerouslySetInnerHTML={{ __html: this.parseHTML() }}
-                  />
-                  "中{this.getFinancialTips(item)}
+                <View className={styles['content-html']}>
+                  {this.getFinancialContent()}
                 </View>
               }
               {/* 私信 */}

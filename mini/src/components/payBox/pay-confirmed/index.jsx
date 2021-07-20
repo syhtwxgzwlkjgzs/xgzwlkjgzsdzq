@@ -205,7 +205,7 @@ export default class PayBox extends React.Component {
       <View className={styles.payBox}>
         <View className={styles.title}>
           <Text>
-            <Text className={styles.moneyUnit}>￥ </Text>
+            <Text className={styles.moneyUnit}>￥</Text>
             {this.transMoneyToFixed(options.amount)}
           </Text>
         </View>

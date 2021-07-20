@@ -14,11 +14,16 @@ export default function DefaultToolbar(props) {
 
 
   const emojiId = 'dzq-toolbar-emoji';
+  const topicId = 'dzq-toolbar-topic';
+  const atId = 'dzq-toolbar-at';
   function handleClick(e) {
     const emojiDom = document.querySelector(`#${emojiId}`);
+    const topicDom = document.querySelector(`#${topicId}`);
+    const atDom = document.querySelector(`#${atId}`);
 
-    if (emojiDom
-      && emojiDom?.style?.display !== 'none') {
+    if ((emojiDom && emojiDom?.style?.display !== 'none')
+      || (topicDom && topicDom?.style?.display !== 'none')
+      || (atDom && atDom?.style?.display !== 'none')) {
       setCurrentAction('');
       onClick({ id: '' });
     }

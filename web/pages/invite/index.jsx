@@ -14,7 +14,7 @@ class Invite extends React.Component {
     return <ViewAdapter
               h5={<InviteH5Page />}
               pc={<InvitePCPage />}
-              title={`推广邀请 - ${this.props.site?.siteName}`}
+              title={`推广邀请`}
             />;
   }
 }

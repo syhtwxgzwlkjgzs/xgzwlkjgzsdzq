@@ -57,4 +57,9 @@
       transform: rotate(90deg);
     }
   }
+  :global {
+    .dzq-avatar__text {
+      font-size: $font-size-label;
+    }
+  }
 }
