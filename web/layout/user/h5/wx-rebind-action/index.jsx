@@ -9,7 +9,7 @@ import styles from './index.module.scss';
 
 @inject('site')
 @observer
-class RebindAuthorizationPage extends React.Component {
+class WXRebindActionPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -39,4 +39,4 @@ class RebindAuthorizationPage extends React.Component {
   }
 }
 
-export default withRouter(RebindAuthorizationPage);
+export default withRouter(WXRebindActionPage);

@@ -19,7 +19,7 @@ import { getParamCode, getUserProfile } from '../../../subPages/user/common/util
 @inject('h5QrCode')
 @inject('commonLogin')
 @observer
-class WXBind extends Component {
+class WXRebindActionPage extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -78,4 +78,4 @@ class WXBind extends Component {
   }
 }
 
-export default WXBind;
+export default WXRebindActionPage;

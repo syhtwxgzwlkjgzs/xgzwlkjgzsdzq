@@ -1,20 +1,20 @@
 import React from 'react';
-import RebindAuthorizationPage from '@layout/user/rebind-authorization';
+import WXRebindActionPage from '@layout/user/wx-rebind-action';
 import { inject } from 'mobx-react';
 import Page from '@components/page';
 import { getParamCode, getUserProfile } from '../common/utils';
 
 @inject('site')
-class RebindAuthorization extends React.Component {
+class WXRebindAction extends React.Component {
 
   render() {
     return (
       <Page>
-        <RebindAuthorizationPage />
+        <WXRebindActionPage />
       </Page>
     );
   }
 }
 
 // eslint-disable-next-line new-cap
-export default RebindAuthorization;
+export default WXRebindAction;

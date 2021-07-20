@@ -50,7 +50,7 @@
         'user/supplementary/index',
         'user/reset-password/index',
         'user/rebind/index',
-        'user/rebind-authorization/index',
+        'user/wx-rebind-action/index',
         'wallet/index',
         'wallet/frozen/index',
         'wallet/withdrawal/index',
