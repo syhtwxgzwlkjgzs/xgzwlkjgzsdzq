@@ -10,6 +10,7 @@ import { toTCaptcha } from '@common/utils/to-tcaptcha'
 import { View } from '@tarojs/components';
 import Page from '@components/page';
 import layout from './index.module.scss';
+import LoginHelper from '@common/utils/login-helper';
 
 @inject('site')
 @inject('user')
@@ -112,9 +113,7 @@ class ResetPasswordH5Page extends React.Component {
         hasMask: false,
         duration: 1000,
         onClose: () => {
-          redirectTo({
-            url: `/indexPages/home/index`
-          });
+          LoginHelper.restore();
         }
       });
     } catch (e) {

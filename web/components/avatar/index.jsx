@@ -231,7 +231,7 @@ function avatar(props) {
                 circle={true}
                 image={targetAvatarImage}
                 siz="primary"
-                text={userInfo.nickname && userInfo.nickname.substring(0, 1)}
+                text={userName}
               ></Avatar>
             </div>
             <div className={styles.right}>

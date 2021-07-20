@@ -109,7 +109,7 @@ class WeixinAuth extends React.Component {
     return <ViewAdapter
               h5={<></>}
               pc={<></>}
-              title={`登录 - ${this.props.site?.siteName}`}
+              title={`登录`}
             />;
   }
 }

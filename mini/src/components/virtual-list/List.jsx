@@ -49,6 +49,11 @@ export default class List extends React.Component {
             
         });
 
+        if (this.observerObjs && this.observerObjs[pageIndex]) {
+            const observer = this.observerObjs[pageIndex]
+            observer?.disconnect()
+        }
+
         this.observerObjs[pageIndex] = observerObj
     }
 

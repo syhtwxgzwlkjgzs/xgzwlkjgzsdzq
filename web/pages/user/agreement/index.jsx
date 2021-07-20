@@ -22,7 +22,7 @@ class Agreement extends React.Component {
     return <ViewAdapter
               h5={<></>}
               pc={<AgreementPage/>}
-              title={`${pageType} - ${site?.siteName}`}
+              title={`${pageType}`}
             />;
   }
 }

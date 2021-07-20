@@ -9,7 +9,7 @@ import styles from './index.module.scss';
 import Popup from '@discuzq/design/dist/components/popup/index';
 
 
-const Index = inject('threadPost')(observer(({ threadPost, show = false, onHide = () => {}, onClick = () => {} }) => {
+const Index = inject('threadPost')(observer(({ threadPost, show = false, onHide = () => { }, onClick = () => { } }) => {
   const { fetchEmoji, emojis } = threadPost;
 
   useEffect(async () => {
@@ -18,7 +18,9 @@ const Index = inject('threadPost')(observer(({ threadPost, show = false, onHide 
 
   return (
     <View className={styles['emoji-container']} style={{ display: show ? 'block' : 'none' }}>
-      {emojis.map((item, index) => <Image className={styles['emoji-item']} key={index} src={item.url} onClick={() => {onClick(item);}} />)}
+      <View className={styles['emoji-container__inner']}>
+        {emojis.map((item, index) => <Image className={styles['emoji-item']} key={index} src={item.url} onClick={() => { onClick(item); }} />)}
+      </View>
     </View>
   );
 }));
