@@ -40,7 +40,7 @@ export const savePic = (Url) => {
   var a = document.createElement('a'); //创建一个 a 标签
   a.href = Url;  //把路径赋到a标签的href上
     //正则表达式，这里是把图片文件名分离出来。拿到文件名赋到a.download,作为文件名来使用文本
-  a.download = Url.replace(/(.*\/)*([^.]+.*)/ig,"$2").split("?")[0]; 
+  a.download = '分享海报'; 
     
   var e = new MouseEvent('click', ( true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null));  
   //派遣后，它将不再执行任何操作。执行保存到本地
