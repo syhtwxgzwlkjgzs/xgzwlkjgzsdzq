@@ -949,10 +949,10 @@ class UserAction extends SiteStore {
 
       // 更新点赞
       if (
-        updateType === 'like' &&
-        !typeofFn.isUndefined(updatedInfo.isLiked) &&
-        !typeofFn.isNull(updatedInfo.isLiked) &&
-        user
+        updateType === 'like'
+        && !typeofFn.isUndefined(updatedInfo.isLiked)
+        && !typeofFn.isNull(updatedInfo.isLiked)
+        && user
       ) {
         const { isLiked, likePayCount = 0 } = updatedInfo;
         const theUserId = user.userId || user.id;
@@ -1017,7 +1017,11 @@ class UserAction extends SiteStore {
 
   // 生成微信换绑二维码，仅在 PC 使用
   @action
-  genRebindQrCode = async (scanSuccess = () => {}, scanFail = () => {}) => {
+  genRebindQrCode = async (
+    scanSuccess = () => { },
+    scanFail = () => { },
+    onTimeOut = () => { },
+  ) => {
     clearInterval(this.rebindTimer);
     const qrCodeRes = await wechatRebindQrCodeGen();
 
@@ -1037,6 +1041,9 @@ class UserAction extends SiteStore {
       setTimeout(() => {
         this.isQrCodeValid = false;
         clearInterval(this.rebindTimer);
+        if (onTimeOut) {
+          onTimeOut();
+        }
       }, 5 * 60 * 1000);
 
       return qrCodeRes.data;
@@ -1047,6 +1054,27 @@ class UserAction extends SiteStore {
       Msg: qrCodeRes.msg,
     };
   };
+
+  // mini 换绑接口
+  @action
+  rebindWechatMini = async ({
+    jsCode,
+    iv,
+    encryptedData,
+    sessionToken,
+  }) => {
+
+  }
+
+  // h5 换绑接口
+  @action
+  rebindWechatH5 = async ({
+    code,
+    sessionId,
+    sessionToken,
+  }) => {
+
+  }
 
   // 轮询重新绑定结果
   @action
