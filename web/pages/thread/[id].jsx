@@ -117,25 +117,27 @@ class Detail extends React.Component {
       const { site, thread } = this.props;
       const { webConfig } = site;
       const { setSite } = webConfig;
-      const { siteFavicon, siteIntroduction } = setSite;
+      const { siteHeaderLogo, siteIntroduction } = setSite;
       const { threadData } = thread;
-      const { content, title, user: threadUser, payType } = threadData;
+      const { content, title, user: threadUser, payType, isAnonymous } = threadData;
       const { text, indexes } = content;
       function setSpecialTitle(text, user, indexes = []) {
         // 全贴付费不能使用内容展示
-        if (payType !== 1) {
+        if (text) {
           const contentStr = htmlToString(text);
-          if (contentStr && contentStr !== '') return contentStr;
+          if (contentStr) {
+            return contentStr.length > 28 ? `${contentStr.substr(0, 28)}...` : contentStr;
+          };
         }
 
         const arr = [];
         if (indexes['101']) arr.push('图片');
         if (indexes['103']) arr.push('视频');
-        if (indexes['102']) arr.push('音频');
+        if (indexes['102']) arr.push('语音');
         if (indexes['108']) arr.push('附件');
         const contentLable = arr.length > 0 ? `${arr.join('/')}` : '内容';
-        const name = user && user.nickname ? `${user.nickname}` : '';
-        return `${name}分享的${contentLable}`;
+        const name = user && user.nickname ? `${user.nickname}` : '匿名用户';
+        return `${name}发布的${contentLable}`;
       }
 
       function setShareImg(threadUser, text, indexes = [], favicon) {
@@ -170,7 +172,7 @@ class Detail extends React.Component {
         }
 
         // 取用户头像
-        if (!img && threadUser && threadUser.avatar) {
+        if (!isAnonymous && !img && threadUser && threadUser.avatar) {
           img = threadUser.avatar;
         }
 
@@ -183,7 +185,7 @@ class Detail extends React.Component {
 
       const desc = siteIntroduction && siteIntroduction !== '' ? siteIntroduction : '在这里，发现更多精彩内容';
       const shareTitle = title && title !== '' ? title : setSpecialTitle(text, threadUser, indexes);
-      const shareImg = setShareImg(threadUser, text, indexes, siteFavicon);
+      const shareImg = setShareImg(threadUser, text, indexes, siteHeaderLogo);
       setWxShare(shareTitle, desc, window.location.href, shareImg);
     } catch (err) {
       console.error('设置分享错误', err);

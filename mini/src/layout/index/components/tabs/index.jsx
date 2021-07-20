@@ -10,7 +10,7 @@ import styles from '../../index.module.scss';
 import NavBar from '../nav-bar';
 import { useEffect } from 'react';
 import Taro from '@tarojs/taro';
-
+import classNames from 'classnames';
 
 const Index = forwardRef((props, ref) => {
     const [fixedTab, setFixedTab] = useState(false)
@@ -32,13 +32,6 @@ const Index = forwardRef((props, ref) => {
                 observePage()
             }, 10);
         }
-
-        return () => {
-            if (observerObj.current) {
-                observerObj.current.disconnect(); // 关闭观察器
-            }
-        }
-        
     }, [props.index?.currentCategories])
 
     const changeFixedTab = () => {
@@ -48,11 +41,15 @@ const Index = forwardRef((props, ref) => {
     }
 
     const observePage = () => {
-        observerObj.current = Taro.createIntersectionObserver().relativeToViewport({ top: 100 });
-        observerObj.current.observe(`#${tabsId.current}`, (res) => {
-            const isHidden = res.intersectionRatio <= 0
-            setFixedTab(isHidden)
-        });
+      if (observerObj.current) {
+        observerObj.current.disconnect(); // 关闭观察器
+      }
+
+      observerObj.current = Taro.createIntersectionObserver().relativeToViewport({ top: 100 });
+      observerObj.current.observe(`#${tabsId.current}`, (res) => {
+          const isHidden = res.intersectionRatio <= 0
+          setFixedTab(isHidden)
+      });
     }
 
     const handleClickTab = (e) => {
@@ -102,9 +99,9 @@ const Index = forwardRef((props, ref) => {
       const renderFixedTabs = () => {
         const { index, site, searchClick } = props;
         const { categories = [], activeCategoryId, currentCategories } = index;
-    
+
         return (
-          <View className={styles.fixed} style={{ opacity: !fixedTab ? '0' : '1' }}>
+          <View className={classNames(styles.fixed, fixedTab ? styles.showUp : '')}>
             <NavBar title={site?.webConfig?.setSite?.siteName || ''} />
             {categories?.length > 0 && (
               <View

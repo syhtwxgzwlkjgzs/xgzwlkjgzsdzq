@@ -12,7 +12,7 @@ import { get } from '@common/utils/get';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT, isExtFieldsOpen } from '@common/store/login/util';
 import layout from './index.module.scss';
 import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
-
+import LoginHelper from '@common/utils/login-helper';
 // const MemoToastProvider = React.memo(ToastProvider)
 
 @inject('site')
@@ -42,9 +42,7 @@ class Index extends Component {
         hasMask: false,
         duration: 1000,
         onClose: () => {
-          navigateTo({
-            url: `/indexPages/home/index`
-          });
+          LoginHelper.restore();
         }
       });
     } catch (e) {
@@ -56,7 +54,7 @@ class Index extends Component {
           redirectTo({ url: '/subPages/user/supplementary/index' });
           return;
         }
-        redirectTo({ url: '/indexPages/home/index' });
+        LoginHelper.restore();
         return;
       }
 
