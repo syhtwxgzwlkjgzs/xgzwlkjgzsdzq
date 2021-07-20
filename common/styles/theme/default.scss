@@ -71,10 +71,12 @@ $light: (
   --color-orange7: #FBC1A7,
   --color-orange8: #FCD0BC,
   --color-orange9: #FDE0D3,
-  --color-orange10: #FEEFE8, 
+  --color-orange10: #FEEFE8,
 
   --border-line-color: #eee,
   --border-color-hover: #c5c6ca, // TODO: 待去掉，没用
+
+  --border-color-blockquote: #dbdbdb,
 
   --shadow-color: #c5c9d5,
   --shadow-color2: #f1f3f4,
@@ -85,6 +87,7 @@ $light: (
   // 董琳说 8490a8 对应的应该是 8590a6
   --color-text-placeholder: #c5c6cb, // border hover 的颜色还有 loading 文字和这个一致
   --color-box-placeholder: #f1f3f4,
+  --color-text-blockquote: #6a737d,
 
   // pc，移动都是统一这个背景色；另外 // 评论框，评论，附件，语音，模块与模块之间的间距背景色
   --background-color: #f5f7f8,
