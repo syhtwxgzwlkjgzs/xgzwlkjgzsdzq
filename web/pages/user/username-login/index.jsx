@@ -12,7 +12,7 @@ class UsernameLogin extends React.Component {
     return <ViewAdapter
               h5={<UsernameH5Login/>}
               pc={<UsernameH5Login/>}
-              title={`用户名登录 - ${this.props.site?.siteName}`}
+              title={`用户名登录`}
             />;
   }
 }

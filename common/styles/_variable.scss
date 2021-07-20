@@ -11,6 +11,12 @@ $font-size-middle-extra: 18px;
 $font-size-large: 20px;
 $font-size-label: $font-size-small;
 $font-size-primary: $font-size-base;
+$font-size-h1: 26px;
+$font-size-h2: 24px;
+$font-size-h3: 22px;
+$font-size-h4: $font-size-large;
+$font-size-h5: $font-size-middle-extra;
+$font-size-h6: $font-size-middle;
 
 $font-line-height-xs: 18px;
 $font-line-height-small: 22px;
@@ -76,7 +82,7 @@ $border-color-hover: $text-color-placeholder;
 // ---- border shadow color ----
 $border-shadow-color: var(--shadow-color);
 $border-shadow-color2: var(--shadow-color2);
-
+$shadow-color: 0 0 8px $border-shadow-color;
 $shadow-color2: 0 0 8px var(--shadow-color2);
 
 $border-shadow-color-8: 0 0 8px 0 var(--shadow-color2);
@@ -165,3 +171,7 @@ $paybox-border-line-color: var(--border-line-color);
 
 
 $box-color-placeholder: var(--color-box-placeholder);
+
+// ------ blockquote -----------
+$blockquote-border: var(--border-color-blockquote);
+$blockquote-text-color: var(--color-text-blockquote);

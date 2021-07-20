@@ -1,5 +1,5 @@
 import isServer from './is-server';
-const constants = {
+export const constants = {
     IE: 'ie',
     OPERA: 'opera',
     WEBKIT: 'webKit',

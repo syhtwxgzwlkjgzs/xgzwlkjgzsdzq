@@ -13,7 +13,7 @@ class Login extends React.Component {
     return <ViewAdapter
               h5={<H5Login/>}
               pc={<H5Login/>}
-              title={`登录 - ${this.props.site?.siteName}`}
+              title={`登录`}
             />;
   }
 }

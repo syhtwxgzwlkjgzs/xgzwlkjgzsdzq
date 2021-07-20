@@ -11,7 +11,7 @@ class FindPassword extends React.Component {
     return <ViewAdapter
               h5={<FindPasswordH5Page/>}
               pc={<></>}
-              title={`找回密码 - ${this.props.site?.siteName}`}
+              title={`找回密码`}
             />;
   }
 }
