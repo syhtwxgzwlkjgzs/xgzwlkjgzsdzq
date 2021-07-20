@@ -216,7 +216,7 @@ class HomeHeader extends React.Component {
                 <Text className={styles.text}>内容</Text>
                 <Text className={styles.content}>{countThreads}</Text>
               </View>
-              <View className={styles.item} onClick={this.handleShareClick} data-shareData={shareData}>
+              <View className={styles.item} onClick={this.handleShareClick} >
                 <Icon className={styles.shareIcon} name="ShareAltOutlined" />
                 <Text className={styles.shareText}>分享</Text>
               </View>
