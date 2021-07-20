@@ -110,51 +110,50 @@ class SearchAction extends SearchStore {
     }
   
     if ( !hasTopics ) {
-      readTopicsList({ params: { filter: topicFilter, perPage: newPerPage, page: 1 } })
-        .then((res) => {
-          const { code, data, msg } = res;
-          if (code !== 0) {
-            if (type === 0) {
-              this.indexTopicsError = { isError: true, errorText: msg || '加载失败' }
-            } else {
-              this.searchTopicsError = { isError: true, errorText: msg || '加载失败' }
-            }
-          }
-          
-          type === 0 ? this.setIndexTopics(code === 0 ? data : {}) : this.setSearchTopics(code === 0 ? data : {});
-        })
+      const res = await readTopicsList({ params: { filter: topicFilter, perPage: newPerPage, page: 1 } })
+       
+      const { code, data, msg } = res;
+      if (code !== 0) {
+        if (type === 0) {
+          this.indexTopicsError = { isError: true, errorText: msg || '加载失败' }
+        } else {
+          this.searchTopicsError = { isError: true, errorText: msg || '加载失败' }
+        }
+      }
+      
+      type === 0 ? this.setIndexTopics(code === 0 ? data : {}) : this.setSearchTopics(code === 0 ? data : {});
     }
+
     if ( !hasUsers ) {
-      readUsersList({ params: { filter: { hot: 1, nickname: search }, perPage: newPerPage, page: 1 } })
-        .then((res) => {
-          const { code, data, msg } = res;
-          if (code !== 0) {
-            if (type === 0) {
-              this.indexUsersError = { isError: true, errorText: msg || '加载失败' }
-            } else {
-              this.searchUsersError = { isError: true, errorText: msg || '加载失败' }
-            }
-          }
+      const res = await readUsersList({ params: { filter: { hot: 1, nickname: search }, perPage: newPerPage, page: 1 } })
+       
+      const { code, data, msg } = res;
+      if (code !== 0) {
+        if (type === 0) {
+          this.indexUsersError = { isError: true, errorText: msg || '加载失败' }
+        } else {
+          this.searchUsersError = { isError: true, errorText: msg || '加载失败' }
+        }
+      }
 
-          type === 0 ? this.setIndexUsers(code === 0 ? data : {}) : this.setSearchUsers(code === 0 ? data : {});
-        })
+      type === 0 ? this.setIndexUsers(code === 0 ? data : {}) : this.setSearchUsers(code === 0 ? data : {});
     }
+
     if ( !hasThreads ) {
-      readThreadList({ params: { filter: { sort: '3', search }, perPage: newPerPage, page: 1 } })
-        .then((res) => {
-          const { code, data, msg } = res;
-          if (code !== 0) {
-            if (type === 0) {
-              this.indexThreadsError = { isError: true, errorText: msg || '加载失败' }
-            } else {
-              this.searchThreadsError = { isError: true, errorText: msg || '加载失败' }
-            }
-          }
+      const res = await readThreadList({ params: { filter: { sort: '3', search }, perPage: newPerPage, page: 1 } })
+        
+      const { code, data, msg } = res;
+      if (code !== 0) {
+        if (type === 0) {
+          this.indexThreadsError = { isError: true, errorText: msg || '加载失败' }
+        } else {
+          this.searchThreadsError = { isError: true, errorText: msg || '加载失败' }
+        }
+      }
 
-          type === 0 ? this.setIndexThreads(code === 0 ? data : {}) : this.setSearchThreads(code === 0 ? data : {});
+      type === 0 ? this.setIndexThreads(code === 0 ? data : {}) : this.setSearchThreads(code === 0 ? data : {});
 
-          this.getThreadListAgain({ firstRes: data, search, type })
-        })
+      this.getThreadListAgain({ firstRes: data, search, type })
     }
   };
 

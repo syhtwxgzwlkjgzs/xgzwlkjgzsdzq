@@ -146,9 +146,11 @@ class SearchPCPage extends React.Component {
 
   // 右侧 - 步骤条
   renderRight = () => {
+    const { stepIndex } = this.props
+  
     return (
       <div className={styles.searchRight}>
-        <Stepper onItemClick={this.itemClick} selectIndex={this.state.stepIndex}/>
+        <Stepper onItemClick={this.itemClick} selectIndex={stepIndex}/>
         <Copyright/>
       </div>
     )
