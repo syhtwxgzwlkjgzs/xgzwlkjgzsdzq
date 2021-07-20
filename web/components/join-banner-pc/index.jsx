@@ -27,10 +27,7 @@ class JoinBanner extends React.Component {
   }
 
   render() {
-    const { site: { platform, webConfig = {} }, isShowData } = this.props;
-    // if (platform === 'h5') {
-    //   return <></>;
-    // }
+    const { site: { webConfig = {} }, isShowData } = this.props;
     const siteAuthor = get(webConfig, 'setSite.siteAuthor.username', '');
     const siteInstall = get(webConfig, 'setSite.siteInstall', '');
     const siteHeaderLogo = get(webConfig, 'setSite.siteHeaderLogo', '');
