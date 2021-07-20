@@ -1,5 +1,5 @@
-
-import Taro, { Component } from '@tarojs/taro';
+import Taro, {  } from '@tarojs/taro';
+import React from 'react'
 import PropTypes from 'prop-types';
 import { Canvas } from '@tarojs/components';
 import { randomString, getHeight, downloadImageAndInfo } from './utils/tools';
@@ -7,7 +7,7 @@ import { drawImage, drawText, drawBlock, drawLine, } from './utils/draw';
 import './index.css';
 
 let count = 1;
-export default class CanvasDrawer extends Component {
+export default class CanvasDrawer extends React.Component {
     constructor(props) {
         super(props);
         this.toPx = (rpx, int = false, factor = this.state.factor) => {
@@ -29,7 +29,6 @@ export default class CanvasDrawer extends Component {
                     resolve(result);
                 })
                     .catch(err => {
-                    console.log(err);
                     reject(err);
                 });
             });
@@ -176,7 +175,6 @@ export default class CanvasDrawer extends Component {
                 },
                 fail: (error) => {
                     const { errMsg } = error;
-                    console.log(errMsg);
                     if (errMsg === 'canvasToTempFilePath:fail:create bitmap failed') {
                         count += 1;
                         if (count <= 3) {

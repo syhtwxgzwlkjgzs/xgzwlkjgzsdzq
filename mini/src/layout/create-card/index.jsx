@@ -30,7 +30,11 @@ class Index extends React.Component {
         }
         try {
             const res = await getMiniCode(data)
-            this.setState({miniCode: res})
+            if(!res) {
+                this.setState({miniCode: defaultLogo})
+            } else {
+                this.setState({miniCode: res})
+            }
         } catch {
             this.setState({miniCode: defaultLogo})
         }

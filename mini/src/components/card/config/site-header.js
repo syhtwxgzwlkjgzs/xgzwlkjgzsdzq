@@ -164,7 +164,7 @@ const handleLogo = async (setSite) => {
             }
         })
     })
-    const imgWidth = imgInfo.height * width / height
+    const imgWidth = imgInfo.width * height / imgInfo.height
     return {
         url: logoUrl,
         x: 355 - imgWidth / 2,

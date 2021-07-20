@@ -6,7 +6,7 @@ import lookMore from '../card-img/look-more.jpg';
 import browser from '../../../../../common/utils/browser'
 
 export const getContentConfig = ({baseHeight, data}) => {
-    const maxLineNum = 6 // 最大高度1900，最大行数60行
+    const maxLineNum = 60 // 最大高度1900，最大行数60行
     const Title = handleTitle(baseHeight)
     const line = handleLines(baseHeight)
     const TitleImg = handleTitleImg(baseHeight)
@@ -88,7 +88,7 @@ const handleSiteIntroduction = (data, baseHeight, maxLineNum) => {
     const contentWidth = posterWidth - 64
     if(!siteIntroduction) {
         // siteIntroduction = '暂无介绍'
-        siteIntroduction =`Discuz!Q官方站点，是中文 PC 互联网最知名的社区开源软件 Discuz!，在过去 15 年间，服务过超过 200 万网站客户。其推出的 UCenter、SupeSite，ECshop 等组件所代表的产品理念对今天移动互联网各类产品的技术架构至今仍有着深远的影响，毫不夸张的说，Discuz! 代表了互联网 2.0 时代里社交网络的最初形态。`
+        siteIntroduction =`来这里，发现更多精彩内容！`
     }
     const length = getByteLen(siteIntroduction) * 14
     let lineNum = Math.ceil(length / contentWidth)

@@ -10,7 +10,7 @@ const getConfig = async ({ data, miniCode, siteName, user }) => {
   if (!miniCode) {
     return;
   }
-  const codeUrl = await checkAndGetBase64Src(miniCode.base64Img)
+  const codeUrl = await miniCode.base64Img ? checkAndGetBase64Src(miniCode.base64Img) : miniCode
   const { height: headerHeight, config: headerConfig } = await getHeaderConfig({ data, user, siteName });
   const { height: contentHeight, config: contentConfig } = getContentConfig({ baseHeight: headerHeight, data });
   const { height: footerHeight, config: footerConfig } = getFooterConfig({
