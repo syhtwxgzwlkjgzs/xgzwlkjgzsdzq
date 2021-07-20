@@ -19,6 +19,18 @@ class PayBoxPc extends React.Component {
     // }, 500);
   };
 
+  forbidBack = () => {
+    window.history.pushState(null, null, document.URL);
+  };
+
+  componentDidMount() {
+    // QQ浏览器需阻止回退事件
+    if (!isServer()) {
+      window.history.pushState(null, null, document.URL);
+      window.addEventListener('popstate', this.forbidBack);
+    }
+  }
+
   render() {
     return (
       !isServer() && (
@@ -31,8 +43,8 @@ class PayBoxPc extends React.Component {
         >
           {this.props.payBox.step === STEP_MAP.SURE && <AmountRecognized />}
           {this.props.payBox.step === STEP_MAP.PAYWAY && <PayConfirmed />}
-          {(this.props.payBox.step === STEP_MAP.WALLET_PASSWORD
-            || this.props.payBox.step === STEP_MAP.SET_PASSWORD) && <PayPwd />}
+          {(this.props.payBox.step === STEP_MAP.WALLET_PASSWORD ||
+            this.props.payBox.step === STEP_MAP.SET_PASSWORD) && <PayPwd />}
         </Dialog>
       )
     );
