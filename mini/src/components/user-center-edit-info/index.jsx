@@ -124,6 +124,10 @@ class index extends Component {
     Taro.navigateTo({ url: '/subPages/my/edit/paypwd/index' });
   };
 
+  handleGoToAdditionalInfo = () => {
+    Taro.navigateTo({ url: '/subPages/my/edit/additional-info/index' });
+  };
+
   // 渲染修改用户名
   renderInputNickName = () => {
     const { isClickNickName } = this.state;
@@ -212,6 +216,14 @@ class index extends Component {
               </View>
             </View>
           )}
+          <View className={styles.userCenterEditItem}>
+            <View className={styles.userCenterEditLabel}>
+              <Text className={styles.userLabelName}>补充信息</Text>
+            </View>
+            <View className={styles.userCenterEditValue} onClick={this.handleGoToAdditionalInfo}>
+              <Icon name="RightOutlined" size={12} />
+            </View>
+          </View>
         </View>
         {/* bottom */}
         <View className={styles.userCenterEditBtn}>
