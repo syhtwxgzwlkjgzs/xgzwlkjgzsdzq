@@ -12,6 +12,11 @@ export const APP_THEME = {
   dark: 'dark',
 };
 
+export const ERROR_PAGE_TIPS = {
+  site: '获取站点接口信息失败',
+  apply: '出bug了 页面暂时无法展示'
+}
+
 /**
  * 后端错误码
 **/

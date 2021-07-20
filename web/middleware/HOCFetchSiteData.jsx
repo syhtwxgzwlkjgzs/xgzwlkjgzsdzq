@@ -228,7 +228,9 @@ export default function HOCFetchSiteData(Component, _isPass) {
         case JUMP_TO_PAY_SITE:// 到付费加入页面
           LoginHelper.saveAndRedirect('/forum/partner-invite');
           break;
-        default: Router.redirect({ url: '/500' });
+        default:
+          site.setErrPageType('site');
+          Router.redirect({ url: '/500' });
           break;
       }
     }
