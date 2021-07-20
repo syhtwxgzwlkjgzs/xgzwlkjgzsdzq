@@ -116,7 +116,9 @@ class SiteCard extends React.Component {
           </div>
           <div className={styles.contentBox} ref={this.content}>
             <div className={styles.contentHeader}>
-              <img src='/dzq-img/content-header.png' className={styles.contentHeaderImg}/>
+              <div className={styles.contentHeaderImgBox}>
+                <img src='/dzq-img/content-header.png' className={styles.contentHeaderImg}/>
+              </div>
               <span className={styles.contentHeaderText}>站点介绍</span>
             </div>
             <div className={styles.line}></div>
