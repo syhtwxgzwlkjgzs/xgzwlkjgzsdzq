@@ -19,6 +19,8 @@ import {
   readUsersDeny,
   wechatRebindQrCodeGen,
   getWechatRebindStatus,
+  h5Rebind,
+  miniRebind,
 } from '@server';
 import { get } from '../../utils/get';
 import set from '../../utils/set';
@@ -1043,7 +1045,7 @@ class UserAction extends SiteStore {
         if (onTimeOut) {
           onTimeOut();
         }
-      }, 5 * 60 * 1000);
+      }, 4 * 60 * 1000);
 
       return qrCodeRes.data;
     }
@@ -1062,7 +1064,36 @@ class UserAction extends SiteStore {
     encryptedData,
     sessionToken,
   }) => {
+    try {
+      const miniRebindResp = await h5Rebind({
+        data: {
+          jsCode,
+          iv,
+          encryptedData,
+          sessionToken,
+        },
+      });
 
+      if (miniRebindResp.code === 0) {
+        return miniRebindResp;
+      }
+
+      // 不为零，实际是错误
+      throw miniRebindResp;
+    } catch (err) {
+      if (err.code) {
+        throw {
+          Code: err.code,
+          Msg: err.msg,
+        };
+      }
+
+      throw {
+        Code: 'rbd_9999',
+        Msg: '网络错误',
+        err,
+      };
+    }
   }
 
   // h5 换绑接口
@@ -1072,7 +1103,35 @@ class UserAction extends SiteStore {
     sessionId,
     sessionToken,
   }) => {
+    try {
+      const h5RebindResp = await h5Rebind({
+        data: {
+          code,
+          sessionId,
+          sessionToken,
+        },
+      });
 
+      if (h5RebindResp.code === 0) {
+        return h5RebindResp;
+      }
+
+      // 不为零，实际是错误
+      throw h5RebindResp;
+    } catch (err) {
+      if (err.code) {
+        throw {
+          Code: err.code,
+          Msg: err.msg,
+        };
+      }
+
+      throw {
+        Code: 'rbd_9999',
+        Msg: '网络错误',
+        err,
+      };
+    }
   }
 
   // 轮询重新绑定结果
