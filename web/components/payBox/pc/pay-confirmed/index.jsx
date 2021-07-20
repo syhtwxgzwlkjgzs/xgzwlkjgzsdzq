@@ -121,7 +121,6 @@ export default class index extends Component {
       let list_ = [...list];
       if (list.length >= 6) {
         return;
-        list_ = list_.join('').substring(0, 5).split('');
       }
       this.setState(
         {

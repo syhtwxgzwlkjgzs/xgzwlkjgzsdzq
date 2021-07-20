@@ -19,16 +19,25 @@ class PayBoxPc extends React.Component {
     // }, 500);
   };
 
-  forbidBack = () => {
-    window.history.pushState(null, null, document.URL);
+  // 拉起支付弹窗后阻止回退操作
+  handleKeyDown = (e) => {
+    if (e.keyCode === 8) {
+      if (e.returnValue) {
+        e.returnValue = false;
+      }
+      if (e.preventDefault) {
+        e.preventDefault();
+      }
+      return false;
+    }
   };
 
   componentDidMount() {
-    // QQ浏览器需阻止回退事件
-    if (!isServer()) {
-      window.history.pushState(null, null, document.URL);
-      window.addEventListener('popstate', this.forbidBack);
-    }
+    document.addEventListener('keydown', this.handleKeyDown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeyDown);
   }
 
   render() {
