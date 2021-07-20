@@ -119,7 +119,7 @@ class Detail extends React.Component {
       const { setSite } = webConfig;
       const { siteHeaderLogo, siteIntroduction } = setSite;
       const { threadData } = thread;
-      const { content, title, user: threadUser, payType } = threadData;
+      const { content, title, user: threadUser, payType, isAnonymous } = threadData;
       const { text, indexes } = content;
       function setSpecialTitle(text, user, indexes = []) {
         // 全贴付费不能使用内容展示
@@ -172,7 +172,7 @@ class Detail extends React.Component {
         }
 
         // 取用户头像
-        if (!img && threadUser && threadUser.avatar) {
+        if (!isAnonymous && !img && threadUser && threadUser.avatar) {
           img = threadUser.avatar;
         }
 
