@@ -50,7 +50,6 @@ class Index extends React.Component {
           onRefresh={this.loadMore}
           hasOnScrollToLower={true}
           noMore={userShieldTotalPage < userShieldPage}
-          // className={styles.shieldList}
           showLoadingInCenter={!userShield?.length}
         >
           {userShield.length > 0 && <View className={styles.titleBox}>{`共有${userShieldTotalCount}位用户`}</View>}
