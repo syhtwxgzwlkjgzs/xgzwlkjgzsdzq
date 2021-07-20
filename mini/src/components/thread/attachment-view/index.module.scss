@@ -47,7 +47,7 @@
     flex-direction: column;
     overflow: hidden;
     white-space: nowrap;
-    margin-left: 8px;
+    margin-left: 10px;
     margin-right: 8px;
     margin-top: 2px;
     flex: 1;
@@ -60,6 +60,8 @@
   .containerIcon {
     color: $success-color;
     font-size: 20px;
+    width: 19px;
+    height: 20px;
   }
   .content {
     color: $text-color-primary;
