@@ -202,7 +202,7 @@ function avatar(props) {
     if (userInfo === 'padding') {
       return (
         <div className={styles.userInfoBox} style={direction === 'left' ? { right: 0 } : { left: 0 }}>
-          <div className={styles.userInfoContent}>
+          <div className={classNames(styles.userInfoContent, isSameWithMe ? styles.myContent : "")}>
             <LoadingBox style={{ minHeight: '100%' }} />
           </div>
         </div>
@@ -223,7 +223,7 @@ function avatar(props) {
         className={`${styles.userInfoBox} ${direction}`}
         style={direction === 'left' ? { right: 0 } : { left: 0 }}
       >
-        <div className={styles.userInfoContent}>
+        <div className={classNames(styles.userInfoContent, isSameWithMe ? styles.myContent : "")}>
           <div className={styles.header}>
             <div className={styles.left} onClick={clickAvatar}>
               <Avatar
