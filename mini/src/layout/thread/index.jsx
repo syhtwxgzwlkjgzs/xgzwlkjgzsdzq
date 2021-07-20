@@ -1016,6 +1016,7 @@ class ThreadH5Page extends React.Component {
 
             {/* 更多弹层 */}
             <MorePopup
+              thread={threadStore}
               shareData={this.shareData}
               permissions={morePermissions}
               statuses={moreStatuses}
