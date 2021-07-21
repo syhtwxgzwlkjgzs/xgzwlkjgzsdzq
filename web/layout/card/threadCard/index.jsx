@@ -7,11 +7,11 @@ import UserInfo from '@components/thread/user-info';
 import styles from './index.module.scss';
 import Card from '../index';
 
-
 const ThreadCard = inject('user', 'card')(observer((props) => {
   const { card: threadStore } = props;
+  const { isReady } = threadStore;
   let { text, indexes } = threadStore?.threadData?.content || {};
-  const { parentCategoryName, categoryName } = threadStore?.threadData;
+  const { parentCategoryName, categoryName } = threadStore?.threadData || {};
   let title = threadStore?.threadData?.title;
   let parseContent = parseContentData(indexes);
   const isEssence = threadStore?.threadData?.displayTag?.isEssence || false;
@@ -21,9 +21,9 @@ const ThreadCard = inject('user', 'card')(observer((props) => {
   const isRedPack = threadStore?.threadData?.displayTag?.isRedPack;
   // 是否悬赏帖
   const isReward = threadStore?.threadData?.displayTag?.isReward;
-  let { nickname } = threadStore?.threadData?.user;
-  let { avatar } = threadStore?.threadData?.user;
-  const { isAnonymous } = threadStore?.threadData;
+  let nickname = threadStore?.threadData?.user?.nickname;
+  let avatar = threadStore?.threadData?.user?.avatar;
+  const isAnonymous = threadStore?.threadData?.isAnonymous;
   const priceImg = '/dzq-img/admin-logo-pc.jpg';
   const content = useRef();
   const [overMaxHeight, setOverMaxHeight] = useState(false);
@@ -48,15 +48,23 @@ const ThreadCard = inject('user', 'card')(observer((props) => {
     text = '';
     parseContent = '';
   }
+  // if (!isReady) {
+  //   return (
+  //     <Card>
+
+  //     </Card>
+  //   );
+  // }
   return (
     <Card>
+      {isReady && (
       <div className={`${styles.container}`}>
         <div className={styles.header}>
           <div className={styles.userInfo}>
             <UserInfo
               name={nickname || ''}
               avatar={avatar || ''}
-              location={threadStore?.threadData?.position.location || ''}
+              location={threadStore?.threadData?.position?.location || ''}
               groupName={threadStore?.threadData?.group?.groupName || ''}
               view={`${threadStore?.threadData?.viewCount}` || ''}
               time={`${threadStore?.threadData?.diffTime}` || ''}
@@ -105,7 +113,9 @@ const ThreadCard = inject('user', 'card')(observer((props) => {
             </div>
           )}
       </div>
-      </Card>
+      )}
+
+    </Card>
   );
 }));
 

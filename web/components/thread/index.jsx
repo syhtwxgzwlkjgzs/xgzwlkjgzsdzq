@@ -22,7 +22,6 @@ import { updateViewCountInStores } from '@common/utils/viewcount-in-storage';
 @inject('thread')
 @inject('search')
 @inject('topic')
-@inject('card')
 @observer
 class Index extends React.Component {
     state = {
@@ -231,7 +230,7 @@ class Index extends React.Component {
     }
 
     render() {
-      const { data, card, className = '', site = {}, showBottomStyle = true,  collect = '', unifyOnClick = null, isShowIcon = false, user: users } = this.props;
+      const { data, className = '', site = {}, showBottomStyle = true,  collect = '', unifyOnClick = null, isShowIcon = false, user: users } = this.props;
       const { platform = 'pc' } = site;
 
       const { onContentHeightChange = noop, onImageReady = noop, onVideoReady = noop } = this.props;
@@ -295,7 +294,6 @@ class Index extends React.Component {
 
           <BottomEvent
             data={data}
-            card={card}
             user={users}
             userImgs={likeReward.users}
             wholeNum={likeReward.likePayCount || 0}

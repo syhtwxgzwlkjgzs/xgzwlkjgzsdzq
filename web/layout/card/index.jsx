@@ -4,7 +4,6 @@ import styles from './index.module.scss';
 import { Button, Toast } from '@discuzq/design';
 import Footer from './footer';
 import isWeiXin from '@common/utils/is-weixin';
-
 const Index = ({ children }) => {
   const [url, setUrl] = useState('');
   const [ready, setReady] = useState(false);
@@ -28,9 +27,12 @@ const Index = ({ children }) => {
         {children}
         <Footer setReady={setReady}></Footer>
       </div>
-      {ready && (
+      {ready ? (
         <div className={styles.imgbox}>
           <img className={styles.centImage} src={url} />
+        </div>
+      ) : (
+        <div className={styles.imgbox}>
         </div>
       )}
       <div className={styles.shareBtn}>
@@ -42,7 +44,6 @@ const Index = ({ children }) => {
       </div>
     </div>
   );
-}
-;
+};
 
 export default Index;
