@@ -74,7 +74,6 @@ class Index extends React.Component {
       const { threadId = '' } = this.props.data || {};
 
       if (threadId !== '') {
-        this.updateViewCount();
         this.props.thread.positionToComment()
         Router.push({url: `/indexPages/thread/index?id=${threadId}`})
       } else {
@@ -84,7 +83,8 @@ class Index extends React.Component {
     // 点赞
     onPraise = (e) => {
       e && e.stopPropagation();
-      this.handlePraise()
+      this.updateViewCount();
+      this.handlePraise();
     }
 
     handlePraise = debounce(() => {
@@ -98,24 +98,23 @@ class Index extends React.Component {
       }
       const { data = {}, user } = this.props;
       const { threadId = '', isLike, postId } = data;
-      this.setState({isSendingLike: true});
-      this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } }).then(result => {
+      this.setState({ isSendingLike: true });
+      this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } }).then((result) => {
         if (result.code === 0 && result.data) {
           this.props.index.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
           this.props.search.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
           this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
           this.props.user.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
-
-          this.updateViewCount();
         }
-        this.setState({isSendingLike: false});
+        this.setState({ isSendingLike: false });
       });
     }, 1000)
 
     // 支付
     onPay = (e) => {
       // e && e.stopPropagation();
-      this.handlePay()
+      this.updateViewCount();
+      this.handlePay();
     }
     handlePay = debounce(async (e) => {
       // e && e.stopPropagation();
@@ -138,12 +137,11 @@ class Index extends React.Component {
       if (success && thread?.threadId) {
         const { code, data } = await this.props.thread.fetchThreadDetail(thread?.threadId);
         if (code === 0 && data) {
-          this.props.index.updatePayThreadInfo(thread?.threadId, data)
-          this.props.search.updatePayThreadInfo(thread?.threadId, data)
-          this.props.topic.updatePayThreadInfo(thread?.threadId, data)
-          this.props.user.updatePayThreadInfo(thread?.threadId, data)
+          this.props.index.updatePayThreadInfo(thread?.threadId, data);
+          this.props.search.updatePayThreadInfo(thread?.threadId, data);
+          this.props.topic.updatePayThreadInfo(thread?.threadId, data);
+          this.props.user.updatePayThreadInfo(thread?.threadId, data);
 
-          this.updateViewCount();
           if(typeof this.props.dispatch === "function") {
             this.props.dispatch(thread?.threadId, data);
           }
@@ -162,10 +160,6 @@ class Index extends React.Component {
         this.props.thread.isPositionToComment = false;
         Router.push({url: `/indexPages/thread/index?id=${threadId}`})
 
-        // this.updateViewCount();
-        this.props.index.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
-        this.props.search.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
-        this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
       } else {
         console.log('帖子不存在');
       }
@@ -214,13 +208,14 @@ class Index extends React.Component {
     }
 
     updateViewCount = async () => {
-      // const { threadId = '' } = this.props.data || {};
-      // const viewCount = await updateViewCountInStores(threadId);
-      // if(viewCount) {
-      //   this.props.index.updateAssignThreadInfo(threadId, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
-      //   this.props.search.updateAssignThreadInfo(threadId, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
-      //   this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
-      // }
+      const { threadId = '' } = this.props.data || {};
+      const threadIdNumber = Number(threadId);
+      const viewCount = await updateViewCountInStores(threadIdNumber);
+      if(viewCount) {
+        this.props.index.updateAssignThreadInfo(threadIdNumber, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
+        this.props.search.updateAssignThreadInfo(threadIdNumber, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
+        this.props.topic.updateAssignThreadInfo(threadIdNumber, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
+      }
     }
 
     render() {

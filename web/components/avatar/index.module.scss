@@ -18,6 +18,11 @@
     width: rem(423);
     min-height: rem(245);
     height: fit-content;
+
+    &.myContent {
+      padding: rem(16);
+    }
+
     @include media('s-pc') {
       width: rem(320);
     }

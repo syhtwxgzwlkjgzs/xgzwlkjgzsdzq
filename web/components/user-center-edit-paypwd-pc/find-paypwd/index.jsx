@@ -47,7 +47,7 @@ class index extends Component {
     if (type == 'add') {
       let list_ = [...list];
       if (list.length >= 6) {
-        list_ = list_.join('').substring(0, 5).split('');
+        return;
       }
       this.setState(
         {

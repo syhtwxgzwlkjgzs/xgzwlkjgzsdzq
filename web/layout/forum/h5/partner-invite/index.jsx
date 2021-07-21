@@ -76,8 +76,7 @@ class PartnerInviteH5Page extends React.Component {
         data: {      // data 中传递后台参数
           amount: sitePrice,
           title: siteName,
-          // type: user?.userInfo?.expiredAt ? 8 : 1, // 续费传8，新付费传1.站点付费注册
-          type: 1
+          type: user?.userInfo?.expiredAt ? 8 : 1, // 续费传8，新付费传1.站点付费注册
         },
         isAnonymous: false, // 是否匿名
         success: async () => {
@@ -178,7 +177,7 @@ class PartnerInviteH5Page extends React.Component {
               : <></>
           }
           <div className={layout.user_card_button} onClick={this.handleJoinSite}>
-            {siteMode === 'pay' ? (user.isLogin() ? `¥${sitePrice} 立即加入` : '登录浏览更多内容') : '立即加入' }
+            {siteMode === 'pay' ? (user.isLogin() ? `¥${sitePrice} ${user?.userInfo?.expiredAt ? '续费' : '立即'}加入` : '登录浏览更多内容') : '立即加入' }
           </div>
           {siteMode === 'pay' ? (
             <div className={layout.bottom_title}>
@@ -294,7 +293,7 @@ class PartnerInviteH5Page extends React.Component {
                     </div>
                   ) : <></>}
                   <Button className={layout.bottom_button} onClick={this.handleJoinSite}>
-                    { user.isLogin() ? `${siteMode === 'pay' ? `¥${sitePrice} ` : ''}立即加入` : `${siteMode === 'pay' ? '登录浏览更多内容' : '立即加入'}` }
+                    { user.isLogin() ? `${siteMode === 'pay' ? `¥${sitePrice} ` : ''}${user?.userInfo?.expiredAt ? '续费' : '立即'}加入` : `${siteMode === 'pay' ? '登录浏览更多内容' : '立即加入'}` }
                   </Button>
                 </div>
                 </>

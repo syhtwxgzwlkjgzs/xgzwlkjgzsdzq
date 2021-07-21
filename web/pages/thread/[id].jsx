@@ -13,6 +13,7 @@ import { Toast } from '@discuzq/design';
 import setWxShare from '@common/utils/set-wx-share';
 import htmlToString from '@common/utils/html-to-string';
 import { updateViewCountInStores } from '@common/utils/viewcount-in-storage';
+import isWeiXin from '@common/utils/is-weixin';
 
 @inject('site')
 @inject('thread')
@@ -93,23 +94,24 @@ class Detail extends React.Component {
     }
   }
 
-  updateViewCount = async (threadId) => {
-    // const viewCount = await updateViewCountInStores(threadId);
-    // if (viewCount) {
-    //   this.props.thread.updateViewCount(viewCount);
-    //   this.props.index.updateAssignThreadInfo(threadId, {
-    //     updateType: 'viewCount',
-    //     updatedInfo: { viewCount },
-    //   });
-    //   this.props.search.updateAssignThreadInfo(threadId, {
-    //     updateType: 'viewCount',
-    //     updatedInfo: { viewCount },
-    //   });
-    //   this.props.topic.updateAssignThreadInfo(threadId, {
-    //     updateType: 'viewCount',
-    //     updatedInfo: { viewCount },
-    //   });
-    // }
+  updateViewCount = async (id) => {
+    const threadId = Number(id);
+    const viewCount = await updateViewCountInStores(threadId);
+    if (viewCount) {
+      this.props.thread.updateViewCount(viewCount);
+      this.props.index.updateAssignThreadInfo(threadId, {
+        updateType: 'viewCount',
+        updatedInfo: { viewCount },
+      });
+      this.props.search.updateAssignThreadInfo(threadId, {
+        updateType: 'viewCount',
+        updatedInfo: { viewCount },
+      });
+      this.props.topic.updateAssignThreadInfo(threadId, {
+        updateType: 'viewCount',
+        updatedInfo: { viewCount },
+      });
+    }
   };
 
   handleWeiXinShare = async () => {
@@ -234,7 +236,7 @@ class Detail extends React.Component {
     }
 
     // 设置详情分享
-    this.handleWeiXinShare();
+    isWeiXin() && this.handleWeiXinShare();
 
     // 获取评论列表
     if (!this.props?.thread?.commentList || !this.hasMaybeCache()) {

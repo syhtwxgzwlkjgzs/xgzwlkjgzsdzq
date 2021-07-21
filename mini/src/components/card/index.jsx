@@ -1,21 +1,31 @@
 import React, { useState, useEffect } from 'react'
 import { View, Button } from '@tarojs/components'
 import styles from './index.module.scss'
-import Card from './components/card';
+import Card from './card';
 import { saveToAlbum } from './utils'
-import getConfig from './components/config/index';
+import getConfig from './config/thread-card';
 import { throttle } from '@common/utils/throttle-debounce.js';
 import { inject, observer } from 'mobx-react';
+import getSiteConfig from './config/site-card'
 
 const Index = ({
   thread,
   miniCode,
-  site
+  site,
+  user,
+  data
 }) => {
   useEffect(() => {
-    getConfig({ thread, miniCode, siteName }).then(
+    if(thread) {
+      getConfig({ thread, miniCode, siteName }).then(
+        config => {
+          setConfig(config);
+        }
+      )
+    }
+    getSiteConfig({ data, miniCode, siteName, user }).then(
       config => {
-        setConfig(config);
+        setConfig(config)
       }
     )
   }, [miniCode])
@@ -30,4 +40,4 @@ const Index = ({
       </View>
     </View>)
 }
-export default inject('index', 'site')(observer(Index));
+export default inject('index', 'site', 'user')(observer(Index));
