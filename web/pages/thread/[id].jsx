@@ -93,23 +93,24 @@ class Detail extends React.Component {
     }
   }
 
-  updateViewCount = async (threadId) => {
-    // const viewCount = await updateViewCountInStores(threadId);
-    // if (viewCount) {
-    //   this.props.thread.updateViewCount(viewCount);
-    //   this.props.index.updateAssignThreadInfo(threadId, {
-    //     updateType: 'viewCount',
-    //     updatedInfo: { viewCount },
-    //   });
-    //   this.props.search.updateAssignThreadInfo(threadId, {
-    //     updateType: 'viewCount',
-    //     updatedInfo: { viewCount },
-    //   });
-    //   this.props.topic.updateAssignThreadInfo(threadId, {
-    //     updateType: 'viewCount',
-    //     updatedInfo: { viewCount },
-    //   });
-    // }
+  updateViewCount = async (id) => {
+    const threadId = Number(id);
+    const viewCount = await updateViewCountInStores(threadId);
+    if (viewCount) {
+      this.props.thread.updateViewCount(viewCount);
+      this.props.index.updateAssignThreadInfo(threadId, {
+        updateType: 'viewCount',
+        updatedInfo: { viewCount },
+      });
+      this.props.search.updateAssignThreadInfo(threadId, {
+        updateType: 'viewCount',
+        updatedInfo: { viewCount },
+      });
+      this.props.topic.updateAssignThreadInfo(threadId, {
+        updateType: 'viewCount',
+        updatedInfo: { viewCount },
+      });
+    }
   };
 
   handleWeiXinShare = async () => {
@@ -119,7 +120,7 @@ class Detail extends React.Component {
       const { setSite } = webConfig;
       const { siteHeaderLogo, siteIntroduction } = setSite;
       const { threadData } = thread;
-      const { content, title, user: threadUser, payType } = threadData;
+      const { content, title, user: threadUser, payType, isAnonymous } = threadData;
       const { text, indexes } = content;
       function setSpecialTitle(text, user, indexes = []) {
         // 全贴付费不能使用内容展示
@@ -172,7 +173,7 @@ class Detail extends React.Component {
         }
 
         // 取用户头像
-        if (!img && threadUser && threadUser.avatar) {
+        if (!isAnonymous && !img && threadUser && threadUser.avatar) {
           img = threadUser.avatar;
         }
 
