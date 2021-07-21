@@ -202,7 +202,7 @@ function avatar(props) {
       return (
         <div className={styles.userInfoBox} style={direction === 'left' ? { right: 0 } : { left: 0 }}>
           <div className={styles.userInfoContent}>
-            <LoadingBox style={{ minHeight: '200px'}} />
+            <LoadingBox style={{ minHeight: '205px'}} />
           </div>
         </div>
       );
@@ -222,7 +222,7 @@ function avatar(props) {
         className={`${styles.userInfoBox} ${direction}`}
         style={direction === 'left' ? { right: 0 } : { left: 0 }}
       >
-        <div className={styles.userInfoContent}>
+        <div className={classNames(styles.userInfoContent, isSameWithMe ? styles.myContent : "")}>
           <div className={styles.header}>
             <div className={styles.left} onClick={clickAvatar}>
               <Avatar
@@ -303,7 +303,7 @@ function avatar(props) {
   const [referenceElement, setReferenceElement] = useState(null);
   const [popperElement, setPopperElement] = useState(null);
   const { styles: poperStyle, attributes } = usePopper(referenceElement, popperElement, {
-    placement: 'bottom-end',
+    placement: 'bottom-start',
     modifiers: [
       {
         name: 'offset',
@@ -327,7 +327,7 @@ function avatar(props) {
         </div>
 
         {isShow && (
-          <div ref={setPopperElement} style={{ ...poperStyle.popper, zIndex: 1 }} {...attributes.popper}>
+          <div ref={setPopperElement} style={{ ...poperStyle.popper, zIndex: 100 }} {...attributes.popper}>
             {userInfoBox}
           </div>
         )}
@@ -347,7 +347,7 @@ function avatar(props) {
       </div>
 
       {isShow && (
-        <div ref={setPopperElement} style={{ ...poperStyle.popper, zIndex: 1 }} {...attributes.popper}>
+        <div ref={setPopperElement} style={{ ...poperStyle.popper, zIndex: 100 }} {...attributes.popper}>
           {userInfoBox}
         </div>
       )}

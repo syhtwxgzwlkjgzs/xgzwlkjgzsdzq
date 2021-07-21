@@ -45,33 +45,47 @@ class Index extends React.Component {
       serverSearch && serverSearch.indexUsers && search.setIndexUsers(serverSearch.indexUsers);
       serverSearch && serverSearch.indexThreads && search.setIndexThreads(serverSearch.indexThreads);
     }
+
+    this.state = {
+      stepIndex: 0
+    }
   }
 
   async componentDidMount() {
     const { search, router } = this.props;
     const { keyword = '' } = router?.query;
 
-    // 当服务器无法获取数据时，触发浏览器渲染
-    
-
-    // this.toastInstance = Toast.loading({
-    //   content: '加载中...',
-    //   duration: 0,
-    // });
-
     const { platform } = this.props.site || {};
 
     if (platform === 'pc') {
-      search.getSearchData({ hasTopics: false, hasUsers: false, hasThreads: false, search: keyword });
+      await search.getSearchData({ hasTopics: false, hasUsers: false, hasThreads: false, search: keyword });
+      this.setStepIndex()
     } else {
       const hasIndexTopics = !!search.indexTopics;
       const hasIndexUsers = !!search.indexUsers;
       const hasIndexThreads = !!search.indexThreads;
       search.getSearchData({ hasTopics: hasIndexTopics, hasUsers: hasIndexUsers, hasThreads: hasIndexThreads, search: keyword });
     }
-    
+  }
 
-    // this.toastInstance?.destroy();
+  // 获取数据状态
+  setStepIndex = () => {
+    const { hasTopics, hasUsers, isShowAll } = this.props.search.dataIndexStatus
+
+    let stepIndex = 0
+    if (isShowAll) {
+      stepIndex = 0
+    } else {
+      if (hasTopics) {
+        stepIndex = 0
+      } else if (!hasTopics && hasUsers) {
+        stepIndex = 1
+      } else if (!hasTopics && !hasUsers) {
+        stepIndex = 2
+      }
+    }
+
+    this.setState({ stepIndex })
   }
 
   dispatch = async (type, data = '') => {
@@ -80,7 +94,10 @@ class Index extends React.Component {
     if (type === 'refresh') {
       search.getSearchData({ hasTopics: false, hasUsers: false, hasThreads: false });
     } else if (type === 'search') {
-      search.getSearchData({ search: data });
+      await search.getSearchData({ search: data });
+      this.setStepIndex()
+    } else if (type === 'update-step-index') {
+      this.setState({ stepIndex: data || 0 })
     }
   }
 
@@ -88,7 +105,7 @@ class Index extends React.Component {
     return (
       <ViewAdapter
         h5={<IndexH5Page dispatch={this.dispatch} />}
-        pc={ <IndexPCPage dispatch={this.dispatch} />}
+        pc={ <IndexPCPage dispatch={this.dispatch} stepIndex={this.state.stepIndex} />}
         title='发现'
       />
     );

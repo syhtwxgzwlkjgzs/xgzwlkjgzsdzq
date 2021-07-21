@@ -10,7 +10,7 @@
   background: var(--color-white);
 }
 .right {
-  width: rem(286);
+  // width: rem(286);
   overflow: hidden;
 }
 
@@ -18,7 +18,7 @@
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
-  
+
 .postTitle {
   padding: 0 rem($padding-6n);
   border-top-left-radius: rem($border-radius-small);

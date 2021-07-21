@@ -12,6 +12,7 @@ import isServer from '@common/utils/is-server';
 @inject('index')
 @inject('user')
 @inject('baselayout')
+@inject('vlist')
 @observer
 class Index extends React.Component {
 
@@ -102,15 +103,21 @@ class Index extends React.Component {
     if (type === 'click-filter') { // 点击tab
       this.page = 1;
       this.props.baselayout.setJumpingToTop();
+      this.props.vlist.setPosition(0);
       await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
     } else if (type === 'moreData') {
+      const { currentPage = 0 } = this.props.index.threads || {}
       this.page += 1;
-      return await index.getReadThreadList({
-        perPage: this.prePage,
-        page: this.page,
-        filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort },
-        sequence,
-      });
+
+      if (currentPage < this.page) {
+        return await index.getReadThreadList({
+          perPage: this.prePage,
+          page: this.page,
+          filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort },
+          sequence,
+        });
+      } 
+      return Promise.resolve()
     } else if (type === 'refresh-recommend') {
       await index.getRecommends({ categoryIds });
     } else if (type === 'update-page') {// 单独更新页数

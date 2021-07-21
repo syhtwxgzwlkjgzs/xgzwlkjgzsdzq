@@ -48,12 +48,12 @@
   overflow: hidden;
 
   @include media('s-pc') {
-    width: 98%;
+    width: 98% !important;
   }
 
   @include media('l-pc') {
     // width: 95%;
-    padding: 0 calc((100vw - 1100px) / 2);
+    padding: 0 calc((100vw - 1070px) / 2);
   }
 
   @include media('xl-pc') {
