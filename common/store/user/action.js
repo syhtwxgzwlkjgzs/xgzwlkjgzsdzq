@@ -1155,7 +1155,7 @@ class UserAction extends SiteStore {
     if (scanStatus.code !== 0) {
       if (scanStatus.msg !== '扫码中') {
         if (scanFail) {
-          scanFail();
+          scanFail(scanStatus);
         }
       }
     }
