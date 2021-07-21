@@ -1,8 +1,11 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import styles from './index.module.scss';
 import Tip from '../tip';
 import { Icon } from '@discuzq/design';
 import { noop } from '../utils';
+import MorePopop from '@components/more-popop';
+import Router from '@discuzq/sdk/dist/router';
+import goToLoginPage from '@common/utils/go-to-login-page';
 
 /**
  * 帖子底部内容
@@ -23,6 +26,9 @@ const Index = ({
   isSendingLike = false,
   tipData,
   platform,
+  card,
+  data,
+  user,
   onShare = () => {},
   onComment = () => {},
   onPraise = () => {},
@@ -33,26 +39,42 @@ const Index = ({
       icon: 'LikeOutlined',
       name: '赞',
       event: onPraise,
-      type: 'like'
+      type: 'like',
     };
 
     return [praise, {
       icon: 'MessageOutlined',
       name: '评论',
       event: onComment,
-      type: 'commonet'
+      type: 'commonet',
     },
     {
       icon: 'ShareAltOutlined',
       name: '分享',
       event: onShare,
-      type: 'share'
+      type: 'share',
     }];
   }, [isLiked]);
-
-  const needHeight = useMemo(() => {
-    return userImgs.length !== 0 || comment > 0 || sharing > 0
-  }, [userImgs, comment, sharing])
+  const handleClick = () => {
+    if (!user.isLogin()) {
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+    setShow(true);
+  };
+  const [show, setShow] = useState(false);
+  const onClose = () => {
+    setShow(false);
+  };
+  const handleH5Share = () => {
+    onShare();
+    onClose();
+  };
+  const createCard = () => {
+    card.setThreadData(data);
+    Router.push({ url: '/card?from=thread' });
+  };
+  const needHeight = useMemo(() => userImgs.length !== 0 || comment > 0 || sharing > 0, [userImgs, comment, sharing]);
   return (
     <div>
       <div className={needHeight ? styles.user : styles.users}>
@@ -85,19 +107,26 @@ const Index = ({
       <div className={needHeight ? styles.operation : styles.operations}>
         {
           postList.map((item, index) => (
-              <div key={index} className={styles.fabulous} onClick={item.event}>
+              <div key={index} className={styles.fabulous} onClick={platform === 'h5' && item.name === '分享' ? handleClick : item.event}>
                 <Icon
                   className={`${styles.icon} ${item.type} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`}
                   name={item.icon}
                   size={16}>
                 </Icon>
-                <span className={isLiked && item.name ===  '赞' ? styles.fabulousCancel: styles.fabulousPost}>
+                <span className={isLiked && item.name ===  '赞' ? styles.fabulousCancel : styles.fabulousPost}>
                   {item.name}
                 </span>
               </div>
           ))
         }
       </div>
+      {show && <MorePopop
+        show={show}
+        fromThread
+        handleH5Share={handleH5Share}
+        onClose={onClose}
+        createCard={createCard}>
+      </MorePopop>}
     </div>
   );
 };

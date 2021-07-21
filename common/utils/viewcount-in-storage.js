@@ -56,7 +56,8 @@ const addViewedThread = (threadId = null, threadIndex) => {
   if(!threadId || !storage) return ;
   threadId += ''; // 统一为字符串
 
-  const viewedObj = JSON.parse(storage.get(STORAGE_KEY));
+  const value = storage.get(STORAGE_KEY) || `{}`
+  const viewedObj = JSON.parse(value);
   const { threads } = viewedObj;
 
   if(!threads) return;

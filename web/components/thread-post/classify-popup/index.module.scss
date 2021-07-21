@@ -73,7 +73,11 @@
     }
     .dzq-button.is-pc {
       margin-right: $margin-4n;
+      margin-bottom: $margin-4n;
     }
+  }
+  &:last-child {
+    border-bottom: 0;
   }
 }
 .popup-content__children {
@@ -88,5 +92,14 @@
     .dzq-button.is-mouseenter {
       @include button-primary-light;
     }
+  }
+}
+.pc {
+  .popup-content {
+    padding-top: $padding-4n;
+    padding-bottom: 0;
+  }
+  .popup-content__children {
+    margin-bottom: 0;
   }
 }

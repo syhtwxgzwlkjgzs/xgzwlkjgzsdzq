@@ -18,6 +18,7 @@
   background-color: $white;
 
   .vditor-reset {
+    overflow: hidden;
     ol {
       list-style-type: decimal;
     }
