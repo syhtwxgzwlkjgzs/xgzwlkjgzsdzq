@@ -115,13 +115,13 @@ export default function DVditor(props) {
         if (vditor && vditor.getValue && vditor.getValue() === '\n' && vditor.getValue() !== value) {
           errorNum = 0;
           html2mdSetValue(value);
-          vditor.vditor[vditor.vditor.currentMode].element.blur();
         }
       } catch (error) {
         console.log(error);
         errorNum += 1;
         if (errorNum <= 5) setEditorInitValue();
       }
+      vditor.vditor[vditor.vditor.currentMode].element.blur();
     }, 300);
   };
 
@@ -248,6 +248,7 @@ export default function DVditor(props) {
           if (!pc && getSelection().rangeCount > 0) {
             getSelection().removeAllRanges();
           }
+          editor.vditor[editor.vditor.currentMode].element.blur();
         },
         focus: (val, e) => {
           // onFocus('focus', e);
