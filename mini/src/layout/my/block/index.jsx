@@ -48,7 +48,7 @@ class Index extends React.Component {
         <List
           height={this.state.height}
           onRefresh={this.loadMore}
-          hasOnScrollToLower={true}
+          hasOnScrollToLower
           noMore={userShieldTotalPage < userShieldPage}
           showLoadingInCenter={!userShield?.length}
         >
