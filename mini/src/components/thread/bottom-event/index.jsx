@@ -67,6 +67,7 @@ const Index = ({
   }, [isLiked]);
   const [ show, setShow ] = useState(false)
   const handleClickShare = () => {
+    updateViewCount();
     // 对没有登录的先登录
     if (!user.isLogin()) {
       Toast.info({ content: '请先登录!' });

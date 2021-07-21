@@ -12,6 +12,7 @@ import isServer from '@common/utils/is-server';
 @inject('index')
 @inject('user')
 @inject('baselayout')
+@inject('vlist')
 @observer
 class Index extends React.Component {
 
@@ -102,6 +103,7 @@ class Index extends React.Component {
     if (type === 'click-filter') { // 点击tab
       this.page = 1;
       this.props.baselayout.setJumpingToTop();
+      this.props.vlist.setPosition(0);
       await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
     } else if (type === 'moreData') {
       this.page += 1;

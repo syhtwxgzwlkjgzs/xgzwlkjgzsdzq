@@ -20,7 +20,6 @@
   }
 }
 .commentSharing {
-  @include cursor-on-pc;
   display: flex;
   .division {
     line-height: rem(24);
