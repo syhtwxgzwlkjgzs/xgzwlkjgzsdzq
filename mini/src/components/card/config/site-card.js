@@ -1,21 +1,20 @@
-import { getHeaderConfig } from './header';
+import { getHeaderConfig } from './site-header';
 import { getFooterConfig } from './footer';
-import { getContentConfig } from './content';
-import { checkAndGetBase64Src } from '../../utils'
+import { getContentConfig } from './site-content';
+import { checkAndGetBase64Src } from '../utils'
 
 const posterFrameWidth = 8;
 const posterWidth = 710 - posterFrameWidth * 2;
 
-const getConfig = async ({ thread, miniCode, siteName }) => {
+const getConfig = async ({ data, miniCode, siteName, user }) => {
   if (!miniCode) {
     return;
   }
-  const codeUrl = await checkAndGetBase64Src(miniCode.base64Img)
-  const { height: headerHeight, config: headerConfig } = getHeaderConfig({ thread });
-  const { height: contentHeight, config: contentConfig } = getContentConfig({ baseHeight: headerHeight, thread });
+  const codeUrl = await miniCode.base64Img ? checkAndGetBase64Src(miniCode.base64Img) : miniCode
+  const { height: headerHeight, config: headerConfig } = await getHeaderConfig({ data, user, siteName });
+  const { height: contentHeight, config: contentConfig } = getContentConfig({ baseHeight: headerHeight, data });
   const { height: footerHeight, config: footerConfig } = getFooterConfig({
     baseHeight: headerHeight + contentHeight,
-    thread,
     codeUrl,
     siteName,
   });
@@ -27,9 +26,9 @@ const getConfig = async ({ thread, miniCode, siteName }) => {
     blocks: [],
     images: [],
     texts: [],
+    lines: [],
   };
-  const config = mergeObj([baseConfig, headerConfig, contentConfig, footerConfig]);
-
+  const config = mergeObj([baseConfig, contentConfig, headerConfig, footerConfig]);
   return config;
 };
 
