@@ -6,18 +6,7 @@ import Spin from '@discuzq/design/dist/components/spin/index';
 import { extensionList, isPromise, noop } from '../utils';
 import { View, Text, Image } from '@tarojs/components';
 import Taro from '@tarojs/taro';
-
-import xlsOutlined from '../../../../../web/public/dzq-img/xls-outlined.png';
-import docOutlined from '../../../../../web/public/dzq-img/doc-outlined.png';
-import pptOutlined from '../../../../../web/public/dzq-img/ppt-outlined.png';
-import zipOutlined from '../../../../../web/public/dzq-img/zip-outlined.png';
-import pdfOutlined from '../../../../../web/public/dzq-img/pdf-outlined.png';
-import textOutlined from '../../../../../web/public/dzq-img/text-outlined.png';
-import videoOutlined from '../../../../../web/public/dzq-img/video-outlined.png';
-import audioOutlined from '../../../../../web/public/dzq-img/audio-outlined.png';
-import imageOutlined from '../../../../../web/public/dzq-img/image-outlined.png';
-import formOutlined from '../../../../../web/public/dzq-img/form-outlined.png';
-import fileOutlined from '../../../../../web/public/dzq-img/file-outlined.png';
+import classnames from 'classnames';
 
 import { throttle } from '@common/utils/throttle-debounce.js';
 
@@ -165,47 +154,47 @@ const Index = ({
     }
   };
 
-  const getIcon = (type) => {
+  const getIconClass = (type) => {
     switch (type) {
       case 'XLS':
       case 'XLSX':
-        return xlsOutlined;
+        return "xlsOutlined";
       case 'DOC':
       case 'DOCX':
-        return docOutlined;
+        return "docOutlined";
       case 'PPT':
       case 'PPTX':
-        return pptOutlined;
+        return "pptOutlined";
       case 'RAR':
       case 'ZIP':
-        return zipOutlined;
+        return "zipOutlined";
       case 'PDF':
-        return pdfOutlined;
+        return "pdfOutlined";
       case 'TXT':
-        return textOutlined;
+        return "textOutlined";
       case 'MP4':
-        return videoOutlined;
+        return "videoOutlined";
       case 'M4A':
       case 'MP3':
-        return audioOutlined;
+        return "audioOutlined";
       case 'PNG':
       case 'JPEG':
-        return imageOutlined;
+        return "imageOutlined";
       case 'FORM':
-        return formOutlined;
+        return "formOutlined";
       default:
         break;
     }
-    return fileOutlined;
+    return "fileOutlined";
   }
 
   const Normal = ({ item, index, type }) => {
-    const iconLink = getIcon(type);
+    const iconClass = getIconClass(type);
     return (
       <View className={styles.container} key={index} onClick={onClick} >
         <View className={styles.wrapper}>
           <View className={styles.left}>
-            <Image className={styles.containerIcon} mode="widthfix" src={iconLink}/>
+            <Image className={classnames(styles.containerIcon, styles[iconClass])} mode="widthfix"/>
             <View className={styles.containerText}>
               <Text className={styles.content}>{item.fileName}</Text>
               <Text className={styles.size}>{handleFileSize(parseFloat(item.fileSize || 0))}</Text>
@@ -227,7 +216,7 @@ const Index = ({
   };
 
   const Pay = ({ item, index, type }) => {
-    const iconLink = getIcon(type);
+    const iconLink = getIconClass(type);
     return (
       <View className={`${styles.container} ${styles.containerPay}`} key={index} onClick={onPay}>
         <Image className={styles.containerIcon} mode="widthfix" src={iconLink}/>
