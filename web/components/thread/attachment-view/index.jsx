@@ -102,7 +102,9 @@ const Index = ({
       const attachmentId = item.id;
       fetchDownloadUrl(threadId, attachmentId, async (url) => {
         setTimeout(() => {
-          h5Share({url: url});
+          if(!h5Share({url: url})) {
+            navigator.clipboard.writeText(url); // qq浏览器不支持异步document.execCommand('Copy')
+          }
           Toast.success({
             content: '链接复制成功',
           });

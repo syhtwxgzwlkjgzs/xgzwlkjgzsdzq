@@ -1,20 +1,5 @@
-// import {deleteDeny} from '@discuzq/sdk/dist/api/user/delete-deny';
-import api from '../api';
+import { updateSingleReply } from '@discuzq/sdk/dist/api/thread/update-singlereply';
 
-export default async function _updateComment(opts, ctx = null) {
-    try {
-        const { params = {}, data = {}, ...others } = opts;
-        const options = {
-            url: '/apiv3/posts.reply', // 请求地址
-            method: 'GET',
-            params,
-            data,
-            __context: ctx,
-            ...others,
-        };
-        const result = await api.http(options);
-        return result;
-    } catch (error) {
-        return error;
-    }
+export default async function _updateSingleReply(opts, ctx = null) {
+  return await updateSingleReply({ ...opts, __context: ctx });
 }

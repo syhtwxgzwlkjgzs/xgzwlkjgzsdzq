@@ -30,6 +30,11 @@ class SiteAction extends SiteStore {
     this.closeSiteConfig = config;
   }
 
+  @action
+  setErrPageType(type) {
+    this.errPageType = type;
+  }
+
   @action.bound
   changeTheme(theme) {
     this.theme = theme;

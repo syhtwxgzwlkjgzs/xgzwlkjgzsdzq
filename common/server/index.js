@@ -11,7 +11,6 @@ export { default as readThreadDetail } from './thread/readThreadDetail';
 export { default as readThreadAttachmentUrl } from './thread/readThreadAttachmentUrl';
 export { default as updateThreads } from './thread/updateThreads';
 export { default as readCommentList } from './thread/readCommentList';
-export { default as readReplyList } from './thread/readReplyList';
 export { default as createPosts } from './thread/createPosts';
 export { default as updateComment } from './thread/updateComment';
 export { default as updateSingleReply } from './thread/updateSingleReply';
