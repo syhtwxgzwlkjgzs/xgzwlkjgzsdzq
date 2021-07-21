@@ -60,12 +60,15 @@ class H5OthersPage extends React.Component {
       return;
     }
 
+    // cdm 周期不触发
+    if (!this.targetUserId) return;
+
     if (String(this.targetUserId) === String(query.id)) return;
     this.targetUserId = query.id;
     if (query.id) {
       this.setState({
         fetchUserInfoLoading: true,
-        fetchUserThreadsLoading: true
+        fetchUserThreadsLoading: true,
       });
       this.props.user.removeTargetUserInfo();
       await this.props.user.getTargetUserInfo(query.id);
@@ -85,9 +88,9 @@ class H5OthersPage extends React.Component {
         const { nickname, avatarUrl, signature, id } = targetUser;
         const title = `${nickname}的主页`;
         const img = avatarUrl;
-        const desc = signature ?
-        (signature.length > 35 ? `${signature.substr(0, 35)}...` : signature) :
-        '在这里，发现更多精彩内容';
+        const desc = signature
+          ? (signature.length > 35 ? `${signature.substr(0, 35)}...` : signature)
+          : '在这里，发现更多精彩内容';
         const link = `${window.location.origin}/user/${id}`;
         setWxShare(title, desc, link, img);
       }
@@ -166,10 +169,10 @@ class H5OthersPage extends React.Component {
             </div>
 
             <div className={styles.threadItemContainer}>
-              {this.formatUserThreadsData(targetUserThreads) &&
-                this.formatUserThreadsData(targetUserThreads).length > 0 && (
+              {this.formatUserThreadsData(targetUserThreads)
+                && this.formatUserThreadsData(targetUserThreads).length > 0 && (
                   <UserCenterThreads data={this.formatUserThreadsData(targetUserThreads)} />
-                )}
+              )}
             </div>
           </div>
         </div>
