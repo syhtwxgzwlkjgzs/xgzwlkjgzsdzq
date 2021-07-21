@@ -33,10 +33,10 @@ const ThreadCard = inject('user', 'card')(observer((props) => {
     isEmpty = true;
   }
   useEffect(() => {
-    if (content?.current?.offsetHeight >= 1900) {
+    if (content?.current?.clientHeight >= 1900) {
       setOverMaxHeight(true);
     }
-  }, [isReady]);
+  }, [content?.current?.clientHeight, isReady]);
   // 处理匿名情况
   if (isAnonymous) {
     nickname = '匿名用户';
