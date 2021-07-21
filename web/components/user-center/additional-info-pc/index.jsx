@@ -2,8 +2,81 @@ import React, { Component } from 'react';
 import styles from './index.module.scss';
 import { Spin, Input, Icon, Dialog, Toast, Button } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
+import additionalInfoData from './test.json';
 
 export default class UserCenterAdditionalInfo extends Component {
+  // 处理单选字段
+  getRadioFieldValue = (data = []) => {
+    let resultValue = data.map((i) => {
+      if (i.checked) {
+        return i.value || '';
+      }
+    });
+    return resultValue;
+  };
+
+  // 处理多选字段
+  getCheckboxFieldValue = (data = []) => {
+    let resultValue = [];
+    data.map((i) => {
+      if (i.checked) {
+        resultValue.push(i.value);
+      }
+    });
+    return resultValue.join('');
+  };
+
+  /**
+   * 渲染每一条item
+   * type 0 文本| 1 多行文本|2 单选|3 多选|4 图片|5 附件
+   */
+  renderAdditionalItem = (item) => {
+    const { type, fieldsExt = [] } = item;
+    switch (type) {
+      case 0:
+        return <div className={`${styles.additionValue} ${styles.singleText}`}>{item.fieldsExt}</div>;
+        break;
+      case 1:
+        return <div className={styles.additionValue}>{item.fieldsExt}</div>;
+        break;
+      case 2:
+        return <div className={styles.additionValue}>{this.getRadioFieldValue(fieldsExt)}</div>;
+        break;
+      case 3:
+        return (
+          <div className={styles.checkboxValue}>
+            {fieldsExt.map((d) => {
+              return <div className={styles.additionValue}>{d.value}</div>;
+            })}
+          </div>
+        );
+        break;
+      case 4:
+        return (
+          <div className={styles.cardItem}>
+            {fieldsExt.map((d, i) => {
+              return (
+                <div className={`${styles.identityCard} ${i != fieldsExt.length - 1 && styles.identityCardBottom}`}>
+                  <img src={d.url} className={styles.identityImg} />
+                </div>
+              );
+            })}
+          </div>
+        );
+        break;
+      case 5:
+        return (
+          <div className={styles.additionValue}>
+            <Icon size={16} color={'#8490A8'} name="PaperClipOutlined" />
+            <span className={styles.additionFile}>附件已上传</span>
+          </div>
+        );
+        break;
+      default:
+        break;
+    }
+  };
+
   render() {
     return (
       <div className={styles.additionalWrapper}>
@@ -16,37 +89,17 @@ export default class UserCenterAdditionalInfo extends Component {
             </div>
             {/* 内容区域 */}
             <div className={styles.additionalContent}>
-              <div className={styles.additionItem}>
-                <div className={styles.additionLabel}>真实姓名</div>
-                <div className={styles.additionValue}>xxx</div>
-              </div>
-              <div className={styles.additionItem}>
-                <div className={styles.additionLabel}>性别</div>
-                <div className={styles.additionValue}>女</div>
-              </div>
-              <div className={styles.additionItem}>
-                <div className={styles.additionLabel}>注册原因</div>
-                <div className={styles.additionValue}>xxxxxxxxxxxxxxxxxxxxxxxxxxxx</div>
-              </div>
-              <div className={`${styles.additionItem} ${styles.additionIdentityCard}`}>
-                <div className={styles.additionLabel}>身份证</div>
-                <div className={styles.cardItem}>
-                  {/* <img /> */}
-                  <div className={styles.identityCard}>
-                    <span className={styles.iCardText}>身份证正面照</span>
+              {additionalInfoData.map((item) => {
+                return (
+                  <div
+                    className={`${styles.additionItem} ${item.type === 4 && styles.additionIdentityCard}`}
+                    style={{ alignItems: (item.type === 1 || item.type === 3) && 'flex-start' }}
+                  >
+                    <div className={styles.additionLabel}>{item.name}</div>
+                    {this.renderAdditionalItem(item)}
                   </div>
-                  <div className={styles.identityCard}>
-                    <span className={styles.iCardText}>身份证正面照</span>
-                  </div>
-                </div>
-              </div>
-              <div className={styles.additionItem}>
-                <div className={styles.additionLabel}>体检资质证明</div>
-                <div className={styles.additionValue}>
-                  <Icon size={16} color={'#8490A8'} name="PaperClipOutlined" />
-                  <span className={styles.additionFile}>附件已上传</span>
-                </div>
-              </div>
+                );
+              })}
             </div>
             {/* 提示 */}
             <p className={styles.additionTips}>

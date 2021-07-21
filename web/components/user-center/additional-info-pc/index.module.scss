@@ -8,12 +8,31 @@
       border-radius: rem(var(--border-radius-small));
       background: $white;
       box-sizing: border-box;
-      padding: rem($padding-6n);
+      padding: 0;
+      margin-right: 4px;
+      overflow-y: auto;
+      &::-webkit-scrollbar {
+        display: block;
+        width: rem(4);
+        border-radius: $border-radius-small;
+      }
+      // 滚动条轨道
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      // 滚动条上的滚动滑块
+      &::-webkit-scrollbar-thumb {
+        background: $border-shadow-color;
+        border-radius: rem(4);
+      }
     }
     .dzq-modal__body {
-      padding: 0;
+      padding: rem($padding-6n);
     }
   }
+}
+
+.additionalContent {
 }
 
 .additionalContainer {
@@ -38,32 +57,44 @@
     padding: rem($padding-4n) 0;
     border-bottom: var(--border-border);
     .additionLabel {
+      flex-shrink: 0;
       color: $text-color-regular;
       height: rem(20);
       line-height: rem(20);
+      margin-right: rem(46);
     }
     .additionValue {
       color: $text-color-primary;
-      height: rem(20);
+      min-height: rem(20);
       line-height: rem(20);
       .additionFile {
         margin-left: rem($margin-1n);
       }
+    }
+    .checkboxValue {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+    .singleText {
+      @include text-ellipsis();
     }
   }
   .additionIdentityCard {
     flex-direction: column;
     .additionLabel {
       align-self: flex-start;
+      flex-shrink: 0;
     }
     .cardItem {
       display: flex;
       justify-content: space-between;
+      flex-direction: column;
       margin-top: rem($margin-4n);
     }
     .identityCard {
-      width: rem(166);
-      height: rem(104);
+      width: rem(343);
+      height: rem(215);
       border-radius: rem(5);
       background: #eee;
       position: relative;
@@ -76,8 +107,13 @@
         color: $text-color-regular;
       }
     }
-    .identityCard:nth-child(1) {
-      margin-right: rem($margin-5n);
+    .identityImg {
+      width: rem(343);
+      height: rem(215);
+      border-radius: rem(5);
+    }
+    .identityCardBottom {
+      margin-bottom: rem($margin-5n);
     }
   }
   .additionTips {
