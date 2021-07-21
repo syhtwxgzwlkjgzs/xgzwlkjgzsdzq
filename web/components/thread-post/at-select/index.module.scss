@@ -318,6 +318,20 @@
     .avatar {
       width: 24px !important;
       height: 24px !important;
+      :global {
+        .dzq-avatar {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: $font-size-label;
+        }
+        .dzq-avatar__text {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          line-height: 1;
+        }
+      }
     }
   }
 
