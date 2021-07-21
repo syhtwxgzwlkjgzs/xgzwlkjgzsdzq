@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
-import Audio from '@discuzq/design/dist/components/audio/index';
+import AudioPlayer from '@discuzq/design/dist/components/audio-player/index';
 import { noop } from '../utils';
 import { View, Image } from '@tarojs/components'
 import Taro from '@tarojs/taro';
@@ -42,6 +42,7 @@ const Index = ({ isPay = false, url, onPay = noop, baselayout, updateViewCount =
       baselayout.playingAudioWrapperId = audioWrapperRef.current.uid;
     }
   };
+
   return (
     <View className={styles.container}>
       {
@@ -49,7 +50,7 @@ const Index = ({ isPay = false, url, onPay = noop, baselayout, updateViewCount =
           <View className={styles.wrapper}>
             <Image src={parAudioImg} className={styles.payBox} onClick={onPay}></Image>
           </View>
-        ) : <View ref={audioWrapperRef}><Audio src={url} onPlay={onPlay} disabled={!url} ref={audioRef}/></View>
+        ) : <View ref={audioWrapperRef}><AudioPlayer src={url} onPlay={onPlay} disabled={!url} ref={audioRef}/></View>
       }
     </View>
   );

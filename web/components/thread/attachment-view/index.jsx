@@ -158,7 +158,6 @@ const Index = ({
   };
 
   const onAudioPlay = file => {
-
   };
 
   // 文件是否可预览
@@ -212,7 +211,7 @@ const Index = ({
             <div>
               { downloading[index] ?
                   <Spin className={styles.spinner} type="spinner" /> :
-                  <span className={styles.span} onClick={throttle(() => onDownLoad(item, index), 1000)}>下载</span>
+                  <span className={styles.span} onClick={throttle(() => onDownload(item, index), 1000)}>下载</span>
               }
             </div>
           </div>

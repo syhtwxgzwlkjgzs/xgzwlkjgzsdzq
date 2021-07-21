@@ -7,10 +7,11 @@ import { extensionList, isPromise, noop } from '../utils';
 import { View, Text, Image } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import classnames from 'classnames';
+import AudioPlayer from '@discuzq/design/dist/components/audio-player/index';
 
 import { throttle } from '@common/utils/throttle-debounce.js';
 
-
+import { AUDIO_FORMAT } from '@common/constants/thread-post';
 
 /**
  * 附件
@@ -72,7 +73,7 @@ const Index = ({
   const [downloading, setDownloading] =
         useState(Array.from({length: attachments.length}, () => false));
 
-  const onDownLoad = (item, index) => {
+  const onDownload = (item, index) => {
     updateViewCount();
     if (!isPay) {
 
@@ -188,7 +189,24 @@ const Index = ({
     return "fileOutlined";
   }
 
+  // 音频文件判断
+  const isAudioPlayable = (file) => {
+    return AUDIO_FORMAT.includes(file?.extension?.toUpperCase());
+  };
+
   const Normal = ({ item, index, type }) => {
+    if (isAudioPlayable(item)) {
+      const { url, fileName } = item;
+      const fileSize = handleFileSize(parseFloat(item.fileSize || 0));
+
+      return (
+        <View className={styles.audioPlayer}>
+          <AudioPlayer src={url} fileName={fileName} fileSize={fileSize} onDownload={throttle(() => onDownload(item, index), 1000)} onLink={throttle(() => onLinkShare(item), 1000)} />
+        </View>
+      );
+    }
+
+
     const iconClass = getIconClass(type);
     return (
       <View className={styles.container} key={index} onClick={onClick} >
@@ -206,7 +224,7 @@ const Index = ({
             <View className={styles.label}>
               { downloading[index] ?
                 <Spin className={styles.spinner} type="spinner" /> :
-                <Text onClick={throttle(() => onDownLoad(item, index), 1000)}>下载</Text>
+                <Text onClick={throttle(() => onDownload(item, index), 1000)}>下载</Text>
               }
             </View>
           </View>
