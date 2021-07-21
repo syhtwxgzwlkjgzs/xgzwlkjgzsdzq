@@ -245,9 +245,14 @@ export default function DVditor(props) {
           editor.setValue('');
           setEditorInitValue();
           // 去掉异步渲染之后的光标focus
-          if (!pc && getSelection().rangeCount > 0) getSelection().removeAllRanges();
+          if (!pc && getSelection().rangeCount > 0) {
+            getSelection().removeAllRanges();
+            bubbleBarHidden();
+          }
         },
-        focus: () => {},
+        focus: (val, e) => {
+          onFocus('focus', e);
+        },
         input: () => {
           setIsFocus(false);
           onInput(editor);
