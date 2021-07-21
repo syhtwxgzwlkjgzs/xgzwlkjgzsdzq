@@ -202,7 +202,7 @@ function avatar(props) {
       return (
         <div className={styles.userInfoBox} style={direction === 'left' ? { right: 0 } : { left: 0 }}>
           <div className={styles.userInfoContent}>
-            <LoadingBox style={{ minHeight: '200px'}} />
+            <LoadingBox style={{ minHeight: '205px'}} />
           </div>
         </div>
       );
