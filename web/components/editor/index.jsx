@@ -245,13 +245,13 @@ export default function DVditor(props) {
           editor.setValue('');
           setEditorInitValue();
           // 去掉异步渲染之后的光标focus
+          editor.vditor[editor.vditor.currentMode].element.blur();
           if (!pc && getSelection().rangeCount > 0) {
             getSelection().removeAllRanges();
           }
-          editor.vditor[editor.vditor.currentMode].element.blur();
         },
         focus: (val, e) => {
-          // onFocus('focus', e);
+          onFocus('focus', e);
         },
         input: () => {
           setIsFocus(false);
