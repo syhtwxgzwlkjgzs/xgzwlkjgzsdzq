@@ -4,6 +4,7 @@ import HOCUserInfo from '@middleware/HOCUserInfo';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import ViewAdapter from '@components/view-adapter';
 import { inject, observer } from 'mobx-react';
+import Redirect from '@components/redirect';
 
 @inject('site')
 @observer
@@ -16,8 +17,10 @@ class EditPwdPage extends React.Component {
             <UserCenterEditAccountPwd />
           </div>
         }
-        pc={null}
-        title={`设置密码`}
+        pc={
+          <Redirect jumpUrl={'/my/edit'} />
+        }
+        title={'设置密码'}
       />
     );
   }

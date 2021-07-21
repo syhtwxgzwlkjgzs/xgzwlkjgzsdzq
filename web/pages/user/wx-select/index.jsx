@@ -2,6 +2,7 @@ import React from 'react';
 import WXSelectH5Page from '@layout/user/h5/wx-select';
 import { inject } from 'mobx-react';
 import ViewAdapter from '@components/view-adapter';
+import Redirect from '@components/redirect';
 
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import HOCLoginMode from '@middleware/HOCLoginMode';
@@ -12,8 +13,10 @@ class WXSelect extends React.Component {
   render() {
     return <ViewAdapter
               h5={<WXSelectH5Page/>}
-              pc={<></>}
-              title='微信绑定'
+              pc={
+                <Redirect jumpUrl={'/user/login'} />
+              }
+              title={`微信绑定 - ${this.props.site?.siteName}`}
             />;
   }
 }
