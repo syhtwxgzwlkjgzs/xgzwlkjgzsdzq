@@ -1,5 +1,5 @@
 import React from 'react';
-import RebindAuthorizationPage from '@layout/user/h5/rebind-authorization';
+import WXAuthorizationPage from '@layout/user/h5/rebind-authorization';
 import { inject } from 'mobx-react';
 import ViewAdapter from '@components/view-adapter';
 
@@ -7,10 +7,10 @@ import HOCLoginMode from '@middleware/HOCLoginMode';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
 @inject('site')
-class Authorization extends React.Component {
+class WXAuthorization extends React.Component {
   render() {
     return <ViewAdapter
-              h5={<RebindAuthorizationPage/>}
+              h5={<WXAuthorizationPage/>}
               pc={<></>}
               title={`换绑授权 - ${this.props.site?.siteName}`}
             />;
@@ -18,4 +18,4 @@ class Authorization extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(HOCLoginMode('weixin')(Authorization));
+export default HOCFetchSiteData(HOCLoginMode('weixin')(WXAuthorization));
