@@ -47,7 +47,8 @@ class Index extends React.Component {
     }
 
     this.state = {
-      stepIndex: 0
+      stepIndex: 0,
+      isClick: false
     }
   }
 
@@ -85,7 +86,9 @@ class Index extends React.Component {
       }
     }
 
-    this.setState({ stepIndex })
+    this.setState({ stepIndex, isClick: true }, () => {
+      this.setState({ isClick: false })
+    })
   }
 
   dispatch = async (type, data = '') => {
@@ -105,7 +108,7 @@ class Index extends React.Component {
     return (
       <ViewAdapter
         h5={<IndexH5Page dispatch={this.dispatch} />}
-        pc={ <IndexPCPage dispatch={this.dispatch} stepIndex={this.state.stepIndex}  />}
+        pc={ <IndexPCPage dispatch={this.dispatch} stepIndex={this.state.stepIndex} isClick={this.state.isClick}  />}
         title='发现'
       />
     );
