@@ -15,8 +15,7 @@ import { getParamCode, getUserProfile } from '../../../subPages/user/common/util
 // const MemoToastProvider = React.memo(ToastProvider);
 
 @inject('site')
-@inject('miniBind')
-@inject('h5QrCode')
+@inject('user')
 @inject('commonLogin')
 @observer
 class WXRebindActionPage extends Component {
@@ -24,17 +23,41 @@ class WXRebindActionPage extends Component {
     super(props);
     this.state = {
       currentStatus: '',
-      statusInfo: {
-        success: '扫码成功',
-        error: '扫码失败'
-      }
+      errorTips: '扫码失败',
     };
   }
+  getUserProfileCallback = async (params) => {
+    const { scene: sessionToken } = getCurrentInstance().router.params;
+
+    try {
+      const { user, commonLogin } = this.props;
+      await getParamCode(commonLogin);
+      await user.rebindWechatMini({
+        jsCode: commonLogin.jsCode,
+        iv: params.iv,
+        encryptedData: params.encryptedData,
+        sessionToken,
+      });
+      this.setState({
+        currentStatus: 'success'
+      });
+    } catch (e) {
+      this.setState({
+        currentStatus: 'error',
+        errorTips: e.Message || '扫码失败'
+      });
+      Toast.error({
+        content: e.Message || '扫码失败',
+        hasMask: false,
+        duration: 1000,
+      });
+    }
+  }
+
 
   render() {
-    const { commonLogin } = this.props;
-    const { currentStatus, statusInfo } = this.state;
-    const { nickname = '' } = getCurrentInstance()?.router?.params || commonLogin;
+    const { currentStatus, errorTips } = this.state;
+    const { nickname = '微信用户', avatarUrl = '' } = getCurrentInstance()?.router?.params || {};
     if (currentStatus) {
       return (
         <Page>
@@ -43,7 +66,7 @@ class WXRebindActionPage extends Component {
             <View className={`${styles.content} ${styles.statusContent}` }>
                 { currentStatus === 'success' && <Icon color='#3AC15F' name="SuccessOutlined" size={80} className={styles.statusIcon} /> }
                 { currentStatus === 'error' && <Icon color='#E02433' name="WrongOutlined" size={80} className={styles.statusIcon} /> }
-                <Text className={styles.statusBottom}>{ currentStatus && (currentStatus === 'success' ? statusInfo.success : statusInfo.error) }</Text>
+                <Text className={styles.statusBottom}>{ currentStatus && (currentStatus === 'success' ? '扫码成功' : errorTips) }</Text>
             </View>
           </View>
         </Page>
@@ -57,20 +80,16 @@ class WXRebindActionPage extends Component {
           <View className={styles.content}>
             <View className={styles.title}>确认换绑微信</View>
             <View className={styles.tips}>
-              <View style={{display: 'flex' }}>亲爱的，<Avatar style={{margin: '0 8px'}} circle size='small' image={commonLogin.avatarUrl}/>{nickname}</View>
+              <View style={{display: 'flex' }}>亲爱的，<Avatar style={{margin: '0 8px'}} circle size='small' image={avatarUrl}/>{nickname}</View>
               <View>确认换绑微信？</View>
             </View>
-            {
-              this.props.h5QrCode.isBtn
-              ? <Button
+            <Button
                 className={styles.button}
                 type="primary"
-                onClick={() => {}}
+                onClick={() => {getUserProfile(this.getUserProfileCallback)}}
               >
-                确认
-              </Button>
-              : <></>
-            }
+              确认
+            </Button>
           </View>
         </View>
       </Page>

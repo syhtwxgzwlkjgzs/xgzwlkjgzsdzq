@@ -1068,7 +1068,7 @@ class UserAction extends SiteStore {
     sessionToken,
   }) => {
     try {
-      const miniRebindResp = await h5Rebind({
+      const miniRebindResp = await miniRebind({
         data: {
           jsCode,
           iv,

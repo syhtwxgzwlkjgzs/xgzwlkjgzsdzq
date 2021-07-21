@@ -9,8 +9,6 @@ import WeixinQrCode from '@components/login/wx-qr-code';
 import { get } from '@common/utils/get';
 import Router from '@discuzq/sdk/dist/router';
 import PcBodyWrap from '../components/pc-body-wrap';
-import { BANNED_USER, REVIEWING, REVIEW_REJECT, isExtFieldsOpen } from '@common/store/login/util';
-import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 
 @inject('site')
 @inject('user')
@@ -45,7 +43,7 @@ class RebindPage extends React.Component {
     try {
       const { wechatEnv } = this.props.site;
       const { user } = this.props;
-      const redirectUri = `${wechatEnv === 'miniProgram' ? '/subPages/user/wx-rebind-action/index' : `${window.location.origin}/user/wx-rebind-action`}`;
+      const redirectUri = `${wechatEnv === 'miniProgram' ? '/subPages/user/wx-rebind-action/index' : `${window.location.origin}/user/wx-rebind-action?avatarUrl=${user.avatarUrl}&nickname=${user.nickname}`}`;
       await user.genRebindQrCode({
         scanSuccess: this.scanSuccess,
         scanFail: this.scanFail,

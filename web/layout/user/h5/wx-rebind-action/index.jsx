@@ -22,12 +22,11 @@ class WXRebindActionPage extends React.Component {
     try {
       const { router, user } = this.props;
       const { code, sessionId, sessionToken } = router.query;
-      const resp = await user.rebindWechatH5({
+      await user.rebindWechatH5({
         code,
         sessionId,
         sessionToken,
       });
-      console.log(resp)
       this.setState({
         currentStatus: 'success'
       });
