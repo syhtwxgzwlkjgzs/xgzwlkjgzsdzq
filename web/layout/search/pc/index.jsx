@@ -89,13 +89,12 @@ class SearchPCPage extends React.Component {
   }
 
   itemClick = (index) => {
-    const { hasTopics, hasUsers, hasThreads, isShowAll } = this.getStatus()
+    const { hasTopics, hasUsers, hasThreads, isShowAll } = this.props.search.dataIndexStatus
 
     const disableClickTopic = !hasTopics && !isShowAll && index === 0
     const disableClickUser = !hasUsers && !isShowAll && index === 1
     const disableClickThread = !hasThreads && !isShowAll && index === 2
     if (disableClickTopic || disableClickUser || disableClickThread) {
-      console.log(123);
       return
     }
 
@@ -118,10 +117,11 @@ class SearchPCPage extends React.Component {
     }
     scrollTo = pos + parseInt(HEADER_HEIGHT / 2) - STEPPER_PADDING;
 
-    const stepIndex = this.state.stepIndex;
+    const stepIndex = this.props.stepIndex;
     if (stepIndex !== index) {
       this.setState({position: scrollTo});
-      this.setState({stepIndex: index});
+      // this.setState({stepIndex: index});
+      this.props.dispatch('update-step-index', index)
     }
   }
 
@@ -132,13 +132,16 @@ class SearchPCPage extends React.Component {
 
     const { topicHeight, userHeight, totalHeight } = this.getDivHeight()
 
-    if (scrollTop < topicHeight - 24) {
-      this.setState({ stepIndex: 0 })
-    } else if (scrollTop < topicHeight + userHeight - 24) {
-      this.setState({ stepIndex: 1 })
-    } else if (scrollTop < totalHeight - 24) {
-      this.setState({ stepIndex: 2 })
+    let stepIndex = 0
+    if (scrollTop < topicHeight + 12) {
+      stepIndex = 0
+    } else if (scrollTop < topicHeight + userHeight + 12) {
+      stepIndex = 1
+    } else if (scrollTop < totalHeight + 12) {
+      stepIndex = 2
     }
+
+    this.props.dispatch('update-step-index', stepIndex)
 
     // 滑动之后，重置position
     this.setState({position: -1});
@@ -232,7 +235,7 @@ class SearchPCPage extends React.Component {
   }
 
   renderContent = () => {
-    const { hasTopics, hasUsers, hasThreads, isShowAll } = this.getStatus()
+    const { hasTopics, hasUsers, hasThreads, isShowAll } = this.props.search.dataIndexStatus
 
     return (
       <div className={styles.searchContent}>
@@ -241,23 +244,6 @@ class SearchPCPage extends React.Component {
         { (isShowAll || hasThreads) && this.renderContentHotThread() }
       </div>
     )
-  }
-
-  // 获取数据状态
-  getStatus = () => {
-    const { indexTopics, indexUsers, indexThreads } = this.props.search;
-    const { pageData: topicsPageData } = indexTopics || {};
-    const { pageData: usersPageData } = indexUsers || {};
-    const { pageData: threadsPageData } = indexThreads || {};
-
-    const hasTopics = !!(topicsPageData?.length)
-    const hasUsers = !!(usersPageData?.length)
-    const hasThreads = !!(threadsPageData?.length)
-
-    // 都没有值，或者都有值，则显示全部
-    const isShowAll = (!hasTopics && !hasUsers && !hasThreads) || (hasTopics && hasUsers && hasThreads)
-
-    return { hasTopics, hasUsers, hasThreads, isShowAll }
   }
 
   // 获取各模块的高度

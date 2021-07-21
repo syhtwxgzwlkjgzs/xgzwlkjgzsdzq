@@ -59,7 +59,7 @@ class Index extends React.Component {
 
     if (platform === 'pc') {
       await search.getSearchData({ hasTopics: false, hasUsers: false, hasThreads: false, search: keyword });
-      this.getStatus()
+      this.setStepIndex()
     } else {
       const hasIndexTopics = !!search.indexTopics;
       const hasIndexUsers = !!search.indexUsers;
@@ -69,18 +69,8 @@ class Index extends React.Component {
   }
 
   // 获取数据状态
-  getStatus = () => {
-    const { indexTopics, indexUsers, indexThreads } = this.props.search;
-    const { pageData: topicsPageData } = indexTopics || {};
-    const { pageData: usersPageData } = indexUsers || {};
-    const { pageData: threadsPageData } = indexThreads || {};
-
-    const hasTopics = false
-    const hasUsers = !!(usersPageData?.length)
-    const hasThreads = !!(threadsPageData?.length)
-
-    // 都没有值，或者都有值，则显示全部
-    const isShowAll = (!hasTopics && !hasUsers && !hasThreads) || (hasTopics && hasUsers && hasThreads)
+  setStepIndex = () => {
+    const { hasTopics, hasUsers, isShowAll } = this.props.search.dataIndexStatus
 
     let stepIndex = 0
     if (isShowAll) {
@@ -104,7 +94,8 @@ class Index extends React.Component {
     if (type === 'refresh') {
       search.getSearchData({ hasTopics: false, hasUsers: false, hasThreads: false });
     } else if (type === 'search') {
-      search.getSearchData({ search: data });
+      await search.getSearchData({ search: data });
+      this.setStepIndex()
     } else if (type === 'update-step-index') {
       this.setState({ stepIndex: data || 0 })
     }

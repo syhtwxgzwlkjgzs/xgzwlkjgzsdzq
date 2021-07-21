@@ -1,4 +1,4 @@
-import { action } from 'mobx';
+import { action, computed } from 'mobx';
 import SearchStore from './store';
 import { readTopicsList, readUsersList, readThreadList, createFollow, deleteFollow } from '../../server';
 import typeofFn from '@common/utils/typeof';
@@ -52,6 +52,40 @@ class SearchAction extends SearchStore {
   @action
   setSearchThreads(data) {
     this.searchThreads = data;
+  }
+
+  // 获取数据状态 - 仅用于PC端
+  @computed get dataIndexStatus() {
+    const { indexTopics, indexUsers, indexThreads } = this;
+    const { pageData: topicsPageData } = indexTopics || {};
+    const { pageData: usersPageData } = indexUsers || {};
+    const { pageData: threadsPageData } = indexThreads || {};
+
+    const hasTopics = !!(topicsPageData?.length)
+    const hasUsers = !!(usersPageData?.length)
+    const hasThreads = !!(threadsPageData?.length)
+
+    // 都没有值，或者都有值，则显示全部
+    const isShowAll = (!hasTopics && !hasUsers && !hasThreads) || (hasTopics && hasUsers && hasThreads)
+
+    return { hasTopics, hasUsers, hasThreads, isShowAll }
+  }
+
+  // 获取数据状态 - 用于小程序和H5
+  @computed get dataSearchStatus() {
+    const { searchTopics, searchUsers, searchThreads } = this;
+    const { pageData: topicsPageData } = searchTopics || {};
+    const { pageData: usersPageData } = searchUsers || {};
+    const { pageData: threadsPageData } = searchThreads || {};
+
+    const hasTopics = !!(topicsPageData?.length)
+    const hasUsers = !!(usersPageData?.length)
+    const hasThreads = !!(threadsPageData?.length)
+
+    // 都没有值，或者都有值，则显示全部
+    const isShowAll = (!hasTopics && !hasUsers && !hasThreads) || (hasTopics && hasUsers && hasThreads)
+
+    return { hasTopics, hasUsers, hasThreads, isShowAll }
   }
 
   /**
@@ -108,9 +142,30 @@ class SearchAction extends SearchStore {
       newPerPage = 3;
       topicFilter.hot = 0;
     }
-  
+
+    let tasks = []
     if ( !hasTopics ) {
-      const res = await readTopicsList({ params: { filter: topicFilter, perPage: newPerPage, page: 1 } })
+      tasks.push(readTopicsList({ params: { filter: topicFilter, perPage: newPerPage, page: 1 } }))
+    } else {
+      tasks.push(Promise.resolve({}))
+    }
+
+    if ( !hasUsers ) {
+      tasks.push(readUsersList({ params: { filter: { hot: 1, nickname: search }, perPage: newPerPage, page: 1 } }))
+    } else {
+      tasks.push(Promise.resolve({}))
+    }
+
+    if ( !hasThreads ) {
+      tasks.push(readThreadList({ params: { filter: { sort: '3', search }, perPage: newPerPage, page: 1 } }))
+    } else {
+      tasks.push(Promise.resolve({}))
+    }
+
+    const result = await Promise.all(tasks)
+
+    if ( !hasTopics ) {
+      const res = result[0]
        
       const { code, data, msg } = res;
       if (code !== 0) {
@@ -125,7 +180,7 @@ class SearchAction extends SearchStore {
     }
 
     if ( !hasUsers ) {
-      const res = await readUsersList({ params: { filter: { hot: 1, nickname: search }, perPage: newPerPage, page: 1 } })
+      const res = result[1]
        
       const { code, data, msg } = res;
       if (code !== 0) {
@@ -140,7 +195,7 @@ class SearchAction extends SearchStore {
     }
 
     if ( !hasThreads ) {
-      const res = await readThreadList({ params: { filter: { sort: '3', search }, perPage: newPerPage, page: 1 } })
+      const res = result[2]
         
       const { code, data, msg } = res;
       if (code !== 0) {
@@ -153,13 +208,13 @@ class SearchAction extends SearchStore {
 
       type === 0 ? this.setIndexThreads(code === 0 ? data : {}) : this.setSearchThreads(code === 0 ? data : {});
 
-      this.getThreadListAgain({ firstRes: data, search, type })
+      await this.getThreadListAgain({ firstRes: data, search, type })
     }
   };
 
   // 如果热门内容数量不够，需要再请求
   @action
-  getThreadListAgain({ firstRes, search, type }) {
+  async getThreadListAgain({ firstRes, search, type }) {
     const ids = firstRes.pageData.map(item => item.threadId)
 
     // 发现页的最多展示10条数据，发现结果页最多展示3条数据
@@ -168,25 +223,24 @@ class SearchAction extends SearchStore {
       return
     }
     
-    readThreadList({ params: { filter: { sort: '4', search, repeatedIds: ids }, perPage: 10, page: 1 } })
-    .then((res) => {
-      const { code, data, msg } = res;
-      if (code !== 0) {
-        if (type === 0) {
-          this.indexThreadsError = { isError: true, errorText: msg || '加载失败' }
-        } else {
-          this.searchThreadsError = { isError: true, errorText: msg || '加载失败' }
-        }
+    const res = await readThreadList({ params: { filter: { sort: '4', search, repeatedIds: ids }, perPage: 10, page: 1 } })
 
-        return
+    const { code, data, msg } = res;
+    if (code !== 0) {
+      if (type === 0) {
+        this.indexThreadsError = { isError: true, errorText: msg || '加载失败' }
+      } else {
+        this.searchThreadsError = { isError: true, errorText: msg || '加载失败' }
       }
 
-      const pageData = [...firstRes.pageData, ...data.pageData]
+      return
+    }
 
-      const newData = {...data, pageData }
+    const pageData = [...firstRes.pageData, ...data.pageData]
 
-      type === 0 ? this.setIndexThreads(code === 0 ? newData : {}) : this.setSearchThreads(code === 0 ? newData : {});
-    })
+    const newData = {...data, pageData }
+
+    type === 0 ? this.setIndexThreads(code === 0 ? newData : {}) : this.setSearchThreads(code === 0 ? newData : {});
 }
 
   /**
