@@ -1,4 +1,6 @@
 @import '@common/styles/index.scss';
+@import '@common/styles/base64/attachment-icons.scss';
+
 .wrapper {
   :last-child {
     margin-bottom: 0;
@@ -58,10 +60,44 @@
     line-height: 17px;
   }
   .containerIcon {
+    background-size: 20px;
     color: $success-color;
     font-size: 20px;
-    width: 19px;
+    width: 20px;
     height: 20px;
+    &.xlsOutlined {
+      background-image: $xls-outlined-icon;
+    }
+    &.docOutlined {
+      background-image: $doc-outlined-icon;
+    }
+    &.pptOutlined {
+      background-image: $ppt-outlined-icon;
+    }
+    &.zipOutlined {
+      background-image: $zip-outlined-icon;
+    }
+    &.pdfOutlined {
+      background-image: $pdf-outlined-icon;
+    }
+    &.textOutlined {
+      background-image: $text-outlined-icon;
+    }
+    &.videoOutlined {
+      background-image: $video-outlined-icon;
+    }
+    &.audioOutlined {
+      background-image: $audio-outlined-icon;
+    }
+    &.imageOutlined {
+      background-image: $image-outlined-icon;
+    }
+    &.formOutlined {
+      background-image: $form-outlined-icon;
+    }
+    &.fileOutlined {
+      background-image: $file-outlined-icon;
+    }
   }
   .content {
     color: $text-color-primary;

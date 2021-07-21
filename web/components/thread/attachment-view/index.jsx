@@ -5,6 +5,7 @@ import { extensionList, isPromise, noop } from '../utils';
 import { throttle } from '@common/utils/throttle-debounce.js';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import isWeiXin from '@common/utils/is-weixin';
+import classnames from 'classnames';
 
 import styles from './index.module.scss';
 
@@ -114,47 +115,47 @@ const Index = ({
     }
   };
 
-  const getIcon = (type) => {
+  const getIconClass = (type) => {
     switch (type) {
       case 'XLS':
       case 'XLSX':
-        return '/dzq-img/xls-outlined.png';
+        return "xlsOutlined";
       case 'DOC':
       case 'DOCX':
-        return '/dzq-img/doc-outlined.png';
+        return "docOutlined";
       case 'PPT':
       case 'PPTX':
-        return '/dzq-img/ppt-outlined.png';
+        return "pptOutlined";
       case 'RAR':
       case 'ZIP':
-        return '/dzq-img/zip-outlined.png';
+        return "zipOutlined";
       case 'PDF':
-        return '/dzq-img/pdf-outlined.png';
+        return "pdfOutlined";
       case 'TXT':
-        return '/dzq-img/text-outlined.png';
+        return "textOutlined";
       case 'MP4':
-        return '/dzq-img/video-outlined.png';
+        return "videoOutlined";
       case 'M4A':
       case 'MP3':
-        return '/dzq-img/audio-outlined.png';
+        return "audioOutlined";
       case 'PNG':
       case 'JPEG':
-        return '/dzq-img/audio-outlined.png';
+        return "imageOutlined";
       case 'FORM':
-        return '/dzq-img/form-outlined.png';
+        return "formOutlined";
       default:
         break;
     }
-    return '/dzq-img/file-outlined.png';
+    return "fileOutlined";
   }
 
   const Normal = ({ item, index, type }) => {
-    const iconLink = getIcon(type);
+    const iconClass = getIconClass(type);
     return (
       <div className={styles.container} key={index} onClick={onClick} >
         <div className={styles.wrapper}>
           <div className={styles.left}>
-            <img className={styles.containerIcon} src={iconLink} />
+            <div className={classnames(styles.containerIcon, styles[iconClass])} />
             <div className={styles.containerText}>
               <span className={styles.content}>{item.fileName}</span>
               <span className={styles.size}>{handleFileSize(parseFloat(item.fileSize || 0))}</span>
@@ -176,7 +177,7 @@ const Index = ({
   };
 
   const Pay = ({ item, index, type }) => {
-    const iconLink = getIcon(type);
+    const iconLink = getIconClass(type);
     return (
       <div className={`${styles.container} ${styles.containerPay}`} key={index} onClick={onPay}>
         <img className={styles.containerIcon} src={iconLink} />
