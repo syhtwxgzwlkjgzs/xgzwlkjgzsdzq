@@ -201,8 +201,8 @@ function avatar(props) {
     if (userInfo === 'padding') {
       return (
         <div className={styles.userInfoBox} style={direction === 'left' ? { right: 0 } : { left: 0 }}>
-          <div className={classNames(styles.userInfoContent, isSameWithMe ? styles.myContent : "")}>
-            <LoadingBox style={{ minHeight: '200px'}} />
+          <div className={styles.userInfoContent}>
+            <LoadingBox style={{ minHeight: '205px'}} />
           </div>
         </div>
       );
