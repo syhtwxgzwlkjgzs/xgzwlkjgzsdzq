@@ -33,7 +33,7 @@ const ThreadCard = inject('user', 'card')(observer((props) => {
     isEmpty = true;
   }
   useEffect(() => {
-    if (content.current && content.current.offsetHeight >= 1900) {
+    if (content?.current?.offsetHeight >= 1900) {
       setOverMaxHeight(true);
     }
   }, [isReady]);

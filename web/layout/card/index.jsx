@@ -38,6 +38,7 @@ const Index = ({ children, card }) => {
         <div className={styles.imgbox}>
         </div>
       )}
+      <div className={styles.emptyHeight}></div>
       <div className={styles.shareBtn}>
         {!isWeiXin() ? (
           <Button className={styles.btn} onClick={isWeiXin() ? '' : saveImg}>保存到相册</Button>
