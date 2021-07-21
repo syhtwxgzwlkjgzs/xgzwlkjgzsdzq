@@ -12,7 +12,7 @@ import { noop } from '../utils';
  * @prop {function} goCheckAudio 音频点击事件
  */
 
-const Index = ({ isPay = false, url, onPay = noop, baselayout, updateViewCount = noop }) => {
+const Index = ({ isPay = false, url, fileName='录音', fileSize='未知', onPay = noop, baselayout, updateViewCount = noop }) => {
 
   const audioRef = useRef();
   const audioWrapperRef = useRef();
@@ -52,7 +52,7 @@ const Index = ({ isPay = false, url, onPay = noop, baselayout, updateViewCount =
           <div className={styles.wrapper}>
             <img src='/dzq-img/pay-audio.png' className={styles.payBox} onClick={onPay}></img>
           </div>
-        ) : <div ref={audioWrapperRef}><AudioPlayer src={url} onPlay={onPlay} disabled={!url} ref={audioRef}/></div>
+        ) : <div ref={audioWrapperRef}><AudioPlayer src={url} fileName={fileName} fileSize={fileSize} onPlay={onPlay} disabled={!url} ref={audioRef}/></div>
       }
     </div>
   );
