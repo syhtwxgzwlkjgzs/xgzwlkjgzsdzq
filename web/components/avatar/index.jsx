@@ -25,12 +25,12 @@ function avatar(props) {
     userType = -1,
     unifyOnClick = null, // 付费加入，统一点击事件
     withStopPropagation = false, // 是否需要阻止冒泡 默认false不阻止
-    level = 6
+    level = 6,
   } = props;
 
   const currAvatarImage = useMemo(() => {
     if (!image || image === '') return image;
-    if ( /(http|https):\/\/.*?(gif)/.test(image) ) {
+    if (/(http|https):\/\/.*?(gif)/.test(image)) {
       return calcCosImageQuality(image, 'gif');
     } else {
       return calcCosImageQuality(image, 'png', level);
@@ -47,8 +47,6 @@ function avatar(props) {
   const [following, changeFollowStatus] = useState(false);
   const [blocking, changeBlockStatus] = useState(false);
   const [isSameWithMe, changeIsSameWithMe] = useState(false);
-  
-
 
   const onMouseEnterHandler = useCallback(async () => {
     if (!isShowUserInfo || !userId) return;
@@ -204,7 +202,7 @@ function avatar(props) {
       return (
         <div className={styles.userInfoBox} style={direction === 'left' ? { right: 0 } : { left: 0 }}>
           <div className={styles.userInfoContent}>
-            <LoadingBox style={{ minHeight: '100%' }} />
+            <LoadingBox style={{ minHeight: '200px'}} />
           </div>
         </div>
       );
@@ -212,7 +210,7 @@ function avatar(props) {
 
     let targetAvatarImage = userInfo?.avatarUrl;
     if (targetAvatarImage && targetAvatarImage !== '') {
-      if ( /(http|https):\/\/.*?(gif)/.test(targetAvatarImage) ) {
+      if (/(http|https):\/\/.*?(gif)/.test(targetAvatarImage)) {
         targetAvatarImage = calcCosImageQuality(targetAvatarImage, 'gif');
       } else {
         targetAvatarImage = calcCosImageQuality(targetAvatarImage, 'png', 5);
@@ -302,26 +300,10 @@ function avatar(props) {
     bgClrBasedOnType =
       userType === 1 ? styles.like : userType === 2 ? styles.heart : userType === 3 ? styles.heart : '';
 
-  if (currAvatarImage && currAvatarImage !== '') {
-    return (
-      <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
-        <div className={styles.avatarWrapper} onClick={clickAvatar}>
-          <Avatar className={className} circle={circle} image={currAvatarImage} size={size}></Avatar>
-          {userTypeIcon && (
-            <div className={`${styles.userIcon} ${bgClrBasedOnType}`}>
-              <Icon name={userTypeIcon} size={12} />
-            </div>
-          )}
-        </div>
-        {isShow && userInfoBox}
-      </div>
-    );
-  }
-
   const [referenceElement, setReferenceElement] = useState(null);
   const [popperElement, setPopperElement] = useState(null);
   const { styles: poperStyle, attributes } = usePopper(referenceElement, popperElement, {
-    placement: 'bottom',
+    placement: 'bottom-end',
     modifiers: [
       {
         name: 'offset',
@@ -331,11 +313,31 @@ function avatar(props) {
       },
     ],
   });
-  console.log(poperStyle, attributes);
+
+  if (currAvatarImage && currAvatarImage !== '') {
+    return (
+      <div onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
+        <div onClick={clickAvatar} ref={setReferenceElement}>
+          <Avatar className={className} circle={circle} image={currAvatarImage} size={size}></Avatar>
+          {userTypeIcon && (
+            <div className={`${styles.userIcon} ${bgClrBasedOnType}`}>
+              <Icon name={userTypeIcon} size={12} />
+            </div>
+          )}
+        </div>
+
+        {isShow && (
+          <div ref={setPopperElement} style={{ ...poperStyle.popper, zIndex: 1 }} {...attributes.popper}>
+            {userInfoBox}
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
-    <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
-      <div className={styles.cursor} onClick={clickAvatar} ref={setReferenceElement}>
+    <div onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
+      <div onClick={clickAvatar} ref={setReferenceElement}>
         <Avatar className={className} circle={circle} text={userName} size={size} onClick={clickAvatar}></Avatar>
         {userTypeIcon && (
           <div className={`${styles.userIcon} ${bgClrBasedOnType}`}>
@@ -344,9 +346,11 @@ function avatar(props) {
         )}
       </div>
 
-      <div ref={setPopperElement} {...attributes.popper} style={poperStyle.popper}>
-        {userInfoBox}
-      </div>
+      {isShow && (
+        <div ref={setPopperElement} style={{ ...poperStyle.popper, zIndex: 1 }} {...attributes.popper}>
+          {userInfoBox}
+        </div>
+      )}
     </div>
   );
 }
