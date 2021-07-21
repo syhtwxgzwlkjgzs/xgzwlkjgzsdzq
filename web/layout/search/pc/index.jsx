@@ -29,6 +29,8 @@ class SearchPCPage extends React.Component {
     this.treadingTopicRef = React.createRef();
     this.activeUsersRef = React.createRef();
     this.hotTopicRef = React.createRef();
+
+    this.isClick = false
   }
 
   redirectToSearchResultPost = () => {
@@ -121,13 +123,14 @@ class SearchPCPage extends React.Component {
     if (stepIndex !== index) {
       this.setState({position: scrollTo});
       // this.setState({stepIndex: index});
+      this.isClick = true
       this.props.dispatch('update-step-index', index)
     }
   }
 
   handleScroll = ({ scrollTop = 0 } = {}) => {
-    const { isClick = false } = this.props
-    if (isNaN(scrollTop) || isClick) {
+    if (isNaN(scrollTop) || this.isClick) {
+      this.isClick = false
       return
     }
 
