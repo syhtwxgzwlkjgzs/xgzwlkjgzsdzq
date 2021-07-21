@@ -83,6 +83,7 @@ const ThreadCard = inject('user', 'card')(observer((props) => {
               flat
               platform="h5"
               imgData={parseContent.IMAGE}
+              showLongPicture={false}
             />
           )}
           {/* 付费 */}
