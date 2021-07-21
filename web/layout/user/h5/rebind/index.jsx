@@ -23,10 +23,7 @@ class RebindPage extends React.Component {
         '手机登录新微信扫码完成换绑'
       ],
       currentStatus: '',
-      statusInfo: {
-        success: '换绑成功',
-        error: '换绑失败'
-      }
+      errorTips: '扫码失败',
     };
 
   }
@@ -47,7 +44,6 @@ class RebindPage extends React.Component {
       await user.genRebindQrCode({
         scanSuccess: this.scanSuccess,
         scanFail: this.scanFail,
-        onTimeOut: this.onTimeOut,
         option: {
           params: {
             redirectUri
@@ -63,9 +59,21 @@ class RebindPage extends React.Component {
     }
   }
 
+  async scanSuccess() {
+    this.setState({
+      currentStatus: 'success'
+    });
+    // TODO 几秒钟跳转需要确认
+    
+  }
+
+  async scanFail(e) {
+    console.error(e);
+  }
+
   render() {
     const { site, user } = this.props;
-    const { currentStatus, explain, statusInfo } = this.state;
+    const { currentStatus, explain, errorTips } = this.state;
     const { platform } = site;
 
     if (platform === 'h5') {
@@ -125,7 +133,7 @@ class RebindPage extends React.Component {
                         <Icon name="FunnelOutlined" size={18} className={styles.statusBottomIcon} />
                         页面自动跳转中…
                         </>
-                    : statusInfo.error
+                    : errorTips
                   }
                 </p>
               </div>
