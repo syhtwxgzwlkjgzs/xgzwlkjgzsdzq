@@ -120,7 +120,7 @@ const VirtualList = ({
   return (
       <>
         {
-            !isClickTab && <List 
+            (!isClickTab && dataSource?.length > 0) && <List 
                 ref={(e) => { listRef.current = e }}
                 dataSource={dataSource} 
                 wholePageIndex={wholePageIndex} 
