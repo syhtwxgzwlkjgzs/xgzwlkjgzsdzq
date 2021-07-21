@@ -251,7 +251,7 @@ export default function DVditor(props) {
           }
         },
         focus: (val, e) => {
-          onFocus('focus', e);
+          if (browser.env(constants.ANDROID)) onFocus('edior-focus', e);
         },
         input: () => {
           setIsFocus(false);

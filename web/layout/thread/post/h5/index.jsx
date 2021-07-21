@@ -252,7 +252,8 @@ class ThreadCreate extends React.Component {
             onChange={this.props.handleVditorChange}
             onFocus={(action, event) => {
               this.setBottomFixed(action, event);
-              const operation = this.props.currentDefaultOperation === defaultOperation.emoji ? defaultOperation.emoji : '';
+              const operation = action === 'edior-focus'
+                && this.props.currentDefaultOperation === defaultOperation.emoji ? defaultOperation.emoji : '';
               this.props.handleSetState({ isVditorFocus: true, currentDefaultOperation: operation });
             }}
             onBlur={() => {
