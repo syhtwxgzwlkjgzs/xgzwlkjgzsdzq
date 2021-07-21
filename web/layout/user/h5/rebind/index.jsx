@@ -60,11 +60,15 @@ class RebindPage extends React.Component {
   }
 
   async scanSuccess() {
+    const { user } = this.props;
     this.setState({
       currentStatus: 'success'
     });
     // TODO 几秒钟跳转需要确认
-    
+    setTimeout(() => {
+      user.id && user.updateUserInfo(user.id);
+      Router.back();
+    }, 1000);
   }
 
   async scanFail(e) {
