@@ -247,11 +247,10 @@ export default function DVditor(props) {
           // 去掉异步渲染之后的光标focus
           if (!pc && getSelection().rangeCount > 0) {
             getSelection().removeAllRanges();
-            bubbleBarHidden();
           }
         },
         focus: (val, e) => {
-          onFocus('focus', e);
+          // onFocus('focus', e);
         },
         input: () => {
           setIsFocus(false);
