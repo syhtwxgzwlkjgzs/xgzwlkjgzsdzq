@@ -8,6 +8,7 @@ import isWeiXin from '@common/utils/is-weixin';
 import { AUDIO_FORMAT, FILE_PREVIEW_FORMAT } from '@common/constants/thread-post';
 import classNames from 'classnames';
 import FilePreview from './../file-preview';
+import { AudioPlayer } from '@discuzq/design';
 
 import styles from './index.module.scss';
 
@@ -69,7 +70,7 @@ const Index = ({
   const [downloading, setDownloading] =
         useState(Array.from({length: attachments.length}, () => false));
 
-  const onDownLoad = (item, index) => {
+  const onDownload = (item, index) => {
     updateViewCount();
     if (!isPay) {
       if(!item || !threadId) return;
@@ -176,6 +177,17 @@ const Index = ({
   };
 
   const Normal = ({ item, index, type }) => {
+    if (isAudioPlayable(item)) {
+      const { url, fileName } = item;
+      const fileSize = handleFileSize(parseFloat(item.fileSize || 0));
+
+      return (
+        <div className={styles.audioPlayer}>
+          <AudioPlayer src={url} fileName={fileName} fileSize={fileSize} onDownload={throttle(() => onDownload(item, index), 1000)} onLink={throttle(() => onLinkShare(item), 1000)} />
+        </div>
+      );
+    }
+
     const iconLink = getIcon(type);
 
     return (

@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
-import { Audio } from '@discuzq/design';
+import { AudioPlayer } from '@discuzq/design';
 import { noop } from '../utils';
 
 /**
@@ -52,7 +52,7 @@ const Index = ({ isPay = false, url, onPay = noop, baselayout, updateViewCount =
           <div className={styles.wrapper}>
             <img src='/dzq-img/pay-audio.png' className={styles.payBox} onClick={onPay}></img>
           </div>
-        ) : <div ref={audioWrapperRef}><Audio src={url} onPlay={onPlay} disabled={!url} ref={audioRef}/></div>
+        ) : <div ref={audioWrapperRef}><AudioPlayer src={url} onPlay={onPlay} disabled={!url} ref={audioRef}/></div>
       }
     </div>
   );
