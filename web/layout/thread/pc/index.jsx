@@ -396,11 +396,17 @@ class ThreadPCPage extends React.Component {
         });
     }
 
-    const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
+    const { success, msg, isApproved } = await this.props.comment.createComment(params, this.props.thread);
     if (success) {
-      Toast.success({
-        content: '评论成功',
-      });
+      if (isApproved) {
+        Toast.success({
+          content: msg,
+        });
+      } else {
+        Toast.warning({
+          content: msg,
+        });
+      }
 
       // 更新帖子中的评论数据
       this.props.thread.updatePostCount(this.props.thread.totalCount);
@@ -450,11 +456,17 @@ class ThreadPCPage extends React.Component {
         });
     }
 
-    const { success, msg } = await this.props.comment.updateComment(params, this.props.thread);
+    const { success, msg, isApproved } = await this.props.comment.updateComment(params, this.props.thread);
     if (success) {
-      Toast.success({
-        content: '修改成功',
-      });
+      if (isApproved) {
+        Toast.success({
+          content: msg,
+        });
+      } else {
+        Toast.warning({
+          content: msg,
+        });
+      }
       this.setState({
         showCommentInput: false,
       });
@@ -698,7 +710,7 @@ class ThreadPCPage extends React.Component {
 
         {/* 回复详情内容 */}
         <div className={`${layout.bottom}`} ref={this.commentDataRef}>
-          {isCommentReady ? (
+          {isCommentReady && isApproved ? (
             <Fragment>
               <RenderCommentList
                 router={this.props.router}
@@ -710,7 +722,7 @@ class ThreadPCPage extends React.Component {
               {/* {this.state.isCommentLoading && <LoadingTips></LoadingTips>} */}
             </Fragment>
           ) : (
-            <LoadingTips isError={isCommentListError} type="init"></LoadingTips>
+            isApproved && <LoadingTips isError={isCommentListError} type="init"></LoadingTips>
           )}
         </div>
         {/* {isNoMore && <NoMore empty={totalCount === 0}></NoMore>} */}
@@ -833,6 +845,7 @@ class ThreadPCPage extends React.Component {
           visible={this.state.showDeletePopup}
           onClose={() => this.setState({ showDeletePopup: false })}
           onBtnClick={() => this.delete()}
+          type='thread'
         ></DeletePopup>
 
         {/* 举报弹层 */}

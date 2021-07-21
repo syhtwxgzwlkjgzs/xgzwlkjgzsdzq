@@ -40,9 +40,8 @@
 
   .moreIcon {
     position: absolute;
-    right: 4px;
+    right: -10px;
     bottom: 2.5px;
-    transform: translateX(50%);
     color: $text-color-secondary;
     width: 20px;
     height: 12px;
@@ -56,6 +55,11 @@
     z-index: 5;
     .icon {
       transform: rotate(90deg);
+    }
+  }
+  :global {
+    .dzq-avatar__text {
+      font-size: $font-size-label;
     }
   }
 }

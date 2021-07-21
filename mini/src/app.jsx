@@ -5,6 +5,7 @@ import Taro from '@tarojs/taro'
 import Router from '@discuzq/sdk/dist/router';
 import setTitle from '@common/utils/setTitle';
 import LoginHelper from '@common/utils/login-helper'
+import { STORAGE_KEY } from '@common/utils/viewcount-in-storage';
 
 import './app.scss';
 
@@ -93,6 +94,9 @@ class App extends Component {
     } catch(err) {
       console.log('savePageJump', err);
     }
+    
+    // 清除帖子浏览计数
+    Taro.removeStorageSync(STORAGE_KEY)
   }
 
   /**

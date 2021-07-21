@@ -194,7 +194,7 @@ export default class PayBox extends React.Component {
       <div className={styles.payBox}>
         <div className={styles.title}>
           <p>
-            <span className={styles.moneyUnit}>￥ </span>
+            <span className={styles.moneyUnit}>￥</span>
             {this.transMoneyToFixed(options.amount)}
           </p>
         </div>

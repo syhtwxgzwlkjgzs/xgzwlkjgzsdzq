@@ -496,24 +496,31 @@ class ThreadH5Page extends React.Component {
         });
     }
 
-    const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
+    const { success, msg, isApproved } = await this.props.comment.createComment(params, this.props.thread);
     if (success) {
       // 更新帖子中的评论数据
       this.props.thread.updatePostCount(this.props.thread.totalCount);
-      // 更新列表store数据
-      this.props.thread.updateListStore(this.props.index, this.props.search, this.props.topic);
 
       // 是否红包帖
       const isRedPack = this.props.thread?.threadData?.displayTag?.isRedPack;
       // TODO:可以进一步细化判断条件，是否还有红包
       if (isRedPack) {
         // 评论获得红包帖，更新帖子数据
-        this.props.thread.fetchThreadDetail(id);
+        await this.props.thread.fetchThreadDetail(id);
       }
 
-      Toast.success({
-        content: '评论成功',
-      });
+      // 更新列表store数据
+      this.props.thread.updateListStore(this.props.index, this.props.search, this.props.topic);
+
+      if (isApproved) {
+        Toast.success({
+          content: msg,
+        });
+      } else {
+        Toast.warning({
+          content: msg,
+        });
+      }
       this.setState({
         showCommentInput: false,
       });
@@ -535,11 +542,17 @@ class ThreadH5Page extends React.Component {
       content: val,
       attachments: [],
     };
-    const { success, msg } = await this.props.comment.updateComment(params, this.props.thread);
+    const { success, msg, isApproved } = await this.props.comment.updateComment(params, this.props.thread);
     if (success) {
-      Toast.success({
-        content: '修改成功',
-      });
+      if (isApproved) {
+        Toast.success({
+          content: msg,
+        });
+      } else {
+        Toast.warning({
+          content: msg,
+        });
+      }
       this.setState({
         showCommentInput: false,
       });
@@ -648,16 +661,22 @@ class ThreadH5Page extends React.Component {
         });
     }
 
-    const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
+    const { success, msg, isApproved } = await this.props.comment.createReply(params, this.props.thread);
 
     if (success) {
       this.setState({
         showCommentInput: false,
         inputValue: '',
       });
-      Toast.success({
-        content: '回复成功',
-      });
+      if (isApproved) {
+        Toast.success({
+          content: msg,
+        });
+      } else {
+        Toast.warning({
+          content: msg,
+        });
+      }
       return true;
     }
 
@@ -1013,6 +1032,7 @@ class ThreadH5Page extends React.Component {
               visible={this.state.showDeletePopup}
               onClose={() => this.setState({ showDeletePopup: false })}
               onBtnClick={(type) => this.onBtnClick(type)}
+              type='thread'
             ></DeletePopup>
             {/* 举报弹层 */}
 

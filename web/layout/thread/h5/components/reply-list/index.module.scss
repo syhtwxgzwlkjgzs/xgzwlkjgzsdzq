@@ -13,11 +13,21 @@
       border-radius: rem($border-radius-small);
       background: $body-bg-color;
       .replyListName {
-        font-size: rem($font-size-primary);
-        font-weight: bold;
-        line-height: rem(20);
-        text-align: left;
-        color: $text-color-primary;
+        display: flex;
+        justify-content: space-between;
+
+        .replyListName {
+          font-size: rem($font-size-primary);
+          font-weight: bold;
+          line-height: rem(20);
+          text-align: left;
+          color: $text-color-primary;
+        }
+        .isApproved {
+          font-size: $font-size-primary;
+          color: $error-color;
+          line-height: rem(20);
+        }
       }
       .replyListText {
         margin-top: rem($margin-1n);
@@ -39,25 +49,16 @@
           position: relative;
           top: rem(3);
 
-          p {
-            display: inline;
-
-            img {
+          :global {
+            .qq-emotion {
+              width: rem(22);
               height: rem(22);
             }
+
+            .dzq-p {
+              margin-bottom: 0;
+            }
           }
-
-          img {
-            height: rem(22);
-          }
-        }
-
-        .isShowOne {
-          // @include lamp-clamp(3);
-
-          // p {
-          //   @include lamp-clamp(3);
-          // }
         }
 
         .commentUser {
@@ -66,6 +67,8 @@
           align-items: center;
           justify-content: flex-start;
           height: rem(28);
+          position: relative;
+          top: rem(3);
 
           .replyedUserName {
             font-weight: bold;

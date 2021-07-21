@@ -36,6 +36,7 @@ const QUALITY_NAME = '/quality/';
 const INTERLACE = '/interlace/1';
 const CONVERSION = '/format';
 const CGIF = '/cgif';
+const ERROR_IGNORE = '/ignore-error/1'
 
 function _conversion(conversion) {
     return `${CONVERSION}/${conversion}`;
@@ -48,7 +49,7 @@ function _level_0_quality(viewWidth, conversion) {
     } else if ( viewWidth >= 1080  ){
         zoom = QUALITY_15;
     }
-    return `${IMAGEMOGR2}${conversion ? _conversion(conversion) : ''}${QUALITY_NAME}${zoom}${INTERLACE}`;
+    return `${IMAGEMOGR2}${conversion ? _conversion(conversion) : ''}${QUALITY_NAME}${zoom}${INTERLACE}${ERROR_IGNORE}`;
 }
 
 function _level_1_quality(viewWidth, conversion) {
@@ -58,7 +59,7 @@ function _level_1_quality(viewWidth, conversion) {
     } else if ( viewWidth >= 1080  ){
         zoom = QUALITY_12;
     }
-    return `${IMAGEMOGR2}${conversion ? _conversion(conversion) : ''}${QUALITY_NAME}${zoom}${INTERLACE}`;
+    return `${IMAGEMOGR2}${conversion ? _conversion(conversion) : ''}${QUALITY_NAME}${zoom}${INTERLACE}${ERROR_IGNORE}`;
 }
 
 function _level_2_quality(viewWidth, conversion) {
@@ -68,7 +69,7 @@ function _level_2_quality(viewWidth, conversion) {
     } else if ( viewWidth >= 1080  ){
         zoom = QUALITY_10;
     }
-    return `${IMAGEMOGR2}${conversion ? _conversion(conversion) : ''}${QUALITY_NAME}${zoom}${INTERLACE}`;
+    return `${IMAGEMOGR2}${conversion ? _conversion(conversion) : ''}${QUALITY_NAME}${zoom}${INTERLACE}${ERROR_IGNORE}`;
 }
 
 function _level_3_quality(viewWidth, conversion) {
@@ -78,7 +79,7 @@ function _level_3_quality(viewWidth, conversion) {
     } else if ( viewWidth >= 1080  ){
         zoom = QUALITY_7;
     }
-    return `${IMAGEMOGR2}${conversion ? _conversion(conversion) : ''}${QUALITY_NAME}${zoom}${INTERLACE}`;
+    return `${IMAGEMOGR2}${conversion ? _conversion(conversion) : ''}${QUALITY_NAME}${zoom}${INTERLACE}${ERROR_IGNORE}`;
 }
 
 function _level_4_quality(viewWidth, conversion) {
@@ -88,7 +89,7 @@ function _level_4_quality(viewWidth, conversion) {
     } else if ( viewWidth >= 1080  ){
         zoom = QUALITY_6;
     }
-    return `${IMAGEMOGR2}${conversion ? _conversion(conversion) : ''}${QUALITY_NAME}${zoom}${INTERLACE}`;
+    return `${IMAGEMOGR2}${conversion ? _conversion(conversion) : ''}${QUALITY_NAME}${zoom}${INTERLACE}${ERROR_IGNORE}`;
 }
 
 function _level_5_quality(viewWidth, conversion) {
@@ -98,7 +99,7 @@ function _level_5_quality(viewWidth, conversion) {
     } else if ( viewWidth >= 1080  ){
         zoom = QUALITY_5;
     }
-    return `${IMAGEMOGR2}${conversion ? _conversion(conversion) : ''}${QUALITY_NAME}${zoom}${INTERLACE}`;
+    return `${IMAGEMOGR2}${conversion ? _conversion(conversion) : ''}${QUALITY_NAME}${zoom}${INTERLACE}${ERROR_IGNORE}`;
 }
 
 function _level_6_quality(viewWidth, conversion) {
@@ -108,7 +109,7 @@ function _level_6_quality(viewWidth, conversion) {
     } else if ( viewWidth >= 1080  ){
         zoom = QUALITY_4;
     }
-    return `${IMAGEMOGR2}${conversion ? _conversion(conversion) : ''}${QUALITY_NAME}${zoom}${INTERLACE}`;
+    return `${IMAGEMOGR2}${conversion ? _conversion(conversion) : ''}${QUALITY_NAME}${zoom}${INTERLACE}${ERROR_IGNORE}`;
 }
 
 function _level_7_quality(viewWidth, conversion) {
@@ -118,7 +119,7 @@ function _level_7_quality(viewWidth, conversion) {
     } else if ( viewWidth >= 1080  ){
         zoom = QUALITY_3;
     }
-    return `${IMAGEMOGR2}${conversion ? _conversion(conversion) : ''}${QUALITY_NAME}${zoom}${INTERLACE}`;
+    return `${IMAGEMOGR2}${conversion ? _conversion(conversion) : ''}${QUALITY_NAME}${zoom}${INTERLACE}${ERROR_IGNORE}`;
 }
 
 export default function calcImageQuality(viewWidth, type, level) {

@@ -9,6 +9,7 @@ import { withRouter } from 'next/router';
 import { numberFormat } from '@common/utils/number-format';
 import browser from '@common/utils/browser';
 import throttle from '@common/utils/thottle.js';
+import LoginHelper from '@common/utils/login-helper.js';
 
 @inject('user')
 @inject('site')
@@ -32,10 +33,10 @@ class index extends Component {
   }
 
   // 点击屏蔽
-  handleChangeShield = throttle((isDeny) => {
+  handleChangeShield = throttle(async (isDeny) => {
     const id = this.props.router.query?.id;
     if (isDeny) {
-      this.props.user.undenyUser(id);
+      await this.props.user.undenyUser(id);
       this.props.user.setTargetUserNotBeDenied();
       Toast.success({
         content: '解除屏蔽成功',
@@ -43,7 +44,7 @@ class index extends Component {
         duration: 2000,
       });
     } else {
-      this.props.user.denyUser(id);
+      await this.props.user.denyUser(id);
       this.props.user.setTargetUserDenied();
       Toast.success({
         content: '屏蔽成功',
@@ -131,7 +132,7 @@ class index extends Component {
 
   logout = () => {
     clearLoginStatus();
-    window.location.replace('/');
+    LoginHelper.gotoIndex();
   };
 
   // 点击粉丝列表
@@ -302,12 +303,12 @@ class index extends Component {
             <span>{user.isDeny ? '解除屏蔽' : '屏蔽'}</span>
           </div>
         )}
-        {user.avatarUrl && this.state.isPreviewAvatar && (
+        {user.originalAvatarUrl && this.state.isPreviewAvatar && (
           <ImagePreviewer
             visible={this.state.isPreviewAvatar}
             onClose={this.handlePreviewAvatar}
-            imgUrls={[user.avatarUrl]}
-            currentUrl={user.avatarUrl}
+            imgUrls={[user.originalAvatarUrl]}
+            currentUrl={user.originalAvatarUrl}
           />
         )}
       </div>

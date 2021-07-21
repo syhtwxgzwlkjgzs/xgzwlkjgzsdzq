@@ -158,6 +158,11 @@ class TopicAction extends TopicStore {
       if (updateType === 'share') {
         data.likeReward.shareCount = data.likeReward.shareCount + 1;
       }
+
+      // 更新帖子浏览量
+      if (updateType === 'viewCount') {
+        data.viewCount = updatedInfo.viewCount;
+      }
   
       if (this.threads?.pageData) {
         this.threads.pageData[index] = data;

@@ -23,6 +23,7 @@ const Index = ({
   threadId = null,
   thread = null,
   user = null,
+  updateViewCount = noop,
 }) => {
   // 处理文件大小的显示
   const handleFileSize = (fileSize) => {
@@ -66,7 +67,7 @@ const Index = ({
         useState(Array.from({length: attachments.length}, () => false));
 
   const onDownLoad = (item, index) => {
-
+    updateViewCount();
     if (!isPay) {
       if(!item || !threadId) return;
 
@@ -94,13 +95,16 @@ const Index = ({
   };
 
   const onLinkShare = (item, e) => {
+    updateViewCount();
     if (!isPay) {
       if(!item || !threadId) return;
 
       const attachmentId = item.id;
       fetchDownloadUrl(threadId, attachmentId, async (url) => {
         setTimeout(() => {
-          h5Share({url: url});
+          if(!h5Share({url: url})) {
+            navigator.clipboard.writeText(url); // qq浏览器不支持异步document.execCommand('Copy')
+          }
           Toast.success({
             content: '链接复制成功',
           });

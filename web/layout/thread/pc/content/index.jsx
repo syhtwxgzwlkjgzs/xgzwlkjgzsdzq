@@ -22,6 +22,7 @@ export default inject('user')(
   observer((props) => {
     const { store: threadStore } = props;
     const { text, indexes } = threadStore?.threadData?.content || {};
+    const { parentCategoryName, categoryName } = threadStore?.threadData;
     const tipData = {
       postId: threadStore?.threadData?.postId,
       threadId: threadStore?.threadData?.threadId,
@@ -288,9 +289,9 @@ export default inject('user')(
           )}
 
           {/* 标签 */}
-          {(threadStore?.threadData?.parentCategoryName || threadStore?.threadData?.categoryName) && (
+          {(parentCategoryName || categoryName) && (
             <div className={topic.tag} onClick={onTagClick}>
-              {threadStore?.threadData?.parentCategoryName || threadStore?.threadData?.categoryName}
+              {parentCategoryName ? `${parentCategoryName}/${categoryName}` : categoryName}
             </div>
           )}
 
@@ -338,26 +339,29 @@ export default inject('user')(
         <Divider className={topic.divider}></Divider>
 
         {/* 操作按钮 */}
-        <div className={topic.bottomOperate}>
-          <div
-            className={classnames(topic.item, threadStore?.threadData?.isLike && topic.active)}
-            onClick={debounce(onLikeClick, 500)}
-          >
-            <Icon name="LikeOutlined"></Icon>
-            <span>赞</span>
-          </div>
-          <div
-            className={classnames(topic.item, threadStore?.threadData?.isFavorite && topic.active)}
-            onClick={debounce(onCollectionClick, 500)}
-          >
-            <Icon name="CollectOutlined"></Icon>
-            <span>收藏</span>
-          </div>
-          <div className={classnames(topic.item)} onClick={debounce(onShareClick, 500)}>
-            <Icon name="ShareAltOutlined"></Icon>
-            <span>分享</span>
-          </div>
-        </div>
+        {
+          isApproved && (
+            <div className={topic.bottomOperate}>
+              <div
+                className={classnames(topic.item, threadStore?.threadData?.isLike && topic.active)}
+                onClick={debounce(onLikeClick, 500)}
+              >
+                <Icon name="LikeOutlined"></Icon>
+                <span>赞</span>
+              </div>
+              <div
+                className={classnames(topic.item, threadStore?.threadData?.isFavorite && topic.active)}
+                onClick={debounce(onCollectionClick, 500)}
+              >
+                <Icon name="CollectOutlined"></Icon>
+                <span>收藏</span>
+              </div>
+              <div className={classnames(topic.item)} onClick={debounce(onShareClick, 500)}>
+                <Icon name="ShareAltOutlined"></Icon>
+                <span>分享</span>
+              </div>
+            </div>
+          )}
       </div>
     );
   }),

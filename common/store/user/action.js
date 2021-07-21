@@ -96,15 +96,17 @@ class UserAction extends SiteStore {
       const originBackgroundFilename = this.backgroundUrl?.split('?')[0];
       const nextBackgroundFilename = data.backgroundUrl?.split('?')[0];
 
+      if (originBackgroundFilename === nextBackgroundFilename) {
+        transformedData.backgroundUrl = this.backgroundUrl;
+      }
+    }
+
+    if (data.avatarUrl && this.avatarUrl) {
       const originAvatarFilename = this.avatarUrl?.split('?')[0];
       const nextAvatarFilename = data.avatarUrl?.split('?')[0];
 
       if (originAvatarFilename === nextAvatarFilename) {
         transformedData.avatarUrl = this.avatarUrl;
-      }
-
-      if (originBackgroundFilename === nextBackgroundFilename) {
-        transformedData.backgroundUrl = this.backgroundUrl;
       }
     }
 
@@ -118,10 +120,41 @@ class UserAction extends SiteStore {
     if (!userInfo || userInfo?.code !== 0) {
       return;
     }
+
+    if (!this.id && this.onLoginCallback) {
+      this.onLoginCallback(userInfo.data);
+    }
     const userPermissions = await readPermissions({});
     userInfo?.data && this.diffPicAndUpdateUserInfo(userInfo.data);
     userPermissions?.data && this.setUserPermissions(userPermissions.data);
+
     return userInfo?.code === 0 && userInfo.data;
+  }
+
+  @action
+  diffPicAndUpdateTargetUserInfo(data) {
+    const transformedData = Object.assign({}, data);
+
+    // 如下操作是为了避免因为签名导致的图片重加载问题
+    if (data.backgroundUrl && this.targetUserBackgroundUrl) {
+      const originBackgroundFilename = this.targetUserBackgroundUrl?.split('?')[0];
+      const nextBackgroundFilename = data.backgroundUrl?.split('?')[0];
+
+      if (originBackgroundFilename === nextBackgroundFilename) {
+        transformedData.backgroundUrl = this.targetUserBackgroundUrl;
+      }
+    }
+
+    if (data.avatarUrl && this.targetUserAvatarUrl) {
+      const originAvatarFilename = this.targetUserAvatarUrl?.split('?')[0];
+      const nextAvatarFilename = data.avatarUrl?.split('?')[0];
+
+      if (originAvatarFilename === nextAvatarFilename) {
+        transformedData.avatarUrl = this.targetUserAvatarUrl;
+      }
+    }
+
+    return transformedData;
   }
 
   // 获取指定用户的用户信息，用于获取他人首页
@@ -129,7 +162,7 @@ class UserAction extends SiteStore {
   async getTargetUserInfo(id) {
     this.targetUserId = id;
     const userInfo = await this.getAssignUserInfo(id);
-    this.targetUser = userInfo;
+    this.targetUser = this.diffPicAndUpdateTargetUserInfo(userInfo);
     return userInfo;
   }
 
@@ -181,60 +214,6 @@ class UserAction extends SiteStore {
     }
     this.userFans = { ...this.userFans };
   };
-
-  // @action
-  // getTargetUserFollow = async (id) => {
-  //   const followsRes = await getUserFollow({
-  //     params: {
-  //       page: this.targetUserFollowsPage,
-  //       perPage: 20,
-  //       filter: {
-  //         userId: id,
-  //       },
-  //     },
-  //   });
-
-  //   if (followsRes.code !== 0) {
-  //     console.error(followsRes);
-  //     return;
-  //   }
-
-  //   const pageData = get(followsRes, 'data.pageData', []);
-  //   const totalPage = get(followsRes, 'data.totalPage', 1);
-  //   this.targetUserFollowsTotalPage = totalPage;
-  //   this.targetUserFollows[this.targetUserFollowsPage] = pageData;
-  //   if (this.targetUserFollowsPage <= this.targetUserFollowsTotalPage) {
-  //     this.targetUserFollowsPage += 1;
-  //   }
-  //   this.targetUserFollows = { ...this.targetUserFollows };
-  // }
-
-  // @action
-  // getTargetUserFans = async (id) => {
-  //   const fansRes = await getUserFans({
-  //     params: {
-  //       page: this.targetUserFansPage,
-  //       perPage: 20,
-  //       filter: {
-  //         userId: id,
-  //       },
-  //     },
-  //   });
-
-  //   if (fansRes.code !== 0) {
-  //     console.error(fansRes);
-  //     return;
-  //   }
-
-  //   const pageData = get(fansRes, 'data.pageData', []);
-  //   const totalPage = get(fansRes, 'data.totalPage', 1);
-  //   this.targetUserFansTotalPage = totalPage;
-  //   this.targetUserFans[this.targetUserFansPage] = pageData;
-  //   if (this.targetUserFansPage <= this.targetUserFansTotalPage) {
-  //     this.targetUserFansPage += 1;
-  //   }
-  //   this.targetUserFans = { ...this.targetUserFans };
-  // }
 
   /**
    * 取消屏蔽指定 id 的用户
@@ -477,6 +456,7 @@ class UserAction extends SiteStore {
     if (updateAvatarRes.code === 0) {
       this.userInfo.avatarUrl = updateAvatarRes.data.avatarUrl;
       this.userInfo = { ...this.userInfo };
+      this.updateUserThreadsAvatar(updateAvatarRes.data.avatarUrl);
       return updateAvatarRes.data;
     }
 
@@ -484,6 +464,19 @@ class UserAction extends SiteStore {
       Code: updateAvatarRes.code,
       Msg: updateAvatarRes.msg,
     };
+  }
+
+  // 更新头像后，更新用户 threads 列表的 avatar url
+  @action
+  updateUserThreadsAvatar(avatarUrl) {
+    Object.keys(this.userThreads).forEach((key) => {
+      this.userThreads[key].forEach((thread) => {
+        if (!thread.user) {
+          thread.user = {};
+        }
+        thread.user.avatar = avatarUrl;
+      });
+    });
   }
 
   /**
@@ -921,10 +914,10 @@ class UserAction extends SiteStore {
 
       // 更新点赞
       if (
-        updateType === 'like' &&
-        !typeofFn.isUndefined(updatedInfo.isLiked) &&
-        !typeofFn.isNull(updatedInfo.isLiked) &&
-        user
+        updateType === 'like'
+        && !typeofFn.isUndefined(updatedInfo.isLiked)
+        && !typeofFn.isNull(updatedInfo.isLiked)
+        && user
       ) {
         const { isLiked, likePayCount = 0 } = updatedInfo;
         const theUserId = user.userId || user.id;

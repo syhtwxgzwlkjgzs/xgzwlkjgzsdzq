@@ -199,7 +199,7 @@ class UserCenterUsers extends React.Component {
         style={{
           height: '100%',
           overflow: 'scroll',
-          ...this.props.styles,
+          ...this.props.style,
         }}
       >
         {this.state?.users?.map((user, index) => {

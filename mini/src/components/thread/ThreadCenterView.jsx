@@ -30,6 +30,7 @@ const Index = (props) => {
     changeHeight = noop, 
     useShowMore = true, 
     setUseShowMore = noop,
+    updateViewCount
   } = props;
 
   const wrapperId= useRef(`thread-wrapper-${randomStr()}`)
@@ -60,7 +61,7 @@ const Index = (props) => {
         {text && (
           <PostContent 
             content={text} 
-            onPay={onPay} 
+            updateViewCount={updateViewCount}
             onRedirectToDetail={onClick} 
             relativeToViewport={relativeToViewport}
             changeHeight={changeHeight}
@@ -80,6 +81,7 @@ const Index = (props) => {
               status={videoData.status}
               relativeToViewport={relativeToViewport}
               changeHeight={changeHeight}
+              updateViewCount={updateViewCount}
             />
           </WrapperView>
         )}
@@ -91,11 +93,12 @@ const Index = (props) => {
               onPay={onPay} 
               onClickMore={onClick}
               relativeToViewport={relativeToViewport}
+              updateViewCount={updateViewCount}
             />
         ) : null}
-        {rewardData && <Packet type={1} money={rewardData.money} onClick={onClick} />}
+        {rewardData && <Packet type={1} money={rewardData.money} onClick={onClick}/>}
         {redPacketData && (
-          <Packet money={redPacketData.money || 0} onClick={onClick} condition={redPacketData.condition} />
+          <Packet money={redPacketData.money || 0} onClick={onClick} condition={redPacketData.condition}/>
         )}
         {goodsData && (
             <ProductItem
@@ -105,8 +108,8 @@ const Index = (props) => {
               onClick={onClick}
             />
         )}
-        {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} />}
-        {fileData?.length ? <AttachmentView threadId={threadId} attachments={fileData} onPay={onPay} isPay={needPay} /> : null}
+        {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} updateViewCount={updateViewCount}/>}
+        {fileData?.length ? <AttachmentView threadId={threadId} attachments={fileData} onPay={onPay} isPay={needPay} updateViewCount={updateViewCount}/> : null}
       </>
     );
   };
