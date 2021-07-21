@@ -23,7 +23,6 @@ export default function DVditor(props) {
     onCountChange = () => { },
     hintCustom = () => { },
     hintHide = () => { },
-    upload = {},
   } = props;
   const vditorId = 'dzq-vditor';
   let timeoutId = null;
@@ -42,12 +41,11 @@ export default function DVditor(props) {
   };
 
   const html2mdInserValue = (text) => {
-    debugger;
     try {
-      if (!vditor) return;
-      debugger;
-      const md = vditor.html2md && vditor.html2md(text);
-      vditor.insertValue && vditor.insertValue(md.substr(0, md.length - 1));
+      if (!vditor && !window.vditorInstance) return;
+      const editorInstance = vditor || window.vditorInstance;
+      const md = editorInstance.html2md && editorInstance.html2md(text);
+      editorInstance.insertValue && editorInstance.insertValue(md.substr(0, md.length - 1));
     } catch (error) {
       console.error('html2mdInserValue', error);
     }
@@ -129,8 +127,6 @@ export default function DVditor(props) {
   };
 
   useEffect(() => {
-    console.log(vditor);
-    debugger;
     setEditorInitValue();
   }, [value, vditor]);
 
@@ -322,11 +318,7 @@ export default function DVditor(props) {
           url: 'upload',
           accept: 'image/*',
           handler: (files) => {
-            console.log(isFocus);
-            console.log(vditor);
-            console.log(setVditor);
             html2mdInserValue('<p><img src="https://pic1.zhimg.com/v2-4ab20b03ef5de616b2f7efb82dff8db4_1440w.jpg?source=172ae18b" alt="图片" attachmentId="99" tag="text-img" /></p>');
-            debugger;
           }
         }
       },
@@ -334,10 +326,7 @@ export default function DVditor(props) {
 
     storeLastCursorPosition(editor);
     setVditor(editor);
-    setTimeout(() => {
-      console.log(vditor);
-      debugger;
-    }, 5000);
+    window.vditorInstance = editor;
   }
 
   const className = pc ? 'dvditor pc' : classNames('dvditor h5', { 'no-focus': !pc && !isFocus });

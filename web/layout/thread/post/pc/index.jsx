@@ -6,7 +6,7 @@ import DVditor from '@components/editor';
 import Title from '@components/thread-post/title';
 import { AttachmentToolbar, DefaultToolbar } from '@components/editor/toolbar';
 import Position from '@components/thread-post/position';
-import { Button, Audio, AudioRecord, Toast } from '@discuzq/design';
+import { Button, Audio, AudioRecord } from '@discuzq/design';
 import ClassifyPopup from '@components/thread-post/classify-popup';
 import { withRouter } from 'next/router';
 import Emoji from '@components/editor/emoji';
@@ -88,7 +88,7 @@ class ThreadPCPage extends React.Component {
     } = this.props;
     const { postData } = threadPost;
     const { webConfig = {} } = site;
-    console.log(postData.contentText);
+
     return (
       <div className={styles.container}>
         <Header />
@@ -112,20 +112,7 @@ class ThreadPCPage extends React.Component {
                   onChange={this.props.handleVditorChange}
                   onCountChange={count => this.props.handleSetState({ count })}
                   onFocus={() => { }}
-                  // onBlur={() => {
-                  //   Toast.loading({
-                  //     content: '这是一条信息提示',
-                  //     hasMask: true,
-                  //     duration: 0,
-                  //   });
-                  // }}
-                  upload={{
-                    url: 'upload',
-                    accept: 'image/*',
-                    handler: (files) => {
-                      debugger;
-                    }
-                  }}
+                  onBlur={() => { }}
                   onInit={this.props.handleVditorInit}
                   setState={this.props.handleSetState}
                   hintCustom={(type, key, textareaPosition, lastindex, vditor) =>
