@@ -6,7 +6,7 @@ import DVditor from '@components/editor';
 import Title from '@components/thread-post/title';
 import { AttachmentToolbar, DefaultToolbar } from '@components/editor/toolbar';
 import Position from '@components/thread-post/position';
-import { Button, Audio, AudioRecord } from '@discuzq/design';
+import { Button, AudioPlayer, AudioRecord } from '@discuzq/design';
 import ClassifyPopup from '@components/thread-post/classify-popup';
 import { withRouter } from 'next/router';
 import Emoji from '@components/editor/emoji';
@@ -177,7 +177,9 @@ class ThreadPCPage extends React.Component {
                 )}
                 {/* 语音组件 */}
                 {(Boolean(postData.audio.mediaUrl))
-                  && (<Audio src={postData.audio.mediaUrl} />)}
+                  && (<div className={styles.voiceRecorder}>
+                    <AudioPlayer fileName='录音' src={postData.audio.mediaUrl} onDelete={() => this.props.setPostData({ audio: {} })}  />
+                  </div>)}
 
                 {/* 附件上传组件 */}
                 {(currentDefaultOperation === defaultOperation.attach || Object.keys(postData.files).length > 0) && (
