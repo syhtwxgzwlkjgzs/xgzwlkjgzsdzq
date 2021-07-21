@@ -112,6 +112,7 @@ class PayPassword extends React.Component {
           hasMask: false,
           duration: 1000,
         });
+        this.props.payBox.visible = false;
         setTimeout(() => {
           // 清空密码
           this.props.payBox.clear();
