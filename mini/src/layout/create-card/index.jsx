@@ -20,9 +20,9 @@ class Index extends React.Component {
     }
     async componentDidMount(){
         const {threadId} = this.data
-        let path= `/indexPages/thread/index?id=${threadId}`
+        let path =  `/indexPages/thread/index?id=${threadId}`
         if(!threadId) { 
-        path = 'indexPages/home/index'
+            path='indexPages/home/index'
         }
         try {
             const paramPath = `/pages/index/index?path=${encodeURIComponent(path)}`;
