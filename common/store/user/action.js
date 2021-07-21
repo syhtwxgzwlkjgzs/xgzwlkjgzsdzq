@@ -1070,6 +1070,7 @@ class UserAction extends SiteStore {
     code,
     sessionId,
     sessionToken,
+    state
   }) => {
     try {
       const h5RebindResp = await h5Rebind({
@@ -1077,6 +1078,7 @@ class UserAction extends SiteStore {
           code,
           sessionId,
           sessionToken,
+          state
         },
       });
 

@@ -21,11 +21,12 @@ class WXRebindActionPage extends React.Component {
   async componentDidMount() {
     try {
       const { router, user } = this.props;
-      const { code, sessionId, sessionToken } = router.query;
+      const { code, sessionId, sessionToken, state } = router.query;
       await user.rebindWechatH5({
         code,
         sessionId,
         sessionToken,
+        state
       });
       this.setState({
         currentStatus: 'success'
@@ -33,10 +34,9 @@ class WXRebindActionPage extends React.Component {
     } catch (e) {
       this.setState({
         currentStatus: 'error',
-        errorTips: e.Message || '扫码失败'
       });
       Toast.error({
-        content: e.Message || '扫码失败',
+        content: e.Msg || '扫码失败',
         hasMask: false,
         duration: 1000,
       });

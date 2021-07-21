@@ -40,7 +40,7 @@ class RebindPage extends React.Component {
     try {
       const { wechatEnv } = this.props.site;
       const { user } = this.props;
-      const redirectUri = `${wechatEnv === 'miniProgram' ? '/subPages/user/wx-rebind-action/index' : `${window.location.origin}/user/wx-rebind-action?avatarUrl=${user.avatarUrl}&nickname=${user.nickname}`}`;
+      const redirectUri = `${wechatEnv === 'miniProgram' ? '/subPages/user/wx-rebind-action/index' : `${window.location.origin}/user/wx-rebind-action`}`;
       await user.genRebindQrCode({
         scanSuccess: this.scanSuccess,
         scanFail: this.scanFail,
@@ -59,7 +59,7 @@ class RebindPage extends React.Component {
     }
   }
 
-  async scanSuccess() {
+  scanSuccess = async () => {
     const { user } = this.props;
     this.setState({
       currentStatus: 'success'
