@@ -106,12 +106,14 @@ class PayPassword extends React.Component {
       // 表示钱包支付密码
       try {
         await this.props.payBox.walletPayOrder();
+        this.initState();
         Toast.success({
           content: '支付成功',
           hasMask: false,
           duration: 1000,
         });
         setTimeout(() => {
+          // 清空密码
           this.props.payBox.clear();
         }, 500);
       } catch (error) {
