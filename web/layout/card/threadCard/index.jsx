@@ -27,6 +27,11 @@ const ThreadCard = inject('user', 'card')(observer((props) => {
   const priceImg = '/dzq-img/admin-logo-pc.jpg';
   const content = useRef();
   const [overMaxHeight, setOverMaxHeight] = useState(false);
+  // 内容是否为空
+  let isEmpty = false;
+  if (!text && !title && !parseContent.IMAGE) {
+    isEmpty = true;
+  }
   useEffect(() => {
     if (content.current.offsetHeight >= 1900) {
       setOverMaxHeight(true);
@@ -81,7 +86,7 @@ const ThreadCard = inject('user', 'card')(observer((props) => {
             />
           )}
           {/* 付费 */}
-          {!isFree && (
+          {(!isFree || isEmpty) && (
             <div className={styles.imgBox}>
               <img src={priceImg} className={styles.priceimg}/>
             </div>
