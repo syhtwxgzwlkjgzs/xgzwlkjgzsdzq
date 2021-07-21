@@ -92,12 +92,12 @@ const ThreadCard = inject('user', 'card')(observer((props) => {
               <img src={priceImg} className={styles.priceimg}/>
             </div>
           )}
-        </div>
-        {overMaxHeight && (
+          {overMaxHeight && (
             <div className={styles.lookmoreBox}>
               <img src="/dzq-img/look-more.jpg" alt="扫码查看更多" className={styles.lookmoreImg}/>
             </div>
-        )}
+          )}
+        </div>
           {/* 标签 */}
           {(parentCategoryName || categoryName) && (
             <div className={styles.tag}>

@@ -125,8 +125,7 @@ class SiteCard extends React.Component {
             <div className={styles.contentText}>
               {siteIntroduction}
             </div>
-          </div>
-          {this.state.overMaxHeight && (
+            {this.state.overMaxHeight && (
             <div>
               <div className={styles.rectangleBox}>
                 <img src='dzq-img/rectangle.png' className={styles.rectangle}/>
@@ -135,7 +134,8 @@ class SiteCard extends React.Component {
                 <img src='/dzq-img/look-more.jpg' className={styles.lookmoreImg}/>
               </div>
             </div>
-          )}
+            )}
+          </div>
         </Card>
     );
   }
