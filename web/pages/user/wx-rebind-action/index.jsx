@@ -15,7 +15,7 @@ class WXRebindAction extends React.Component {
               pc={
                 <Redirect jumpUrl={'/user/login'} />
               }
-              title={`授权登录`}
+              title='换绑授权'
             />;
   }
 }
