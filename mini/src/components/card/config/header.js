@@ -1,11 +1,10 @@
-import { getByteLen } from '../../utils'
-import eyeImg from '../../card-img/eye.png'
-import position from '../../card-img/position.png'
+import { getByteLen } from '../utils'
+import eyeImg from '../card-img/eye.png'
+import position from '../card-img/position.png'
 import { posterFrameWidth, posterWidth, descriptionY, positionIconWidth, eyeIconWidth, nameAndTagsY, posterPadding, avatarWidth, userInfoHeight, descriptionStartsX, baseX, minGap } from './constants';
-import browser from '../../../../../../common/utils/browser'
+import browser from '../../../../../common/utils/browser'
 
 export const getHeaderConfig = ({ thread }) => {
-
     const {avatarBlock, avatarImage} = handleAvatar(thread);
     const tags = handleTags(thread)
     const {descTexts, descImages} = handleDesc(thread)
@@ -22,7 +21,6 @@ export const getHeaderConfig = ({ thread }) => {
           images: [ ...descImages ],
       }
     };
-    
     if(!thread.user.avatar || thread.isAnonymous) {
       headerConfig.config.blocks.push(avatarBlock);
     } else {

@@ -1,8 +1,8 @@
 import htmlparser2 from 'htmlparser2';
-import { getByteLen } from '../../utils';
+import { getByteLen } from '../utils';
 import replaceStringInRegex from '@common/utils/replace-string-in-regex';
-import priceShare from '../../card-img/admin-logo-pc.jpg';
-import lookMore from '../../card-img/look-more.jpg';
+import priceShare from '../card-img/admin-logo-pc.jpg';
+import lookMore from '../card-img/look-more.jpg';
 
 import {
   posterFrameWidth,
