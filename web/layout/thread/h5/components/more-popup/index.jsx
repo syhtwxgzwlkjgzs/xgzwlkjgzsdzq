@@ -1,17 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Icon, Popup, Button } from '@discuzq/design';
 import styles from './index.module.scss';
 import className from 'classnames';
+import classNames from 'classnames';
 
 const InputPop = (props) => {
   const { visible, onSubmit, onClose, onOperClick, permissions = {}, statuses = {} } = props;
 
-  const { canEdit, canDelete, canEssence, canStick, canShare, canCollect } = permissions;
+  const { canEdit, canDelete, canEssence, canStick, canShare, canCollect, isAdmini } = permissions;
   const { isEssence, isStick, isCollect } = statuses;
 
   const [essence, setEssence] = useState(isEssence);
   const [stick, setStick] = useState(isStick);
   const [collect, setCollect] = useState(isCollect);
+
+  const buttonNumber = useMemo(() => 1 + canEdit + canDelete + canEssence + canStick + canShare + canCollect, [
+    canEdit,
+    canDelete,
+    canEssence,
+    canStick,
+    canShare,
+    canCollect,
+  ]);
 
   useEffect(() => {
     setEssence(isEssence);
@@ -29,7 +39,7 @@ const InputPop = (props) => {
     <Popup position="bottom" visible={visible} onClose={onClose}>
       <div>
         <div className={styles.container}>
-          <div className={styles.more}>
+          <div className={classNames(styles.more, buttonNumber < 5 && styles.flex)}>
             {canEdit && (
               <div className={styles.moreItem} onClick={() => onOperClick('edit')}>
                 <div className={styles.icon}>
@@ -84,13 +94,14 @@ const InputPop = (props) => {
                 <div className={styles.text}>分享</div>
               </div>
             )}
-
-            <div className={styles.moreItem} onClick={() => onOperClick('report')}>
-              <div className={styles.icon}>
-                <Icon name="WarnOutlined" size={20}></Icon>
+            {!isAdmini && (
+              <div className={styles.moreItem} onClick={() => onOperClick('report')}>
+                <div className={styles.icon}>
+                  <Icon name="WarnOutlined" size={20}></Icon>
+                </div>
+                <div className={styles.text}>举报</div>
               </div>
-              <div className={styles.text}>举报</div>
-            </div>
+            )}
           </div>
         </div>
 

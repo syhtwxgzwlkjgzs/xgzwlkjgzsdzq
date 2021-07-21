@@ -30,6 +30,10 @@ class Index extends React.Component {
     const { serverSearch, search } = this.props;
     // 初始化数据到store中
     search.setThreads(null);
+
+    this.state = {
+      repeatedIds: [],
+    };
   }
 
   async componentDidMount() {
@@ -38,30 +42,47 @@ class Index extends React.Component {
     // 当服务器无法获取数据时，触发浏览器渲染
     const hasThreads = !!search.threads;
 
-    // if (!hasThreads) {
-      // this.toastInstance = Toast.loading({
-      //   content: '加载中...',
-      //   duration: 0,
-      // });
+    this.page = 1;
+    const res = await search.getThreadList({ search: keyword });
 
-      this.page = 1;
-      await search.getThreadList({ search: keyword });
-
-    //   this.toastInstance?.destroy();
-    // }
+    this.handleFirstRequest(res);
   }
 
-  dispatch = async (type, data) => {
+  dispatch = async (type, keyword, params) => {
     const { search } = this.props;
+    let { repeatedIds = [] } = params || this.state || {};
 
+    let sort = '3';
     if (type === 'refresh') {
       this.page = 1;
       search.setThreads(null);
+      repeatedIds = [];
+      this.setState({ repeatedIds: [] });
     } else if (type === 'moreData') {
       this.page += 1;
+      sort = '4';
+    } else if (type === 'repeated') {
+      this.page = 1;
+      sort = '4';
     }
-    await search.getThreadList({ search: data, perPage: this.perPage, page: this.page });
+
+    const res = await search.getThreadList({ search: keyword, repeatedIds, sort, perPage: this.perPage, page: this.page });
+
+    if (sort === '3') {
+      this.handleFirstRequest(res, keyword);
+    }
+
     return;
+  }
+
+  handleFirstRequest = (res, keyword = '') => {
+    if (!res) {
+      return;
+    }
+
+    const ids = res.pageData?.map(item => item.threadId);
+    this.setState({ repeatedIds: ids });
+    this.dispatch('repeated', keyword, { repeatedIds: ids });
   }
 
   render() {

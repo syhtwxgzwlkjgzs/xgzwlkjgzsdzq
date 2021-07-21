@@ -27,9 +27,9 @@ class InviteH5Page extends React.Component {
 
   createInviteLink = async () => {
     try {
-      const { site: { setSite: { siteTitle } = {} } = {}, user } = this.props;
+      const { site: { setSite: { siteName } = {} } = {}, user } = this.props;
       // copyToClipboard(`${window.location.origin}/forum/partner-invite?inviteCode=${user.id}`);
-      h5Share({ title: `邀请您加入${siteTitle || ''}`, path: `/forum/partner-invite?inviteCode=${user.id}` });
+      h5Share({ title: `邀请您加入${siteName || ''}`, path: `/forum/partner-invite?inviteCode=${user.id}` });
       Toast.success({
         content: '创建邀请链接成功',
         duration: 1000,
@@ -132,8 +132,15 @@ class InviteH5Page extends React.Component {
                 ))
               }
               <div className={layout.bottom_tips_wrap}>
-                {isNoData && <NoData className={layout.invite_list_nodata} text='没有更多内容了'/>}
                 {inviteLoading && <div className={layout.loadMoreContainer}><Spin type={'spinner'}>加载中 ...</Spin></div>}
+                {
+                  !inviteLoading && isNoData
+                  && <div className={layout.lineSty}>
+                        <span className={layout.noMoreLeft}></span>
+                        <span>没有更多内容了</span>
+                        <span className={layout.noMoreRight}></span>
+                    </div>
+                }
               </div>
             </div>
           </div>

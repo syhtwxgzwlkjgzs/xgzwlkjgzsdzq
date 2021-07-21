@@ -7,12 +7,12 @@ import {calcImageType, calcImageDefaultType} from '@common/utils/calc-image-type
 const { Col, Row } = Flex;
 
 // TODO 图片懒加载
-const Index = ({ imgData = [], flat = false, platform = 'h5', isPay = false, onPay = noop, onImageReady = () => {} }) => {
+const Index = ({ imgData = [], flat = false, platform = 'h5', isPay = false, onPay = noop, onImageReady = noop, updateViewCount = noop }) => {
   const [visible, setVisible] = useState(false);
   const [defaultImg, setDefaultImg] = useState('');
   const ImagePreviewerRef = React.useRef(null);
   // const [firstImgData, setFirstImgData] = useState(null);
-  const [firstImgData, setFirstImgData] = useState({width: (imgData && imgData[0] && imgData[0].fileWidth) || 0, height: (imgData && imgData[0] && imgData[0].fileHeight) || 0});
+  const [firstImgData, setFirstImgData] = useState({width: (Array.isArray(imgData) && imgData[0] && imgData[0].fileWidth) || 0, height: (Array.isArray(imgData) && imgData[0] && imgData[0].fileHeight) || 0});
 
   const imagePreviewers = useMemo(() => imgData.map((item) => item.url), [imgData]);
   useEffect(() => {
@@ -78,6 +78,7 @@ const Index = ({ imgData = [], flat = false, platform = 'h5', isPay = false, onP
     if (isPay) {
       onPay();
     } else {
+      updateViewCount();
       imgData.forEach((item) => {
         if (item.id === id) {
           setDefaultImg(item.url);
@@ -89,7 +90,7 @@ const Index = ({ imgData = [], flat = false, platform = 'h5', isPay = false, onP
 
   const onClickMore = (e) => {
     e.stopPropagation();
-
+    updateViewCount();
     setDefaultImg(imgData[4].url);
     setTimeout(() => {
       setVisible(true);

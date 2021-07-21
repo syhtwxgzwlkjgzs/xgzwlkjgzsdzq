@@ -1,10 +1,18 @@
 import React from 'react';
 import style from './index.module.scss';
 import { inject, observer } from 'mobx-react';
+import classNames from 'classnames';
 
 @inject('site')
 @observer
 class Index extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      siteName: ''
+    };
+  }
 
   qrCode = React.createRef(null)
 
@@ -18,19 +26,23 @@ class Index extends React.Component {
         height: 83,
       })
     }
+
+    const title = this.props.site?.webConfig?.setSite?.siteName
+    this.setState({
+      siteName: title || 'Discuz! Q'
+    })
   }
 
   render() {
-    const { subTitle = '扫一扫访问移动端', title = 'Discuz! Q' } = this.props
-    // TODO 待确定是否用siteTitle字段
-    const newTitle = ''; //this.props.site?.webConfig?.setSite?.siteTitle
+    const { subTitle = '扫一扫访问移动端' } = this.props
+    const { siteName } = this.state
 
     return (
-      <div className={style.code}>
+      <div className={classNames(style.code, 'qrcode')}>
         <div className={style.codeBox} ref={this.qrCode}></div>
         <div className={style.codeText}>
           <p className={style.codeTextVisit}>{subTitle}</p>
-          <p className={style.codeTextLogo}>{ newTitle || title }</p>
+          <p className={style.codeTextLogo}>{ siteName }</p>
         </div>
       </div>
     )

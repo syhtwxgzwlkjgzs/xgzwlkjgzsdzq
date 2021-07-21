@@ -1,10 +1,10 @@
-import {readUsersList} from '@discuzq/sdk/dist/api/user/read-userslist';
+import { readUsersList } from '@discuzq/sdk/dist/api/search/read-users-list';
 
-/**
- * 活跃用户
+/** 成员列表
+ * @param {object} params
+ * @returns object
  */
-export default async function _readUsersList(opt = {}, ctx = null) {
-  const res = await readUsersList({ ...opt, __context: ctx, url: '/apiv3/users.list', isValidate: false });
-
+export default async function _readUsersList(opts, ctx = null) {
+  const res = await readUsersList({ ...opts, __context: ctx });
   return res;
 }

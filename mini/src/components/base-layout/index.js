@@ -69,7 +69,12 @@ const BaseLayout = (props) => {
     }
 
     if(baselayout.videoFullScreenStatus === "inFullScreen") {
-      if(osPlatform === 'ios') setShowShadow(true); // 增加一层黑色遮罩用于推出全屏后跳转
+      if(osPlatform === 'ios') {
+        setShowShadow(true); // 增加一层黑色遮罩用于推出全屏后跳转
+        setTimeout(() => { // 关闭遮罩的兜底
+          setShowShadow(false)
+        }, 3000);
+      }
     } else if (baselayout.videoFullScreenStatus === "offFullScreen" &&
         pageName && baselayout[pageName] > 0) {
       listRef.current.jumpToScrollTop(baselayout[pageName]);
@@ -87,35 +92,36 @@ const BaseLayout = (props) => {
     const playingAudioDom = baselayout.playingAudioDom;
 
     if (e?.detail?.scrollTop && pageName) baselayout[pageName] = e.detail.scrollTop;
-
-    Taro.getSystemInfo({
-      success(res) {
-
-        if (playingVideoDom) {
-          Taro.createSelectorQuery()
-          .select(`#${playingVideoDom}`)
-          .boundingClientRect((rect) => { 
-            if(rect.top > res.windowHeight || rect.bottom < 0) {
-              Taro.createVideoContext(playingVideoDom)?.pause();
-              baselayout.playingVideoDom = "";
-            }
-          }).exec();
+    
+    if (playingVideoDom || playingAudioDom) {
+      Taro.getSystemInfo({
+        success(res) {
+  
+          if (playingVideoDom) {
+            Taro.createSelectorQuery()
+            .select(`#${playingVideoDom}`)
+            .boundingClientRect((rect) => { 
+              if(rect.top > res.windowHeight || rect.bottom < 0) {
+                Taro.createVideoContext(playingVideoDom)?.pause();
+                baselayout.playingVideoDom = "";
+              }
+            }).exec();
+          }
+  
+          if(playingAudioDom) {
+            Taro.createSelectorQuery()
+              .select(`#${baselayout?.playingAudioWrapperId}`)
+              .boundingClientRect((rect) => {
+              if(rect.top > res.windowHeight || rect.bottom < 0) {
+                baselayout.playingAudioDom.pause();
+                baselayout.playingAudioDom = null;
+              }
+            }).exec();
+          }
+  
         }
-
-        if(playingAudioDom) {
-          Taro.createSelectorQuery()
-            .select(`#${baselayout?.playingAudioWrapperId}`)
-            .boundingClientRect((rect) => {
-            if(rect.top > res.windowHeight || rect.bottom < 0) {
-              baselayout.playingAudioDom.pause();
-              baselayout.playingAudioDom = null;
-            }
-          }).exec();
-        }
-
-      }
-    });
-
+      });
+    }
   }, 50);
 
   return (

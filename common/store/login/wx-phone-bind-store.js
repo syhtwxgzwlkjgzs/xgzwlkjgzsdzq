@@ -54,6 +54,14 @@ export default class wxPhoneBindStore {
       return this.code.length === 6;
     }
 
+    // 重置参数
+    @action
+    reset = () => {
+      this.mobile = '';
+      this.code = '';
+      this.codeTimeout = null;
+    }
+
     // 是否信息填写完毕
     @computed get isInfoComplete() {
       return this.code && this.mobile;
@@ -169,8 +177,6 @@ export default class wxPhoneBindStore {
 
       try {
         const smsLoginResp = await transitionSmsBind({
-          url: 'apiv3/users/wechat/transition/sms.bind',
-
           data: {
             mobile: this.mobile,
             code: this.code,

@@ -74,6 +74,10 @@ const CommentInput = inject('site')((props) => {
   };
 
   const onEmojiIconClick = async () => {
+    if (typeof props.onEmojiIconClick === 'function' && !props.onEmojiIconClick()) {
+      return;
+    }
+
     setShowEmojis(!showEmojis);
     setShowAt(false);
 
@@ -88,11 +92,19 @@ const CommentInput = inject('site')((props) => {
   };
 
   const onAtIconClick = () => {
+    if (typeof props.onAtIconClick === 'function' && !props.onAtIconClick()) {
+      return;
+    }
+
     setShowAt(!showAt);
     setShowEmojis(false);
   };
 
   const onPcitureIconClick = () => {
+    if (typeof props.onPcitureIconClick === 'function' && !props.onPcitureIconClick()) {
+      return;
+    }
+
     setShowPicture(!showPicture);
     setShowEmojis(false);
     setShowAt(false);
@@ -120,7 +132,7 @@ const CommentInput = inject('site')((props) => {
   };
 
   const handleUploadChange = async (list) => {
-    setImageList(list);
+    setImageList([...list]);
   };
 
   // 附件、图片上传之前
@@ -131,7 +143,8 @@ const CommentInput = inject('site')((props) => {
     const { supportFileExt, supportImgExt, supportMaxSize } = webConfig.setAttach;
     if (type === THREAD_TYPE.file) {
       // 当前选择附件的类型大小
-      const fileType = cloneList[0].name.match(/\.(.+)$/i)[1].toLocaleLowerCase();
+      const arr = cloneList[0].name.split('.').pop();
+      const fileType = arr.toLocaleLowerCase();
       const fileSize = cloneList[0].size;
       // 判断合法性
       const isLegalType = supportFileExt.toLocaleLowerCase().includes(fileType);
@@ -179,10 +192,16 @@ const CommentInput = inject('site')((props) => {
     setImageUploading(list?.length && list.some((image) => image.status === 'uploading'));
   };
 
-  const onFail = () => {
+  const onFail = (ret) => {
+    const msg = ret?.msg;
+    const code = ret?.code === -7075; // 错误码为-7075时为不允许上传敏感图
     Toast.error({
-      content: '图片上传失败',
+      content: code ? msg : '图片上传失败',
     });
+  };
+
+  const onFocus = (e) => {
+    typeof props.onFocus === 'function' && props.onFocus(e);
   };
 
   return (
@@ -198,6 +217,7 @@ const CommentInput = inject('site')((props) => {
           placeholder={placeholderState}
           disabled={loading}
           forwardedRef={textareaRef}
+          onFocus={onFocus}
         ></Textarea>
 
         {showPicture && (
@@ -220,7 +240,7 @@ const CommentInput = inject('site')((props) => {
       {showAt && <AtSelect pc visible={showAt} getAtList={onAtListChange} onCancel={onAtIconClick} />}
 
       <div className={styles.footer}>
-        {showEmojis && <Emoji pc show={showEmojis} emojis={emojis} onClick={onEmojiClick} atTop={false}/>}
+        {showEmojis && <Emoji pc show={showEmojis} emojis={emojis} onClick={onEmojiClick} atTop={false} />}
 
         <div className={styles.linkBtn}>
           <Icon

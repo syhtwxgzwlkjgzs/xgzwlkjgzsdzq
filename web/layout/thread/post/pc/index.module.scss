@@ -1,6 +1,6 @@
 @import '@common/styles/index.scss';
 .container {
-  min-height: 100vh;
+  // min-height: 100vh;
   background-color: $body-bg-color;
 }
 .wrapper {
@@ -33,11 +33,11 @@
 .editor {
   position: relative;
   padding: 16px 16px 52px;
-  height: 550px;
+  height: 450px;
   border: $border-solid-1;
   border-radius: $border-radius-small;
   &-inner {
-    height: 550px;
+    height: 450px;
     overflow-y: scroll;
     overflow-x: hidden;
     @include scrollbar();
@@ -95,6 +95,7 @@
   align-items: center;
   justify-content: space-between;
   border-bottom: $border-solid-1;
+  z-index: 2;
   &-left {
     display: flex;
     align-items: center;

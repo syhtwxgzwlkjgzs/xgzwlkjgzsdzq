@@ -15,13 +15,13 @@
   height: rem(20);
   line-height: rem(20);
   .text {
-    font-family: 'PingFangSC-Regular';
+    
     font-size: rem($font-size-primary);
     text-align: left;
     // line-height: rem(16);
   }
   .money {
-    font-family: 'PingFang SC';
+    
     font-weight: 600;
     font-size: rem($font-size-middle);
     text-align: left;
@@ -31,7 +31,7 @@
 .footer {
   display: flex;
   justify-content: space-between;
-  font-family: 'PingFangSC-Regular';
+  
   font-weight: normal;
   font-size: rem($font-size-label);
   .time {
@@ -53,11 +53,14 @@
 }
 
 .serialNumber {
-  font-family: 'PingFangSC-Regular';
+  
   font-weight: normal;
   font-size: rem($font-size-label);
   text-align: left;
   color: $text-color-secondary;
-  padding: rem($padding-4n) 0;
+  padding: {
+    top: rem($padding-2n);
+    bottom: rem($padding-4n);
+  }
   border-bottom: $border-solid-1;
 }

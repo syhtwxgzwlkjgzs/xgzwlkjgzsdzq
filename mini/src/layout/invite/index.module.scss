@@ -1,19 +1,32 @@
 @import '@common/styles/index.scss';
+.scroll {
+  width: 100%;
+  height: calc(100vh - 58px - constant(safe-area-inset-bottom));
+  height: calc(100vh - 58px - env(safe-area-inset-bottom));
+  overflow-y: scroll;
+  flex: 1 0 auto;
+  background: $white;
+}
+
 .top_bg {
-  height: rem(144);
-  background-color: $primary-color;
+  height: rem(180);
+  width: 100%;
+  position: absolute;
+  top: 0;
+  z-index: $zindex-backtotop;
   .top_bg_image {
-    position: absolute;
     top: 0;
     left: 0;
     width: 65%;
   }
 }
 .content{
-  height: 100%;
+  position: relative;
+  background: $body-bg-color;
+  z-index: $zindex-backtotop;
   // 用户信息 start
   .user_info{
-    height: rem(165);
+    height: rem(167);
     background: $comment-bg-color;
     position: relative;
   }
@@ -24,10 +37,10 @@
     position: absolute;
     left: 50%;
     margin-left: rem(-60);
-    top: rem(-80);
+    top: rem(-115);
     border-radius: $border-radius-circle;
     background: $white;
-    border: rem(2) solid $white;
+    border: rem(3) solid $white;
     overflow: hidden;
     z-index: $zindex-backtotop;
     :global(.dzq-avatar__img),:global(.dzq-avatar__text) {
@@ -42,7 +55,7 @@
     position: absolute;
     margin-left: rem(-171.5);
     left: 50%;
-    top: rem(-60);
+    top: rem(-55);
     background: $white;
     border-radius: $border-radius-small;
     text-align: center;
@@ -60,13 +73,13 @@
   .user_info_tag{
     font-weight: normal;
     font-size: $font-size-small;
-    line-height: $font-line-height-large;
-    height: rem(30);
+    line-height: $font-line-height-small;
     color: $text-color-secondary;
   }
   .user_info_invite{
     width: rem(311);
     height: rem(78);
+    margin-top: $margin-5;
     border-radius: $border-radius-small;
     background: $body-bg-color;
   }
@@ -104,8 +117,8 @@
     box-sizing: border-box;
     padding: $padding-4n;
     padding-bottom: 0;
-    background-color: $white;
-    border-radius: $border-radius-big;
+    background: $white;
+    border-radius: $border-radius-big $border-radius-big 0 0;
   }
   .invite_list_title{
     font-size: $font-size-middle;
@@ -222,35 +235,31 @@
     left: rem(16);
     bottom: 0;
   }
-  // 邀请列表 end
+}
 
-  // 邀请朋友 start
-  .invite_bottom{
+.footer {
+  width: 100%;
+  box-sizing: border-box;
+  padding: $padding-2n $padding-4n;
+  background: $white;
+  border-top: $border-solid-1;
+  position: fixed;
+  bottom: $padding-2n;
+  bottom: constant(safe-area-inset-bottom); ///兼容 IOS<11.2/
+  bottom: env(safe-area-inset-bottom); ///兼容 IOS>11.2/
+
+  .button {
     width: 100%;
-    box-sizing: border-box;
-    position: fixed;
-    bottom: 0;
-    padding: $padding-2n $padding-4n $padding-4n ;
-    background: $white;
-    border-top: rem(1) solid $border-color;
-    .invite_bottom_button{
-      width: 100%;
-      height: rem(42);
-      background: $primary-color;
-      font-weight: normal;
-      text-align: center;
-      color: $white;
-      font-size: $font-size-middle;
-      border: none;
-    }
-  }
-  // 邀请朋友 end
-  .refreshView {
-    height: rem(40);
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: $font-size-primary;
-    color: $text-color-placeholder;
+    height: rem(42);
+    border-radius: rem($border-radius-small);
+    color: $white;
+    background-color: $primary-color;
+    border: none;
+    font-weight: normal;
+    font-size: rem($font-size-middle);
   }
 }

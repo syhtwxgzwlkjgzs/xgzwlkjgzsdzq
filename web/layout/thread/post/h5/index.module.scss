@@ -91,3 +91,30 @@
     margin-top: rem($margin-10);
   }
 }
+
+.imageUpload {
+  $width: 45.06vw;
+  $margin: 1.333vw;
+
+  :global {
+    .dzq-upload {
+      padding: 0 4.26vw 4.26vw;
+      &.is-card {
+        .dzq-upload-list-card {
+          margin-right: -$margin !important;
+        }
+
+        .dzq-upload__area,
+        .dzq-upload-list-card__item {
+          margin: 0 $margin $margin 0 !important;
+          width: $width !important;
+          height: $width !important;
+        }
+        .dzq-upload__area,
+        .dzq-upload-list-card__item.is-error {
+          margin-right: 1vw;
+        }
+      }
+    }
+  }
+}

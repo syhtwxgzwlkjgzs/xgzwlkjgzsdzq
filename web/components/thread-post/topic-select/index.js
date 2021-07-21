@@ -11,7 +11,6 @@ import styles from './index.module.scss';
 import PropTypes from 'prop-types';
 
 import List from '@components/list';
-import DDialog from '@components/dialog';
 
 @inject('threadPost')
 @observer
@@ -42,19 +41,23 @@ class TopicSelect extends Component {
   searchInput = () => {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
-      this.fetchTopics();
+      this.fetchTopics(1);
     }, 300);
   }
 
   // 请求
-  async fetchTopics() {
+  async fetchTopics(p) {
     // 1 设置参数
     const { fetchTopic } = this.props.threadPost;
-    const { page, perPage, keywords } = this.state;
+    const { perPage, keywords } = this.state;
+    const page = p || this.state.page;
     const params = { page, perPage };
+
+    params.filter = {};
     if (keywords) {
-      params.filter = {};
       params.filter.content = keywords;
+    } else {
+      params.filter.recommended = 1;
     }
     // 2 发起请求
     const ret = await fetchTopic(params);
@@ -92,10 +95,10 @@ class TopicSelect extends Component {
   );
 
   render() {
-    const { pc, visible = false, cancelTopic, threadPost } = this.props;
+    const { pc, visible = false, cancelTopic, threadPost, style = {} } = this.props;
     const { topics = [] } = threadPost;
     const { finish, keywords } = this.state;
-
+    const platform = pc ? 'pc' : 'h5';
     const content = (
       <div className={styles.wrapper} onClick={e => e.stopPropagation()}>
 
@@ -128,8 +131,10 @@ class TopicSelect extends Component {
           height={pc ? 'auto' : 'calc(100vh - 50px)'}
           noMore={finish}
           onRefresh={() => this.fetchTopics()}
+          immediateCheck={false}
+          platform={platform}
         >
-          {keywords && this.renderItem({ content: keywords, newTopic: '新话题' })}
+          {keywords && topics.map(item => item.content).indexOf(keywords) === -1 && this.renderItem({ content: keywords, newTopic: '新话题' })}
           {topics.map(item => (
             <React.Fragment key={item.topicId}>
               {this.renderItem(item)}
@@ -140,15 +145,10 @@ class TopicSelect extends Component {
     );
 
     if (pc) return (
-      <DDialog
-        visible={visible}
-        className={styles.pc}
-        onClose={cancelTopic}
-        title="#添加话题#"
-        isCustomBtn={true}
-      >
+      <div className={styles.pc} style={style} id="dzq-toolbar-topic">
+        <div className={styles.pcHeader}>#添加话题#</div>
         {content}
-      </DDialog>
+      </div>
     );
 
     return (

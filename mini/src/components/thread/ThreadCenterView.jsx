@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useEffect, useState } from 'react';
 import Button from '@discuzq/design/dist/components/button/index';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import AudioPlay from './audio-play';
@@ -11,6 +11,7 @@ import ImageDisplay from './image-display';
 import Packet from './packet';
 import styles from './index.module.scss';
 import { View, Text } from '@tarojs/components';
+import { getElementRect, randomStr, noop } from './utils'
 
 /**
  * 帖子内容组件
@@ -22,7 +23,17 @@ import { View, Text } from '@tarojs/components';
 const Index = (props) => {
   const { title = '', payType, price, paid, attachmentPrice } = props.data || {};
   const needPay = useMemo(() => payType !== 0 && !paid, [paid, payType]);
-  const { onClick, onPay } = props;
+  const { 
+    onClick, 
+    onPay, 
+    relativeToViewport = true, 
+    changeHeight = noop, 
+    useShowMore = true, 
+    setUseShowMore = noop,
+    updateViewCount
+  } = props;
+
+  const wrapperId= useRef(`thread-wrapper-${randomStr()}`)
 
   // 标题显示37个字符
   const newTitle = useMemo(() => {
@@ -31,8 +42,9 @@ const Index = (props) => {
     }
     return title;
   }, [title]);
+
   // 帖子属性内容
-  const renderThreadContent = ({ content: data, attachmentPrice, payType, paid } = {}) => {
+  const renderThreadContent = ({ content: data } = {}, videoH = 0) => {
     const {
       text,
       imageData,
@@ -46,8 +58,19 @@ const Index = (props) => {
     } = handleAttachmentData(data);
     return (
       <>
-        {text && <PostContent content={text} onPay={onPay} onRedirectToDetail={onClick} />}
+        {text && (
+          <PostContent 
+            content={text} 
+            updateViewCount={updateViewCount}
+            onRedirectToDetail={onClick} 
+            relativeToViewport={relativeToViewport}
+            changeHeight={changeHeight}
+            useShowMore={useShowMore}
+            setUseShowMore={setUseShowMore}
+          />
+        )}
         {videoData && (
+          <WrapperView onClick={onClick} videoH={videoH}>
             <VideoPlay
               url={videoData.mediaUrl}
               coverUrl={videoData.coverUrl}
@@ -56,13 +79,27 @@ const Index = (props) => {
               onPay={onPay}
               isPay={needPay}
               status={videoData.status}
+              relativeToViewport={relativeToViewport}
+              changeHeight={changeHeight}
+              updateViewCount={updateViewCount}
             />
+          </WrapperView>
         )}
         {imageData?.length ? (
-            <ImageDisplay platform="h5" imgData={imageData} isPay={needPay} onPay={onPay} onClickMore={onClick} />
+            <ImageDisplay 
+              platform="h5" 
+              imgData={imageData} 
+              isPay={needPay} 
+              onPay={onPay} 
+              onClickMore={onClick}
+              relativeToViewport={relativeToViewport}
+              updateViewCount={updateViewCount}
+            />
         ) : null}
-        {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} />}
-        {fileData?.length ? <AttachmentView threadId={threadId} attachments={fileData} onPay={onPay} isPay={needPay} /> : null}
+        {rewardData && <Packet type={1} money={rewardData.money} onClick={onClick}/>}
+        {redPacketData && (
+          <Packet money={redPacketData.money || 0} onClick={onClick} condition={redPacketData.condition}/>
+        )}
         {goodsData && (
             <ProductItem
               image={goodsData.imagePath}
@@ -71,23 +108,21 @@ const Index = (props) => {
               onClick={onClick}
             />
         )}
-        {rewardData && <Packet type={1} money={rewardData.money} onClick={onClick} />}
-        {redPacketData && (
-          <Packet money={redPacketData.money || 0} onClick={onClick} condition={redPacketData.condition} />
-        )}
+        {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} updateViewCount={updateViewCount}/>}
+        {fileData?.length ? <AttachmentView threadId={threadId} attachments={fileData} onPay={onPay} isPay={needPay} updateViewCount={updateViewCount}/> : null}
       </>
     );
   };
   return (
     <>
-      <View className={styles.wrapper}>
+      <View id={wrapperId.current} className={styles.wrapper}>
         {title && (
           <View className={styles.title} onClick={onClick}>
             {newTitle}
           </View>
         )}
 
-        {renderThreadContent(props.data)}
+        {renderThreadContent(props.data, props.videoH)}
       </View>
 
       {needPay && (
@@ -106,6 +141,23 @@ const Index = (props) => {
   );
 };
 
-const BrWrapper = ({ children }) => <View className={styles.brWrapper}>{children}</View>;
-
 export default React.memo(Index);
+
+// 处理
+const WrapperView = ({ children, onClick, videoH = 0 }) => {
+  const [styleH, setStyleH] = useState({})
+  useEffect(() => {
+    if (videoH > 0) {
+      setStyleH({ minHeight: `${videoH}px` })
+    } else {
+      setStyleH({})
+    }
+  }, [videoH])
+
+  return (
+    <View className={styles.wrapperView} style={styleH}>
+      {children}
+      <View className={styles.placeholder} onClick={onClick}></View>
+    </View>
+  )
+}

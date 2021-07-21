@@ -2,55 +2,63 @@
 @import '@common/styles/_variable.scss';
 
 .loadMoreContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    padding-top: rem(16);
-    padding-bottom: rem(16);
+  padding-top: rem(16);
+  padding-bottom: rem(16);
 
-    :global {
-        .dzq-spin--spinner {
-            color: $text-color-placeholder;
-        }
+  :global {
+    .dzq-spin--spinner {
+      color: $text-color-placeholder;
     }
+  }
 }
 
 .searchInputWrapper {
-    :global {
-        .dzq-input {
-            width: 100%;
+  padding: $padding-2n $padding-4n;
+  :global {
+    .dzq-input {
+      width: 100%;
 
-            .dzq-icon {
-                height: rem(44);
-                line-height: rem(44);
-                width: auto;
-                margin-right: rem(16);
-            }
+      .dzq-icon {
+        height: rem(44);
+        line-height: rem(44);
+        width: rem(32);
+        // margin-right: rem(16);
+        box-sizing: border-box;
+      }
 
-            input {
-                height: rem(44);
-                line-height: rem(44);
-                padding-left: rem(16);
-            }
-        }
+      input {
+        height: rem(44);
+        line-height: rem(44);
+        // padding-left: rem(16);
+      }
     }
+  }
 }
 
 .messageButton {
-    height: rem(25);
-    width: rem(88);
-    font-size: rem(12);
+  height: rem(25);
+  width: rem(88);
+  font-size: rem(12);
+  line-height: rem(25);
+  padding: 0;
 }
 
 .messageButtonContent {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    span {
-        margin-left: rem(4);
-    }
+  span {
+    margin-left: rem(4);
+  }
+}
+
+.friendWrap {
+  overflow: hidden;
 }
 
 .friendWrap.display-none {

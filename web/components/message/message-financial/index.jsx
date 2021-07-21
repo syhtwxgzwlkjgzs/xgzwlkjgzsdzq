@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { inject, observer } from 'mobx-react';
 
 import Notice from '@components/message/notice';
 
 import styles from './index.module.scss';
 
-const Index = ({ site, message }) => {
+const Index = ({ site, message, rightContent }) => {
   const { readFinancialMsgList, financialMsgList, deleteMsg } = message;
   const { list, currentPage, totalPage, totalCount } = financialMsgList;
 
@@ -23,8 +23,26 @@ const Index = ({ site, message }) => {
   const formatFinancialList = (list = []) => {
     const newList = [];
     list.forEach(({
-      amount, cashActualAmount, content, createdAt, id, threadId, threadTitle, type, userAvatar, userId, username, nickname, orderType
+      amount, cashActualAmount, content, createdAt, id, threadId, threadTitle, type, userAvatar, userId, username, nickname, orderType, threadUserAvatar, threadUsername, threadUserNickname
     }) => {
+      let _avatar = userAvatar;
+      let _userId = userId;
+      let _username = username;
+      let _nickname = nickname;
+      switch (type) {
+        case 'threadrewarded':
+          _avatar = threadUserAvatar;
+          _username = threadUsername;
+          _nickname = threadUserNickname;
+          break;
+        case 'threadrewardedexpired':
+          _avatar = '';
+          _userId = '';
+          _username = '悬赏过期退回';
+          _nickname = '悬赏过期退回';
+          break;
+      }
+
       newList.push({
         amount: amount || cashActualAmount || 0,
         content: threadTitle || content,
@@ -32,10 +50,10 @@ const Index = ({ site, message }) => {
         id,
         threadId,
         type,
-        avatar: userAvatar,
-        userId,
-        username,
-        nickname,
+        avatar: _avatar,
+        userId: _userId,
+        username: _username,
+        nickname: _nickname,
         orderType,
       });
     });
@@ -48,12 +66,13 @@ const Index = ({ site, message }) => {
   }, [list])
 
   return (
-    <div className={`${styles.wrapper} ${site.isPC ? styles.pc : styles.mobile}`}>
+    <div className={`${styles.wrapper} ${!site.isPC && styles.mobile}`}>
       <Notice
         infoIdx={2}
         totalCount={totalCount}
         noMore={currentPage >= totalPage}
         showHeader={!site.isPC}
+        rightContent={site.isPC ? rightContent : null}
         list={renderList}
         type='financial'
         onPullDown={() => readFinancialMsgList(1)}

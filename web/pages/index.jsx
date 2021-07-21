@@ -6,11 +6,13 @@ import { readCategories, readStickList, readThreadList } from '@server';
 import { handleString2Arr } from '@common/utils/handleCategory';
 import HOCFetchSiteData from '../middleware/HOCFetchSiteData';
 import ViewAdapter from '@components/view-adapter';
+import isServer from '@common/utils/is-server';
 
 @inject('site')
 @inject('index')
 @inject('user')
 @inject('baselayout')
+@inject('vlist')
 @observer
 class Index extends React.Component {
 
@@ -21,32 +23,32 @@ class Index extends React.Component {
 
   page = 1;
   prePage = 10;
-  static async getInitialProps(ctx, { user, site }) {
-    const categories = await readCategories({}, ctx);
-    const sticks = await readStickList({}, ctx);
+  // static async getInitialProps(ctx, { user, site }) {
+  //   const categories = await readCategories({}, ctx);
+  //   const sticks = await readStickList({}, ctx);
 
-    const threads = await readThreadList({ params: { filter: {
-      sort: 1,
-      attention: 0,
-      essence: 0
-    }, sequence: 0, perPage: 10, page: 1 } }, ctx);
+  //   const threads = await readThreadList({ params: { filter: {
+  //     sort: 1,
+  //     attention: 0,
+  //     essence: 0
+  //   }, sequence: 0, perPage: 10, page: 1 } }, ctx);
 
-    return {
-      serverIndex: {
-        categories: categories && categories.code === 0 ? categories.data : null,
-        sticks: sticks && sticks.code === 0 ? sticks.data : null,
-        threads: threads && threads.code === 0 ? threads.data : null,
-      },
-    };
-  }
+  //   return {
+  //     serverIndex: {
+  //       categories: categories && categories.code === 0 ? categories.data : null,
+  //       sticks: sticks && sticks.code === 0 ? sticks.data : null,
+  //       threads: threads && threads.code === 0 ? threads.data : null,
+  //     },
+  //   };
+  // }
 
   constructor(props) {
     super(props);
     const { serverIndex, index } = this.props;
     // 初始化数据到store中
-    serverIndex && serverIndex.categories && index.setCategories(serverIndex.categories);
-    serverIndex && serverIndex.sticks && index.setSticks(serverIndex.sticks);
-    serverIndex && serverIndex.threads && index.setThreads(serverIndex.threads);
+    // serverIndex && serverIndex.categories && index.setCategories(serverIndex.categories);
+    // serverIndex && serverIndex.sticks && index.setSticks(serverIndex.sticks);
+    // serverIndex && serverIndex.threads && index.setThreads(serverIndex.threads);
   }
 
   componentDidMount() {
@@ -90,10 +92,18 @@ class Index extends React.Component {
 
     let categoryIds = handleString2Arr(newData, 'categoryids');
 
+    // 每次请求前，先判断错误状态，并重置
+    if (this.props.index?.threadError?.isError) {
+      this.props.index.threadError = {
+        isError: false,
+        errorText: ''
+      }
+    }
+
     if (type === 'click-filter') { // 点击tab
       this.page = 1;
       this.props.baselayout.setJumpingToTop();
-
+      this.props.vlist.setPosition(0);
       await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
     } else if (type === 'moreData') {
       this.page += 1;
@@ -124,4 +134,15 @@ class Index extends React.Component {
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(Index);
+export default HOCFetchSiteData(Index, (pass) => {
+  // 因部署方式的问题，所有路径第一次访问都会访问index.html，导致会出现首页渲染出来之后跳转到制定的url地址，为了防止这种情况，对首页的渲染做一次判断，如果url不是首页连接，将不渲染首页。
+  if (!isServer()) {
+    const pathname = window.location.pathname;
+    if (pathname === '/' || pathname === '/index') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  return pass;
+});

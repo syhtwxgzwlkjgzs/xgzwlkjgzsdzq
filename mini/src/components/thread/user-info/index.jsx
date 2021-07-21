@@ -57,7 +57,7 @@ export default function UserInfo(props) {
         </View>
 
         <View className={styles.meta}>
-          {props.time && <Text className={styles.time}>{diffDate(props.time)}</Text>}
+          {props.time && <Text className={styles.time}>{props.time.substr(0, 10)}</Text>}
           {props.location && (
             <View className={styles.location}>
               <Icon name="PositionOutlined" size={14}></Icon>

@@ -46,11 +46,15 @@ import { View, Text } from '@tarojs/components'
 
   const loadData = async ({ type }) => {
     const { postId = '', threadId = '' } = tipData;
+    
     const res = await readLikedUsers({ params: { threadId, postId, type, page: 1 } });
-
-    setAll(res?.data);
-
-    return res
+    if(res?.code === 0) {
+      setAll(res?.data);
+    } else {
+      setRequestError(true);
+      setErrorText(res?.msg);
+    }
+    return res;
   };
 
   const singleLoadData = async ({ page = 1, type = 1 } = {}) => {

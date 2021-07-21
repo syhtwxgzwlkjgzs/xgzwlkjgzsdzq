@@ -1,23 +1,17 @@
 /**
  * 入口配置文件：https://taro-docs.jd.com/taro/docs/next/tutorial/
  */
-const config = {
+ const config = {
   // TODO: 分包处理
   // 首页和详情页在主包
   pages: [
     'pages/index/index',
-    'pages/home/index',
   ],
   subPackages: [
     {
-      root: 'subPages',
+      root: 'indexPages',
       pages: [
-        '404/index',
-        '500/index',
-        'no-install/index',
-        'close/index',
-        'create-card/index',
-        'join/index',
+        'home/index',
         'thread/index',
         'thread/comment/index',
         'thread/post/index',
@@ -27,6 +21,17 @@ const config = {
         'thread/selectRedpacket/index',
         'thread/selectReward/index',
         'thread/selectPayment/index',
+      ]
+    },
+    {
+      root: 'subPages',
+      pages: [
+        '404/index',
+        '500/index',
+        'no-install/index',
+        'close/index',
+        'create-card/index',
+        'join/index',
         'search/index',
         'search/result-topic/index',
         'search/result-post/index',
@@ -83,7 +88,7 @@ const config = {
   "preloadRule": {
     "pages/index/index": {
       "network": "all",
-      "packages": ["subPages"]
+      "packages": ["indexPages"]
     }
   }
 };

@@ -2,21 +2,24 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
-import { Button, Icon, Toast, Spin } from '@discuzq/design';
+import { Button, Icon, Toast, Spin, ImagePreviewer } from '@discuzq/design';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import { numberFormat } from '@common/utils/number-format';
 import browser from '@common/utils/browser';
 import throttle from '@common/utils/thottle.js';
+import LoginHelper from '@common/utils/login-helper.js';
 
 @inject('user')
+@inject('site')
 @observer
 class index extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isFollowedLoading: false, // 是否点击关注
+      isPreviewAvatar: false, // 是否预览头像
     };
   }
 
@@ -30,10 +33,10 @@ class index extends Component {
   }
 
   // 点击屏蔽
-  handleChangeShield = throttle((isDeny) => {
+  handleChangeShield = throttle(async (isDeny) => {
     const id = this.props.router.query?.id;
     if (isDeny) {
-      this.props.user.undenyUser(id);
+      await this.props.user.undenyUser(id);
       this.props.user.setTargetUserNotBeDenied();
       Toast.success({
         content: '解除屏蔽成功',
@@ -41,7 +44,7 @@ class index extends Component {
         duration: 2000,
       });
     } else {
-      this.props.user.denyUser(id);
+      await this.props.user.denyUser(id);
       this.props.user.setTargetUserDenied();
       Toast.success({
         content: '屏蔽成功',
@@ -76,11 +79,9 @@ class index extends Component {
             hasMask: false,
             duration: 2000,
           });
-          setTimeout(() => {
-            this.setState({
-              isFollowedLoading: false,
-            });
-          }, 200);
+          this.setState({
+            isFollowedLoading: false,
+          });
         } catch (error) {
           console.error(error);
           Toast.error({
@@ -112,11 +113,9 @@ class index extends Component {
             hasMask: false,
             duration: 2000,
           });
-          setTimeout(() => {
-            this.setState({
-              isFollowedLoading: false,
-            });
-          }, 200);
+          this.setState({
+            isFollowedLoading: false,
+          });
         } catch (error) {
           console.error(error);
           Toast.error({
@@ -133,7 +132,7 @@ class index extends Component {
 
   logout = () => {
     clearLoginStatus();
-    window.location.replace('/');
+    LoginHelper.gotoIndex();
   };
 
   // 点击粉丝列表
@@ -196,15 +195,25 @@ class index extends Component {
     return { icon, text };
   };
 
+  // 点击头像预览
+  handlePreviewAvatar = (e) => {
+    e && e.stopPropagation();
+    this.setState({
+      isPreviewAvatar: !this.state.isPreviewAvatar,
+    });
+  };
+
   render() {
+    const { site } = this.props;
     const { targetUser } = this.props.user;
     const user = this.props.router.query?.id ? targetUser || {} : this.props.user;
+    const isHideLogout = site.platform === 'h5' && browser.env('weixin') && site.isOffiaccountOpen; // h5下非微信浏览器访问时，若用户已登陆，展示退出按钮
     return (
       <div className={styles.h5box}>
         {/* 上 */}
         <div className={styles.h5boxTop}>
-          <div className={styles.headImgBox}>
-            <Avatar image={user.avatarUrl} size="big" name={user.nickname} />
+          <div className={styles.headImgBox} onClick={this.handlePreviewAvatar}>
+            <Avatar image={user.avatarUrl} size="big" name={user.nickname} level={1} />
           </div>
           {/* 粉丝|关注|点赞 */}
           <div className={styles.userMessageList}>
@@ -269,12 +278,16 @@ class index extends Component {
                   <span className={styles.userBtnText}>编辑资料</span>
                 </div>
               </Button>
-              <Button full className={styles.btn} onClick={this.logout}>
-                <div className={styles.actionButtonContentWrapper}>
-                  <Icon name="PoweroffOutlined" size={browser.env('ios') ? 14 : 16} />
-                  <span className={styles.userBtnText}>退出登录</span>
-                </div>
-              </Button>
+              {isHideLogout ? (
+                ''
+              ) : (
+                <Button full className={styles.btn} onClick={this.logout}>
+                  <div className={styles.actionButtonContentWrapper}>
+                    <Icon name="PoweroffOutlined" size={browser.env('ios') ? 14 : 16} />
+                    <span className={styles.userBtnText}>退出登录</span>
+                  </div>
+                </Button>
+              )}
             </>
           )}
         </div>
@@ -289,6 +302,14 @@ class index extends Component {
             <Icon name="ShieldOutlined" />
             <span>{user.isDeny ? '解除屏蔽' : '屏蔽'}</span>
           </div>
+        )}
+        {user.originalAvatarUrl && this.state.isPreviewAvatar && (
+          <ImagePreviewer
+            visible={this.state.isPreviewAvatar}
+            onClose={this.handlePreviewAvatar}
+            imgUrls={[user.originalAvatarUrl]}
+            currentUrl={user.originalAvatarUrl}
+          />
         )}
       </div>
     );

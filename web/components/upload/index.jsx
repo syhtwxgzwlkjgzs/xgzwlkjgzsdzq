@@ -4,6 +4,8 @@ import { createAttachment } from '@common/server';
 import styles from './index.module.scss';
 import classNames from 'classnames';
 import ProgressRender from './progress-render';
+import { fixImageOrientation } from '@common/utils/exif';
+
 
 export default function DzqUpload(props) {
   const {
@@ -22,12 +24,14 @@ export default function DzqUpload(props) {
     data,
     accept,
     className,
+    wxChooseImage = () => new Promise(resolve => resolve([])),
   } = props;
   const multiple = limit > 1;
   const post = async (file, list, updater) => {
     // file, list, updater
     const formData = new FormData();
-    formData.append('file', file.originFileObj);
+    const fileImg = await fixImageOrientation(file.originFileObj);
+    formData.append('file', fileImg);
     Object.keys(data).forEach((item) => {
       formData.append(item, data[item]);
     });
@@ -66,7 +70,7 @@ export default function DzqUpload(props) {
   return (
     <div className={clsName} onClick={(e) => e.stopPropagation()}>
       <Upload
-        progressRender={(file) => <ProgressRender file={file} />}
+        // progressRender={(file) => <ProgressRender file={file} />}
         listType={listType}
         fileList={formatFileList}
         limit={limit}
@@ -74,6 +78,7 @@ export default function DzqUpload(props) {
         onRemove={(file) => {
           onRemove(file);
         }}
+        wxChooseImage={wxChooseImage}
         beforeUpload={(cloneList, showFileList) => {
           if (typeof beforeUpload !== 'function') return true;
           return beforeUpload(cloneList, showFileList);

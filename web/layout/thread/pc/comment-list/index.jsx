@@ -68,7 +68,7 @@ class RenderCommentList extends React.Component {
       id: data.id,
       isLiked: !data.isLiked,
     };
-    const { success, msg } = await this.props.comment.updateLiked(params);
+    const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
 
     if (success) {
       this.props.thread.setCommentListDetailField(data.id, 'isLiked', params.isLiked);
@@ -265,7 +265,7 @@ class RenderCommentList extends React.Component {
         });
     }
 
-    const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
+    const { success, msg, isApproved } = await this.props.comment.createReply(params, this.props.thread);
 
     if (success) {
       this.setState({
@@ -273,9 +273,15 @@ class RenderCommentList extends React.Component {
         inputValue: '',
         commentId: null,
       });
-      Toast.success({
-        content: '回复成功',
-      });
+      if (isApproved) {
+        Toast.success({
+          content: msg,
+        });
+      } else {
+        Toast.warning({
+          content: msg,
+        });
+      }
       return true;
     }
 
@@ -355,6 +361,29 @@ class RenderCommentList extends React.Component {
     typeof this.props.onReportClick === 'function' && this.props.onReportClick(comment);
   }
 
+  replyAvatarClick(reply, comment, floor) {
+    if (floor === 2) {
+      const { userId } = reply;
+      if (!userId) return;
+      this.props.router.push(`/user/${userId}`);
+    }
+    if (floor === 3) {
+      const { commentUserId } = reply;
+      if (!commentUserId) return;
+      this.props.router.push(`/user/${commentUserId}`);
+    }
+  }
+
+  onFocus(e) {
+    if (!this.props.user.isLogin()) {
+      e && e.stopPropagation();
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/user/login' });
+      return;
+    }
+    return true;
+  }
+
   render() {
     const { totalCount, commentList } = this.props.thread;
 
@@ -396,6 +425,10 @@ class RenderCommentList extends React.Component {
             onSubmit={(value, imageList) => this.props.onPublishClick(value, imageList)}
             initValue={this.state.inputValue}
             placeholder={this.state.placeholder}
+            onFocus={(e) => this.onFocus(e)}
+            onEmojiIconClick={() => this.onFocus()}
+            onAtIconClick={() => this.onFocus()}
+            onPcitureIconClick={() => this.onFocus()}
           ></CommentInput>
         </div>
 
@@ -414,6 +447,7 @@ class RenderCommentList extends React.Component {
                 data={val}
                 key={val.id}
                 avatarClick={(userId) => this.onUserClick(userId)}
+                replyAvatarClick={(reply, floor) => this.replyAvatarClick(reply, val, floor)}
                 likeClick={() => this.likeClick(val)}
                 replyClick={() => this.replyClick(val)}
                 deleteClick={() => this.deleteClick(val)}

@@ -4,14 +4,13 @@
 import React, { Component } from 'react';
 import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
-import Avatar from '@discuzq/design/dist/components/avatar/index';
 import RichText from '@discuzq/design/dist/components/rich-text/index';
+import Avatar from '@components/avatar';
 import UnreadRedDot from '@components/unread-red-dot';
 import { inject, observer } from 'mobx-react';
 import classNames from 'classnames';
 import styles from './index.module.scss';
 
-import stringToColor from '@common/utils/string-to-color';
 import { diffDate } from '@common/utils/diff-date';
 import { handleLink } from '@components/thread/utils';
 import s9e from '@common/utils/s9e';
@@ -32,31 +31,48 @@ class Index extends Component {
     return avatar;
   }
 
-  // 获取头像背景色
-  getBackgroundColor = (name) => {
-    return name ? stringToColor(name.toUpperCase()[0]) : "#8590a6";
+  // 获取财务消息展示内容
+  getFinancialContent = () => {
+    const { item, site } = this.props;
+
+    let tips = '';
+    switch (item.type) {
+      case 'rewarded':
+        if (item.orderType === 1) return (<>
+          邀请{item.nickname}加入{site?.webConfig?.setSite?.siteName}
+        </>);
+        if (item.orderType === 3 || item.orderType === 7) {
+          tips = '支付了你';
+        } else {
+          tips = '打赏了你';
+        }
+        break;
+      case 'receiveredpacket':
+        tips = '获取红包';
+        break;
+      case 'threadrewarded':
+        tips = '悬赏了你';
+        break;
+      case 'threadrewardedexpired':
+        tips = `悬赏到期，未领取金额${item.amount}元被退回`;
+        break;
+    }
+
+    return (<>
+      在帖子"
+      <View
+        className={`${styles['financial-content']} ${styles['single-line']}`}
+        style={{
+          maxWidth: `90px`,
+          display: 'inline-block',
+          verticalAlign: 'bottom'
+        }}
+        dangerouslySetInnerHTML={{ __html: this.parseHTML() }}
+      />"中{tips}
+    </>)
   }
 
-  // 未读消息数
-  getUnReadCount = (count) => {
-    return count > 99 ? '99+' : (count || null);
-  };
-
-  // 针对财务消息，获取后缀提示语
-  getFinancialTips = (item) => {
-    if (item.type === 'rewarded') {
-      if (item.orderType === 3 || item.orderType === 7) return '支付了你';
-      return '打赏了你';
-    }
-    if (item.type === 'receiveredpacket') {
-      return '获取红包';
-    }
-    if (item.type === 'threadrewarded') {
-      return '悬赏了你';
-    }
-  };
-
-  // 账号信息前置语
+  // 帖子消息前置语
   getAccountTips = (item) => {
     switch (item.type) {
       case 'replied':
@@ -69,7 +85,7 @@ class Index extends Component {
   };
 
   filterTag(html) {
-    return html?.replace(/<(\/)?([beprt]|br|div)[^>]*>|[\r\n]/gi, '')
+    return html?.replace(/<(\/)?([beprt]|br|div|h\d)[^>]*>|[\r\n]/gi, '')
       .replace(/<img[^>]+>/gi, $1 => {
         return $1.includes('qq-emotion') ? $1 : "[图片]";
       });
@@ -103,7 +119,7 @@ class Index extends Component {
     let url = "";
     const { type } = this.props;
     if (item.threadId) {
-      url = `/subPages/thread/index?id=${item.threadId}`;
+      url = `/indexPages/thread/index?id=${item.threadId}`;
     }
     if (type === 'chat') {
       url = `/subPages/message/index?page=chat&dialogId=${item.dialogId}&nickname=${item.nickname || ''}`;
@@ -136,16 +152,7 @@ class Index extends Component {
             onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
           >
             <UnreadRedDot type='avatar' unreadCount={item.unreadCount}>
-              {avatarUrl
-                ? <Avatar image={avatarUrl} circle={true} />
-                : <Avatar
-                  text={item.nickname}
-                  circle={true}
-                  style={{
-                    backgroundColor: this.getBackgroundColor(item.nickname)
-                  }}
-                />
-              }
+              <Avatar image={avatarUrl} name={item.nickname} />
             </UnreadRedDot>
           </View>
           {/* 详情 */}
@@ -179,20 +186,8 @@ class Index extends Component {
             <View className={classNames(styles.middle)}>
               {/* 财务内容 */}
               {type === 'financial' &&
-                <View
-                  className={styles['content-html']}
-                >
-                  在帖子"
-                  <View
-                    className={`${styles['financial-content']} ${styles['single-line']}`}
-                    style={{
-                      maxWidth: `90px`,
-                      display: 'inline-block',
-                      verticalAlign: 'bottom'
-                    }}
-                    dangerouslySetInnerHTML={{ __html: this.parseHTML() }}
-                  />
-                  "中{this.getFinancialTips(item)}
+                <View className={styles['content-html']}>
+                  {this.getFinancialContent()}
                 </View>
               }
               {/* 私信 */}

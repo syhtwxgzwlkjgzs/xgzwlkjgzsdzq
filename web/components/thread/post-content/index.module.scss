@@ -16,19 +16,9 @@
       color: $text-color-primary;
       // margin-top: rem($padding-1n);
       word-break: break-all;
-      p,
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6 {
-        font-size: rem($font-size-middle) !important;
-      }
       img {
         &:not(:global(.qq-emotion)) {
           max-width: 100%;
-          max-height: rem(200);
           overflow: hidden;
         }
       }
@@ -44,6 +34,7 @@
     :global(.dzq-richText) {
       overflow: hidden;
     }
+    
   }
 
   .hideCover {

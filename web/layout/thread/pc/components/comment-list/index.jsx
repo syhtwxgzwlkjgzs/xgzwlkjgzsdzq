@@ -107,6 +107,11 @@ class CommentList extends React.Component {
     typeof this.props.reportClick === 'function' && this.props.reportClick(data);
   }
 
+  // 点击评论列表用户头像
+  replyAvatarClick(data,floor) {
+    typeof this.props.replyAvatarClick === 'function' && this.props.replyAvatarClick(data,floor);
+  }
+
   async onSubmit(value, imageList) {
     if (typeof this.props.onSubmit === 'function') {
       const success = await this.props.onSubmit(value, imageList);
@@ -131,6 +136,9 @@ class CommentList extends React.Component {
   render() {
     const { canDelete, canEdit, canLike, canHide } = this.generatePermissions(this.props.data);
 
+    // 评论内容是否通过审核
+    const isApproved = this.props?.data?.isApproved === 1;
+
     return (
       <div className={`${styles.commentList} dzq-comment`}>
         {this.props.data?.rewards || this.props.data?.redPacketAmount ? (
@@ -149,21 +157,29 @@ class CommentList extends React.Component {
           ''
         )}
         <div className={styles.content}>
-          <div className={styles.commentListAvatar} onClick={() => this.avatarClick()}>
+          <div className={styles.commentListAvatar} >
             <Avatar
-              image={this.props.data?.user?.avatar}
-              name={this.props.data?.user?.nickname || this.props.data?.user?.userName || ''}
+              image={(this.props.data?.user?.nickname || this.props.data?.user?.userName) && this.props.data?.user?.avatar}
+              name={this.props.data?.user?.nickname || this.props.data?.user?.userName || '异'}
               circle={true}
               userId={this.props.data?.user?.id}
               isShowUserInfo={this.props.isShowOne}
               className={styles.avatar}
+              onClick={() => this.avatarClick()}
             ></Avatar>
           </div>
           <div className={styles.commentListContent}>
             {/* 评论内容 */}
             <div className={classnames(styles.commentListContentText, this.props.isShowOne && styles.hover)}>
-              <div className={styles.commentListName}>
-                {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
+              <div className={styles.commentHeader}>
+                <div className={styles.commentListName}>
+                  {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
+                </div>
+                {!isApproved ? (
+                  <div className={styles.isApproved}>审核中</div>
+                ) : (
+                  <div></div>
+                )}
               </div>
               <div className={classnames(styles.commentListText)}>
                 <PostContent
@@ -268,7 +284,7 @@ class CommentList extends React.Component {
                         data={this.needReply[0]}
                         key={this.needReply[0].id}
                         isShowOne={true}
-                        avatarClick={() => this.reployAvatarClick(this.needReply[0])}
+                        avatarClick={(floor) => this.replyAvatarClick(this.needReply[0],floor)}
                         likeClick={() => this.replyLikeClick(this.needReply[0])}
                         replyClick={() => this.replyReplyClick(this.needReply[0])}
                         deleteClick={() => this.replyDeleteClick(this.needReply[0])}
@@ -281,7 +297,7 @@ class CommentList extends React.Component {
                         <ReplyList
                           data={val}
                           key={val.id || index}
-                          avatarClick={() => this.reployAvatarClick(val)}
+                          avatarClick={(floor) => this.replyAvatarClick(val,floor)}
                           likeClick={() => this.replyLikeClick(val)}
                           replyClick={() => this.replyReplyClick(val)}
                           deleteClick={() => this.replyDeleteClick(val)}

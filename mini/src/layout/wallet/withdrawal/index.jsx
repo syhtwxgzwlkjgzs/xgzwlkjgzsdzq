@@ -34,7 +34,6 @@ class Withdrawal extends React.Component {
     this.setState({
       inputValue: datas ? datas[0] : '',
     });
-    this.getmoneyNum(datas ? datas[0] : '');
   };
 
   initState = () => {
@@ -46,38 +45,12 @@ class Withdrawal extends React.Component {
     });
   };
 
-  // 获得输入的提现金额
-  getmoneyNum = (data) => {
-    if (Number(data) >= 1) {
-      this.setState({
-        withdrawalAmount: data,
-      });
-
-      if (Number(this.state.withdrawalAmount) > this.props.walletData.availableAmount) {
-        this.setState({
-          moneyOverThanAmount: true,
-        });
-      }
-    } else {
-      this.setState({
-        withdrawalAmount: 0,
-        moneyOverThanAmount: false,
-      });
-    }
-  };
-
   // 提现到微信钱包
   moneyToWeixin = async () => {
-    if (
-      !this.state.withdrawalAmount ||
-      parseFloat(this.state.withdrawalAmount) < parseFloat(this.props.site.cashMinSum)
-    ) {
-      return Toast.warning({ content: '不得小于最低提现金额' });
-    }
-
+    if (this.getDisabeledButton()) return;
     this.props.wallet
       .createWalletCash({
-        money: this.state.withdrawalAmount,
+        money: this.state.inputValue,
       })
       .then(async () => {
         Toast.success({
@@ -101,31 +74,70 @@ class Withdrawal extends React.Component {
         this.initState();
       });
   };
+  getStatusBarHeight() {
+    return wx?.getSystemInfoSync()?.statusBarHeight || 44;
+  }
 
-  // 点击返回按钮
-  handlePageJump = () => {
+  // 全屏状态下自定义左上角返回按钮位置
+  getTopBarBtnStyle() {
+    return {
+      position: 'fixed',
+      top: `${this.getStatusBarHeight()}px`,
+      left: '12px',
+      transform: 'translate(0, 10px)',
+    };
+  }
+
+  getTopBarTitleStyle() {
+    return {
+      position: 'fixed',
+      top: `${this.getStatusBarHeight()}px`,
+      left: '50%',
+      transform: 'translate(-50%, 8px)',
+    };
+  }
+
+  handleBack = () => {
     Taro.navigateBack();
   };
 
-  render() {
+  // 渲染顶部title
+  renderTitleContent = () => {
+    return (
+      <View className={styles.topBarTitle}>
+        <View onClick={this.handleBack} className={styles.customCapsule} style={this.getTopBarBtnStyle()}>
+          <Icon size={18} name="LeftOutlined" />
+        </View>
+        <View style={this.getTopBarTitleStyle()} className={styles.fullScreenTitle}>
+          提现
+        </View>
+      </View>
+    );
+  };
+
+  // 获取禁用逻辑
+  getDisabeledButton = () => {
     const { inputValue } = this.state;
     const btnDisabled =
-      !inputValue || parseFloat(this.state.withdrawalAmount) > parseFloat(this.props.walletData?.availableAmount);
+      !inputValue ||
+      parseFloat(inputValue) > parseFloat(this.props.wallet?.walletAvaAmount) ||
+      parseFloat(inputValue) < parseFloat(this.props.site?.cashMinSum);
+    return btnDisabled;
+  };
+
+  render() {
     return (
       <>
         <View className={styles.container}>
           <View className={styles.main}>
             {/* 自定义顶部返回 */}
-            <View className={styles.topBar}>
-              <Icon name="RightOutlined" onClick={() => this.handlePageJump()} />
-            </View>
+            {this.renderTitleContent()}
             <View className={styles.totalAmount}>
               <View className={styles.moneyTitle}>可提现金额</View>
               <View className={styles.moneyNum}>{this.props.walletData?.availableAmount}</View>
             </View>
             <View className={styles.moneyInput}>
               <MoneyInput
-                // getmoneyNum={data => this.getmoneyNum(data)}
                 inputValue={this.state.inputValue}
                 onChange={this.onChange}
                 updateState={this.updateState}
@@ -137,10 +149,15 @@ class Withdrawal extends React.Component {
           </View>
           <View
             className={classNames(styles.footer, {
-              [styles.bgBtnColor]: !btnDisabled,
+              [styles.bgBtnColor]: !this.getDisabeledButton(),
             })}
           >
-            <Button type={'primary'} className={styles.button} onClick={this.moneyToWeixin} disabled={btnDisabled}>
+            <Button
+              type={'primary'}
+              className={styles.button}
+              onClick={this.moneyToWeixin}
+              disabled={this.getDisabeledButton()}
+            >
               <View className={styles.buttonContent}>提现到微信钱包</View>
             </Button>
           </View>

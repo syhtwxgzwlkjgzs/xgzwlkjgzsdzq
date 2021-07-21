@@ -16,11 +16,11 @@ import Router from '@discuzq/sdk/dist/router';
     e && e.stopPropagation();
     const {url, isExternaLink } = handleLink(node)
     if(isExternaLink) return
-    
+
     if (url) {
-      Router.push({url}) 
+      Router.push({url})
     } else {
-      Router.push({url: `/subPages/thread/index?id=${threadId}`});
+      Router.push({url: `/indexPages/thread/index?id=${threadId}`});
     }
   };
 

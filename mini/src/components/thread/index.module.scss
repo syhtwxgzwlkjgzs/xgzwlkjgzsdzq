@@ -30,27 +30,6 @@
     justify-content: flex-end;
   }
 
-  .wrapper {
-    position: relative;
-    overflow: hidden;
-
-    > View:not(:last-child) {
-      margin-bottom: $margin-4n;
-    }
-
-    .cover {
-      position: absolute;
-      right: 0;
-      left: 0;
-      top: -16px;
-      bottom: 0;
-      background-color: rgba($color: #000, $alpha: 0.5);
-      z-index: 10;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-    }
-  }
   .payContent {
     min-height: 40px;
   }
@@ -68,7 +47,7 @@
     width: 100%;
     height: 36px;
     font-size: $font-size-middle;
-    
+
     .payIcon {
       margin-right: $margin-2n;
     }
@@ -87,10 +66,41 @@
   }
 }
 
+.wrapper {
+  position: relative;
+  overflow: hidden;
+
+  > View:not(:last-child) {
+    margin-bottom: $margin-4n;
+  }
+
+  .cover {
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: -16px;
+    bottom: 0;
+    background-color: rgba($color: #000, $alpha: 0.5);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+}
+
 .brWrapper {
   margin-top: $margin-4n;
 }
 
 .collectIcon {
   font-size: 20px !important;
+}
+
+.wrapperView {
+  display: flex;
+
+  .placeholder {
+    flex: 1;
+    height: auto;
+  }
 }

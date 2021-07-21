@@ -7,6 +7,8 @@ import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import GetQueryString from '../../../../common/utils/get-query-string';
+import ViewAdapter from '@components/view-adapter';
+import Redirect from '@components/redirect';
 
 @inject('user')
 @observer
@@ -17,6 +19,7 @@ class index extends Component {
       height: '100%',
       renderComponent: null,
     };
+    this.getFlag();
     this.props.user.cleanUserFollows();
     this.props.user.cleanTargetUserFollows();
   }
@@ -28,6 +31,17 @@ class index extends Component {
     });
   }
 
+  getFlag() {
+    const isOtherPersonQuery = GetQueryString('isOtherPerson');
+
+    if (!isOtherPersonQuery) {
+      this.isOtherFollows = false;
+      return;
+    }
+
+    this.isOtherFollows = JSON.parse(isOtherPersonQuery);
+  }
+
   // 点击关注
   followHandler = async ({ id }) => {
     try {
@@ -37,7 +51,7 @@ class index extends Component {
         hasMask: false,
         duration: 1000,
       });
-      const isOtherFollows = JSON.parse(GetQueryString('isOtherPerson'));
+      const { isOtherFollows } = this;
       if (isOtherFollows) {
         const isOtherFollowId = GetQueryString('otherId');
         this.props.user.setTargetUserFollowerBeFollowed(isOtherFollowId);
@@ -53,7 +67,7 @@ class index extends Component {
   unFollowHandler = async ({ id }) => {
     try {
       await this.props.user.cancelFollow({ id, type: 1 });
-      const isOtherFollows = JSON.parse(GetQueryString('isOtherPerson'));
+      const { isOtherFollows } = this;
       const isOtherFollowId = GetQueryString('otherId');
       if (isOtherFollows) {
         this.props.user.setTargetUserFollowerBeUnFollowed(isOtherFollowId);
@@ -82,7 +96,7 @@ class index extends Component {
   );
 
   getRenderComponent() {
-    const isOtherFollows = JSON.parse(GetQueryString('isOtherPerson'));
+    const { isOtherFollows } = this;
     const id = GetQueryString('otherId');
     return (
       <>
@@ -97,14 +111,20 @@ class index extends Component {
 
   render() {
     return (
-      <div
-        style={{
-          height: this.state.height,
-        }}
-      >
-        <Header />
-        {this.state.renderComponent && this.getRenderComponent()}
-      </div>
+      <ViewAdapter
+        h5={
+          <div
+            style={{
+              height: this.state.height,
+            }}
+          >
+            <Header />
+            {this.state.renderComponent && this.getRenderComponent()}
+          </div>
+        }
+        pc={<Redirect jumpUrl={'/my'} />}
+        title={'关注列表'}
+      />
     );
   }
 }

@@ -1,7 +1,7 @@
 import { action } from 'mobx';
 import ThreadPostStore from './store';
-import { readEmoji, readFollow, readProcutAnalysis, readTopics, createThread, updateThread, createThreadVideoAudio } from '@common/server';
-import { LOADING_TOTAL_TYPE, THREAD_TYPE } from '@common/constants/thread-post';
+import { readEmoji, readFollow, readProcutAnalysis, readTopics, createThread, updateThread, createThreadVideoAudio, readPostCategories } from '@common/server';
+import { LOADING_TOTAL_TYPE, THREAD_TYPE, THREAD_STATUS } from '@common/constants/thread-post';
 import { emojiFromEditFormat, emojiFormatForCommit } from '@common/utils/emoji-regexp';
 import { formatDate } from '@common/utils/format-date';
 import { initPostData } from './common';
@@ -9,10 +9,11 @@ import { initPostData } from './common';
 class ThreadPostAction extends ThreadPostStore {
   /**
    * 发帖
+   * @param {boolean} isMini 是否是来自小程序
    */
   @action.bound
-  async createThread() {
-    const params = this.getCreateThreadParams();
+  async createThread(isMini) {
+    const params = this.getCreateThreadParams(false, isMini);
     const ret = await createThread(params);
     if (ret.code === 0) this.currentSelectedToolbar = false;
     return ret;
@@ -21,11 +22,20 @@ class ThreadPostAction extends ThreadPostStore {
   /**
    * 更新帖子
    * @param {number} id 帖子id
+   * @param {boolean} isMini 是否是来自小程序
    */
   @action.bound
-  async updateThread(id) {
-    const params = this.getCreateThreadParams(true);
+  async updateThread(id, isMini) {
+    const params = this.getCreateThreadParams(true, isMini);
     const ret = await updateThread({ ...params, threadId: Number(id) });
+    return ret;
+  }
+
+  @action.bound
+  async readPostCategory(id) {
+    const params = id ? { threadId: id } : {};
+    const ret = await readPostCategories({ params });
+    if (ret.code === 0) this.categories = ret.data || [];
     return ret;
   }
 
@@ -245,13 +255,19 @@ class ThreadPostAction extends ThreadPostStore {
    * 获取发帖时需要的参数
    */
   @action
-  getCreateThreadParams(isUpdate) {
+  getCreateThreadParams(isUpdate, isMini) {
     const { title, categoryId, contentText, position, price,
       attachmentPrice, freeWords, redpacket, rewardQa } = this.postData;
+    let text = contentText;
+    if (isMini) {
+      // 目前只是简单的队小程序进行简单的处理
+      text = `${text.replace(/(\n*)$/, '').replace(/\n/g, '<br />')}`;
+    }
+    text = emojiFormatForCommit(text)
+      .replace(/@([^@<]+)<\/p>/g, '@$1 </p>');
     const params = {
       title, categoryId, content: {
-        text: emojiFormatForCommit(contentText).replace(/\n/g, '<br />')
-          .replace(/@([^@<]+)<\/p>/g, '@$1 </p>'),
+        text,
       },
     };
     if (position.address) params.position = position;
@@ -282,13 +298,15 @@ class ThreadPostAction extends ThreadPostStore {
   }
 
   @action
-  formatThreadDetailToPostData(detail) {
+  formatThreadDetailToPostData(detail, isMini) {
     const { title, categoryId, content, freewords = 0, isDraft, isAnonymous, orderInfo = {}, threadId } = detail || {};
     const price = Number(detail.price);
     const attachmentPrice = Number(detail.attachmentPrice);
     let position = {};
     if (detail.position && detail.position.address) position = detail.position;
-    const contentText = content && content.text.replace(/<br \/>/g, '\n');
+    let contentText = content && content.text;
+    // 目前只是简单的队小程序进行简单的处理
+    if (isMini) contentText = contentText.replace(/<br \/>/g, '\n');
     const contentindexes = (content && content.indexes) || {};
     let audio = {};
     let rewardQa = {};
@@ -378,6 +396,94 @@ class ThreadPostAction extends ThreadPostStore {
   @action
   setNavInfo(info) {
     if (info) this.navInfo = info;
+  }
+
+  /**
+   * 根据 ID 获取当前选中的类别
+   * @param {number} id 帖子类别id
+   * @returns 选中的帖子详细信息
+   */
+  @action
+  getCategorySelectById(id) {
+    let parent = {};
+    let child = {};
+    let currentId = id;
+    const categories = this.getCurrentCategories();
+    // 如果没有传入id，则取默认第一个
+    if (!id && categories && categories.length) currentId = categories[0].pid;
+    if (categories && categories.length && currentId) {
+      categories.forEach((item) => {
+        const { children } = item;
+        if (item.pid === currentId) {
+          parent = item;
+          if (children && children.length > 0) [child] = children;
+        } else {
+          if (children && children.length > 0) {
+            children.forEach((elem) => {
+              if (elem.pid === currentId) {
+                child = elem;
+                parent = item;
+              }
+            });
+          }
+        }
+      });
+    }
+    // 如果有 id，但是没有设置选中的种类，说明可能是编辑没有发帖权限的分类帖子，这时也展示第一个帖子
+    if (id && !parent.pid && categories && categories.length) {
+      currentId = categories[0].pid;
+      return this.getCategorySelectById(currentId);
+    }
+    return { parent, child };
+  }
+
+  @action
+  getCategoriesCanCreate() {
+    const len = this.categories.length;
+    if (!len) return;
+    const result = [];
+    for (let i = 0; i < len; i++) {
+      const { canCreateThread, children } = this.categories[i];
+      let item = {};
+      if (canCreateThread) {
+        item = this.categories[i];
+        if (children && children.length) {
+          item.children = [...children.filter(elem => elem.canCreateThread)];
+        }
+        result.push(item);
+      }
+    }
+    return result;
+  }
+
+  @action
+  getCategoriesCanEdit() {
+    const len = this.categories.length;
+    if (!len) return;
+    const result = [];
+    for (let i = 0; i < len; i++) {
+      const { canEditThread, children } = this.categories[i];
+      let item = {};
+      if (canEditThread) {
+        item = this.categories[i];
+        if (children && children.length) {
+          item.children = [...children.filter(elem => elem.canEditThread)];
+        }
+        result.push(item);
+      }
+    }
+    return result;
+  }
+
+  @action
+  getCurrentCategories() {
+    if (this.threadStatus === THREAD_STATUS.edit) return this.getCategoriesCanEdit();
+    return this.getCategoriesCanCreate();
+  }
+
+  @action
+  setThreadStatus(status) {
+    this.threadStatus = status || THREAD_STATUS.create;
   }
 }
 

@@ -95,7 +95,7 @@
   .cancel {
     width: 167px;
     height: 42px;
-    line-height: $font-line-height-base;
+    line-height: 42px;
     border-radius: $border-radius-small;
     color: $text-color-primary;
     background: $text-bg-color2;
@@ -103,7 +103,7 @@
   .ok {
     width: 167px;
     height: 42px;
-    line-height: $font-line-height-base;
+    line-height: 42px;
     border-radius: $border-radius-small;
     background: $primary-color;
   }

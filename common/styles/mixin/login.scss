@@ -72,6 +72,11 @@
     border-color: $disabled-color;
   }
 }
+@mixin button_exit {
+  color: $text-color-secondary;
+  background: $text-bg-color2;
+  border: $text-bg-color2;
+}
 @mixin functionalRegion {
   margin-top: rem($margin-6n);
   font-size: rem($font-size-base);

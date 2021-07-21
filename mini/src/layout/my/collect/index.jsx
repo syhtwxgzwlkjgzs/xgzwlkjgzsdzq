@@ -5,15 +5,16 @@ import styles from './index.module.scss';
 import BaseLayout from '@components/base-layout';
 import { View, Text } from '@tarojs/components';
 import Toast from '@discuzq/design/dist/components/toast';
+import throttle from '@common/utils/thottle.js';
 
 @inject('site')
 @inject('index')
 @inject('thread')
 @observer
 class Index extends React.Component {
-  handleUnFavoriteItem = async (item) => {
+  handleUnFavoriteItem = throttle(async (item) => {
     const { index } = this.props;
-    const { pageData = [] } = index.threads || {};
+    const { pageData = [], totalCount = 0 } = index.threads || {};
     const params = {
       id: item.threadId,
       isFavorite: false,
@@ -25,20 +26,33 @@ class Index extends React.Component {
         duration: 2000,
       });
     } else {
+      let collectTotalCount = totalCount;
       Toast.success({
         content: '取消收藏成功',
         duration: 2000,
       });
+      // 这里需要对收藏条数做单独处理
+      collectTotalCount--;
+      if (collectTotalCount <= 0) {
+        collectTotalCount = 0;
+      }
+      // FIXME: 这里采用数组截取的方式也直接改变了原数据--不安全
       pageData.splice(pageData.indexOf(item), 1);
-      this.props.index.setThreads({ pageData: [...pageData] });
+      this.props.index.setThreads({ ...index.threads, totalCount: collectTotalCount, pageData: [...pageData] });
+      this.props.dispatch();
     }
-  };
+  }, 1000);
 
   render() {
     const { index } = this.props;
     const { pageData = [], currentPage, totalPage, totalCount } = index.threads || {};
     return (
-      <BaseLayout showHeader={false} noMore={currentPage >= totalPage} onRefresh={this.props.dispatch}>
+      <BaseLayout
+        showLoadingInCenter={!pageData?.length}
+        showHeader={false}
+        noMore={currentPage >= totalPage}
+        onRefresh={this.props.dispatch}
+      >
         {pageData?.length !== 0 && (
           <View className={styles.titleBox}>
             <Text className={styles.num}>{`${totalCount || 0}`}</Text>
@@ -52,7 +66,7 @@ class Index extends React.Component {
               this.handleUnFavoriteItem(item);
             }}
             isShowIcon
-            key={index}
+            key={index + new Date().getTime()}
             data={item}
           />
         ))}

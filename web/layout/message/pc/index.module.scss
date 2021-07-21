@@ -7,21 +7,42 @@
 
 .stepper-container {
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: $margin-10;
 }
 
+/**
+* PC 消息页右侧关注列表自适应
+*
+*/
 :global {
-  .mymessage {
+  .mymessage-page {
+    @include heightMedia(1005px, 895px) {
+      .user-center-follow-list {
+        max-height: 375px !important;
+      }
+    }
+
+    @include heightMedia(895px, 840px) {
+      .user-center-follow-list {
+        max-height: 270px !important;
+      }
+    }
+
+    @include heightMedia(840px, 785px) {
+      .user-center-follow-list {
+        max-height: 225px !important;
+      }
+    }
 
     @include heightMedia(785px, 730px) {
-      .user-center-follow-item:nth-last-child(-n + 2) {
-        display: none;
+      .user-center-follow-list {
+        max-height: 210px !important;
       }
     }
 
     @include heightMedia(730px, 675px) {
-      .user-center-follow-item:nth-last-child(-n + 3) {
-        display: none;
+      .user-center-follow-list {
+        max-height: 155px !important;
       }
     }
 

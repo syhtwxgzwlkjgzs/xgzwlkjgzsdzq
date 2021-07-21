@@ -39,8 +39,6 @@ class SearchH5Page extends React.Component {
     this.props.router.push(`/topic/topic-detail/${topicId}`)
   };
 
-  onPostClick = data => console.log('post click', data);
-
   onCancel = () => {
     this.props.router.back();
   };
@@ -113,7 +111,7 @@ class SearchH5Page extends React.Component {
           mold='plane'
         >
           {
-            threadsPageData?.map((item, index) => <ThreadContent data={item} key={index} />)
+            threadsPageData?.filter((_, index) => index < 10).map((item, index) => <ThreadContent data={item} key={index} />)
           }
         </SidebarPanel>
       </BaseLayout>

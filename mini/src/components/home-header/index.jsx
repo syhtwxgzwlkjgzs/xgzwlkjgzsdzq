@@ -10,6 +10,10 @@ import { get } from '@common/utils/get';
 import logoImg from '../../../../web/public/dzq-img/admin-logo-x2.png';
 import joinLogoImg from '../../../../web/public/dzq-img/join-banner-bg.png';
 import { numberFormat } from '@common/utils/number-format';
+import SiteShare from '../site-share';
+import Toast from '@discuzq/design/dist/components/toast';
+import goToLoginPage from '@common/utils/go-to-login-page';
+
 /**
  * 帖子头部
  * @prop {string} bgColor 背景颜色
@@ -18,10 +22,12 @@ import { numberFormat } from '@common/utils/number-format';
 
 @inject('site')
 @inject('user')
+@inject('index')
 @observer
 class HomeHeader extends React.Component {
   state = {
     visible: false,
+    show: false,
     height: 180,
   };
 
@@ -36,22 +42,31 @@ class HomeHeader extends React.Component {
     }
     return bgColor ? { background: bgColor } : { background: '#2469f6' };
   }
-
+  
   getLogo() {
     // 站点加入页面logo图片定制
-    const { mode } = this.props;
-    if (mode === 'join') {
+    const { mode, site } = this.props;
+    const siteHeaderLogo = get(site, 'webConfig.setSite.siteHeaderLogo', '');
+    if (mode === 'join' && !siteHeaderLogo) {
       return joinLogoImg;
     }
 
-    const { site } = this.props;
     const siteData = site.webConfig || {};
     if (siteData.setSite?.siteHeaderLogo) {
       return siteData.setSite.siteHeaderLogo;
     }
     return logoImg;
   }
-
+  handleShareClick = () => {
+    const { user } = this.props
+    // 对没有登录的先登录
+    if (!user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+      return;
+    }
+    this.setState({ show: true })
+  }
   getSiteInfo() {
     const { site } = this.props;
     const { webConfig } = site;
@@ -82,7 +97,9 @@ class HomeHeader extends React.Component {
   onClose = () => {
     this.setState({ visible: false });
   };
-
+  onShareClose= () => {
+    this.setState({ show: false})
+  }
   getStatusBarHeight() {
     return wx?.getSystemInfoSync()?.statusBarHeight || 44;
   }
@@ -106,6 +123,16 @@ class HomeHeader extends React.Component {
     };
   }
 
+  goBack() {
+    Router.back({
+      fail: () => {
+        Router.redirect({
+          url: '/indexPages/home/index'
+        });
+      }
+    });
+  }
+
   componentDidMount() {
     if (this.domRef.current) {
       this.setState({ height: this.domRef.current.clientHeight });
@@ -115,13 +142,14 @@ class HomeHeader extends React.Component {
     const {
       bgColor,
       hideInfo = false,
-      hideLogo = false,
       showToolbar = false,
+      hideLogo = false,
       style = {},
       digest = null,
       mode = '',
       site,
-      fullScreenTitle = ''
+      fullScreenTitle = '',
+      index
     } = this.props;
     const { visible } = this.state;
     const { countUsers, countThreads, siteAuthor, createDays } = this.getSiteInfo();
@@ -129,21 +157,20 @@ class HomeHeader extends React.Component {
       title: site.webConfig?.setSite?.siteName || '',
       path: 'pages/index/index',
     };
-
+    index.setHiddenTabBar(this.state.show)
     return (
         <View
           ref={this.domRef}
           className={`
-            ${styles.container} 
-            ${mode ? styles[`container_mode_${mode}`] : ''} 
-            ${hideLogo ? styles['hide_logo'] : ''}
+            ${styles.container}
+            ${mode ? styles[`container_mode_${mode}`] : ''}
           `}
           style={{ ...style, ...this.getBgHeaderStyle(bgColor) }}
         >
           {hideInfo && mode !== 'join' && (
             <View className={styles.topBar}>
               {mode === 'login' ? (
-                <View onClick={() => Router.back()} className={styles.left}>
+                <View onClick={() => this.goBack()} className={styles.left}>
                   <Icon name="LeftOutlined" />
                 </View>
               ) : (
@@ -158,7 +185,7 @@ class HomeHeader extends React.Component {
           )}
           {showToolbar && (
             <View className={styles.topBar}>
-              <View onClick={() => Router.back()} className={styles.customCapsule} style={this.getTopBarBtnStyle()}>
+              <View onClick={() => this.goBack()} className={styles.customCapsule} style={this.getTopBarBtnStyle()}>
                 <Icon name="LeftOutlined" />
               </View>
               <View style={this.getTopBarTitleStyle()} className={styles.fullScreenTitle}>{ fullScreenTitle }</View>
@@ -189,12 +216,13 @@ class HomeHeader extends React.Component {
                 <Text className={styles.text}>内容</Text>
                 <Text className={styles.content}>{countThreads}</Text>
               </View>
-              <Button className={styles.item} openType="share" plain="true" data-shareData={shareData}>
+              <View className={styles.item} onClick={this.handleShareClick} >
                 <Icon className={styles.shareIcon} name="ShareAltOutlined" />
                 <Text className={styles.shareText}>分享</Text>
-              </Button>
+              </View>
             </View>
           )}
+          <SiteShare show={this.state.show} onShareClose={this.onShareClose} site={site}></SiteShare>
           {mode === 'join' && (
             <view className={`${styles.siteInfo} ${styles.joinInfo}`}>
               <view className={styles.item}>

@@ -25,8 +25,22 @@ class UserCenterFollowsPc extends React.Component {
     showMore: true,
     withLimit: 5,
     className: '',
-    messageMode: false
+    messageMode: false,
+    style: {},
   };
+
+
+  componentDidMount = () => {
+    if (this.props.getRef) {
+      this.props.getRef(this);
+    }
+  }
+
+  closePopup = () => {
+    this.setState({
+      showFollowsPopup: false,
+    });
+  }
 
   // 点击粉丝更多
   moreFollow = () => {
@@ -62,6 +76,11 @@ class UserCenterFollowsPc extends React.Component {
     } else {
       followCount = this.props.user.followCount;
     }
+
+    const UserCenterFollowsStyle = {
+      overflow: 'hidden',
+      ...this.props.style,
+    };
     return (
       <>
         <SidebarPanel
@@ -70,17 +89,16 @@ class UserCenterFollowsPc extends React.Component {
           noData={Number(followCount) === 0}
           title="关注"
           mold={'wrapper'}
+          messageMode={this.props.messageMode}
           leftNum={followCount}
           isShowMore={this.props.showMore}
           onShowMore={this.moreFollow}
-          className={this.props.className}
+          className={`${this.props.className} ${styles.borderRadius}`}
         >
           <div className={classnames(styles.followsWrapper, this.props.className)}>
             {Number(followCount) !== 0 && (
               <UserCenterFollows
-                style={{
-                  overflow: 'hidden',
-                }}
+                style={UserCenterFollowsStyle}
                 dataSource={this.state.dataSource}
                 setDataSource={this.setDataSource}
                 sourcePage={this.state.sourcePage}
@@ -97,13 +115,14 @@ class UserCenterFollowsPc extends React.Component {
                     },
                   });
                 }}
+                style={this.props.messageMode ? { padding: '0 16px' } : {}}
                 itemStyle={{
                   paddingLeft: 0,
                   paddingRight: 0,
                   paddingTop: 8,
                   paddingBottom: 8,
                 }}
-                className={styles.friendsWrapper}
+                className={this.props.messageMode ? styles.friendsWrapperScroll : styles.friendsWrapper}
                 limit={this.props.withLimit}
               />
             )}

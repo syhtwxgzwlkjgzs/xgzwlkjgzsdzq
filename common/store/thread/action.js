@@ -15,10 +15,20 @@ import {
 import { plus } from '@common/utils/calculate';
 import threadReducer from './reducer';
 import rewardPay from '@common/pay-bussiness/reward-pay';
+import createPreFetch from '@common/utils//pre-fetch';
 
 class ThreadAction extends ThreadStore {
   constructor(props) {
     super(props);
+
+    this.PreFetch = createPreFetch({
+      fetch: this._preLoadCommentList.bind(this),
+    });
+  }
+
+  @action
+  updateViewCount(viewCount) {
+    this.threadData.viewCount = viewCount;
   }
 
   @action
@@ -92,15 +102,17 @@ class ThreadAction extends ThreadStore {
   }
 
   @action
-  reset() {
+  reset(params) {
+    const { isPositionToComment = false } = params || {};
     this.threadData = null; // 帖子信息
     this.commentList = null; // 评论列表数据
     this.totalCount = 0; // 评论列表总条数
     this.authorInfo = null; // 作者信息
-    this.isPositionToComment = false; // 是否定位到评论位置
+    this.isPositionToComment = isPositionToComment; // 是否定位到评论位置
     this.isCommentListError = false;
     this.isAuthorInfoError = false;
     this.scrollDistance = 0;
+    // this.PreFetch = null; // 预加载相关
   }
 
   // 定位到评论位置
@@ -123,7 +135,7 @@ class ThreadAction extends ThreadStore {
   @action
   setCheckUser = (data) => {
     this.checkUser = data;
-  }
+  };
 
   /**
    * 更新帖子详情的点赞数据
@@ -346,7 +358,7 @@ class ThreadAction extends ThreadStore {
    * @returns {object} 处理结果
    */
   @action
-  async delete(id, IndexStore, SearchStore, TopicStore) {
+  async delete(id, IndexStore, SearchStore, TopicStore, SiteStore) {
     if (!id) {
       return {
         msg: '参数不完整',
@@ -364,7 +376,7 @@ class ThreadAction extends ThreadStore {
       this.setThreadDetailField('isDelete', 1);
 
       // 删除帖子列表中的数据
-      IndexStore?.deleteThreadsData && IndexStore.deleteThreadsData({ id });
+      IndexStore?.deleteThreadsData && IndexStore.deleteThreadsData({ id }, SiteStore);
       SearchStore?.deleteThreadsData && SearchStore.deleteThreadsData({ id });
       TopicStore?.deleteThreadsData && TopicStore.deleteThreadsData({ id });
 
@@ -430,14 +442,20 @@ class ThreadAction extends ThreadStore {
    * 加载评论列表
    * @param {object} parmas * 参数
    * @param {number} parmas.id * 帖子id
-   * @param {number} parmas.page 页码
+   * @param {number} parmas.page 页数
    * @param {number} parmas.perPage 页码
    * @param {string} params.sort 'createdAt' | '-createdAt' 排序条件
    * @returns {object} 处理结果
    */
+  async _preLoadCommentList(params) {
+    const res = await readCommentList({ params });
+
+    return res;
+  }
+
   @action
-  async loadCommentList(params) {
-    const { id, page = 1, perPage = 5, sort = 'createdAt' } = params;
+  async preFetch(params) {
+    const { id, page = 1, perPage = 20, sort = 'createdAt' } = params;
     if (!id) {
       return {
         msg: '帖子id不存在',
@@ -452,9 +470,48 @@ class ThreadAction extends ThreadStore {
       sort,
       page,
       perPage,
+      index: page,
     };
 
-    const res = await readCommentList({ params: requestParams });
+    this.PreFetch.setData(requestParams);
+  }
+
+  /**
+   * 加载评论列表
+   * @param {object} parmas * 参数
+   * @param {number} parmas.id * 帖子id
+   * @param {number} parmas.page 页数
+   * @param {number} parmas.perPage 页码
+   * @param {string} params.sort 'createdAt' | '-createdAt' 排序条件
+   * @returns {object} 处理结果
+   */
+  @action
+  async loadCommentList(params) {
+    const { id, page = 1, perPage = 20, sort = 'createdAt' } = params;
+    if (!id) {
+      return {
+        msg: '帖子id不存在',
+        success: false,
+      };
+    }
+
+    // 清空预加载缓存
+    if (page === 1) {
+      console.log('清空预加载缓存');
+      this.PreFetch.clearAll();
+    }
+
+    const requestParams = {
+      filter: {
+        thread: Number(id),
+      },
+      sort,
+      page,
+      perPage,
+      index: page,
+    };
+
+    const res = await this.PreFetch.getData(requestParams);
 
     if (res.code === 0 && res?.data?.pageData) {
       let { commentList } = this;

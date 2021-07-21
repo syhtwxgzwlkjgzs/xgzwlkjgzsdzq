@@ -1,3 +1,7 @@
-export default function setTitle(title = '欢迎您') {
-    document.title = title;
+export default function setTitle(title = '') {
+    if ( title === '' && document.title && document.title != '') {
+        document.title = document.title;
+    } else {
+        document.title = title && title !== '' ? title : '欢迎您';
+    }
 }

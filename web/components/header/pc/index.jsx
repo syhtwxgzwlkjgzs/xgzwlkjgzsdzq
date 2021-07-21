@@ -9,6 +9,7 @@ import Router from '@discuzq/sdk/dist/router';
 import clearLoginStatus from '@common/utils/clear-login-status';
 import UnreadRedDot from '@components/unread-red-dot';
 import { unreadUpdateInterval } from '@common/constants/message';
+import LoginHelper from '@common/utils/login-helper';
 
 @inject('site')
 @inject('user')
@@ -33,7 +34,9 @@ class Header extends React.Component {
   // 轮询更新未读消息
   updateUnreadMessage() {
     if (!this.props.user.id) return;
-    const { message: { readUnreadCount } } = this.props;
+    const {
+      message: { readUnreadCount },
+    } = this.props;
     readUnreadCount();
     this.timeoutId = setTimeout(() => {
       this.updateUnreadMessage();
@@ -94,8 +97,14 @@ class Header extends React.Component {
   renderHeaderLogo() {
     const { site } = this.props;
 
-    if (site?.webConfig?.setSite?.siteHeaderLogo !== '') {
-      return <img className={styles.siteLogo} src={site?.webConfig?.setSite?.siteHeaderLogo} onClick={() => this.handleRouter('/')} />;
+    if (site?.webConfig?.setSite?.siteLogo !== '') {
+      return (
+        <img
+          className={styles.siteLogo}
+          src={site?.webConfig?.setSite?.siteLogo}
+          onClick={() => this.handleRouter('/')}
+        />
+      );
     }
     return <img className={styles.siteLogo} src="/dzq-img/admin-logo-pc.png" onClick={() => this.handleRouter('/')} />;
   }
@@ -106,7 +115,7 @@ class Header extends React.Component {
 
   dropdownUserLogoutActionImpl = () => {
     clearLoginStatus();
-    window.location.replace('/');
+    LoginHelper.gotoIndex();
   };
 
   dropdownActionImpl = (action) => {
@@ -149,12 +158,14 @@ class Header extends React.Component {
             {/* onClick={this.handleUserInfoClick} */}
             <Avatar
               className={styles.avatar}
-              name={user.userInfo.username}
+              name={user.userInfo.nickname}
               circle={true}
               image={user.userInfo?.avatarUrl}
               onClick={() => {}}
             ></Avatar>
-            <p title={user.userInfo.nickname || ''} className={styles.userName}>{user.userInfo.nickname || ''}</p>
+            <p title={user.userInfo.nickname || ''} className={styles.userName}>
+              {user.userInfo.nickname || ''}
+            </p>
           </div>
         </Dropdown>
       );
@@ -179,7 +190,12 @@ class Header extends React.Component {
   }
 
   render() {
-    const { site, user, message: { totalUnread,  }, forum } = this.props;
+    const {
+      site,
+      user,
+      message: { totalUnread },
+      forum,
+    } = this.props;
     const { otherPermissions } = forum || {};
     return (
       <div className={styles.header}>
@@ -189,18 +205,20 @@ class Header extends React.Component {
               {this.renderHeaderLogo()}
               <div className={styles.inputBox}>
                 <Input
+                  // 增加 name ，避免错误的自动补全
+                  name="homeSearch"
                   placeholder="搜索"
                   icon="SearchOutlined"
                   value={this.state.value}
                   onEnter={this.handleSearch}
-                  onChange={(e) => this.onChangeInput(e.target.value)}
+                  onChange={e => this.onChangeInput(e.target.value)}
                   onIconClick={this.handleIconClick}
                 />
               </div>
             </div>
             <div className={styles.right}>
               <div className={styles.iconList}>
-                <div className={styles.iconItem} onClick={() => this.handleRouter('/')}>
+                <div className={styles.iconItem} onClick={() => LoginHelper.gotoIndex()}>
                   <Icon
                     onClick={() => {
                       this.iconClickHandle('home');
@@ -211,7 +229,7 @@ class Header extends React.Component {
                   <p className={styles.iconText}>首页</p>
                 </div>
                 <div className={styles.iconItem} onClick={() => this.handleRouter('/message')}>
-                  <UnreadRedDot type="icon" unreadCount={totalUnread}>
+                  <UnreadRedDot unreadCount={totalUnread}>
                     <div className={styles.message}>
                       <Icon
                         onClick={() => {
@@ -224,8 +242,9 @@ class Header extends React.Component {
                     </div>
                   </UnreadRedDot>
                 </div>
-                {
-                  !otherPermissions?.canViewThreads ? <></> :
+                {!otherPermissions?.canViewThreads ? (
+                  <></>
+                ) : (
                   <div className={styles.iconItem} onClick={() => this.handleRouter('/search')}>
                     <Icon
                       onClick={() => {
@@ -236,7 +255,7 @@ class Header extends React.Component {
                     />
                     <p className={styles.iconText}>发现</p>
                   </div>
-                }
+                )}
               </div>
               <div className={styles.border}></div>
               {this.renderUserInfo()}

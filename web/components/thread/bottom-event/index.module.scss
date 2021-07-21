@@ -16,11 +16,10 @@
     line-height: rem(24);
     font-size: rem($font-size-label);
     color: #8490a6;
-    margin-left: rem(4);
+    margin-left: rem($margin-2n);
   }
 }
 .commentSharing {
-  @include cursor-on-pc;
   display: flex;
   .division {
     line-height: rem(24);

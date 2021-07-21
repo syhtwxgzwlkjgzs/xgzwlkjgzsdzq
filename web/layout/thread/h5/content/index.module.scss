@@ -49,7 +49,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: rem($margin-6n);
+  margin-bottom: rem($margin-4n);
 }
 
 .rewardBody {
@@ -59,6 +59,13 @@
 
 .rewardContianer {
   margin-bottom: rem($margin-6n);;
+}
+
+.redPacketLikeNum {
+  text-align: center;
+  margin-top: $margin-5n;
+  font-size: rem($font-size-label);
+  color: $text-color-secondary;
 }
 
 .rewardButton {

@@ -1,8 +1,10 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
-import { View } from '@tarojs/components';
+import { View, Navigator } from '@tarojs/components';
 import styles from './index.module.scss';
 import Icon from '@discuzq/design/dist/components/icon/index';
+import Popup from '@discuzq/design/dist/components/popup/index'
+import Button from '@discuzq/design/dist/components/button/index';;
 import Router from '@discuzq/sdk/dist/router';
 import { getCurrentInstance } from '@tarojs/taro';
 import PayBoxProvider from '@components/payBox/payBoxProvider';
@@ -10,10 +12,10 @@ import { MINI_SITE_JOIN_WHITE_LIST, REVIEWING_USER_WHITE_LIST } from '@common/co
 import { ToastProvider } from '@discuzq/design/dist/components/toast/ToastProvider';
 import Taro from '@tarojs/taro';
 import { REVIEWING } from '@common/store/login/util';
+import LoginHelper from '@common/utils/login-helper';
 
-const INDEX_URL = '/pages/home/index';
+const INDEX_URL = '/indexPages/home/index';
 const PARTNER_INVITE_URL = '/subPages/forum/partner-invite/index';
-const WX_AUTH_URL = '/subPages/user/wx-auth/index';
 const BIND_NICKNAME_URL = '/subPages/user/bind-nickname/index';
 const CLOSE_URL = '/subPage/close/index';
 const PAGE_404_URL = '/subPages/404/index';
@@ -31,28 +33,27 @@ export default class Page extends React.Component {
     disabledToast: false,
   };
 
-  constructor(props) {
-    super(props);
-    const { noWithLogin, withLogin, user } = this.props;
-    
+  // 检查是否满足渲染条件
+  isPass(noWait = false) {
+    const { noWithLogin, withLogin, site, user, commonLogin } = this.props;
+    const path = getCurrentInstance().router.path;
+    const siteMode = site?.webConfig?.setSite?.siteMode;
+
+    if (!site.isMiniProgramOpen) {
+      return false;
+    }
+
     // 是否必须登录
     if (withLogin && !user.isLogin()) {
-      Router.redirect({ url: WX_AUTH_URL });
+      LoginHelper.saveAndLogin();
+      return false;
     }
 
     // 是否必须不登录
     if (noWithLogin && user.isLogin()) {
       Router.redirect({ url: INDEX_URL });
+      return false;
     }
-
-    this.isPass();
-  }
-
-  // 检查是否满足渲染条件
-  isPass(noWait = false) {
-    const { site, user, commonLogin } = this.props;
-    const path = getCurrentInstance().router.path;
-    const siteMode = site?.webConfig?.setSite?.siteMode;
 
     if (site?.webConfig) {
       // 关闭站点
@@ -108,6 +109,19 @@ export default class Page extends React.Component {
           }
         }
       }
+
+      // 访问指定页面，经过登陆、付费等操作完成后，跳回主页
+      // 大问题
+      // const jumpUrl = LoginHelper.getUrl();
+      // if (jumpUrl) {
+      //   if (jumpUrl.includes(path)) {
+      //     LoginHelper.clear();
+      //   }
+      //   if (path === INDEX_URL) {
+      //     LoginHelper.restore();
+      //     return false;
+      //   }
+      // }
     }
 
     return true;
@@ -135,6 +149,31 @@ export default class Page extends React.Component {
   }
 
   render() {
+    if (!this.props.site.isMiniProgramOpen) {
+      return (
+        <Popup position="center" visible={true} onClose={()=> {}}>
+          <View className={styles.container}>
+            <View className={styles.deleteTips}>
+              <View className={styles.tips}>提示</View>
+              <View className={styles.content}>管理员未开启小程序配置，暂不支持小程序访问</View>
+            </View>
+            <View className={styles.btn}>
+              <Button type='primary' className={styles.exit} onClick={() => {}}>
+                <Navigator openType='exit' target='miniProgram' className={styles.navigator}>
+                  关闭
+                </Navigator>
+              </Button>
+            </View>
+          </View>
+        </Popup>
+      );
+    }
+
+    // 如果被劫持到其它页面，则不展示当前页
+    if (!this.isPass()) {
+      return null;
+    }
+
     const { site, disabledToast, className = '' } = this.props;
     return (
       <View className={`${styles['dzq-page']} dzq-theme-${site.theme} ${className}`}>

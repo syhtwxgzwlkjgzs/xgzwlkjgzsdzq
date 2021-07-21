@@ -8,7 +8,6 @@ import { h5WechatCodeBind } from '@server';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT, checkUserStatus } from '@common/store/login/util';
 import setAccessToken from '@common/utils/set-access-token';
 import { get } from '@common/utils/get';
-import initJSSdk from '@common/utils/initJSSdk.js';
 import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 import { isExtFieldsOpen } from '@common/store/login/util';
 
@@ -21,10 +20,6 @@ const NEED_BIND_OR_REGISTER_USER = -7016;
 @inject('commonLogin')
 @observer
 class WeixinBindH5Page extends React.Component {
-  componentDidMount() {
-    initJSSdk(['closeWindow']);
-  }
-
   render() {
     const { sessionToken, loginType, code, sessionId, state, nickname }  = this.props.router.query;
     const { site } = this.props;
@@ -52,15 +47,17 @@ class WeixinBindH5Page extends React.Component {
                 </>
               : <></>
           }
-          <div className={layout.functionalRegion}>
-            <span className={layout.clickBtn} onClick={() => {
+          <Button
+            className={layout.exit}
+            onClick={() => {
               this.props.h5QrCode.bindTitle = '已取消绑定';
               this.props.h5QrCode.isBtn = false;
-              wx.closeWindow();
+              window.wx && window.wx.ready(() => {
+                wx.closeWindow();
+              });
             }}>
-              退出
-            </span>
-          </div>
+            退出
+          </Button>
         </div>
       </div>
     );
@@ -73,11 +70,7 @@ class WeixinBindH5Page extends React.Component {
       }
       const { router } = this.props;
       bindLoading = true;
-      const res = await h5WechatCodeBind({
-        url: '/apiv3/users/wechat/h5.bind',
-        method: 'GET',
-        ...opts,
-      });
+      const res = await h5WechatCodeBind(opts);
       bindLoading = false;
 
       // 落地页开关打开

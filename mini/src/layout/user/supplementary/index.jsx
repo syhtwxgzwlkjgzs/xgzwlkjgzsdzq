@@ -10,6 +10,7 @@ import { getSignInFields, setSignInFields } from '@server';
 import HomeHeader from '@components/home-header';
 import { InputType, CreateFunctions } from './components';
 import Router from '@discuzq/sdk/dist/router';
+import LoginHelper from '@common/utils/login-helper';
 
 @inject('site')
 @inject('user')
@@ -99,10 +100,6 @@ class SupplementaryH5Page extends React.Component {
     });
   };
 
-  gotoIndex = () => {
-    Router.push({ url: '/pages/home/index' });
-  };
-
   submit() {
     try {
       const { values } = this.props.supplementary;
@@ -114,7 +111,7 @@ class SupplementaryH5Page extends React.Component {
           duration: 2000,
         });
         setTimeout(() => {
-          this.gotoIndex();
+          LoginHelper.restore();
         }, 1000);
       });
     } catch (e) {
@@ -132,7 +129,7 @@ class SupplementaryH5Page extends React.Component {
 
     return (
       <View className={layout.container}>
-        <HomeHeader hideInfo hideMinibar />
+        <HomeHeader hideInfo hideMinibar mode="supplementary"/>
         <View className={layout.content}>
           {values?.map((field) => this.createComponent(field))}
           <Button type="primary" className={layout.button} onClick={() => this.submit()}>

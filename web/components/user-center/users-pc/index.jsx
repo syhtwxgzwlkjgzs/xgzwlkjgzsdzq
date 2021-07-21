@@ -12,6 +12,7 @@ import { withRouter } from 'next/router';
 class UserCenterUsersPc extends React.Component {
   static defaultProps = {
     limit: 10,
+    className: '',
   };
   constructor(props) {
     super(props);
@@ -35,6 +36,7 @@ class UserCenterUsersPc extends React.Component {
           title="成员"
           leftNum={usersCount}
           onShowMore={this.moreUser}
+          className={`${this.props.className} ${styles.borderRadius}`}
         >
           {Number(usersCount) !== 0 && (
             <UserCenterUsers
@@ -49,10 +51,6 @@ class UserCenterUsersPc extends React.Component {
                     id,
                   },
                 });
-              }}
-              itemStyle={{
-                paddingLeft: 0,
-                paddingRight: 0,
               }}
               className={styles.friendsWrapper}
               limit={this.props.limit}

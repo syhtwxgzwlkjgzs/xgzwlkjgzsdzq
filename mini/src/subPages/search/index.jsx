@@ -5,11 +5,13 @@ import Page from '@components/page';
 import Taro from '@tarojs/taro'
 import withShare from '@common/utils/withShare/withShare'
 import { priceShare } from '@common/utils/priceShare';
+import { getCurrentInstance } from '@tarojs/taro';
 
 @inject('search')
 @inject('topic')
 @inject('index')
 @inject('user')
+@inject('site')
 @observer
 @withShare({
   needShareline: false
@@ -21,12 +23,21 @@ class Index extends React.Component {
   }
   async componentDidMount() {
     const { search } = this.props;
+    const { keyword = '' } = getCurrentInstance().router.params;
     Taro.hideHomeButton();
-    await search.getSearchData();
+
+    const hasIndexTopics = !!search.indexTopics;
+    const hasIndexUsers = !!search.indexUsers;
+    const hasIndexThreads = !!search.indexThreads;
+    search.getSearchData({ hasTopics: hasIndexTopics, hasUsers: hasIndexUsers, hasThreads: hasIndexThreads, search: keyword });
   }
   getShareData (data) {
+    const { site } = this.props
+    const siteName = site.webConfig?.setSite?.siteName || ''
     if(data.from === 'menu') {
       return {
+        title: `${siteName} - 在这里，发现更多热门内容`,
+        path: '/subPages/search/index'
       }
     }
     const { title, path, comeFrom, threadId, isAnonymous, isPrice} = data

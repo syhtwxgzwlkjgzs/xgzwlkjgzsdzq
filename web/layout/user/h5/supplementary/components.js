@@ -3,6 +3,7 @@ import { Input, Checkbox, Radio, Icon, Toast } from '@discuzq/design';
 import '@discuzq/design/dist/styles/index.scss';
 import { ATTACHMENT_TYPE, ACCEPT_FILE_TYPES, ACCEPT_IMAGE_TYPES } from '@common/constants/thread-post';
 import DZQUpload from '@components/upload';
+import beforeUpload from '@common/utils/before-upload';
 import ImageUpload from '../../../../components/thread-post/image-upload';
 import FileUpload from '../../../../components/thread-post/file-upload';
 import { toJS, set } from 'mobx';
@@ -46,6 +47,9 @@ export function CreateInput(field, layout) {
           onChange={(e) => {
             field.value = e.target.value;
           }}
+          onBlur={(e) => {
+            field.value = e.target.value.trim();
+          }}
         />
       </div>
     </div>
@@ -71,6 +75,9 @@ export function CreateTextArea(field, layout) {
           rows={3}
           onChange={(e) => {
             field.value = e.target.value;
+          }}
+          onBlur={(e) => {
+            field.value = e.target.value.trim();
           }}
         />
       </div>
@@ -129,7 +136,7 @@ const getAttachment = (ret) => {
   return { url, id };
 };
 
-export function CreatePhotoUploader(field, layout) {
+export function CreatePhotoUploader(field, layout, site) {
   const { name, required } = field;
   const data = { type: ATTACHMENT_TYPE.image };
   return (
@@ -149,11 +156,19 @@ export function CreatePhotoUploader(field, layout) {
             (ret, file) => {
               const att = getAttachment(ret);
               if (att) {
+                Object.assign(file, att);
                 field.value = field.value.concat([file]);
               }
             }
           }
-          beforeUpload={() => true}
+          onChange={(fileList) => {
+            const file = fileList[fileList.length - 1];
+            if (file?.status === 'error') {
+              fileList.splice(fileList.length - 1);
+            }
+            field.value = fileList;
+          }}
+          beforeUpload={(cloneList, showFileList) => beforeUpload(cloneList, showFileList, 'image', site)}
           fileList={field.value}
           className={layout['imgUpload-dom']}
         >
@@ -163,41 +178,45 @@ export function CreatePhotoUploader(field, layout) {
   );
 }
 
-export function CreateFileUploader(field, layout) {
+export function CreateFileUploader(field, layout, site) {
   const { name, required } = field;
   const data = { type: ATTACHMENT_TYPE.file };
   return (
     <div className={layout.item} key={name}>
-      <div className={layout.attachmentsUpload}>
+      <FileUpload
+        className={layout.attachmentsUpload}
+        multiple={true}
+        btnText='上传文件'
+        data={data}
+        limit={9}
+        accept={ACCEPT_FILE_TYPES.join(',')}
+        onChange={(fileList) => {
+          const file = fileList[fileList.length - 1];
+          if (file?.status === 'error') {
+            fileList.splice(fileList.length - 1);
+          }
+          field.value = fileList;
+        }}
+        onComplete={
+          (ret, file) => {
+            const att = getAttachment(ret);
+            Object.assign(file, att);
+          }
+        }
+        beforeUpload={(cloneList, showFileList) => beforeUpload(cloneList, showFileList, 'file', site)}
+        fileList={field.value}
+        isCustomUploadIcon={true}
+      >
         <span className={layout['attachmentsUpload-left']}>
           {requiredSign(required, layout.required)}
           {name}
         </span>
-        <FileUpload
-          className={layout['attachmentsUpload-right']}
-          listType='text'
-          multiple={true}
-          btnText='上传文件'
-          data={data}
-          limit={9}
-          accept={ACCEPT_FILE_TYPES.join(',')}
-          onChange={(fileList) => {
-            field.value = fileList;
-          }}
-          onComplete={
-            (ret, file) => {
-              const att = getAttachment(ret);
-              Object.assign(file, att);
-            }
-          }
-          beforeUpload={() => true}
-          fileList={field.value}
-          isCustomUploadIcon={true}
-        >
+        <span className={layout['attachmentsUpload-right']}>
           <Icon size='small' name='PaperClipOutlined' />
-          <span>{field.fieldsDesc}</span>
-        </FileUpload>
-      </div>
+          {field.fieldsDesc}
+        </span>
+      </FileUpload>
+      <div className={layout.attachmentsUpload_shade}></div>
     </div>
   );
 }

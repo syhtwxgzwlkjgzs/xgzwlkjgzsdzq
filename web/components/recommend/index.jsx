@@ -7,6 +7,7 @@ import BottomView from '@components/list/BottomView';
 import isServer from '@common/utils/is-server';
 import { debounce } from '@common/utils/throttle-debounce';
 import replaceStringInRegex from '@common/utils/replace-string-in-regex';
+import classNames from 'classnames';
 
 @inject('index')
 @observer
@@ -71,13 +72,13 @@ class Index extends React.Component {
     const { filterCount = 5 } = this.props
     const { isError, errorText } = this.state
     return (
-      <div className={style.recommend} style={{
+      <div className={`${style.recommend} recommend`} style={{
         /* stylelint-disable */
         // maxHeight: (this.state.windowSize?.innerHeight - 80) || '600px'
       }}>
-        <div className={style.recommendContent}>推荐内容</div>
+        <div className={`${style.recommendContent} right-recommend-title`}>推荐内容</div>
         { (recommendsStatus === 'loading' || recommendsStatus === 'error' || !recommends?.length) && (
-            <BottomView isBox isError={isError} errorText={errorText} noMore={recommendsStatus === 'none' && !recommends?.length} loadingText='正在加载' noMoreText='暂无数据' />
+            <BottomView className={style.recommendBottomView} isBox isError={isError} errorText={errorText} noMore={recommendsStatus === 'none' && !recommends?.length} loadingText='正在加载' noMoreText='暂无数据' />
         )}
         {
           recommendsStatus === 'none' && recommends?.filter((_, index) => index < filterCount).map((item, index) => {
@@ -85,7 +86,7 @@ class Index extends React.Component {
             titleString = replaceStringInRegex(titleString, "emoj", '[表情]');
             titleString = replaceStringInRegex(titleString, "img", '[图片]');
             return (
-              <div key={index} className={style.recommendBox} onClick={() => {this.recommendDetails(item)}}>
+              <div key={index} className={`${style.recommendBox} right-recommend-item`} onClick={() => {this.recommendDetails(item)}}>
                 <div className={style.recommendTitle}>
                   <p className={`${style.recommendSort} ${style[`itemIndex${index+1}`]}`}>{index + 1}</p>
                   <p className={style.recommenText}>{`${titleString}`}</p>
@@ -131,7 +132,7 @@ class Index extends React.Component {
               </div>
           )})
         }
-        {(recommendsStatus === 'none'|| recommendsStatus === 'error') && <div className={style.recommendSwitch}>
+        {(recommendsStatus === 'none'|| recommendsStatus === 'error') && <div className={classNames(style.recommendSwitch, 'right-recommend-switch')}>
           <div className={style.switchBox} onClick={this.changeBatch}>
             <Icon name="RenovateOutlined" className={style.switchIcon} size={14}/>换一批
           </div>

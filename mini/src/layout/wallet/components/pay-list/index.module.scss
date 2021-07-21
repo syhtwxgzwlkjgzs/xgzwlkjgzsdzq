@@ -15,26 +15,25 @@
   line-height: 20px;
 
   .money {
-    font-family: 'PingFang SC';
     font-weight: 600;
     font-size: $font-size-middle;
     text-align: left;
-    line-height: 20px;
   }
   :global {
     .qq-emotion {
-      width: 14px;
-      height: 14px;
-      vertical-align: text-top;
+      width: 20px;
+      height: 20px;
+      vertical-align: middle;
       display: inline-block !important;
       flex-shrink: 0;
     }
 
     .dzq-richText--mini {
+      height: 20px;
       font-size: $font-size-primary;
       overflow: hidden;
       word-break: break-all;
-      max-width: 140px;
+      max-width: 200px;
       line-height: 20px;
       @include text-ellipsis();
 
@@ -48,10 +47,10 @@
   display: flex;
   justify-content: space-between;
   border-bottom: $border-solid-1;
-  font-family: 'PingFangSC-Regular';
   font-weight: normal;
   font-size: $font-size-label;
   .time {
+    line-height: 17px;
     text-align: left;
     color: $text-color-secondary;
     padding-bottom: $padding-4n;

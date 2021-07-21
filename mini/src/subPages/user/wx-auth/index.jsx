@@ -1,5 +1,5 @@
 import React from 'react';
-import Taro, { getCurrentInstance, redirectTo  } from '@tarojs/taro';
+import { getCurrentInstance } from '@tarojs/taro';
 import { inject } from 'mobx-react';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import Popup from '@discuzq/design/dist/components/popup/index';
@@ -12,8 +12,11 @@ import { get } from '@common/utils/get';
 import { getParamCode, getUserProfile } from '../common/utils'
 import layout from './index.module.scss';
 import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
+import LoginHelper from '@common/utils/login-helper';
+import Router from '@discuzq/sdk/dist/router';
 
 const NEED_BIND_OR_REGISTER_USER = -7016;
+
 @inject('site')
 @inject('user')
 @inject('commonLogin')
@@ -30,7 +33,7 @@ class MiniAuth extends React.Component {
     await getParamCode(this.props.commonLogin)
     // 其他地方跳入的小程序绑定流程
     if(action === 'mini-bind'){
-      redirectTo({
+      Router.redirect({
         url: `/subPages/user/wx-bind/index?sessionToken=${sessionToken}`
       })
     }
@@ -68,15 +71,13 @@ class MiniAuth extends React.Component {
       // 检查正常登陆后的其它状态码，并重置code
       checkUserStatus(resp);
       if (resp.code === 0) {
-        redirectTo({
-          url: `/pages/home/index`
-        });
+        LoginHelper.restore();
         return;
       }
       // 落地页开关打开
       if (resp.code === NEED_BIND_OR_REGISTER_USER) {
         const { sessionToken } = resp.data;
-        redirectTo({
+        Router.redirect({
           url: `/subPages/user/wx-select/index?sessionToken=${sessionToken}&nickname=${nickName}`
         });
         return;
@@ -89,12 +90,14 @@ class MiniAuth extends React.Component {
     } catch (error) {
       // 注册信息补充
       if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+        const uid = get(error, 'uid', '');
+        uid && this.props.user.updateUserInfo(uid);
         if (isExtFieldsOpen(this.props.site)) {
           this.props.commonLogin.needToCompleteExtraInfo = true;
-          redirectTo({ url: '/subPages/user/supplementary/index' });
+          Router.redirect({ url: '/subPages/user/supplementary/index' });
           return;
         }
-        redirectTo({ url: '/pages/home/index' });
+        LoginHelper.restore();
         return;
       }
       // 跳转状态页
@@ -102,7 +105,7 @@ class MiniAuth extends React.Component {
         const uid = get(error, 'uid', '');
         uid && this.props.user.updateUserInfo(uid);
         this.props.commonLogin.setStatusMessage(error.Code, error.Message);
-        redirectTo({
+        Router.redirect({
           url: `/subPages/user/status/index?statusCode=${error.Code}&statusMsg=${error.Message}`
         });
         return;

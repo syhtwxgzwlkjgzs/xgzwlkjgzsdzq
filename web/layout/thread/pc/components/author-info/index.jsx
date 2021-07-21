@@ -38,13 +38,14 @@ class AuthorInfo extends React.Component {
         </div>
         <div className={styles.info}>
           <div className={styles.AuthorInfo}>
-            <div className={styles.avatar} onClick={() => this.onPersonalPage()}>
+            <div className={styles.avatar}>
               <Avatar
                 image={this.user.avatarUrl}
                 name={this.user.nickname}
                 circle={true}
                 userId={this.user.id}
                 platform="pc"
+                onClick={() => this.onPersonalPage()}
               ></Avatar>
             </div>
             <div className={styles.information}>
@@ -119,7 +120,7 @@ class AuthorInfo extends React.Component {
             </Button>
           </div>
         ) : (
-          <div className={styles.btn}></div>
+          ''
         )}
       </div>
     );

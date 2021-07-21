@@ -269,7 +269,7 @@ class PayBoxStore {
 
         if (mode === PAY_MENT_MAP.WX_H5) {
           listenWXJsBridgeAndExecCallback(() => {
-            onBridgeReady(get(payRes, 'data.wechatPayResult.wechatH5Link'))
+            onBridgeReady(get(payRes, 'data.wechatPayResult.wechatH5Link'));
           });
           return;
         }
@@ -425,7 +425,7 @@ class PayBoxStore {
 
       this.resErrorFactory(setPayPwdRes);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       if (error.Code) {
         throw error;
       }
@@ -472,7 +472,7 @@ class PayBoxStore {
         payPassword: this.newPayPwd,
         payPasswordConfirmation: this.newPayPwdRepeat,
         payPasswordToken: this.payPwdResetToken,
-      }
+      },
     });
     if (resetPayPwdRes.code === 0) {
       return resetPayPwdRes.data;

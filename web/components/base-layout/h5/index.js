@@ -5,7 +5,7 @@ import List from '@components/list';
 import BottomNavBar from '@components/bottom-nav-bar';
 import { PullDownRefresh } from '@discuzq/design';
 import { noop } from '@components/thread/utils';
-
+import BacktoTop from '@components/list/backto-top';
 import styles from './index.module.scss';
 
 /**
@@ -39,20 +39,29 @@ const BaseLayout = forwardRef((props, ref) => {
     footer,
     disabledList = false,
   } = props;
-
+  const winHeight = window.innerHeight;
   const [height, setHeight] = useState(600);
 
   const pullDownWrapper = useRef(null);
   const listRef = useRef(null);
-
+  const [scrollTop, setScrollTop] = useState(0);
   useImperativeHandle(ref, () => ({
     listRef,
   }));
 
+  const handleBacktoTop = () => {
+    listRef && listRef.current.onBackTop();
+  };
+
   let content = showPullDown ? (
     <div className={styles.list} ref={pullDownWrapper}>
       <PullDownRefresh onRefresh={onPullDown} isFinished={isFinished} height={height}>
-        <List {...props} className={styles.listHeight} ref={listRef} onScroll={onScroll} platform={platform}>
+        <List {...props} className={styles.listHeight} ref={listRef}
+          onScroll={({ scrollTop }) => {
+            setScrollTop(scrollTop);
+            onScroll({ scrollTop });
+          }}
+          platform={platform}>
           {typeof children === 'function' ? children({ ...props }) : children}
         </List>
       </PullDownRefresh>
@@ -63,7 +72,10 @@ const BaseLayout = forwardRef((props, ref) => {
       immediateCheck={immediateCheck}
       className={styles.list}
       ref={listRef}
-      onScroll={onScroll}
+      onScroll={({ scrollTop }) => {
+        setScrollTop(scrollTop);
+        onScroll({ scrollTop });
+      }}
       platform={platform}
     >
       {typeof children === 'function' ? children({ ...props }) : children}
@@ -79,6 +91,7 @@ const BaseLayout = forwardRef((props, ref) => {
       {showHeader && <Header />}
       {content}
       {footer}
+      {scrollTop > winHeight * 2 && !disabledList && <BacktoTop showTabBar={showTabBar} h5 onClick={handleBacktoTop} />}
       {showTabBar && <BottomNavBar onClick={onClickTabBar} placeholder curr={curr} />}
     </div>
   );

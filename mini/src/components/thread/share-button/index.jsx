@@ -3,8 +3,10 @@ import { View, Button, Text } from '@tarojs/components'
 import styles from './index.module.scss'
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Taro, { useDidHide, useDidShow } from '@tarojs/taro'
+import classNames from 'classnames';
+import Popup from '@discuzq/design/dist/components/popup/index';
 
-const index = ({setShow, tipData, data, index, getShareData, shareNickname, shareAvatar, shareThreadid, getShareContent, shareContent}) => {
+const index = ({show, setShow, tipData, data, getShareData, shareNickname, shareAvatar, shareThreadid}) => {
     const {threadId} = tipData
     let threadTitle = ''
     const thread = data
@@ -13,7 +15,7 @@ const index = ({setShow, tipData, data, index, getShareData, shareNickname, shar
         comeFrom:'thread',
         threadId,
         title:threadTitle,
-        path: `/subPages/thread/index?id=${threadId}`,
+        path: `/indexPages/thread/index?id=${threadId}`,
         isAnonymous: thread.isAnonymous,
         isPrice: thread.displayTag.isPrice,
     }
@@ -33,15 +35,14 @@ const index = ({setShow, tipData, data, index, getShareData, shareNickname, shar
             Taro.eventCenter.trigger('message:detail', data)
         })
         Taro.navigateTo({
-            url: `/subPages/create-card/index?threadId=${threadId}`,
+            url: `/subPages/create-card/index`,
         })
     }
-
+    const onClose = () => {
+        setShow(false)
+    }
     // 当页面被隐藏时（去分享）,收起弹窗
     // TODO 最好是做成点击按钮之后，就收起弹窗
-    useDidHide(() => {
-        setShow(false) 
-    })
     useDidShow(() => {
         if(shareThreadid === threadId) {
             if(thread.isAnonymous){
@@ -52,9 +53,13 @@ const index = ({setShow, tipData, data, index, getShareData, shareNickname, shar
         }
     })
     return (
+      <Popup
+        position="bottom"
+        visible={show}
+        onClose={onClose}>
         <View className={styles.body}>
             <View className={styles.container}>
-            <View className={styles.more}>
+            <View className={classNames(styles.more, styles.oneRow)}>
                 <View className={styles.moreItem} onClick={CreateCard}>
                     <View className={styles.icon}>
                         <Icon name='PictureOutlinedBig' size={20}>
@@ -76,11 +81,12 @@ const index = ({setShow, tipData, data, index, getShareData, shareNickname, shar
             </View>
         </View>
         <View className={styles.button} >
-                <Text className={styles.cancel} onClick={handleClick}>
+                <Text className={styles.cancel} onClick={onClose}>
                     取消
                 </Text>
             </View>
         </View>
+        </Popup>
     )
 }
 

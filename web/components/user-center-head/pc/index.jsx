@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import styles from './index.module.scss';
 import Avatar from '@components/avatar';
-import { Button, Icon, Toast } from '@discuzq/design';
+import { Button, Icon, Toast, Spin } from '@discuzq/design';
 import { ACCEPT_IMAGE_TYPES } from '@common/constants/thread-post';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import { fixImageOrientation } from '@common/utils/exif';
+import throttle from '@common/utils/thottle.js';
 
 @inject('user')
 @observer
@@ -15,6 +16,7 @@ class index extends Component {
     super(props);
     this.state = {
       isUploadAvatarUrl: false, // 是否上传头像
+      isFollowedLoading: false, // 是否点击关注
     };
   }
 
@@ -28,6 +30,7 @@ class index extends Component {
     this.avatarUploaderRef.current.click();
   };
   onAvatarChange = async (fileList) => {
+    if (!fileList.target.files[0]) return;
     this.setState({
       isUploadAvatarUrl: true,
     });
@@ -65,6 +68,7 @@ class index extends Component {
     this.backgroundUploaderRef.current.click();
   };
   onBackgroundChange = async (fileList) => {
+    if (!fileList.target.files[0]) return;
     this.props.handleSetBgLoadingStatus(true);
     const fixedImg = await fixImageOrientation(fileList.target.files[0]);
     this.props.user
@@ -90,46 +94,71 @@ class index extends Component {
       });
   };
   // 点击关注
-  handleChangeAttention = async (follow) => {
+  handleChangeAttention = throttle(async (follow) => {
     const id = this.props.router.query?.id;
     if (id) {
       if (follow !== 0) {
         try {
+          this.setState({
+            isFollowedLoading: true,
+          });
           const cancelRes = await this.props.user.cancelFollow({ id: id, type: 1 });
           if (!cancelRes.success) {
             Toast.error({
               content: cancelRes.msg || '取消关注失败',
               duration: 2000,
             });
+            this.setState({
+              isFollowedLoading: false,
+            });
           }
           await this.props.user.getTargetUserInfo(id);
+          this.setState({
+            isFollowedLoading: false,
+          });
         } catch (error) {
           console.error(error);
           Toast.error({
             content: '网络错误',
             duration: 2000,
           });
+          this.setState({
+            isFollowedLoading: false,
+          });
         }
       } else {
         try {
+          this.setState({
+            isFollowedLoading: true,
+          });
           const followRes = await this.props.user.postFollow(id);
           if (!followRes.success) {
             Toast.error({
               content: followRes.msg || '关注失败',
               duration: 2000,
             });
+            this.setState({
+              isFollowedLoading: false,
+            });
           }
           await this.props.user.getTargetUserInfo(id);
+          this.setState({
+            isFollowedLoading: false,
+          });
         } catch (error) {
           console.error(error);
           Toast.error({
             content: '网络错误',
             duration: 2000,
           });
+          this.setState({
+            isFollowedLoading: false,
+          });
         }
       }
     }
-  };
+  }, 1000);
+
   // 渲染关注状态
   renderFollowedStatus = (follow) => {
     let icon = '';
@@ -153,7 +182,7 @@ class index extends Component {
     return { icon, text };
   };
   // 点击屏蔽
-  handleChangeShield = async (isDeny) => {
+  handleChangeShield = throttle(async (isDeny) => {
     const { query } = this.props.router;
     try {
       if (isDeny) {
@@ -183,7 +212,7 @@ class index extends Component {
         });
       }
     }
-  };
+  }, 1000);
   // 点击发送私信
   handleMessage = () => {
     const { username, nickname } = this.props.user.targetUser;
@@ -197,7 +226,7 @@ class index extends Component {
       <div className={styles.box}>
         <div className={styles.boxTop}>
           <div className={styles.headImgBox}>
-            <Avatar image={user.avatarUrl} size="big" name={user.nickname} />
+            <Avatar image={user.avatarUrl} size="big" name={user.nickname} level={2}/>
             {/* 相机图标 */}
             {!this.props.router.query?.id && (
               <div className={styles.userCenterEditCameraIcon} onClick={this.handleAvatarUpload}>
@@ -224,7 +253,10 @@ class index extends Component {
             <div className={styles.userNameOrTeam}>
               <div className={styles.username}>{user.nickname}</div>
               <div className={styles.groupName}>{user.group?.groupName}</div>
-              <p className={`${styles.text} ${this.props.router.query?.id && styles.otherText}`}>
+              <p
+                title={user.signature || '这个人很懒，什么也没留下~'}
+                className={`${styles.text} ${this.props.router.query?.id && styles.otherText}`}
+              >
                 {user.signature || '这个人很懒，什么也没留下~'}
               </p>
             </div>
@@ -245,14 +277,19 @@ class index extends Component {
                       this.handleChangeAttention(user.follow);
                     }}
                     type="primary"
-                    className={`${user.follow === 2 && styles.userFriendsBtn} ${
+                    className={`${styles.btn} ${user.follow === 2 && styles.userFriendsBtn} ${
                       user.follow === 1 && styles.userFollowedBtn
                     }`}
+                    disabled={this.state.isFollowedLoading}
                   >
-                    <Icon name={this.renderFollowedStatus(user.follow || 0).icon} size={12} />
+                    {this.state.isFollowedLoading ? (
+                      <Spin size={14} type="spinner"></Spin>
+                    ) : (
+                      <Icon name={this.renderFollowedStatus(user.follow || 0).icon} size={12} />
+                    )}
                     <span className={styles.userBtnText}>{this.renderFollowedStatus(user.follow || 0).text}</span>
                   </Button>
-                  <Button onClick={this.handleMessage}>
+                  <Button className={styles.btn} onClick={this.handleMessage}>
                     <Icon name="NewsOutlined" size={12} />
                     <span className={styles.userBtnText}>发私信</span>
                   </Button>

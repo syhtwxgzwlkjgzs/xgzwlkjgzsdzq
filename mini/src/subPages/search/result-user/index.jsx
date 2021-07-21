@@ -15,7 +15,6 @@ class Index extends React.Component {
 
   async componentDidMount() {
     const { search } = this.props;
-    console.log(search, 'search');
     // const { keyword = '' } = router.query;
     const { keyword = '' } = getCurrentInstance().router.params;
 

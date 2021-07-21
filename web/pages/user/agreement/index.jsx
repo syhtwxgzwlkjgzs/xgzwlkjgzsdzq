@@ -2,6 +2,7 @@ import React from 'react';
 import AgreementPage from '@layout/user/h5/agreement';
 import { inject } from 'mobx-react';
 import ViewAdapter from '@components/view-adapter';
+import Redirect from '@components/redirect';
 
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
@@ -20,9 +21,11 @@ class Agreement extends React.Component {
         break;
     }
     return <ViewAdapter
-              h5={<></>}
+              h5={
+                <Redirect jumpUrl={'/user/login'} />
+              }
               pc={<AgreementPage/>}
-              title={`${pageType} - ${site?.siteName}`}
+              title={`${pageType}`}
             />;
   }
 }

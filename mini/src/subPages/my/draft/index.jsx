@@ -18,6 +18,10 @@ import ThreadCenterView from '@components/thread/ThreadCenterView';
 class Index extends Component {
   page = 1;
   perPage = 10;
+  constructor(props) {
+    super(props);
+    Taro.hideShareMenu();
+  }
   componentDidShow() {
     this.fetchData();
   }
@@ -33,11 +37,12 @@ class Index extends Component {
       filter: { complex: THREAD_LIST_FILTER_COMPLEX.draft },
     });
     return;
-  }
+  };
 
-  handleEdit = item => Taro.navigateTo({url: `/subPages/thread/post/index?id=${item.threadId}`});
+  handleEdit = (item) => Taro.navigateTo({ url: `/indexPages/thread/post/index?id=${item.threadId}` });
 
-  handleDelete = async (item) => { // 删除草稿事件
+  handleDelete = async (item) => {
+    // 删除草稿事件
     const { thread, index } = this.props;
     Taro.showToast({
       title: '删除中...',
@@ -46,13 +51,13 @@ class Index extends Component {
     const res = await thread.delete(item.threadId);
     Taro.hideToast();
     if (res.code === 0) {
-      const data = (index.drafts?.pageData || []).filter(elem => elem.threadId !== item.threadId);
+      const data = (index.drafts?.pageData || []).filter((elem) => elem.threadId !== item.threadId);
       const total = index.drafts?.totalCount - 1;
       index.setDrafts({ ...index.drafts, totalCount: total, pageData: data });
     } else {
       Toast.error({ content: res.msg });
     }
-  }
+  };
 
   // 渲染草稿单项
   renderItem = ({ item, isLast }) => {
@@ -64,17 +69,17 @@ class Index extends Component {
         <ThreadCenterView data={item} onClick={() => this.handleEdit(item)} />
         <View className={styles['item-time']}>编辑于&nbsp;{item.updatedAt}</View>
       </View>
-    )
-  }
+    );
+  };
 
   // 处理列表数据
   getRenderList = (data = []) => {
-    return data.map(item => ({ id: item.threadId, ...item }));
-  }
+    return data.map((item) => ({ id: item.threadId, ...item }));
+  };
 
   render() {
     const { currentPage, totalPage, totalCount, pageData } = this.props.index?.drafts || {};
-    const topCard = (<View className={styles.header}>{totalCount || 0}&nbsp;条草稿</View>);
+    const topCard = <View className={styles.header}>{totalCount || 0}&nbsp;条草稿</View>;
 
     return (
       <Page>
@@ -88,7 +93,7 @@ class Index extends Component {
             onScrollBottom={() => this.fetchData(true)}
             onBtnClick={this.handleDelete}
           />
-        </View >
+        </View>
       </Page>
     );
   }

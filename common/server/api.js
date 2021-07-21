@@ -23,8 +23,10 @@ import {
   SITE_CLOSED,
   JUMP_TO_PAY_SITE,
   SITE_NO_INSTALL,
-  JUMP_TO_SUPPLEMENTARY
+  JUMP_TO_SUPPLEMENTARY,
+  OPERATING_FREQUENCY
 } from '@common/constants/site';
+import LoginHelper from '@common/utils/login-helper';
 
 let globalToast = null;
 const api = apiIns({
@@ -86,7 +88,7 @@ http.interceptors.response.use((res) => {
   const { data, status, statusText } = res;
   // 如果4002将重定向到登录
   // if (data.Code === -4002) {
-  //   Router.redirect({url: '/user/login'});
+  //   LoginHelper.saveAndLogin();
   // }
   let url = null;
   switch (data.Code) {
@@ -94,15 +96,9 @@ http.interceptors.response.use((res) => {
       // @TODO 未登陆且无权限时，直接跳转加入页面。可能影响其它逻辑
       // 通过res?.config?.headers?.authorization获取用户的token判断是否登陆
       // 未登陆时，帖子列表接口返回无权限，跳转登陆
+      // TODO: 没有开启小程序配置时，在小程序里不要做跳转
       if (!res?.config?.headers?.authorization && ~res?.config?.url.indexOf('/thread.list')) {
-        if (process.env.DISCUZ_ENV === 'web') {
-          url = '/user/login';
-        } else {
-          url = '/subPages/user/wx-auth/index';
-        }
-        Router.push({
-          url
-        });
+        LoginHelper.saveAndLogin();
       }
       break;
     }
@@ -119,26 +115,16 @@ http.interceptors.response.use((res) => {
     }
     case JUMP_TO_LOGIN: {
       clearLoginStatus();
-      if (process.env.DISCUZ_ENV === 'web') {
-        window.location.replace('/user/login');
-      } else {
-        url = '/subPages/user/wx-auth/index'
-      }
-      Router.replace({
-        url
-      });
+      LoginHelper.saveAndLogin();
       break;
     }
     case JUMP_TO_REGISTER: {
       clearLoginStatus();
       if (process.env.DISCUZ_ENV === 'web') {
-        window.location.replace('/user/register');
+        LoginHelper.saveAndRedirect('/user/register');
       } else {
-        url = '/subPages/user/wx-auth/index'
+        LoginHelper.saveAndLogin();
       }
-      Router.replace({
-        url
-      });
       break;
     }
     case JUMP_TO_AUDIT: {
@@ -178,7 +164,7 @@ http.interceptors.response.use((res) => {
       if (process.env.DISCUZ_ENV === 'web') {
         url = '/';
       } else {
-        url = '/pages/home/index'
+        url = '/indexPages/home/index'
       }
       Router.replace({
         url
@@ -202,9 +188,7 @@ http.interceptors.response.use((res) => {
       } else {
         url = '/subPages/forum/partner-invite/index'
       }
-      Router.push({
-        url
-      });
+      LoginHelper.saveAndRedirect(url);
       break;
     }
     case SITE_NO_INSTALL: {
@@ -224,21 +208,17 @@ http.interceptors.response.use((res) => {
       } else {
         url = '/subPages/user/supplementary/index';
       }
-      Router.push({
-        url
-      });
+      LoginHelper.saveAndRedirect(url);
       break;
     }
+    case OPERATING_FREQUENCY: {
+      Toast.error({
+        content: data.Message && data.Message !== '' ? data.Message : '操作太频繁，请稍后重试',
+      });
+    }
     default:  // 200 状态码
-      if (status === 200) {
-        return Promise.resolve({
-          code: data.Code,
-          data: reasetData(data.Data),
-          msg: data.Message,
-        });
-      }
+    break;
   }
-
   if (status === 200) {
     return Promise.resolve({
       code: data.Code,
@@ -246,7 +226,6 @@ http.interceptors.response.use((res) => {
       msg: data.Message,
     });
   }
-
   return Promise.resolve({
     code: status,
     data: null,

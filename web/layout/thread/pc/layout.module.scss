@@ -9,7 +9,16 @@
 }
 
 .positionSticky {
-  top: rem(-308) !important;
+  top: 0;
+}
+:global {
+  .is-userinfo-show {
+    top: -255px !important;
+
+    &.is-operate-show {
+      top: -316px !important;
+    }
+  }
 }
 
 .bottom {
@@ -68,4 +77,8 @@
 .copyright {
   margin-top: rem(10);
   width: 100%;
+}
+
+.examinePosition {
+  height: rem(52);
 }

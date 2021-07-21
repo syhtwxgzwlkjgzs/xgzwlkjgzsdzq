@@ -57,7 +57,6 @@ class CommentH5Page extends React.Component {
 
   // 点击更多
   onMoreClick() {
-    console.log('点击了更多');
     this.setState({ showMorePopup: true });
   }
 
@@ -73,7 +72,6 @@ class CommentH5Page extends React.Component {
 
     // 编辑
     if (type === 'edit') {
-      console.log('点击了编辑', this.props.comment.commentDetail);
       // this.onEditClick(this.props.comment.commentDetail);
     }
 
@@ -330,16 +328,22 @@ class CommentH5Page extends React.Component {
         });
     }
 
-    const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
+    const { success, msg, isApproved } = await this.props.comment.createReply(params, this.props.thread);
 
     if (success) {
       this.setState({
         showCommentInput: false,
         inputText: '请输入内容',
       });
-      Toast.success({
-        content: '回复成功',
-      });
+      if (isApproved) {
+        Toast.success({
+          content: msg,
+        });
+      } else {
+        Toast.warning({
+          content: msg,
+        });
+      }
       return true;
     }
 
@@ -383,6 +387,7 @@ class CommentH5Page extends React.Component {
       canDelete: commentData?.canDelete,
       canEssence: false,
       canStick: false,
+      isAdmini: this.props?.user?.isAdmini,
     };
 
     // 更多弹窗界面

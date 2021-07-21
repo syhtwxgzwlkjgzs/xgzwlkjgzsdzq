@@ -2,28 +2,34 @@ import React from 'react';
 import { Provider } from 'mobx-react';
 import { hideInstance } from '@discuzq/design/dist/components/image-previewer/layouts/web';
 import App from 'next/app';
+import getPlatform from '@common/utils/get-platform';
 import initializeStore from '@common/store';
 import PayBoxProvider from '../components/payBox/payBoxProvider';
 import isServer from '@common/utils/is-server';
 import '@discuzq/design/dist/styles/index.scss';
 import csrRouterRedirect from '@common/utils/csr-router-redirect';
 import Router from '@discuzq/sdk/dist/router';
-import sentry from '@common/utils/sentry';
+// import sentry from '@common/utils/sentry';
 import '../styles/index.scss';
 import CustomHead from '@components/custom-head';
 import Head from 'next/head';
 import monitor from '@common/utils/monitor';
+import { detectH5Orient } from '@common/utils/detect-orient';
+import browser from '@common/utils/browser';
+import Toast from '@discuzq/design/dist/components/toast';
+import { STORAGE_KEY, STORAGE_TYPE } from '@common/utils/viewcount-in-storage';
 
 
-if (!isServer()) {
-  process.env.NODE_ENV === 'production' && sentry();
-}
+// if (!isServer()) {
+//   process.env.NODE_ENV === 'production' && sentry();
+// }
 
 class DzqApp extends App {
   constructor(props) {
     super(props);
     this.appStore = initializeStore();
     this.updateSize = this.updateSize.bind(this);
+    this.toastInstance = null;
   }
 
   // 路由跳转时，需要清理图片预览器
@@ -45,22 +51,33 @@ class DzqApp extends App {
   }
 
   componentDidMount() {
-    if ( window.performance ) {
+    console.log(process.env.DISCUZ_BUILDINFO);
+    if (window.performance) {
       monitor.call('reportTime', {
         eventName: 'fist-render',
-        duration: Date.now() - performance.timing.navigationStart
+        duration: Date.now() - performance.timing.navigationStart,
       });
     }
-    
+
+    this.initOretation();
     window.addEventListener('resize', this.updateSize);
     csrRouterRedirect();
     this.listenRouterChangeAndClean();
+
+    if (!isServer()) {
+      window.addEventListener("beforeunload", () => {
+        if(STORAGE_TYPE === "session") sessionStorage.removeItem(STORAGE_KEY);
+      });
+    }
   }
 
   componentWillUnmount() {
     if (!isServer()) {
       window.removeEventListener('resize', this.updateSize);
       window.removeEventListener('popstate', this.cleanImgViewer);
+      window.removeEventListener("beforeunload", () => {
+        if(STORAGE_TYPE === "session") sessionStorage.removeItem(STORAGE_KEY);
+      });
     }
   }
 
@@ -71,20 +88,25 @@ class DzqApp extends App {
     // Router.replace({ url: '/render-error' });
   }
 
-  updateSize() {
-    const currentWidth = window.innerWidth;
-    
-    if ( this.appStore.site ) {
-      if ( this.appStore.site.platform === 'pc' && currentWidth < 800 ) {
-        this.appStore.site.setPlatform('h5');
-        return;
-      }
+  // 移动端检测横屏
+  initOretation() {
+    this.toastInstance?.destroy();
 
-      if ( this.appStore.site.platform === 'h5' && currentWidth >= 800 ) {
-        this.appStore.site.setPlatform('pc');
-        return;
+    if (browser.env('mobile') && !browser.env('iPad')) {
+      const isVertical = detectH5Orient();
+      if (!isVertical) {
+        this.toastInstance = Toast.info({
+          content: '为了更好的体验，请使用竖屏浏览',
+          duration: 5000,
+        });
       }
     }
+  }
+
+  updateSize() {
+    this.appStore.site.setPlatform(getPlatform(window.navigator.userAgent));
+
+    this.initOretation();
   }
 
   render() {

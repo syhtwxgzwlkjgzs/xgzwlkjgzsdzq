@@ -12,6 +12,11 @@ export const APP_THEME = {
   dark: 'dark',
 };
 
+export const ERROR_PAGE_TIPS = {
+  site: '获取站点接口信息失败',
+  apply: '出bug了 页面暂时无法展示'
+}
+
 /**
  * 后端错误码
 **/
@@ -31,6 +36,7 @@ export const JUMP_TO_404 = -4004; // 资源不存在
 export const NEED_BIND_WEIXIN_FLAG = -8000; // 需要绑定微信
 export const NEED_BIND_PHONE_FLAG = -8001; // 需要绑定手机
 export const SITE_NO_INSTALL = -10001; // 站点未安装
+export const OPERATING_FREQUENCY = -5002; // 操作频繁
 
 // web端站点加入路由白名单
 export const WEB_SITE_JOIN_WHITE_LIST = [
@@ -78,7 +84,7 @@ export const MINI_SITE_JOIN_WHITE_LIST = [
 // mini端站点，用户账号审核中可以访问的路由白名单
 export const REVIEWING_USER_WHITE_LIST = [
   '/pages/index/index', // 启动页
-  '/pages/home/index', // 首页
+  '/indexPages/home/index', // 首页
   '/subPages/thread/index', // 帖子详情页
   '/subPages/user/status/index', // 用户状态提示页
   '/subPages/forum/partner-invite/index', // 站点加入

@@ -1,6 +1,6 @@
 import React from 'react';
 import UserCenterFriends from '../user-center-friends';
-import { Spin, Toast, Avatar } from '@discuzq/design';
+import { Spin, Toast } from '@discuzq/design';
 import { followerAdapter } from './adapter';
 import friendsStyle from '@components/user-center/friend-pc/index.module.scss';
 import styles from './index.module.scss';
@@ -10,6 +10,7 @@ import deepClone from '@common/utils/deep-clone';
 import NoData from '@components/no-data';
 import classnames from 'classnames';
 import { inject, observer } from 'mobx-react';
+import Avatar from '@components/avatar';
 import throttle from '@common/utils/thottle.js';
 
 @inject('user')
@@ -143,7 +144,7 @@ class UserCenterFans extends React.Component {
     });
   }
 
-  followUser = throttle(async ({ id: userId }) => {
+  followUser = async ({ id: userId }) => {
     const res = await createFollow({ data: { toUserId: userId } });
     if (res.code === 0 && res.data) {
       Toast.success({
@@ -171,9 +172,9 @@ class UserCenterFans extends React.Component {
       data: null,
       success: false,
     };
-  }, 1000);
+  };
 
-  unFollowUser = throttle(async ({ id }) => {
+  unFollowUser = async ({ id }) => {
     const res = await deleteFollow({ data: { id, type: 1 } });
     if (res.code === 0 && res.data) {
       Toast.success({
@@ -198,7 +199,7 @@ class UserCenterFans extends React.Component {
       data: null,
       success: false,
     };
-  }, 1000);
+  };
 
   async componentDidMount() {
     // 第一次加载完后，才允许加载更多页面
@@ -306,7 +307,7 @@ class UserCenterFans extends React.Component {
                 imgUrl={user.avatar}
                 withHeaderUserInfo={this.props.isPc}
                 onContainerClick={this.props.onContainerClick}
-                userName={user.nickName}
+                nickName={user.nickName}
                 userGroup={user.groupName}
                 followHandler={this.followUser}
                 itemStyle={this.props.itemStyle}
@@ -322,11 +323,19 @@ class UserCenterFans extends React.Component {
           {followerAdapter(this.props.dataSource || this.state.fans).map((user, index) => {
             if (index + 1 > this.props.limit) return null;
             return (
-              <div key={user.id + index} className={friendsStyle.friendItem}>
+              <div
+                key={user.id + index}
+                className={friendsStyle.friendItem}
+                onClick={async () => {
+                  await this.props.onContainerClick({
+                    id: user.id,
+                  });
+                }}
+              >
                 <div className={friendsStyle.friendAvatar}>
-                  <Avatar image={user.avatar} userId={user.id} circle name={user.userName} />
+                  <Avatar image={user.avatar} userId={user.id} circle name={user.nickName} />
                 </div>
-                <div className={friendsStyle.friendTextInfo}>{user.userName}</div>
+                <div className={friendsStyle.friendTextInfo}>{user.nickName}</div>
               </div>
             );
           })}

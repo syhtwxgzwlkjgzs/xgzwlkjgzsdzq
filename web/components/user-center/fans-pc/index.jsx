@@ -14,6 +14,7 @@ class UserCenterFansPc extends React.Component {
   static defaultProps = {
     className: '',
   };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -22,6 +23,18 @@ class UserCenterFansPc extends React.Component {
       sourcePage: 1,
       sourceTotalPage: 1,
     };
+  }
+
+  componentDidMount = () => {
+    if (this.props.getRef) {
+      this.props.getRef(this);
+    }
+  }
+
+  closePopup = () => {
+    this.setState({
+      showFansPopup: false,
+    });
   }
 
   setDataSource = (targetData) => {
@@ -59,6 +72,7 @@ class UserCenterFansPc extends React.Component {
       fansCount = this.props.user.fansCount;
     }
 
+
     return (
       <>
         <SidebarPanel
@@ -70,7 +84,7 @@ class UserCenterFansPc extends React.Component {
           leftNum={fansCount}
           onShowMore={this.moreFans}
           mold={'wrapper'}
-          className={this.props.className}
+          className={`${this.props.className} ${styles.borderRadius}`}
         >
           <div>
             {Number(fansCount) !== 0 && (

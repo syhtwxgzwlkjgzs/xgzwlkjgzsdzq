@@ -12,6 +12,10 @@ import threadPay from '@common/pay-bussiness/thread-pay';
 import ThreadCenterView from './ThreadCenterView';
 import { debounce, noop } from './utils'
 import { View, Text } from '@tarojs/components'
+import { getImmutableTypeHeight } from './getHeight'
+import { getElementRect, randomStr } from './utils'
+import Skeleton from './skeleton';
+import { updateViewCountInStores } from '@common/utils/viewcount-in-storage';
 
 @inject('site')
 @inject('index')
@@ -21,25 +25,57 @@ import { View, Text } from '@tarojs/components'
 @inject('topic')
 @observer
 class Index extends React.Component {
-    state = {
-      isSendingLike: false,
+
+    constructor(props) {
+      super(props);
+
+      this.state = {
+        isSendingLike: false,
+        minHeight: 0,
+        useShowMore: true,
+        videoH: 0
+      }
+
+      this.threadStyleId = `thread-style-id-${randomStr()}`
+  }
+
+    componentDidMount() {
+      this.changeHeight()
     }
+
+    setUseShowMore = () => {
+      this.setState({ useShowMore: false })
+    }
+
+    changeHeight = (params) => {
+      // 保存视频高度
+      const { videoH } = this.state
+      if (params?.type === 'video' && videoH === 0) {
+        this.setState({ videoH: params['height'] })
+      }
+
+      // 更新帖子组件高度
+      getElementRect(this.threadStyleId).then(res => {
+        this.setState({ minHeight: res?.height })
+      }).catch(() => {
+        const height = getImmutableTypeHeight(this.props.data)
+        this.setState({ minHeight: height })
+      })
+    }
+
     // 评论
     onComment = (e) => {
       e && e.stopPropagation();
 
-      // 对没有登录的先登录
-      if (!this.props.user.isLogin()) {
-        Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/subPages/user/wx-auth/index' });
-        return;
+      if (!this.allowEnter()) {
+        return
       }
 
-      const { data = {} } = this.props;
-      const { threadId = '' } = data;
+      const { threadId = '' } = this.props.data || {};
+
       if (threadId !== '') {
         this.props.thread.positionToComment()
-        Router.push({url: `/subPages/thread/index?id=${threadId}`})
+        Router.push({url: `/indexPages/thread/index?id=${threadId}`})
       } else {
         console.log('帖子不存在');
       }
@@ -47,8 +83,10 @@ class Index extends React.Component {
     // 点赞
     onPraise = (e) => {
       e && e.stopPropagation();
-      this.handlePraise()
+      this.updateViewCount();
+      this.handlePraise();
     }
+
     handlePraise = debounce(() => {
 
       if(this.state.isSendingLike) return;
@@ -60,22 +98,23 @@ class Index extends React.Component {
       }
       const { data = {}, user } = this.props;
       const { threadId = '', isLike, postId } = data;
-      this.setState({isSendingLike: true});
-      this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } }).then(result => {
+      this.setState({ isSendingLike: true });
+      this.props.index.updateThreadInfo({ pid: postId, id: threadId, data: { attributes: { isLiked: !isLike } } }).then((result) => {
         if (result.code === 0 && result.data) {
           this.props.index.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
           this.props.search.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
           this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
           this.props.user.updateAssignThreadInfo(threadId, { updateType: 'like', updatedInfo: result.data, user: user.userInfo });
         }
-        this.setState({isSendingLike: false});
+        this.setState({ isSendingLike: false });
       });
     }, 1000)
 
     // 支付
     onPay = (e) => {
       // e && e.stopPropagation();
-      this.handlePay()
+      this.updateViewCount();
+      this.handlePay();
     }
     handlePay = debounce(async (e) => {
       // e && e.stopPropagation();
@@ -83,7 +122,7 @@ class Index extends React.Component {
       // 对没有登录的先做
       if (!this.props.user.isLogin()) {
         Toast.info({ content: '请先登录!' });
-        goToLoginPage({ url: '/user/login' });
+        goToLoginPage({ url: '/subPages/user/wx-auth/index' });
         return;
       }
 
@@ -98,28 +137,29 @@ class Index extends React.Component {
       if (success && thread?.threadId) {
         const { code, data } = await this.props.thread.fetchThreadDetail(thread?.threadId);
         if (code === 0 && data) {
-          this.props.index.updatePayThreadInfo(thread?.threadId, data)
-          this.props.search.updatePayThreadInfo(thread?.threadId, data)
-          this.props.topic.updatePayThreadInfo(thread?.threadId, data)
-          this.props.user.updatePayThreadInfo(thread?.threadId, data)
+          this.props.index.updatePayThreadInfo(thread?.threadId, data);
+          this.props.search.updatePayThreadInfo(thread?.threadId, data);
+          this.props.topic.updatePayThreadInfo(thread?.threadId, data);
+          this.props.user.updatePayThreadInfo(thread?.threadId, data);
+
+          if(typeof this.props.dispatch === "function") {
+            this.props.dispatch(thread?.threadId, data);
+          }
         }
       }
     }, 1000);
 
     onClick = (e) => {
-      const { threadId = '', ability } = this.props.data || {};
-      const { canViewPost } = ability;
-
-      if (!canViewPost) {
-        Toast.info({ content: '暂无权限查看详情，请联系管理员' });
+      if (!this.allowEnter()) {
+        return
       }
 
-      if (threadId !== '') {
-        Router.push({url: `/subPages/thread/index?id=${threadId}`})
+      const { threadId = '' } = this.props.data || {};
 
-        this.props.index.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
-        this.props.search.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
-        this.props.topic.updateAssignThreadInfo(threadId, { updateType: 'viewCount' })
+      if (threadId !== '') {
+        this.props.thread.isPositionToComment = false;
+        Router.push({url: `/indexPages/thread/index?id=${threadId}`})
+
       } else {
         console.log('帖子不存在');
       }
@@ -149,8 +189,38 @@ class Index extends React.Component {
       onClickIcon(e)
     }
 
+    // 判断能否进入详情逻辑
+    allowEnter = () => {
+      const { ability } = this.props.data || {};
+      const { canViewPost } = ability;
+
+      if (!canViewPost) {
+        const isLogin = this.props.user.isLogin()
+        if (!isLogin) {
+          Toast.info({ content: '请先登录!' });
+          goToLoginPage({ url: '/user/login' });
+        } else {
+          Toast.info({ content: '暂无权限查看详情，请联系管理员' });
+        }
+        return false
+      }
+      return true
+    }
+
+    updateViewCount = async () => {
+      const { threadId = '' } = this.props.data || {};
+      const threadIdNumber = Number(threadId);
+      const viewCount = await updateViewCountInStores(threadIdNumber);
+      if(viewCount) {
+        this.props.index.updateAssignThreadInfo(threadIdNumber, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
+        this.props.search.updateAssignThreadInfo(threadIdNumber, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
+        this.props.topic.updateAssignThreadInfo(threadIdNumber, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
+      }
+    }
+
     render() {
-      const { data, className = '', site = {}, showBottomStyle = true, isShowIcon = false } = this.props;
+      const { data, className = '', site = {}, showBottomStyle = true, isShowIcon = false, unifyOnClick = null, relativeToViewport = true } = this.props;
+
       const { platform = 'pc' } = site;
       if (!data) {
         return <NoData />;
@@ -169,57 +239,80 @@ class Index extends React.Component {
         payType,
         content,
         isAnonymous,
+        diffTime
       } = data || {};
       const {text} = content
       const { isEssence, isPrice, isRedPack, isReward } = displayTag;
       const {getShareData, getShareContent} = this.props.user
       const {shareNickname, shareAvatar, shareThreadid, shareContent} = this.props.user
+      const { minHeight, useShowMore, videoH } = this.state
+
       return (
-        <View className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`}>
-          <View className={styles.header} onClick={this.onClick}>
-              <UserInfo
-                name={user.nickname || ''}
-                avatar={user.avatar || ''}
-                location={position.location}
-                view={`${viewCount}`}
-                groupName={group?.groupName}
-                time={createdAt}
-                isEssence={isEssence}
-                isPay={isPrice}
-                isRed={isRedPack}
-                isReward={isReward}
-                isAnonymous={isAnonymous}
-                userId={user?.userId}
-                platform={platform}
-                onClick={this.onUser}
-              />
-              {isShowIcon && <View className={styles.headerIcon} onClick={this.onClickHeaderIcon}><Icon name='CollectOutlinedBig' className={styles.collectIcon}></Icon></View>}
-          </View>
+        <View className={`${styles.container} ${className} ${showBottomStyle && styles.containerBottom} ${platform === 'pc' && styles.containerPC}`} style={{ minHeight: `${minHeight}px` }} id={this.threadStyleId}>
+          {
+          relativeToViewport ? (
+            <>
+            <View className={styles.header} onClick={unifyOnClick || this.onClick}>
+                <UserInfo
+                  name={user.nickname || ''}
+                  avatar={user.avatar || ''}
+                  location={position.location}
+                  view={`${viewCount}`}
+                  groupName={group?.groupName}
+                  time={diffTime}
+                  isEssence={isEssence}
+                  isPay={isPrice}
+                  isRed={isRedPack}
+                  isReward={isReward}
+                  isAnonymous={isAnonymous}
+                  userId={user?.userId}
+                  platform={platform}
+                  onClick={unifyOnClick || this.onUser}
+                />
+                {isShowIcon && <View className={styles.headerIcon} onClick={unifyOnClick || this.onClickHeaderIcon}><Icon name='CollectOutlinedBig' className={styles.collectIcon}></Icon></View>}
+            </View>
 
-          <ThreadCenterView text={text} data={data} onClick={this.onClick} onPay={this.onPay} platform={platform} />
+            <ThreadCenterView
+              text={text}
+              data={data}
+              onClick={unifyOnClick || this.onClick}
+              onPay={unifyOnClick || this.onPay}
+              platform={platform}
+              relativeToViewport={relativeToViewport}
+              changeHeight={this.changeHeight}
+              useShowMore={useShowMore}
+              setUseShowMore={this.setUseShowMore}
+              videoH={videoH}
+              updateViewCount={this.updateViewCount}
+            />
 
-          <BottomEvent
-            userImgs={likeReward.users}
-            wholeNum={likeReward.likePayCount || 0}
-            comment={likeReward.postCount || 0}
-            sharing={likeReward.shareCount || 0}
-            // onShare={this.onShare}
-            onComment={this.onComment}
-            onPraise={this.onPraise}
-            isLiked={isLike}
-            isSendingLike={this.state.isSendingLike}
-            tipData={{ postId, threadId, platform, payType }}
-            platform={platform}
-            index={this.props.index}
-            shareNickname = {shareNickname}
-            shareAvatar = {shareAvatar}
-            shareThreadid = {shareThreadid}
-            getShareData = {getShareData}
-            shareContent = {shareContent}
-            getShareContent = {getShareContent}
-            data={data}
-            user={this.props.user}
-          />
+            <BottomEvent
+              userImgs={likeReward.users}
+              wholeNum={likeReward.likePayCount || 0}
+              comment={likeReward.postCount || 0}
+              sharing={likeReward.shareCount || 0}
+              // onShare={this.onShare}
+              onComment={this.onComment}
+              onPraise={this.onPraise}
+              unifyOnClick={unifyOnClick}
+              isLiked={isLike}
+              isSendingLike={this.state.isSendingLike}
+              tipData={{ postId, threadId, platform, payType }}
+              platform={platform}
+              index={this.props.index}
+              shareNickname = {shareNickname}
+              shareAvatar = {shareAvatar}
+              shareThreadid = {shareThreadid}
+              getShareData = {getShareData}
+              shareContent = {shareContent}
+              getShareContent = {getShareContent}
+              data={data}
+              user={this.props.user}
+              updateViewCount={this.updateViewCount}
+            />
+            </>
+          ) : <Skeleton style={{ minHeight: `${minHeight}px` }} />
+        }
         </View>
       );
     }

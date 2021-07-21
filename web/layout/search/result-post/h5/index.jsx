@@ -45,8 +45,6 @@ class SearchResultPostH5Page extends React.Component {
     });
   };
 
-  onPostClick = (data) => {};
-
   render() {
     const { keyword } = this.state;
     const { threads, threadsError } = this.props.search;
@@ -64,7 +62,7 @@ class SearchResultPostH5Page extends React.Component {
         </div>
         {
           pageData?.map((item, index, arr) => (
-            <ThreadContent showBottomStyle={index !== arr.length - 1} key={index} data={item} />
+            <ThreadContent showBottomStyle={index !== arr.length - 1} key={`${item.threadId}-${item.updatedAt}`} data={item} />
           ))
         }
       </BaseLayout>

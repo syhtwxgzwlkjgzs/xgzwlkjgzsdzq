@@ -9,9 +9,9 @@
   display: flex;
   justify-content: space-between;
   font-weight: normal;
-  padding-bottom: rem($padding-4n);
+  padding-bottom: rem($padding-2n);
   .text {
-    font-family: 'PingFang SC';
+    
     font-size: rem($font-size-primary);
     text-align: left;
     color: $text-color-primary;
@@ -40,20 +40,20 @@
     }
   }
   .money {
-    font-family: 'PingFangSC-Semibold';
+    
     font-size: rem($font-size-middle);
     text-align: left;
     color: $error-color;
   }
   .text {
-    font-family: 'PingFang SC';
+    
     font-size: rem($font-size-primary);
     text-align: left;
     color: $text-color-primary;
     // line-height: rem(16);
   }
   .money {
-    font-family: 'PingFangSC-Semibold';
+    
     font-size: rem($font-size-middle);
     text-align: left;
     color: $error-color;
@@ -61,7 +61,7 @@
 }
 
 .time {
-  font-family: 'PingFangSC-Regular';
+  
   font-weight: normal;
   font-size: rem($font-size-label);
   text-align: left;

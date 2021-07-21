@@ -58,19 +58,30 @@ const checkCompleteUserInfo = (resp) => {
   const isMissNickname = get(resp, 'data.isMissNickname', false);
   const isMissRequireInfo = get(resp, 'data.userStatus') === 10;
   const accessToken = get(resp, 'data.accessToken', '');
+  const uid = get(resp, 'data.uid', '');
+
   setAccessToken({
     accessToken,
   });
   if (isMissRequireInfo && isMissNickname) {
-    throw COMMON_LOGIN_STORE_ERRORS.NEED_ALL_INFO;
+    throw {
+      uid,
+      ...COMMON_LOGIN_STORE_ERRORS.NEED_ALL_INFO,
+    }
   }
 
   if (isMissNickname) {
-    throw COMMON_LOGIN_STORE_ERRORS.NEED_BIND_USERNAME;
+    throw {
+      uid,
+      ...COMMON_LOGIN_STORE_ERRORS.NEED_BIND_USERNAME,
+    }
   }
 
   if (isMissRequireInfo) {
-    throw COMMON_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO;
+    throw {
+      uid,
+      ...COMMON_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO,
+    }
   }
 };
 

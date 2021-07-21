@@ -65,6 +65,10 @@ class WithdrawalPop extends Component {
         });
         const { getUserWalletInfo } = this.props.wallet;
         await getUserWalletInfo();
+        // 如果触发提现回调
+        if (this.props.onCreateCash) {
+          this.props.onCreateCash();
+        }
         this.initState();
       })
       .catch((err) => {

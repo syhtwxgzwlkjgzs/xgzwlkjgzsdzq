@@ -1,66 +1,15 @@
 @import '@common/styles/index.scss';
 
-@mixin loadMoreStyles {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  right: 0;
-  left: 0;
-  top: rem(60);
-  bottom: 0;
-  background-color: $body-bg-color;
-  z-index: -1;
-  transform: translateY(rem(-30));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.collectBox {
-  background-color: $body-bg-color;
-}
 .titleBox {
-  width: 100%;
   height: rem(53);
-  box-sizing: border-box;
   background-color: var(--color-white);
   font-size: rem($font-size-primary);
   color: $text-color-regular;
   padding: 0 rem($padding-4n);
   line-height: rem(53);
-}
-
-.list {
-  flex: 1;
-  background-color: $body-bg-color;
-  -webkit-overflow-scrolling:touch
-}
-
-.listItem {
-  position: relative;
-}
-
-.buySplitLine {
-  width: 100%;
-  height: rem(10);
-  background-color: $body-bg-color;
-}
-
-.listItemBox {
-  width: rem(20);
-  height: rem(20);
-  right: rem(16);
-  top: rem(16);
-  position: absolute;
-  .listItemIcon {
-    color: var(--color-primary);
+  margin-bottom: rem($margin-10);
+  .num {
+    font-weight: 600;
+    margin-right: $margin-base;
   }
-}
-
-.spinLoading {
-  @include loadMoreStyles();
-}
-
-.noDataList {
-  @include loadMoreStyles();
 }

@@ -105,7 +105,7 @@ const InputPop = (props) => {
   };
 
   const handleUploadChange = async (list) => {
-    setImageList(list);
+    setImageList([...list]);
   };
 
   // 附件、图片上传之前
@@ -116,7 +116,8 @@ const InputPop = (props) => {
     const { supportFileExt, supportImgExt, supportMaxSize } = webConfig.setAttach;
     if (type === THREAD_TYPE.file) {
       // 当前选择附件的类型大小
-      const fileType = cloneList[0].name.match(/\.(.+)$/i)[1].toLocaleLowerCase();
+      const arr = cloneList[0].name.split('.').pop();
+      const fileType = arr.toLocaleLowerCase();
       const fileSize = cloneList[0].size;
       // 判断合法性
       const isLegalType = supportFileExt.toLocaleLowerCase().includes(fileType);
@@ -136,8 +137,14 @@ const InputPop = (props) => {
 
       let isAllLegal = true; // 状态：此次上传图片是否全部合法
       cloneList.forEach((item, index) => {
-        const arr = item.name.split('.').pop();
-        const imageType = arr.toLocaleLowerCase();
+        let imageType = '';
+        if (item.imageType) {
+          imageType = item.imageType;
+        } else {
+          const arr = item.name.split('.').pop();
+          imageType = arr.toLocaleLowerCase();
+        }
+
         const isLegalType = supportImgExt.toLocaleLowerCase().includes(imageType);
 
         // 存在不合法图片时，从上传图片列表删除
@@ -146,7 +153,6 @@ const InputPop = (props) => {
           isAllLegal = false;
         }
       });
-
       !isAllLegal && Toast.info({ content: `仅支持${supportImgExt}类型的图片` });
 
       cloneList?.length && setImageUploading(true);
@@ -164,9 +170,11 @@ const InputPop = (props) => {
     setImageUploading(list?.length && list.some((image) => image.status === 'uploading'));
   };
 
-  const onFail = () => {
+  const onFail = (ret) => {
+    const msg = ret?.msg;
+    const code = ret?.code === -7075; // 错误码为-7075时为不允许上传敏感图
     Toast.error({
-      content: '图片上传失败',
+      content: code ? msg : '图片上传失败',
     });
   };
 
@@ -240,10 +248,10 @@ const InputPop = (props) => {
             <Emoji show={showEmojis} emojis={emojis} onClick={onEmojiClick} />
           </div>
         )}
+        <div className={styles.safeArea}></div>
       </Popup>
 
       {showAt && <AtSelect visible={showAt} getAtList={onAtListChange} onCancel={onAtIconClick} />}
-
     </div>
   );
 };

@@ -38,6 +38,7 @@
       display: flex;
       align-items: center;
       flex-direction: row;
+      z-index: $zindex-tooltip;
       :global(.dzq-icon){
         font-size: $font-size-middle-extra !important;
         font-weight: bold;
@@ -94,11 +95,6 @@
     box-sizing: border-box;
     position: absolute;
     bottom: $font-line-height-primary;
-    Button {
-      margin:0;
-      padding:0;
-      border: 0;
-    }
     .item {
       display: flex;
       align-items: center;
@@ -146,7 +142,9 @@
 .container_mode_join {
   height: 169px;
 }
-
-.hide_logo {
-  height: 40px;
+.container_mode_supplementary{
+  height: 128px;
+  .logoBox {
+    margin-top: 55px;
+  }
 }

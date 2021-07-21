@@ -4,7 +4,6 @@ import img from './index.module.scss';
 import { View, Text, Image } from '@tarojs/components';
 
 const Index = ({ imgData = [] }) => {
-  console.log(imgData, '图片地址');
   const [visible, setVisible] = useState(false);
   const [defaultImg, setDefaultImg] = useState('');
 

@@ -83,12 +83,12 @@ class PayPassword extends React.Component {
       Toast.error({
         content: '需要首先绑定手机号才能进行此操作',
         duration: 2000,
+        onClose: () => {
+          // TODO: 回跳逻辑补充
+          this.props.payBox.visible = false;
+          Taro.navigateTo({ url: '/subPages/user/bind-phone/index?from=paybox' });
+        },
       });
-      setTimeout(() => {
-        // TODO: 回跳逻辑补充
-        this.props.payBox.visible = false;
-        Taro.navigateTo({ url: '/subPages/user/bind-phone/index?from=paybox' });
-      }, 1000);
       return;
     }
     Taro.navigateTo({
@@ -106,12 +106,15 @@ class PayPassword extends React.Component {
       // 表示钱包支付密码
       try {
         await this.props.payBox.walletPayOrder();
+        this.initState();
         Toast.success({
           content: '支付成功',
           hasMask: false,
           duration: 1000,
         });
+        this.props.payBox.visible = false;
         setTimeout(() => {
+          // 清空密码
           this.props.payBox.clear();
         }, 500);
       } catch (error) {
@@ -170,7 +173,7 @@ class PayPassword extends React.Component {
       <View>
         <Dialog
           className={styles.paypwdDialogWrapper}
-          visible={this.props.payBox.step === STEP_MAP.WALLET_PASSWORD}
+          visible={this.props.payBox.visible && this.props.payBox.step === STEP_MAP.WALLET_PASSWORD}
           position="center"
           maskClosable={true}
         >
@@ -254,7 +257,7 @@ class PayPassword extends React.Component {
               0
             </View>
             <View data-key="-1" className={`${styles.column} ${styles.special}`}>
-              <Icon name="BackspaceOutlined" size={16} />
+              <Icon name="BackspaceOutlined" size={18} />
             </View>
           </View>
         </View>

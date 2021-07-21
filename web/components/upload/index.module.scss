@@ -117,9 +117,9 @@ $width: rem(169);
           border: 0;
         }
 
-        // .dzq-upload-list-list__name {
-        //   width: rem(260);
-        // }
+        .dzq-upload-list-list__icon {
+          color: $success-color;
+        }
 
         .dzq-upload-list-list__operate {
           width: rem(40);

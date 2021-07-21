@@ -40,11 +40,19 @@ class UserAction extends SiteStore {
   // 写入用户数据
   @action
   setUserInfo(data) {
-    this.userInfo = data;
-    if (data && data.id) {
-      this.updateLoginStatus(true);
-    } else {
-      this.updateLoginStatus(false);
+    if (data) {
+      if (!this.userInfo) {
+        this.userInfo = data;
+      } else {
+        Object.keys(data).forEach((key) => {
+          this.userInfo[key] = data[key];
+        });
+      }
+      if (data && data.id) {
+        this.updateLoginStatus(true);
+      } else {
+        this.updateLoginStatus(false);
+      }
     }
   }
 
@@ -79,14 +87,74 @@ class UserAction extends SiteStore {
     // this.editBackgroundUrl = get(this.userInfo, 'backgroundUrl');
   }
 
+  @action
+  diffPicAndUpdateUserInfo(data) {
+    const transformedData = Object.assign({}, data);
+
+    // 如下操作是为了避免因为签名导致的图片重加载问题
+    if (data.backgroundUrl && this.backgroundUrl) {
+      const originBackgroundFilename = this.backgroundUrl?.split('?')[0];
+      const nextBackgroundFilename = data.backgroundUrl?.split('?')[0];
+
+      if (originBackgroundFilename === nextBackgroundFilename) {
+        transformedData.backgroundUrl = this.backgroundUrl;
+      }
+    }
+
+    if (data.avatarUrl && this.avatarUrl) {
+      const originAvatarFilename = this.avatarUrl?.split('?')[0];
+      const nextAvatarFilename = data.avatarUrl?.split('?')[0];
+
+      if (originAvatarFilename === nextAvatarFilename) {
+        transformedData.avatarUrl = this.avatarUrl;
+      }
+    }
+
+    this.setUserInfo(transformedData);
+  }
+
   // 登录后获取新的用户信息
   @action
   async updateUserInfo(id) {
     const userInfo = await readUser({ params: { pid: id } });
+    if (!userInfo || userInfo?.code !== 0) {
+      return;
+    }
+
+    if (!this.id && this.onLoginCallback) {
+      this.onLoginCallback(userInfo.data);
+    }
     const userPermissions = await readPermissions({});
-    userInfo.data && this.setUserInfo(userInfo.data);
-    userPermissions.data && this.setUserPermissions(userPermissions.data);
-    return userInfo.code === 0 && userInfo.data;
+    userInfo?.data && this.diffPicAndUpdateUserInfo(userInfo.data);
+    userPermissions?.data && this.setUserPermissions(userPermissions.data);
+
+    return userInfo?.code === 0 && userInfo.data;
+  }
+
+  @action
+  diffPicAndUpdateTargetUserInfo(data) {
+    const transformedData = Object.assign({}, data);
+
+    // 如下操作是为了避免因为签名导致的图片重加载问题
+    if (data.backgroundUrl && this.targetUserBackgroundUrl) {
+      const originBackgroundFilename = this.targetUserBackgroundUrl?.split('?')[0];
+      const nextBackgroundFilename = data.backgroundUrl?.split('?')[0];
+
+      if (originBackgroundFilename === nextBackgroundFilename) {
+        transformedData.backgroundUrl = this.targetUserBackgroundUrl;
+      }
+    }
+
+    if (data.avatarUrl && this.targetUserAvatarUrl) {
+      const originAvatarFilename = this.targetUserAvatarUrl?.split('?')[0];
+      const nextAvatarFilename = data.avatarUrl?.split('?')[0];
+
+      if (originAvatarFilename === nextAvatarFilename) {
+        transformedData.avatarUrl = this.targetUserAvatarUrl;
+      }
+    }
+
+    return transformedData;
   }
 
   // 获取指定用户的用户信息，用于获取他人首页
@@ -94,10 +162,9 @@ class UserAction extends SiteStore {
   async getTargetUserInfo(id) {
     this.targetUserId = id;
     const userInfo = await this.getAssignUserInfo(id);
-    this.targetUser = userInfo;
+    this.targetUser = this.diffPicAndUpdateTargetUserInfo(userInfo);
     return userInfo;
   }
-
 
   @action
   getUserFollow = async () => {
@@ -121,7 +188,7 @@ class UserAction extends SiteStore {
       this.userFollowsPage += 1;
     }
     this.userFollows = { ...this.userFollows };
-  }
+  };
 
   @action
   getUserFans = async () => {
@@ -146,61 +213,7 @@ class UserAction extends SiteStore {
       this.userFansPage += 1;
     }
     this.userFans = { ...this.userFans };
-  }
-
-  @action
-  getTargetUserFollow = async (id) => {
-    const followsRes = await getUserFollow({
-      params: {
-        page: this.targetUserFollowsPage,
-        perPage: 20,
-        filter: {
-          userId: id,
-        },
-      },
-    });
-
-    if (followsRes.code !== 0) {
-      console.error(followsRes);
-      return;
-    }
-
-    const pageData = get(followsRes, 'data.pageData', []);
-    const totalPage = get(followsRes, 'data.totalPage', 1);
-    this.targetUserFollowsTotalPage = totalPage;
-    this.targetUserFollows[this.targetUserFollowsPage] = pageData;
-    if (this.targetUserFollowsPage <= this.targetUserFollowsTotalPage) {
-      this.targetUserFollowsPage += 1;
-    }
-    this.targetUserFollows = { ...this.targetUserFollows };
-  }
-
-  @action
-  getTargetUserFans = async (id) => {
-    const fansRes = await getUserFans({
-      params: {
-        page: this.targetUserFansPage,
-        perPage: 20,
-        filter: {
-          userId: id,
-        },
-      },
-    });
-
-    if (fansRes.code !== 0) {
-      console.error(fansRes);
-      return;
-    }
-
-    const pageData = get(fansRes, 'data.pageData', []);
-    const totalPage = get(fansRes, 'data.totalPage', 1);
-    this.targetUserFansTotalPage = totalPage;
-    this.targetUserFans[this.targetUserFansPage] = pageData;
-    if (this.targetUserFansPage <= this.targetUserFansTotalPage) {
-      this.targetUserFansPage += 1;
-    }
-    this.targetUserFans = { ...this.targetUserFans };
-  }
+  };
 
   /**
    * 取消屏蔽指定 id 的用户
@@ -364,6 +377,13 @@ class UserAction extends SiteStore {
         Msg: userThreadList.msg || '获取用户主题列表失败',
       };
     }
+
+    return userThreadList;
+  };
+
+  // 获取用户主题列表的写方法
+  // 读写分离，用于阻止多次请求的数据错乱
+  setUserThreads = async (userThreadList) => {
     const pageData = get(userThreadList, 'data.pageData', []);
     const totalPage = get(userThreadList, 'data.totalPage', 1);
     this.userThreadsTotalPage = totalPage;
@@ -376,9 +396,7 @@ class UserAction extends SiteStore {
     if (this.userThreadsPage <= this.userThreadsTotalPage) {
       this.userThreadsPage += 1;
     }
-
-    return this.userThreads;
-  }
+  };
 
   /**
    * 获取指定用户发的主题列表
@@ -418,14 +436,17 @@ class UserAction extends SiteStore {
    */
   @action
   async updateAvatar(file) {
+    if (!file) return;
     const param = new FormData();
-    param.append('avatar', file);// 通过append向form对象添加数据
+    param.append('avatar', file); // 通过append向form对象添加数据
     param.append('pid', this.id);
 
     const updateAvatarRes = await updateAvatar({
-      transformRequest: [function (data) {
-        return data;
-      }],
+      transformRequest: [
+        function (data) {
+          return data;
+        },
+      ],
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -435,6 +456,7 @@ class UserAction extends SiteStore {
     if (updateAvatarRes.code === 0) {
       this.userInfo.avatarUrl = updateAvatarRes.data.avatarUrl;
       this.userInfo = { ...this.userInfo };
+      this.updateUserThreadsAvatar(updateAvatarRes.data.avatarUrl);
       return updateAvatarRes.data;
     }
 
@@ -444,17 +466,33 @@ class UserAction extends SiteStore {
     };
   }
 
+  // 更新头像后，更新用户 threads 列表的 avatar url
+  @action
+  updateUserThreadsAvatar(avatarUrl) {
+    Object.keys(this.userThreads).forEach((key) => {
+      this.userThreads[key].forEach((thread) => {
+        if (!thread.user) {
+          thread.user = {};
+        }
+        thread.user.avatar = avatarUrl;
+      });
+    });
+  }
+
   /**
    * 上传新的背景图
    */
   @action
   async updateBackground(file) {
+    if (!file) return;
     const param = new FormData();
-    param.append('background', file);// 通过append向form对象添加数据
+    param.append('background', file); // 通过append向form对象添加数据
     const updateBackgroundRes = await updateBackground({
-      transformRequest: [function (data) {
-        return data;
-      }],
+      transformRequest: [
+        function (data) {
+          return data;
+        },
+      ],
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -534,7 +572,7 @@ class UserAction extends SiteStore {
     });
 
     if (updateUserInfoRes.code === 0) {
-      this.userInfo.signature = this.editSignature;
+      this.userInfo.signature = get(updateUserInfoRes, 'data.signature');
       return updateUserInfoRes.data;
     }
 
@@ -608,11 +646,7 @@ class UserAction extends SiteStore {
   }
 
   @action
-  async sendSmsUpdateCode({
-    mobile,
-    captchaTicket,
-    captchaRandStr,
-  }) {
+  async sendSmsUpdateCode({ mobile, captchaTicket, captchaRandStr }) {
     const smsResp = await smsSend({
       data: {
         mobile,
@@ -634,13 +668,8 @@ class UserAction extends SiteStore {
   }
 
   @action
-  async sendSmsVerifyCode({
-    mobile,
-    captchaTicket,
-    captchaRandStr,
-  }) {
+  async sendSmsVerifyCode({ mobile, captchaTicket, captchaRandStr }) {
     const smsResp = await smsSend({
-
       data: {
         mobile,
         type: 'verify',
@@ -776,7 +805,7 @@ class UserAction extends SiteStore {
     this.oldPassword = null;
     this.newPassword = null;
     this.newPasswordRepeat = null;
-  }
+  };
 
   /**
    * 四个清理函数，清理用户和目标用户粉丝信息
@@ -786,14 +815,14 @@ class UserAction extends SiteStore {
     this.userFans = {};
     this.userFansPage = 1;
     this.userFansTotalPage = 1;
-  }
+  };
 
   @action
   cleanUserFollows = () => {
     this.userFollows = {};
     this.userFollowsPage = 1;
     this.userFollowsTotalPage = 1;
-  }
+  };
 
   @action
   cleanTargetUserThreads = () => {
@@ -801,21 +830,21 @@ class UserAction extends SiteStore {
     this.targetUserThreadsPage = 1;
     this.targetUserThreadsTotalCount = 0;
     this.targetUserThreadsTotalPage = 1;
-  }
+  };
 
   @action
   cleanTargetUserFans = () => {
     this.targetUserFans = {};
     this.targetUserFansPage = 1;
     this.targetUserFansTotalPage = 1;
-  }
+  };
 
   @action
   cleanTargetUserFollows = () => {
     this.targetUserFollows = {};
     this.targetUserFollowsPage = 1;
     this.targetUserFollowsTotalPage = 1;
-  }
+  };
 
   /**
    * 清理我的屏蔽数据内容
@@ -828,7 +857,7 @@ class UserAction extends SiteStore {
     this.userShieldPage = 1; // 页码
     this.userShieldTotalPage = 1; // 总页数
     this.userShieldTotalCount = 0; // 总条数
-  }
+  };
 
   /**
    * 清理他人用户数据函数
@@ -839,7 +868,7 @@ class UserAction extends SiteStore {
     this.cleanTargetUserThreads();
     this.cleanTargetUserFans();
     this.cleanTargetUserFollows();
-  }
+  };
 
   /**
    * 支付成功后，更新帖子列表指定帖子状态
@@ -847,7 +876,7 @@ class UserAction extends SiteStore {
    * @param {object}  obj 更新数据
    * @returns
    */
-   @action
+  @action
   updatePayThreadInfo(threadId, obj) {
     const targetThreads = this.findAssignThread(threadId);
     if (!targetThreads || targetThreads.length === 0) return;
@@ -861,58 +890,62 @@ class UserAction extends SiteStore {
   }
 
   /**
-    * 更新帖子列表指定帖子状态
-    * @param {number} threadId 帖子id
-    * @param {object}  obj 更新数据
-    * @param {boolean} obj.isLike 是否更新点赞
-    * @param {boolean} obj.isPost 是否更新评论数
-    * @param {boolean} obj.user 当前操作的用户
-    * @returns
-    */
+   * 更新帖子列表指定帖子状态
+   * @param {number} threadId 帖子id
+   * @param {object}  obj 更新数据
+   * @param {boolean} obj.isLike 是否更新点赞
+   * @param {boolean} obj.isPost 是否更新评论数
+   * @param {boolean} obj.user 当前操作的用户
+   * @returns
+   */
   @action
-   updateAssignThreadInfo(threadId, obj = {}) {
-     const targetThreads = this.findAssignThread(threadId);
+  updateAssignThreadInfo(threadId, obj = {}) {
+    const targetThreads = this.findAssignThread(threadId);
 
-     if (!targetThreads || targetThreads.length === 0) return;
+    if (!targetThreads || targetThreads.length === 0) return;
 
-     targetThreads.forEach((targetThread) => {
-       if (!targetThread) return;
+    targetThreads.forEach((targetThread) => {
+      if (!targetThread) return;
 
-       const { index, key, data, store } = targetThread; // 这里是数组
-       const { updateType, updatedInfo, user } = obj;
+      const { index, key, data, store } = targetThread; // 这里是数组
+      const { updateType, updatedInfo, user } = obj;
 
-       if (!data && !data?.likeReward && !data?.likeReward?.users) return;
+      if (!data && !data?.likeReward && !data?.likeReward?.users) return;
 
-       // 更新点赞
-       if (updateType === 'like' && !typeofFn.isUndefined(updatedInfo.isLiked)
-        && !typeofFn.isNull(updatedInfo.isLiked) && user) {
-         const { isLiked, likePayCount = 0 } = updatedInfo;
-         const theUserId = user.userId || user.id;
-         data.isLike = isLiked;
+      // 更新点赞
+      if (
+        updateType === 'like'
+        && !typeofFn.isUndefined(updatedInfo.isLiked)
+        && !typeofFn.isNull(updatedInfo.isLiked)
+        && user
+      ) {
+        const { isLiked, likePayCount = 0 } = updatedInfo;
+        const theUserId = user.userId || user.id;
+        data.isLike = isLiked;
 
-         const userData = threadReducer.createUpdateLikeUsersData(user, 1);
-         // 添加当前用户到按过赞的用户列表
-         const newLikeUsers = threadReducer.setThreadDetailLikedUsers(data.likeReward, !!isLiked, userData);
+        const userData = threadReducer.createUpdateLikeUsersData(user, 1);
+        // 添加当前用户到按过赞的用户列表
+        const newLikeUsers = threadReducer.setThreadDetailLikedUsers(data.likeReward, !!isLiked, userData);
 
-         data.likeReward.users = newLikeUsers;
-         data.likeReward.likePayCount = likePayCount;
-       }
+        data.likeReward.users = newLikeUsers;
+        data.likeReward.likePayCount = likePayCount;
+      }
 
-       // 更新评论
-       if (updateType === 'comment' && data?.likeReward) {
-         data.likeReward.postCount = data.likeReward.postCount + 1;
-       }
+      // 更新评论
+      if (updateType === 'comment' && data?.likeReward) {
+        data.likeReward.postCount = data.likeReward.postCount + 1;
+      }
 
-       // 更新分享
-       if (updateType === 'share') {
-         data.likeReward.shareCount = data.likeReward.shareCount + 1;
-       }
+      // 更新分享
+      if (updateType === 'share') {
+        data.likeReward.shareCount = data.likeReward.shareCount + 1;
+      }
 
-       if (store[key] && store[key][index]) {
-         store[key][index] = data;
-       }
-     });
-   }
+      if (store[key] && store[key][index]) {
+        store[key][index] = data;
+      }
+    });
+  }
 
   // 获取指定的帖子数据
   findAssignThread(threadId) {
@@ -949,7 +982,7 @@ class UserAction extends SiteStore {
 
   // 生成微信换绑二维码，仅在 PC 使用
   @action
-  genRebindQrCode = async (scanSuccess = () => { }, scanFail = () => {}) => {
+  genRebindQrCode = async (scanSuccess = () => {}, scanFail = () => {}) => {
     clearInterval(this.rebindTimer);
     const qrCodeRes = await wechatRebindQrCodeGen();
 
@@ -977,15 +1010,11 @@ class UserAction extends SiteStore {
       Code: qrCodeRes.code,
       Msg: qrCodeRes.msg,
     };
-  }
+  };
 
   // 轮询重新绑定结果
   @action
-  wechatRebindStatusPoll = async ({
-    sessionToken,
-    scanSuccess,
-    scanFail,
-  }) => {
+  wechatRebindStatusPoll = async ({ sessionToken, scanSuccess, scanFail }) => {
     const scanStatus = await getWechatRebindStatus({
       params: {
         sessionToken,
@@ -1005,14 +1034,14 @@ class UserAction extends SiteStore {
         }
       }
     }
-  }
+  };
 
   // 清空换绑二维码和interval
   @action
   clearWechatRebindTimer = () => {
     clearInterval(this.rebindTimer);
     this.rebindQRCode = null;
-  }
+  };
 }
 
 export default UserAction;

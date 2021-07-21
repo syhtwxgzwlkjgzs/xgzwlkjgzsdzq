@@ -8,10 +8,11 @@ import { View } from '@tarojs/components';
 // import AudioRecord from '@discuzq/design/dist/components/audio-record/index';
 // import Audio from '@discuzq/design/dist/components/audio/index';
 import { Units } from '@components/common';
-import styles from './index.module.scss';
 import locals from '@common/utils/local-bridge';
+import Toast from '@discuzq/design/dist/components/toast/index';
 import constants from '@common/constants';
 import { THREAD_TYPE } from '@common/constants/thread-post';
+import styles from './index.module.scss';
 
 // @TODO 基于@components/thread-post/general-upload组件修改
 // 待重构提取公用
@@ -48,7 +49,15 @@ export default inject('site')(
           title: '上传中',
           mask: true,
         });
-        await upload(tempFile);
+        try{
+          await upload(tempFile);
+        }catch(err){
+          Toast.error({
+            content: err.Msg || '上传失败',
+            hasMask: false,
+            duration: 1000,
+          });
+        }
         Taro.hideLoading();
       } else if (type === THREAD_TYPE.image) {
         // 剔除超出数量9的多余图片
@@ -75,7 +84,15 @@ export default inject('site')(
           });
           uploadPromise.push(upload(item));
         });
-        await Promise.all(uploadPromise);
+        try{
+          await Promise.all(uploadPromise);
+        }catch(err){
+          Toast.error({
+            content: err.Msg || '上传失败',
+            hasMask: false,
+            duration: 1000,
+          });
+        }
         Taro.hideLoading();
         !isAllLegal &&
           Taro.showToast({
@@ -135,7 +152,7 @@ export default inject('site')(
             resolve();
           },
           fail(res) {
-            console.log(res);
+            reject(res);
           },
         });
       });

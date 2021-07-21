@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-// import BaseLayout from '@components/base-layout';
+import BaseLayout from '@components/base-layout';
 import Tideway from '@components/pop-topic';
 import ThreadCenterView from '@components/thread/ThreadCenterView';
 import NoData from '@components/no-data';
@@ -9,7 +9,6 @@ import UserCenterFansPc from '@components/user-center/fans-pc';
 import styles from './index.module.scss';
 import { Icon } from '@discuzq/design';
 import { withRouter } from 'next/router';
-import BaseLayout from '@components/user-center-base-laout-pc';
 
 @inject('index')
 @inject('user')
@@ -19,11 +18,11 @@ class PC extends React.Component {
   onPullingUp = () => this.props.dispatch(true);
 
   renderRight = () => (
-    <div className={styles['right']}>
+    <>
       <Tideway />
       <UserCenterFansPc userId={this.props.user.id} />
       <Copyright />
-    </div>
+    </>
   );
 
   renderHeader = () => (
@@ -69,14 +68,15 @@ class PC extends React.Component {
 
   render() {
     const { index } = this.props;
-    const { currentPage, totalPage } = index.drafts || {};
+    const { currentPage, totalPage, pageData = [] } = index.drafts || {};
     return (
       <BaseLayout
         onRefresh={this.onPullingUp}
         noMore={currentPage >= totalPage}
         showRefresh={false}
         right={this.renderRight()}
-        contentHeader={() => true}
+        className="mydraft"
+        isShowLayoutRefresh={!!pageData.length}
       >
         {this.renderContent()}
       </BaseLayout>

@@ -16,14 +16,11 @@
   font-weight: bold;
   padding: 0 $padding-4n;
   margin-bottom: $margin-10;
-
-  font-family: 'PingFangSC-Regular';
   font-weight: normal;
   text-align: left;
   color: $text-color-secondary;
 
   .totalMoneyNumber {
-    font-family: 'PingFang SC';
     font-weight: $font-weight-regular;
   }
 }
@@ -38,9 +35,9 @@
     .upper {
       display: flex;
       justify-content: space-between;
-      font-family: 'PingFang SC';
       text-align: left;
       color: $text-color-primary;
+      overflow: hidden;
       .title {
         font-weight: normal;
         font-size: $font-size-primary;
@@ -48,12 +45,36 @@
       .amount {
         font-weight: $font-weight-regular;
         font-size: $font-size-middle;
+        margin-left: $margin-2n;
+        flex-shrink: 0;
+      }
+    }
+    .normalText {
+      overflow: hidden;
+      :global {
+        .qq-emotion {
+          width: 14px;
+          height: 14px;
+          display: inline-block;
+          flex-shrink: 0;
+        }
+        .dzq-richText--mini {
+          font-size: $font-size-primary;
+          color: $text-color-primary;
+          overflow: hidden;
+          word-break: break-all;
+          @include text-ellipsis();
+
+          .dzq-a {
+            display: inline;
+          }
+        }
       }
     }
     .lower {
       display: flex;
       justify-content: space-between;
-      font-family: 'PingFangSC-Regular';
+      
       font-size: $font-size-label;
       text-align: left;
       color: $text-color-secondary;

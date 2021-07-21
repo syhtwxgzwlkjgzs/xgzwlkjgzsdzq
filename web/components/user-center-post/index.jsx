@@ -23,7 +23,7 @@ class UserCenterPost extends React.Component {
         <div className={styles.userCenterPostTitle}>发帖</div>
         <div className={styles.userCenterPostContent}>
           <div className={styles.userCenterPostAvatar}>
-          <Avatar image={user.avatarUrl} name={user.username} circle/>
+            <Avatar image={user.avatarUrl} name={user.nickname} circle />
           </div>
           <div
             style={{
@@ -64,7 +64,7 @@ class UserCenterPost extends React.Component {
               <Icon color={'#8590A6'} size={20} name={'ShoppingCartOutlined'} />
             </div>
           )}
-          {this.props.user.threadExtendPermissions.createThread && (
+          {this.props.user.threadExtendPermissions[THREAD_TYPE.reward] && (
             <div className={styles.userCenterPostListItem}>
               <Icon color={'#8590A6'} size={20} name={'QuestionOutlined'} />
             </div>

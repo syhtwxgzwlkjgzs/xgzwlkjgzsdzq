@@ -18,14 +18,13 @@
  *
  */
 import React, { Component } from 'react';
-import { Avatar, Icon } from '@discuzq/design';
+import { Icon } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import classNames from 'classnames';
 import styles from './index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
-import Toast from '@discuzq/design/dist/components/toast';
+import Avatar from '@components/avatar';
 
-import stringToColor from '@common/utils/string-to-color';
 import { diffDate } from '@common/utils/diff-date';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
@@ -45,26 +44,48 @@ class Index extends Component {
     return avatar;
   };
 
-  // 获取头像背景色
-  getBackgroundColor = (name) => {
-    return name ? stringToColor(name.toUpperCase()[0]) : "#8590a6";
-  };
+  // 获取财务消息展示内容
+  getFinancialContent = () => {
+    const { item, site } = this.props;
 
-  // 针对财务消息，获取后缀提示语
-  getFinancialTips = (item) => {
-    if (item.type === 'rewarded') {
-      if (item.orderType === 3 || item.orderType === 7) return '支付了你';
-      return '打赏了你';
+    let tips = '';
+    switch (item.type) {
+      case 'rewarded':
+        if (item.orderType === 1) return (<>
+          邀请{item.nickname}加入{site?.webConfig?.setSite?.siteName}
+        </>);
+        if (item.orderType === 3 || item.orderType === 7) {
+          tips = '支付了你';
+        } else {
+          tips = '打赏了你';
+        }
+        break;
+      case 'receiveredpacket':
+        tips = '获取红包';
+        break;
+      case 'threadrewarded':
+        tips = '悬赏了你';
+        break;
+      case 'threadrewardedexpired':
+        tips = `悬赏到期，未领取金额${item.amount}元被退回`;
+        break;
     }
-    if (item.type === 'receiveredpacket') {
-      return '获取红包';
-    }
-    if (item.type === 'threadrewarded') {
-      return '悬赏了你';
-    }
-  };
 
-  // 账号信息前置语
+    return (<>
+      在帖子"
+      <span
+        className={`${styles['financial-content']} ${styles['single-line']}`}
+        style={{
+          maxWidth: `${site.isPC ? '400px' : '90px'}`,
+          display: 'inline-block',
+          verticalAlign: 'bottom',
+        }}
+        dangerouslySetInnerHTML={{ __html: this.parseHTML() }}
+      />"中{tips}
+    </>)
+  }
+
+  // 帖子消息前置语
   getAccountTips = (item) => {
     switch (item.type) {
       case 'replied':
@@ -77,7 +98,7 @@ class Index extends Component {
   };
 
   filterTag(html) {
-    return html?.replace(/<(\/)?([beprt]|br|div)[^>]*>|[\r\n]/gi, '')
+    return html?.replace(/<(\/)?([beprt]|br|div|h\d)[^>]*>|[\r\n]/gi, '')
       .replace(/<img[^>]+>/gi, $1 => {
         return $1.includes('qq-emotion') ? $1 : "[图片]";
       });
@@ -124,7 +145,10 @@ class Index extends Component {
     const avatarUrl = this.getAvatar(item.avatar);
 
     return (
-      <div className={styles.wrapper} onClick={(e) => this.toDetailOrChat(e, item)}>
+      <div
+        className={classNames(styles.wrapper, isPC && isLast && styles['set-radius'])}
+        onClick={(e) => this.toDetailOrChat(e, item)}
+      >
         {/* 默认block */}
         <div className={isPC ? styles['block-pc'] : styles.block}>
           {/* 头像 */}
@@ -137,19 +161,13 @@ class Index extends Component {
 
             {/* 未读消息红点 */}
             <UnreadRedDot type='avatar' unreadCount={item.unreadCount}>
-              {
-                avatarUrl ? (
-                  <Avatar image={avatarUrl} circle={true} />
-                ) : (
-                  <Avatar
-                    text={item.nickname}
-                    circle={true}
-                    style={{
-                      backgroundColor: this.getBackgroundColor(item.nickname),
-                    }}
-                  />
-                )
-              }
+              <Avatar
+                isShowUserInfo={isPC && item.nickname && type !== 'thread'}
+                userId={item.userId}
+                image={avatarUrl}
+                name={item.nickname}
+                circle={true}
+              />
             </UnreadRedDot>
 
           </div>
@@ -187,17 +205,7 @@ class Index extends Component {
               {/* 财务内容 */}
               {type === 'financial' && (
                 <p className={styles['content-html']} style={isPC ? { paddingRight: '20px' } : {}}>
-                  在帖子"
-                  <span
-                    className={`${styles['financial-content']} ${styles['single-line']}`}
-                    style={{
-                      maxWidth: `${isPC ? '400px' : '90px'}`,
-                      display: 'inline-block',
-                      verticalAlign: 'bottom',
-                    }}
-                    dangerouslySetInnerHTML={{ __html: this.parseHTML() }}
-                  />
-                  "中{this.getFinancialTips(item)}
+                  {this.getFinancialContent()}
                 </p>
               )}
               {/* 私信、帖子、账户 */}
@@ -205,7 +213,7 @@ class Index extends Component {
                 <p
                   className={classNames(styles['content-html'], {
                     [styles['single-line']]: ['chat'].includes(type),
-                    [styles['multiple-line']]: ['account'].includes(type),
+                    [styles['multiple-line']]: ['thread', 'account'].includes(type),
                   })}
                   style={isPC ? { paddingRight: '20px' } : {}}
                   dangerouslySetInnerHTML={{ __html: this.parseHTML() }}

@@ -15,6 +15,7 @@ import layout from './layout.module.scss';
 
 import ReportPopup from './components/report-popup';
 import ShowTop from './components/show-top';
+import IsApproved from './components/isApproved';
 import DeletePopup from '@components/thread-detail-pc/delete-popup';
 
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
@@ -26,6 +27,7 @@ import QcCode from '@components/qcCode';
 import RenderThreadContent from './content';
 import RenderCommentList from './comment-list';
 import goToLoginPage from '@common/utils/go-to-login-page';
+import classNames from 'classnames';
 
 @inject('site')
 @inject('user')
@@ -54,7 +56,7 @@ class ThreadPCPage extends React.Component {
     this.likedLoading = false;
     this.collectLoading = false;
 
-    this.perPage = 5;
+    this.perPage = 20;
     this.page = 1; // 页码
     this.commentDataSort = true;
 
@@ -328,7 +330,7 @@ class ThreadPCPage extends React.Component {
     this.setState({ showDeletePopup: false });
     const id = this.props.thread?.threadData?.id;
 
-    const { success, msg } = await this.props.thread.delete(id, this.props.index, this.props.search, this.props.topic);
+    const { success, msg } = await this.props.thread.delete(id, this.props.index, this.props.search, this.props.topic, this.props.site);
 
     if (success) {
       Toast.success({
@@ -376,7 +378,7 @@ class ThreadPCPage extends React.Component {
     const params = {
       id,
       content: val,
-      postId: this.props.thread?.threadData?.postId,
+      // postId: this.props.thread?.threadData?.postId,
       sort: this.commentDataSort, // 目前的排序
       isNoMore: this.props?.thread?.isNoMore,
       attachments: [],
@@ -394,11 +396,17 @@ class ThreadPCPage extends React.Component {
         });
     }
 
-    const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
+    const { success, msg, isApproved } = await this.props.comment.createComment(params, this.props.thread);
     if (success) {
-      Toast.success({
-        content: '评论成功',
-      });
+      if (isApproved) {
+        Toast.success({
+          content: msg,
+        });
+      } else {
+        Toast.warning({
+          content: msg,
+        });
+      }
 
       // 更新帖子中的评论数据
       this.props.thread.updatePostCount(this.props.thread.totalCount);
@@ -448,11 +456,17 @@ class ThreadPCPage extends React.Component {
         });
     }
 
-    const { success, msg } = await this.props.comment.updateComment(params, this.props.thread);
+    const { success, msg, isApproved } = await this.props.comment.updateComment(params, this.props.thread);
     if (success) {
-      Toast.success({
-        content: '修改成功',
-      });
+      if (isApproved) {
+        Toast.success({
+          content: msg,
+        });
+      } else {
+        Toast.warning({
+          content: msg,
+        });
+      }
       this.setState({
         showCommentInput: false,
       });
@@ -670,8 +684,13 @@ class ThreadPCPage extends React.Component {
   renderContent() {
     const { thread: threadStore } = this.props;
     const { isReady, isCommentReady, isNoMore, totalCount, isCommentListError } = threadStore;
+    // 是否审核通过
+    const isApproved = (threadStore?.threadData?.isApproved || 0) === 1;
     return (
       <div className={layout.bodyLeft}>
+        {isReady && !isApproved && (
+          <div className={layout.examinePosition}></div>
+        )}
         {/* 帖子内容 */}
         {isReady ? (
           <RenderThreadContent
@@ -691,7 +710,7 @@ class ThreadPCPage extends React.Component {
 
         {/* 回复详情内容 */}
         <div className={`${layout.bottom}`} ref={this.commentDataRef}>
-          {isCommentReady ? (
+          {isCommentReady && isApproved ? (
             <Fragment>
               <RenderCommentList
                 router={this.props.router}
@@ -703,7 +722,7 @@ class ThreadPCPage extends React.Component {
               {/* {this.state.isCommentLoading && <LoadingTips></LoadingTips>} */}
             </Fragment>
           ) : (
-            <LoadingTips isError={isCommentListError} type="init"></LoadingTips>
+            isApproved && <LoadingTips isError={isCommentListError} type="init"></LoadingTips>
           )}
         </div>
         {/* {isNoMore && <NoMore empty={totalCount === 0}></NoMore>} */}
@@ -713,16 +732,21 @@ class ThreadPCPage extends React.Component {
 
   renderRight() {
     const { thread: threadStore } = this.props;
-    const { isAuthorInfoError } = threadStore;
+    const { isAuthorInfoError, isReady } = threadStore;
+
+    // 是否审核通过
+    const isApproved = (threadStore?.threadData?.isApproved || 0) === 1;
     // 是否作者自己
     const isSelf = this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === threadStore?.threadData?.userId;
     // 是否匿名
     const isAnonymous = threadStore?.threadData?.isAnonymous;
-
     return (
-      <div className={`${layout.bodyRigth} ${isSelf ? layout.positionSticky : ''}`}>
+      <div className={`${layout.bodyRigth}`}>
+        {isReady && !isApproved && (
+          <div className={layout.examinePosition}></div>
+        )}
         {!isAnonymous && (
-          <div className={layout.authorInfo}>
+          <div className={`${layout.authorInfo} detail-authorinfo`}>
             {threadStore?.authorInfo ? (
               <AuthorInfo
                 user={threadStore.authorInfo}
@@ -751,10 +775,28 @@ class ThreadPCPage extends React.Component {
 
   render() {
     const { isCommentReady, isNoMore } = this.props.thread;
+    const { thread: threadStore } = this.props;
+    const { isReady } = threadStore;
 
+    // 是否审核通过
+    const isApproved = (threadStore?.threadData?.isApproved || 0) === 1;
+    // TODO:目前还不清楚这块代码的作用，可能会对过滤代码块有影响
+    // console.log(threadStore?.threadData)
+    // if ( threadStore?.threadData ) {
+    //   const text = threadStore?.threadData.content.text;
+    //   let reg=/(<\/?.+?\/?>)|\n/g;
+    //   let newText = text.replace(reg,'');
+    //   // newText = newText.replace(/\n/g, '');
+    //   console.log(newText);
+    // }
+    // 是否匿名
+    const isAnonymous = threadStore?.threadData?.isAnonymous;
+    // 是否作者本人
+    const isSelf = this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === threadStore?.threadData?.userId;
     return (
       <div>
         <ShowTop showContent={this.props.thread?.threadData?.isStick} setTop={this.state.setTop}></ShowTop>
+        <IsApproved isShow={isReady && !isApproved}></IsApproved>
 
         <BaseLayout
           onRefresh={() => this.handleOnRefresh()}
@@ -765,7 +807,10 @@ class ThreadPCPage extends React.Component {
           right={this.renderRight()}
           isShowLayoutRefresh={isCommentReady}
           ready={() => this.onBaseLayoutReady()}
-          rightClassName={layout.positionSticky}
+          rightClassName={classNames(layout.positionSticky, {
+            'is-userinfo-show': !isAnonymous,
+            'is-operate-show': !isSelf,
+          })}
           className="detail"
         >
           {this.renderContent()}
@@ -800,6 +845,7 @@ class ThreadPCPage extends React.Component {
           visible={this.state.showDeletePopup}
           onClose={() => this.setState({ showDeletePopup: false })}
           onBtnClick={() => this.delete()}
+          type='thread'
         ></DeletePopup>
 
         {/* 举报弹层 */}

@@ -82,8 +82,12 @@ class CommentAction extends CommentStore {
   }
 
   @action
-  deleteReplyToList() {
-    this.commentDetail?.commentPosts.pop();
+  deleteReplyToList(replyId) {
+    this.commentDetail?.commentPosts.map((reply, index) => {
+      if (reply.id === replyId) {
+        this.commentDetail.commentPosts?.splice(index, 1);
+      }
+    })
   }
   /**
    * 创建评论
@@ -120,6 +124,7 @@ class CommentAction extends CommentStore {
       const newTotalCount = totalCount + 1;
       ThreadStore && ThreadStore.setTotalCount(newTotalCount);
       const newData = res.data;
+      const isApproved = res.data.isApproved === 1;
       newData.lastThreeComments = [];
 
       // 头部添加评论
@@ -135,7 +140,8 @@ class CommentAction extends CommentStore {
       }
 
       return {
-        msg: '评论成功',
+        isApproved: isApproved,
+        msg: isApproved ? '评论成功' : '您发布的内容正在审核中',
         success: true,
       };
     }
@@ -188,8 +194,11 @@ class CommentAction extends CommentStore {
         }
       });
 
+      const isApproved = res.data.isApproved === 1;
+
       return {
-        msg: '评论成功',
+        isApproved: isApproved,
+        msg: isApproved ? '修改成功' : '您修改的内容正在审核中',
         success: true,
       };
     }
@@ -247,9 +256,11 @@ class CommentAction extends CommentStore {
 
       // 更新回复列表
       this.addReplyToList(res.data);
+      const isApproved = res.data.isApproved === 1;
 
       return {
-        msg: '回复成功',
+        isApproved: isApproved,
+        msg: isApproved ? '回复成功' : '您回复的内容正在审核中',
         success: true,
       };
     }
@@ -268,7 +279,7 @@ class CommentAction extends CommentStore {
    * @returns {object} 处理结果
    */
   @action
-  async updateLiked(params,T) {
+  async updateLiked(params, ThreadStore) {
     const { id, isLiked } = params;
     if (!id) {
       return {
@@ -286,8 +297,14 @@ class CommentAction extends CommentStore {
       },
     };
     const res = await updateComment({ data: requestParams });
-
+    
     if (res?.data && res.code === 0) {
+      if (Number(res.data.redPacketAmount) > 0) {
+        const threadId = ThreadStore?.threadData?.id;
+        ThreadStore.setCommentListDetailField(res.data.pid, 'redPacketAmount', res.data.redPacketAmount);
+        ThreadStore.fetchThreadDetail(threadId);
+      }
+
       return {
         msg: '操作成功',
         success: true,
@@ -389,7 +406,7 @@ class CommentAction extends CommentStore {
         }
       }
 
-      this.deleteReplyToList()
+      this.deleteReplyToList(replyId);
       return {
         msg: '操作成功',
         success: true,

@@ -33,6 +33,7 @@ export default class index extends Component {
   };
 
   onAvatarChange = async (fileList) => {
+    if (!fileList.target.files[0]) return;
     this.setState({
       isUploadAvatarUrl: true,
     });
@@ -68,6 +69,7 @@ export default class index extends Component {
   };
 
   onBackgroundChange = async (fileList) => {
+    if (!fileList.target.files[0]) return;
     this.setState({
       isUploadBackgroundUrl: true,
     });
@@ -142,7 +144,7 @@ export default class index extends Component {
             )}
           </div>
           <div className={styles.headImgBox}>
-            <Avatar image={this.user.avatarUrl} size="big" name={this.user.username} />
+            <Avatar image={this.user.avatarUrl} size="big" name={this.user.nickname} />
             {/* 相机图标 */}
             <div className={styles.userCenterEditCameraIcon} onClick={this.handleAvatarUpload}>
               <Icon name="CameraOutlined" />

@@ -15,7 +15,7 @@ import locals from '@common/utils/local-bridge';
 import constants from '@common/constants';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 
-export default inject('threadPost', 'site')(observer(({ type, threadPost, site, audioUpload, children }) => {
+export default inject('threadPost', 'site')(observer(({ type, threadPost, site, audioUpload, children, pageScrollTo }) => {
   const { postData, setPostData } = threadPost;
   const { webConfig, envConfig } = site;
   const localData = JSON.parse(JSON.stringify(postData));
@@ -56,6 +56,7 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
     Promise.all(uploadPromise)
       .then((res) => {
         Taro.hideLoading();
+        pageScrollTo({ selector: isImage ? "#thread-post-image" : "#thread-post-file" });
 
         let count = 0;
         res.forEach((item) => {
@@ -83,6 +84,17 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
     return new Promise((resolve, reject) => {
       const tempFilePath = file.path || file.tempFilePath;
       const token = locals.get(constants.ACCESS_TOKEN_NAME);
+      const formData = {
+        'type': (() => {
+          switch (type) {
+            case THREAD_TYPE.image: return 1;
+            case THREAD_TYPE.file: return 0;
+          }
+        })(),
+      };
+      if (type === THREAD_TYPE.file) {
+        formData.name = file.name; // 附件文件名，用于后端替换file中的临时文件名
+      }
       Taro.uploadFile({
         url: `${envConfig.COMMON_BASE_URL}/apiv3/attachments`,
         filePath: tempFilePath,
@@ -91,14 +103,7 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
           'Content-Type': 'multipart/form-data',
           'authorization': `Bearer ${token}`
         },
-        formData: {
-          'type': (() => {
-            switch (type) {
-              case THREAD_TYPE.image: return 1;
-              case THREAD_TYPE.file: return 0;
-            }
-          })()
-        },
+        formData: formData,
         success(res) {
           if (res.statusCode === 200) {
             const ret = JSON.parse(res.data);
@@ -125,6 +130,8 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
             }
           } else {
             console.log(res);
+            const msg = res.statusCode === 413 ? '上传大小超过了服务器限制' : res.msg;
+            Toast.error({ content: `上传失败：${msg}` });
           }
           resolve(res);
         },
@@ -149,6 +156,7 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
   const chooseFile = () => {
     Taro.chooseMessageFile({
       count: 9,
+      type: 'file',
       success(res) {
         checkWithUpload(res.tempFiles, false)
       }
@@ -167,7 +175,9 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
         );
       })}
 
-      {(type === THREAD_TYPE.file && Object.values(files).length < 9) && (<Units type='atta-upload' onUpload={chooseFile} />)}
+      <View id='thread-post-file'>
+        {(type === THREAD_TYPE.file && Object.values(files).length < 9) && (<Units type='atta-upload' onUpload={chooseFile} />)}
+      </View>
     </>
   );
 
@@ -184,27 +194,33 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
         );
       })}
 
-      {(type === THREAD_TYPE.image && Object.values(images).length < 9) && (<Units type='img-upload' onUpload={chooseImage} />)}
+      <View id='thread-post-image'>
+        {(type === THREAD_TYPE.image && Object.values(images).length < 9) && (<Units type='img-upload' onUpload={chooseImage} />)}
+      </View>
     </View>
   );
 
   // 录音并上传
-  const audioRecord = (type === THREAD_TYPE.voice && !audio.id) && (
-    <AudioRecord
-      duration={60.4}
-      onUpload={(file) => {
-        audioUpload(file);
-      }}
-      onRecordBegan={() => {
-        setPostData({ audioRecordStatus: 'began' });
-      }}
-      onRecordCompleted={() => {
-        setPostData({ audioRecordStatus: 'completed' });
-      }}
-      onRecordReset={() => {
-        setPostData({ audioRecordStatus: 'reset' });
-      }}
-    />
+  const audioRecord = (
+    <View id="thread-post-voice">
+      {(type === THREAD_TYPE.voice && !audio.id) && (
+        <AudioRecord
+          duration={60.4}
+          onUpload={(file) => {
+            audioUpload(file);
+          }}
+          onRecordBegan={() => {
+            setPostData({ audioRecordStatus: 'began' });
+          }}
+          onRecordCompleted={() => {
+            setPostData({ audioRecordStatus: 'completed' });
+          }}
+          onRecordReset={() => {
+            setPostData({ audioRecordStatus: 'reset' });
+          }}
+        />)
+      }
+    </View>
   );
 
   // 录音音频

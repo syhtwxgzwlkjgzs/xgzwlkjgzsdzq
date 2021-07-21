@@ -11,12 +11,12 @@ import ViewAdapter from '@components/view-adapter';
 class Index extends Component {
   render() {
     return (
-      <ViewAdapter 
+      <ViewAdapter
         h5={<H5OthersUserCenter />}
-        pc={<PCOthersUserCenter/>}
-        title={`${this.props.user.targetUserNickname + '的' || '他人'}首页 - ${this.props.site?.siteName}`}
+        pc={<PCOthersUserCenter />}
+        title={this.props.user?.targetUserNickname ? `${this.props.user?.targetUserNickname}的主页` : '他人主页'}
       />
-    )
+    );
   }
 }
 

@@ -4,14 +4,15 @@
   padding: $padding-4n 0;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
   text-align: center;
   .friendItem {
+    @include cursor-on-pc;
+    cursor: pointer;
     display: flex;
+    width: 20%;
     flex-direction: column;
     align-items: center;
-    @include cursor-on-pc;
   }
   .friendAvatar {
     width: 38px;
@@ -35,4 +36,7 @@
   align-items: center;
   text-align: center;
   color: $text-color-placeholder;
+}
+.borderRadius {
+  border-radius: $border-radius-small;
 }

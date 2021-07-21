@@ -9,6 +9,7 @@ import { get } from '@common/utils/get';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import { numberFormat } from '@common/utils/number-format';
+import LoginHelper from '@common/utils/login-helper';
 
 /**
  * 帖子头部
@@ -108,10 +109,10 @@ class HomeHeader extends React.Component {
   }
 
   render() {
-    const { bgColor, hideInfo = false, style = {}, digest = null, mode = '' } = this.props;
+    const { bgColor, hideInfo = false, style = {}, digest = null, mode = '', site } = this.props;
     const { visible, loadWeiXin } = this.state;
     const { countUsers, countThreads, siteAuthor, createDays } = this.getSiteInfo();
-
+    const siteHeaderLogo = get(site, 'webConfig.setSite.siteHeaderLogo', '');
     return (
       <div ref={this.domRef}
         className={`${styles.container} ${mode ? styles[`container_mode_${mode}`] : ''}`}
@@ -126,13 +127,11 @@ class HomeHeader extends React.Component {
               : <></>
           }
           <div>
-            <Icon onClick={() => {
-              Router.redirect({ url: '/' });
-            }} name="HomeOutlined" color="#fff" size={20} />
+            <Icon onClick={() => LoginHelper.gotoIndex()} name="HomeOutlined" color="#fff" size={20} />
           </div>
         </div>}
         {
-          mode === 'join'
+          mode === 'join' && !siteHeaderLogo
             ? <div className={styles.joinLog}>
                 <img
                     className={styles.logo}

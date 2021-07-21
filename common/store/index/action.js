@@ -4,6 +4,7 @@ import { readCategories, readStickList, readThreadList, updatePosts, createThrea
 import typeofFn from '@common/utils/typeof';
 import threadReducer from '../thread/reducer';
 import { getCategoryName, getActiveId, getCategories, handleString2Arr } from '@common/utils/handleCategory'
+import replaceStringInRegex from '../../utils/replace-string-in-regex'
 
 class IndexAction extends IndexStore {
   constructor(props) {
@@ -22,7 +23,7 @@ class IndexAction extends IndexStore {
   @computed get activeCategoryId() {
     const categories = this.categories || [];
     const { categoryids } = this.filter
-    
+
     const [id, cid] = getActiveId(categories, categoryids)
     return id
   }
@@ -31,7 +32,7 @@ class IndexAction extends IndexStore {
   @computed get activeChildCategoryId() {
     const categories = this.categories || [];
     const { categoryids } = this.filter
-    
+
     const [id, cid] = getActiveId(categories, categoryids)
     return cid
   }
@@ -127,14 +128,33 @@ class IndexAction extends IndexStore {
    * @returns
    */
    @action
-   async deleteThreadsData({ id } = {}) {
+   async deleteThreadsData({ id } = {}, SiteStore) {
      if (id && this.threads) {
+      //  删除列表
         const { pageData = [] } = this.threads;
-        const newPageData = pageData.filter(item => item.threadId !== id)
+        const newPageData = pageData.filter(item => `${item.threadId}` !== `${id}`)
 
         if (this.threads?.pageData) {
           this.threads.pageData = newPageData;
+          this.changeInfo = { type: 'delete', thread: id }
         }
+
+        // 删除置顶
+        const newSticksData = this.sticks?.filter(item => `${item.threadId}` !== `${id}`)
+
+        if (this.sticks) {
+          this.sticks = newSticksData;
+        }
+
+        if (this.threads?.pageData || this.sticks) {
+          // 更新帖子总数
+          const totalCount = Number(this.threads.totalCount)
+          this.threads.totalCount = totalCount - 1
+        }
+
+        // 删除帖子后更新首页导航栏分类数据
+        this.getReadCategories();
+        SiteStore?.getSiteInfo && SiteStore.getSiteInfo(); // 删除帖子后分类中"全部"数据更新
      }
    }
 
@@ -149,7 +169,7 @@ class IndexAction extends IndexStore {
       this.threads = null;
       this.sticks = null;
     }
-    
+
     this.resetErrorInfo()
 
     await this.getRreadStickList(filter.categoryids);
@@ -172,7 +192,12 @@ class IndexAction extends IndexStore {
         delete newFilter.categoryids;
       }
     }
+    this.latestReq += 1;
+    const currentReq = this.latestReq;
     const result = await readThreadList({ params: { perPage, page, filter: newFilter, sequence } });
+    if (currentReq !== this.latestReq) {
+      return;
+    }
     if (result.code === 0 && result.data) {
       if (isDraft) {
         if (this.drafts && result.data.pageData && page !== 1) {
@@ -190,17 +215,17 @@ class IndexAction extends IndexStore {
         }
       } else {
         if (this.threads && result.data.pageData && page !== 1) {
-          this.threads.pageData.push(...result.data.pageData);
-          const newPageData = this.threads.pageData.slice();
-          this.setThreads({
-            ...result.data,
-            currentPage: result.data.currentPage,
-            pageData: newPageData
-          });
+          const nextThreads = result.data.pageData.map(item => {
+            item.openedMore = false;
+            return item
+          })
+
+          this.threads.pageData.push(...nextThreads);
+          this.threads.currentPage = result.data.currentPage;
         } else {
           // 首次加载
           this.threads = null;
-          this.setThreads(result.data);
+          this.setThreads(this.adapterList(result.data));
         }
       }
       return result.data;
@@ -221,10 +246,14 @@ class IndexAction extends IndexStore {
   @action.bound
   async getReadCategories() {
     const result = await readCategories();
-    if (result.code === 0 && result.data) {
-      const data = [...result.data];
-      this.setCategories(data);
-      return this.categories;
+    if (result.code === 0) {
+      if (result.data) {
+        const data = [...result.data];
+        this.setCategories(data);
+        return this.categories;
+      }
+      this.setCategories([]);
+      return []
     } else {
       this.categoryError = {
         isError: true,
@@ -263,6 +292,18 @@ class IndexAction extends IndexStore {
     }
   }
 
+  // 获取指定的置顶帖子数据
+  findAssignSticks(threadId) {
+    if (this.sticks) {
+      for (let i = 0; i < this.sticks.length; i++)  {
+        if (this.sticks[i].threadId === threadId) {
+          return { index: i, data: this.sticks[i] };
+        }
+      }
+      return null;
+    }
+  }
+
   /**
    * 写入分类数据
    * @param {Object} data
@@ -270,38 +311,6 @@ class IndexAction extends IndexStore {
   @action.bound
   setCategories(data) {
     this.categories = data;
-  }
-
-  /**
-   * 根据 ID 获取当前选中的类别
-   * @param {number} id 帖子类别id
-   * @returns 选中的帖子详细信息
-   */
-  @action
-  getCategorySelectById(id) {
-    let parent = {};
-    let child = {};
-    let currentId = id;
-    if (!id && this.categoriesNoAll && this.categoriesNoAll.length) currentId = this.categoriesNoAll[0].pid;
-    if (this.categoriesNoAll && this.categoriesNoAll.length && currentId) {
-      this.categoriesNoAll.forEach((item) => {
-        const { children } = item;
-        if (item.pid === currentId) {
-          parent = item;
-          if (children && children.length > 0) [child] = children;
-        } else {
-          if (children && children.length > 0) {
-            children.forEach((elem) => {
-              if (elem.pid === currentId) {
-                child = elem;
-                parent = item;
-              }
-            });
-          }
-        }
-      });
-    }
-    return { parent, child };
   }
 
   /* 写入置顶数据
@@ -341,6 +350,7 @@ class IndexAction extends IndexStore {
     const { index } = targetThread;
     if (this.threads?.pageData) {
       this.threads.pageData[index] = obj;
+      this.changeInfo = { type: 'pay', thread: threadId }
     }
   }
 
@@ -353,11 +363,52 @@ class IndexAction extends IndexStore {
   @action
   updateAssignThreadAllData(threadId, threadInfo) {
     if (!threadId || !threadInfo || !Object.keys(threadInfo).length) return false;
+
+    // 更新置顶帖
+    this.updateAssignSticksInfo(threadId, threadInfo)
+
+    // 更新帖子列表
     const targetThread = this.findAssignThread(typeofFn.isNumber(threadId) ? threadId : +threadId);
     if (!targetThread) return false;
     const { index, data } = targetThread;
     this.threads.pageData[index] = threadInfo;
+
+    // 小程序编辑
+    this.changeInfo = { type: 'edit', thread: threadInfo }
+
     return true;
+  }
+
+  /**
+   * 更新置顶帖内容
+   * @param {string} threadId
+   * @param {object} threadInfo
+   * @returns boolean
+   */
+  @action
+  updateAssignSticksInfo(threadId, threadInfo) {
+    const targetThread = this.findAssignSticks(threadId);
+    if (!targetThread || targetThread.length === 0) return;
+
+    // TODO 因为置顶贴的数据格式和帖子列表的数据格式不一致，先通过网络请求的方式解决问题
+    const categoryids = handleString2Arr(this.filter, 'categoryids')
+    this.getRreadStickList(categoryids)
+
+    // const { index, data } = targetThread;
+
+    // const text = threadInfo.title || threadInfo?.content?.text;
+    // let newText = replaceStringInRegex(text, "break", '');
+    // newText = replaceStringInRegex(newText, "heading", '');
+    // newText = replaceStringInRegex(newText, "paragraph", '');
+    // newText = replaceStringInRegex(newText, "imgButEmoj", '');
+    // newText = replaceStringInRegex(newText, "list", '');
+    // this.sticks[index] = { 
+    //   canViewPosts: threadInfo?.ability?.canViewPost, 
+    //   categoryId: threadInfo?.categoryId, 
+    //   title: threadInfo.title || threadInfo?.content?.text, 
+    //   updatedAt: threadInfo?.updatedAt,
+    //   threadId: threadInfo?.threadId
+    // };
   }
 
   /**
@@ -372,7 +423,7 @@ class IndexAction extends IndexStore {
     if (!targetThread || targetThread.length === 0) return;
 
     const { index, data } = targetThread;
-    const { updateType, updatedInfo, user } = obj;
+    const { updateType, updatedInfo, user, openedMore } = obj;
 
     // 更新整个帖子内容
     if ( data && updateType === 'content' ) {
@@ -406,13 +457,17 @@ class IndexAction extends IndexStore {
       data.likeReward.shareCount = data.likeReward.shareCount + 1;
     }
 
-    // 更新分享
+    // 更新帖子浏览量
     if (updateType === 'viewCount') {
-      data.viewCount = data.viewCount + 1;
+      data.viewCount = updatedInfo.viewCount;
     }
 
     if (this.threads?.pageData) {
       this.threads.pageData[index] = data;
+    }
+
+    if (updateType === 'openedMore') {
+      data.openedMore = openedMore;
     }
   }
 
@@ -431,6 +486,11 @@ class IndexAction extends IndexStore {
       if (pageData) {
         pageData.unshift(threadInfo);
         this.threads.pageData = this.threads.pageData.slice();
+        const totalCount = Number(this.threads.totalCount)
+        this.threads.totalCount = totalCount + 1
+
+        // 小程序
+        this.changeInfo = { type: 'add', thread: threadInfo }
       }
     } else {
       this.updateAssignThreadAllData(threadId, threadInfo)
@@ -465,7 +525,7 @@ class IndexAction extends IndexStore {
    @action
    async getRecommends({ categoryIds = [] } = {}) {
     this.updateRecommendsStatus('loading');
-    
+
     const result = await readRecommends({ params: { categoryIds } })
     if (result.code === 0) {
       this.setRecommends(result.data || []);
@@ -490,6 +550,21 @@ class IndexAction extends IndexStore {
     this.recommendsStatus = status;
   }
 
+
+  adapterList(data = {}) {
+    const { pageData = [], ...others } = data;
+
+    const newpageData =  pageData.map(item => {
+      item.openedMore = false;
+
+      return item;
+    });
+
+    return {
+      pageData: newpageData,
+      ...others
+    };
+  }
 }
 
 export default IndexAction;

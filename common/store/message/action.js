@@ -12,7 +12,7 @@ class MessageAction extends MessageStore {
   // 把对话消息设置为已读
   @action.bound
   async updateDialog(dialogId) {
-    updateDialog({ data: { dialogId } });
+    updateDialog({ data: { dialogId: parseInt(dialogId) } });
   }
 
   // 获取未读消息数量
@@ -21,12 +21,12 @@ class MessageAction extends MessageStore {
     const ret = await readUnreadCount();
     const { code, data } = ret;
     if (code === 0) {
-      const { unreadNotifications, typeUnreadNotifications, dialogNotifications } = data;
+      const { unreadNotifications = 0, typeUnreadNotifications, dialogNotifications = 0 } = data;
       const { threadrewardedexpired = 0, receiveredpacket = 0, related = 0, replied = 0, system = 0, withdrawal = 0, liked = 0, rewarded = 0, threadrewarded = 0 } = typeUnreadNotifications;
-      // threadrewardedexpired, withdrawal, 悬赏过期、提现不在消息中心展示，未读总数需要减去此类型消息的未读数
-      this.totalUnread = unreadNotifications - threadrewardedexpired - withdrawal + dialogNotifications;
+      // withdrawal,提现不在消息中心展示，未读总数需要减去此类型消息的未读数
+      this.totalUnread = unreadNotifications - withdrawal + dialogNotifications;
       this.threadUnread = system;
-      this.financialUnread = receiveredpacket + rewarded + threadrewarded;
+      this.financialUnread = receiveredpacket + rewarded + threadrewarded + threadrewardedexpired;
       this.accountUnread = related + replied + liked;
       this.atUnread = related;
       this.replyUnread = replied;
@@ -107,8 +107,8 @@ class MessageAction extends MessageStore {
   // 获取财务消息
   @action.bound
   async readFinancialMsgList(page = 1) {
-    // threadrewardedexpired 悬赏过期，产品经理说不展示;withdrawal 提现信息放入钱包，不在消息展示
-    const ret = await readMsgList(this.assemblyParams(page, 'rewarded,threadrewarded,receiveredpacket'));
+    // withdrawal 提现信息放入钱包，不在消息展示
+    const ret = await readMsgList(this.assemblyParams(page, 'rewarded,threadrewarded,receiveredpacket,threadrewardedexpired'));
     this.setMsgList(page, 'financialMsgList', ret);
   }
 
@@ -124,7 +124,7 @@ class MessageAction extends MessageStore {
   async readDialogList(page = 1) {
     const ret = await readDialogList({
       params: {
-        ...this.perPage,
+        perPage: 20,
         page,
       },
     });
@@ -134,16 +134,46 @@ class MessageAction extends MessageStore {
   // 获取对话的消息列表
   @action.bound
   async readDialogMsgList(dialogId, page = 1) {
-    const ret = await readDialogMsgList({
-      params: {
-        perPage: 200,
-        page,
-        filter: {
-          dialogId,
+    return new Promise(async (resolve) => {
+      const ret = await readDialogMsgList({
+        params: {
+          perPage: 200,
+          page,
+          filter: {
+            dialogId: parseInt(dialogId),
+          },
         },
-      },
+      });
+
+      const { code, data = {} } = ret;
+      if (code === 0) {
+        // 更新未读消息数量
+        this.readUnreadCount();
+
+        const { pageData: list = [] } = data;
+        const currentPage = page;
+        const listData = (({ totalPage = 0, totalCount = 0 }) => ({ list, totalPage, totalCount, currentPage }))(data);
+
+        // 图片后端每次都会返回不同的cos签名，导致小程序上图片重新加载闪动，以下逻辑处理该问题
+        if (this.dialogMsgList.totalCount) {
+          listData.list.forEach(newMsg => {
+            this.dialogMsgList.list.forEach(oldMsg => {
+              if (newMsg.id === oldMsg.id && newMsg.dialogId === oldMsg.dialogId && !oldMsg.isImageLoading) {
+                newMsg.imageUrl = oldMsg.imageUrl;
+              }
+
+              if (newMsg.userId === oldMsg.userId) {
+                newMsg.user.avatar = oldMsg.user.avatar;
+              }
+            });
+          });
+        }
+
+        this.dialogMsgList = listData;
+      }
+
+      resolve();
     });
-    this.setMsgList(page, 'dialogMsgList', ret);
   }
 
   // 创建新的私信对话
@@ -181,6 +211,9 @@ class MessageAction extends MessageStore {
 
   // 从store数据中删除消息
   deleteListItem(key, id) {
+    // 每次删除消息后更新一下未读消息
+    this.readUnreadCount();
+
     const data = this[key];
     const list = [].concat(...data.list)
     try {

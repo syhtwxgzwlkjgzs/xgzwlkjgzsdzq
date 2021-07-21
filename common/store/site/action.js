@@ -1,7 +1,6 @@
 import { action } from 'mobx';
-import { readUserLoginDisplay, readForum, getMiniCode } from '@server';
+import { readForum } from '@server';
 import SiteStore from './store';
-import { get } from '../../utils/get';
 
 class SiteAction extends SiteStore {
   constructor(props) {
@@ -21,11 +20,6 @@ class SiteAction extends SiteStore {
     siteResult.data && this.setSiteConfig(siteResult.data);
   }
 
-  @action.bound
-  async getMiniCode(data) {
-    this.miniCode = await getMiniCode(data);
-  }
-
   @action
   setSiteConfig(config) {
     this.webConfig = config;
@@ -36,39 +30,24 @@ class SiteAction extends SiteStore {
     this.closeSiteConfig = config;
   }
 
+  @action
+  setErrPageType(type) {
+    this.errPageType = type;
+  }
+
   @action.bound
   changeTheme(theme) {
     this.theme = theme;
   }
 
+  // 是否开启用户名登陆
   @action
-  getUserLoginEntryStatus = async () => {
-    /**
-     * 获取是否展示用户名登录入口
-     */
-    try {
-      const readResp = await readUserLoginDisplay({});
-
-      if (get(readResp, 'code') === 0) {
-        this.isUserLoginVisible = true;
-      } else {
-        // 如果没开短信，也没配微信，用户名接口默认返回 true
-        if (!this.isSmsOpen && this.wechatEnv === 'none') {
-          this.isUserLoginVisible = true;
-          return;
-        }
-        this.isUserLoginVisible = false;
-      }
-    } catch (error) {
-      if (error.Code) {
-        throw error;
-      }
-      this.isUserLoginVisible = false;
-      throw {
-        Code: 'site_9999',
-        Message: '网络错误',
-        error,
-      };
+  initUserLoginEntryStatus = () => {
+    if (this.webConfig?.setSite?.usernameLoginIsdisplay) {
+      this.isUserLoginVisible = true;
+    } else {
+      // 如果没开短信，也没配微信，用户名接口默认返回 true
+      this.isUserLoginVisible = !this.isSmsOpen && this.wechatEnv === 'none'
     }
   }
 

@@ -11,6 +11,7 @@ import xss from '@common/utils/xss';
 import ImageDisplay from '@components/thread/image-display';
 import { debounce } from '@common/utils/throttle-debounce';
 import { urlToLink } from '@common/utils/replace-url-to-a';
+import PostContent from '@components/thread/post-content';
 
 @observer
 export default class ReplyList extends React.Component {
@@ -20,11 +21,6 @@ export default class ReplyList extends React.Component {
       isShowInput: this.props.isShowInput, // 是否显示输入框
       placeholder: '输入你的回复',
     };
-  }
-
-  // 跳转至评论详情
-  toCommentDetail() {
-    console.log('跳至评论详情');
   }
 
   filterContent() {
@@ -50,6 +46,13 @@ export default class ReplyList extends React.Component {
   deleteClick() {
     typeof this.props.deleteClick === 'function' && this.props.deleteClick();
   }
+  avatarClick(floor) {
+    typeof this.props.avatarClick === 'function' && this.props.avatarClick(floor);
+  }
+
+  toCommentDetail = () => {
+    typeof this.props.toCommentDetail === 'function' && this.props.toCommentDetail()
+  }
 
   generatePermissions(data = {}) {
     return {
@@ -61,60 +64,84 @@ export default class ReplyList extends React.Component {
     };
   }
 
+  transformer = (parsedDom) => {
+    const element =
+      this.props.data.commentUserId && this.props.data?.commentUser ? (
+        <div className={styles.commentUser}>
+          <div className={styles.replyedAvatar}>
+            <Avatar
+              className={styles.avatar}
+              image={
+                (this.props.data.commentUser.nickname || this.props.data.commentUser.userName) &&
+                this.props.data.commentUser.avatar
+              }
+              name={this.props.data.commentUser.nickname || this.props.data.commentUser.userName || '异'}
+              circle={true}
+              userId={this.props.data.commentUser.id}
+              isShowUserInfo={true}
+              size="mini"
+              onClick={() => this.avatarClick(3)}
+            ></Avatar>
+          </div>
+          <span className={styles.replyedUserName} onClick={() => this.avatarClick(3)}>
+            {this.props.data.commentUser.nickname || this.props.data.commentUser.userName || '用户异常'}
+          </span>
+        </div>
+      ) : (
+        ''
+      );
+
+    parsedDom.unshift(element);
+
+    return parsedDom;
+  };
+
   render() {
     const { canLike, canDelete, canHide } = this.generatePermissions(this.props.data);
 
+    // 评论回复内容是否通过审核
+    const isApproved = this.props?.data?.isApproved === 1;
+
     return (
       <div className={styles.replyList}>
-        <div className={styles.replyListAvatar} onClick={this.props.avatarClick('2')}>
+        <div className={styles.replyListAvatar}>
           <Avatar
-            image={this.props?.data?.user?.avatar}
-            name={this.props?.data?.user?.nickname || this.props?.data?.user?.userName || ''}
+            image={
+              (this.props.data?.user?.nickname || this.props.data?.user?.userName) && this.props?.data?.user?.avatar
+            }
+            name={this.props?.data?.user?.nickname || this.props?.data?.user?.userName || '异'}
             circle={true}
             userId={this.props?.data?.user?.id}
             isShowUserInfo={true}
             size="small"
+            onClick={() => this.avatarClick(2)}
           ></Avatar>
         </div>
 
         <div className={styles.replyListContent}>
           <div className={styles.replyListContentText}>
-            <div className={styles.replyListName}>
-              {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
+            <div className={styles.replyHeader}>
+              <div className={styles.replyListName} onClick={() => this.avatarClick(2)}>
+                {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
+              </div>
+              {!isApproved ? <div className={styles.isApproved}>审核中</div> : <div></div>}
             </div>
             <div className={styles.replyListText}>
-              {this.props.data.commentUserId && this.props.data?.commentUser ? (
-                <div className={styles.commentUser}>
-                  <div className={styles.replyedAvatar} onClick={this.props.avatarClick()}>
-                    <Avatar
-                      className={styles.avatar}
-                      image={this.props.data.commentUser.avatar}
-                      name={this.props.data.commentUser.nickname || this.props.data.commentUser.userName || ''}
-                      circle={true}
-                      userId={this.props.data.commentUser.id}
-                      isShowUserInfo={true}
-                      size="mini"
-                    ></Avatar>
-                  </div>
-                  <span className={styles.replyedUserName}>
-                    {this.props.data.commentUser.nickname || this.props.data.commentUser.userName}
-                  </span>
-                </div>
-              ) : (
-                ''
-              )}
-              <div
-                className={classnames(styles.content, this.props.isShowOne && styles.isShowOne)}
-                dangerouslySetInnerHTML={{ __html: this.filterContent() }}
-              ></div>
+              <div className={classnames(styles.content)}>
+                <PostContent
+                  onRedirectToDetail={() => this.toCommentDetail()}
+                  useShowMore={!!this.props.isShowOne}
+                  content={this.props?.data?.content}
+                  customHoverBg={true}
+                  transformer={this.transformer}
+                ></PostContent>
+              </div>
 
               {/* 图片展示 */}
-              {this.props.data?.images || this.props.data?.attachments ? (
+              {(this.props.data?.images?.length || this.props.data?.attachments?.length) && (
                 <div className={styles.imageDisplay}>
                   <ImageDisplay platform="pc" imgData={this.props.data?.images || this.props.data?.attachments} />
                 </div>
-              ) : (
-                ''
               )}
             </div>
           </div>

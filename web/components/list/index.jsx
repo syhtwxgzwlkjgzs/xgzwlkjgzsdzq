@@ -3,6 +3,7 @@ import { noop, isPromise } from '@components/thread/utils';
 import styles from './index.module.scss';
 import BottomView from './BottomView';
 import { inject, observer } from 'mobx-react';
+import backtoTopFn from '@common/utils/backto-top';
 
 
 /**
@@ -28,7 +29,7 @@ const List = forwardRef(({
   onRefresh,
   onScroll = noop,
   showRefresh = true,
-  preload = 30,
+  preload = 1000,
   onError = noop,
   enableError = false,
   immediateCheck = true,
@@ -45,6 +46,9 @@ const List = forwardRef(({
   const [errText, setErrText] = useState(errorText);
   const [isLoadingInCenter, setIsLoadingInCenter] = useState(false)
 
+  // 提前加载
+  preload = site?.platform === 'pc' ? 3000 : 1000;
+
   useEffect(() => {
     if (noMore) {
       setIsLoading(true);
@@ -55,20 +59,23 @@ const List = forwardRef(({
 
   useEffect(() => {
     // 初始化的时候，是否立即请求一次
-    if (immediateCheck) {
-      onTouchMove({ isFirst: true });
+    if (immediateCheck && typeof(onRefresh) === 'function') {
+      onRefresh()
     }
   }, []);
 
   // 当list内容高度，没有超过list高度，则将loading居中显示
-  // useEffect(() => {
-  //   if (listWrapper.current && showLoadingInCenter && site?.platform === 'h5') {
-  //     const { clientHeight } = listWrapper.current;
-  //     const { scrollHeight } = listWrapper.current;
-      
-  //     setIsLoadingInCenter(scrollHeight <= clientHeight)
-  //   }
-  // }, [listWrapper.current, children])
+  useEffect(() => {
+    // 约束，只有在H5端，加载中的状态才会生效此样式
+    if (listWrapper.current && showLoadingInCenter && !noMore && !isError && site?.platform === 'h5') {
+      const { clientHeight } = listWrapper.current;
+      const { scrollHeight } = listWrapper.current;
+
+      setIsLoadingInCenter(scrollHeight <= clientHeight);
+    } else {
+      setIsLoadingInCenter(false);
+    }
+  }, [listWrapper.current, children])
 
   useEffect(() => {
     setIsError(requestError)
@@ -77,6 +84,11 @@ const List = forwardRef(({
   useEffect(() => {
     setErrText(errorText)
   }, [errorText])
+
+  //移动端没有更多内容样式才有下划线
+  const noMoreType = useMemo(() => {
+    return site.platform === 'h5' ? 'line' : 'normal'
+  },[site.platform])
 
   useImperativeHandle(
     ref,
@@ -107,8 +119,10 @@ const List = forwardRef(({
   };
 
   const onBackTop = () => {
-    listWrapper.current.scrollTop = 0;
-    currentScrollTop.current = 0;
+    backtoTopFn(listWrapper.current.scrollTop, (top) => {
+      listWrapper.current.scrollTop = top;
+      currentScrollTop.current = top;
+    });
   };
 
   const jumpToScrollTop = (scrollTop) => {
@@ -117,7 +131,6 @@ const List = forwardRef(({
       currentScrollTop.current = scrollTop;
     }
   };
-
   const onTouchMove = throttle(({ isFirst = false }) => {
     if (!listWrapper || !listWrapper.current) {
       onScroll();
@@ -139,7 +152,10 @@ const List = forwardRef(({
     if (!isFirst) {
       allowHandleRefresh = (scrollTop !== 0);
     }
+
+    // if (((scrollTop + clientHeight) >= scrollHeight / 2) && !isLoading && allowHandleRefresh) {
     if ((scrollHeight - preload <= clientHeight + scrollTop) && !isLoading && allowHandleRefresh) {
+    // if ((scrollHeight/scrollTop <= 1.5) && !isLoading && allowHandleRefresh) {
       setIsLoading(true);
       if (typeof(onRefresh) === 'function') {
         const promise = onRefresh();
@@ -181,7 +197,7 @@ const List = forwardRef(({
         onScroll={onTouchMove}
       >
         {children}
-        {onRefresh && showRefresh && <BottomView isError={isError} errorText={errText} noMore={noMore} handleError={handleError} />}
+        {onRefresh && showRefresh && <BottomView isError={isError} errorText={errText} noMore={noMore} handleError={handleError} noMoreType={noMoreType} />}
       </div>
     </div>
   );

@@ -6,13 +6,14 @@ import Router from '@discuzq/sdk/dist/router';
 import browser from '@common/utils/browser';
 import UnreadRedDot from '@components/unread-red-dot';
 import { unreadUpdateInterval } from '@common/constants/message';
+import LoginHelper from '@common/utils/login-helper';
 
 const H5Header = (props) => {
   const { allowJump = true, customJum = () => { }, message: { totalUnread, readUnreadCount }, user } = props;
   // todo
   const iconClickHandle = useCallback((link) => {
     if (allowJump) {
-      Router.push({ url: link });
+      link === '/' ?  LoginHelper.gotoIndex() : Router.push({ url: link });
       return;
     }
     customJum(link);
@@ -58,7 +59,7 @@ const H5Header = (props) => {
             onClick={() => iconClickHandle('/')}
             name="HomeOutlined"
           />
-          <UnreadRedDot type="icon" style={{ width: "18px", marginRight: "24px" }} unreadCount={totalUnread}>
+          <UnreadRedDot style={{ margin: "0 24px" }} unreadCount={totalUnread}>
             <Icon
               className={styles.icon}
               onClick={() => iconClickHandle('/message')}

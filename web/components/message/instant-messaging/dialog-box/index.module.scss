@@ -1,15 +1,34 @@
 @import "../vars.scss";
+@mixin custom-scrollbar() {
+  &::-webkit-scrollbar {
+    display: block;
+    width: 4px;
+  }
+  &:hover {
+    &::-webkit-scrollbar {
+      display: block;
+      width: 4px;
+      border-radius: $border-radius-small;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: $border-color;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $border-shadow-color;
+      border-radius: 4px;
+    }
+  }
+}
 
 .pcDialogBox {
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  @include scrollbar();
-  &::-webkit-scrollbar {
-    display: block !important;
-    width: 8px;
-  }
+  padding: 0 $padding-4n;
+  @include custom-scrollbar();
 
   .box__inner {
     // height: 100%;
@@ -29,18 +48,15 @@
 .h5DialogBox {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 93px);
+  height: calc(100% - 93px);
   overflow-y: auto;
 }
 
 .h5DialogBox-emoji {
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 314px);
-  overflow-y: auto;
+  height: calc(100% - 314px);
 }
 
-.h5DialogBox .box__inner, .h5DialogBox-emoji .box__inner {
+.h5DialogBox .box__inner {
   padding: 0 $padding-4n;
 
   .itself {
@@ -116,11 +132,73 @@
 
 .msgImage {
   border-radius: rem($border-radius-small);
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.msgImage-container {
+  position: relative;
+
+  .status {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: rem($border-radius-small);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .uploading {
+    background: $black;
+    opacity: 0.5;
+  }
+
+  .fail {
+    background: $disabled-color;
+  }
+
+  .failMsg {
+    font-size: 12px;
+    line-height: 26px;
+    color: $white;
+  }
+
+  .failIcon {
+    color: $white;
+  }
+
+  .loadingIcon {
+    animation: loading 2s linear infinite;
+    color: $white;
+  }
+
+  .redDot {
+    position: absolute;
+    left: -24px;
+    bottom: 0;
+    color: $error-color;
+    cursor: pointer;
+  }
+}
+
+@keyframes loading {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .myself {
   flex-direction: row-reverse;
-  .msgImage {
+  .msgImage-container {
     margin-left: $im-msg-space-aside;
     margin-right: $im-gap-btw-icon-and-msg;
   }
@@ -138,7 +216,7 @@
 
 .itself {
   flex-direction: row;
-  .msgImage {
+  .msgImage-container {
     margin-right: $im-msg-space-aside;
     margin-left: $im-gap-btw-icon-and-msg;
   }

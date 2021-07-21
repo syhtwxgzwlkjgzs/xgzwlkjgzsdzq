@@ -13,14 +13,14 @@
     "miniprogram": {
       "list": [
         {
-          "name": "subPages/thread/index",
-          "pathName": "subPages/thread/index",
+          "name": "indexPages/thread/index",
+          "pathName": "indexPages/thread/index",
           "query": "id=47261",
           "scene": null
         },
         {
-          "name": "subPages/thread/index",
-          "pathName": "subPages/thread/index",
+          "name": "indexPages/thread/index",
+          "pathName": "indexPages/thread/index",
           "query": "id=49644",
           "scene": null
         },
@@ -31,8 +31,8 @@
           "scene": null
         },
         {
-          "name": "subPages/thread/index",
-          "pathName": "subPages/thread/index",
+          "name": "indexPages/thread/index",
+          "pathName": "indexPages/thread/index",
           "query": "id=47261",
           "scene": null
         }

@@ -24,6 +24,7 @@ import {
   SITE_NO_INSTALL,
   MINI_SITE_JOIN_WHITE_LIST
 } from '@common/constants/site';
+import LoginHelper from '@common/utils/login-helper';
 
 const PARTNER_INVITE_URL = '/subPages/forum/partner-invite/index';
 const CLOSE_URL = '/subPage/close/index';
@@ -34,10 +35,6 @@ const CLOSE_URL = '/subPage/close/index';
 class Index extends React.Component {
 
     $instance = Taro.getCurrentInstance()
-    
-    componentDidUpdate() {
-
-    }
 
     componentDidShow() {
       this.initSiteData();
@@ -48,6 +45,13 @@ class Index extends React.Component {
       const { site } = this.props;
       switch (result.code) {
         case 0:
+          // 未开启小程序，展示错误页面信息
+          if(result?.data?.passport?.miniprogramOpen === false) {
+            site.setErrPageType('site');
+            Router.redirect({
+              url: '/subPages/500/index'
+            });
+          }
           break;
         case SITE_CLOSED: site.setCloseSiteConfig(result.data);// 关闭站点
           Router.redirect({
@@ -66,12 +70,12 @@ class Index extends React.Component {
         case JUMP_TO_LOGIN:// 到登录页
           clearLoginStatus();
           this.initSiteData(); // 重新获取数据
-          Router.reLaunch({ url: '/subPages/user/wx-auth/index' });
+          LoginHelper.gotoLogin();
           break;
         case JUMP_TO_REGISTER:// 到注册页
           clearLoginStatus();
           this.initSiteData(); // 重新获取数据
-          Router.reLaunch({ url: '/subPages/user/wx-auth/index' });
+          LoginHelper.gotoLogin();
           break;
         case JUMP_TO_AUDIT:// 到审核页
           Router.push({ url: '/subPages/user/status/index?statusCode=2' });
@@ -83,18 +87,19 @@ class Index extends React.Component {
           Router.push({ url: '/subPages/user/status/index?statusCode=-4009' });
           break;
         case JUMP_TO_HOME_INDEX:// 到首页
-          Router.redirect({ url: '/pages/home/index' });
+          Router.redirect({ url: '/indexPages/home/index' });
           break;
         case JUMP_TO_PAY_SITE:// 到付费加入页面
-          Router.push({ url: '/subPages/forum/partner-invite/index' });
+          LoginHelper.saveAndRedirect(PARTNER_INVITE_URL);
           break;
         case JUMP_TO_SUPPLEMENTARY:// 跳转到扩展字段页
-          Router.push({ url: '/subPages/user/supplementary/index' });
+          LoginHelper.saveAndRedirect('/subPages/user/supplementary/index');
           break;
         case SITE_NO_INSTALL:// 未安装站点
           Router.push({ url: '/subPages/no-install/index' });
           break;
-        default: 
+        default:
+          site.setErrPageType('site');
           Router.redirect({url: '/subPages/500/index'});
           clearLoginStatus();
           Toast.error({
@@ -116,13 +121,13 @@ class Index extends React.Component {
 
       let webConfig;
       if ( !site.webConfig ) {
-        // 获取站点信息  
+        // 获取站点信息
         const siteResult = await readForum({});
-
         // 检查站点状态
         const isPass = this.setAppCommonStatus(siteResult);
         if(!isPass) return;
         site.setSiteConfig(siteResult.data);
+
         webConfig = siteResult.data;
       } else {
         webConfig = site.webConfig;
@@ -160,27 +165,27 @@ class Index extends React.Component {
             params,
             fail: () => {
               Router.redirect({
-                url: '/pages/home/index'
+                url: '/indexPages/home/index'
               });
             }
           });
         }
         else if (router.params && router.params.path) {
-          console.log(router.params.path)
           Router.redirect({
             url: decodeURIComponent(router.params.path),
             fail: () => {
               Router.redirect({
-                url: '/pages/home/index'
+                url: '/indexPages/home/index'
               });
             }
           });
         } else {
           Router.redirect({
-            url: '/pages/home/index'
+            url: '/indexPages/home/index'
           });
         }
       } else {
+        site.setErrPageType('site');
         Router.redirect({
           url: '/subPages/500/index'
         });
@@ -192,7 +197,7 @@ class Index extends React.Component {
     const { site, user } = this.props;
     const { path } = Taro.getCurrentInstance().router;
     const siteMode = site?.webConfig?.setSite?.siteMode;
-    
+
     if (site?.webConfig) {
       // 关闭站点
       if (site.closeSiteConfig) {

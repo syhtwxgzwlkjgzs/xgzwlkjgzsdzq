@@ -19,30 +19,29 @@
   }
   .imgAfter2 {
     position: relative;
-    left: -5px;
+    left: -4px;
     z-index: 4;
   }
   .imgAfter3 {
     position: relative;
-    left: -10px;
+    left: -8px;
     z-index: 3;
   }
   .imgAfter4 {
     position: relative;
-    left: -15px;
+    left: -12px;
     z-index: 2;
   }
   .imgAfter5 {
     position: relative;
-    left: -20px;
+    left: -16px;
     z-index: 1;
   }
 
   .moreIcon {
     position: absolute;
-    right: 4px;
+    right: -10px;
     bottom: 2.5px;
-    transform: translateX(50%);
     color: $text-color-secondary;
     width: 20px;
     height: 12px;
@@ -56,6 +55,11 @@
     z-index: 5;
     .icon {
       transform: rotate(90deg);
+    }
+  }
+  :global {
+    .dzq-avatar__text {
+      font-size: $font-size-label;
     }
   }
 }

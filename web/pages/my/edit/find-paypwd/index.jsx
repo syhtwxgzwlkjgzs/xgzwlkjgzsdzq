@@ -5,20 +5,25 @@ import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import HOCTencentCaptcha from '@middleware/HOCTencentCaptcha';
 import ViewAdapter from '@components/view-adapter';
 import { inject, observer } from 'mobx-react';
+import Redirect from '@components/redirect';
 
 @inject('site')
 @observer
 class FindPayPwdPage extends React.Component {
   render() {
-    return <ViewAdapter 
-    h5={(
-      <div>
-        <UserCenterEditFindPayPwd {...this.props}  />
-      </div>
-    )}
-    pc={null}
-    title={`找回支付密码 - ${this.props.site?.siteName}`}
-  />
+    return (
+      <ViewAdapter
+        h5={
+          <div>
+            <UserCenterEditFindPayPwd {...this.props} />
+          </div>
+        }
+        pc={
+          <Redirect jumpUrl={'/my/edit'} />
+        }
+        title={'找回支付密码'}
+      />
+    );
   }
 }
 

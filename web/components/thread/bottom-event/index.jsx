@@ -2,6 +2,7 @@ import React, { useMemo, useEffect } from 'react';
 import styles from './index.module.scss';
 import Tip from '../tip';
 import { Icon } from '@discuzq/design';
+import { noop } from '../utils';
 
 /**
  * 帖子底部内容
@@ -25,6 +26,7 @@ const Index = ({
   onShare = () => {},
   onComment = () => {},
   onPraise = () => {},
+  updateViewCount = noop,
 }) => {
   const postList = useMemo(() => {
     const praise =  {
@@ -56,7 +58,14 @@ const Index = ({
       <div className={needHeight ? styles.user : styles.users}>
         {userImgs.length !== 0 ? <div className={styles.userImg}>
           <div className={styles.portrait}>
-            <Tip tipData={tipData} imgs={userImgs} wholeNum={wholeNum} showCount={ platform === 'pc' ? 10 : 5 } platform={platform}></Tip>
+            <Tip
+              tipData={tipData}
+              imgs={userImgs}
+              wholeNum={wholeNum}
+              showCount={ platform === 'pc' ? 10 : 5 }
+              platform={platform}
+              updateViewCount={updateViewCount}
+            ></Tip>
           </div>
           {
             wholeNum !== 0 && (

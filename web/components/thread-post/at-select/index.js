@@ -9,7 +9,6 @@ import { Popup, Input, Checkbox, Avatar, Button, Icon, Toast } from '@discuzq/de
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
-import DDialog from '@components/dialog';
 import List from '@components/list';
 
 import stringToColor from '@common/utils/string-to-color';
@@ -152,9 +151,9 @@ class AtSelect extends Component {
   }
 
   render() {
-    const { pc, visible } = this.props;
+    const { pc, visible, style = {} } = this.props;
     const { keywords, checkUser, finish } = this.state;
-
+    const platform = pc ? 'pc' : 'h5';
     const content = (
       <div className={styles.wrapper} onClick={e => e.stopPropagation()}>
 
@@ -187,12 +186,14 @@ class AtSelect extends Component {
           onChange={val => this.setState({ checkUser: val })}
         >
           <List
+            showLoadingInCenter
             className={styles.list}
             wrapperClass={styles['list__inner']}
             height={pc ? 'auto' : 'calc(100vh - 120px)'}
             noMore={finish}
             onRefresh={this.onScrollBottom}
             immediateCheck={false}
+            platform={platform}
           >
             {this.renderItem()}
           </List>
@@ -211,15 +212,10 @@ class AtSelect extends Component {
     );
 
     if (pc) return (
-      <DDialog
-        visible={visible}
-        className={styles.pc}
-        onClose={this.handleCancel}
-        isCustomBtn={true}
-        title="@圈友"
-      >
+      <div className={styles.pc} style={style} id="dzq-toolbar-at">
+        <div className={styles.pcHeader}>@圈友</div>
         {content}
-      </DDialog>
+      </div>
     );
 
     return (

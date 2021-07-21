@@ -22,6 +22,7 @@ import WithdrawalList from './components/withdrawal-list/index';
 import FilterView from './components/all-state-popup';
 import { typeFilter } from './adapter';
 import layout from './layout.module.scss';
+import BaseLayout from '@components/base-layout';
 
 @inject('wallet')
 @observer
@@ -299,10 +300,67 @@ class WalletH5Page extends React.Component {
     }
   };
 
-  // 点击返回按钮
-  handlePageJump = () => {
-    Taro.navigateBack();
+  getStatusBarHeight() {
+    return wx?.getSystemInfoSync()?.statusBarHeight || 44;
   }
+
+  // 全屏状态下自定义左上角返回按钮位置
+  getTopBarBtnStyle() {
+    return {
+      position: 'fixed',
+      top: `${this.getStatusBarHeight()}px`,
+      left: '12px',
+      transform: 'translate(0, 10px)',
+    };
+  }
+
+  getTopBarTitleStyle() {
+    return {
+      position: 'fixed',
+      top: `${this.getStatusBarHeight()}px`,
+      left: '50%',
+      transform: 'translate(-50%, 8px)',
+    };
+  }
+
+  handleBack = () => {
+    Taro.navigateBack();
+  };
+
+  // 获取钱包中对应列表数据
+  getWalletList = () => {
+    const { incomeDetail = {}, expandDetail = {}, cashDetail = {} } = this.props.wallet;
+    const incomeData = this.listRenderDataFilter(incomeDetail) || [];
+    const expandData = this.listRenderDataFilter(expandDetail) || [];
+    const cashData = this.listRenderDataFilter(cashDetail) || [];
+    let list = [];
+    switch (this.state.tabsType) {
+      case 'income':
+        list = incomeData;
+        break;
+      case 'pay':
+        list = expandData;
+        break;
+      case 'withdrawal':
+        list = cashData;
+        break;
+    }
+    return list;
+  };
+
+  // 渲染顶部title
+  renderTitleContent = () => {
+    return (
+      <View className={layout.topBarTitle}>
+        <View onClick={this.handleBack} className={layout.customCapsule} style={this.getTopBarBtnStyle()}>
+          <Icon size={18} name="LeftOutlined" />
+        </View>
+        <View style={this.getTopBarTitleStyle()} className={layout.fullScreenTitle}>
+          我的钱包
+        </View>
+      </View>
+    );
+  };
 
   render() {
     const tabList = [
@@ -346,72 +404,67 @@ class WalletH5Page extends React.Component {
         { name: 'TransferOutOutlined' },
       ],
     ];
-    const { walletInfo, incomeDetail = {}, expandDetail, cashDetail } = this.props.wallet;
-    const incomeData = this.listRenderDataFilter(incomeDetail) || [];
-    const expandData = this.listRenderDataFilter(expandDetail) || [];
-    const cashData = this.listRenderDataFilter(cashDetail) || [];
+    const { walletInfo = {} } = this.props.wallet;
     return (
       <Page>
-        <View className={layout.container}>
-          <List
-            onRefresh={this.loadMore}
-            noMore={this.state.page > this.state.totalPage}
-            hasOnScrollToLower={true}
-            className={layout.scroll}
-          >
-            <View className={layout.header}>
-              {/* 自定义顶部返回 */}
-              <View className={layout.topBar}>
-                <Icon name="RightOutlined" onClick={() => this.handlePageJump()} />
-              </View>
-              <WalletInfo
-                walletData={walletInfo}
-                webPageType="h5"
-                onFrozenAmountClick={() => this.onFrozenAmountClick()}
-              ></WalletInfo>
+        <BaseLayout
+          noMore={this.state.page > this.state.totalPage}
+          onRefresh={this.loadMore}
+          className={layout.container}
+          immediateCheck
+          showHeader={false}
+          showLoadingInCenter={!this.getWalletList().length}
+        >
+          <View className={layout.header}>
+            {this.renderTitleContent()}
+            <WalletInfo
+              walletData={walletInfo}
+              webPageType="h5"
+              onFrozenAmountClick={() => this.onFrozenAmountClick()}
+            ></WalletInfo>
+          </View>
+          <View className={layout.choiceTime}>
+            <View className={layout.status} onClick={this.handleTypeSelectorClick}>
+              <Text className={layout.text}>{this.renderSelectedType()}</Text>
+              <Icon name="UnderOutlined" size={12} className={layout.icon}></Icon>
             </View>
-
-            <View className={layout.choiceTime}>
-              <View className={layout.status} onClick={this.handleTypeSelectorClick}>
-                <Text className={layout.text}>{this.renderSelectedType()}</Text>
-                <Icon name="UnderOutlined" size={12} className={layout.icon}></Icon>
-              </View>
-              <View className={layout.status} onClick={this.openTimePicker}>
-                <Text className={layout.text}>
-                  {formatDate(this.state.consumptionTime, 'yyyy年MM月') || formatDate(new Date(), 'yyyy年MM月')}
-                </Text>
-                <Icon name="UnderOutlined" size={12} className={layout.icon}></Icon>
-              </View>
+            <View className={layout.status} onClick={this.openTimePicker}>
+              <Text className={layout.text}>
+                {formatDate(this.state.consumptionTime, 'yyyy年MM月') || formatDate(new Date(), 'yyyy年MM月')}
+              </Text>
+              <Icon name="UnderOutlined" size={12} className={layout.icon}></Icon>
             </View>
-
-            {/* 列表展示区 */}
-            <View className={layout.tabs}>
-              <Tabs scrollable={true} className={layout.tabList} onActive={this.onTabActive}>
-                {tabList.map(([id, label, icon]) => (
-                  <Tabs.TabPanel key={id} id={id} label={label} name={icon.name}></Tabs.TabPanel>
-                ))}
-              </Tabs>
-              {this.state.tabsType === 'income' &&
-                incomeData.map((value, index) => (
-                  <IncomeList key={value.id} incomeVal={value} itemKey={index} dataLength={incomeData.length} />
-                ))}
-              {this.state.tabsType === 'pay' &&
-                expandData.map((value, index) => (
-                  <PayList key={value.id} payVal={value} itemKey={index} dataLength={expandData.length} />
-                ))}
-              {this.state.tabsType === 'withdrawal' &&
-                cashData.map((value, index) => (
-                  <WithdrawalList key={value.id} withdrawalVal={value} itemKey={index} dataLength={cashData.length} />
-                ))}
-            </View>
-          </List>
-
+          </View>
+          {/* 列表展示区 */}
+          <View className={layout.tabs}>
+            <Tabs scrollable={true} className={layout.tabList} onActive={this.onTabActive}>
+              {tabList.map(([id, label, icon]) => (
+                <Tabs.TabPanel key={id} id={id} label={label} name={icon.name}></Tabs.TabPanel>
+              ))}
+            </Tabs>
+            {this.state.tabsType === 'income' &&
+              this.getWalletList().map((value, index) => (
+                <IncomeList key={value.id} incomeVal={value} itemKey={index} dataLength={this.getWalletList().length} />
+              ))}
+            {this.state.tabsType === 'pay' &&
+              this.getWalletList().map((value, index) => (
+                <PayList key={value.id} payVal={value} itemKey={index} dataLength={this.getWalletList().length} />
+              ))}
+            {this.state.tabsType === 'withdrawal' &&
+              this.getWalletList().map((value, index) => (
+                <WithdrawalList
+                  key={value.id}
+                  withdrawalVal={value}
+                  itemKey={index}
+                  dataLength={this.getWalletList().length}
+                />
+              ))}
+          </View>
           <View className={layout.footer}>
             <Button className={layout.button} onClick={this.toWithrawal} type="primary">
               提现
             </Button>
           </View>
-
           {/* 条件过滤 */}
           <FilterView
             value={this.state.selectType}
@@ -421,18 +474,17 @@ class WalletH5Page extends React.Component {
             handleCancel={this.handleStateCancel}
             handleSubmit={this.handleTypeChange}
           />
-
-          {/* 时间选择器 */}
-          <DatePickers
-            ref={this.timeRef}
-            onConfirm={this.handleMoneyTime}
-            initValue={this.state.initValue}
-            disabledTime={true}
-            wrap-class="my-class"
-            select-item-class="mySelector"
-            type='wallet'
-          />
-        </View>
+        </BaseLayout>
+        {/* 时间选择器 */}
+        <DatePickers
+          ref={this.timeRef}
+          onConfirm={this.handleMoneyTime}
+          initValue={this.state.initValue}
+          disabledTime={true}
+          wrap-class="my-class"
+          select-item-class="mySelector"
+          type="wallet"
+        />
       </Page>
     );
   }

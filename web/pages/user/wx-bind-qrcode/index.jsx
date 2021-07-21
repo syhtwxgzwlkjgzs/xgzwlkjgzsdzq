@@ -12,7 +12,7 @@ class WeixinBind extends React.Component {
     return <ViewAdapter
               h5={<WeixinBindQrCodePage/>}
               pc={<WeixinBindQrCodePage/>}
-              title={`微信扫码绑定 - ${this.props.site?.siteName}`}
+              title={`微信扫码绑定`}
             />;
   }
 }

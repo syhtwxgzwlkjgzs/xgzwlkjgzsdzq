@@ -2,23 +2,7 @@
  * 业务中用到的颜色以及字体、层级关系、间距等都从此变量文件中获取，不要直接在业务中存在css变量的使用
  */
 // ------ Font 字体 --------
-$font-family: 'PingFang SC',
-  'BlinkMacSystemFont',
-  'Helvetica Neue',
-  'Arial',
-  'Hiragino Sans GB',
-  'STHeiti',
-  'Microsoft YaHei',
-  'Microsoft JhengHei',
-  'Source Han Sans SC',
-  'Noto Sans CJK SC',
-  'Source Han Sans CN',
-  'Noto Sans SC',
-  'Source Han Sans TC',
-  'Noto Sans CJK TC',
-  'WenQuanYi Micro Hei',
-  'SimSun',
-  sans-serif;
+$font-family: "-apple-system","BlinkMacSystemFont","Segoe UI","Roboto","Helvetica Neue","Arial","Noto Sans","Liberation Sans","sans-serif","Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
 
 $font-size-small: 12px;
 $font-size-base: 14px;
@@ -27,6 +11,12 @@ $font-size-middle-extra: 18px;
 $font-size-large: 20px;
 $font-size-label: $font-size-small;
 $font-size-primary: $font-size-base;
+$font-size-h1: 26px;
+$font-size-h2: 24px;
+$font-size-h3: 22px;
+$font-size-h4: $font-size-large;
+$font-size-h5: $font-size-middle-extra;
+$font-size-h6: $font-size-middle;
 
 $font-line-height-xs: 18px;
 $font-line-height-small: 22px;
@@ -92,6 +82,8 @@ $border-color-hover: $text-color-placeholder;
 // ---- border shadow color ----
 $border-shadow-color: var(--shadow-color);
 $border-shadow-color2: var(--shadow-color2);
+$shadow-color: 0 0 8px $border-shadow-color;
+$shadow-color2: 0 0 8px var(--shadow-color2);
 
 $border-shadow-color-8: 0 0 8px 0 var(--shadow-color2);
 
@@ -120,6 +112,9 @@ $button-info-bg-color: $text-bg-color2;
 $button-primary-bg-color: $primary-color;
 $button-primary-light-bg-color: $primary-color10;
 $button-primary-disabled-bg-color: $primary-disabled-color;
+// 关闭按钮背景，小程序顶部胶囊按钮背景
+$button-close-bg: var(--color-primary20);
+$button-capsule-bg: var(--color-primary20);
 
 // ----- checkbox color -----
 $checkbox-checked-bg-color: var(--color-primary8);
@@ -173,3 +168,10 @@ $zindex-toast: 1800;
 // ------  paybox ------------
 $paybox-pay-text-font-size: 30px;
 $paybox-border-line-color: var(--border-line-color);
+
+
+$box-color-placeholder: var(--color-box-placeholder);
+
+// ------ blockquote -----------
+$blockquote-border: var(--border-color-blockquote);
+$blockquote-text-color: var(--color-text-blockquote);

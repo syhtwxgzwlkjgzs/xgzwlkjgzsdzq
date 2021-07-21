@@ -19,7 +19,7 @@ import { isExtFieldsOpen } from '@common/store/login/util';
 @observer
 class WXSelectH5Page extends React.Component {
   render() {
-    const { router, invite } = this.props;
+    const { router, invite, commonLogin } = this.props;
     const { sessionToken, nickname, avatarUrl } = router.query;
     return (
       <div className={layout.container}>
@@ -51,6 +51,10 @@ class WXSelectH5Page extends React.Component {
             onClick={async () => {
               const inviteCode = invite.getInviteCode(router);
               try {
+                if (!commonLogin.loginLoading) {
+                  return;
+                }
+                commonLogin.loginLoading = false;
                 const res = await usernameAutoBind({
                   timeout: 10000,
                   params: {
@@ -59,11 +63,8 @@ class WXSelectH5Page extends React.Component {
                     inviteCode,
                   },
                 });
+                commonLogin.loginLoading = true;
                 checkUserStatus(res);
-                Toast.success({
-                  content: res.msg,
-                  duration: 1000,
-                });
                 if (res.code === 0) {
                   const accessToken = get(res, 'data.accessToken', '');
                   const uid = get(res, 'data.uid', '');
@@ -72,7 +73,13 @@ class WXSelectH5Page extends React.Component {
                     accessToken,
                   });
                   this.props.user.updateUserInfo(uid);
-                  window.location.href = '/';
+                  Toast.success({
+                    content: '登录成功',
+                    duration: 1000,
+                    onClose: () => {
+                      window.location.href = '/';
+                    }
+                  });
                   return;
                 }
                 throw {
@@ -80,6 +87,7 @@ class WXSelectH5Page extends React.Component {
                   Message: res.msg,
                 };
               } catch (error) {
+                commonLogin.loginLoading = true;
                 // 跳转补充信息页
                 if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
                   if (isExtFieldsOpen(this.props.site)) {
@@ -98,9 +106,9 @@ class WXSelectH5Page extends React.Component {
                   this.props.router.push(`/user/status?statusCode=${error.Code}&statusMsg=${error.Message}`);
                   return;
                 }
-                if (error.Code) {
-                  throw error;
-                }
+                Toast.error({
+                  content: error.Message || '网络错误',
+                });
                 throw {
                   Code: 'ulg_9999',
                   Message: '网络错误',

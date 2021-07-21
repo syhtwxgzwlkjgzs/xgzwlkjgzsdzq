@@ -49,7 +49,7 @@ class index extends Component {
     if (type == 'add') {
       let list_ = [...list];
       if (list.length >= 6) {
-        list_ = list_.join('').substring(0, 5).split('');
+        return;
       }
       this.setState(
         {
@@ -108,7 +108,7 @@ class index extends Component {
           });
           setTimeout(() => {
             this.props.onClose();
-            this.props.updateUserInfo(this.props.user.id);
+            this.props.user.updateUserInfo(this.props.user.id);
             this.initState();
           }, 1000);
         })

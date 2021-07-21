@@ -46,11 +46,15 @@
     // border-top: 1px solid $border-color;
     padding: rem($padding-2n) rem($padding-4n) rem($padding-4n);
     display: flex;
+    padding-bottom: calc(16px + constant(safe-area-inset-bottom)); ///兼容 IOS<11.2/
+    padding-bottom: calc(16px + env(safe-area-inset-bottom)); ///兼容 IOS>11.2/
     .btn {
       height: rem(42);
       font-size: $font-size-middle;
       margin: auto;
       border-radius: $border-radius-small;
+      padding: 0;
+      line-height: rem(42);
     }
   }
 }
@@ -58,7 +62,7 @@
 .bgBtnColor {
   :global {
     .dzq-button--primary.is-mouseenter {
-      @include button-primary()
+      @include button-primary();
     }
   }
 }

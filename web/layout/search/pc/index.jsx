@@ -123,7 +123,7 @@ class SearchPCPage extends React.Component {
       </div>
     )
   }
-  handleScroll = ({ scrollTop } = {}) => {
+  handleScroll = ({ scrollTop = 0 } = {}) => {
     const HEADER_HEIGHT = 57;
     const STEPPER_PADDING = 30;
 
@@ -133,7 +133,7 @@ class SearchPCPage extends React.Component {
     const hotTopicPos = this.hotTopicRef?.current?.offsetTop || 0,
           hotTopicScrollTo = hotTopicPos + parseInt(HEADER_HEIGHT / 2) - STEPPER_PADDING;
 
-    if(scrollTop) {
+    if(!isNaN(scrollTop) && scrollTop >= 0) {
       if(scrollTop < activeUsersScrollTo) {
         this.setState({stepIndex: 0});
       } else if(scrollTop < hotTopicScrollTo && scrollTop >= activeUsersScrollTo) {
@@ -205,7 +205,7 @@ class SearchPCPage extends React.Component {
             isError={indexThreadsError.isError}
             errorText={indexThreadsError.errorText}
           >
-            {threadsPageData?.map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />)}
+            {threadsPageData?.filter((_, index) => index < 10).map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />)}
           </SidebarPanel>
         </div>
       </div>

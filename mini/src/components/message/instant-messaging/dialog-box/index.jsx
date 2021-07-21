@@ -1,25 +1,20 @@
 import React, { useRef, useEffect, useMemo, useState } from 'react';
-import { View, Image } from '@tarojs/components';
+import { View, Image, Text } from '@tarojs/components';
 import Avatar from '@discuzq/design/dist/components/avatar/index';
+import Icon from '@discuzq/design/dist/components/icon/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import { diffDate } from '@common/utils/diff-date';
+import classnames from 'classnames';
 import { inject, observer } from 'mobx-react';
 import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
 
 const DialogBox = (props) => {
-  // const { shownMessages, dialogBoxRef } = props;
-
-  const { message, user, dialogId, showEmoji, keyboardHeight, inputBottom, hideEmoji } = props;
-  const { readDialogMsgList, dialogMsgList, dialogMsgListLength, updateDialog } = message;
-
+  const { message, dialogId, showEmoji, keyboardHeight, hideEmoji, scrollEnd, messagesHistory, sendImageAttachment } = props;
+  const { readDialogMsgList, dialogMsgList } = message;
 
   const [paddingBottom, setPaddingBottom] = useState(52);
 
-  // const [previewerVisibled, setPreviewerVisibled] = useState(false);
-  // const [defaultImg, setDefaultImg] = useState('');
-  // const router = useRouter();
-  // const dialogId = router.query.dialogId;
   const dialogBoxRef = useRef();
   const timeoutId = useRef();
   useEffect(() => {
@@ -42,13 +37,6 @@ const DialogBox = (props) => {
       let query = Taro.createSelectorQuery();
       query.select('#operation-box').boundingClientRect(rect => {
         let clientHeight = rect.height;
-        // let clientWidth = rect.width;
-        // let ratio = 750 / clientWidth;
-        // let height = clientHeight * ratio;
-        console.log(clientHeight);
-
-        const padding = (keyboardHeight && !showEmoji) ? inputBottom : 0
-
         setPaddingBottom(clientHeight);
         setTimeout(scrollEnd, 300);
       }).exec();
@@ -56,46 +44,62 @@ const DialogBox = (props) => {
 
   }, [showEmoji, keyboardHeight]);
 
-  const scrollEnd = () => {
-    setTimeout(() => {
-      Taro.pageScrollTo({
-        scrollTop: 30000,
-        duration: 0
-      });
-    }, 0);
-  };
 
-  // 每5秒轮询一次
+  // 每20秒轮询一次
   const updateMsgList = () => {
     readDialogMsgList(dialogId);
     clearTimeout(timeoutId.current);
     timeoutId.current = setTimeout(() => {
       updateMsgList();
-    }, 5000);
+    }, 20000);
   };
 
-  const messagesHistory = useMemo(() => {
-    setTimeout(() => {
-      scrollEnd();
-      // 把消息状态更新为已读
-      updateDialog(dialogId);
-    }, 100);
-    return dialogMsgList.list.map(item => ({
-      timestamp: item.createdAt,
-      userAvatar: item.user.avatar,
-      displayTimePanel: true,
-      textType: 'string',
-      text: item.messageTextHtml,
-      ownedBy: user.id === item.userId ? 'myself' : 'itself',
-      imageUrl: item.imageUrl,
-      userId: item.userId,
-    })).reverse();
-  }, [dialogMsgListLength]);
+  const renderImageStatus = (data) => {
+    const { isImageFail, isImageLoading, file, failMsg } = data;
+    const size = 20;
 
-  const [previewImageUrls, setPreviewImageUrls] = useState([]);
-  useMemo(() => {
-    setPreviewImageUrls(dialogMsgList.list.filter(item => !!item.imageUrl).map(item => item.imageUrl).reverse());
-  }, [dialogMsgList]);
+    if (isImageLoading) {
+      return (
+        <View className={classnames(styles.status, {
+          [styles.fail]: isImageFail || failMsg,
+          [styles.uploading]: !isImageFail && !failMsg,
+        })}>
+          {isImageFail || failMsg ? (
+            <>
+              <Icon className={styles.failIcon} name="PictureErrorOutlined" size={size} />
+              {failMsg && <Text className={styles.failMsg}>{failMsg}</Text>}
+              <Icon className={styles.redDot} name="TipsOutlined" size={16} onClick={() => {
+                sendImageAttachment(file, true);
+              }} />
+            </>
+          ) : (
+            <Icon className={styles.loadingIcon} name="LoadingOutlined" size={size} />
+          )}
+        </View>
+      );
+    }
+  }
+
+  const renderImage = (data) => {
+    const { imageUrl, renderUrl, width, height } = data;
+
+    return (
+      <View className={styles['msgImage-container']} style={{ width: `${width}px`, height: `${height}px` }}>
+        {renderImageStatus(data)}
+        <Image
+          className={styles.msgImage}
+          mode='aspectFill'
+          src={renderUrl || imageUrl}
+          onClick={() => {
+            Taro.previewImage({
+              urls: dialogMsgList.list.filter(item => (item.imageUrl && !item.isImageLoading)).map(item => item.imageUrl).reverse(),
+              current: imageUrl,
+            });
+          }}
+        />
+      </View>
+    );
+  };
 
   return (
     <View
@@ -105,41 +109,36 @@ const DialogBox = (props) => {
       className={styles.dialogBox}
       style={{
         paddingBottom: `${paddingBottom}px`,
-        // marginBottom: keyboardHeight ? 0 : '',
       }}
       ref={dialogBoxRef}>
       <View className={styles.box__inner}>
-        {messagesHistory.map(({ timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl, userId }, idx) => (
-          <React.Fragment key={idx}>
-            {displayTimePanel && <View className={styles.msgTime}>{diffDate(timestamp)}</View>}
-            <View className={(ownedBy === 'myself' ? `${styles.myself}` : `${styles.itself}`) + ` ${styles.persona}`}>
-              <View className={styles.profileIcon} onClick={() => {
-                userId && Taro.navigateTo({ url: `/subPages/user/index?id=${userId}` });
-              }}>
-                <Avatar image={userAvatar || '/favicon.ico'} circle={true} />
+        {messagesHistory.map((item) => {
+          const { id, timestamp, displayTimePanel, text, ownedBy, userAvatar, imageUrl, userId, nickname, width, height } = item;
+          return (
+            <React.Fragment key={id}>
+              {displayTimePanel && timestamp && <View className={styles.msgTime}>{timestamp}</View>}
+              <View className={(ownedBy === 'myself' ? `${styles.myself}` : `${styles.itself}`) + ` ${styles.persona}`}>
+                <View className={styles.profileIcon} onClick={() => {
+                  userId && Taro.navigateTo({ url: `/subPages/user/index?id=${userId}` });
+                }}>
+                  {userAvatar
+                    ? <Avatar image={userAvatar} circle={true} />
+                    : <Avatar text={nickname && nickname.toUpperCase()[0]} circle={true} style={{
+                      backgroundColor: "#8590a6",
+                    }} />
+                  }
+                </View>
+                {imageUrl ? (
+                  renderImage(item)
+                ) : (
+                  <View className={styles.msgContent} dangerouslySetInnerHTML={{
+                    __html: text,
+                  }}></View>
+                )}
               </View>
-              {imageUrl ? (
-                <Image
-                  className={styles.msgImage}
-                  mode='widthFix'
-                  style='width: 200px;'
-                  src={imageUrl}
-                  onClick={() => {
-                    Taro.previewImage({
-                      current: imageUrl,
-                      urls: previewImageUrls
-                    });
-                  }}
-                  onLoad={scrollEnd}
-                />
-              ) : (
-                <View className={styles.msgContent} dangerouslySetInnerHTML={{
-                  __html: text,
-                }}></View>
-              )}
-            </View>
-          </React.Fragment>
-        ))}
+            </React.Fragment>
+          );
+        })}
       </View>
     </View>
   );

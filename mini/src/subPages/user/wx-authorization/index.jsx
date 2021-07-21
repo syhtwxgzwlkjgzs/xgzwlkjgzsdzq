@@ -20,6 +20,13 @@ const NEED_BIND_OR_REGISTER_USER = -7016;
 @inject('commonLogin')
 @observer
 class WXAuthorization extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isBtn: true,
+      loginTitle: `你确定要授权登录${props.site.siteName}吗？`
+    }
+  }
 
   async componentDidMount() {
     await getParamCode(this.props.commonLogin)
@@ -49,8 +56,12 @@ class WXAuthorization extends Component {
         return;
       }
       if (res.code === 0) {
-        this.props.h5QrCode.loginTitle = '已成功登录';
-        this.props.h5QrCode.isBtn = false;
+        this.setState({
+          loginTitle: '已成功登录'
+        })
+        this.setState({
+          isBtn: false,
+        });
         return;
       }
       checkUserStatus(res);
@@ -59,14 +70,25 @@ class WXAuthorization extends Component {
         Message: res.msg,
       };
     } catch (error) {
+      this.setState({
+        loginTitle: '登录失败，请刷新二维码重新扫码'
+      });
+      this.setState({
+        isBtn: false,
+      });
       Toast.error({
         content: error.Message,
       });
+      throw {
+        Code: 'ulg_9999',
+        Message: '网络错误',
+        error,
+      };
     }
   }
 
   render() {
-    const { nickname } = getCurrentInstance().router.params;
+    const { nickname } = getCurrentInstance()?.router?.params || {};
 
     return (
       <Page>
@@ -75,10 +97,10 @@ class WXAuthorization extends Component {
             <View className={layout.content}>
               <View className={layout.title}>授权登录小程序</View>
               <View className={layout.tips}>
-                {nickname ? `${nickname}，` : ''}{this.props.h5QrCode.loginTitle}
+                {nickname ? `${nickname}，` : ''}{this.state.loginTitle}
               </View>
               {
-                this.props.h5QrCode.isBtn
+                this.state.isBtn
                 ? <Button
                   className={layout.button}
                   type="primary"
@@ -88,14 +110,18 @@ class WXAuthorization extends Component {
                 </Button>
                 : <></>
               }
-              <View className={layout.functionalRegion}>
+              <Button className={layout.exit}>
                 <Navigator openType='exit' target='miniProgram' className={layout.clickBtn} onClick={() => {
-                  this.props.h5QrCode.loginTitle = '已取消登录';
-                  this.props.h5QrCode.isBtn = false;
+                  this.setState({
+                    loginTitle: '已取消登录'
+                  })
+                  this.setState({
+                    isBtn: false,
+                  })
                 }}>
                   退出
                 </Navigator>
-              </View>
+              </Button>
             </View>
           </View>
         {/* </MemoToastProvider> */}

@@ -1,36 +1,20 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'next/router';
-import Header from '@components/header';
-import List from '@components/list';
-import NoData from '@components/no-data';
 import ThreadContent from '@components/thread';
-import { Spin, Toast } from '@discuzq/design';
+import { Toast } from '@discuzq/design';
 import styles from './index.module.scss';
-import classnames from 'classnames';
+import BaseLayout from '@components/base-layout';
+import throttle from '@common/utils/thottle.js';
 
 @inject('site')
 @inject('index')
 @inject('thread')
 @observer
 class Index extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      height: '100%',
-    };
-  }
-
-  componentDidMount() {
-    this.setState({
-      // header 是 40px，留出 2px ，用以触发下拉事件
-      height: window.outerHeight - 94,
-    });
-  }
-
-  handleUnFavoriteItem = async (item) => {
+  handleUnFavoriteItem = throttle(async (item) => {
     const { index } = this.props;
-    const { pageData = [] } = index.threads || {};
+    const { pageData = [], totalCount = 0 } = index.threads || {};
     const params = {
       id: item.threadId,
       isFavorite: false,
@@ -42,55 +26,51 @@ class Index extends React.Component {
         duration: 2000,
       });
     } else {
+      let collectTotalCount = totalCount;
       Toast.success({
         content: '取消收藏成功',
         duration: 2000,
       });
+      // 这里需要对收藏条数做单独处理
+      collectTotalCount--;
+      if (collectTotalCount <= 0) {
+        collectTotalCount = 0;
+      }
+      // FIXME: 这里采用数组截取的方式也直接改变了原数据--不安全
       pageData.splice(pageData.indexOf(item), 1);
-      this.props.index.setThreads({ pageData: [...pageData] });
+      this.props.index.setThreads({ ...index.threads, totalCount: collectTotalCount, pageData: [...pageData] });
     }
-  };
+  }, 1000);
 
   render() {
-    const { index, page, totalPage } = this.props;
-    const { pageData = [] } = index.threads || {};
-
+    const { index } = this.props;
+    const { pageData = [], currentPage, totalPage, totalCount } = index.threads || {};
     return (
-      <div className={styles.collectBox}>
-        <Header />
-        {pageData?.length !== 0 && <div className={styles.titleBox}>{`${this.props.totalCount} 条收藏`}</div>}
-        {this.props.firstLoading && (
-          <div className={styles.spinLoading}>
-            <Spin type="spinner">加载中...</Spin>
+      <BaseLayout
+        pageName={'collect'}
+        showLoadingInCenter={!pageData?.length}
+        showHeader={true}
+        noMore={currentPage >= totalPage}
+        onRefresh={this.props.dispatch}
+      >
+        {pageData?.length !== 0 && (
+          <div className={styles.titleBox}>
+            <span className={styles.num}>{`${totalCount || 0}`}</span>
+            条收藏
           </div>
         )}
-        {pageData?.length ? (
-          <List
-            height={this.state.height}
-            className={classnames(styles.list, {
-              [styles.noDataList]: this.props.firstLoading,
-            })}
-            immediateCheck={false}
-            onRefresh={this.props.dispatch}
-            noMore={page > totalPage}
-          >
-            <div className={styles.collectSplitLine} />
-            {pageData?.map((item, index) => (
-              <div className={styles.listItem} key={index}>
-                <ThreadContent
-                  data={item}
-                  isShowIcon
-                  onClickIcon={async () => {
-                    this.handleUnFavoriteItem(item);
-                  }}
-                />
-              </div>
-            ))}
-          </List>
-        ) : (
-          <>{!this.props.firstLoading && <NoData className={styles.noDataList} />}</>
-        )}
-      </div>
+
+        {pageData?.map((item, index) => (
+          <ThreadContent
+            onClickIcon={async () => {
+              this.handleUnFavoriteItem(item);
+            }}
+            isShowIcon
+            key={index}
+            data={item}
+          />
+        ))}
+      </BaseLayout>
     );
   }
 }

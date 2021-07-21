@@ -16,11 +16,13 @@ import Toast from '@discuzq/design/dist/components/toast/index';
 import Button from '@discuzq/design/dist/components/button/index';
 import goToLoginPage from '@common/utils/go-to-login-page';
 
+import AboptPopup from './components/abopt-popup';
 import ReportPopup from './components/report-popup';
 import ShowTop from './components/show-top';
 import DeletePopup from './components/delete-popup';
 import MorePopup from './components/more-popup';
 import InputPopup from './components/input-popup';
+import BottomView from '@components/list/BottomView';
 import throttle from '@common/utils/thottle';
 
 import threadPay from '@common/pay-bussiness/thread-pay';
@@ -29,8 +31,9 @@ import RenderThreadContent from './detail/content';
 import RenderCommentList from './detail/comment-list';
 import classNames from 'classnames';
 import { debounce } from '@common/utils/throttle-debounce';
-import styles from "./post/index.module.scss";
+import styles from './post/index.module.scss';
 import Router from '@discuzq/sdk/dist/router';
+import { parseContentData } from './utils';
 
 @inject('site')
 @inject('user')
@@ -45,6 +48,8 @@ class ThreadH5Page extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      showAboptPopup: false, // 是否弹出采纳弹框
+      isShowShare: false, // 更多弹框是否显示分享
       showReportPopup: false, // 是否弹出举报弹框
       showDeletePopup: false, // 是否弹出删除弹框
       showCommentInput: false, // 是否弹出评论框
@@ -58,7 +63,7 @@ class ThreadH5Page extends React.Component {
       toView: '', // 接收元素id用来滚动定位
     };
 
-    this.perPage = 5;
+    this.perPage = 20;
     this.page = 1; // 页码
     this.commentDataSort = true;
 
@@ -81,27 +86,6 @@ class ThreadH5Page extends React.Component {
     this.reportContent = ['广告垃圾', '违规内容', '恶意灌水', '重复发帖'];
     this.inputText = '其他理由...';
   }
-  // 滚动事件
-  handleOnScroll = (e) => {
-    // 加载评论列表
-    if (this.state.toView !== '') {
-      this.setState({ toView: '' });
-    }
-
-    if (this.flag) {
-      this.nextPosition = e.detail?.scrollTop || 0;
-    }
-    this.currentPosition = e.detail?.scrollTop || 0;
-  };
-
-  // 触底事件
-  scrollToLower = () => {
-    const { isCommentReady, isNoMore } = this.props.thread;
-    if (!this.state.isCommentLoading && isCommentReady && !isNoMore) {
-      this.page = this.page + 1;
-      this.loadCommentList();
-    }
-  };
 
   componentDidMount() {
     // 当内容加载完成后，获取评论区所在的位置
@@ -127,7 +111,7 @@ class ThreadH5Page extends React.Component {
           comeFrom: 'thread',
           threadId: id,
           title,
-          path: `/subPages/thread/index?id=${id}`,
+          path: `/indexPages/thread/index?id=${id}`,
         };
       }
     }
@@ -141,6 +125,42 @@ class ThreadH5Page extends React.Component {
     // 清空@ren数据
     this.props.thread.setCheckUser([]);
   }
+
+  // 滚动事件
+  handleOnScroll = (e) => {
+    // 加载评论列表
+    if (this.state.toView !== '') {
+      this.setState({ toView: '' });
+    }
+
+    if (this.flag) {
+      this.nextPosition = e.detail?.scrollTop || 0;
+    }
+    this.currentPosition = e.detail?.scrollTop || 0;
+
+    // 数据预加载
+    const { scrollLeft, scrollTop, scrollHeight, scrollWidth, deltaX, deltaY } = e.detail;
+    if (scrollTop * 3 > scrollHeight) {
+      const id = this.props.thread?.threadData?.id;
+      const params = {
+        id,
+        page: this.page + 1,
+        perPage: this.perPage,
+        sort: this.commentDataSort ? 'createdAt' : '-createdAt',
+      };
+
+      this.props.thread.preFetch(params);
+    }
+  };
+
+  // 触底事件
+  scrollToLower = () => {
+    const { isCommentReady, isNoMore } = this.props.thread;
+    if (!this.state.isCommentLoading && isCommentReady && !isNoMore) {
+      this.page = this.page + 1;
+      this.loadCommentList();
+    }
+  };
 
   // 点击信息icon
   onMessageClick() {
@@ -241,7 +261,24 @@ class ThreadH5Page extends React.Component {
     // this.setState({
     //   text: !this.state.text,
     // });
-    this.setState({ showMorePopup: true });
+    this.setState({
+      isShowShare: false,
+      showMorePopup: true,
+    });
+  };
+
+  // 点击分享
+  onShareClick = () => {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+      return;
+    }
+
+    this.setState({
+      isShowShare: true,
+      showMorePopup: true,
+    });
   };
 
   onOperClick = (type) => {
@@ -272,7 +309,7 @@ class ThreadH5Page extends React.Component {
     if (type === 'edit') {
       if (!this.props.thread?.threadData?.id) return;
       Taro.redirectTo({
-        url: `/subPages/thread/post/index?id=${this.props.thread?.threadData?.id}}`,
+        url: `/indexPages/thread/post/index?id=${this.props.thread?.threadData?.id}}`,
       });
     }
 
@@ -297,10 +334,10 @@ class ThreadH5Page extends React.Component {
     const threadId = this.props.thread?.threadData?.id;
     const threadData = this.props.thread?.threadData;
     Taro.eventCenter.once('page:init', () => {
-      Taro.eventCenter.trigger('message:detail', threadData)
+      Taro.eventCenter.trigger('message:detail', threadData);
     });
     Taro.navigateTo({
-        url: `/subPages/create-card/index?threadId=${threadId}`,
+      url: `/subPages/create-card/index?threadId=${threadId}`,
     });
   }
 
@@ -459,24 +496,31 @@ class ThreadH5Page extends React.Component {
         });
     }
 
-    const { success, msg } = await this.props.comment.createComment(params, this.props.thread);
+    const { success, msg, isApproved } = await this.props.comment.createComment(params, this.props.thread);
     if (success) {
       // 更新帖子中的评论数据
       this.props.thread.updatePostCount(this.props.thread.totalCount);
-      // 更新列表store数据
-      this.props.thread.updateListStore(this.props.index, this.props.search, this.props.topic);
 
       // 是否红包帖
       const isRedPack = this.props.thread?.threadData?.displayTag?.isRedPack;
       // TODO:可以进一步细化判断条件，是否还有红包
       if (isRedPack) {
         // 评论获得红包帖，更新帖子数据
-        this.props.thread.fetchThreadDetail(id);
+        await this.props.thread.fetchThreadDetail(id);
       }
 
-      Toast.success({
-        content: '评论成功',
-      });
+      // 更新列表store数据
+      this.props.thread.updateListStore(this.props.index, this.props.search, this.props.topic);
+
+      if (isApproved) {
+        Toast.success({
+          content: msg,
+        });
+      } else {
+        Toast.warning({
+          content: msg,
+        });
+      }
       this.setState({
         showCommentInput: false,
       });
@@ -498,11 +542,17 @@ class ThreadH5Page extends React.Component {
       content: val,
       attachments: [],
     };
-    const { success, msg } = await this.props.comment.updateComment(params, this.props.thread);
+    const { success, msg, isApproved } = await this.props.comment.updateComment(params, this.props.thread);
     if (success) {
-      Toast.success({
-        content: '修改成功',
-      });
+      if (isApproved) {
+        Toast.success({
+          content: msg,
+        });
+      } else {
+        Toast.warning({
+          content: msg,
+        });
+      }
       this.setState({
         showCommentInput: false,
       });
@@ -518,7 +568,7 @@ class ThreadH5Page extends React.Component {
       comeFrom: 'thread',
       threadId: this.props.thread?.threadData?.id,
       title: '',
-      path: `/subPages/thread/index?id=${this.props.thread?.threadData?.id}`
+      path: `/indexPages/thread/index?id=${this.props.thread?.threadData?.id}`
     }
     this.setState({shareData:shareData});
   }*/
@@ -611,16 +661,22 @@ class ThreadH5Page extends React.Component {
         });
     }
 
-    const { success, msg } = await this.props.comment.createReply(params, this.props.thread);
+    const { success, msg, isApproved } = await this.props.comment.createReply(params, this.props.thread);
 
     if (success) {
       this.setState({
         showCommentInput: false,
         inputValue: '',
       });
-      Toast.success({
-        content: '回复成功',
-      });
+      if (isApproved) {
+        Toast.success({
+          content: msg,
+        });
+      } else {
+        Toast.warning({
+          content: msg,
+        });
+      }
       return true;
     }
 
@@ -632,13 +688,13 @@ class ThreadH5Page extends React.Component {
   replyAvatarClick(reply, comment, floor) {
     if (floor === 2) {
       const { userId } = reply;
-      if(!userId) return;
-      Router.push({url: `/subPages/user/index?id=${userId}`});
+      if (!userId) return;
+      Router.push({ url: `/subPages/user/index?id=${userId}` });
     }
     if (floor === 3) {
       const { commentUserId } = reply;
-      if(!commentUserId) return;
-      Router.push({url: `/subPages/user/index?id=${commentUserId}`});
+      if (!commentUserId) return;
+      Router.push({ url: `/subPages/user/index?id=${commentUserId}` });
     }
   }
 
@@ -738,8 +794,57 @@ class ThreadH5Page extends React.Component {
       this.props.index.refreshHomeData({ categoryIds: [categoryId] });
     }
     Taro.redirectTo({
-      url: '/pages/home/index',
+      url: '/indexPages/home/index',
     });
+  }
+
+  // 点击采纳
+  onAboptClick(data) {
+    if (!this.props.user.isLogin()) {
+      Toast.info({ content: '请先登录!' });
+      goToLoginPage({ url: '/subPages/user/wx-auth/index' });
+      return;
+    }
+
+    this.commentData = data;
+    this.setState({ showAboptPopup: true });
+  }
+
+  // 悬赏弹框确定
+  async onAboptOk(data) {
+    if (data > 0) {
+      const params = {
+        postId: this.commentData?.id,
+        rewards: data,
+        threadId: this.props.thread?.threadData?.threadId,
+      };
+      const { success, msg } = await this.props.thread.reward(params);
+      if (success) {
+        this.setState({ showAboptPopup: false });
+
+        // 重新获取帖子详细
+        this.props.thread.fetchThreadDetail(params.threadId);
+
+        Toast.success({
+          content: `悬赏${data}元`,
+        });
+        return true;
+      }
+
+      Toast.error({
+        content: msg,
+      });
+    } else {
+      Toast.info({
+        content: '悬赏金额不能为0',
+      });
+    }
+  }
+
+  // 悬赏弹框取消
+  onAboptCancel() {
+    this.commentData = null;
+    this.setState({ showAboptPopup: false });
   }
 
   render() {
@@ -748,6 +853,9 @@ class ThreadH5Page extends React.Component {
     const fun = {
       moreClick: this.onMoreClick,
     };
+
+    const { indexes } = this.props.thread?.threadData?.content || {};
+    const parseContent = parseContentData(indexes);
 
     // const isDraft = threadStore?.threadData?.isDraft;
     // // 是否红包帖
@@ -767,6 +875,7 @@ class ThreadH5Page extends React.Component {
       canStick: threadStore?.threadData?.ability?.canStick,
       canShare: this.props.user.isLogin(),
       canCollect: this.props.user.isLogin(),
+      isAdmini: this.props?.user?.isAdmini,
     };
 
     // 更多弹窗界面
@@ -785,7 +894,7 @@ class ThreadH5Page extends React.Component {
           {/* <Header></Header> */}
           {isReady && !isApproved && (
             <View className={layout.examine}>
-              <Icon className={layout.tipsIcon} name="WarnOutlined"></Icon>
+              <Icon className={layout.tipsIcon} name="TipsOutlined"></Icon>
               <Text className={layout.tipsText}>内容正在审核中，审核通过后才能正常显示！</Text>
             </View>
           )}
@@ -799,7 +908,7 @@ class ThreadH5Page extends React.Component {
           lowerThreshold={50}
           onScrollToLower={() => this.scrollToLower()}
           scrollIntoView={this.state.toView}
-          onScroll={(e) => throttle(this.handleOnScroll(e), 500)}
+          onScroll={(e) => throttle(this.handleOnScroll(e), 200)}
         >
           <View className={layout['view-inner']}>
             <ShowTop showContent={this.state.showContent} setTop={this.state.setTop}></ShowTop>
@@ -833,14 +942,12 @@ class ThreadH5Page extends React.Component {
                       onEditClick={(comment) => this.onEditClick(comment)}
                       replyReplyClick={(reply, comment) => this.replyReplyClick(reply, comment)}
                       replyClick={(comment) => this.replyClick(comment)}
-                      replyAvatarClick={(comment, reply, floor) =>this.replyAvatarClick(comment, reply, floor)}
+                      replyAvatarClick={(comment, reply, floor) => this.replyAvatarClick(comment, reply, floor)}
+                      onAboptClick={(data) => this.onAboptClick(data)}
                     ></RenderCommentList>
-                    {this.state.isCommentLoading && <LoadingTips></LoadingTips>}
-                    {isNoMore && (
-                      <View className={layout.noMore}>
-                        <NoMore empty={totalCount === 0}></NoMore>
-                      </View>
-                    )}
+                    <View className={layout.noMore}>
+                      <BottomView type="line" isError={isCommentListError} noMore={isNoMore}></BottomView>
+                    </View>
                   </Fragment>
                 ) : (
                   <LoadingTips isError={isCommentListError} type="init"></LoadingTips>
@@ -886,13 +993,9 @@ class ThreadH5Page extends React.Component {
                 ></Icon>
 
                 {/* 分享button */}
-                <Button
-                  className={classNames(footer.share, footer.icon)}
-                  openType="share"
-                  data-shareData={this.shareData}
-                >
+                <View className={classNames(footer.share, footer.icon)} onClick={() => this.onShareClick()}>
                   <Icon className={footer.icon} size="20" name="ShareAltOutlined"></Icon>
-                </Button>
+                </View>
               </View>
             </View>
           </View>
@@ -921,6 +1024,7 @@ class ThreadH5Page extends React.Component {
               onClose={() => this.setState({ showMorePopup: false })}
               onSubmit={() => this.setState({ showMorePopup: false })}
               onOperClick={(type) => this.onOperClick(type)}
+              isShowShare={this.state.isShowShare}
             ></MorePopup>
 
             {/* 删除弹层 */}
@@ -928,6 +1032,7 @@ class ThreadH5Page extends React.Component {
               visible={this.state.showDeletePopup}
               onClose={() => this.setState({ showDeletePopup: false })}
               onBtnClick={(type) => this.onBtnClick(type)}
+              type='thread'
             ></DeletePopup>
             {/* 举报弹层 */}
 
@@ -946,6 +1051,16 @@ class ThreadH5Page extends React.Component {
               onCancel={() => this.setState({ showRewardPopup: false })}
               onOkClick={(value) => this.onRewardSubmit(value)}
             ></RewardPopup>
+
+            {/* 采纳弹层 */}
+            {parseContent?.REWARD?.money && (
+              <AboptPopup
+                rewardAmount={parseContent?.REWARD?.money} // 需要传入剩余悬赏金额
+                visible={this.state.showAboptPopup}
+                onCancel={() => this.onAboptCancel()}
+                onOkClick={(data) => this.onAboptOk(data)}
+              ></AboptPopup>
+            )}
           </Fragment>
         )}
       </View>

@@ -170,19 +170,33 @@ export default class PayBox extends React.Component {
     return Number(num).toFixed(2);
   };
 
+  // 获取按钮禁用状态
+  getDisabledWithButton = () => {
+    const { isSubmit } = this.state;
+    const canWalletPay = this.props.user?.canWalletPay;
+    const { options = {} } = this.props.payBox;
+    const { amount = 0 } = options;
+    let disabled = !this.props.payBox.payWay || isSubmit;
+    if (this.props.payBox.payWay === PAYWAY_MAP.WALLET) {
+      if (!canWalletPay) {
+        disabled = true;
+      }
+      if (Number(this.props.payBox?.walletAvaAmount) < Number(amount)) {
+        disabled = true;
+      }
+    }
+    return disabled;
+  };
+
   render() {
     const { options = {} } = this.props.payBox;
     const { payConfig, isSubmit } = this.state;
     const canWalletPay = this.props.user?.canWalletPay;
-    let disabled = !this.props.payBox.payWay || isSubmit;
-    if (this.props.payBox.payWay === PAYWAY_MAP.WALLET && !canWalletPay) {
-      disabled = true;
-    }
     return (
       <div className={styles.payBox}>
         <div className={styles.title}>
           <p>
-            <span className={styles.moneyUnit}>￥ </span>
+            <span className={styles.moneyUnit}>￥</span>
             {this.transMoneyToFixed(options.amount)}
           </p>
         </div>
@@ -214,7 +228,7 @@ export default class PayBox extends React.Component {
         </div>
         <div className={styles.btnBox}>
           <Button
-            disabled={disabled}
+            disabled={this.getDisabledWithButton()}
             className={styles.btn}
             type="primary"
             size="large"

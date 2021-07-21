@@ -5,7 +5,9 @@ import IndexPCPage from '@layout/my/like/pc';
 import ViewAdapter from '@components/view-adapter';
 import { readThreadList, readTopicsList } from '@server';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
+import HOCWithLogin from '@middleware/HOCWithLogin';
 import isServer from '@common/utils/is-server';
+import { withRouter } from 'next/router';
 
 @inject('site')
 @inject('index')
@@ -60,7 +62,12 @@ class Index extends React.Component {
     serverSearch && serverSearch.topics && search.setTopics(serverSearch.topics);
   }
 
+  componentWillUnmount() {
+    this.props.router.events.off('routeChangeStart', this.beforeRouterChange);
+  }
+
   async componentDidMount() {
+    this.props.router.events.on('routeChangeStart', this.beforeRouterChange);
     const { index, search } = this.props;
     const hasThreadsData = !!index.threads;
     const hasTopics = !!search.topics;
@@ -73,10 +80,10 @@ class Index extends React.Component {
         perPage: 10,
       });
       this.setState({
-        totalCount: threadsResp.totalCount,
-        totalPage: threadsResp.totalPage,
+        totalCount: threadsResp?.totalCount,
+        totalPage: threadsResp?.totalPage,
       });
-      if (this.state.page <= threadsResp.totalPage) {
+      if (this.state.page <= threadsResp?.totalPage) {
         this.setState({
           page: this.state.page + 1,
         });
@@ -88,20 +95,20 @@ class Index extends React.Component {
     if (!hasTopics) {
       search.getTopicsList();
     }
-    this.listenRouterChangeAndClean();
   }
+
+  beforeRouterChange = (url) => {
+    // 如果不是进入 thread 详情页面
+    if (!/thread\//.test(url)) {
+      this.clearStoreThreads();
+    }
+  }
+
 
   clearStoreThreads = () => {
     const { index } = this.props;
     index.setThreads(null);
   };
-
-  listenRouterChangeAndClean() {
-    // FIXME: 此种写法不好
-    if (!isServer()) {
-      window.addEventListener('popstate', this.clearStoreThreads, false);
-    }
-  }
 
   componentWillUnmount() {
     this.clearStoreThreads();
@@ -144,11 +151,11 @@ class Index extends React.Component {
           />
         }
         pc={<IndexPCPage firstLoading={firstLoading} dispatch={this.dispatch} />}
-        title={`我的点赞 - ${this.props.site?.siteName}`}
+        title={`我的点赞`}
       />
     );
   }
 }
 
 // eslint-disable-next-line new-cap
-export default HOCFetchSiteData(Index);
+export default withRouter(HOCFetchSiteData(HOCWithLogin(Index)));

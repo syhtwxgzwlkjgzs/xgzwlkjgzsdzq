@@ -7,6 +7,8 @@ import styles from './index.module.scss';
 import { withRouter } from 'next/router';
 import Router from '@discuzq/sdk/dist/router';
 import GetQueryString from '../../../../common/utils/get-query-string';
+import ViewAdapter from '@components/view-adapter';
+import Redirect from '@components/redirect';
 
 @inject('user')
 @observer
@@ -17,9 +19,13 @@ class index extends Component {
       height: '100%',
       renderComponent: null,
     };
+
+    this.getFlag();
+
     this.props.user.cleanUserFans();
     this.props.user.cleanTargetUserFans();
   }
+
   componentDidMount() {
     this.setState({
       // header 是 40px，留出 2px ，用以触发下拉事件
@@ -28,17 +34,29 @@ class index extends Component {
     });
   }
 
+  getFlag() {
+    const isOtherPersonQuery = GetQueryString('isOtherPerson');
+
+    if (!isOtherPersonQuery) {
+      this.isOtherFans = false;
+      return;
+    }
+
+    this.isOtherFans = JSON.parse(isOtherPersonQuery);
+  }
+
   // 点击关注
   followHandler = async ({ id }) => {
     try {
       await this.props.user.postFollow(id);
-      const isOtherFans = JSON.parse(GetQueryString('isOtherPerson'));
-      const isOtherFansId = GetQueryString('otherId');
+      const { isOtherFans } = this;
+
       if (isOtherFans) {
         this.props.user.setTargetUserFansBeFollowed(id);
       } else {
         this.props.user.setUserFansBeFollowed(id);
       }
+
       Toast.success({
         content: '关注成功',
         hasMask: false,
@@ -53,7 +71,8 @@ class index extends Component {
   unFollowHandler = async ({ id }) => {
     try {
       await this.props.user.cancelFollow({ id, type: 1 });
-      const isOtherFans = JSON.parse(GetQueryString('isOtherPerson'));
+      const { isOtherFans } = this;
+
       if (isOtherFans) {
         this.props.user.setTargetUserFansBeUnFollowed(id);
       } else {
@@ -83,8 +102,10 @@ class index extends Component {
   );
 
   getRenderComponent = () => {
-    const isOtherFans = JSON.parse(GetQueryString('isOtherPerson'));
+    const { isOtherFans } = this;
+
     const id = GetQueryString('otherId');
+
     return (
       <>
         {!isOtherFans ? (
@@ -98,14 +119,20 @@ class index extends Component {
 
   render() {
     return (
-      <div
-        style={{
-          height: this.state.height,
-        }}
-      >
-        <Header />
-        {this.state.renderComponent && this.getRenderComponent()}
-      </div>
+      <ViewAdapter
+        h5={
+          <div
+            style={{
+              height: this.state.height,
+            }}
+          >
+            <Header />
+            {this.state.renderComponent && this.getRenderComponent()}
+          </div>
+        }
+        pc={<Redirect jumpUrl={'/my'} />}
+        title={'粉丝列表'}
+      />
     );
   }
 }
