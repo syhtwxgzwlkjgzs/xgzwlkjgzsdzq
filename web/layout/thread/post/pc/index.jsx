@@ -43,6 +43,13 @@ class ThreadPCPage extends React.Component {
       lastindex: -1,
       vditor: null,
     };
+    this.isMouseDown = false;
+  }
+
+  componentDidMount() {
+    window.onmousedown = () => {
+      this.isMouseDown = true;
+    }
   }
 
   hintCustom = (type, key, textareaPosition, lastindex, vditor) => {
@@ -99,7 +106,9 @@ class ThreadPCPage extends React.Component {
               isDisplay={true}
               onChange={title => this.props.setPostData({ title })}
             />
-            <div className={styles.editor} onClick={this.props.handleVditorFocus}>
+            <div id="lijiahong" className={styles.editor} onClick={this.props.handleVditorFocus} onMouseOver={(e) => {
+              console.log(e);
+            }}>
               <div className={styles['editor-inner']} id="post-inner" onScroll={() => {
                 this.hintHide();
               }}>

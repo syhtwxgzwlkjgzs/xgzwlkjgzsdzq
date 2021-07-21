@@ -13,6 +13,7 @@ import './index.scss';
 import '@discuzq/vditor/src/assets/scss/index.scss';
 import { Toast } from '@discuzq/design';
 import browser, { constants } from '@common/utils/browser';
+import attachmentUpload from '@common/utils/attachment-upload';
 
 export default function DVditor(props) {
   const { pc, emoji = {}, atList = [], topic, value = '',
@@ -317,8 +318,20 @@ export default function DVditor(props) {
         upload: {
           url: 'upload',
           accept: 'image/*',
-          handler: (files) => {
-            html2mdInserValue('<p><img src="https://pic1.zhimg.com/v2-4ab20b03ef5de616b2f7efb82dff8db4_1440w.jpg?source=172ae18b" alt="图片" attachmentId="99" tag="text-img" /></p>');
+          handler: async (files) => {
+            const toastInstance = Toast.loading({
+              content: `图片上传中...`,
+              hasMask: true,
+              duration: 0,
+            });
+            const res = await attachmentUpload(files);
+            res.forEach(ret => {
+              const { code, data: { url, id } } = ret;
+              if (code === 0) {
+                html2mdInserValue(`<p style="padding: 10px;"><img src="${url}" alt="图片" attachmentId="${id}" tag="text-img" /></p>`);
+              }
+            });
+            toastInstance.destroy();
           }
         }
       },
