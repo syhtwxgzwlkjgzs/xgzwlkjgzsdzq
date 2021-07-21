@@ -29,12 +29,18 @@
     }
 
     .right {
-      width: rem(68);
+      min-width: rem(110);
       font-size: rem($font-size-label);
       color: $text-color-regular;
       display: flex;
       justify-content: flex-end;
       align-items: center;
+      & > * + * {
+        margin-left: rem($padding-4n);
+      }
+      .playIcon {
+        color: $text-color-secondary;
+      }
     }
   }
 
@@ -42,9 +48,6 @@
     cursor: pointer;
   }
 
-  .label {
-    margin-left: rem($padding-4n);
-  }
 
   .containerText {
     display: flex;
@@ -98,4 +101,11 @@
 
 .spinner {
   width: 22px;
+}
+
+
+:global {
+  .web-office-default-container {
+    z-index: $zindex-backtotop;
+  }
 }
