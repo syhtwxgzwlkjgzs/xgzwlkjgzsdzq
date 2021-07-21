@@ -19,6 +19,27 @@ class PayBoxPc extends React.Component {
     // }, 500);
   };
 
+  // 拉起支付弹窗后阻止回退操作
+  handleKeyDown = (e) => {
+    if (e.keyCode === 8) {
+      if (e.returnValue) {
+        e.returnValue = false;
+      }
+      if (e.preventDefault) {
+        e.preventDefault();
+      }
+      return false;
+    }
+  };
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleKeyDown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeyDown);
+  }
+
   render() {
     return (
       !isServer() && (
@@ -31,8 +52,8 @@ class PayBoxPc extends React.Component {
         >
           {this.props.payBox.step === STEP_MAP.SURE && <AmountRecognized />}
           {this.props.payBox.step === STEP_MAP.PAYWAY && <PayConfirmed />}
-          {(this.props.payBox.step === STEP_MAP.WALLET_PASSWORD
-            || this.props.payBox.step === STEP_MAP.SET_PASSWORD) && <PayPwd />}
+          {(this.props.payBox.step === STEP_MAP.WALLET_PASSWORD ||
+            this.props.payBox.step === STEP_MAP.SET_PASSWORD) && <PayPwd />}
         </Dialog>
       )
     );

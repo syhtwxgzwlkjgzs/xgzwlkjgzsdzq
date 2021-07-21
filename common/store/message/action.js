@@ -144,7 +144,34 @@ class MessageAction extends MessageStore {
           },
         },
       });
-      this.setMsgList(page, 'dialogMsgList', ret);
+
+      const { code, data = {} } = ret;
+      if (code === 0) {
+        // 更新未读消息数量
+        this.readUnreadCount();
+
+        const { pageData: list = [] } = data;
+        const currentPage = page;
+        const listData = (({ totalPage = 0, totalCount = 0 }) => ({ list, totalPage, totalCount, currentPage }))(data);
+
+        // 图片后端每次都会返回不同的cos签名，导致小程序上图片重新加载闪动，以下逻辑处理该问题
+        if (this.dialogMsgList.totalCount) {
+          listData.list.forEach(newMsg => {
+            this.dialogMsgList.list.forEach(oldMsg => {
+              if (newMsg.id === oldMsg.id && newMsg.dialogId === oldMsg.dialogId && !oldMsg.isImageLoading) {
+                newMsg.imageUrl = oldMsg.imageUrl;
+              }
+
+              if (newMsg.userId === oldMsg.userId) {
+                newMsg.user.avatar = oldMsg.user.avatar;
+              }
+            });
+          });
+        }
+
+        this.dialogMsgList = listData;
+      }
+
       resolve();
     });
   }
