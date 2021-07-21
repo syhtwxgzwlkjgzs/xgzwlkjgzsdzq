@@ -4,30 +4,33 @@ import styles from './index.module.scss';
 import { Button, Toast } from '@discuzq/design';
 import Footer from './footer';
 import isWeiXin from '@common/utils/is-weixin';
-const Index = ({ children }) => {
+import { inject, observer } from 'mobx-react';
+
+const Index = ({ children, card }) => {
   const [url, setUrl] = useState('');
   const [ready, setReady] = useState(false);
   const post = useRef(null);
+  const { isReady } = card;
   useEffect(() => {
-    if (ready) {
+    if (ready && isReady) {
       generateImageUrlByHtml(post.current).then((res) => {
         setUrl(res);
       });
     }
-  }, [ready]);
+  }, [ready, isReady]);
   const saveImg = () => {
     savePic(url);
   };
-  if (!ready) {
+  if (!ready || !isReady) {
     Toast.loading({ content: '正在绘制...' });
   }
   return (
     <div className={styles.contain}>
-      <div className={styles.poster} ref={post}>
+      <div  ref={post}>
         {children}
         <Footer setReady={setReady}></Footer>
       </div>
-      {ready ? (
+      {ready && isReady ? (
         <div className={styles.imgbox}>
           <img className={styles.centImage} src={url} />
         </div>
@@ -46,4 +49,4 @@ const Index = ({ children }) => {
   );
 };
 
-export default Index;
+export default inject('card')(observer(Index));

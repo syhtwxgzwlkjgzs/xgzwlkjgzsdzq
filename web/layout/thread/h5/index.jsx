@@ -41,6 +41,7 @@ import MorePopop from '@components/more-popop';
 @inject('index')
 @inject('topic')
 @inject('search')
+@inject('card')
 @inject('vlist')
 @observer
 class ThreadH5Page extends React.Component {
@@ -583,6 +584,8 @@ class ThreadH5Page extends React.Component {
   createCard = () => {
     const data = this.props.thread.threadData;
     const threadId = data.id;
+    const { card } = this.props;
+    card.setThreadData(data);
     Router.push({ url: `/card?threadId=${threadId}` });
   };
   // 付费支付

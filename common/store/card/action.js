@@ -24,6 +24,7 @@ class ThreadAction extends ThreadStore {
   }
   @action
   setThreadData(data) {
+    this.setReady();
     this.threadData = data;
     this.threadData.id = data.threadId;
   }

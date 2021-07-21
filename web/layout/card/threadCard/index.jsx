@@ -25,7 +25,7 @@ const ThreadCard = inject('user', 'card')(observer((props) => {
   let avatar = threadStore?.threadData?.user?.avatar;
   const isAnonymous = threadStore?.threadData?.isAnonymous;
   const priceImg = '/dzq-img/admin-logo-pc.jpg';
-  const content = useRef();
+  const content = useRef(null);
   const [overMaxHeight, setOverMaxHeight] = useState(false);
   // 内容是否为空
   let isEmpty = false;
@@ -33,10 +33,10 @@ const ThreadCard = inject('user', 'card')(observer((props) => {
     isEmpty = true;
   }
   useEffect(() => {
-    if (content.current.offsetHeight >= 1900) {
+    if (content.current && content.current.offsetHeight >= 1900) {
       setOverMaxHeight(true);
     }
-  }, []);
+  }, [isReady]);
   // 处理匿名情况
   if (isAnonymous) {
     nickname = '匿名用户';
@@ -48,13 +48,6 @@ const ThreadCard = inject('user', 'card')(observer((props) => {
     text = '';
     parseContent = '';
   }
-  // if (!isReady) {
-  //   return (
-  //     <Card>
-
-  //     </Card>
-  //   );
-  // }
   return (
     <Card>
       {isReady && (
@@ -100,12 +93,13 @@ const ThreadCard = inject('user', 'card')(observer((props) => {
               <img src={priceImg} className={styles.priceimg}/>
             </div>
           )}
-          {overMaxHeight && (
+
+        </div>
+        {overMaxHeight && (
             <div className={styles.lookmoreBox}>
               <img src="/dzq-img/look-more.jpg" alt="扫码查看更多" className={styles.lookmoreImg}/>
             </div>
-          )}
-        </div>
+        )}
           {/* 标签 */}
           {(parentCategoryName || categoryName) && (
             <div className={styles.tag}>
