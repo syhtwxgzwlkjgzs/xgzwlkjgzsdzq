@@ -303,7 +303,7 @@ function avatar(props) {
   const [referenceElement, setReferenceElement] = useState(null);
   const [popperElement, setPopperElement] = useState(null);
   const { styles: poperStyle, attributes } = usePopper(referenceElement, popperElement, {
-    placement: 'bottom-end',
+    placement: 'bottom-start',
     modifiers: [
       {
         name: 'offset',
