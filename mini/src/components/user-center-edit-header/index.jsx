@@ -357,7 +357,7 @@ export default class index extends Component {
             )}
           </View>
           <View className={styles.headImgBox}>
-            <Avatar image={this.user.avatarUrl} size="big" name={this.user.username} />
+            <Avatar image={this.user.avatarUrl} size="big" name={this.user.nickname} />
             {/* 相机图标 */}
             <View className={styles.userCenterEditCameraIcon} onClick={this.handleAvatarUpload}>
               <Icon name="CameraOutlined" />

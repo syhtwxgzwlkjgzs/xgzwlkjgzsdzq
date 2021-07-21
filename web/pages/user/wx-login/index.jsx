@@ -14,7 +14,7 @@ class WXLogin extends React.Component {
     return <ViewAdapter
               h5={<WXLoginH5Page/>}
               pc={<WXLoginH5Page/>}
-              title={`微信登录 - ${this.props.site?.siteName}`}
+              title='微信登录'
             />;
   }
 }

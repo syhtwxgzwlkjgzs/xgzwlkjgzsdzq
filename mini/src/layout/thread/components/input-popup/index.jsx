@@ -206,9 +206,11 @@ const InputPop = (props) => {
     setImageUploading(list?.length && list.some((image) => image.status === 'uploading'));
   };
 
-  const onFail = () => {
+  const onFail = (ret) => {
+    const msg = ret?.Message;
+    const code = ret?.Code === -7075; // 错误码为-7075时为不允许上传敏感图
     Toast.error({
-      content: '图片上传失败',
+      content: code ? msg : '图片上传失败',
     });
   };
 

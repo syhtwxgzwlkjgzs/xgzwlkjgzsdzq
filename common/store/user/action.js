@@ -120,9 +120,14 @@ class UserAction extends SiteStore {
     if (!userInfo || userInfo?.code !== 0) {
       return;
     }
+
+    if (!this.id && this.onLoginCallback) {
+      this.onLoginCallback(userInfo.data);
+    }
     const userPermissions = await readPermissions({});
     userInfo?.data && this.diffPicAndUpdateUserInfo(userInfo.data);
     userPermissions?.data && this.setUserPermissions(userPermissions.data);
+
     return userInfo?.code === 0 && userInfo.data;
   }
 
@@ -209,60 +214,6 @@ class UserAction extends SiteStore {
     }
     this.userFans = { ...this.userFans };
   };
-
-  // @action
-  // getTargetUserFollow = async (id) => {
-  //   const followsRes = await getUserFollow({
-  //     params: {
-  //       page: this.targetUserFollowsPage,
-  //       perPage: 20,
-  //       filter: {
-  //         userId: id,
-  //       },
-  //     },
-  //   });
-
-  //   if (followsRes.code !== 0) {
-  //     console.error(followsRes);
-  //     return;
-  //   }
-
-  //   const pageData = get(followsRes, 'data.pageData', []);
-  //   const totalPage = get(followsRes, 'data.totalPage', 1);
-  //   this.targetUserFollowsTotalPage = totalPage;
-  //   this.targetUserFollows[this.targetUserFollowsPage] = pageData;
-  //   if (this.targetUserFollowsPage <= this.targetUserFollowsTotalPage) {
-  //     this.targetUserFollowsPage += 1;
-  //   }
-  //   this.targetUserFollows = { ...this.targetUserFollows };
-  // }
-
-  // @action
-  // getTargetUserFans = async (id) => {
-  //   const fansRes = await getUserFans({
-  //     params: {
-  //       page: this.targetUserFansPage,
-  //       perPage: 20,
-  //       filter: {
-  //         userId: id,
-  //       },
-  //     },
-  //   });
-
-  //   if (fansRes.code !== 0) {
-  //     console.error(fansRes);
-  //     return;
-  //   }
-
-  //   const pageData = get(fansRes, 'data.pageData', []);
-  //   const totalPage = get(fansRes, 'data.totalPage', 1);
-  //   this.targetUserFansTotalPage = totalPage;
-  //   this.targetUserFans[this.targetUserFansPage] = pageData;
-  //   if (this.targetUserFansPage <= this.targetUserFansTotalPage) {
-  //     this.targetUserFansPage += 1;
-  //   }
-  //   this.targetUserFans = { ...this.targetUserFans };
-  // }
 
   /**
    * 取消屏蔽指定 id 的用户
@@ -505,6 +456,7 @@ class UserAction extends SiteStore {
     if (updateAvatarRes.code === 0) {
       this.userInfo.avatarUrl = updateAvatarRes.data.avatarUrl;
       this.userInfo = { ...this.userInfo };
+      this.updateUserThreadsAvatar(updateAvatarRes.data.avatarUrl);
       return updateAvatarRes.data;
     }
 
@@ -512,6 +464,19 @@ class UserAction extends SiteStore {
       Code: updateAvatarRes.code,
       Msg: updateAvatarRes.msg,
     };
+  }
+
+  // 更新头像后，更新用户 threads 列表的 avatar url
+  @action
+  updateUserThreadsAvatar(avatarUrl) {
+    Object.keys(this.userThreads).forEach((key) => {
+      this.userThreads[key].forEach((thread) => {
+        if (!thread.user) {
+          thread.user = {};
+        }
+        thread.user.avatar = avatarUrl;
+      });
+    });
   }
 
   /**
@@ -949,10 +914,10 @@ class UserAction extends SiteStore {
 
       // 更新点赞
       if (
-        updateType === 'like' &&
-        !typeofFn.isUndefined(updatedInfo.isLiked) &&
-        !typeofFn.isNull(updatedInfo.isLiked) &&
-        user
+        updateType === 'like'
+        && !typeofFn.isUndefined(updatedInfo.isLiked)
+        && !typeofFn.isNull(updatedInfo.isLiked)
+        && user
       ) {
         const { isLiked, likePayCount = 0 } = updatedInfo;
         const theUserId = user.userId || user.id;
