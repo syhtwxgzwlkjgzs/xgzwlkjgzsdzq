@@ -7,6 +7,7 @@ import goToLoginPage from '@common/utils/go-to-login-page';
 import classNames from 'classnames';
 import calcCosImageQuality from '@common/utils/calc-cos-image-quality';
 import styles from './index.module.scss';
+import { usePopper } from 'react-popper';
 
 function avatar(props) {
   const {
@@ -317,9 +318,24 @@ function avatar(props) {
     );
   }
 
+  const [referenceElement, setReferenceElement] = useState(null);
+  const [popperElement, setPopperElement] = useState(null);
+  const { styles: poperStyle, attributes } = usePopper(referenceElement, popperElement, {
+    placement: 'bottom',
+    modifiers: [
+      {
+        name: 'offset',
+        options: {
+          offset: [0, 8],
+        },
+      },
+    ],
+  });
+  console.log(poperStyle, attributes);
+
   return (
     <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
-      <div className={styles.cursor} onClick={clickAvatar}>
+      <div className={styles.cursor} onClick={clickAvatar} ref={setReferenceElement}>
         <Avatar className={className} circle={circle} text={userName} size={size} onClick={clickAvatar}></Avatar>
         {userTypeIcon && (
           <div className={`${styles.userIcon} ${bgClrBasedOnType}`}>
@@ -327,7 +343,10 @@ function avatar(props) {
           </div>
         )}
       </div>
-      {isShow && userInfoBox}
+
+      <div ref={setPopperElement} {...attributes.popper} style={poperStyle.popper}>
+        {userInfoBox}
+      </div>
     </div>
   );
 }
