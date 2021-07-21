@@ -16,12 +16,12 @@ import LoginHelper from '@common/utils/login-helper';
 @inject('commonLogin')
 @observer
 class StatusH5Page extends React.Component {
-  async componentWillMount() {
+  async componentDidMount() {
     // 刷新页面时，检测是否已通过审核
     const { id } = this.props.user;
     await this.props.user.updateUserInfo(id);
 
-    if (this.props.user?.userInfo?.status === 0) {
+    if (this.props.user.userInfo?.status === 0) {
       LoginHelper.gotoIndex();
     }
   }
