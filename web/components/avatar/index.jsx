@@ -327,7 +327,7 @@ function avatar(props) {
         </div>
 
         {isShow && (
-          <div ref={setPopperElement} style={{ ...poperStyle.popper, zIndex: 1 }} {...attributes.popper}>
+          <div ref={setPopperElement} style={{ ...poperStyle.popper, zIndex: 100 }} {...attributes.popper}>
             {userInfoBox}
           </div>
         )}
@@ -347,7 +347,7 @@ function avatar(props) {
       </div>
 
       {isShow && (
-        <div ref={setPopperElement} style={{ ...poperStyle.popper, zIndex: 1 }} {...attributes.popper}>
+        <div ref={setPopperElement} style={{ ...poperStyle.popper, zIndex: 100 }} {...attributes.popper}>
           {userInfoBox}
         </div>
       )}
