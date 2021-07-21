@@ -29,6 +29,8 @@ class SearchPCPage extends React.Component {
     this.treadingTopicRef = React.createRef();
     this.activeUsersRef = React.createRef();
     this.hotTopicRef = React.createRef();
+
+    this.isClick = false
   }
 
   redirectToSearchResultPost = () => {
@@ -89,7 +91,7 @@ class SearchPCPage extends React.Component {
   }
 
   itemClick = (index) => {
-    const { hasTopics, hasUsers, hasThreads, isShowAll } = this.props.search.dataIndexStatus
+    const { hasTopics = false, hasUsers = false, hasThreads = false, isShowAll = true } = this.props.search.dataIndexStatus || {}
 
     const disableClickTopic = !hasTopics && !isShowAll && index === 0
     const disableClickUser = !hasUsers && !isShowAll && index === 1
@@ -121,23 +123,25 @@ class SearchPCPage extends React.Component {
     if (stepIndex !== index) {
       this.setState({position: scrollTo});
       // this.setState({stepIndex: index});
+      this.isClick = true
       this.props.dispatch('update-step-index', index)
     }
   }
 
   handleScroll = ({ scrollTop = 0 } = {}) => {
-    if (isNaN(scrollTop)) {
+    if (isNaN(scrollTop) || this.isClick) {
+      this.isClick = false
       return
     }
 
-    const { topicHeight, userHeight, totalHeight } = this.getDivHeight()
+    const { topicHeight, userHeight, threadHeight, totalHeight } = this.getDivHeight()
 
     let stepIndex = 0
-    if (scrollTop < topicHeight + 12) {
+    if (topicHeight !== 0 && scrollTop < topicHeight + 12) {
       stepIndex = 0
-    } else if (scrollTop < topicHeight + userHeight + 12) {
+    } else if (userHeight !== 0 && scrollTop < topicHeight + userHeight + 12) {
       stepIndex = 1
-    } else if (scrollTop < totalHeight + 12) {
+    } else if (threadHeight !== 0 && scrollTop < totalHeight + 12) {
       stepIndex = 2
     }
 

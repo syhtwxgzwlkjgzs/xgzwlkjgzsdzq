@@ -105,7 +105,7 @@ class Index extends React.Component {
     return (
       <ViewAdapter
         h5={<IndexH5Page dispatch={this.dispatch} />}
-        pc={ <IndexPCPage dispatch={this.dispatch} stepIndex={this.state.stepIndex}  />}
+        pc={ <IndexPCPage dispatch={this.dispatch} stepIndex={this.state.stepIndex} />}
         title='发现'
       />
     );
