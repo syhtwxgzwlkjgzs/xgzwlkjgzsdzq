@@ -16,8 +16,7 @@
     box-sizing: border-box;
     padding: rem(16) rem(24) rem(24);
     width: rem(423);
-    min-height: rem(245);
-    height: fit-content;
+    min-height: rem(193);
     @include media('s-pc') {
       width: rem(320);
     }
