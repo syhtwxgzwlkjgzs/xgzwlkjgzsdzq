@@ -7,7 +7,7 @@ import Taro from '@tarojs/taro';
 import { observer, inject } from 'mobx-react';
 import { View } from '@tarojs/components';
 import AudioRecord from '@discuzq/design/dist/components/audio-record/index';
-import AudioPlayer from '@discuzq/design/dist/components/audio-player/index';
+import Audio from '@discuzq/design/dist/components/audio/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import { Units } from '@components/common';
 import styles from './index.module.scss';
@@ -226,7 +226,7 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
   // 录音音频
   const audioPlayer = (audio?.mediaUrl) && (
     <View className={styles['audio-container']}>
-      <AudioPlayer src={audio.mediaUrl} onDelete={() => { setPostData({ audio: {} }); }} />
+      <Audio src={audio.mediaUrl} onDelete={() => { setPostData({ audio: {} }); }} />
     </View>
   );
 

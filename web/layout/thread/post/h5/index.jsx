@@ -11,7 +11,7 @@ import ImageUpload from '@components/thread-post/image-upload';
 import { defaultOperation } from '@common/constants/const';
 import FileUpload from '@components/thread-post/file-upload';
 import { THREAD_TYPE } from '@common/constants/thread-post';
-import { AudioPlayer, AudioRecord, Icon, Toast } from '@discuzq/design';
+import { Audio, AudioRecord, Icon, Toast } from '@discuzq/design';
 import ClassifyPopup from '@components/thread-post/classify-popup';
 import ProductSelect from '@components/thread-post/product-select';
 import Product from '@components/thread-post/product';
@@ -306,7 +306,8 @@ class ThreadCreate extends React.Component {
           {/* 语音组件 */}
           {(Boolean(postData.audio.mediaUrl)) && (
             <div className={`${styles['audio-record']} ${styles['audio-record-display']}`} onClick={e => e.stopPropagation()}>
-              <AudioPlayer fileName='录音' src={postData.audio.mediaUrl} onDelete={() => this.props.setPostData({ audio: {} })} />
+              <Audio src={postData.audio.mediaUrl} />
+              <Icon className={styles.delete} name="DeleteOutlined" onClick={() => this.props.setPostData({ audio: {} })} />
             </div>
           )}
 

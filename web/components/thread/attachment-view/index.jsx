@@ -5,10 +5,9 @@ import { extensionList, isPromise, noop } from '../utils';
 import { throttle } from '@common/utils/throttle-debounce.js';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import isWeiXin from '@common/utils/is-weixin';
-import { AUDIO_FORMAT, FILE_PREVIEW_FORMAT } from '@common/constants/thread-post';
+import { FILE_PREVIEW_FORMAT } from '@common/constants/thread-post';
 import classNames from 'classnames';
 import FilePreview from './../file-preview';
-import { AudioPlayer } from '@discuzq/design';
 
 import styles from './index.module.scss';
 
@@ -152,13 +151,6 @@ const Index = ({
     return '/dzq-img/file-outlined.png';
   }
 
-  // 音频文件判断
-  const isAudioPlayable = (file) => {
-    return AUDIO_FORMAT.includes(file?.extension?.toUpperCase());
-  };
-
-  const onAudioPlay = file => {
-  };
 
   // 文件是否可预览
   const isAttachPreviewable = (file) => {
@@ -176,19 +168,7 @@ const Index = ({
   };
 
   const Normal = ({ item, index, type }) => {
-    if (isAudioPlayable(item)) {
-      const { url, fileName } = item;
-      const fileSize = handleFileSize(parseFloat(item.fileSize || 0));
-
-      return (
-        <div className={styles.audioPlayer}>
-          <AudioPlayer src={url} fileName={fileName} fileSize={fileSize} onDownload={throttle(() => onDownload(item, index), 1000)} onLink={throttle(() => onLinkShare(item), 1000)} />
-        </div>
-      );
-    }
-
     const iconLink = getIcon(type);
-
     return (
       <div className={styles.container} key={index} onClick={onClick} >
         <div className={styles.wrapper}>
@@ -203,9 +183,6 @@ const Index = ({
           <div className={styles.right}>
             {
               isAttachPreviewable(item) ? <span onClick={throttle(() => onAttachPreview(item), 1000)}>预览</span> : <></>
-            }
-            {
-              isAudioPlayable(item) ? <span onClick={throttle(() => onAudioPlay(item), 1000)} className={styles.playIcon}><Icon name="PlayOutlined" size={12} /></span> : <></>
             }
             <span onClick={throttle(() => onLinkShare(item), 1000)}>链接</span>
             <div>
