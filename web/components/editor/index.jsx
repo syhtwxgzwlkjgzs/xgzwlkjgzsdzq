@@ -366,8 +366,7 @@ export default function DVditor(props) {
                 return;
               }
 
-
-              if (file.size > (supportMaxSize * 1024)) {
+              if (file.size > (supportMaxSize * 1024 * 1024)) {
                 Toast.error({
                   content: `仅支持上传小于${supportMaxSize}MB的图片，请重新选择`,
                   duration: 3000,
