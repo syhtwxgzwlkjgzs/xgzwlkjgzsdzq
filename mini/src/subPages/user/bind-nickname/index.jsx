@@ -54,8 +54,6 @@ class BindNicknameH5Page extends React.Component {
               });
               return;
             }
-            LoginHelper.restore();
-            return;
           }
 
           if (needToBindPhone) {
