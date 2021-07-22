@@ -89,9 +89,14 @@ class MiniAuth extends React.Component {
       };
     } catch (error) {
       // 补充昵称
-      if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_USERNAME.Code) {
+      if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_USERNAME.Code || e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_ALL_INFO.Code) {
         const uid = get(error, 'uid', '');
         uid && this.props.user.updateUserInfo(uid);
+
+        if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_ALL_INFO.Code) {
+          this.props.commonLogin.needToCompleteExtraInfo = true;
+        }
+
         Router.redirect({ url: '/subPages/user/bind-nickname/index' });
         return;
       }
