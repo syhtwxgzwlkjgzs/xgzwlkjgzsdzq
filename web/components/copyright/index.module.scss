@@ -1,35 +1,28 @@
 
 @import '@common/styles/index.scss';
 .container {
-  margin-top: rem($margin-5n);
-  margin-bottom: rem($margin-5n);
+  margin-top: rem($margin-10);
+  margin-bottom: rem($margin-10);
+  font-size: $font-size-small;
+  line-height: $font-line-height-xs;
   &.center {
     text-align: center;
   }
-  &.line{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: row;
-    .text {
-      font-size: rem($font-size-label);
-      line-height: rem($font-line-height-small);
-      color: $text-color-secondary;
-      &:not(:last-child){
-        margin-right: rem(20);
-      }
-    }
-  }
   .text {
-    font-size: rem($font-size-label);
-    line-height: rem($font-line-height-small);
-    color: $text-color-secondary;
-    >a{
+    color: green;
+    > a {
       color: $text-color-secondary;
       text-decoration: unset;
       cursor: pointer;
-      &:hover{
+      &:hover {
         text-decoration: underline;
+      }
+    }
+  }
+  &.h5 {
+    .text {
+      a {
+        color: $h5-copyright-color;
       }
     }
   }
