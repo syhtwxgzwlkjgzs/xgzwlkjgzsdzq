@@ -19,6 +19,7 @@ import {
   readUsersDeny,
   wechatRebindQrCodeGen,
   getWechatRebindStatus,
+  getSignInFields,
 } from '@server';
 import { get } from '../../utils/get';
 import set from '../../utils/set';
@@ -1035,6 +1036,33 @@ class UserAction extends SiteStore {
       }
     }
   };
+
+  // 获取用户注册扩展信息
+  @action
+  getUserSigninFields = async () => {
+    let signinFieldsResp = {
+      code: 0,
+    };
+
+    try {
+      signinFieldsResp = await getSignInFields();
+    } catch (e) {
+      console.error(e);
+      throw {
+        Code: 'usr_9999',
+        Message: '网络错误',
+      };
+    }
+
+    if (signinFieldsResp.code === 0) {
+      this.userSigninFields = signinFieldsResp.data;
+    } else {
+      throw {
+        Code: signinFieldsResp.code,
+        Message: signinFieldsResp.msg,
+      };
+    }
+  }
 
   // 清空换绑二维码和interval
   @action
