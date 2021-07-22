@@ -66,6 +66,9 @@ class PayBoxStore {
   // 如果钱包支付，钱包的密码存储在这里
   @observable password = null;
 
+  // h5 微信支付回调链接
+  @observable h5RedirectLink = null;
+
   // 用户钱包信息
   @observable walletInfo = null;
 
@@ -269,6 +272,7 @@ class PayBoxStore {
 
         if (mode === PAY_MENT_MAP.WX_H5) {
           listenWXJsBridgeAndExecCallback(() => {
+            this.h5RedirectLink = get(payRes, 'data.wechatPayResult.wechatH5Link');
             onBridgeReady(get(payRes, 'data.wechatPayResult.wechatH5Link'));
           });
           return;
@@ -590,6 +594,7 @@ class PayBoxStore {
     this.walletInfo = null;
     this.wechatQRCode = null;
     this.qrCodeTimeout = false;
+    this.h5RedirectLink = null;
   }
 }
 

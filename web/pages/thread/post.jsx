@@ -522,10 +522,10 @@ class PostPage extends React.Component {
     const { audioRecordStatus } = postData;
     // 判断录音状态
     if (audioRecordStatus === 'began') {
-      Toast.info({ content: '您有录制中的录音未处理，请先上传或撤销录音', duration: 3000, });
+      Toast.info({ content: '您有录制中的录音未处理，请先上传或撤销录音', duration: 3000 });
       return false;
-    } else if (audioRecordStatus === 'completed') {
-      Toast.info({ content: '您有录制完成的录音未处理，请先上传或撤销录音', duration: 3000, });
+    } if (audioRecordStatus === 'completed') {
+      Toast.info({ content: '您有录制完成的录音未处理，请先上传或撤销录音', duration: 3000 });
       return false;
     }
 
