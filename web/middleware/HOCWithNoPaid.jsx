@@ -45,7 +45,7 @@ export default function HOCWithNoPaid(Component) {
     // 已付费用户滞留付费页处理
     handlePaidUserRedirect() {
       const { router, user } = this.props;
-      if (user?.paid && router.asPath === '/forum/partner-invite') {
+      if (user?.paid && router.pathname === '/forum/partner-invite') {
         LoginHelper.restore();
       }
     }
