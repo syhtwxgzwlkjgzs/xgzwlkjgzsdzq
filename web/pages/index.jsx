@@ -118,8 +118,8 @@ class Index extends React.Component {
         });
       } else {
         this.page = currentPage
+        return Promise.resolve()
       }
-      return Promise.resolve()
     } else if (type === 'refresh-recommend') {
       await index.getRecommends({ categoryIds });
     } else if (type === 'update-page') {// 单独更新页数
