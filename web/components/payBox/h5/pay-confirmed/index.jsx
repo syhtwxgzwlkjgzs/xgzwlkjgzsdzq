@@ -135,6 +135,7 @@ export default class PayBox extends React.Component {
             wxValidator,
             mode: PAY_MENT_MAP.WX_H5,
           });
+          this.props.payBox.visible = false;
           this.setState({
             isSubmit: false,
           });

@@ -69,6 +69,9 @@ class PayBoxStore {
   // h5 微信支付回调链接
   @observable h5RedirectLink = null;
 
+  // 确认支付成功弹窗是否可见
+  @observable h5SureDialogVisible = false;
+
   // 用户钱包信息
   @observable walletInfo = null;
 
