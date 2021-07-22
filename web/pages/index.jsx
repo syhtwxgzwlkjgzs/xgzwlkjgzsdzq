@@ -116,7 +116,9 @@ class Index extends React.Component {
           filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort },
           sequence,
         });
-      } 
+      } else {
+        this.page = currentPage
+      }
       return Promise.resolve()
     } else if (type === 'refresh-recommend') {
       await index.getRecommends({ categoryIds });
