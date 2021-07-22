@@ -243,7 +243,7 @@ export default function DVditor(props) {
       {
         _lutePath: 'https://cdn.jsdelivr.net/npm/@discuzq/vditor@1.0.22/dist/js/lute/lute.min.js',
         ...baseOptions,
-        minHeight: 44,
+        minHeight: pc ? 450 : 44,
         // 编辑器初始化值
         tab: '  ',
         value,
