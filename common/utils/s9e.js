@@ -1,7 +1,7 @@
 /* eslint-disable */
 // <p>&lt;p&gt;111&lt;/p&gt;</p>
 import getConfig from '@common/config';
-const tags = {
+export const tags = {
   topic: text => {
     if (!text) return;
     const regexp = /<span\s*id="topic"\s*value="(?<value>\w+)"\s*>(?<string>[^<]+)<\/span>/gimu;
@@ -42,7 +42,7 @@ const tags = {
   },
   emotion: text => {  // 转义表情
     if (!text) return;
-    const regexp = /:(?<value>[0-9A-Za-z]{2,20}):/gimu;
+    const regexp = /:(?<value>[^(<(.*):\w+:(.*)>)][0-9A-Za-z]{2,20}):/gimu;
     return text.replace(regexp, match => {
       return match.replace(regexp, (content, value, text) => {
        const config = getConfig() || {}
