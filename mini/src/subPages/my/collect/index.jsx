@@ -50,6 +50,7 @@ class Index extends React.Component {
       page: this.page,
     });
   };
+
   getShareData(data) {
     const { site } = this.props;
     const defalutTitle = site.webConfig?.setSite?.siteName || '';
@@ -90,6 +91,7 @@ class Index extends React.Component {
       }
     );
   }
+  
   render() {
     return (
       <Page>
