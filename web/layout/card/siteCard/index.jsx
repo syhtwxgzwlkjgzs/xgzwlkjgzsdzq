@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import calcCosImageQuality from '@common/utils/calc-cos-image-quality';
 @inject('site')
 @inject('user')
+@inject('card')
 @observer
 class SiteCard extends React.Component {
   constructor(props) {
@@ -56,7 +57,7 @@ class SiteCard extends React.Component {
     }
   }
   render() {
-    const { bgColor, style = {}, mode = '', site, user } = this.props;
+    const { bgColor, style = {}, mode = '', site, user, card } = this.props;
     const { countUsers, countThreads } = this.getSiteInfo();
     const { userInfo } = user;
     const siteData = site.webConfig?.setSite || '';
@@ -101,6 +102,7 @@ class SiteCard extends React.Component {
                   className={styles.logo}
                   mode="aspectFit"
                   src={this.getLogo()}
+                  onLoad={card.setImgReady}
                 />
             </div>
             <ul className={styles.siteInfo}>
