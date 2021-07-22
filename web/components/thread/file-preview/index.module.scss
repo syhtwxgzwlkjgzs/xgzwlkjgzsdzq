@@ -54,12 +54,16 @@
         height: calc(100% - 42px);
       }
     }
+    .dzq-popup__overlay {
+      background-color: $white;
+    }
   }
 }
+
 .errMsg {
   height: 60%;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: $disabled-color;
+  font-size: $font-size-small;
 }
