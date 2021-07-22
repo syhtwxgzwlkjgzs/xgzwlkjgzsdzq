@@ -24,6 +24,7 @@ export default function DVditor(props) {
     onCountChange = () => { },
     hintCustom = () => { },
     hintHide = () => { },
+    site = {},
   } = props;
   const vditorId = 'dzq-vditor';
   let timeoutId = null;
@@ -331,13 +332,43 @@ export default function DVditor(props) {
           accept: 'image/*',
           handler: async (files) => {
 
+            const { webConfig: { other, setAttach } } = site;
+            const { canInsertThreadImage } = other;
+            const { supportImgExt, supportMaxSize } = setAttach;
+
+            if (!canInsertThreadImage) {
+              Toast.error({
+                content: '您没有上传图片的权限',
+                duration: 3000,
+              });
+              return;
+            }
+
             // 检查文件类型，含有非图片文件则退出上传并提示用户
             for (let i = 0; i < files.length; i++) {
               const file = files[i];
+              const type = file.type;
 
-              if (!file.type.includes('image')) {
+              if (!type.includes('image')) {
                 Toast.error({
                   content: '暂不支持拖拽/复制上传非图片文件',
+                  duration: 3000,
+                });
+                return;
+              }
+
+              const types = supportImgExt.split(',');
+              if (!types.includes(type.substr(6))) {
+                Toast.error({
+                  content: `仅支持上传格式为${supportImgExt}的图片，请重新选择`,
+                  duration: 3000,
+                });
+                return;
+              }
+
+              if (file.size > (supportMaxSize * 1024 * 1024)) {
+                Toast.error({
+                  content: `仅支持上传小于${supportMaxSize}MB的图片，请重新选择`,
                   duration: 3000,
                 });
                 return;
@@ -358,6 +389,10 @@ export default function DVditor(props) {
                 return;
               }
             }
+
+
+
+
 
             // 执行上传
             const toastInstance = Toast.loading({
