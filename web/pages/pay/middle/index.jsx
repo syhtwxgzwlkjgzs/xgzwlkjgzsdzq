@@ -1,10 +1,11 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import getQueryString from '@common/utils/get-query-string';
 
 @inject('payBox')
 @observer
-export default class PayMiddlePage extends React.Component {
+class PayMiddlePage extends React.Component {
   componentDidMount = async () => {
     const link = getQueryString('link');
 
@@ -23,3 +24,5 @@ export default class PayMiddlePage extends React.Component {
     return <div>正在拉起微信支付...</div>;
   }
 }
+
+export default HOCFetchSiteData(PayMiddlePage);
