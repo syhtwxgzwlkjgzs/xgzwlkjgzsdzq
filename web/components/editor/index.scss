@@ -152,6 +152,12 @@
     img[alt$=":dzqemoji"] {
       width: 30px;
     }
+
+    // img[alt^="attachmentId-"] {
+    //   width: 50%;
+    //   margin: 5px;
+    //   display: block;
+    // }
   }
 
   .vditor-ir {
