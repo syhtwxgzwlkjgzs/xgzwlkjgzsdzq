@@ -1045,6 +1045,16 @@ class UserAction extends SiteStore {
       data: [],
     };
 
+    const safeParse = (value) => {
+      try {
+        return JSON.parse(value);
+      } catch (e) {
+        console.error(e);
+        console.error('解析JSON错误', value);
+        return value;
+      }
+    };
+
     try {
       signinFieldsResp = await getSignInFields();
     } catch (e) {
@@ -1060,7 +1070,7 @@ class UserAction extends SiteStore {
         if (!item.fieldsExt) {
           item.fieldsExt = '';
         } else {
-          item.fieldsExt = JSON.parse(item.fieldsExt);
+          item.fieldsExt = safeParse(item.fieldsExt);
         }
         return item;
       });;
