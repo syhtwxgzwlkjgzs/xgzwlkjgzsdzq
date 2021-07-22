@@ -1046,11 +1046,7 @@ class UserAction extends SiteStore {
     };
 
     try {
-      const signinFieldsRespSource = await getSignInFields();
-      signinFieldsResp = signinFieldsRespSource.data.map((item) => {
-        item.fieldsExt = JSON.parse(item.fieldsExt);
-        return item;
-      });
+      signinFieldsResp = await getSignInFields();
     } catch (e) {
       console.error(e);
       throw {
@@ -1060,7 +1056,10 @@ class UserAction extends SiteStore {
     }
 
     if (signinFieldsResp.code === 0) {
-      this.userSigninFields = signinFieldsResp.data;
+      this.userSigninFields = signinFieldsResp.data.map((item) => {
+        item.fieldsExt = JSON.parse(item.fieldsExt);
+        return item;
+      });;
     } else {
       throw {
         Code: signinFieldsResp.code,
