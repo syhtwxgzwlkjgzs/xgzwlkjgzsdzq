@@ -17,6 +17,7 @@ import { tencentVodUpload } from '@common/utils/tencent-vod';
 import { plus } from '@common/utils/calculate';
 import { defaultOperation } from '@common/constants/const';
 import ViewAdapter from '@components/view-adapter';
+import { attachmentUploadMultiple } from '@common/utils/attachment-upload';
 
 @inject('site')
 @inject('threadPost')
@@ -641,6 +642,41 @@ class PostPage extends React.Component {
 
   async createThread(isDraft) {
     const { threadPost, thread } = this.props;
+
+    // 图文混排：第三方图片转存
+    let contentText = threadPost.postData.contentText;
+    const images = contentText.match(/<img.*?\/>/g)?.filter(image => !image.match('alt="attachmentId-'));
+    if (images) {
+      const fileurls = images.map(img => {
+        const src = img.match(/\"(.*?)\"/);
+        if (src) return src[1];
+        return false;
+      });
+
+      const toastInstance = Toast.loading({
+        content: `图片转存中...`,
+        hasMask: true,
+        duration: 0,
+      });
+      const res = await attachmentUploadMultiple(fileurls);
+      res.forEach((ret, index) => {
+        const { code, data = {} } = ret;
+        if (code === 0) {
+          const { url, id } = data;
+          contentText = contentText.replace(images[index], `<img src=\"${url}\" alt=\"attachmentId-${id}\" />`);
+        }
+      });
+      threadPost.setPostData({ contentText });
+      toastInstance.destroy();
+
+      await new Promise(resolve => {
+        setTimeout(() => {
+          resolve();
+        }, 100);
+      });
+    }
+
+    // 提交帖子数据
     let ret = {};
     this.toastInstance = Toast.loading({ content: '发布中...', hasMask: true });
     if (threadPost.postData.threadId) ret = await threadPost.updateThread(threadPost.postData.threadId);

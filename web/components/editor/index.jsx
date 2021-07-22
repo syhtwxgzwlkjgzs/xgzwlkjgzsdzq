@@ -13,7 +13,7 @@ import './index.scss';
 import '@discuzq/vditor/src/assets/scss/index.scss';
 import { Toast } from '@discuzq/design';
 import browser, { constants } from '@common/utils/browser';
-import attachmentUpload from '@common/utils/attachment-upload';
+import { attachmentUploadMultiple } from '@common/utils/attachment-upload';
 
 export default function DVditor(props) {
   const { pc, emoji = {}, atList = [], topic, value = '',
@@ -329,10 +329,11 @@ export default function DVditor(props) {
               hasMask: true,
               duration: 0,
             });
-            const res = await attachmentUpload(files);
+            const res = await attachmentUploadMultiple(files);
             res.forEach(ret => {
-              const { code, data: { url, id } } = ret;
+              const { code, data = {} } = ret;
               if (code === 0) {
+                const { url, id } = data;
                 html2mdInserValue(`<img src="${url}" alt="attachmentId-${id}" />`);
               }
             });

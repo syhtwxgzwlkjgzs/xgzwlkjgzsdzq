@@ -1,21 +1,35 @@
 import { createAttachment } from '@common/server';
 import { fixImageOrientation } from '@common/utils/exif';
 
-const attachmentUpload = async (files) => {
-  const uploadPromises = [];
 
-  for (let i = 0; i < files.length; i++) {
-    const fileImg = await fixImageOrientation(files[i]);
-    const formData = new FormData();
+// type: 1是图片，2是文件
+
+
+// 单个文件上传
+const attachmentUploadOne = async (file, type = 1) => {
+  const formData = new FormData();
+  formData.append('type', type);
+
+  if (typeof file === 'string') {
+    formData.append('fileUrl', file);
+  } else {
+    const fileImg = await fixImageOrientation(file);
     formData.append('file', fileImg);
-    formData.append('type', 1);
-    uploadPromises.push(new Promise(async resolve => {
-      const res = await createAttachment(formData);
-      resolve(res);
-    }));
   }
 
+  return new Promise(async resolve => {
+    const res = await createAttachment(formData);
+    resolve(res);
+  })
+};
+
+// 多个文件上传
+const attachmentUploadMultiple = async (files, type = 1) => {
+  const uploadPromises = [];
+  for (let i = 0; i < files.length; i++) {
+    uploadPromises.push(attachmentUploadOne(files[i]), type);
+  }
   return Promise.all(uploadPromises);
 };
 
-export default attachmentUpload;
+export { attachmentUploadOne, attachmentUploadMultiple };
