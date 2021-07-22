@@ -1042,10 +1042,15 @@ class UserAction extends SiteStore {
   getUserSigninFields = async () => {
     let signinFieldsResp = {
       code: 0,
+      data: [],
     };
 
     try {
-      signinFieldsResp = await getSignInFields();
+      const signinFieldsRespSource = await getSignInFields();
+      signinFieldsResp = signinFieldsRespSource.data.map((item) => {
+        item.fieldsExt = JSON.parse(item.fieldsExt);
+        return item;
+      });
     } catch (e) {
       console.error(e);
       throw {
