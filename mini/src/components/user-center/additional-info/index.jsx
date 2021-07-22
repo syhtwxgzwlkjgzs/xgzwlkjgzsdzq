@@ -5,7 +5,85 @@ import { View, Text } from '@tarojs/components';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 
+@inject('user')
+@observer
 export default class UserCenterAdditionalInfo extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  async componentDidMount() {
+    try {
+      await this.props.user.getUserSigninFields();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  // 处理单选字段
+  getRadioFieldValue = (data = []) => {
+    const resultValue = [];
+    data.map((i) => {
+      if (i.checked) {
+        resultValue.push(i.value);
+      }
+    });
+    return resultValue.join('');
+  };
+
+  /**
+   * 渲染每一条item
+   * type 0 文本| 1 多行文本|2 单选|3 多选|4 图片|5 附件
+   */
+  renderAdditionalItem = (item) => {
+    const { type, fieldsExt = [] } = item;
+    if (!fieldsExt || (type === 2 && this.getRadioFieldValue(fieldsExt.options || []) === ''))
+      return <View className={`${styles.additionValue}`}>{'未填写'}</View>;
+    switch (type) {
+      case 0:
+        return <View className={`${styles.additionValue} ${styles.singleText}`}>{item.fieldsExt}</View>;
+      case 1:
+        return <View className={`${styles.additionValue} ${styles.mutipleLineText}`}>{item.fieldsExt}</View>;
+      case 2:
+        return <View className={styles.additionValue}>{this.getRadioFieldValue(fieldsExt.options || [])}</View>;
+        break;
+      case 3:
+        return (
+          <View className={styles.checkboxValue}>
+            {(fieldsExt.options || []).map((d) => (
+              <View className={styles.additionValue}>{d.value}</View>
+            ))}
+          </View>
+        );
+        break;
+      case 4:
+        return (
+          <View className={styles.cardItem}>
+            {fieldsExt?.map((d, i) => {
+              return (
+                <View
+                  key={d.id}
+                  className={`${styles.identityCard} ${i != fieldsExt.length - 1 && styles.identityCardBottom}`}
+                >
+                  <img src={d.url} className={styles.identityImg} alt={d.name || '图片'} />
+                </View>
+              );
+            })}
+          </View>
+        );
+        break;
+      case 5:
+        return (
+          <View className={styles.additionValue}>
+            <Icon size={16} color={'#8490A8'} name="PaperClipOutlined" />
+            <Text className={styles.additionFile}>附件已上传</Text>
+          </View>
+        );
+      default:
+        break;
+    }
+  };
+
   render() {
     return (
       <View className={styles.additionalWrapper}>
@@ -16,37 +94,15 @@ export default class UserCenterAdditionalInfo extends Component {
           </View>
           {/* 内容区域 */}
           <View className={styles.additionalContent}>
-            <View className={styles.additionItem}>
-              <View className={styles.additionLabel}>真实姓名</View>
-              <View className={styles.additionValue}>xxx</View>
-            </View>
-            <View className={styles.additionItem}>
-              <View className={styles.additionLabel}>性别</View>
-              <View className={styles.additionValue}>女</View>
-            </View>
-            <View className={styles.additionItem}>
-              <View className={styles.additionLabel}>注册原因</View>
-              <View className={styles.additionValue}>xxxxxxxxxxxxxxxxxxxxxxxxxxxx</View>
-            </View>
-            <View className={`${styles.additionItem} ${styles.additionIdentityCard}`}>
-              <View className={styles.additionLabel}>身份证</View>
-              <View className={styles.cardItem}>
-                {/* <img /> */}
-                <View className={styles.identityCard}>
-                  <Text className={styles.iCardText}>身份证正面照</Text>
-                </View>
-                <View className={styles.identityCard}>
-                  <Text className={styles.iCardText}>身份证正面照</Text>
-                </View>
+            {this.props.user?.userSigninFields.map((item) => (
+              <View
+                className={`${styles.additionItem} ${item.type === 4 && item.fieldsExt && styles.additionIdentityCard}`}
+                style={{ alignItems: (item.type === 1 || item.type === 3) && 'flex-start' }}
+              >
+                <View className={styles.additionLabel}>{item.name}</View>
+                {this.renderAdditionalItem(item)}
               </View>
-            </View>
-            <View className={styles.additionItem}>
-              <View className={styles.additionLabel}>体检资质证明</View>
-              <View className={styles.additionValue}>
-                <Icon size={16} color={'#8490A8'} name="PaperClipOutlined" />
-                <Text className={styles.additionFile}>附件已上传</Text>
-              </View>
-            </View>
+            ))}
           </View>
           {/* 提示 */}
           <View className={styles.additionTips}>

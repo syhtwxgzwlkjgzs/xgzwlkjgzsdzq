@@ -34,6 +34,10 @@
       color: $text-color-regular;
       height: 20px;
       line-height: 20px;
+      flex-shrink: 0;
+      margin-right: 46px;
+      max-width: rem(108);
+      @include text-ellipsis();
     }
     .additionValue {
       color: $text-color-primary;
@@ -43,11 +47,24 @@
         margin-left: $margin-1n;
       }
     }
+    .checkboxValue {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+    .singleText {
+      @include text-ellipsis();
+    }
+    .mutipleLineText {
+      word-break: break-all;
+    }
   }
   .additionIdentityCard {
     flex-direction: column;
     .additionLabel {
       align-self: flex-start;
+      max-width: 108px;
+      @include text-ellipsis();
     }
     .cardItem {
       display: flex;
@@ -69,8 +86,8 @@
         color: $text-color-regular;
       }
     }
-    .identityCard:nth-child(1) {
-      margin-right: $margin-5n;
+    .identityCardBottom {
+      margin-bottom: rem($margin-10);
     }
   }
   .additionTips {

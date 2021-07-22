@@ -915,10 +915,10 @@ class UserAction extends SiteStore {
 
       // 更新点赞
       if (
-        updateType === 'like'
-        && !typeofFn.isUndefined(updatedInfo.isLiked)
-        && !typeofFn.isNull(updatedInfo.isLiked)
-        && user
+        updateType === 'like' &&
+        !typeofFn.isUndefined(updatedInfo.isLiked) &&
+        !typeofFn.isNull(updatedInfo.isLiked) &&
+        user
       ) {
         const { isLiked, likePayCount = 0 } = updatedInfo;
         const theUserId = user.userId || user.id;
@@ -1064,7 +1064,6 @@ class UserAction extends SiteStore {
         Message: '网络错误',
       };
     }
-
     if (signinFieldsResp.code === 0) {
       this.userSigninFields = signinFieldsResp.data.map((item) => {
         if (!item.fieldsExt) {
@@ -1073,14 +1072,14 @@ class UserAction extends SiteStore {
           item.fieldsExt = safeParse(item.fieldsExt);
         }
         return item;
-      });;
+      });
     } else {
       throw {
         Code: signinFieldsResp.code,
         Message: signinFieldsResp.msg,
       };
     }
-  }
+  };
 
   // 清空换绑二维码和interval
   @action

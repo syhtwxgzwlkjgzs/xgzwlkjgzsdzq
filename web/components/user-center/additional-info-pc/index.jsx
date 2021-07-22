@@ -4,19 +4,23 @@ import { Spin, Input, Icon, Dialog, Toast, Button } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import additionalInfoData from './test.json';
 
+@inject('user')
+@observer
 export default class UserCenterAdditionalInfo extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  async componentDidMount() {
+    try {
+      await this.props.user.getUserSigninFields();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   // 处理单选字段
   getRadioFieldValue = (data = []) => {
-    const resultValue = data.map((i) => {
-      if (i.checked) {
-        return i.value || '';
-      }
-    });
-    return resultValue;
-  };
-
-  // 处理多选字段
-  getCheckboxFieldValue = (data = []) => {
     const resultValue = [];
     data.map((i) => {
       if (i.checked) {
@@ -32,29 +36,36 @@ export default class UserCenterAdditionalInfo extends Component {
    */
   renderAdditionalItem = (item) => {
     const { type, fieldsExt = [] } = item;
+    if (!fieldsExt || (type === 2 && this.getRadioFieldValue(fieldsExt.options || []) === ''))
+      return <div className={`${styles.additionValue}`}>{'未填写'}</div>;
     switch (type) {
       case 0:
         return <div className={`${styles.additionValue} ${styles.singleText}`}>{item.fieldsExt}</div>;
       case 1:
-        return <div className={styles.additionValue}>{item.fieldsExt}</div>;
+        return <div className={`${styles.additionValue} ${styles.mutipleLineText}`}>{item.fieldsExt}</div>;
       case 2:
-        return <div className={styles.additionValue}>{this.getRadioFieldValue(fieldsExt)}</div>;
+        return <div className={styles.additionValue}>{this.getRadioFieldValue(fieldsExt.options || [])}</div>;
+        break;
       case 3:
         return (
           <div className={styles.checkboxValue}>
-            {fieldsExt.map(d => <div className={styles.additionValue}>{d.value}</div>)}
-          </div>
-        );
-      case 4:
-        return (
-          <div className={styles.cardItem}>
-            {fieldsExt.map((d, i) => (
-                <div className={`${styles.identityCard} ${i != fieldsExt.length - 1 && styles.identityCardBottom}`}>
-                  <img src={d.url} className={styles.identityImg} />
-                </div>
+            {fieldsExt?.options.map((d) => (
+              <div className={styles.additionValue}>{d.value}</div>
             ))}
           </div>
         );
+        break;
+      case 4:
+        return (
+          <div className={styles.cardItem}>
+            {fieldsExt?.map((d, i) => (
+              <div className={`${styles.identityCard} ${i != fieldsExt.length - 1 && styles.identityCardBottom}`}>
+                <img src={d.url} className={styles.identityImg} alt={d.name || '图片'} />
+              </div>
+            ))}
+          </div>
+        );
+        break;
       case 5:
         return (
           <div className={styles.additionValue}>
@@ -79,14 +90,16 @@ export default class UserCenterAdditionalInfo extends Component {
             </div>
             {/* 内容区域 */}
             <div className={styles.additionalContent}>
-              {additionalInfoData.map(item => (
-                  <div
-                    className={`${styles.additionItem} ${item.type === 4 && styles.additionIdentityCard}`}
-                    style={{ alignItems: (item.type === 1 || item.type === 3) && 'flex-start' }}
-                  >
-                    <div className={styles.additionLabel}>{item.name}</div>
-                    {this.renderAdditionalItem(item)}
-                  </div>
+              {this.props.user?.userSigninFields.map((item) => (
+                <div
+                  className={`${styles.additionItem} ${
+                    item.type === 4 && item.fieldsExt && styles.additionIdentityCard
+                  }`}
+                  style={{ alignItems: (item.type === 1 || item.type === 3) && 'flex-start' }}
+                >
+                  <div className={styles.additionLabel}>{item.name}</div>
+                  {this.renderAdditionalItem(item)}
+                </div>
               ))}
             </div>
             {/* 提示 */}

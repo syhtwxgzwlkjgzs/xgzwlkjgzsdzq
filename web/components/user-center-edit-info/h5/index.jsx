@@ -195,7 +195,7 @@ class index extends Component {
             </div>
           </div>
           {IS_WECHAT_ACCESSABLE && (
-            <div className={styles.userCenterEditItem} style={{ border: 'none' }}>
+            <div className={styles.userCenterEditItem}>
               <div className={styles.userCenterEditLabel}>
                 <label>微信</label>
                 <div className={styles.userCenterEditWeChat}>

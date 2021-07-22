@@ -304,7 +304,7 @@ class index extends Component {
 
   saveInputEditor = (name) => {
     const { editorConfig } = this.state;
-    const targetConfig = editorConfig.filter(item => item.name === name);
+    const targetConfig = editorConfig.filter((item) => item.name === name);
     if (targetConfig.length) {
       targetConfig[0].isConfirm = true;
       this.setState({
@@ -315,7 +315,7 @@ class index extends Component {
 
   cancelInputConfirmEditor = (name) => {
     const { editorConfig } = this.state;
-    const targetConfig = editorConfig.filter(item => item.name === name);
+    const targetConfig = editorConfig.filter((item) => item.name === name);
     if (targetConfig.length) {
       targetConfig[0].isConfirm = false;
       this.setState({
@@ -326,7 +326,7 @@ class index extends Component {
 
   openInputEditor(name) {
     const { editorConfig } = this.state;
-    const targetConfig = editorConfig.filter(item => item.name === name);
+    const targetConfig = editorConfig.filter((item) => item.name === name);
     if (targetConfig.length) {
       targetConfig[0].display = 'edit';
       this.setState({
@@ -337,7 +337,7 @@ class index extends Component {
 
   closeInputEditor(name) {
     const { editorConfig } = this.state;
-    const targetConfig = editorConfig.filter(item => item.name === name);
+    const targetConfig = editorConfig.filter((item) => item.name === name);
     if (targetConfig.length) {
       targetConfig[0].display = 'show';
       targetConfig[0].isConfirm = false;
@@ -446,14 +446,16 @@ class index extends Component {
               });
             }}
           /> */}
-          <UserCenterAdditionalInfo
-            onClose={() => {
-              this.setState({
-                additionalUserInfoVisible: false,
-              });
-            }}
-            visible={this.state.additionalUserInfoVisible}
-          />
+          {this.state.additionalUserInfoVisible && (
+            <UserCenterAdditionalInfo
+              onClose={() => {
+                this.setState({
+                  additionalUserInfoVisible: false,
+                });
+              }}
+              visible={this.state.additionalUserInfoVisible}
+            />
+          )}
         </>
       </div>
     );

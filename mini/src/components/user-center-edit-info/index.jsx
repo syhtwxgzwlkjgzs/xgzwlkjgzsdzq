@@ -206,7 +206,7 @@ class index extends Component {
             </View>
           </View>
           {IS_WECHAT_ACCESSABLE && (
-            <View className={styles.userCenterEditItem} style={{ border: 'none' }}>
+            <View className={styles.userCenterEditItem}>
               <View className={styles.userCenterEditLabel}>
                 <Text className={styles.userLabelName}>微信</Text>
                 <View className={styles.userCenterEditWeChat}>

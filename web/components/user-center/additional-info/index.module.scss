@@ -33,20 +33,37 @@
       color: $text-color-regular;
       height: rem(20);
       line-height: rem(20);
+      flex-shrink: 0;
+      margin-right: rem(46);
+      max-width: rem(108);
+      @include text-ellipsis();
     }
     .additionValue {
       color: $text-color-primary;
-      height: rem(20);
+      min-height: rem(20);
       line-height: rem(20);
       .additionFile {
         margin-left: rem($margin-1n);
       }
+    }
+    .checkboxValue {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+    .singleText {
+      @include text-ellipsis();
+    }
+    .mutipleLineText {
+      word-break: break-all;
     }
   }
   .additionIdentityCard {
     flex-direction: column;
     .additionLabel {
       align-self: flex-start;
+      max-width: rem(108);
+      @include text-ellipsis();
     }
     .cardItem {
       width: 100%;
@@ -70,7 +87,12 @@
         color: $text-color-regular;
       }
     }
-    .identityCard:nth-child(1) {
+    .identityImg {
+      width: 100%;
+      height: rem(215);
+      border-radius: rem(5);
+    }
+    .identityCardBottom {
       margin-bottom: rem($margin-10);
     }
   }
