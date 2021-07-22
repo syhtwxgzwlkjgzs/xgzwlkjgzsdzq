@@ -30,7 +30,7 @@ const Index = ({ children, card }) => {
 
   return (
     <div className={styles.contain}>
-      <div ref={post}>
+      <div className={styles.poster} ref={post}>
         {children}
         <Footer setReady={setReady}></Footer>
       </div>

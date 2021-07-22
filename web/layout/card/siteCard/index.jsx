@@ -58,6 +58,7 @@ class SiteCard extends React.Component {
   }
   render() {
     const { bgColor, style = {}, mode = '', site, user, card } = this.props;
+    card.setImgReady();
     const { countUsers, countThreads } = this.getSiteInfo();
     const { userInfo } = user;
     const siteData = site.webConfig?.setSite || '';
@@ -102,7 +103,6 @@ class SiteCard extends React.Component {
                   className={styles.logo}
                   mode="aspectFit"
                   src={this.getLogo()}
-                  onLoad={card.setImgReady}
                 />
             </div>
             <ul className={styles.siteInfo}>
