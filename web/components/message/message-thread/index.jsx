@@ -1,51 +1,164 @@
 import React from 'react'
 import { inject, observer } from 'mobx-react';
+import { withRouter } from 'next/router';
 import styles from './index.module.scss';
 
+import Card from '../message-card';
 import Notice from '../notice';
 
 @inject('site')
 @inject('message')
 @observer
 class Index extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      items: [
+        {
+          iconName: 'AtOutlined',
+          title: '@我的',
+          link: '/message?page=thread&subPage=at',
+          totalCount: 0,
+        },
+        {
+          iconName: 'DiscussOutlined',
+          title: '回复我的',
+          link: '/message?page=thread&subPage=reply',
+          totalCount: 0,
+        },
+        {
+          iconName: 'PraiseOutlined',
+          title: '点赞我的',
+          link: '/message?page=thread&subPage=like',
+          totalCount: 0,
+        },
+      ],
+      funcType: 'readThreadMsgList',
+      type: 'threadMsgList', // 账户消息类型 threadMsgList，atMsgList,replyMsgList,likeMsgList
+    }
+  }
+
   // 初始化
   async componentDidMount() {
-    this.fetchMessageData(1);
+    const { router } = this.props;
+    const { subPage } = router.query;
+    if (subPage) await this.switchTypeByQuery(subPage);
+    await this.fetchMessageData(1);
+    !subPage && this.setUnReadCount();
+  }
+
+  // 处理路由query切换
+  async componentWillReceiveProps(nextProps) {
+    if (this.props.subPage === nextProps.subPage) return;
+    await this.switchTypeByQuery(nextProps.subPage);
+    this.fetchMessageData(1)
+  }
+
+  // 转换账户信息渲染类型
+  switchTypeByQuery = async (subPage) => {
+    switch (subPage) {
+      case 'at':
+        await this.setState({
+          funcType: 'readAtMsgList',
+          type: 'atMsgList'
+        });
+        break;
+      case 'reply':
+        await this.setState({
+          funcType: 'readReplyMsgList',
+          type: 'replyMsgList'
+        });
+        break;
+      case 'like':
+        await this.setState({
+          funcType: 'readLikeMsgList',
+          type: 'likeMsgList'
+        });
+        break;
+      default:
+        await this.setState({
+          funcType: 'readThreadMsgList',
+          type: 'threadMsgList'
+        });
+    }
   }
 
   // 请求数据
   fetchMessageData(initPage = 0) {
-    const { readThreadMsgList, threadMsgList: { currentPage } } = this.props.message;
-    return readThreadMsgList(initPage || currentPage + 1);
+    const { message } = this.props;
+    const { funcType, type } = this.state;
+    const { currentPage } = message[type];
+    return message[funcType](initPage || currentPage + 1);
+  }
+
+  setUnReadCount = () => {
+    const { atUnread, replyUnread, likeUnread } = this.props.message;
+    const items = [...this.state.items];
+    items[0].totalCount = atUnread;
+    items[1].totalCount = replyUnread;
+    items[2].totalCount = likeUnread;
+    this.setState({ items });
+  }
+
+  // 处理、过滤数据
+  handleRenderList = (data = []) => {
+    const list = [];
+    data.forEach(item => {
+      list.push({
+        id: item.id,
+        isFirst: item.isFirst, // 标识消息主题来源于主题或评论
+        createdAt: item.createdAt,
+        threadId: item.threadId,
+        content: item.threadTitle || item.postContent,
+        type: item.type,
+        avatar: item.userAvatar,
+        userId: item.userId,
+        username: item.username,
+        nickname: item.nickname,
+      })
+    });
+
+    return list;
+  }
+
+  // 跳转其它帖子消息
+  toOtherMessage = (link) => {
+    this.props.router.push(link);
   }
 
   // 处理帖子消息删除
-  handleThreadDelete = (item) => {
+  handleDelete = (item) => {
     const { deleteMsg } = this.props.message;
-    deleteMsg(item.id, 'threadMsgList')
+    deleteMsg(item.id, this.state.type)
   }
 
   render() {
-    const { site: { isPC }, message: { threadMsgList }, rightContent } = this.props;
-    const { list, currentPage, totalPage, totalCount } = threadMsgList;
+    const { site: { isPC }, message, router, rightContent } = this.props;
+    const { type, items } = this.state;
+    const { subPage } = router.query;
+    const { list, currentPage, totalPage, totalCount } = message[type];
+    const renderList = this.handleRenderList(list);
+    const card = <Card type={subPage} cardItems={items} onClick={this.toOtherMessage} />;
 
     return (
       <div className={`${styles.wrapper} ${!isPC && styles.mobile}`}>
         <Notice
-          infoIdx={1}
+          infoIdx={3}
           totalCount={totalCount}
           noMore={currentPage >= totalPage}
           showHeader={!isPC}
+          // topCard={(isPC || type === 'threadMsgList') ? card : null}
+          topCard={isPC ? card : null}
           rightContent={isPC ? rightContent : null}
-          list={list}
+          list={renderList}
           type='thread'
           onPullDown={() => this.fetchMessageData(1)}
           onScrollBottom={() => this.fetchMessageData()}
-          onBtnClick={this.handleThreadDelete}
+          onBtnClick={this.handleDelete}
         />
       </div>
     )
   }
 }
 
-export default Index;
+export default withRouter(Index);
