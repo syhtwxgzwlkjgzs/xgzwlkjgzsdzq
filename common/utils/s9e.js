@@ -42,7 +42,7 @@ export const tags = {
   },
   emotion: text => {  // 转义表情
     if (!text) return;
-    const regexp = /:(?<value>[0-9A-Za-z]{2,20}):/gimu;
+    const regexp = /:(?<value>[^(<(.*):\w+:(.*)>)][0-9A-Za-z]{2,20}):/gimu;
     return text.replace(regexp, match => {
       return match.replace(regexp, (content, value, text) => {
        const config = getConfig() || {}
