@@ -39,6 +39,9 @@
       display: flex;
       justify-content: flex-end;
       align-items: center;
+      & > * {
+        cursor: pointer;
+      }
       & > * + * {
         margin-left: rem($padding-4n);
       }
