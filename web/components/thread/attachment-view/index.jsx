@@ -119,6 +119,21 @@ const Index = ({
     }
   };
 
+  // 文件是否可预览
+  const isAttachPreviewable = (file) => {
+    return FILE_PREVIEW_FORMAT.includes(file?.extension?.toUpperCase())
+  };
+
+  // 附件预览
+  const [previewFile, setPreviewFile] = useState(null);
+  const onAttachPreview = async (file) => {
+    if (!isAttachPreviewable(file)) {
+      return;
+    }
+
+    setPreviewFile(file);
+  };
+
   const Normal = ({ item, index, type }) => {
     return (
       <div className={styles.container} key={index} onClick={onClick} >
