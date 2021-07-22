@@ -10,23 +10,21 @@ const Index = ({ children, card }) => {
   const [url, setUrl] = useState('');
   const [ready, setReady] = useState(false);
   const post = useRef(null);
-  const { isReady } = card;
-
+  const { imgReady } = card;
   useEffect(() => {
     document.body.className = '';
   }, []);
-
   useEffect(() => {
-    if (ready && isReady) {
+    if (ready && imgReady) {
       generateImageUrlByHtml(post.current).then((res) => {
         setUrl(res);
       });
     }
-  }, [ready, isReady]);
+  }, [ready, imgReady]);
   const saveImg = () => {
     savePic(url);
   };
-  if (!ready || !isReady) {
+  if (!ready || !imgReady) {
     Toast.loading({ content: '正在绘制...' });
   }
 
@@ -36,7 +34,7 @@ const Index = ({ children, card }) => {
         {children}
         <Footer setReady={setReady}></Footer>
       </div>
-      {ready && isReady ? (
+      {ready && imgReady ? (
         <div className={styles.imgbox}>
           <img className={styles.centImage} src={url} />
         </div>

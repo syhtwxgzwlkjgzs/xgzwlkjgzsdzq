@@ -9,7 +9,7 @@ import Card from '../index';
 
 const ThreadCard = inject('user', 'card')(observer((props) => {
   const { card: threadStore } = props;
-  const { isReady } = threadStore;
+  const { isReady, imgReadyLength, imgReady } = threadStore;
   let { text, indexes } = threadStore?.threadData?.content || {};
   const { parentCategoryName, categoryName } = threadStore?.threadData || {};
   let title = threadStore?.threadData?.title;
@@ -33,10 +33,17 @@ const ThreadCard = inject('user', 'card')(observer((props) => {
     isEmpty = true;
   }
   useEffect(() => {
-    if (content?.current?.clientHeight >= 1900) {
+    if (!parseContent?.IMAGE) {
+      threadStore.setImgReady();
+    }
+    if (imgReadyLength === parseContent?.IMAGE?.length) {
+      threadStore.setImgReady();
+      threadStore.clearImgReadyLength();
+    }
+    if (imgReady && content?.current?.scrollHeight >= 1900) {
       setOverMaxHeight(true);
     }
-  }, [content?.current?.clientHeight, isReady]);
+  });
   // 处理匿名情况
   if (isAnonymous) {
     nickname = '匿名用户';

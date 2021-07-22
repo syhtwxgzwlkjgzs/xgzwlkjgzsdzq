@@ -32,6 +32,18 @@ class ThreadAction extends ThreadStore {
   setReady() {
     this.isReady = true;
   }
+  @action
+  setImgReady() {
+    this.imgReady = true;
+  }
+  @action
+  setImgReadyLength() {
+    this.imgReadyLength = this.imgReadyLength + 1;
+  }
+  @action
+  clearImgReadyLength() {
+    this.imgReadyLength = 0;
+  }
 }
 
 export default ThreadAction;
