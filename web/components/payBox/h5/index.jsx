@@ -4,6 +4,7 @@ import { Popup } from '@discuzq/design';
 import { STEP_MAP } from '../../../../common/constants/payBoxStoreConstants';
 import AmountRecognized from './amount-recognized';
 import PayConfirmed from './pay-confirmed';
+import PayResultDialog from './pay-result-dialog';
 import PayPwd from './payPwd';
 import styles from './index.module.scss';
 
@@ -30,6 +31,7 @@ export default class index extends Component {
           {step === STEP_MAP.PAYWAY && <PayConfirmed />}
         </Popup>
         {this.props.payBox.visible && step === STEP_MAP.WALLET_PASSWORD && <PayPwd />}
+        <PayResultDialog />
       </>
     );
   }
