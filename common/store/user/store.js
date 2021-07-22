@@ -50,7 +50,7 @@ class UserStore {
   @observable rebindQRCode = null;
 
   // 用户注册扩展信息
-  @observable userSigninFields = {};
+  @observable userSigninFields = [];
 
   // 检索的目标用户，非自己
   @observable targetUser = null;
