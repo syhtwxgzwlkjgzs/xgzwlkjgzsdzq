@@ -41,12 +41,18 @@ export default function DVditor(props) {
     }
   };
 
-  const html2mdInserValue = (text) => {
+  const html2mdInserValue = (text, isImage) => {
     try {
       if (!vditor && !window.vditorInstance) return;
       const editorInstance = vditor || window.vditorInstance;
-      const md = editorInstance.html2md && editorInstance.html2md(text);
-      editorInstance.insertValue && editorInstance.insertValue(md.substr(0, md.length - 1));
+      let md = editorInstance.html2md && editorInstance.html2md(text);
+      md = md.substr(0, md.length - 1);
+
+      if (isImage) {
+        md = `<p>${md}</p>`
+      }
+
+      editorInstance.insertValue && editorInstance.insertValue(md);
     } catch (error) {
       console.error('html2mdInserValue', error);
     }
@@ -324,6 +330,36 @@ export default function DVditor(props) {
           url: 'upload',
           accept: 'image/*',
           handler: async (files) => {
+
+            // 检查文件类型，含有非图片文件则退出上传并提示用户
+            for (let i = 0; i < files.length; i++) {
+              const file = files[i];
+
+              if (!file.type.includes('image')) {
+                Toast.error({
+                  content: '暂不支持拖拽/复制上传非图片文件',
+                  duration: 3000,
+                });
+                return;
+              }
+            }
+
+            // 检查文件数量，超出max数量则退出上传并提示用户
+            if (window.vditorInstance) {
+              const text = window.vditorInstance.getHTML();
+              const images = text.match(/<img.*?\/>/g);
+
+              const max = 100;
+              if (images && (images.length + files.length) > max) {
+                Toast.error({
+                  content: `图文混排最多支持插入${max}张图片，现在还可以插入${max - images.length}张`,
+                  duration: 3000,
+                });
+                return;
+              }
+            }
+
+            // 执行上传
             const toastInstance = Toast.loading({
               content: `图片上传中...`,
               hasMask: true,
@@ -334,7 +370,7 @@ export default function DVditor(props) {
               const { code, data = {} } = ret;
               if (code === 0) {
                 const { url, id } = data;
-                html2mdInserValue(`<img src="${url}" alt="attachmentId-${id}" />`);
+                html2mdInserValue(`<img src="${url}" alt="attachmentId-${id}" />`, true);
               }
             });
             toastInstance.destroy();
