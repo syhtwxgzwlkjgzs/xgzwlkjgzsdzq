@@ -328,7 +328,7 @@ export default function DVditor(props) {
             res.forEach(ret => {
               const { code, data: { url, id } } = ret;
               if (code === 0) {
-                html2mdInserValue(`<p style="padding: 10px;"><img src="${url}" alt="图片" attachmentId="${id}" tag="text-img" /></p>`);
+                html2mdInserValue(`<img src="${url}" alt="attachmentId-${id}" />`);
               }
             });
             toastInstance.destroy();
