@@ -1057,7 +1057,11 @@ class UserAction extends SiteStore {
 
     if (signinFieldsResp.code === 0) {
       this.userSigninFields = signinFieldsResp.data.map((item) => {
-        item.fieldsExt = JSON.parse(item.fieldsExt);
+        if (!item.fieldsExt) {
+          item.fieldsExt = '';
+        } else {
+          item.fieldsExt = JSON.parse(item.fieldsExt);
+        }
         return item;
       });;
     } else {
