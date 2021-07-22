@@ -47,9 +47,10 @@ function avatar(props) {
   const [following, changeFollowStatus] = useState(false);
   const [blocking, changeBlockStatus] = useState(false);
   const [isSameWithMe, changeIsSameWithMe] = useState(false);
-
+  let timeout;
   const onMouseEnterHandler = useCallback(async () => {
     if (!isShowUserInfo || !userId) return;
+    timeout && clearTimeout(timeout);
     changeIsShow(true);
 
     if (!userInfo || userInfo === 'padding') {
@@ -61,8 +62,10 @@ function avatar(props) {
 
   const onMouseLeaveHandler = useCallback(() => {
     if (!isShowUserInfo || !userId) return;
-    changeIsShow(false);
-    changeUserInfo('padding');
+    timeout = setTimeout(() => {
+      changeIsShow(false);
+      changeUserInfo('padding');
+    }, 200);
   });
 
   const followHandler = useCallback(
@@ -316,7 +319,7 @@ function avatar(props) {
 
   if (currAvatarImage && currAvatarImage !== '') {
     return (
-      <div onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
+      <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
         <div onClick={clickAvatar} ref={setReferenceElement}>
           <Avatar className={className} circle={circle} image={currAvatarImage} size={size}></Avatar>
           {userTypeIcon && (
@@ -336,7 +339,7 @@ function avatar(props) {
   }
 
   return (
-    <div onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
+    <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
       <div onClick={clickAvatar} ref={setReferenceElement}>
         <Avatar className={className} circle={circle} text={userName} size={size} onClick={clickAvatar}></Avatar>
         {userTypeIcon && (
