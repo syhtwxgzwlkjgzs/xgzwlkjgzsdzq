@@ -38,7 +38,7 @@ class Index extends Component {
   getAvatar = (avatar) => {
     const { type, site } = this.props;
     const url = site?.webConfig?.setSite?.siteFavicon;
-    if (type === 'thread') {
+    if (type === 'account') {
       return url || '/dzq-img/default-favicon.png';
     }
     return avatar;
@@ -86,7 +86,7 @@ class Index extends Component {
   }
 
   // 帖子消息前置语
-  getAccountTips = (item) => {
+  getThreadTips = (item) => {
     switch (item.type) {
       case 'replied':
         return `回复了你的${item.isFirst ? '主题' : '评论'}`;
@@ -109,8 +109,8 @@ class Index extends Component {
     const { type, item } = this.props;
     let _content = (typeof item.content === 'string' && item.content !== 'undefined') ? item.content : '';
 
-    if (type === 'account') {
-      const tip = `<span class=\"${styles.tip}\">${this.getAccountTips(item)}</span>`;
+    if (type === 'thread') {
+      const tip = `<span class=\"${styles.tip}\">${this.getThreadTips(item)}</span>`;
       _content = tip + _content;
     }
 
@@ -154,15 +154,15 @@ class Index extends Component {
           {/* 头像 */}
           <div
             className={classNames(styles.avatar, {
-              [styles['unset-cursor']]: type === 'thread' || !item.nickname || !item.userId
+              [styles['unset-cursor']]: type === 'account' || !item.nickname || !item.userId
             })}
-            onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
+            onClick={(e) => this.toUserCenter(e, type !== 'account', item)}
           >
 
             {/* 未读消息红点 */}
             <UnreadRedDot type='avatar' unreadCount={item.unreadCount}>
               <Avatar
-                isShowUserInfo={isPC && item.nickname && type !== 'thread'}
+                isShowUserInfo={isPC && item.nickname && type !== 'account'}
                 userId={item.userId}
                 image={avatarUrl}
                 name={item.nickname}
@@ -187,14 +187,14 @@ class Index extends Component {
               <div
                 className={classNames(styles.name, {
                   [styles['single-line']]: true,
-                  [styles['unset-cursor']]: type === 'thread' || !item.nickname || !item.userId
+                  [styles['unset-cursor']]: type === 'account' || !item.nickname || !item.userId
                 })}
-                onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
+                onClick={(e) => this.toUserCenter(e, type !== 'account', item)}
               >
                 {/* 仅帖子通知没有nickname，使用title代替显示 */}
                 {item.nickname || this.filterTag(item.title) || "用户已删除"}
               </div>
-              {['chat', 'thread'].includes(type) && (
+              {['chat', 'account'].includes(type) && (
                 <div className={styles.time}>{diffDate(item.createdAt)}</div>
               )}
               {type === 'financial' && <div className={styles.amount}>+{parseFloat(item.amount).toFixed(2)}</div>}
@@ -234,7 +234,7 @@ class Index extends Component {
             </div>
 
             {/* 底部 */}
-            {['financial', 'account'].includes(type) && (
+            {['financial', 'thread'].includes(type) && (
               <div className={`${styles.bottom} ${styles.time}`}>{diffDate(item.createdAt)}</div>
             )}
           </div>
@@ -252,7 +252,7 @@ Index.propTypes = {
 };
 
 Index.defaultProps = {
-  type: 'thread',
+  type: 'account',
   item: {},
   onBtnClick: () => { },
 };
