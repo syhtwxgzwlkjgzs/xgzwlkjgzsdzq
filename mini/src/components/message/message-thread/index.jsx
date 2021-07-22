@@ -7,7 +7,7 @@ import styles from './index.module.scss';
 import Card from '../message-card/index';
 import Notice from '../notice/index';
 
-// 映射账户消息的类型和请求动作
+// 映射帖子消息的类型和请求动作
 const actionMap = {
   '': ['threadMsgList', 'readThreadMsgList'],
   'at': ['atMsgList', 'readAtMsgList'],
@@ -20,7 +20,7 @@ const Index = ({ message, subPage }) => {
   const [type, funcType] = useMemo(() => actionMap[subPage], [subPage]); // 根据路由变化，切换类型
   const { list, currentPage, totalPage } = message[type];
 
-  // 监听账户消息子类型变化，初始化请求数据
+  // 监听帖子消息子类型变化，初始化请求数据
   useEffect(() => {
     fetchMessageData(1);
   }, [type])
@@ -76,7 +76,6 @@ const Index = ({ message, subPage }) => {
     ]
   }, [atUnread, replyUnread, likeUnread]);
 
-  console.log(1111111111111111111111)
   return (
     <View className={styles.container}>
       <Notice

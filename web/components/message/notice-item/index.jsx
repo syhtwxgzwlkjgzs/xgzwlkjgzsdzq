@@ -5,7 +5,7 @@
  * 未读私信内容，在头像上展示未读信息条数，超过99条，则显示99+
  * 点击进入消息页面
  *
- * 帖子通知，原网的系统通知，
+ * 账号消息（系统通知）
  * 头像默认为Q的头像，昵称默认为“内容通知”
  * 通知类型包括：编辑、举报、指定、精华、删除、注册申请、欢迎词、角色变更
  * 左滑出现删除按钮，点击删除可删除通知内容
@@ -14,7 +14,7 @@
  * 内容区显示：用户头像、名称、金额、内容、时间（12px）
  * 注：帖子内容中默认显示标题，如果没有标题则显示内容，长度限制为90px
  *
- * 账号消息，@、点赞、回复主题、回复评论
+ * 帖子通知，@、点赞、回复主题、回复评论
  *
  */
 import React, { Component } from 'react';
@@ -34,7 +34,7 @@ import UnreadRedDot from '@components/unread-red-dot';
 @inject('site')
 @observer
 class Index extends Component {
-  // 获取头像地址,非帖子使用自己的url头像，帖子使用站点logo
+  // 获取头像地址,非账号消息使用自己的url头像，账号消息使用站点logo
   getAvatar = (avatar) => {
     const { type, site } = this.props;
     const url = site?.webConfig?.setSite?.siteFavicon;
@@ -191,7 +191,7 @@ class Index extends Component {
                 })}
                 onClick={(e) => this.toUserCenter(e, type !== 'account', item)}
               >
-                {/* 仅帖子通知没有nickname，使用title代替显示 */}
+                {/* 仅账号消息没有nickname，使用title代替显示 */}
                 {item.nickname || this.filterTag(item.title) || "用户已删除"}
               </div>
               {['chat', 'account'].includes(type) && (

@@ -21,7 +21,7 @@ import defaultFavicon from '../../../public/dzq-img/default-favicon.png';
 @inject('site')
 @observer
 class Index extends Component {
-  // 获取头像地址,非帖子使用自己的url头像，帖子使用站点logo
+  // 获取头像地址,非账户消息使用自己的url头像，账户消息使用站点logo
   getAvatar = (avatar) => {
     const { type, site } = this.props;
     const url = site?.webConfig?.setSite?.siteFavicon;

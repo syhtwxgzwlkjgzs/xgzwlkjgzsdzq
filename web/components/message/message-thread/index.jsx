@@ -34,7 +34,7 @@ class Index extends React.Component {
         },
       ],
       funcType: 'readThreadMsgList',
-      type: 'threadMsgList', // 账户消息类型 threadMsgList，atMsgList,replyMsgList,likeMsgList
+      type: 'threadMsgList',
     }
   }
 
@@ -54,7 +54,7 @@ class Index extends React.Component {
     this.fetchMessageData(1)
   }
 
-  // 转换账户信息渲染类型
+  // 转换帖子消息渲染类型
   switchTypeByQuery = async (subPage) => {
     switch (subPage) {
       case 'at':
@@ -126,7 +126,7 @@ class Index extends React.Component {
     this.props.router.push(link);
   }
 
-  // 处理帖子消息删除
+  // 处理消息删除
   handleDelete = (item) => {
     const { deleteMsg } = this.props.message;
     deleteMsg(item.id, this.state.type)
