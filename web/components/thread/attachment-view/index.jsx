@@ -5,6 +5,7 @@ import { extensionList, isPromise, noop } from '../utils';
 import { throttle } from '@common/utils/throttle-debounce.js';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import isWeiXin from '@common/utils/is-weixin';
+import getAttachmentIconLink from '@common/utils/get-attachment-icon-link';
 
 import styles from './index.module.scss';
 
@@ -114,47 +115,12 @@ const Index = ({
     }
   };
 
-  const getIcon = (type) => {
-    switch (type) {
-      case 'XLS':
-      case 'XLSX':
-        return '/dzq-img/xls-outlined.png';
-      case 'DOC':
-      case 'DOCX':
-        return '/dzq-img/doc-outlined.png';
-      case 'PPT':
-      case 'PPTX':
-        return '/dzq-img/ppt-outlined.png';
-      case 'RAR':
-      case 'ZIP':
-        return '/dzq-img/zip-outlined.png';
-      case 'PDF':
-        return '/dzq-img/pdf-outlined.png';
-      case 'TXT':
-        return '/dzq-img/text-outlined.png';
-      case 'MP4':
-        return '/dzq-img/video-outlined.png';
-      case 'M4A':
-      case 'MP3':
-        return '/dzq-img/audio-outlined.png';
-      case 'PNG':
-      case 'JPEG':
-        return '/dzq-img/audio-outlined.png';
-      case 'FORM':
-        return '/dzq-img/form-outlined.png';
-      default:
-        break;
-    }
-    return '/dzq-img/file-outlined.png';
-  }
-
   const Normal = ({ item, index, type }) => {
-    const iconLink = getIcon(type);
     return (
       <div className={styles.container} key={index} onClick={onClick} >
         <div className={styles.wrapper}>
           <div className={styles.left}>
-          <img className={styles.containerIcon} src={iconLink} />
+            <img className={styles.containerIcon} src={getAttachmentIconLink(type)}/>
             <div className={styles.containerText}>
               <span className={styles.content}>{item.fileName}</span>
               <span className={styles.size}>{handleFileSize(parseFloat(item.fileSize || 0))}</span>
@@ -176,10 +142,9 @@ const Index = ({
   };
 
   const Pay = ({ item, index, type }) => {
-    const iconLink = getIcon(type);
     return (
       <div className={`${styles.container} ${styles.containerPay}`} key={index} onClick={onPay}>
-        <img className={styles.containerIcon} src={iconLink} />
+        <img className={styles.containerIcon} src={getAttachmentIconLink(type)}/>
         <span className={styles.content}>{item.fileName}</span>
       </div>
     );
