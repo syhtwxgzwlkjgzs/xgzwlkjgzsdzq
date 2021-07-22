@@ -7,7 +7,7 @@ import additionalInfoData from './test.json';
 export default class UserCenterAdditionalInfo extends Component {
   // 处理单选字段
   getRadioFieldValue = (data = []) => {
-    let resultValue = data.map((i) => {
+    const resultValue = data.map((i) => {
       if (i.checked) {
         return i.value || '';
       }
@@ -17,7 +17,7 @@ export default class UserCenterAdditionalInfo extends Component {
 
   // 处理多选字段
   getCheckboxFieldValue = (data = []) => {
-    let resultValue = [];
+    const resultValue = [];
     data.map((i) => {
       if (i.checked) {
         resultValue.push(i.value);
@@ -35,35 +35,26 @@ export default class UserCenterAdditionalInfo extends Component {
     switch (type) {
       case 0:
         return <div className={`${styles.additionValue} ${styles.singleText}`}>{item.fieldsExt}</div>;
-        break;
       case 1:
         return <div className={styles.additionValue}>{item.fieldsExt}</div>;
-        break;
       case 2:
         return <div className={styles.additionValue}>{this.getRadioFieldValue(fieldsExt)}</div>;
-        break;
       case 3:
         return (
           <div className={styles.checkboxValue}>
-            {fieldsExt.map((d) => {
-              return <div className={styles.additionValue}>{d.value}</div>;
-            })}
+            {fieldsExt.map(d => <div className={styles.additionValue}>{d.value}</div>)}
           </div>
         );
-        break;
       case 4:
         return (
           <div className={styles.cardItem}>
-            {fieldsExt.map((d, i) => {
-              return (
+            {fieldsExt.map((d, i) => (
                 <div className={`${styles.identityCard} ${i != fieldsExt.length - 1 && styles.identityCardBottom}`}>
                   <img src={d.url} className={styles.identityImg} />
                 </div>
-              );
-            })}
+            ))}
           </div>
         );
-        break;
       case 5:
         return (
           <div className={styles.additionValue}>
@@ -71,7 +62,6 @@ export default class UserCenterAdditionalInfo extends Component {
             <span className={styles.additionFile}>附件已上传</span>
           </div>
         );
-        break;
       default:
         break;
     }
@@ -89,8 +79,7 @@ export default class UserCenterAdditionalInfo extends Component {
             </div>
             {/* 内容区域 */}
             <div className={styles.additionalContent}>
-              {additionalInfoData.map((item) => {
-                return (
+              {additionalInfoData.map(item => (
                   <div
                     className={`${styles.additionItem} ${item.type === 4 && styles.additionIdentityCard}`}
                     style={{ alignItems: (item.type === 1 || item.type === 3) && 'flex-start' }}
@@ -98,8 +87,7 @@ export default class UserCenterAdditionalInfo extends Component {
                     <div className={styles.additionLabel}>{item.name}</div>
                     {this.renderAdditionalItem(item)}
                   </div>
-                );
-              })}
+              ))}
             </div>
             {/* 提示 */}
             <p className={styles.additionTips}>
