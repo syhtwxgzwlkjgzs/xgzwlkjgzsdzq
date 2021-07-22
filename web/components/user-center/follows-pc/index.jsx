@@ -26,8 +26,21 @@ class UserCenterFollowsPc extends React.Component {
     withLimit: 5,
     className: '',
     messageMode: false,
-    style: {}
+    style: {},
   };
+
+
+  componentDidMount = () => {
+    if (this.props.getRef) {
+      this.props.getRef(this);
+    }
+  }
+
+  closePopup = () => {
+    this.setState({
+      showFollowsPopup: false,
+    });
+  }
 
   // 点击粉丝更多
   moreFollow = () => {
@@ -102,7 +115,7 @@ class UserCenterFollowsPc extends React.Component {
                     },
                   });
                 }}
-                style={this.props.messageMode ? {padding: '0 16px'} : {}}
+                style={this.props.messageMode ? { padding: '0 16px' } : {}}
                 itemStyle={{
                   paddingLeft: 0,
                   paddingRight: 0,

@@ -6,6 +6,8 @@ import { throttle } from '@common/utils/throttle-debounce.js';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import isWeiXin from '@common/utils/is-weixin';
 import getAttachmentIconLink from '@common/utils/get-attachment-icon-link';
+import { FILE_PREVIEW_FORMAT } from '@common/constants/thread-post';
+import FilePreview from './../file-preview';
 
 import styles from './index.module.scss';
 
@@ -67,7 +69,7 @@ const Index = ({
   const [downloading, setDownloading] =
         useState(Array.from({length: attachments.length}, () => false));
 
-  const onDownLoad = (item, index) => {
+  const onDownload = (item, index) => {
     updateViewCount();
     if (!isPay) {
       if(!item || !threadId) return;
@@ -103,7 +105,9 @@ const Index = ({
       const attachmentId = item.id;
       fetchDownloadUrl(threadId, attachmentId, async (url) => {
         setTimeout(() => {
-          h5Share({url: url});
+          if(!h5Share({url: url})) {
+            navigator.clipboard.writeText(url); // qq浏览器不支持异步document.execCommand('Copy')
+          }
           Toast.success({
             content: '链接复制成功',
           });
@@ -128,11 +132,14 @@ const Index = ({
           </div>
 
           <div className={styles.right}>
-            <span className={styles.span} onClick={throttle(() => onLinkShare(item), 1000)}>链接</span>
-            <div className={styles.label}>
+            {
+              isAttachPreviewable(item) ? <span onClick={throttle(() => onAttachPreview(item), 1000)}>预览</span> : <></>
+            }
+            <span onClick={throttle(() => onLinkShare(item), 1000)}>链接</span>
+            <div>
               { downloading[index] ?
                   <Spin className={styles.spinner} type="spinner" /> :
-                  <span className={styles.span} onClick={throttle(() => onDownLoad(item, index), 1000)}>下载</span>
+                  <span className={styles.span} onClick={throttle(() => onDownload(item, index), 1000)}>下载</span>
               }
             </div>
           </div>
@@ -168,6 +175,7 @@ const Index = ({
             );
           })
         }
+        { previewFile ? <FilePreview file={previewFile} onClose={() => setPreviewFile(null) } /> : <></> }
     </div>
   );
 };

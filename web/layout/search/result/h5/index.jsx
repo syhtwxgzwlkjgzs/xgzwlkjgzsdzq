@@ -78,11 +78,13 @@ class SearchResultH5Page extends React.Component {
     const { pageData: usersPageData } = searchUsers || {};
     const { pageData: threadsPageData } = searchThreads || {};
 
+    const { hasTopics, hasUsers, hasThreads, isShowAll } = this.props.search.dataSearchStatus
+
     return (
       <BaseLayout allowRefresh={false}>
         <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} searchWhileTyping/>
 
-        <SidebarPanel
+        {(isShowAll || hasUsers) && <SidebarPanel
           title="用户" 
           onShowMore={this.redirectToSearchResultUser}
           isLoading={!usersPageData}
@@ -95,9 +97,9 @@ class SearchResultH5Page extends React.Component {
           {
             usersPageData?.length && <SearchUsers data={usersPageData} onItemClick={this.onUserClick} />
           }
-        </SidebarPanel>
+        </SidebarPanel>}
 
-        <SidebarPanel
+        {(isShowAll || hasThreads) && <SidebarPanel
           title="主题" 
           onShowMore={this.redirectToSearchResultPost}
           isLoading={!threadsPageData}
@@ -111,9 +113,9 @@ class SearchResultH5Page extends React.Component {
           {
             threadsPageData?.length &&<SearchPosts data={threadsPageData.filter((_, index) => index < 3)} onItemClick={this.onPostClick} />
           }
-        </SidebarPanel>
+        </SidebarPanel>}
 
-        <SidebarPanel
+        {(isShowAll || hasTopics) && <SidebarPanel
           title="话题" 
           onShowMore={this.redirectToSearchResultTopic}
           isLoading={!topicsPageData}
@@ -126,7 +128,7 @@ class SearchResultH5Page extends React.Component {
           {
             topicsPageData?.length && <SearchTopics data={topicsPageData} onItemClick={this.onTopicClick} />
           }
-        </SidebarPanel>
+        </SidebarPanel>}
       </BaseLayout>
     );
   }

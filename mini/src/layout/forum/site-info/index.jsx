@@ -12,7 +12,7 @@ import { getSiteUpdateTime } from '@common/utils/get-site-uptade-time';
 class SiteInfo extends Component {
   render() {
     const { site, forum } = this.props;
-    const { threadTotal, updataTime } = forum;
+    const countThreads = get(site.webConfig, 'other.countThreads', '');
     const { siteIntroduction } = site;
 
     return (
@@ -40,7 +40,7 @@ class SiteInfo extends Component {
           </View>
           <View className={layout.site_status_list}>
             <View className={layout.site_status_label}>主题</View>
-            <View className={layout.site_status_item}>{numberFormat(threadTotal)}</View>
+            <View className={layout.site_status_item}>{numberFormat(countThreads)}</View>
           </View>
         </View>
       </View>

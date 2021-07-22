@@ -11,7 +11,6 @@ import getAttachmentIconLink from '@common/utils/get-attachment-icon-link';
 import { throttle } from '@common/utils/throttle-debounce.js';
 
 
-
 /**
  * 附件
  * @prop {Array} attachments 附件数组
@@ -72,7 +71,7 @@ const Index = ({
   const [downloading, setDownloading] =
         useState(Array.from({length: attachments.length}, () => false));
 
-  const onDownLoad = (item, index) => {
+  const onDownload = (item, index) => {
     updateViewCount();
     if (!isPay) {
 
@@ -171,7 +170,7 @@ const Index = ({
             <View className={styles.label}>
               { downloading[index] ?
                 <Spin className={styles.spinner} type="spinner" /> :
-                <Text onClick={throttle(() => onDownLoad(item, index), 1000)}>下载</Text>
+                <Text onClick={throttle(() => onDownload(item, index), 1000)}>下载</Text>
               }
             </View>
           </View>

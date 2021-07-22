@@ -459,8 +459,7 @@ class IndexAction extends IndexStore {
 
     // 更新帖子浏览量
     if (updateType === 'viewCount') {
-      data.viewCount = data.viewCount + 1;
-      // data.viewCount = updatedInfo.viewCount;
+      data.viewCount = updatedInfo.viewCount;
     }
 
     if (this.threads?.pageData) {

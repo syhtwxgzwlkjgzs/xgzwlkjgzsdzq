@@ -500,16 +500,17 @@ class ThreadH5Page extends React.Component {
     if (success) {
       // 更新帖子中的评论数据
       this.props.thread.updatePostCount(this.props.thread.totalCount);
-      // 更新列表store数据
-      this.props.thread.updateListStore(this.props.index, this.props.search, this.props.topic);
 
       // 是否红包帖
       const isRedPack = this.props.thread?.threadData?.displayTag?.isRedPack;
       // TODO:可以进一步细化判断条件，是否还有红包
       if (isRedPack) {
         // 评论获得红包帖，更新帖子数据
-        this.props.thread.fetchThreadDetail(id);
+        await this.props.thread.fetchThreadDetail(id);
       }
+
+      // 更新列表store数据
+      this.props.thread.updateListStore(this.props.index, this.props.search, this.props.topic);
 
       if (isApproved) {
         Toast.success({
@@ -1031,6 +1032,7 @@ class ThreadH5Page extends React.Component {
               visible={this.state.showDeletePopup}
               onClose={() => this.setState({ showDeletePopup: false })}
               onBtnClick={(type) => this.onBtnClick(type)}
+              type='thread'
             ></DeletePopup>
             {/* 举报弹层 */}
 

@@ -33,10 +33,10 @@ class index extends Component {
   }
 
   // 点击屏蔽
-  handleChangeShield = throttle((isDeny) => {
+  handleChangeShield = throttle(async (isDeny) => {
     const id = this.props.router.query?.id;
     if (isDeny) {
-      this.props.user.undenyUser(id);
+      await this.props.user.undenyUser(id);
       this.props.user.setTargetUserNotBeDenied();
       Toast.success({
         content: '解除屏蔽成功',
@@ -44,7 +44,7 @@ class index extends Component {
         duration: 2000,
       });
     } else {
-      this.props.user.denyUser(id);
+      await this.props.user.denyUser(id);
       this.props.user.setTargetUserDenied();
       Toast.success({
         content: '屏蔽成功',
@@ -299,8 +299,8 @@ class index extends Component {
             }}
             className={styles.shieldBtn}
           >
-            <Icon name="ShieldOutlined" />
-            <span>{user.isDeny ? '解除屏蔽' : '屏蔽'}</span>
+            <Icon name="ShieldOutlined" size={14} />
+            <span className={styles.shieldText}>{user.isDeny ? '解除屏蔽' : '屏蔽'}</span>
           </div>
         )}
         {user.originalAvatarUrl && this.state.isPreviewAvatar && (
