@@ -14,6 +14,7 @@ class UserCenterFansPc extends React.Component {
   static defaultProps = {
     className: '',
   };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -22,6 +23,18 @@ class UserCenterFansPc extends React.Component {
       sourcePage: 1,
       sourceTotalPage: 1,
     };
+  }
+
+  componentDidMount = () => {
+    if (this.props.getRef) {
+      this.props.getRef(this);
+    }
+  }
+
+  closePopup = () => {
+    this.setState({
+      showFansPopup: false,
+    });
   }
 
   setDataSource = (targetData) => {

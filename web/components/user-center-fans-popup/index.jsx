@@ -50,7 +50,7 @@ const Index = (props) => {
           {!id ? (
             <UserCenterFans
               styles={{
-                height: 'calc(100% - 60px)',
+                height: 'calc(100% - 80px)',
               }}
               dataSource={dataSource}
               setDataSource={setDataSource}
@@ -64,7 +64,7 @@ const Index = (props) => {
           ) : (
             <UserCenterFans
               styles={{
-                height: 'calc(100% - 60px)',
+                height: 'calc(100% - 80px)',
               }}
               userId={id}
               dataSource={dataSource}
@@ -74,7 +74,7 @@ const Index = (props) => {
               sourceTotalPage={sourceTotalPage}
               updateSourceTotalPage={updateSourceTotalPage}
               onContainerClick={onContainerClick}
-              splitElement={splitElement}           
+              splitElement={splitElement}
             />
           )}
         </div>
