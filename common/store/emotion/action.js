@@ -29,8 +29,8 @@ class IndexAction extends IndexStore {
     }
 
     async asyncGetEmoji() {
-        if (!this.emojis?.length) {
-            const emojis = JSON.parse(storage.get('DZQ_EMOJI') || `{}`);
+        if (!this.emojis?.length && this.storage) {
+            const emojis = JSON.parse(this.storage.get('DZQ_EMOJI') || `{}`);
             if (!emojis?.length) {
                 await fetchEmoji()
                 return this.emojis
