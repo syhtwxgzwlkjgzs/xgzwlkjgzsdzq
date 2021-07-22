@@ -29,6 +29,8 @@ import BaseLayoutStore from './baselayout/action';
 import WalletStore from './wallet/action';
 import VListStore from './vlist/action';
 import CardStore from './card/action';
+import EmotionStore from './emotion/action';
+
 useStaticRendering(isServer());
 
 
@@ -66,6 +68,7 @@ export default function initializeStore(initProps = {}) {
       baselayout: new BaseLayoutStore(),
       wallet: new WalletStore(),
       vlist: new VListStore(),
+      emotion: new EmotionStore(),
     };
   }
   if (store.getStore() === null) {
@@ -100,6 +103,7 @@ export default function initializeStore(initProps = {}) {
       baselayout: new BaseLayoutStore(),
       wallet: new WalletStore(),
       vlist: new VListStore(),
+      emotion: new EmotionStore(),
     });
   }
 
