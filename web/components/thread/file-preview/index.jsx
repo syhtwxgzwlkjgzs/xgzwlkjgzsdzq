@@ -20,14 +20,18 @@ export default class FilePreview extends React.Component {
     try {
       const {file} = this.props;
       if (!file?.url) {
-        throw new Error('预览失败：附件地址错误');
+        throw new Error('预览失败：文件地址错误');
       }
 
       const url = await COSDocPreviewSDK.getPreviewUrl({
         objectUrl: file.url,
       });
-      const mount = document.querySelector('#preview');
 
+      if (!url) {
+        throw new Error('预览失败：对象存储配置异常，请联系管理员')
+      }
+
+      const mount = document.querySelector('#preview');
       const preview = COSDocPreviewSDK.config({
         mount,
         mode: 'simple',
