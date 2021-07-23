@@ -110,6 +110,7 @@ export default class ReplyList extends React.Component {
 
   render() {
     const { canLike, canDelete, canHide } = this.generatePermissions(this.props.data);
+    const { groups } = this.props.data?.user;
 
     // 评论内容是否通过审核
     const isApproved = this.props?.data?.isApproved === 1;
@@ -134,15 +135,19 @@ export default class ReplyList extends React.Component {
         <View className={styles.replyListContent}>
           <View className={styles.replyListContentText}>
             <View className={styles.replyListName}>
-              <View
-                className={styles.replyListName}
-                onClick={() => {
-                  this.avatarClick(2);
-                }}
-              >
-                {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
+              <View className={styles.userInfo}>
+                <View className={styles.replyListName} onClick={() => {this.avatarClick(2)}}>
+                    {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
+                </View>
+                {!!groups?.isDisplay  && (
+                  <View className={styles.groups}>{groups?.name || groups?.groupName}</View>
+                )}
               </View>
-              {!isApproved ? <View className={styles.isApproved}>审核中</View> : <View></View>}
+                {!isApproved ? (
+                  <View className={styles.isApproved}>审核中</View>
+                ) : (
+                  <View></View>
+                )}
             </View>
             <View className={styles.replyListText}>
               {/* 回复内容 */}
