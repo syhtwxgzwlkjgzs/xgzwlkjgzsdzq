@@ -11,7 +11,6 @@ import HOCFetchSiteData from '../../../middleware/HOCFetchSiteData';
 import UserCenterEditAccountPwd from '../../user-center-edit-account-pwd-pc';
 import UserCenterEditMobile from '../../user-center-edit-mobile-pc';
 import UserCenterEditPaypwd from '../../user-center-edit-paypwd-pc';
-import WechatRebindDialog from '../../user-center/rebind-wechat';
 import UserCenterAdditionalInfo from '../../user-center/additional-info-pc/index';
 import Copyright from '@components/copyright';
 import { getClientHeight } from '@common/utils/get-client-height';
@@ -264,6 +263,16 @@ class index extends Component {
               <p className={styles.pcEditWeiName}>{this.user.wxNickname}</p>
             </div>
           ),
+          operation: () => (
+            <p
+              onClick={() => {
+                Router.push({ url: '/user/rebind' });
+              }}
+              className={styles.pcEditNicknameCallMsodify}
+            >
+              换绑
+            </p>
+          ),
           // <p
           //   onClick={() => {
           //     this.setState({
@@ -274,7 +283,7 @@ class index extends Component {
           // >
           //   换绑
           // </p>
-          operation: () => null,
+          // operation: () => null,
           inputEditor: () => null,
         },
         {
@@ -439,14 +448,6 @@ class index extends Component {
               });
             }}
           />
-          {/* <WechatRebindDialog
-            visible={this.state.wechatRebindEditorVisible}
-            onClose={() => {
-              this.setState({
-                wechatRebindEditorVisible: false,
-              });
-            }}
-          /> */}
           <UserCenterAdditionalInfo
             onClose={() => {
               this.setState({

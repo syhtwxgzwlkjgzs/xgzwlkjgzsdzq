@@ -1,7 +1,12 @@
 /* eslint-disable */
 // <p>&lt;p&gt;111&lt;/p&gt;</p>
+import getConfig from '@common/config';
+import Storage from '@common/utils/session-storage';
 
-const tags = {
+const storage = new Storage({ storageType: 'local' })
+const emojis = JSON.parse(storage.get('DZQ_EMOJI') || `{}`);
+
+export const tags = {
   topic: text => {
     if (!text) return;
     const regexp = /<span\s*id="topic"\s*value="(?<value>\w+)"\s*>(?<string>[^<]+)<\/span>/gimu;
@@ -39,7 +44,21 @@ const tags = {
         return `>`;
       });
     });
-  }
+  },
+  emotion: text => {  // 转义表情
+    if (!text) return '';
+    const regexp = /:(?<value>[0-9A-Za-z]{2,20}):/gimu;
+    return text.replace(regexp, match => {
+      return match.replace(regexp, (content, value, text) => {
+        const { code, url, isAllow } = handleEmoji(value)
+        if (isAllow) {
+          return `<img style="display:inline-block;vertical-align:top" src="${url}" alt="${code}" class="qq-emotion">`;
+        }
+
+        return value
+      });
+    });
+  },
 };
 function parse(text) {
   for (const tag in tags) {
@@ -47,6 +66,34 @@ function parse(text) {
   }
 
   return text;
+}
+
+const handleEmoji = (value) => {
+  const config = getConfig() || {}
+  const url = config.COMMON_BASE_URL || window.location.origin
+
+  if (!emojis?.length) {
+    return {
+      code: value,
+      url: `${url}/emoji/qq/${value}.gif`,
+      isAllow: true
+    }
+  }
+
+  const emoji = emojis.filter(item => item.code === `:${value}:`).map(item => {
+    return {
+      code: value,
+      url: item.url,
+      isAllow: true
+    }
+  })
+
+  if (emoji?.length) {
+    return emoji[0]
+  } else {
+    return { isAllow: false }
+  }
+  
 }
 
 export default { parse };

@@ -10,9 +10,9 @@ const Index = ({ page, subPage, dialogId, username, nickname }) => {
     case 'index':
       return <MessageIndex />;
     case 'account':
-      return <MessageAccount subPage={subPage} />;
+      return <MessageAccount />;
     case 'thread':
-      return <MessageThread />;
+      return <MessageThread subPage={subPage} />;
     case 'financial':
       return <MessageFinancial />;
     case 'chat':

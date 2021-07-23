@@ -7,6 +7,7 @@ import goToLoginPage from '@common/utils/go-to-login-page';
 import classNames from 'classnames';
 import calcCosImageQuality from '@common/utils/calc-cos-image-quality';
 import styles from './index.module.scss';
+import { usePopper } from 'react-popper';
 
 function avatar(props) {
   const {
@@ -24,12 +25,12 @@ function avatar(props) {
     userType = -1,
     unifyOnClick = null, // 付费加入，统一点击事件
     withStopPropagation = false, // 是否需要阻止冒泡 默认false不阻止
-    level = 6
+    level = 6,
   } = props;
 
   const currAvatarImage = useMemo(() => {
     if (!image || image === '') return image;
-    if ( /(http|https):\/\/.*?(gif)/.test(image) ) {
+    if (/(http|https):\/\/.*?(gif)/.test(image)) {
       return calcCosImageQuality(image, 'gif');
     } else {
       return calcCosImageQuality(image, 'png', level);
@@ -46,11 +47,10 @@ function avatar(props) {
   const [following, changeFollowStatus] = useState(false);
   const [blocking, changeBlockStatus] = useState(false);
   const [isSameWithMe, changeIsSameWithMe] = useState(false);
-  
-
-
+  let timeout;
   const onMouseEnterHandler = useCallback(async () => {
     if (!isShowUserInfo || !userId) return;
+    timeout && clearTimeout(timeout);
     changeIsShow(true);
 
     if (!userInfo || userInfo === 'padding') {
@@ -62,8 +62,10 @@ function avatar(props) {
 
   const onMouseLeaveHandler = useCallback(() => {
     if (!isShowUserInfo || !userId) return;
-    changeIsShow(false);
-    changeUserInfo('padding');
+    timeout = setTimeout(() => {
+      changeIsShow(false);
+      changeUserInfo('padding');
+    }, 200);
   });
 
   const followHandler = useCallback(
@@ -202,8 +204,8 @@ function avatar(props) {
     if (userInfo === 'padding') {
       return (
         <div className={styles.userInfoBox} style={direction === 'left' ? { right: 0 } : { left: 0 }}>
-          <div className={styles.userInfoContent}>
-            <LoadingBox style={{ minHeight: '100%' }} />
+          <div className={classNames(styles.userInfoContent, isSameWithMe ? styles.myContent : "")}>
+            <LoadingBox style={{ minHeight: '205px' }} />
           </div>
         </div>
       );
@@ -211,7 +213,7 @@ function avatar(props) {
 
     let targetAvatarImage = userInfo?.avatarUrl;
     if (targetAvatarImage && targetAvatarImage !== '') {
-      if ( /(http|https):\/\/.*?(gif)/.test(targetAvatarImage) ) {
+      if (/(http|https):\/\/.*?(gif)/.test(targetAvatarImage)) {
         targetAvatarImage = calcCosImageQuality(targetAvatarImage, 'gif');
       } else {
         targetAvatarImage = calcCosImageQuality(targetAvatarImage, 'png', 5);
@@ -223,7 +225,7 @@ function avatar(props) {
         className={`${styles.userInfoBox} ${direction}`}
         style={direction === 'left' ? { right: 0 } : { left: 0 }}
       >
-        <div className={styles.userInfoContent}>
+        <div className={classNames(styles.userInfoContent, isSameWithMe ? styles.myContent : "")}>
           <div className={styles.header}>
             <div className={styles.left} onClick={clickAvatar}>
               <Avatar
@@ -301,10 +303,24 @@ function avatar(props) {
     bgClrBasedOnType =
       userType === 1 ? styles.like : userType === 2 ? styles.heart : userType === 3 ? styles.heart : '';
 
+  const [referenceElement, setReferenceElement] = useState(null);
+  const [popperElement, setPopperElement] = useState(null);
+  const { styles: poperStyle, attributes } = usePopper(referenceElement, popperElement, {
+    placement: 'bottom-start',
+    modifiers: [
+      {
+        name: 'offset',
+        options: {
+          offset: [0, 8],
+        },
+      },
+    ],
+  });
+
   if (currAvatarImage && currAvatarImage !== '') {
     return (
       <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
-        <div className={styles.avatarWrapper} onClick={clickAvatar}>
+        <div onClick={clickAvatar} ref={setReferenceElement}>
           <Avatar className={className} circle={circle} image={currAvatarImage} size={size}></Avatar>
           {userTypeIcon && (
             <div className={`${styles.userIcon} ${bgClrBasedOnType}`}>
@@ -312,14 +328,19 @@ function avatar(props) {
             </div>
           )}
         </div>
-        {isShow && userInfoBox}
+
+        {isShow && (
+          <div ref={setPopperElement} style={{ ...poperStyle.popper, zIndex: 100 }} {...attributes.popper}>
+            {userInfoBox}
+          </div>
+        )}
       </div>
     );
   }
 
   return (
     <div className={styles.avatarBox} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
-      <div className={styles.cursor} onClick={clickAvatar}>
+      <div onClick={clickAvatar} ref={setReferenceElement}>
         <Avatar className={className} circle={circle} text={userName} size={size} onClick={clickAvatar}></Avatar>
         {userTypeIcon && (
           <div className={`${styles.userIcon} ${bgClrBasedOnType}`}>
@@ -327,7 +348,12 @@ function avatar(props) {
           </div>
         )}
       </div>
-      {isShow && userInfoBox}
+
+      {isShow && (
+        <div ref={setPopperElement} style={{ ...poperStyle.popper, zIndex: 100 }} {...attributes.popper}>
+          {userInfoBox}
+        </div>
+      )}
     </div>
   );
 }

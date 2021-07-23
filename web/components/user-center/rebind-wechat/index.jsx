@@ -8,12 +8,12 @@ import Router from '@discuzq/sdk/dist/router';
 @observer
 class WechatRebindDialog extends Component {
   // TODO: 完善这部分
-  async componentDidMount() {
-    await this.props.user.genRebindQrCode({
-      scanSuccess: this.handleScanSuccess,
-      scanFail: this.handleScanFail,
-    });
-  }
+  // async componentDidMount() {
+  //   await this.props.user.genRebindQrCode({
+  //     scanSuccess: this.handleScanSuccess,
+  //     scanFail: this.handleScanFail,
+  //   });
+  // }
 
   handleScanSuccess = async () => {
     Toast.success({

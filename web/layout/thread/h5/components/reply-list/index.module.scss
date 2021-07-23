@@ -15,13 +15,24 @@
       .replyListName {
         display: flex;
         justify-content: space-between;
-
-        .replyListName {
-          font-size: rem($font-size-primary);
-          font-weight: bold;
-          line-height: rem(20);
-          text-align: left;
-          color: $text-color-primary;
+        .userInfo {
+          display: flex;
+          .replyListName {
+            font-size: rem($font-size-primary);
+            font-weight: bold;
+            line-height: rem(20);
+            text-align: left;
+            color: $text-color-primary;
+          }
+          .groups {
+            color: var(--color-text-secondary);
+            font-size: $font-size-label;
+            max-width: rem(100);
+            white-space: nowrap;
+            overflow: hidden;
+            padding-left: $padding-2n;
+            line-height: rem(20);
+          }
         }
         .isApproved {
           font-size: $font-size-primary;

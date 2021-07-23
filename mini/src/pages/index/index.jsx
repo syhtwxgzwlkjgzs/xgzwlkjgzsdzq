@@ -31,6 +31,7 @@ const CLOSE_URL = '/subPage/close/index';
 
 @inject('site')
 @inject('user')
+@inject('emotion')
 @observer
 class Index extends React.Component {
 
@@ -113,7 +114,10 @@ class Index extends React.Component {
     // 初始化站点数据
     async initSiteData() {
 
-      const { site, user} = this.props;
+      const { site, user, emotion } = this.props;
+
+      // 请求并保持表情数据
+      emotion.fetchEmoji()
 
       let loginStatus = false;
 
