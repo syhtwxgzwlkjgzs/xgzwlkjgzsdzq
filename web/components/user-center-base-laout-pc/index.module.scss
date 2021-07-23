@@ -48,7 +48,8 @@
   overflow: hidden;
 
   @include media('s-pc') {
-    width: 98% !important;
+    padding: 0 1.5%;
+    width: 97% !important;
   }
 
   @include media('l-pc') {
