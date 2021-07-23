@@ -16,31 +16,52 @@ export default class FilePreview extends React.Component {
     };
   }
 
+  getAuthorization() {
+    try {
+      const { url } = this.props.file;
+      const urlObj = new URL(url);
+
+      const params = urlObj.search.split('?')[1].split('&').map(item => item.split('=')).reduce((res, cur) => {
+        res[cur[0]] = cur[1];
+        return res;
+      }, {});
+
+      return params.sign;
+    } catch (err) {
+      return undefined;
+    }
+  }
+
   async componentDidMount() {
     try {
       const {file} = this.props;
       if (!file?.url) {
-        throw new Error('预览失败：文件地址错误');
+        this.setState({ errMsg: '预览失败：文件地址错误' });
+        return;
       }
 
+      const authorization = this.getAuthorization();
       const url = await COSDocPreviewSDK.getPreviewUrl({
         objectUrl: file.url,
+        credentials: {
+          authorization,
+        }
       });
 
       if (!url) {
-        throw new Error('预览失败：对象存储配置异常，请联系管理员')
+        this.setState({ errMsg: '预览失败：对象存储配置异常，请联系管理员' });
+        return;
       }
 
       const mount = document.querySelector('#preview');
       const preview = COSDocPreviewSDK.config({
-        mount,
         mode: 'simple',
+        mount,
         url,
       });
     } catch(err) {
-      this.setState({
-        errMsg: err.message || '附件预览失败'
-      });
+      console.log('文件预览失败', err);
+      this.setState({ errMsg: '文件预览失败' });
     }
   }
 
