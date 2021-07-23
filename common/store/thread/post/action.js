@@ -369,7 +369,7 @@ class ThreadPostAction extends ThreadPostStore {
       price,
       attachmentPrice,
       position,
-      contentText: emojiFromEditFormat(contentText),
+      contentText: contentText ? emojiFromEditFormat(contentText) : '',
       audio,
       rewardQa,
       product,
