@@ -1,13 +1,12 @@
 import React, { useState }from 'react';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
-import Icon from '@discuzq/design/dist/components/icon/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import Spin from '@discuzq/design/dist/components/spin/index';
 import { extensionList, isPromise, noop } from '../utils';
-import { View, Text } from '@tarojs/components';
+import { View, Text, Image } from '@tarojs/components';
 import Taro from '@tarojs/taro';
-import Downloader from './downloader';
+import classnames from 'classnames';
 
 import { throttle } from '@common/utils/throttle-debounce.js';
 
@@ -155,28 +154,47 @@ const Index = ({
     }
   };
 
-  const handleIcon = (type) => {
-    if (type === 'XLS' || type === 'XLSX') {
-      return 'XLSOutlined';
-    } if (type === 'DOC' || type === 'DOCX') {
-      return 'DOCOutlined';
-    } if (type === 'ZIP') {
-      return 'DOCOutlined';
-    } if (type === 'PDF') {
-      return 'DOCOutlined';
-    } if (type === 'PPT') {
-      return 'PPTOutlined';
+  const getIconClass = (type) => {
+    switch (type) {
+      case 'XLS':
+      case 'XLSX':
+        return "xlsOutlined";
+      case 'DOC':
+      case 'DOCX':
+        return "docOutlined";
+      case 'PPT':
+      case 'PPTX':
+        return "pptOutlined";
+      case 'RAR':
+      case 'ZIP':
+        return "zipOutlined";
+      case 'PDF':
+        return "pdfOutlined";
+      case 'TXT':
+        return "textOutlined";
+      case 'MP4':
+        return "videoOutlined";
+      case 'M4A':
+      case 'MP3':
+        return "audioOutlined";
+      case 'PNG':
+      case 'JPEG':
+        return "imageOutlined";
+      case 'FORM':
+        return "formOutlined";
+      default:
+        break;
     }
-    return 'DOCOutlined';
-  };
+    return "fileOutlined";
+  }
 
   const Normal = ({ item, index, type }) => {
-    const iconName = handleIcon(type);
+    const iconClass = getIconClass(type);
     return (
       <View className={styles.container} key={index} onClick={onClick} >
         <View className={styles.wrapper}>
           <View className={styles.left}>
-            <Icon className={styles.containerIcon} size={20} name={iconName} />
+            <Image className={classnames(styles.containerIcon, styles[iconClass])} mode="widthfix"/>
             <View className={styles.containerText}>
               <Text className={styles.content}>{item.fileName}</Text>
               <Text className={styles.size}>{handleFileSize(parseFloat(item.fileSize || 0))}</Text>
@@ -198,10 +216,10 @@ const Index = ({
   };
 
   const Pay = ({ item, index, type }) => {
-    const iconName = handleIcon(type);
+    const iconLink = getIconClass(type);
     return (
       <View className={`${styles.container} ${styles.containerPay}`} key={index} onClick={onPay}>
-        <Icon className={styles.containerIcon} size={20} name={iconName} />
+        <Image className={styles.containerIcon} mode="widthfix" src={iconLink}/>
         <Text className={styles.content}>{item.fileName}</Text>
       </View>
     );

@@ -45,7 +45,7 @@ const handleDesc = (baseHeight) => ({
 // 站点描述
 const handleSiteDes = (baseHeight, siteName) => ({
   x: 0,
-  y: baseHeight + baseLineHeight + miniCodeWidth + miniCodeRight + 28,
+  y: baseHeight + baseLineHeight + miniCodeWidth + miniCodeRight + 36,
   text: {
     text: `来自${siteName}`,
     color: '#8590A6',
