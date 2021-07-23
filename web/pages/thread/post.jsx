@@ -645,7 +645,7 @@ class PostPage extends React.Component {
 
     // 图文混排：第三方图片转存
     let contentText = threadPost.postData.contentText;
-    const images = contentText.match(/<img.*?\/>/g)?.filter(image => !image.match('alt="attachmentId-'));
+    const images = contentText.match(/<img.*?\/>/g)?.filter(image => (!image.match('alt="attachmentId-') && !image.includes('dzqemoji')));
     if (images) {
       const fileurls = images.map(img => {
         const src = img.match(/\"(.*?)\"/);
