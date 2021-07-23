@@ -26,7 +26,7 @@ export default class FilePreview extends React.Component {
         return res;
       }, {});
 
-      return params.sign;
+      return decodeURIComponent(params.sign);
     } catch (err) {
       return undefined;
     }
@@ -36,20 +36,25 @@ export default class FilePreview extends React.Component {
     try {
       const {file} = this.props;
       if (!file?.url) {
-        this.setState({ errMsg: '预览失败：文件地址错误' });
+        this.setState({ errMsg: '预览失败：文件地址为空' });
         return;
       }
 
+      const urlObj = new URL(file.url);
+      const objectUrl = `${urlObj.origin}${urlObj.pathname}`;
       const authorization = this.getAuthorization();
+
       const url = await COSDocPreviewSDK.getPreviewUrl({
-        objectUrl: file.url,
+        objectUrl,
         credentials: {
           authorization,
+          secretId: '',
+          secretKey: ''
         }
       });
 
       if (!url) {
-        this.setState({ errMsg: '预览失败：对象存储配置异常，请联系管理员' });
+        this.setState({ errMsg: '预览失败：无法获取预览地址' });
         return;
       }
 
