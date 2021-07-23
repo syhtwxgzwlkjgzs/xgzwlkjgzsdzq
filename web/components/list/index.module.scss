@@ -8,12 +8,16 @@
     width: 100%;
     overflow-y: auto;
     overflow-y: overlay;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  }
 
-    .wrapperPCContent {
+  &.h5 {
+    .wrapper {
       display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .copyrightFix {
+      margin-top: 0 !important;
     }
   }
 
@@ -132,8 +136,4 @@
     bottom: calc(constant(safe-area-inset-bottom) + 80px);
     bottom: calc(env(safe-area-inset-bottom) + 80px);
   }
-}
-
-.copyrightFix {
-  margin-top: 0 !important;
 }

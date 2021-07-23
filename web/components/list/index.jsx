@@ -191,23 +191,37 @@ const List = forwardRef(({
     // }, 0)
   };
 
-  return (
-    <div className={`${styles.container} ${className}`} style={{ height }}>
+  const renderPC = () => (
+    <div className={`${styles.container} ${className} ${styles.pc}`} style={{ height }}>
       <div
-        className={`${styles.wrapper} ${wrapperClass} ${isH5 ? styles.hideScrollBar : ''} ${isLoadingInCenter ? styles.wrapperH5Center : ''}`}
+        className={`${styles.wrapper} ${wrapperClass} ${isLoadingInCenter ? styles.wrapperH5Center : ''}`}
         ref={listWrapper}
         onScroll={onTouchMove}
       >
-        <div className={!isH5 ? styles.wrapperPCContent: ''}>
-          {children}
-          {onRefresh && showRefresh && <BottomView isError={isError} errorText={errText} noMore={noMore} handleError={handleError} noMoreType={noMoreType} />}
-        </div>
-        { isH5 && !hideCopyright && <Copyright className={styles.copyrightFix} /> }
+        {children}
+        {onRefresh && showRefresh && <BottomView isError={isError} errorText={errText} noMore={noMore} handleError={handleError} noMoreType={noMoreType} />}
       </div>
     </div>
   );
+
+  const renderH5 = () => (
+    <div className={`${styles.container} ${className} ${styles.h5}` } style={{ height }}>
+      <div
+        className={`${styles.wrapper} ${wrapperClass} ${styles.hideScrollBar} ${isLoadingInCenter ? styles.wrapperH5Center : ''}`}
+        ref={listWrapper}
+        onScroll={onTouchMove}
+      >
+        <div>
+          {children}
+          {onRefresh && showRefresh && <BottomView isError={isError} errorText={errText} noMore={noMore} handleError={handleError} noMoreType={noMoreType} />}
+        </div>
+        { !hideCopyright && <Copyright className={styles.copyrightFix} /> }
+      </div>
+    </div>
+  );
+
+  return isH5 ? renderH5() : renderPC();
 });
 
 // export default React.memo(List);
 export default inject('site')(observer(List));
-
