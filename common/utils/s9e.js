@@ -75,7 +75,7 @@ const handleEmoji = (value) => {
   if (!emojis?.length) {
     return {
       code: value,
-      url,
+      url: `${url}/emoji/qq/${value}.gif`,
       isAllow: true
     }
   }
