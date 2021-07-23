@@ -23,7 +23,8 @@ class CopyRight extends React.Component {
       [className]: !!className,
       copyright: true,
       [styles.center]: center || isH5,
-      [styles.h5]: isH5
+      [styles.h5]: isH5,
+      [styles.pc]: !isH5
     })
 
     const curSiteUrl = window.location.origin;
