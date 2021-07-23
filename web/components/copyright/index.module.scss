@@ -30,4 +30,8 @@
       color: $text-color-secondary;
     }
   }
+  // PC登录等页面
+  &.modeLogin {
+    margin: $margin-5n 0 44px;
+  }
 }

@@ -48,7 +48,7 @@ const List = forwardRef(({
   const [isLoadingInCenter, setIsLoadingInCenter] = useState(false)
 
   // 提前加载
-  const isH5 = site?.platform === 'h5'
+  const isH5 = site?.platform === 'h5';
   preload = !isH5 ? 3000 : 1000;
 
   useEffect(() => {
@@ -89,7 +89,7 @@ const List = forwardRef(({
 
   //移动端没有更多内容样式才有下划线
   const noMoreType = useMemo(() => {
-    return isH5 ? 'line' : 'normal'
+    return isH5 ? 'line' : 'normal';
   },[site.platform])
 
   useImperativeHandle(

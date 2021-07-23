@@ -19,7 +19,7 @@ class PcBodyWrap extends React.Component {
         <div className={layout.pc_body_background}>
           {children}
           <div className={layout.pc_bottom}>
-            <CopyRight center line />
+            <CopyRight center mode='login' />
           </div>
         </div>
       </BaseLayout>

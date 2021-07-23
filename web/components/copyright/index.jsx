@@ -11,7 +11,7 @@ class CopyRight extends React.Component {
   }
 
   render() {
-    const { site, center, line, className } = this.props;
+    const { site, center, line, className, mode } = this.props;
     if ( !site || !site.webConfig || !site.webConfig.setSite) return null;
 
     const { setSite } = site.webConfig;
@@ -24,7 +24,8 @@ class CopyRight extends React.Component {
       copyright: true,
       [styles.center]: center || isH5,
       [styles.h5]: isH5,
-      [styles.pc]: !isH5
+      [styles.pc]: !isH5,
+      [styles.modeLogin]: mode === 'login'
     })
 
     const curSiteUrl = window.location.origin;
