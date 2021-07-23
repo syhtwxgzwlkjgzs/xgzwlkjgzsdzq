@@ -1,5 +1,12 @@
 @import '@common/styles/index.scss';
 
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: calc(100vh - 60px);
+}
+
 .userCenterEditMiddle {
   padding: rem($padding-4n);
   padding-bottom: 0;

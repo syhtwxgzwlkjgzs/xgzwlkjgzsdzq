@@ -37,7 +37,8 @@ const List = forwardRef(({
   errorText='加载失败',
   platform="",
   showLoadingInCenter = true,
-  site
+  site,
+  hideCopyright=false,
 }, ref) => {
   const listWrapper = useRef(null);
   const currentScrollTop = useRef(0);
@@ -201,7 +202,7 @@ const List = forwardRef(({
           {children}
           {onRefresh && showRefresh && <BottomView isError={isError} errorText={errText} noMore={noMore} handleError={handleError} noMoreType={noMoreType} />}
         </div>
-        { isH5 && <Copyright className={styles.copyrightFix} /> }
+        { isH5 && !hideCopyright && <Copyright className={styles.copyrightFix} /> }
       </div>
     </div>
   );
