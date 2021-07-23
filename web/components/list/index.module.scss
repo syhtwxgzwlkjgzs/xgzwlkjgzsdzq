@@ -8,6 +8,13 @@
     width: 100%;
     overflow-y: auto;
     overflow-y: overlay;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .wrapperPCContent {
+      display: flex;
+    }
   }
 
   .wrapperH5Center {
@@ -55,7 +62,7 @@
   justify-content: center;
   font-size: rem($font-size-primary);
   color: $text-color-placeholder;
-  padding: rem(11) 0;
+  padding: rem(11) 0 $padding-5;
   line-height: rem($font-line-height-small);
   .spin {
     margin-right: rem(4);
@@ -125,4 +132,8 @@
     bottom: calc(constant(safe-area-inset-bottom) + 80px);
     bottom: calc(env(safe-area-inset-bottom) + 80px);
   }
+}
+
+.copyrightFix {
+  margin-top: 0 !important;
 }
