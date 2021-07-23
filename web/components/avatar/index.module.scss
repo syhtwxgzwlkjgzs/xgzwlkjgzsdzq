@@ -123,6 +123,10 @@
         &.blocked {
           border-color: $primary-color3;
           background-color: $primary-color3;
+          &:hover {
+            border-color: $primary-color6;
+            background-color: $primary-color6;
+          }
         }
       }
       .ghost {
