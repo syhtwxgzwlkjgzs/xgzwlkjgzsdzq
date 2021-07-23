@@ -89,6 +89,9 @@
   display: flex;
   flex-direction: column;
   margin-top: rem($margin-10);
+  @include media('s-pc') {
+    margin-top: 0;
+  }
 }
 
 .left {
@@ -97,6 +100,9 @@
   margin-right: rem($margin-5n);
   margin-top: rem($margin-10);
   width: rem(300);
+  @include media('s-pc') {
+    margin-top: 0;
+  }
 }
 
 .right {
@@ -105,6 +111,9 @@
   top: rem(0);
   padding-top: rem($margin-10);
   width: 32%;
+  @include media('s-pc') {
+    padding-top: 0;
+  }
 }
 .slideWrap {
   flex-direction: row;
