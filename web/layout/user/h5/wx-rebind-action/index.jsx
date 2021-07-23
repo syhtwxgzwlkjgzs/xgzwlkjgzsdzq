@@ -35,11 +35,6 @@ class WXRebindActionPage extends React.Component {
       this.setState({
         currentStatus: 'error',
       });
-      Toast.error({
-        content: e.Msg || '扫码失败',
-        hasMask: false,
-        duration: 1000,
-      });
     }
   }
 
@@ -52,7 +47,8 @@ class WXRebindActionPage extends React.Component {
           <div className={styles.content}>
               { currentStatus === 'success' && <Icon color='#3AC15F' name="SuccessOutlined" size={80} className={styles.statusIcon} /> }
               { currentStatus === 'error' && <Icon color='#E02433' name="WrongOutlined" size={80} className={styles.statusIcon} /> }
-              <p className={styles.statusBottom}>{ currentStatus && (currentStatus === 'success' ? '扫码成功' : errorTips) }</p>
+              <p className={styles.statusBottom}>{ currentStatus && (currentStatus === 'success' ? '扫码成功' : '扫码失败') }</p>
+              { currentStatus === 'error' && <p className={styles.hint}>{errorTips}</p> }
               { !currentStatus && <LoadingBox style={{ minHeight: '100%' }} />}
           </div>
         </div>
