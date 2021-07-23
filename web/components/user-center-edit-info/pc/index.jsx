@@ -30,6 +30,7 @@ class index extends Component {
       payPwdEditorVisible: false,
       mobileEditorVisible: false,
       wechatRebindEditorVisible: false,
+      additionalUserInfoVisible: false, // 补充信息状态
       editorConfig: [
         {
           name: '昵称',
