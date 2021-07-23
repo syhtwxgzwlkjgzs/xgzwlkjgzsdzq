@@ -446,16 +446,14 @@ class index extends Component {
               });
             }}
           /> */}
-          {this.state.additionalUserInfoVisible && (
-            <UserCenterAdditionalInfo
-              onClose={() => {
-                this.setState({
-                  additionalUserInfoVisible: false,
-                });
-              }}
-              visible={this.state.additionalUserInfoVisible}
-            />
-          )}
+          <UserCenterAdditionalInfo
+            onClose={() => {
+              this.setState({
+                additionalUserInfoVisible: false,
+              });
+            }}
+            visible={this.state.additionalUserInfoVisible}
+          />
         </>
       </div>
     );

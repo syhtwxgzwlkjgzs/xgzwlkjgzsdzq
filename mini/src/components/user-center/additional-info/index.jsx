@@ -38,7 +38,7 @@ export default class UserCenterAdditionalInfo extends Component {
   renderAdditionalItem = (item) => {
     const { type, fieldsExt = [] } = item;
     if (!fieldsExt || (type === 2 && this.getRadioFieldValue(fieldsExt.options || []) === ''))
-      return <View className={`${styles.additionValue}`}>{'未填写'}</View>;
+      return <View className={`${styles.additionValue} ${styles.additionNormalText}`}>{'未填写'}</View>;
     switch (type) {
       case 0:
         return <View className={`${styles.additionValue} ${styles.singleText}`}>{item.fieldsExt}</View>;

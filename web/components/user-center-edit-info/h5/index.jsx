@@ -205,11 +205,11 @@ class index extends Component {
               </div>
             </div>
           )}
-          <div className={styles.userCenterEditItem}>
+          <div className={styles.userCenterEditItem} onClick={this.handleGoToAdditionalInfo}>
             <div className={styles.userCenterEditLabel}>
               <label className={styles.userLabelName}>补充信息</label>
             </div>
-            <div className={styles.userCenterEditValue} onClick={this.handleGoToAdditionalInfo}>
+            <div className={styles.userCenterEditValue}>
               <Icon name="RightOutlined" size={12} />
             </div>
           </div>

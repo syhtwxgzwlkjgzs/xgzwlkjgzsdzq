@@ -47,6 +47,9 @@
         margin-left: $margin-1n;
       }
     }
+    .additionNormalText {
+      color: $text-color-secondary;
+    }
     .checkboxValue {
       display: flex;
       flex-direction: column;

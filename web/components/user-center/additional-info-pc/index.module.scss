@@ -69,9 +69,17 @@
       color: $text-color-primary;
       min-height: rem(20);
       line-height: rem(20);
+      :global {
+        .dzq-icon {
+          cursor: auto;
+        }
+      }
       .additionFile {
         margin-left: rem($margin-1n);
       }
+    }
+    .additionNormalText {
+      color: $text-color-secondary;
     }
     .checkboxValue {
       display: flex;
@@ -83,6 +91,25 @@
     }
     .mutipleLineText {
       word-break: break-all;
+    }
+    .errorImage {
+      width: rem(343);
+      height: rem(215);
+      border-radius: rem(5);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      background-color: #eee;
+      :global {
+        .dzq-icon {
+          cursor: auto;
+        }
+      }
+    }
+    .errorImage:nth-child(1) {
+      margin-bottom: rem($margin-10);
     }
   }
   .additionIdentityCard {
