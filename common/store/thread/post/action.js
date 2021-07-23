@@ -190,6 +190,7 @@ class ThreadPostAction extends ThreadPostStore {
   @action.bound
   resetPostData() {
     this.postData = { ...initPostData };
+    this.currentSelectedToolbar = false;
     this.setCategorySelected();
   }
 
@@ -264,7 +265,8 @@ class ThreadPostAction extends ThreadPostStore {
       text = `${text.replace(/(\n*)$/, '').replace(/\n/g, '<br />')}`;
     }
     text = emojiFormatForCommit(text)
-      .replace(/@([^@<]+)<\/p>/g, '@$1 </p>');
+      .replace(/@([^@<]+)<\/p>/g, '@$1 </p>')
+      .replace(/<code>\s*([^\s]+)\s*<\/code>/, '<code>$1</code>');
     const params = {
       title, categoryId, content: {
         text,

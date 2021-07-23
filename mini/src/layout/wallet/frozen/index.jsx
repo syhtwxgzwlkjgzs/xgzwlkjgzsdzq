@@ -84,7 +84,7 @@ class FrozenAmount extends React.Component {
               <View className={styles.content} key={value.id}>
                 <View className={styles.upper}>
                   <View className={styles.normalText}>
-                    <RichText content={this.parseHTML(value.title || value.changeDesc)} />
+                    <RichText content={this.parseHTML(value.changeDesc || value.title)} />
                   </View>
                   {/* <View className={styles.title}>{value.title || value.changeDesc}</View> */}
                   <View className={styles.amount}>{value.amount}</View>

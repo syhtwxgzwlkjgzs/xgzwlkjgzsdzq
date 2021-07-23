@@ -6,14 +6,16 @@ import { View } from '@tarojs/components';
 import styles from './index.module.scss';
 
 const deletePop = (props) => {
-  const { visible, onClose, onBtnClick } = props;
+  const { visible, onClose, onBtnClick, type = 'comment' } = props;
 
   return (
     <Popup position="center" visible={visible} onClose={onClose}>
       <View className={styles.container}>
         <View className={styles.deleteTips}>
           <View className={styles.tips}>提示</View>
-          <View className={styles.content}>确定删除这篇内容吗？</View>
+          <View className={styles.content}>
+            {type === 'thread' ? '确定删除这篇内容吗？' : '确定删除这条评论吗？'}
+          </View>
         </View>
         <View className={styles.btn}>
           <Button className={styles.close} onClick={onClose}>
