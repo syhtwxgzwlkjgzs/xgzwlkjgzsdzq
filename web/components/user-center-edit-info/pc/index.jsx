@@ -11,7 +11,6 @@ import HOCFetchSiteData from '../../../middleware/HOCFetchSiteData';
 import UserCenterEditAccountPwd from '../../user-center-edit-account-pwd-pc';
 import UserCenterEditMobile from '../../user-center-edit-mobile-pc';
 import UserCenterEditPaypwd from '../../user-center-edit-paypwd-pc';
-import WechatRebind from '../../user-center/rebind-wechat';
 import Copyright from '@components/copyright';
 import { getClientHeight } from '@common/utils/get-client-height';
 import isServer from '@common/utils/is-server';
@@ -426,7 +425,6 @@ class index extends Component {
               });
             }}
           />
-          <WechatRebind />
         </>
       </div>
     );
