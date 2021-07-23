@@ -68,7 +68,7 @@ class RebindPage extends React.Component {
     setTimeout(() => {
       user.id && user.updateUserInfo(user.id);
       Router.back();
-    }, 1000);
+    }, 3000);
   }
 
   async scanFail(e) {
