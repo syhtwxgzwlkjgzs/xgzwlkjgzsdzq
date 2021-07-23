@@ -70,10 +70,12 @@ class Index extends React.Component {
 
   // 获取数据状态
   setStepIndex = () => {
-    const { hasTopics, hasUsers, isShowAll } = this.props.search.dataIndexStatus
+    const { hasTopics, hasUsers, hasThreads, isShowAll } = this.props.search.dataIndexStatus
 
     let stepIndex = 0
-    if (isShowAll) {
+    if (!hasTopics && !hasUsers && !hasThreads) {
+      stepIndex = this.state.stepIndex
+    } else if (isShowAll) {
       stepIndex = 0
     } else {
       if (hasTopics) {
