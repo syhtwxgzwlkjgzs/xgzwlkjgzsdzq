@@ -44,10 +44,9 @@ class WXRebindActionPage extends Component {
     } catch (e) {
       this.setState({
         currentStatus: 'error',
-        errorTips: e.Message || '扫码失败'
       });
       Toast.error({
-        content: e.Message || '扫码失败',
+        content: e.Msg || '扫码失败',
         hasMask: false,
         duration: 1000,
       });

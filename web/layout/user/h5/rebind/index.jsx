@@ -40,19 +40,19 @@ class RebindPage extends React.Component {
     try {
       const { wechatEnv } = this.props.site;
       const { user } = this.props;
-      const redirectUri = `${wechatEnv === 'miniProgram' ? '/subPages/user/wx-rebind-action/index' : `${window.location.origin}/user/wx-rebind-action`}`;
+      const redirectUri = `${wechatEnv === 'miniProgram' ? 'subPages/user/wx-rebind-action/index' : `${window.location.origin}/user/wx-rebind-action`}`;
       await user.genRebindQrCode({
         scanSuccess: this.scanSuccess,
         scanFail: this.scanFail,
         option: {
           params: {
-            redirectUri
+            redirectUri: encodeURIComponent(redirectUri),
           }
         },
       });
     } catch (e) {
       Toast.error({
-        content: e.Message,
+        content: e.Msg,
         hasMask: false,
         duration: 1000,
       });
