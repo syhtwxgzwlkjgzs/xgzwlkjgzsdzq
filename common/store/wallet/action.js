@@ -3,12 +3,20 @@ import WalletStore from './store';
 import { readWalletUser, readWalletLog, readWalletCash, createWalletCash } from '@server';
 import time from '@discuzq/sdk/dist/time';
 import { get } from '@common/utils/get';
+import { INCOME_DETAIL_CONSTANTS, EXPAND_DETAIL_CONSTANTS, FREEZE_TYPE } from '@common/constants/wallet';
 
 const setWalletInfoPageData = (data, obj, {
   type,
   date,
   page,
 }) => {
+  let newData = data
+
+  newData.pageData = newData.pageData.map(item => {
+    item.changeDesc = getTypeStr(item.changeType) || item.changeDesc
+    return item
+  })
+
   if (!obj[type]) {
     obj[type] = {};
   }
@@ -16,10 +24,32 @@ const setWalletInfoPageData = (data, obj, {
     obj[type][date] = {};
   }
   if (!obj[type][date][page]) {
-    obj[type][date][page] = get(data, 'pageData', []);
+    obj[type][date][page] = get(newData, 'pageData', []);
   }
 };
 
+const getTypeStr = (code) => {
+  let text = ''
+
+  const incomes = Object.values(INCOME_DETAIL_CONSTANTS)
+  const expands = Object.values(EXPAND_DETAIL_CONSTANTS)
+
+  // 暂时不需要冻结类型，需要注意
+  // const freezes = Object.values(FREEZE_TYPE)
+
+  const types = [...incomes, ...expands]
+  for (let index = 0; index < types.length; index++) {
+    const element = types[index];
+
+    const codes = `${element.code}`.split(',').map(i => `${i}`)
+    if (codes.indexOf(`${code}`) !== -1) {
+      text = element.text
+      break
+    }
+  }
+
+  return text
+}
 
 class WalletAction extends WalletStore {
     @action
