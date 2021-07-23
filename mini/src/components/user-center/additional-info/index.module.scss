@@ -9,6 +9,22 @@
 }
 
 .additionalContainer {
+  .additionInfoLoading {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    :global {
+      .dzq-spin {
+        color: $text-color-secondary;
+      }
+    }
+  }
   .title {
     display: flex;
     justify-content: space-between;

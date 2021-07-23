@@ -3,18 +3,27 @@ import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import { View, Text } from '@tarojs/components';
 import Icon from '@discuzq/design/dist/components/icon/index';
-import Toast from '@discuzq/design/dist/components/toast/index';
+import Spin from '@discuzq/design/dist/components/spin/index';
 
 @inject('user')
 @observer
 export default class UserCenterAdditionalInfo extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      isLoadingAdditionalInfo: false, // 表示加载状态
+    };
   }
 
   async componentDidMount() {
     try {
+      this.setState({
+        isLoadingAdditionalInfo: true,
+      });
       await this.props.user.getUserSigninFields();
+      this.setState({
+        isLoadingAdditionalInfo: false,
+      });
     } catch (error) {
       console.error(error);
     }
@@ -92,22 +101,33 @@ export default class UserCenterAdditionalInfo extends Component {
           <View className={styles.title}>
             <Text className={styles.titleValue}>您的补充信息已设置</Text>
           </View>
-          {/* 内容区域 */}
-          <View className={styles.additionalContent}>
-            {this.props.user?.userSigninFields.map((item) => (
-              <View
-                className={`${styles.additionItem} ${item.type === 4 && item.fieldsExt && styles.additionIdentityCard}`}
-                style={{ alignItems: (item.type === 1 || item.type === 3) && 'flex-start' }}
-              >
-                <View className={styles.additionLabel}>{item.name}</View>
-                {this.renderAdditionalItem(item)}
+          {this.state.isLoadingAdditionalInfo && (
+            <View className={styles.additionInfoLoading}>
+              <Spin type="spinner">加载中...</Spin>
+            </View>
+          )}
+          {!this.state.isLoadingAdditionalInfo && (
+            <>
+              {/* 内容区域 */}
+              <View className={styles.additionalContent}>
+                {this.props.user?.userSigninFields.map((item) => (
+                  <View
+                    className={`${styles.additionItem} ${
+                      item.type === 4 && item.fieldsExt && styles.additionIdentityCard
+                    }`}
+                    style={{ alignItems: (item.type === 1 || item.type === 3) && 'flex-start' }}
+                  >
+                    <View className={styles.additionLabel}>{item.name}</View>
+                    {this.renderAdditionalItem(item)}
+                  </View>
+                ))}
               </View>
-            ))}
-          </View>
-          {/* 提示 */}
-          <View className={styles.additionTips}>
-            <Text className={styles.note}>*</Text>补充信息设置后不能修改，如有疑问请联系站长处理
-          </View>
+              {/* 提示 */}
+              <View className={styles.additionTips}>
+                <Text className={styles.note}>*</Text>补充信息设置后不能修改，如有疑问请联系站长处理
+              </View>
+            </>
+          )}
         </View>
       </View>
     );

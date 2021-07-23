@@ -9,11 +9,20 @@ import additionalInfoData from '../additional-info-pc/test.json';
 export default class UserCenterAdditionalInfo extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      isLoadingAdditionalInfo: false, // 表示加载状态
+    };
   }
 
   async componentDidMount() {
     try {
+      this.setState({
+        isLoadingAdditionalInfo: true,
+      });
       await this.props.user.getUserSigninFields();
+      this.setState({
+        isLoadingAdditionalInfo: false,
+      });
     } catch (error) {
       console.error(error);
     }
@@ -98,24 +107,33 @@ export default class UserCenterAdditionalInfo extends Component {
             <div className={styles.title}>
               <span className={styles.titleValue}>您的补充信息已设置</span>
             </div>
-            {/* 内容区域 */}
-            <div className={styles.additionalContent}>
-              {this.props.user?.userSigninFields.map((item) => (
-                <div
-                  className={`${styles.additionItem} ${
-                    item.type === 4 && item.fieldsExt && styles.additionIdentityCard
-                  }`}
-                  style={{ alignItems: (item.type === 1 || item.type === 3) && 'flex-start' }}
-                >
-                  <div className={styles.additionLabel}>{item.name}</div>
-                  {this.renderAdditionalItem(item)}
+            {this.state.isLoadingAdditionalInfo && (
+              <div className={styles.additionInfoLoading}>
+                <Spin type="spinner">加载中...</Spin>
+              </div>
+            )}
+            {!this.state.isLoadingAdditionalInfo && (
+              <>
+                {/* 内容区域 */}
+                <div className={styles.additionalContent}>
+                  {this.props.user?.userSigninFields.map((item) => (
+                    <div
+                      className={`${styles.additionItem} ${
+                        item.type === 4 && item.fieldsExt && styles.additionIdentityCard
+                      }`}
+                      style={{ alignItems: (item.type === 1 || item.type === 3) && 'flex-start' }}
+                    >
+                      <div className={styles.additionLabel}>{item.name}</div>
+                      {this.renderAdditionalItem(item)}
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-            {/* 提示 */}
-            <p className={styles.additionTips}>
-              <span className={styles.note}>*</span>补充信息设置后不能修改，如有疑问请联系站长处理
-            </p>
+                {/* 提示 */}
+                <p className={styles.additionTips}>
+                  <span className={styles.note}>*</span>补充信息设置后不能修改，如有疑问请联系站长处理
+                </p>
+              </>
+            )}
           </div>
         </div>
       </>
