@@ -44,11 +44,18 @@
 }
 
 .statusWrap {
+  .hint {
+    margin-top: rem($margin-4n);
+    font-size: $font-size-middle;
+    line-height: $font-line-height-base;
+    color: $text-color-regular;
+    text-align: center;
+  }
   .statusBottom {
     color: $text-color-secondary;
     font-size: $font-size-middle;
     line-height: $font-line-height-small;
-    margin-top: rem(28);
+    margin-top: rem($margin-4n * 2);
     display: flex;
     justify-content: center;
     align-items: center;
