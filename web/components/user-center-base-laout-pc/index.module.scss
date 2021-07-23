@@ -39,6 +39,9 @@
   //   width: 100%;
   //   max-width: rem(1100);
   // }
+  @include media('s-pc') {
+    min-height: rem(220);
+  }
 }
 
 .wrapper {
@@ -123,6 +126,9 @@
 .userHeader {
   margin-top: rem($margin-5n);
   width: 100%;
+  @include media('s-pc') {
+    margin-top: rem($margin-10);
+  }
   // @include media('s-pc') {
   //   width: 98%;
   // }
