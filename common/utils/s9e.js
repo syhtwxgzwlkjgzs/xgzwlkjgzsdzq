@@ -3,9 +3,6 @@
 import getConfig from '@common/config';
 import Storage from '@common/utils/session-storage';
 
-const storage = new Storage({ storageType: 'local' })
-const emojis = JSON.parse(storage.get('DZQ_EMOJI') || `{}`);
-
 export const tags = {
   topic: text => {
     if (!text) return;
@@ -45,12 +42,12 @@ export const tags = {
       });
     });
   },
-  emotion: text => {  // 转义表情
+  emotion: (text, emojis) => {  // 转义表情
     if (!text) return '';
     const regexp = /:(?<value>[0-9A-Za-z]{2,20}):/gimu;
     return text.replace(regexp, match => {
       return match.replace(regexp, (content, value, text) => {
-        const { code, url, isAllow } = handleEmoji(value)
+        const { code, url, isAllow } = handleEmoji(value, emojis)
         if (isAllow) {
           return `<img style="display:inline-block;vertical-align:top" src="${url}" alt="${code}" class="qq-emotion">`;
         }
@@ -62,13 +59,19 @@ export const tags = {
 };
 function parse(text) {
   for (const tag in tags) {
-    text = tags[tag](text);
+    if (tag === 'emotion') {
+      const storage = new Storage({ storageType: 'local' })
+      const emojis = JSON.parse(storage.get('DZQ_EMOJI') || `{}`);
+      text = tags[tag](text, emojis);
+    } else {
+      text = tags[tag](text);
+    }
   }
 
   return text;
 }
 
-const handleEmoji = (value) => {
+const handleEmoji = (value, emojis) => {
   const config = getConfig() || {}
   const url = config.COMMON_BASE_URL || window.location.origin
 
