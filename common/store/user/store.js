@@ -49,6 +49,9 @@ class UserStore {
   // 换绑 QRCode
   @observable rebindQRCode = null;
 
+  // 用户注册扩展信息
+  @observable userSigninFields = [];
+
   // 换绑 QRCode是否有效
   @observable isQrCodeValid = true;
 
