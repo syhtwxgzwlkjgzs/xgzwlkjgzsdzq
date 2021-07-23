@@ -1,5 +1,5 @@
 import React from 'react';
-import WXAuthorizationPage from '@layout/user/h5/rebind-authorization';
+import WXAuthorizationPage from '@layout/user/h5/wx-authorization';
 import { inject } from 'mobx-react';
 import ViewAdapter from '@components/view-adapter';
 import Redirect from '@components/redirect';
