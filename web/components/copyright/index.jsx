@@ -11,7 +11,7 @@ class CopyRight extends React.Component {
   }
 
   render() {
-    const { site, center, line } = this.props;
+    const { site, center, line, className } = this.props;
     if ( !site || !site.webConfig || !site.webConfig.setSite) return null;
 
     const { setSite } = site.webConfig;
@@ -20,6 +20,7 @@ class CopyRight extends React.Component {
     const isH5 = platform === 'h5';
 
     const clsName = classnames(styles.container, {
+      [className]: !!className,
       copyright: true,
       [styles.center]: center || isH5,
       [styles.h5]: isH5
