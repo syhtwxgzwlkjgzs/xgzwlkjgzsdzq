@@ -79,8 +79,7 @@ class WXRebindActionPage extends Component {
           <View className={styles.content}>
             <View className={styles.title}>确认换绑微信</View>
             <View className={styles.tips}>
-              <View style={{display: 'flex' }}>亲爱的，<Avatar style={{margin: '0 8px'}} circle size='small' image={avatarUrl}/>{nickname}</View>
-              <View>确认换绑微信？</View>
+              <View>亲爱的用户，确认换绑微信？</View>
             </View>
             <Button
                 className={styles.button}
