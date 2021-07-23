@@ -4,27 +4,12 @@
   :global {
     .dzq-modal__container {
       width: rem(409);
-      height: rem(494);
+      height: rem(498);
       border-radius: rem(var(--border-radius-small));
       background: $white;
       box-sizing: border-box;
       padding: 0;
       margin-right: 4px;
-      overflow-y: auto;
-      &::-webkit-scrollbar {
-        display: block;
-        width: rem(4);
-        border-radius: $border-radius-small;
-      }
-      // 滚动条轨道
-      &::-webkit-scrollbar-track {
-        background: transparent;
-      }
-      // 滚动条上的滚动滑块
-      &::-webkit-scrollbar-thumb {
-        background: $border-shadow-color;
-        border-radius: rem(4);
-      }
     }
     .dzq-modal__body {
       padding: rem($padding-6n);
@@ -33,6 +18,27 @@
 }
 
 .additionalContent {
+  height: rem(428);
+  overflow-y: auto;
+  margin: rem(-$margin-6n);
+  padding: rem($padding-6n);
+  box-sizing: border-box;
+  padding-top: 0;
+  margin-top: rem($margin-6n);
+  &::-webkit-scrollbar {
+    display: block;
+    width: rem(4);
+    border-radius: $border-radius-small;
+  }
+  // 滚动条轨道
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  // 滚动条上的滚动滑块
+  &::-webkit-scrollbar-thumb {
+    background: $border-shadow-color;
+    border-radius: rem(4);
+  }
 }
 
 .additionalContainer {

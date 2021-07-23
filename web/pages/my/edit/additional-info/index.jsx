@@ -4,7 +4,7 @@ import HOCUserInfo from '@middleware/HOCUserInfo';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import ViewAdapter from '@components/view-adapter';
 import { inject, observer } from 'mobx-react';
-
+import Redirect from '@components/redirect';
 @inject('site')
 @observer
 class EditUserNamePage extends React.Component {
@@ -16,7 +16,7 @@ class EditUserNamePage extends React.Component {
             <UserCenterAdditionalInfo />
           </div>
         }
-        pc={null}
+        pc={<Redirect jumpUrl={'/my/edit'} />}
         title={`补充信息`}
       />
     );

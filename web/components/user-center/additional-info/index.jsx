@@ -60,8 +60,10 @@ export default class UserCenterAdditionalInfo extends Component {
       case 3:
         return (
           <div className={styles.checkboxValue}>
-            {(fieldsExt.options || []).map((d) => (
-              <div className={styles.additionValue}>{d.value}</div>
+            {(fieldsExt.options || []).map((d, i) => (
+              <div key={`${d.value}-${i}`} className={styles.additionValue}>
+                {d.value}
+              </div>
             ))}
           </div>
         );
@@ -74,7 +76,7 @@ export default class UserCenterAdditionalInfo extends Component {
               fieldsExt.map((d, i) => {
                 return (
                   <div
-                    key={d.id}
+                    key={`${d.name}-${i}`}
                     className={`${styles.identityCard} ${i != fieldsExt.length - 1 && styles.identityCardBottom}`}
                   >
                     <img src={d.url} className={styles.identityImg} alt={d.name || '图片'} />
@@ -118,6 +120,7 @@ export default class UserCenterAdditionalInfo extends Component {
                 <div className={styles.additionalContent}>
                   {this.props.user?.userSigninFields.map((item) => (
                     <div
+                      key={`${item.id}`}
                       className={`${styles.additionItem} ${
                         item.type === 4 && item.fieldsExt && styles.additionIdentityCard
                       }`}

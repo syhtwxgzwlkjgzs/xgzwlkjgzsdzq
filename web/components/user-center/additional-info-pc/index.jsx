@@ -60,8 +60,10 @@ export default class UserCenterAdditionalInfo extends Component {
       case 3:
         return (
           <div className={styles.checkboxValue}>
-            {fieldsExt?.options.map((d) => (
-              <div className={styles.additionValue}>{d.value}</div>
+            {fieldsExt?.options.map((d, i) => (
+              <div key={`${d.value}-${i}`} className={styles.additionValue}>
+                {d.value}
+              </div>
             ))}
           </div>
         );
@@ -70,7 +72,10 @@ export default class UserCenterAdditionalInfo extends Component {
         return (
           <div className={styles.cardItem}>
             {fieldsExt?.map((d, i) => (
-              <div className={`${styles.identityCard} ${i != fieldsExt.length - 1 && styles.identityCardBottom}`}>
+              <div
+                key={`${d.name}-${i}`}
+                className={`${styles.identityCard} ${i != fieldsExt.length - 1 && styles.identityCardBottom}`}
+              >
                 <img src={d.url} className={styles.identityImg} alt={d.name || '图片'} />
               </div>
             ))}
@@ -110,6 +115,7 @@ export default class UserCenterAdditionalInfo extends Component {
                 <div className={styles.additionalContent}>
                   {this.props.user?.userSigninFields.map((item) => (
                     <div
+                      key={item.id}
                       className={`${styles.additionItem} ${
                         item.type === 4 && item.fieldsExt && styles.additionIdentityCard
                       }`}
@@ -119,11 +125,11 @@ export default class UserCenterAdditionalInfo extends Component {
                       {this.renderAdditionalItem(item)}
                     </div>
                   ))}
+                  {/* 提示 */}
+                  <p className={styles.additionTips}>
+                    <span className={styles.note}>*</span>补充信息设置后不能修改，如有疑问请联系站长处理
+                  </p>
                 </div>
-                {/* 提示 */}
-                <p className={styles.additionTips}>
-                  <span className={styles.note}>*</span>补充信息设置后不能修改，如有疑问请联系站长处理
-                </p>
               </>
             )}
           </div>
