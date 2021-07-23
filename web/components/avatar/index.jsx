@@ -48,6 +48,11 @@ function avatar(props) {
   const [blocking, changeBlockStatus] = useState(false);
   const [isSameWithMe, changeIsSameWithMe] = useState(false);
   let timeout;
+
+  useEffect(() => {
+    changeIsSameWithMe(myself?.id === userId);
+  }, []);
+
   const onMouseEnterHandler = useCallback(async () => {
     if (!isShowUserInfo || !userId) return;
     timeout && clearTimeout(timeout);
@@ -55,7 +60,6 @@ function avatar(props) {
 
     if (!userInfo || userInfo === 'padding') {
       const userInfo = await myself.getAssignUserInfo(userId);
-      changeIsSameWithMe(myself?.id === userId);
       changeUserInfo(userInfo);
     }
   });
@@ -204,8 +208,8 @@ function avatar(props) {
     if (userInfo === 'padding') {
       return (
         <div className={styles.userInfoBox} style={direction === 'left' ? { right: 0 } : { left: 0 }}>
-          <div className={classNames(styles.userInfoContent, isSameWithMe ? styles.myContent : "")}>
-            <LoadingBox style={{ minHeight: '205px' }} />
+          <div className={styles.userInfoContent}>
+            <LoadingBox style={{ minHeight: `${isSameWithMe ? '145px' : '205px'}` }} />
           </div>
         </div>
       );
@@ -225,7 +229,7 @@ function avatar(props) {
         className={`${styles.userInfoBox} ${direction}`}
         style={direction === 'left' ? { right: 0 } : { left: 0 }}
       >
-        <div className={classNames(styles.userInfoContent, isSameWithMe ? styles.myContent : "")}>
+        <div className={classNames(styles.userInfoContent, isSameWithMe ? styles.myContent : '')}>
           <div className={styles.header}>
             <div className={styles.left} onClick={clickAvatar}>
               <Avatar
@@ -296,7 +300,7 @@ function avatar(props) {
         </div>
       </div>
     );
-  }, [userInfo, isShowUserInfo, userId]);
+  }, [userInfo, isShowUserInfo, userId, isSameWithMe]);
 
   const userTypeIcon =
       userType === 1 ? 'LikeOutlined' : userType === 2 ? 'HeartOutlined' : userType === 3 ? 'HeartOutlined' : '',
