@@ -134,3 +134,11 @@
     bottom: calc(env(safe-area-inset-bottom) + 80px);
   }
 }
+
+.bottomViewContainer {
+  height: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
