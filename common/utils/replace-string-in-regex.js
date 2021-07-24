@@ -54,6 +54,8 @@ export default function replaceStringInRegex(text, type, newSubstr) {
     case "code":
       newText = newText.replace(/<code>[\s\S]*?<\/code>/g, newSubstr);
       newText = newText.replace(/<pre>[\s\S]*?<\/pre>/g, newSubstr);
+    case "emotion":
+      newText = newText.replace(/:[0-9A-Za-z]{2,20}:/g, newSubstr)
     default:
       break;
   }
