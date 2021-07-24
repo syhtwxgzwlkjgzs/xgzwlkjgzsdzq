@@ -149,7 +149,9 @@ class index extends Component {
         <div className={styles.mainContent}>
           <div>
             {/* 头部 */}
-            <UserCenterEditHeader />
+            <div>
+              <UserCenterEditHeader />
+            </div>
             {/* middle */}
             <div className={styles.userCenterEditMiddle}>
               <h3>个人信息</h3>
@@ -227,6 +229,26 @@ class index extends Component {
                   <Icon name="RightOutlined" size={12} />
                 </div>
               </div>
+              <div className={styles.userCenterEditItem}>
+                <div className={styles.userCenterEditLabel}>
+                  <label>支付密码</label>
+                </div>
+                <div className={styles.userCenterEditValue} onClick={this.handleGoToEditPayPwd}>
+                  <div className={styles.ucText}>{this.props.user?.canWalletPay ? '修改' : '设置'}</div>
+                  <Icon name="RightOutlined" />
+                </div>
+              </div>
+              {IS_WECHAT_ACCESSABLE && (
+                <div className={styles.userCenterEditItem} style={{ border: 'none' }}>
+                  <div className={styles.userCenterEditLabel}>
+                    <label>微信</label>
+                    <div className={styles.userCenterEditWeChat}>
+                      <Avatar size="small" image={this.user.wxHeadImgUrl} name={this.user.wxNickname} />
+                      <span>{this.user.wxNickname}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           <Copyright marginBottom={0} />
