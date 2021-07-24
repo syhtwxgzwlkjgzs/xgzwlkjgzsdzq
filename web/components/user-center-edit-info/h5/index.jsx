@@ -217,7 +217,7 @@ class index extends Component {
               </div>
             </div> */}
           </div>
-          <Copyright />
+          <Copyright className={styles.fixCopyright} />
         </div>
         <div className={styles.userCenterEditBtn}>
           <Button full onClick={this.handleCancel}>
