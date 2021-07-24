@@ -2,7 +2,7 @@ import React from 'react';
 import ErrorView from './ErrorView';
 import RefreshView from './RefreshView';
 import { noop } from '@components/thread/utils';
-
+import Copyright from '@components/copyright';
 import styles from './index.module.scss';
 
 /**
@@ -24,7 +24,8 @@ const Index = ({
     handleError = noop,
     isBox = false,
     className='',
-    onRefreshPlaceholder = null
+    onRefreshPlaceholder = null,
+    copyright = false
 }) => {
     return (
         <div className={`${styles.bottomView} ${className} ${isBox ? styles.bottomViewBox : ''}`}>
@@ -33,6 +34,7 @@ const Index = ({
             ) : (
                 errorView || <ErrorView text={errorText || '加载失败'} onClick={handleError} />
             )}
+            {copyright && <Copyright marginTop={0} />}
         </div>
     )
 }

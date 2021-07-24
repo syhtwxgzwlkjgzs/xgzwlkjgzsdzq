@@ -104,7 +104,7 @@ function VList(props, ref) {
 
     // 底部
     if (data.type === 'footer') {
-      return 60;
+      return 125;
     }
     return cache.rowHeight({ index, data });
   };
@@ -121,6 +121,7 @@ function VList(props, ref) {
             errorText={props.errorText}
             type="line"
             platform={props.platform}
+            copyright
           ></BottomView>
         );
       default:

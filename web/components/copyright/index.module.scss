@@ -1,7 +1,6 @@
 
 @import '@common/styles/index.scss';
 .container {
-
   font-size: $font-size-small;
   line-height: $font-line-height-xs;
   &.center {
@@ -26,12 +25,12 @@
   &.pc {
     margin-top: rem($margin-5n);
     margin-bottom: rem($margin-5n);
+    // PC登录等页面
+    &.mode_login {
+      margin: $margin-5n 0 auto;
+    }
     .text > a {
       color: $text-color-secondary;
     }
-  }
-  // PC登录等页面
-  &.modeLogin {
-    margin: $margin-5n 0 44px;
   }
 }

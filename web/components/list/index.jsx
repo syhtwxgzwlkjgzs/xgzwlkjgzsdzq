@@ -215,7 +215,7 @@ const List = forwardRef(({
           {children}
           {onRefresh && showRefresh && <BottomView isError={isError} errorText={errText} noMore={noMore} handleError={handleError} noMoreType={noMoreType} />}
         </div>
-        { !hideCopyright && <Copyright className={styles.copyrightFix} /> }
+        { !hideCopyright && <Copyright marginTop={0} /> }
       </div>
     </div>
   );

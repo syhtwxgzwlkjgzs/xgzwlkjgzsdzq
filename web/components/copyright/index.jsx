@@ -11,7 +11,7 @@ class CopyRight extends React.Component {
   }
 
   render() {
-    const { site, center, line, className, mode } = this.props;
+    const { site, center, line, className, mode, marginTop, marginBottom} = this.props;
     if ( !site || !site.webConfig || !site.webConfig.setSite) return null;
 
     const { setSite } = site.webConfig;
@@ -25,14 +25,18 @@ class CopyRight extends React.Component {
       [styles.center]: center || isH5,
       [styles.h5]: isH5,
       [styles.pc]: !isH5,
-      [styles.modeLogin]: mode === 'login'
+      [styles[`mode_${mode}`]]: !!mode
     })
+
+    const style = {};
+    marginTop !== undefined && (style.marginTop =  `${marginTop}${isNaN(marginTop) ? '' : 'px'}`);
+    marginBottom !== undefined && (style.marginBottom =  `${marginBottom}${isNaN(marginBottom) ? '' : 'px'}`);
 
     const curSiteUrl = window.location.origin;
     const curYear = new Date().getFullYear();
 
     return (
-      <div className={clsName}>
+      <div className={clsName} style={style}>
         <div className={styles.text}>
           <a href="https://discuz.chat" target="_blank">
             Powered By Discuz！Q
