@@ -11,7 +11,12 @@ class PcBodyWrap extends React.Component {
     const { platform } = site;
 
     if (platform === 'h5') {
-      return <div>{children}</div>;
+      return (
+        <div className={layout.h5Container}>
+          {children}
+          <CopyRight />
+        </div>
+      );
     }
 
     return (
