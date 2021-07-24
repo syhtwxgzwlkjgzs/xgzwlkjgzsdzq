@@ -54,7 +54,7 @@ export default class FilePreview extends React.Component {
       });
 
       if (!url) {
-        this.setState({ errMsg: '预览失败：无法获取预览地址' });
+        this.setState({ errMsg: '预览失败：文件存储异常。请下载到本地查看' });
         return;
       }
 
@@ -65,8 +65,7 @@ export default class FilePreview extends React.Component {
         url,
       });
     } catch(err) {
-      console.log('文件预览失败', err);
-      this.setState({ errMsg: '文件预览失败' });
+      this.setState({ errMsg: '预览失败，请下载到本地查看' });
     }
   }
 
