@@ -2,22 +2,14 @@ import React from 'react'
 import { View, Button, Text } from '@tarojs/components'
 import styles from './index.module.scss'
 import Icon from '@discuzq/design/dist/components/icon/index';
-import Taro, { useDidHide, useDidShow } from '@tarojs/taro'
+import Taro, { useDidShow } from '@tarojs/taro'
 import classNames from 'classnames';
 
-const index = ({setShow, tipData, data, index, getShareData, shareNickname, shareAvatar, shareThreadid, getShareContent, shareContent}) => {
+const Index = ({setShow, tipData, data, getShareData, shareNickname, shareAvatar, shareThreadid}) => {
     const {threadId} = tipData
     let threadTitle = ''
     const thread = data
     threadTitle = thread.title
-    const shareData = {
-        comeFrom:'thread',
-        threadId,
-        title:threadTitle,
-        path: `/indexPages/thread/index?id=${threadId}`,
-        isAnonymous: thread.isAnonymous,
-        isPrice: thread.displayTag.isPrice,
-    }
     const handleClick = () => {
         setShow(false)
         const {nickname} = thread.user || ''
@@ -27,6 +19,14 @@ const index = ({setShow, tipData, data, index, getShareData, shareNickname, shar
             thread.user.nickname = '匿名用户'
             thread.user.avatar = ''
         }
+    }
+    const shareData = {
+        comeFrom:'thread',
+        threadId,
+        title:threadTitle,
+        path: `/indexPages/thread/index?id=${threadId}`,
+        isAnonymous: thread.isAnonymous,
+        isPrice: thread.displayTag.isPrice,
     }
     const CreateCard = () => {
         setShow(false)
@@ -38,11 +38,6 @@ const index = ({setShow, tipData, data, index, getShareData, shareNickname, shar
         })
     }
 
-    // 当页面被隐藏时（去分享）,收起弹窗
-    // TODO 最好是做成点击按钮之后，就收起弹窗
-    useDidHide(() => {
-        setShow(false)
-    })
     useDidShow(() => {
         if(shareThreadid === threadId) {
             if(thread.isAnonymous){
@@ -85,4 +80,4 @@ const index = ({setShow, tipData, data, index, getShareData, shareNickname, shar
     )
 }
 
-export default React.memo(index)
+export default React.memo(Index)

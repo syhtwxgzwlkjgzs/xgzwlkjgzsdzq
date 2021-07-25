@@ -124,7 +124,6 @@ class Index extends React.Component {
       backgroundColor: '#ffffff'
     });
   }
-
   componentDidMount() {
     this.setNavigationBarStyle();
   }
