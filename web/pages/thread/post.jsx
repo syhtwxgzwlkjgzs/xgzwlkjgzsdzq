@@ -201,8 +201,15 @@ class PostPage extends React.Component {
     });
   };
 
+  // 上传视频之前判断是否已经有了视频，如果有了视频提示只能上传一个视频
   handleVideoUpload = () => {
     this.isVideoUploadDone = false;
+    const { postData } = this.props.threadPost;
+    if (postData.video && postData.video.id) {
+      Toast.info({ content: '只能上传一个视频' });
+      return false;
+    }
+    return true;
   };
 
   // 通过云点播上传成功之后处理：主要是针对语音和视频
