@@ -66,8 +66,9 @@ const InputPop = (props) => {
                   value={value}
                   max={maxPercent}
                   min={0}
-                  step={1}
+                  step={5}
                   onChange={debounce((val) => onInputChange(val), 200)}
+                  formatter={(value) => `${value}`}
                 />
                 <View className={styles.perCent}>%</View>
                 {isShowMaxMoney && (<View className={styles.maxMoney}>*已达到最大可用金额</View>)}
