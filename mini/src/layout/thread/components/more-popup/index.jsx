@@ -42,7 +42,15 @@ const InputPop = (props) => {
         thread.threadData.user.avatar = ''
     }
   }
-  
+  useDidShow(() => {
+    if(user.shareThreadid === threadId) {
+        if(thread.threadData.isAnonymous){
+          thread.threadData.user.nickname = user.shareNickname
+          thread.threadData.user.avatar = user.shareAvatar
+            user.getShareData({})
+        }
+    }
+})
   return (
     <Popup position="bottom" visible={visible} onClose={onClose} customScroll>
       <View className={styles.body}>
