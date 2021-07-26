@@ -44,11 +44,7 @@ class WXRebindActionPage extends Component {
     } catch (e) {
       this.setState({
         currentStatus: 'error',
-      });
-      Toast.error({
-        content: e.Msg || '扫码失败',
-        hasMask: false,
-        duration: 1000,
+        errorTips: e.Msg
       });
     }
   }
@@ -56,7 +52,6 @@ class WXRebindActionPage extends Component {
 
   render() {
     const { currentStatus, errorTips } = this.state;
-    const { nickname = '微信用户', avatarUrl = '' } = getCurrentInstance()?.router?.params || {};
     if (currentStatus) {
       return (
         <Page>
@@ -65,7 +60,8 @@ class WXRebindActionPage extends Component {
             <View className={`${styles.content} ${styles.statusContent}` }>
                 { currentStatus === 'success' && <Icon color='#3AC15F' name="SuccessOutlined" size={80} className={styles.statusIcon} /> }
                 { currentStatus === 'error' && <Icon color='#E02433' name="WrongOutlined" size={80} className={styles.statusIcon} /> }
-                <Text className={styles.statusBottom}>{ currentStatus && (currentStatus === 'success' ? '扫码成功' : errorTips) }</Text>
+                <Text className={styles.statusBottom}>{ currentStatus && (currentStatus === 'success' ? '扫码成功' : '换绑失败') }</Text>
+                { currentStatus === 'error' && <Text className={styles.hint}>{errorTips}</Text> }
             </View>
           </View>
         </Page>

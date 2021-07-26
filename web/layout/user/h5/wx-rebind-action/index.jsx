@@ -15,7 +15,7 @@ class WXRebindActionPage extends React.Component {
     super(props);
     this.state = {
       currentStatus: '',
-      errorTips: '扫码失败',
+      errorTips: '换绑失败',
     };
   }
   async componentDidMount() {
@@ -34,6 +34,7 @@ class WXRebindActionPage extends React.Component {
     } catch (e) {
       this.setState({
         currentStatus: 'error',
+        errorTips: e.Msg
       });
     }
   }
@@ -47,7 +48,7 @@ class WXRebindActionPage extends React.Component {
           <div className={styles.content}>
               { currentStatus === 'success' && <Icon color='#3AC15F' name="SuccessOutlined" size={80} className={styles.statusIcon} /> }
               { currentStatus === 'error' && <Icon color='#E02433' name="WrongOutlined" size={80} className={styles.statusIcon} /> }
-              <p className={styles.statusBottom}>{ currentStatus && (currentStatus === 'success' ? '扫码成功' : '扫码失败') }</p>
+              <p className={styles.statusBottom}>{ currentStatus && (currentStatus === 'success' ? '扫码成功' : '换绑失败') }</p>
               { currentStatus === 'error' && <p className={styles.hint}>{errorTips}</p> }
               { !currentStatus && <LoadingBox style={{ minHeight: '100%' }} />}
           </div>
