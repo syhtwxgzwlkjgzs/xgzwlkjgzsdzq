@@ -1,16 +1,14 @@
 import React, { useState }from 'react';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
-import Icon from '@discuzq/design/dist/components/icon/index';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import Spin from '@discuzq/design/dist/components/spin/index';
 import { extensionList, isPromise, noop } from '../utils';
-import { View, Text } from '@tarojs/components';
+import { View, Text, Image } from '@tarojs/components';
 import Taro from '@tarojs/taro';
-import Downloader from './downloader';
+import getAttachmentIconLink from '@common/utils/get-attachment-icon-link';
 
 import { throttle } from '@common/utils/throttle-debounce.js';
-
 
 
 /**
@@ -73,7 +71,7 @@ const Index = ({
   const [downloading, setDownloading] =
         useState(Array.from({length: attachments.length}, () => false));
 
-  const onDownLoad = (item, index) => {
+  const onDownload = (item, index) => {
     updateViewCount();
     if (!isPay) {
 
@@ -155,28 +153,12 @@ const Index = ({
     }
   };
 
-  const handleIcon = (type) => {
-    if (type === 'XLS' || type === 'XLSX') {
-      return 'XLSOutlined';
-    } if (type === 'DOC' || type === 'DOCX') {
-      return 'DOCOutlined';
-    } if (type === 'ZIP') {
-      return 'DOCOutlined';
-    } if (type === 'PDF') {
-      return 'DOCOutlined';
-    } if (type === 'PPT') {
-      return 'PPTOutlined';
-    }
-    return 'DOCOutlined';
-  };
-
   const Normal = ({ item, index, type }) => {
-    const iconName = handleIcon(type);
     return (
       <View className={styles.container} key={index} onClick={onClick} >
         <View className={styles.wrapper}>
           <View className={styles.left}>
-            <Icon className={styles.containerIcon} size={20} name={iconName} />
+            <Image src={getAttachmentIconLink(type)} className={styles.containerIcon} mode="widthfix"/>
             <View className={styles.containerText}>
               <Text className={styles.content}>{item.fileName}</Text>
               <Text className={styles.size}>{handleFileSize(parseFloat(item.fileSize || 0))}</Text>
@@ -188,7 +170,7 @@ const Index = ({
             <View className={styles.label}>
               { downloading[index] ?
                 <Spin className={styles.spinner} type="spinner" /> :
-                <Text onClick={throttle(() => onDownLoad(item, index), 1000)}>下载</Text>
+                <Text onClick={throttle(() => onDownload(item, index), 1000)}>下载</Text>
               }
             </View>
           </View>
@@ -198,10 +180,9 @@ const Index = ({
   };
 
   const Pay = ({ item, index, type }) => {
-    const iconName = handleIcon(type);
     return (
       <View className={`${styles.container} ${styles.containerPay}`} key={index} onClick={onPay}>
-        <Icon className={styles.containerIcon} size={20} name={iconName} />
+        <Image src={getAttachmentIconLink(type)} className={styles.containerIcon} mode="widthfix"/>
         <Text className={styles.content}>{item.fileName}</Text>
       </View>
     );

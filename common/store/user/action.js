@@ -19,6 +19,9 @@ import {
   readUsersDeny,
   wechatRebindQrCodeGen,
   getWechatRebindStatus,
+  h5Rebind,
+  miniRebind,
+  getSignInFields,
 } from '@server';
 import { get } from '../../utils/get';
 import set from '../../utils/set';
@@ -914,10 +917,10 @@ class UserAction extends SiteStore {
 
       // 更新点赞
       if (
-        updateType === 'like'
-        && !typeofFn.isUndefined(updatedInfo.isLiked)
-        && !typeofFn.isNull(updatedInfo.isLiked)
-        && user
+        updateType === 'like' &&
+        !typeofFn.isUndefined(updatedInfo.isLiked) &&
+        !typeofFn.isNull(updatedInfo.isLiked) &&
+        user
       ) {
         const { isLiked, likePayCount = 0 } = updatedInfo;
         const theUserId = user.userId || user.id;
@@ -982,9 +985,10 @@ class UserAction extends SiteStore {
 
   // 生成微信换绑二维码，仅在 PC 使用
   @action
-  genRebindQrCode = async (scanSuccess = () => {}, scanFail = () => {}) => {
+  genRebindQrCode = async ({ scanSuccess = () => {}, scanFail = () => {}, onTimeOut = () => {}, option = {} }) => {
     clearInterval(this.rebindTimer);
-    const qrCodeRes = await wechatRebindQrCodeGen();
+    this.isQrCodeValid = true;
+    const qrCodeRes = await wechatRebindQrCodeGen(option);
 
     if (qrCodeRes.code === 0) {
       this.rebindQRCode = get(qrCodeRes, 'data.base64Img');
@@ -1000,8 +1004,12 @@ class UserAction extends SiteStore {
 
       // 5min，二维码失效
       setTimeout(() => {
+        this.isQrCodeValid = false;
         clearInterval(this.rebindTimer);
-      }, 5 * 60 * 1000);
+        if (onTimeOut) {
+          onTimeOut();
+        }
+      }, 4 * 60 * 1000);
 
       return qrCodeRes.data;
     }
@@ -1010,6 +1018,76 @@ class UserAction extends SiteStore {
       Code: qrCodeRes.code,
       Msg: qrCodeRes.msg,
     };
+  };
+
+  // mini 换绑接口
+  @action
+  rebindWechatMini = async ({ jsCode, iv, encryptedData, sessionToken }) => {
+    try {
+      const miniRebindResp = await miniRebind({
+        data: {
+          jsCode,
+          iv,
+          encryptedData,
+          sessionToken,
+        },
+      });
+
+      if (miniRebindResp.code === 0) {
+        return miniRebindResp;
+      }
+
+      // 不为零，实际是错误
+      throw miniRebindResp;
+    } catch (err) {
+      if (err.code) {
+        throw {
+          Code: err.code,
+          Msg: err.msg,
+        };
+      }
+
+      throw {
+        Code: 'rbd_9999',
+        Msg: '网络错误',
+        err,
+      };
+    }
+  };
+
+  // h5 换绑接口
+  @action
+  rebindWechatH5 = async ({ code, sessionId, sessionToken, state }) => {
+    try {
+      const h5RebindResp = await h5Rebind({
+        params: {
+          code,
+          sessionId,
+          sessionToken,
+          state,
+        },
+      });
+
+      if (h5RebindResp.code === 0) {
+        return h5RebindResp;
+      }
+
+      // 不为零，实际是错误
+      throw h5RebindResp;
+    } catch (err) {
+      if (err.code) {
+        throw {
+          Code: err.code,
+          Msg: err.msg,
+        };
+      }
+
+      throw {
+        Code: 'rbd_9999',
+        Msg: '网络错误',
+        err,
+      };
+    }
   };
 
   // 轮询重新绑定结果
@@ -1030,9 +1108,53 @@ class UserAction extends SiteStore {
     if (scanStatus.code !== 0) {
       if (scanStatus.msg !== '扫码中') {
         if (scanFail) {
-          scanFail();
+          scanFail(scanStatus);
         }
       }
+    }
+  };
+
+  // 获取用户注册扩展信息
+  @action
+  getUserSigninFields = async () => {
+    let signinFieldsResp = {
+      code: 0,
+      data: [],
+    };
+
+    const safeParse = (value) => {
+      try {
+        return JSON.parse(value);
+      } catch (e) {
+        console.error(e);
+        console.error('解析JSON错误', value);
+        return value;
+      }
+    };
+
+    try {
+      signinFieldsResp = await getSignInFields();
+    } catch (e) {
+      console.error(e);
+      throw {
+        Code: 'usr_9999',
+        Message: '网络错误',
+      };
+    }
+    if (signinFieldsResp.code === 0) {
+      this.userSigninFields = signinFieldsResp.data.map((item) => {
+        if (!item.fieldsExt) {
+          item.fieldsExt = '';
+        } else {
+          item.fieldsExt = safeParse(item.fieldsExt);
+        }
+        return item;
+      });
+    } else {
+      throw {
+        Code: signinFieldsResp.code,
+        Message: signinFieldsResp.msg,
+      };
     }
   };
 
@@ -1041,6 +1163,7 @@ class UserAction extends SiteStore {
   clearWechatRebindTimer = () => {
     clearInterval(this.rebindTimer);
     this.rebindQRCode = null;
+    this.isQrCodeValid = true;
   };
 }
 
