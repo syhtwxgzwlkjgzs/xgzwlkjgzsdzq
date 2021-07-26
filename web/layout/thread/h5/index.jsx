@@ -34,6 +34,8 @@ import classNames from 'classnames';
 
 import BottomView from '@components/list/BottomView';
 import MorePopop from '@components/more-popop';
+import Copyright from '@components/copyright';
+
 @inject('site')
 @inject('user')
 @inject('thread')
@@ -776,6 +778,7 @@ class ThreadH5Page extends React.Component {
               )}
             </div>
           )}
+          <Copyright margin-top={0} />
         </div>
 
         {/* 底部操作栏 */}
