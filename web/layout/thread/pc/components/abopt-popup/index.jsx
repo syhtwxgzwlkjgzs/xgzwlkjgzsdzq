@@ -1,17 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Icon, Popup, Button, Input, Slider } from '@discuzq/design';
 import { debounce, throttle } from '@common/utils/throttle-debounce';
 import styles from './index.module.scss';
 
 const InputPop = (props) => {
-  const { visible, onOkClick, onCancel, rewardAmount } = props;
+  const { visible, onOkClick, onCancel, remainMoney, money } = props;
+
+  const maxPercent = parseInt((remainMoney / money) * 100);
 
   const [value, setValue] = useState(0);
   const [moneyNum, setMoneyNum] = useState(0);
+  const [isShowMaxMoney, setIsShowMaxMoney] = useState(false);
+
+  useEffect(() => {
+    if(moneyNum >= remainMoney) {
+      setIsShowMaxMoney(true);
+    } else {
+      setIsShowMaxMoney(false);
+    }
+  }, [moneyNum]);
 
   const onInputChange = (val) => {
     setValue(Number(val));
-    setMoneyNum((Number(val) * 0.01 * rewardAmount).toFixed(2));
+    setMoneyNum((Number(val) * 0.01 * money).toFixed(2));
   };
 
   const onSubmitClick = async () => {
@@ -46,12 +57,13 @@ const InputPop = (props) => {
                 <Slider
                   value={value}
                   defaultValue={value}
-                  max={100}
+                  max={maxPercent}
                   min={0}
                   step={1}
                   onChange={throttle((val) => onInputChange(val), 100)}
                 />
                 <div className={styles.perCent}>%</div>
+                {isShowMaxMoney && (<div className={styles.maxMoney}>*已达到最大可用金额</div>)}
               </div>
             </div>
             <div className={styles.rewardMoney}>

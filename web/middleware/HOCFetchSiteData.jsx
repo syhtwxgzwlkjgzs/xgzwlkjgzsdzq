@@ -3,7 +3,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import isServer from '@common/utils/is-server';
 import getPlatform from '@common/utils/get-platform';
-import { readForum, readUser, readPermissions } from '@server';
+import { readForum, readUser, readPermissions, readEmoji } from '@server';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import clearLoginStatus from '@common/utils/clear-login-status';
@@ -35,6 +35,7 @@ import LoginHelper from '@common/utils/login-helper';
 export default function HOCFetchSiteData(Component, _isPass) {
   @inject('site')
   @inject('user')
+  @inject('emotion')
   @observer
   class FetchSiteData extends React.Component {
     // 应用初始化
@@ -52,6 +53,10 @@ export default function HOCFetchSiteData(Component, _isPass) {
         if (isServer()) {
           const { headers } = ctx.req;
           platform = (headers && !typeofFn.isEmptyObject(headers)) ? getPlatform(headers['user-agent']) : 'static';
+
+          // 请求并保持表情数据
+          readEmoji({}, ctx);
+
           // 获取站点信息
           siteConfig = await readForum({}, ctx);
           serverSite = {
@@ -59,7 +64,6 @@ export default function HOCFetchSiteData(Component, _isPass) {
             closeSite: siteConfig.code === -3005 ? siteConfig.data : null,
             webConfig: siteConfig && siteConfig.data || null,
           };
-
           // 当站点信息获取成功，进行当前用户信息查询
           if (siteConfig && siteConfig.code === 0 && siteConfig?.data?.user?.userId) {
             userInfo = await readUser({
@@ -100,13 +104,15 @@ export default function HOCFetchSiteData(Component, _isPass) {
       this.handleWxShare = this.handleWxShare.bind(this);
 
       let isNoSiteData;
-      const { serverUser, serverSite, user, site } = props;
+      const { serverUser, serverSite, serverEmotion, user, site, emotion } = props;
 
       serverSite && serverSite.platform && site.setPlatform(serverSite.platform);
       serverSite && serverSite.closeSite && site.setCloseSiteConfig(serverSite.closeSite);
       serverSite && serverSite.webConfig && site.setSiteConfig(serverSite.webConfig);
       serverUser && serverUser.userInfo && user.setUserInfo(serverUser.userInfo);
       serverUser && serverUser.userPermissions && user.setUserPermissions(serverUser.userPermissions);
+      serverUser && serverUser.userPermissions && user.setUserPermissions(serverUser.userPermissions);
+      serverEmotion && serverEmotion.emojis && emotion.setEmoji(serverEmotion.emojis);
 
       if (!isServer()) {
         isNoSiteData = !((site && site.webConfig));
@@ -121,9 +127,14 @@ export default function HOCFetchSiteData(Component, _isPass) {
 
     async componentDidMount() {
       const { isNoSiteData } = this.state;
-      const { serverUser, serverSite, user, site } = this.props;
+      const { serverUser, serverSite, user, site, emotion } = this.props;
       let siteConfig;
       let loginStatus = false;
+
+      // 请求并保持表情数据
+      if (!emotion.emojis?.length) {
+        emotion.fetchEmoji()
+      }
 
       // 设置平台标识
       site.setPlatform(getPlatform(window.navigator.userAgent));
@@ -302,7 +313,9 @@ export default function HOCFetchSiteData(Component, _isPass) {
         case JUMP_TO_PAY_SITE:// 到付费加入页面
           LoginHelper.saveAndRedirect('/forum/partner-invite');
           break;
-        default: Router.redirect({ url: '/500' });
+        default:
+          site.setErrPageType('site');
+          Router.redirect({ url: '/500' });
           break;
       }
     }

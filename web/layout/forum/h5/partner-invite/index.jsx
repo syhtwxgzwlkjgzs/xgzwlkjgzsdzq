@@ -265,6 +265,7 @@ class PartnerInviteH5Page extends React.Component {
           {/* 热门内容预览 start */}
           <PartnerInviteHot unifyOnClick={this.handleJoinSite}/>
           {/* 热门内容预览 end */}
+          {platform === 'h5' && <Copyright />}
           {
             platform === 'h5'
               ? (

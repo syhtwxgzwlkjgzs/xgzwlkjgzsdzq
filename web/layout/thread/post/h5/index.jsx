@@ -25,7 +25,7 @@ import RedpacketSelect from '@components/thread-post/redpacket-select';
 import PostPopup from '@components/thread-post/post-popup';
 import AllPostPaid from '@components/thread/all-post-paid';
 import { withRouter } from 'next/router';
-import { getVisualViewpost } from '@common/utils/get-client-height';
+import { getVisualViewpost, getClientHeight } from '@common/utils/get-client-height';
 import throttle from '@common/utils/thottle';
 import Header from '@components/header';
 import Router from '@discuzq/sdk/dist/router';
@@ -73,14 +73,14 @@ class ThreadCreate extends React.Component {
     throttle(this.setBottomBarStyle(window.scrollY), 50);
   }
 
-  androidHandler() {
+  androidHandler = () => {
     const winHeight = getVisualViewpost();
     if (!judgeDeviceType().isAndroid) return;
-    throttle(() => {
-      if (window.innerHeight === winHeight) {
-        this.clearBottomFixed();
-      }
-    }, 50);
+    if (window.innerHeight === winHeight) {
+      this.clearBottomFixed();
+    } else {
+      this.props.handleSetState({ currentDefaultOperation: '' });
+    }
   }
 
   // 定位的显示与影藏
@@ -104,7 +104,7 @@ class ThreadCreate extends React.Component {
   setBottomBarStyle = (y = 0, action, event) => {
     const winHeight = getVisualViewpost();
     // 阻止页面上拉带动操作栏位置变化。
-    if (window.innerHeight === winHeight && judgeDeviceType().isIOS) return;
+    if (window.clientHeight === winHeight && judgeDeviceType().isIOS) return;
     // 如果可视窗口不变，即没有弹起键盘不进行任何设置
     const vditorToolbar = document.querySelector('#dzq-vditor .vditor-toolbar');
     this.positionDisplay(action);
@@ -252,7 +252,9 @@ class ThreadCreate extends React.Component {
             onChange={this.props.handleVditorChange}
             onFocus={(action, event) => {
               this.setBottomFixed(action, event);
-              this.props.handleSetState({ isVditorFocus: true, currentDefaultOperation: '' });
+              const operation = action === 'edior-focus'
+                && this.props.currentDefaultOperation === defaultOperation.emoji ? defaultOperation.emoji : '';
+              this.props.handleSetState({ isVditorFocus: true, currentDefaultOperation: operation });
             }}
             onBlur={() => {
               this.props.handleSetState({ isVditorFocus: false });
@@ -260,6 +262,7 @@ class ThreadCreate extends React.Component {
             }}
             onInit={this.props.handleVditorInit}
             setState={this.props.handleSetState}
+            site={site}
           />
           {/* 图片 */}
           {(currentAttachOperation === THREAD_TYPE.image || Object.keys(postData.images).length > 0) && (

@@ -205,11 +205,13 @@ class Header extends React.Component {
               {this.renderHeaderLogo()}
               <div className={styles.inputBox}>
                 <Input
+                  // 增加 name ，避免错误的自动补全
+                  name="homeSearch"
                   placeholder="搜索"
                   icon="SearchOutlined"
                   value={this.state.value}
                   onEnter={this.handleSearch}
-                  onChange={(e) => this.onChangeInput(e.target.value)}
+                  onChange={e => this.onChangeInput(e.target.value)}
                   onIconClick={this.handleIconClick}
                 />
               </div>

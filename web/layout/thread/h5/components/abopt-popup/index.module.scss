@@ -36,9 +36,17 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: rem($padding-2n);
+      padding-bottom: rem($padding-3n);
+      position: relative;
       .perCent {
         color: $text-color-primary;
+      }
+      .maxMoney {
+        color: $error-color;
+        font-size: $font-size-small;
+        position: absolute;
+        right: 0;
+        bottom: rem(2);
       }
       :global {
         .dzq-slider__progress--active {

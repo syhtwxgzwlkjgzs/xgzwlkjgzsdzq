@@ -13,6 +13,7 @@ import './index.scss';
 import '@discuzq/vditor/src/assets/scss/index.scss';
 import { Toast } from '@discuzq/design';
 import browser, { constants } from '@common/utils/browser';
+import { attachmentUploadMultiple } from '@common/utils/attachment-upload';
 
 export default function DVditor(props) {
   const { pc, emoji = {}, atList = [], topic, value = '',
@@ -23,6 +24,7 @@ export default function DVditor(props) {
     onCountChange = () => { },
     hintCustom = () => { },
     hintHide = () => { },
+    site = {},
   } = props;
   const vditorId = 'dzq-vditor';
   let timeoutId = null;
@@ -40,11 +42,18 @@ export default function DVditor(props) {
     }
   };
 
-  const html2mdInserValue = (text) => {
+  const html2mdInserValue = (text, isImage) => {
     try {
-      if (!vditor) return;
-      const md = vditor.html2md && vditor.html2md(text);
-      vditor.insertValue && vditor.insertValue(md.substr(0, md.length - 1));
+      if (!vditor && !window.vditorInstance) return;
+      const editorInstance = vditor || window.vditorInstance;
+      let md = editorInstance.html2md && editorInstance.html2md(text);
+      md = md.substr(0, md.length - 1);
+
+      if (isImage) {
+        md = `<p>${md}</p>`
+      }
+
+      editorInstance.insertValue && editorInstance.insertValue(md);
     } catch (error) {
       console.error('html2mdInserValue', error);
     }
@@ -66,7 +75,7 @@ export default function DVditor(props) {
     if (emoji && emoji.code) {
       setState({ emoji: {} });
       // 因为vditor的lute中有一些emoji表情和 emoji.code 重叠了。这里直接先这样处理
-      let value = `<img alt="${emoji.code}emoji" src="${emoji.url}" class="qq-emotion" />`;
+      let value = `<img alt="${emoji.code}dzqemoji" src="${emoji.url}" class="qq-emotion" />`;
       value = emojiVditorCompatibilityDisplay(value);
       // setCursorPosition();
       html2mdInserValue(value);
@@ -115,13 +124,13 @@ export default function DVditor(props) {
         if (vditor && vditor.getValue && vditor.getValue() === '\n' && vditor.getValue() !== value) {
           errorNum = 0;
           html2mdSetValue(value);
-          vditor.vditor[vditor.vditor.currentMode].element.blur();
         }
       } catch (error) {
         console.log(error);
         errorNum += 1;
         if (errorNum <= 5) setEditorInitValue();
       }
+      vditor.vditor[vditor.vditor.currentMode].element.blur();
     }, 300);
   };
 
@@ -161,6 +170,12 @@ export default function DVditor(props) {
   };
 
   const storeLastCursorPosition = (editor) => {
+    const { vditor } = editor;
+    const editorElement = vditor[vditor.currentMode]?.element;
+    editorElement?.addEventListener('click', (e) => {
+      setIsFocus(false);
+      onFocus('focus', e);
+    });
     /** *
      * ios 和mac safari，在每一个事件中都记住上次光标的位置
      * 避免blur后vditor.insertValue的位置不正确
@@ -168,7 +183,6 @@ export default function DVditor(props) {
 
     if (/Chrome/i.test(navigator.userAgent)
       || !/(iPhone|Safari|Mac OS)/i.test(navigator.userAgent)) return;
-    const { vditor } = editor;
 
     // todo 事件需要throttle或者debounce??? delay时间控制不好可能导致记录不准确
     // const editorElement = vditor[vditor.currentMode]?.element;
@@ -182,11 +196,6 @@ export default function DVditor(props) {
     //     }, 0);
     //   });
     // });
-    const editorElement = vditor[vditor.currentMode]?.element;
-    editorElement?.addEventListener('click', (e) => {
-      setIsFocus(false);
-      onFocus('focus', e);
-    });
     // 从事件绑定方式修改成轮询记录的方式，以达到更实时更精确的记录方式，可解决iphone下输入中文光标会被重置到位置0的问题（性能需关注）
     const timeoutRecord = () => {
       timeoutId = setTimeout(() => {
@@ -228,14 +237,14 @@ export default function DVditor(props) {
     };
   };
 
-  function initVditor() {
+  const initVditor = () => {
     // https://ld246.com/article/1549638745630#options
     const editor = new Vditor(
       vditorId,
       {
         _lutePath: 'https://cdn.jsdelivr.net/npm/@discuzq/vditor@1.0.22/dist/js/lute/lute.min.js',
         ...baseOptions,
-        minHeight: 44,
+        minHeight: pc ? 450 : 44,
         // 编辑器初始化值
         tab: '  ',
         value,
@@ -245,9 +254,14 @@ export default function DVditor(props) {
           editor.setValue('');
           setEditorInitValue();
           // 去掉异步渲染之后的光标focus
-          if (!pc && getSelection().rangeCount > 0) getSelection().removeAllRanges();
+          editor.vditor[editor.vditor.currentMode].element.blur();
+          if (!pc && getSelection().rangeCount > 0) {
+            getSelection().removeAllRanges();
+          }
         },
-        focus: () => {},
+        focus: (val, e) => {
+          if (browser.env(constants.ANDROID)) onFocus('edior-focus', e);
+        },
         input: () => {
           setIsFocus(false);
           onInput(editor);
@@ -313,11 +327,96 @@ export default function DVditor(props) {
             hintHide();
           },
         },
+        upload: {
+          url: 'upload',
+          accept: 'image/*',
+          handler: async (files) => {
+
+            const { webConfig: { other, setAttach } } = site;
+            const { canInsertThreadImage } = other;
+            const { supportImgExt, supportMaxSize } = setAttach;
+
+            if (!canInsertThreadImage) {
+              Toast.error({
+                content: '您没有上传图片的权限',
+                duration: 3000,
+              });
+              return;
+            }
+
+            // 检查文件类型，含有非图片文件则退出上传并提示用户
+            for (let i = 0; i < files.length; i++) {
+              const file = files[i];
+              const type = file.type;
+
+              if (!type.includes('image')) {
+                Toast.error({
+                  content: '暂不支持拖拽/复制上传非图片文件',
+                  duration: 3000,
+                });
+                return;
+              }
+
+              const types = supportImgExt.split(',');
+              if (!types.includes(type.substr(6))) {
+                Toast.error({
+                  content: `仅支持上传格式为${supportImgExt}的图片，请重新选择`,
+                  duration: 3000,
+                });
+                return;
+              }
+
+              if (file.size > (supportMaxSize * 1024 * 1024)) {
+                Toast.error({
+                  content: `仅支持上传小于${supportMaxSize}MB的图片，请重新选择`,
+                  duration: 3000,
+                });
+                return;
+              }
+            }
+
+            // 检查文件数量，超出max数量则退出上传并提示用户
+            if (window.vditorInstance) {
+              const text = window.vditorInstance.getHTML();
+              const images = text.match(/<img.*?\/>/g);
+
+              const max = 100;
+              if (images && (images.length + files.length) > max) {
+                Toast.error({
+                  content: `图文混排最多支持插入${max}张图片，现在还可以插入${max - images.length}张`,
+                  duration: 3000,
+                });
+                return;
+              }
+            }
+
+
+
+
+
+            // 执行上传
+            const toastInstance = Toast.loading({
+              content: `图片上传中...`,
+              hasMask: true,
+              duration: 0,
+            });
+            const res = await attachmentUploadMultiple(files);
+            res.forEach(ret => {
+              const { code, data = {} } = ret;
+              if (code === 0) {
+                const { url, id } = data;
+                html2mdInserValue(`<img src="${url}" alt="attachmentId-${id}" />`, true);
+              }
+            });
+            toastInstance.destroy();
+          }
+        }
       },
     );
 
     storeLastCursorPosition(editor);
     setVditor(editor);
+    window.vditorInstance = editor;
   }
 
   const className = pc ? 'dvditor pc' : classNames('dvditor h5', { 'no-focus': !pc && !isFocus });

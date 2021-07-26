@@ -124,6 +124,10 @@ class index extends Component {
     Taro.navigateTo({ url: '/subPages/my/edit/paypwd/index' });
   };
 
+  handleGoToAdditionalInfo = () => {
+    Taro.navigateTo({ url: '/subPages/my/edit/additional-info/index' });
+  };
+
   // 渲染修改用户名
   renderInputNickName = () => {
     const { isClickNickName } = this.state;
@@ -202,7 +206,7 @@ class index extends Component {
             </View>
           </View>
           {IS_WECHAT_ACCESSABLE && (
-            <View className={styles.userCenterEditItem} style={{ border: 'none' }}>
+            <View className={styles.userCenterEditItem}>
               <View className={styles.userCenterEditLabel}>
                 <Text className={styles.userLabelName}>微信</Text>
                 <View className={styles.userCenterEditWeChat}>
@@ -212,6 +216,14 @@ class index extends Component {
               </View>
             </View>
           )}
+          <View className={styles.userCenterEditItem} onClick={this.handleGoToAdditionalInfo}>
+            <View className={styles.userCenterEditLabel}>
+              <Text className={styles.userLabelName}>补充信息</Text>
+            </View>
+            <View className={styles.userCenterEditValue}>
+              <Icon name="RightOutlined" size={12} />
+            </View>
+          </View>
         </View>
         {/* bottom */}
         <View className={styles.userCenterEditBtn}>
