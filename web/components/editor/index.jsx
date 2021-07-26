@@ -130,7 +130,6 @@ export default function DVditor(props) {
         errorNum += 1;
         if (errorNum <= 5) setEditorInitValue();
       }
-      vditor.vditor[vditor.vditor.currentMode].element.blur();
     }, 300);
   };
 
@@ -253,8 +252,6 @@ export default function DVditor(props) {
           onInit(editor);
           editor.setValue('');
           setEditorInitValue();
-          // 去掉异步渲染之后的光标focus
-          editor.vditor[editor.vditor.currentMode].element.blur();
           if (!pc && getSelection().rangeCount > 0) {
             getSelection().removeAllRanges();
           }

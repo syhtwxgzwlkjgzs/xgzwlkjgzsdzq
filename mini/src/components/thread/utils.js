@@ -2,7 +2,7 @@ import { createContext } from 'react';
 import Taro from '@tarojs/taro';
 
 //URL正则
-const urlReg = /^((https?|ftp|file):\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+const urlReg = /^(((ht|f)tps?):\/\/)?[\w-]+(\.[\w-]+)+([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?$/
 
 export const ThreadCommonContext = createContext();
 

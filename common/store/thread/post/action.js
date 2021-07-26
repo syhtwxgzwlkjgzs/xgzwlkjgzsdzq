@@ -267,7 +267,7 @@ class ThreadPostAction extends ThreadPostStore {
     }
     text = emojiFormatForCommit(text)
       .replace(/@([^@<]+)<\/p>/g, '@$1 </p>')
-      .replace(/<code>\s*([^\s]+)\s*<\/code>/, '<code>$1</code>');
+      .replace(/<code>\s*([^\s]+)\s*<\/code>/g, '<code>$1</code>');
     const params = {
       title, categoryId, content: {
         text,
