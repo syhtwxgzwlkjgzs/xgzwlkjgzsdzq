@@ -14,7 +14,9 @@
   .userInfo {
     flex: 1;
   }
-  
+  :global(.dzq-richText) {
+    word-break: break-all
+  }
   .body {
     margin-top: rem($margin-6n);
     max-height: 1900px;
@@ -22,21 +24,29 @@
     > * {
       margin-bottom: rem($margin-4n);
     }
-    :last-child {
-      margin-bottom: 0;
+    .content {
+      :global(a) {
+        // text-underline-position: under;
+        // text-underline-offset: 10px;
+        text-decoration: none; 
+        // white-space: nowrap;
+        // border-bottom: 1px solid #2469f6; 
+      }
     }
   }
   .imgBox {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: rem(48) !important;
+    margin: rem(40) !important;
+    margin-top: rem(24) !important;
     .priceimg {
       width: rem(259);
     }
   }
   .lookmoreBox {
-    margin: 24px;
+    margin-top: rem(24);
+    margin-bottom: rem(16);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -52,13 +62,12 @@
     word-break: break-all;
   }
   .tag {
-    
+    margin-top: rem(8);
     display: inline-block;
     color: $text-color-regular;
     background: #f0f1f3; // TODO:token
     font-size: rem($font-size-label);
     padding: rem(6.5) rem($padding-1n);
     border-radius: rem($border-radius-small);
-    margin: rem($padding-4n) 0;
     line-height: rem(12);
   }

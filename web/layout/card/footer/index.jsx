@@ -25,7 +25,7 @@ const Index = ({ site, setReady }) => {
         <div className={styles.footerBox}>
             <img src={miniCode} className={styles.footerImg}/>
             <span className={styles.desc}>
-                长按小程序码查看详情
+                长按识别小程序查看详情
             </span>
             <span className={styles.siteName}>
                 {`来自${siteName}`}

@@ -7,11 +7,11 @@ import UserInfo from '@components/thread/user-info';
 import styles from './index.module.scss';
 import Card from '../index';
 
-
 const ThreadCard = inject('user', 'card')(observer((props) => {
   const { card: threadStore } = props;
+  const { isReady, imgReadyLength, imgReady } = threadStore;
   let { text, indexes } = threadStore?.threadData?.content || {};
-  const { parentCategoryName, categoryName } = threadStore?.threadData;
+  const { parentCategoryName, categoryName } = threadStore?.threadData || {};
   let title = threadStore?.threadData?.title;
   let parseContent = parseContentData(indexes);
   const isEssence = threadStore?.threadData?.displayTag?.isEssence || false;
@@ -21,17 +21,29 @@ const ThreadCard = inject('user', 'card')(observer((props) => {
   const isRedPack = threadStore?.threadData?.displayTag?.isRedPack;
   // 是否悬赏帖
   const isReward = threadStore?.threadData?.displayTag?.isReward;
-  let { nickname } = threadStore?.threadData?.user;
-  let { avatar } = threadStore?.threadData?.user;
-  const { isAnonymous } = threadStore?.threadData;
+  let nickname = threadStore?.threadData?.user?.nickname;
+  let avatar = threadStore?.threadData?.user?.avatar;
+  const isAnonymous = threadStore?.threadData?.isAnonymous;
   const priceImg = '/dzq-img/admin-logo-pc.jpg';
-  const content = useRef();
+  const content = useRef(null);
   const [overMaxHeight, setOverMaxHeight] = useState(false);
+  // 内容是否为空
+  let isEmpty = false;
+  if (!text && !title && !parseContent.IMAGE) {
+    isEmpty = true;
+  }
   useEffect(() => {
-    if (content.current.offsetHeight >= 1900) {
+    if (!parseContent?.IMAGE) {
+      threadStore.setImgReady();
+    }
+    if (imgReadyLength === parseContent?.IMAGE?.length) {
+      threadStore.setImgReady();
+      threadStore.clearImgReadyLength();
+    }
+    if (imgReady && content?.current?.scrollHeight >= 1900) {
       setOverMaxHeight(true);
     }
-  }, []);
+  });
   // 处理匿名情况
   if (isAnonymous) {
     nickname = '匿名用户';
@@ -45,13 +57,14 @@ const ThreadCard = inject('user', 'card')(observer((props) => {
   }
   return (
     <Card>
+      {isReady && (
       <div className={`${styles.container}`}>
         <div className={styles.header}>
           <div className={styles.userInfo}>
             <UserInfo
               name={nickname || ''}
               avatar={avatar || ''}
-              location={threadStore?.threadData?.position.location || ''}
+              location={threadStore?.threadData?.position?.location || ''}
               groupName={threadStore?.threadData?.group?.groupName || ''}
               view={`${threadStore?.threadData?.viewCount}` || ''}
               time={`${threadStore?.threadData?.diffTime}` || ''}
@@ -69,7 +82,7 @@ const ThreadCard = inject('user', 'card')(observer((props) => {
           {title && <div className={styles.title}>{title}</div>}
 
           {/* 文字 */}
-          {text && <PostContent useShowMore={false} content={text || ''} />}
+          {text && <PostContent useShowMore={false} content={text || ''} className={styles.content}/>}
 
 
           {/* 图片 */}
@@ -78,14 +91,16 @@ const ThreadCard = inject('user', 'card')(observer((props) => {
               flat
               platform="h5"
               imgData={parseContent.IMAGE}
+              showLongPicture={false}
             />
           )}
           {/* 付费 */}
-          {!isFree && (
+          {(!isFree || isEmpty) && (
             <div className={styles.imgBox}>
               <img src={priceImg} className={styles.priceimg}/>
             </div>
           )}
+
         </div>
         {overMaxHeight && (
             <div className={styles.lookmoreBox}>
@@ -99,7 +114,9 @@ const ThreadCard = inject('user', 'card')(observer((props) => {
             </div>
           )}
       </div>
-      </Card>
+      )}
+
+    </Card>
   );
 }));
 

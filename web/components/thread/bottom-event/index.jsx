@@ -71,8 +71,9 @@ const Index = ({
     onClose();
   };
   const createCard = () => {
+    const { threadId } = tipData;
     card.setThreadData(data);
-    Router.push({ url: '/card?from=thread' });
+    Router.push({ url: `/card?threadId=${threadId}` });
   };
   const needHeight = useMemo(() => userImgs.length !== 0 || comment > 0 || sharing > 0, [userImgs, comment, sharing]);
   return (

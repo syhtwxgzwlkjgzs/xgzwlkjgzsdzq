@@ -25,6 +25,9 @@
     .customAvatar {
       border: 1px solid #fff;
       box-sizing: border-box;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     .descBox {
       display: flex;
@@ -45,7 +48,6 @@
       }
       .sitename {
         margin-top: rem(1);
-        font-family: "PingFangSC-Regular ";
         font-size: rem(12);
         line-height: rem(16);
         text-align: left;
@@ -99,20 +101,27 @@
   max-height: 1900px;
   overflow: hidden;
   padding: 16px;
+  padding-bottom: rem(24);
   .contentHeader {
     margin-top: rem(3);
+    display: flex;
+    align-items: center;
+    .contentHeaderImgBox {
+      height: 24px;
+      line-height: 24px;
+    }
     .contentHeaderImg {
       width: rem(14);
       height: rem(16);
-      vertical-align: middle;
+      vertical-align: middle
     }
     .contentHeaderText {
-      font-family: "PingFang SC Semibold";
       font-size: rem(16);
       line-height: rem(24);
       text-align: left;
       color: #0b0b37;
       margin-left: rem(8);
+      vertical-align: middle
     }
   }
   .line {
@@ -121,7 +130,6 @@
     border-top: 1px solid #eee;
   }
   .contentText {
-    font-family: "PingFangSC-Regular ";
     font-size: rem(14);
     line-height: rem(24);
     text-align: left;

@@ -107,7 +107,7 @@ class HomeHeader extends React.Component {
     this.setState({ show: true });
   }
   createCard = () => {
-    Router.push({ url: '/card?from=header' });
+    Router.push({ url: '/card' });
   }
   componentDidMount() {
     this.setState({ loadWeiXin: isWeiXin() });

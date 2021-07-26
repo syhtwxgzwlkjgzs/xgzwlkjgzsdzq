@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import calcCosImageQuality from '@common/utils/calc-cos-image-quality';
 @inject('site')
 @inject('user')
+@inject('card')
 @observer
 class SiteCard extends React.Component {
   constructor(props) {
@@ -56,7 +57,8 @@ class SiteCard extends React.Component {
     }
   }
   render() {
-    const { bgColor, style = {}, mode = '', site, user } = this.props;
+    const { bgColor, style = {}, mode = '', site, user, card } = this.props;
+    card.setImgReady();
     const { countUsers, countThreads } = this.getSiteInfo();
     const { userInfo } = user;
     const siteData = site.webConfig?.setSite || '';
@@ -116,15 +118,16 @@ class SiteCard extends React.Component {
           </div>
           <div className={styles.contentBox} ref={this.content}>
             <div className={styles.contentHeader}>
-              <img src='/dzq-img/content-header.png' className={styles.contentHeaderImg}/>
+              <div className={styles.contentHeaderImgBox}>
+                <img src='/dzq-img/content-header.png' className={styles.contentHeaderImg}/>
+              </div>
               <span className={styles.contentHeaderText}>站点介绍</span>
             </div>
             <div className={styles.line}></div>
             <div className={styles.contentText}>
               {siteIntroduction}
             </div>
-          </div>
-          {this.state.overMaxHeight && (
+            {this.state.overMaxHeight && (
             <div>
               <div className={styles.rectangleBox}>
                 <img src='dzq-img/rectangle.png' className={styles.rectangle}/>
@@ -133,7 +136,8 @@ class SiteCard extends React.Component {
                 <img src='/dzq-img/look-more.jpg' className={styles.lookmoreImg}/>
               </div>
             </div>
-          )}
+            )}
+          </div>
         </Card>
     );
   }
