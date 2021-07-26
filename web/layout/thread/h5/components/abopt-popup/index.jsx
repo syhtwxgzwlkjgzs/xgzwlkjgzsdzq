@@ -63,8 +63,9 @@ const InputPop = (props) => {
                   defaultValue={value}
                   max={maxPercent}
                   min={0}
-                  step={1}
+                  step={5}
                   onChange={throttle((val) => onInputChange(val), 100)}
+                  formatter={(value) => `${value}`}
                 />
                 <div className={styles.perCent}>%</div>
                 {isShowMaxMoney && (<div className={styles.maxMoney}>*已达到最大可用金额</div>)}
