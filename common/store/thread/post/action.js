@@ -266,12 +266,13 @@ class ThreadPostAction extends ThreadPostStore {
     }
     text = emojiFormatForCommit(text)
       .replace(/@([^@<]+)<\/p>/g, '@$1 </p>')
-      .replace(/<code>\s*([^\s]+)\s*<\/code>/, '<code>$1</code>');
+      .replace(/<code>\s*([^\s]+)\s*<\/code>/g, '<code>$1</code>');
     const params = {
       title, categoryId, content: {
         text,
       },
     };
+    console.log('text', text, contentText);
     if (position.address) params.position = position;
     else {
       // 主要是编辑时删除位置的情况，暂时区别开编辑和发帖，因为后台没有更新接口避免影响发帖
