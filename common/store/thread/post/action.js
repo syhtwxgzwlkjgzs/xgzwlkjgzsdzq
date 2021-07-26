@@ -272,7 +272,6 @@ class ThreadPostAction extends ThreadPostStore {
         text,
       },
     };
-    console.log('text', text, contentText);
     if (position.address) params.position = position;
     else {
       // 主要是编辑时删除位置的情况，暂时区别开编辑和发帖，因为后台没有更新接口避免影响发帖
