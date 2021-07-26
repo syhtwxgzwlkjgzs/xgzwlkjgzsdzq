@@ -75,7 +75,7 @@ const PostContent = ({
     }
     e && e.stopPropagation();
     // 点击图片不跳转，图片不包含表情
-    if( !(e?.target?.getAttribute('src') && e?.target?.className?.indexOf("qq-emotion") === -1) ) {
+    if (!(e?.target?.getAttribute('src') && e?.target?.className?.indexOf('qq-emotion') === -1)) {
       onRedirectToDetail();
     }
   };
@@ -90,18 +90,18 @@ const PostContent = ({
   // 点击富文本中的图片
   const handleImgClick = (e) => {
     updateViewCount();
-    if(e?.attribs?.src) {
+    if (e?.attribs?.src) {
       setImageVisible(true);
       setCurImageUrl(`${decodeURIComponent(e.attribs.src)}`);
     }
-  }
+  };
 
   // 点击富文本中的链接
   const handleLinkClick = () => {
     updateViewCount();
     setTimeout(() => { // 等待store更新完成后跳转
     }, 500);
-  }
+  };
 
   // 超过1200个字符，截断文本用于显示
   const getCutContentForDisplay = (maxContentLength) => {
@@ -191,6 +191,6 @@ const PostContent = ({
       )}
     </div>
   );
-}
+};
 
 export default React.memo(PostContent);
