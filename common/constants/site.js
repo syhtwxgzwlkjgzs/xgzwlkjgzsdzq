@@ -89,6 +89,7 @@ export const REVIEWING_USER_WHITE_LIST = [
   '/subPages/user/status/index', // 用户状态提示页
   '/subPages/forum/partner-invite/index', // 站点加入
   '/subPages/user/supplementary/index', // 补充信息
+  '/subPages/user/bind-phone/index', // 绑定手机号
 ];
 
 // web端站点，用户账号审核中可以访问的路由白名单
@@ -99,6 +100,8 @@ export const REVIEWING_USER_WHITE_LIST_WEB = [
   '/forum/partner-invite', // 站点加入
   '/user/bind-nickname', // 绑定昵称
   '/user/supplementary', // 补充信息
+  '/user/bind-phone', // 绑定手机号
+  '/user/bind-nickname', // 绑定昵称
 ];
 
 export const PERMISSION_PLATE = [

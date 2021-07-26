@@ -141,7 +141,8 @@ class PartnerInviteH5Page extends React.Component {
           // data 中传递后台参数
           amount: sitePrice,
           title: siteName,
-          type: user?.userInfo?.expiredAt ? 8 : 1, // 续费传8，新付费传1.站点付费注册
+          // type: user?.userInfo?.expiredAt ? 8 : 1, // 续费传8，新付费传1.站点付费注册
+          type: 1
         },
         isAnonymous: false, // 是否匿名
         success: async () => {
@@ -255,7 +256,7 @@ class PartnerInviteH5Page extends React.Component {
                 <></>
               }
               <Button className={layout.bottom_button} onClick={this.handleJoinSite}>
-                { user.isLogin() ? `${siteMode === 'pay' ? `¥${sitePrice} ` : ''}${user?.userInfo?.expiredAt ? '续费' : '立即'}加入` : '登录浏览更多内容'}
+                { user.isLogin() ? `${siteMode === 'pay' ? `¥${sitePrice} ` : ''}立即加入` : '登录浏览更多内容'}
               </Button>
             </View>
           </View>

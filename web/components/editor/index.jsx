@@ -121,7 +121,6 @@ export default function DVditor(props) {
         errorNum += 1;
         if (errorNum <= 5) setEditorInitValue();
       }
-      vditor.vditor[vditor.vditor.currentMode].element.blur();
     }, 300);
   };
 
@@ -161,6 +160,12 @@ export default function DVditor(props) {
   };
 
   const storeLastCursorPosition = (editor) => {
+    const { vditor } = editor;
+    const editorElement = vditor[vditor.currentMode]?.element;
+    editorElement?.addEventListener('click', (e) => {
+      setIsFocus(false);
+      onFocus('focus', e);
+    });
     /** *
      * ios 和mac safari，在每一个事件中都记住上次光标的位置
      * 避免blur后vditor.insertValue的位置不正确
@@ -168,7 +173,6 @@ export default function DVditor(props) {
 
     if (/Chrome/i.test(navigator.userAgent)
       || !/(iPhone|Safari|Mac OS)/i.test(navigator.userAgent)) return;
-    const { vditor } = editor;
 
     // todo 事件需要throttle或者debounce??? delay时间控制不好可能导致记录不准确
     // const editorElement = vditor[vditor.currentMode]?.element;
@@ -182,11 +186,6 @@ export default function DVditor(props) {
     //     }, 0);
     //   });
     // });
-    const editorElement = vditor[vditor.currentMode]?.element;
-    editorElement?.addEventListener('click', (e) => {
-      setIsFocus(false);
-      onFocus('focus', e);
-    });
     // 从事件绑定方式修改成轮询记录的方式，以达到更实时更精确的记录方式，可解决iphone下输入中文光标会被重置到位置0的问题（性能需关注）
     const timeoutRecord = () => {
       timeoutId = setTimeout(() => {
@@ -244,14 +243,12 @@ export default function DVditor(props) {
           onInit(editor);
           editor.setValue('');
           setEditorInitValue();
-          // 去掉异步渲染之后的光标focus
           if (!pc && getSelection().rangeCount > 0) {
             getSelection().removeAllRanges();
           }
-          editor.vditor[editor.vditor.currentMode].element.blur();
         },
         focus: (val, e) => {
-          // onFocus('focus', e);
+          if (browser.env(constants.ANDROID)) onFocus('edior-focus', e);
         },
         input: () => {
           setIsFocus(false);

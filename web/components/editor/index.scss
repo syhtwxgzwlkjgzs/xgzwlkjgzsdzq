@@ -91,7 +91,7 @@
       border-radius: $border-radius-small;
       font-size: $font-size-middle;
       font-family: $codeFamily;
-      color: $success-color;
+      color: $success-color !important;
       background: $black;
       span,
       p,
