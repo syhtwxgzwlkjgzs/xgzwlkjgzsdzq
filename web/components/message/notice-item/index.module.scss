@@ -148,7 +148,7 @@
       }
     }
     /*帖子详情*/
-    &.detail-thread {
+    &.detail-account {
       margin-left: $margin-2n;
       .middle {
         line-height: rem(22);
@@ -167,7 +167,7 @@
       }
     }
     /*账号详情*/
-    &.detail-account {
+    &.detail-thread {
       .top {
         padding: rem(8) rem(8) 0;
         background: $body-bg-color;
@@ -209,7 +209,7 @@
       }
     }
 
-    &.detail-account .delete{
+    &.detail-thread .delete{
       bottom: 0;
       transform: translateY(26px);
     }

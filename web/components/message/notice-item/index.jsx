@@ -5,7 +5,7 @@
  * 未读私信内容，在头像上展示未读信息条数，超过99条，则显示99+
  * 点击进入消息页面
  *
- * 帖子通知，原网的系统通知，
+ * 账号消息（系统通知）
  * 头像默认为Q的头像，昵称默认为“内容通知”
  * 通知类型包括：编辑、举报、指定、精华、删除、注册申请、欢迎词、角色变更
  * 左滑出现删除按钮，点击删除可删除通知内容
@@ -14,7 +14,7 @@
  * 内容区显示：用户头像、名称、金额、内容、时间（12px）
  * 注：帖子内容中默认显示标题，如果没有标题则显示内容，长度限制为90px
  *
- * 账号消息，@、点赞、回复主题、回复评论
+ * 帖子通知，@、点赞、回复主题、回复评论
  *
  */
 import React, { Component } from 'react';
@@ -34,11 +34,11 @@ import UnreadRedDot from '@components/unread-red-dot';
 @inject('site')
 @observer
 class Index extends Component {
-  // 获取头像地址,非帖子使用自己的url头像，帖子使用站点logo
+  // 获取头像地址,非账号消息使用自己的url头像，账号消息使用站点logo
   getAvatar = (avatar) => {
     const { type, site } = this.props;
     const url = site?.webConfig?.setSite?.siteFavicon;
-    if (type === 'thread') {
+    if (type === 'account') {
       return url || '/dzq-img/default-favicon.png';
     }
     return avatar;
@@ -86,7 +86,7 @@ class Index extends Component {
   }
 
   // 帖子消息前置语
-  getAccountTips = (item) => {
+  getThreadTips = (item) => {
     switch (item.type) {
       case 'replied':
         return `回复了你的${item.isFirst ? '主题' : '评论'}`;
@@ -109,8 +109,8 @@ class Index extends Component {
     const { type, item } = this.props;
     let _content = (typeof item.content === 'string' && item.content !== 'undefined') ? item.content : '';
 
-    if (type === 'account') {
-      const tip = `<span class=\"${styles.tip}\">${this.getAccountTips(item)}</span>`;
+    if (type === 'thread') {
+      const tip = `<span class=\"${styles.tip}\">${this.getThreadTips(item)}</span>`;
       _content = tip + _content;
     }
 
@@ -154,15 +154,15 @@ class Index extends Component {
           {/* 头像 */}
           <div
             className={classNames(styles.avatar, {
-              [styles['unset-cursor']]: type === 'thread' || !item.nickname || !item.userId
+              [styles['unset-cursor']]: type === 'account' || !item.nickname || !item.userId
             })}
-            onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
+            onClick={(e) => this.toUserCenter(e, type !== 'account', item)}
           >
 
             {/* 未读消息红点 */}
             <UnreadRedDot type='avatar' unreadCount={item.unreadCount}>
               <Avatar
-                isShowUserInfo={isPC && item.nickname && type !== 'thread'}
+                isShowUserInfo={isPC && item.nickname && type !== 'account'}
                 userId={item.userId}
                 image={avatarUrl}
                 name={item.nickname}
@@ -187,14 +187,14 @@ class Index extends Component {
               <div
                 className={classNames(styles.name, {
                   [styles['single-line']]: true,
-                  [styles['unset-cursor']]: type === 'thread' || !item.nickname || !item.userId
+                  [styles['unset-cursor']]: type === 'account' || !item.nickname || !item.userId
                 })}
-                onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
+                onClick={(e) => this.toUserCenter(e, type !== 'account', item)}
               >
-                {/* 仅帖子通知没有nickname，使用title代替显示 */}
+                {/* 仅账号消息没有nickname，使用title代替显示 */}
                 {item.nickname || this.filterTag(item.title) || "用户已删除"}
               </div>
-              {['chat', 'thread'].includes(type) && (
+              {['chat', 'account'].includes(type) && (
                 <div className={styles.time}>{diffDate(item.createdAt)}</div>
               )}
               {type === 'financial' && <div className={styles.amount}>+{parseFloat(item.amount).toFixed(2)}</div>}
@@ -234,7 +234,7 @@ class Index extends Component {
             </div>
 
             {/* 底部 */}
-            {['financial', 'account'].includes(type) && (
+            {['financial', 'thread'].includes(type) && (
               <div className={`${styles.bottom} ${styles.time}`}>{diffDate(item.createdAt)}</div>
             )}
           </div>
@@ -252,7 +252,7 @@ Index.propTypes = {
 };
 
 Index.defaultProps = {
-  type: 'thread',
+  type: 'account',
   item: {},
   onBtnClick: () => { },
 };
