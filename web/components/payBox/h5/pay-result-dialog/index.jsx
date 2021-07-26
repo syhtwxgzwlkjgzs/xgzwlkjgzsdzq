@@ -42,7 +42,7 @@ class PayResultDialog extends React.Component {
           zIndex: 1500,
         }}
         className={styles.payResultDialog}
-        visible={true}
+        visible={this.props.visible}
       >
         <div className={styles.content}>
           <div className={styles.title}>请确认微信支付是否已完成</div>

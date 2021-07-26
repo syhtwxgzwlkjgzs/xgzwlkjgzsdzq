@@ -31,7 +31,7 @@ export default class index extends Component {
           {step === STEP_MAP.PAYWAY && <PayConfirmed />}
         </Popup>
         {this.props.payBox.visible && step === STEP_MAP.WALLET_PASSWORD && <PayPwd />}
-        {this.props.payBox.h5SureDialogVisible && <PayResultDialog />}
+        {this.props.payBox.visible && <PayResultDialog visible={this.props.payBox.h5SureDialogVisible} />}
       </>
     );
   }
