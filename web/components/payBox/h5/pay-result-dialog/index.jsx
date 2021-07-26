@@ -15,13 +15,17 @@ class PayResultDialog extends React.Component {
   }
 
   handleCancel = () => {
+    this.clearPayBox();
+
     this.props.payBox.visible = false;
     this.props.payBox.h5SureDialogVisible = false;
-
-    this.clearPayBox();
   }
 
   handleSure = () => {
+    this.props.payBox.visible = false;
+    this.props.payBox.h5SureDialogVisible = false;
+    this.clearPayBox();
+
     if (this.props.payBox.successCallback) {
       this.props.payBox.successCallback();
     }
@@ -29,8 +33,6 @@ class PayResultDialog extends React.Component {
     if (this.props.payBox.completedCallback) {
       this.props.payBox.completedCallback();
     }
-
-    this.clearPayBox();
   }
 
   render() {
