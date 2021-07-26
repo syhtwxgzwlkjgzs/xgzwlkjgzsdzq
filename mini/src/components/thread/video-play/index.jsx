@@ -120,7 +120,6 @@ const Index = ({
             poster={coverUrl}
             duration={time}
             autoplay={autoplay}
-            onPause={onPause}
           />
         )
       }
