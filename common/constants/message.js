@@ -20,8 +20,8 @@ export const sidebarData = [
     iconName: 'RemindOutlined',
     iconColor: '#3AC15F',
     content: '账号消息',
-    type: 'thread',
-    unreadKeyName: 'threadUnread',
+    type: 'account',
+    unreadKeyName: 'accountUnread',
     unreadCount: 0,
   },
   {
@@ -36,8 +36,8 @@ export const sidebarData = [
     iconName: 'LeaveWordOutlined',
     iconColor: '#E02433',
     content: '帖子通知',
-    type: 'account',
-    unreadKeyName: 'accountUnread',
+    type: 'thread',
+    unreadKeyName: 'threadUnread',
     unreadCount: 0,
   },
 ];

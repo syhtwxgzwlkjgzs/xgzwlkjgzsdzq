@@ -27,9 +27,21 @@ const InteractionBox = (props) => {
   };
 
   const doPressEnter = (e) => {
-    if (e.key !== 'Enter') return;
-    e.preventDefault();
-    doSubmitClick();
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (e.altKey) {
+        // enter + alt 换行
+        const cursorIndex = e.target.selectionStart;
+        const text = typingValue.slice(0, cursorIndex) + "\n" + typingValue.slice(cursorIndex);
+        setTypingValue(text);
+        setTimeout(() => {
+          e.target.selectionStart = e.target.selectionEnd = cursorIndex + 1;
+        }, 0);
+        return;
+      }
+
+      doSubmitClick();
+    }
   };
 
   const insertEmoji = (emoji) => {
