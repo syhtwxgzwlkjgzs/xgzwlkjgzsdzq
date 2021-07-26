@@ -39,6 +39,9 @@
   //   width: 100%;
   //   max-width: rem(1100);
   // }
+  @include media('s-pc') {
+    min-height: rem(220);
+  }
 }
 
 .wrapper {
@@ -48,12 +51,13 @@
   overflow: hidden;
 
   @include media('s-pc') {
-    width: 98%;
+    padding: 0 1.5%;
+    width: 97% !important;
   }
 
   @include media('l-pc') {
     // width: 95%;
-    padding: 0 calc((100vw - 1100px) / 2);
+    padding: 0 calc((100vw - 1070px) / 2);
   }
 
   @include media('xl-pc') {
@@ -85,6 +89,9 @@
   display: flex;
   flex-direction: column;
   margin-top: rem($margin-10);
+  @include media('s-pc') {
+    margin-top: 0;
+  }
 }
 
 .left {
@@ -93,6 +100,9 @@
   margin-right: rem($margin-5n);
   margin-top: rem($margin-10);
   width: rem(300);
+  @include media('s-pc') {
+    margin-top: 0;
+  }
 }
 
 .right {
@@ -101,6 +111,9 @@
   top: rem(0);
   padding-top: rem($margin-10);
   width: 32%;
+  @include media('s-pc') {
+    padding-top: 0;
+  }
 }
 .slideWrap {
   flex-direction: row;
@@ -122,6 +135,9 @@
 .userHeader {
   margin-top: rem($margin-5n);
   width: 100%;
+  @include media('s-pc') {
+    margin-top: rem($margin-10);
+  }
   // @include media('s-pc') {
   //   width: 98%;
   // }

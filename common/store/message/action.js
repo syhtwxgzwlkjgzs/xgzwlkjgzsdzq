@@ -25,9 +25,9 @@ class MessageAction extends MessageStore {
       const { threadrewardedexpired = 0, receiveredpacket = 0, related = 0, replied = 0, system = 0, withdrawal = 0, liked = 0, rewarded = 0, threadrewarded = 0 } = typeUnreadNotifications;
       // withdrawal,提现不在消息中心展示，未读总数需要减去此类型消息的未读数
       this.totalUnread = unreadNotifications - withdrawal + dialogNotifications;
-      this.threadUnread = system;
+      this.threadUnread = related + replied + liked;
       this.financialUnread = receiveredpacket + rewarded + threadrewarded + threadrewardedexpired;
-      this.accountUnread = related + replied + liked;
+      this.accountUnread = system;
       this.atUnread = related;
       this.replyUnread = replied;
       this.likeUnread = liked;
@@ -79,7 +79,7 @@ class MessageAction extends MessageStore {
   // 获取账号消息
   @action.bound
   async readAccountMsgList(page = 1) {
-    const ret = await readMsgList(this.assemblyParams(page, 'related,replied,liked'));
+    const ret = await readMsgList(this.assemblyParams(page, 'system'));
     this.setMsgList(page, 'accountMsgList', ret);
   }
 
@@ -115,7 +115,7 @@ class MessageAction extends MessageStore {
   // 获取帖子通知
   @action.bound
   async readThreadMsgList(page = 1) {
-    const ret = await readMsgList(this.assemblyParams(page, 'system'));
+    const ret = await readMsgList(this.assemblyParams(page, 'related,replied,liked'));
     this.setMsgList(page, 'threadMsgList', ret);
   }
 
