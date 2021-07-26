@@ -136,7 +136,7 @@
       margin-left: $margin-2n;
     }
     /*帖子详情*/
-    &.detail-thread {
+    &.detail-account {
       margin-left: $margin-2n;
       .middle {
 
@@ -160,7 +160,7 @@
       }
     }
     /*账号详情*/
-    &.detail-account {
+    &.detail-thread {
       .top {
         padding: 8px 8px 0;
         background: $body-bg-color;

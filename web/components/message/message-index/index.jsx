@@ -20,7 +20,7 @@ export class MessageIndex extends Component {
         {
           iconName: 'RemindOutlined',
           title: '账号消息',
-          link: '/message/?page=thread',
+          link: '/message/?page=account',
           unreadCount: 0,
         },
         {
@@ -32,7 +32,7 @@ export class MessageIndex extends Component {
         {
           iconName: 'LeaveWordOutlined',
           title: '帖子通知',
-          link: '/message/?page=account',
+          link: '/message/?page=thread',
           unreadCount: 0,
         },
       ],
@@ -51,9 +51,9 @@ export class MessageIndex extends Component {
   updateUnread() {
     const { threadUnread, financialUnread, accountUnread } = this.props.message;
     const items = [...this.state.items];
-    items[0].unreadCount = threadUnread;
+    items[0].unreadCount = accountUnread;
     items[1].unreadCount = financialUnread;
-    items[2].unreadCount = accountUnread;
+    items[2].unreadCount = threadUnread;
     this.setState({ items });
   }
 
