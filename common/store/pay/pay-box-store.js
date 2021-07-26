@@ -66,12 +66,6 @@ class PayBoxStore {
   // 如果钱包支付，钱包的密码存储在这里
   @observable password = null;
 
-  // h5 微信支付回调链接
-  @observable h5RedirectLink = null;
-
-  // 确认支付成功弹窗是否可见
-  @observable h5SureDialogVisible = false;
-
   // 用户钱包信息
   @observable walletInfo = null;
 
@@ -274,10 +268,6 @@ class PayBoxStore {
         clearInterval(this.timer);
 
         if (mode === PAY_MENT_MAP.WX_H5) {
-          listenWXJsBridgeAndExecCallback(() => {
-            this.h5RedirectLink = get(payRes, 'data.wechatPayResult.wechatH5Link');
-            onBridgeReady(get(payRes, 'data.wechatPayResult.wechatH5Link'));
-          });
           return;
         }
         listenWXJsBridgeAndExecCallback(() => {
@@ -432,7 +422,7 @@ class PayBoxStore {
 
       this.resErrorFactory(setPayPwdRes);
     } catch (error) {
-      console.log(error);
+      console.log(error)
       if (error.Code) {
         throw error;
       }
@@ -479,7 +469,7 @@ class PayBoxStore {
         payPassword: this.newPayPwd,
         payPasswordConfirmation: this.newPayPwdRepeat,
         payPasswordToken: this.payPwdResetToken,
-      },
+      }
     });
     if (resetPayPwdRes.code === 0) {
       return resetPayPwdRes.data;
@@ -597,7 +587,6 @@ class PayBoxStore {
     this.walletInfo = null;
     this.wechatQRCode = null;
     this.qrCodeTimeout = false;
-    this.h5RedirectLink = null;
   }
 }
 

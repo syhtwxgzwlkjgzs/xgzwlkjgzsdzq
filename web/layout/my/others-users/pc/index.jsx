@@ -136,7 +136,6 @@ class PCMyPage extends React.Component {
     const { fetchUserThreadsLoading } = this.state;
     const { user } = this.props;
     const { targetUserThreads, targetUserThreadsTotalCount, targetUserThreadsPage, targetUserThreadsTotalPage } = user;
-
     return (
       <div className={styles.userContent}>
         <SidebarPanel
