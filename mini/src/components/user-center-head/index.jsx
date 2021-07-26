@@ -146,7 +146,7 @@ class index extends Component {
           this.props.user.removeUserInfo();
           this.props.site.getSiteInfo();
         }, 300);
-      }
+      },
     });
   };
 
@@ -316,8 +316,8 @@ class index extends Component {
             }}
             className={styles.shieldBtn}
           >
-            <Icon name="ShieldOutlined" />
-            <Text>{user.isDeny ? '解除屏蔽' : '屏蔽'}</Text>
+            <Icon name="ShieldOutlined" size={14} />
+            <Text className={styles.shieldText}>{user.isDeny ? '解除屏蔽' : '屏蔽'}</Text>
           </View>
         )}
         {user.originalAvatarUrl && (
