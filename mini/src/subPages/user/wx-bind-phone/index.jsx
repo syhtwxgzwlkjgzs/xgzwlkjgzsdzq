@@ -14,7 +14,7 @@ import { get } from '@common/utils/get';
 import PhoneInput from '@components/login/phone-input'
 import layout from './index.module.scss';
 import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
-
+import LoginHelper from '@common/utils/login-helper';
 // const MemoToastProvider = React.memo(ToastProvider)
 
 @inject('site')
@@ -110,9 +110,7 @@ class Index extends Component {
         content: '登录成功',
         duration: 1000,
         onClose: () => {
-          navigateTo({
-            url: `/indexPages/home/index`
-          });
+          LoginHelper.restore();
         }
       });
     } catch (error) {
@@ -124,7 +122,7 @@ class Index extends Component {
           redirectTo({ url: '/subPages/user/supplementary/index' });
           return;
         }
-        redirectTo({ url: '/indexPages/home/index' });
+        LoginHelper.restore();
         return;
       }
       // 跳转状态页

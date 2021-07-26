@@ -1,4 +1,4 @@
-import React from 'React'
+import React from 'react'
 import Taro from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import TaroCanvasDrawer from '../taro-plugin-canvas'; // npm 引入方式

@@ -25,9 +25,9 @@ class MessageAction extends MessageStore {
       const { threadrewardedexpired = 0, receiveredpacket = 0, related = 0, replied = 0, system = 0, withdrawal = 0, liked = 0, rewarded = 0, threadrewarded = 0 } = typeUnreadNotifications;
       // withdrawal,提现不在消息中心展示，未读总数需要减去此类型消息的未读数
       this.totalUnread = unreadNotifications - withdrawal + dialogNotifications;
-      this.threadUnread = system;
+      this.threadUnread = related + replied + liked;
       this.financialUnread = receiveredpacket + rewarded + threadrewarded + threadrewardedexpired;
-      this.accountUnread = related + replied + liked;
+      this.accountUnread = system;
       this.atUnread = related;
       this.replyUnread = replied;
       this.likeUnread = liked;
@@ -79,7 +79,7 @@ class MessageAction extends MessageStore {
   // 获取账号消息
   @action.bound
   async readAccountMsgList(page = 1) {
-    const ret = await readMsgList(this.assemblyParams(page, 'related,replied,liked'));
+    const ret = await readMsgList(this.assemblyParams(page, 'system'));
     this.setMsgList(page, 'accountMsgList', ret);
   }
 
@@ -115,7 +115,7 @@ class MessageAction extends MessageStore {
   // 获取帖子通知
   @action.bound
   async readThreadMsgList(page = 1) {
-    const ret = await readMsgList(this.assemblyParams(page, 'system'));
+    const ret = await readMsgList(this.assemblyParams(page, 'related,replied,liked'));
     this.setMsgList(page, 'threadMsgList', ret);
   }
 
@@ -144,7 +144,34 @@ class MessageAction extends MessageStore {
           },
         },
       });
-      this.setMsgList(page, 'dialogMsgList', ret);
+
+      const { code, data = {} } = ret;
+      if (code === 0) {
+        // 更新未读消息数量
+        this.readUnreadCount();
+
+        const { pageData: list = [] } = data;
+        const currentPage = page;
+        const listData = (({ totalPage = 0, totalCount = 0 }) => ({ list, totalPage, totalCount, currentPage }))(data);
+
+        // 图片后端每次都会返回不同的cos签名，导致小程序上图片重新加载闪动，以下逻辑处理该问题
+        if (this.dialogMsgList.totalCount) {
+          listData.list.forEach(newMsg => {
+            this.dialogMsgList.list.forEach(oldMsg => {
+              if (newMsg.id === oldMsg.id && newMsg.dialogId === oldMsg.dialogId && !oldMsg.isImageLoading) {
+                newMsg.imageUrl = oldMsg.imageUrl;
+              }
+
+              if (newMsg.userId === oldMsg.userId) {
+                newMsg.user.avatar = oldMsg.user.avatar;
+              }
+            });
+          });
+        }
+
+        this.dialogMsgList = listData;
+      }
+
       resolve();
     });
   }

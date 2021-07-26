@@ -33,10 +33,10 @@ class index extends Component {
   previewerRef = React.createRef(null);
 
   // 点击屏蔽
-  handleChangeShield = throttle((isDeny) => {
+  handleChangeShield = throttle(async (isDeny) => {
     const { id } = getCurrentInstance().router.params;
     if (isDeny) {
-      this.props.user.undenyUser(id);
+      await this.props.user.undenyUser(id);
       this.props.user.setTargetUserNotBeDenied();
       Toast.success({
         content: '解除屏蔽成功',
@@ -44,7 +44,7 @@ class index extends Component {
         duration: 1000,
       });
     } else {
-      this.props.user.denyUser(id);
+      await this.props.user.denyUser(id);
       this.props.user.setTargetUserDenied();
       Toast.success({
         content: '屏蔽成功',
@@ -63,7 +63,7 @@ class index extends Component {
           this.setState({
             isFollowedLoading: true,
           });
-          const cancelRes = await this.props.user.cancelFollow({ id: id, type: 1 });
+          const cancelRes = await this.props.user.cancelFollow({ id, type: 1 });
           if (!cancelRes.success) {
             Toast.error({
               content: cancelRes.msg || '取消关注失败',
@@ -134,12 +134,18 @@ class index extends Component {
 
   logout = () => {
     clearLoginStatus();
-    this.props.user.removeUserInfo();
-    this.props.site.getSiteInfo();
+    LoginHelper.clear();
+
+    const siteMode = this.props.site?.webConfig?.setSite?.siteMode;
+    const url = siteMode === 'pay' ? '/subPages/forum/partner-invite/index' : '/indexPages/home/index';
+
     Router.reLaunch({
-      url: '/subPages/forum/partner-invite/index',
-      success: () => {
-        LoginHelper.clear();
+      url,
+      complete: () => {
+        setTimeout(() => {
+          this.props.user.removeUserInfo();
+          this.props.site.getSiteInfo();
+        }, 300);
       },
     });
   };

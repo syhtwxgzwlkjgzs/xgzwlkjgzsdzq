@@ -30,6 +30,9 @@ class PCMyPage extends React.Component {
     };
   }
 
+  fansPopupInstance = null;
+  followsPopupInstance = null;
+
   componentDidMount = async () => {
     const { query } = this.props.router;
     const id = this.props.user?.id;
@@ -61,9 +64,17 @@ class PCMyPage extends React.Component {
     if (String(this.targetUserId) === String(query.id)) return;
     this.targetUserId = query.id;
     if (query.id) {
+      if (this.fansPopupInstance) {
+        this.fansPopupInstance.closePopup();
+      }
+
+      if (this.followsPopupInstance) {
+        this.followsPopupInstance.closePopup();
+      }
+
       this.setState({
         fetchUserInfoLoading: true,
-        fetchUserThreadsLoading: true
+        fetchUserThreadsLoading: true,
       });
       this.props.user.removeTargetUserInfo();
       await this.props.user.getTargetUserInfo(query.id);
@@ -113,9 +124,9 @@ class PCMyPage extends React.Component {
     const id = query?.id;
     return (
       <>
-        <UserCenterFansPc userId={id} />
+        <UserCenterFansPc userId={id} getRef={instance => (this.fansPopupInstance = instance)} />
 
-        <UserCenterFollowsPc userId={id} />
+        <UserCenterFollowsPc userId={id} getRef={instance => (this.followsPopupInstance = instance)} />
         <Copyright />
       </>
     );
@@ -137,10 +148,10 @@ class PCMyPage extends React.Component {
           noData={!this.formatUserThreadsData(targetUserThreads)?.length}
           mold="plane"
         >
-          {this.formatUserThreadsData(targetUserThreads) &&
-            this.formatUserThreadsData(targetUserThreads).length > 0 && (
+          {this.formatUserThreadsData(targetUserThreads)
+            && this.formatUserThreadsData(targetUserThreads).length > 0 && (
               <UserCenterThreads data={this.formatUserThreadsData(targetUserThreads)} />
-            )}
+          )}
         </SidebarPanel>
       </div>
     );

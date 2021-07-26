@@ -47,6 +47,7 @@ class Index extends React.Component {
         case 0:
           // 未开启小程序，展示错误页面信息
           if(result?.data?.passport?.miniprogramOpen === false) {
+            site.setErrPageType('site');
             Router.redirect({
               url: '/subPages/500/index'
             });
@@ -98,6 +99,7 @@ class Index extends React.Component {
           Router.push({ url: '/subPages/no-install/index' });
           break;
         default:
+          site.setErrPageType('site');
           Router.redirect({url: '/subPages/500/index'});
           clearLoginStatus();
           Toast.error({
@@ -183,6 +185,7 @@ class Index extends React.Component {
           });
         }
       } else {
+        site.setErrPageType('site');
         Router.redirect({
           url: '/subPages/500/index'
         });

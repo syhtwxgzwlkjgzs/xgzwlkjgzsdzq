@@ -6,6 +6,7 @@ import BaseLayout from '@components/base-layout';
 import { View, Text } from '@tarojs/components';
 import Toast from '@discuzq/design/dist/components/toast';
 import throttle from '@common/utils/thottle.js';
+
 @inject('site')
 @inject('index')
 @inject('thread')
@@ -65,7 +66,7 @@ class Index extends React.Component {
               this.handleUnFavoriteItem(item);
             }}
             isShowIcon
-            key={index}
+            key={index + new Date().getTime()}
             data={item}
           />
         ))}

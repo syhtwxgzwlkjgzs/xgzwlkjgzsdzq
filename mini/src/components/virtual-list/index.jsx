@@ -31,34 +31,25 @@ const VirtualList = ({
         const { changeInfo } = indexStore
 
         if (changeInfo) {
-          const { type = '', thread } = changeInfo
-          if (type === 'delete' || type === 'add' || type === 'edit') {
-            let newArr = [ ...dataSource ];
-            const threadId = type === 'delete' ? thread : thread.threadId
-            const { pIndex, sIndex } = getThreadInfo(threadId)
-            if ((pIndex !== -1 && sIndex !== -1) || type === 'add') {
-              if (type === 'delete') {
-                newArr[pIndex].splice(sIndex, 1)
-              } else if (type === 'add') {
-                newArr[0].unshift(thread)
-              } else if (type === 'edit') {
-                newArr[pIndex][sIndex] = thread
-              }
-  
-              setDataSource(newArr) 
-            }
+          const { type = '' } = changeInfo
+          if (type === 'delete' || type === 'add' || type === 'edit' || type === 'pay') {
+            setDataSource(arr) 
           }
+
+          indexStore.changeInfo = null
         } else {
           const length = arr.length
-          const newArr = dataSource.slice()
           if (length && data.length > arrLength) {
-            newArr.push(arr[length - 1]) 
-            setDataSource(arr)    
+            if (arrLength === 0) {
+              setDataSource(arr)
+            } else {
+              const newArr = dataSource.slice()
+              newArr.push(arr[length - 1]) 
+              setDataSource(newArr)
+            }
           }
         }
-      }
-
-      indexStore.changeInfo = null
+      } 
   }, [data?.length, indexStore.changeInfo])
 
 
@@ -112,24 +103,24 @@ const VirtualList = ({
     }
 
   const dispatch = (threadId, updatedThreadData) => {
-    if(!threadId || !updatedThreadData) return;
+    // if(!threadId || !updatedThreadData) return;
 
-    let newArr = [ ...dataSource ];
-    newArr.forEach((subArr) => {
-      for(let i = 0; i < subArr.length; i++) {
-        if(subArr[i].threadId === threadId) {
-          subArr[i] = updatedThreadData;
-          break;
-        }
-      }
-    });
-    setDataSource(newArr);
+    // let newArr = [ ...dataSource ];
+    // newArr.forEach((subArr) => {
+    //   for(let i = 0; i < subArr.length; i++) {
+    //     if(subArr[i].threadId === threadId) {
+    //       subArr[i] = updatedThreadData;
+    //       break;
+    //     }
+    //   }
+    // });
+    // setDataSource(newArr);
   }
 
   return (
       <>
         {
-            !isClickTab && <List 
+            (!isClickTab && dataSource?.length > 0) && <List 
                 ref={(e) => { listRef.current = e }}
                 dataSource={dataSource} 
                 wholePageIndex={wholePageIndex} 
