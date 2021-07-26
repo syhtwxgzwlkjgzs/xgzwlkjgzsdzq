@@ -108,8 +108,8 @@ class CommentList extends React.Component {
   }
 
   // 点击评论列表用户头像
-  replyAvatarClick(data,floor) {
-    typeof this.props.replyAvatarClick === 'function' && this.props.replyAvatarClick(data,floor);
+  replyAvatarClick(data, floor) {
+    typeof this.props.replyAvatarClick === 'function' && this.props.replyAvatarClick(data, floor);
   }
 
   async onSubmit(value, imageList) {
@@ -135,6 +135,7 @@ class CommentList extends React.Component {
 
   render() {
     const { canDelete, canEdit, canLike, canHide } = this.generatePermissions(this.props.data);
+    const { groups } = this.props.data?.user || {};
 
     // 评论内容是否通过审核
     const isApproved = this.props?.data?.isApproved === 1;
@@ -284,7 +285,7 @@ class CommentList extends React.Component {
                         data={this.needReply[0]}
                         key={this.needReply[0].id}
                         isShowOne={true}
-                        avatarClick={(floor) => this.replyAvatarClick(this.needReply[0],floor)}
+                        avatarClick={floor => this.replyAvatarClick(this.needReply[0], floor)}
                         likeClick={() => this.replyLikeClick(this.needReply[0])}
                         replyClick={() => this.replyReplyClick(this.needReply[0])}
                         deleteClick={() => this.replyDeleteClick(this.needReply[0])}
@@ -297,7 +298,7 @@ class CommentList extends React.Component {
                         <ReplyList
                           data={val}
                           key={val.id || index}
-                          avatarClick={(floor) => this.replyAvatarClick(val,floor)}
+                          avatarClick={floor => this.replyAvatarClick(val, floor)}
                           likeClick={() => this.replyLikeClick(val)}
                           replyClick={() => this.replyReplyClick(val)}
                           deleteClick={() => this.replyDeleteClick(val)}
