@@ -133,6 +133,7 @@ function VList(props, ref) {
             data={data}
             isLast={index === list?.length - 2}
             measure={measure}
+            index={index}
             recomputeRowHeights={(data) => recomputeRowHeights(index, data)}
           />
         );
@@ -186,7 +187,7 @@ function VList(props, ref) {
       props.vlist.setPosition(scrollTop);
     }
     // if (scrollTop + (clientHeight * 4) >= scrollHeight && !loadData) {
-    if (((scrollTop + clientHeight + 1000) >= scrollHeight) && !loadData && !props.noMore) {
+    if (scrollTop + clientHeight + 1000 >= scrollHeight && !loadData && !props.noMore) {
       loadData = true;
       if (props.loadNextPage) {
         const promise = props.loadNextPage();
