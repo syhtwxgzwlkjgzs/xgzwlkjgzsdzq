@@ -18,6 +18,10 @@ class PayMiddlePage extends React.Component {
     iframe.setAttribute('src', parsedLink);
     iframe.setAttribute('sandbox', 'allow-top-navigation allow-scripts');
     document.body.appendChild(iframe);
+
+    // FIXME: SSR下的情况，状态会丢失，需要寻找一种解决办法
+    // CSR 的情况下，打开确认支付结果窗口
+    this.props.payBox.h5SureDialogVisible = true;
   };
 
   render() {

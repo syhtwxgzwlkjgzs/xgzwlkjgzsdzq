@@ -2,11 +2,61 @@
 @import '@common/styles/mixin/index.scss';
 
 .payResultDialog {
+
+  :global(.dzq-modal__container) {
+    top: 280px;
+    width: 280px;
+    padding: {
+      top: 24px;
+      left: 16px;
+      right: 16px;
+      bottom: 24px;
+    }
+    
+    box-sizing: border-box;
+    border-radius: 5px;
+  }
+
   .content {
     .title {
       font-size: 16px;
       line-height: 21px;
-      font-size: 600;
+      font-weight: 600;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .rule {
+      font-size: 14px;
+      line-height: 22px;
+      color: #4f5a70;
+      margin-bottom: 16px;
+    }
+
+    .buttonArea {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .buttonWrap {
+      flex: 1;
+
+      .cancelButton {
+        background-color: #eff1f3;
+        color: #4f5a70;
+        border: none;
+      }
+
+      :global {
+        .dzq-button {
+          width: 116px;
+          height: 36px;
+        }
+      }
+
     }
   }
 }

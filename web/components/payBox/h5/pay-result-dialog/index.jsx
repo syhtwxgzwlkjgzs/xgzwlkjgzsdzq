@@ -16,22 +16,22 @@ class PayResultDialog extends React.Component {
     return (
       <Dialog
         style={{
-          zIndex: 1001,
+          zIndex: 1500,
         }}
         className={styles.payResultDialog}
         visible={true}
       >
         <div className={styles.content}>
           <div className={styles.title}>请确认微信支付是否已完成</div>
-          <div>
+          <div className={styles.rule}>
             <p>1.如果您已在打开微信支付成功，请点击 “已完成付款”按钮</p>
             <p>2.如果您没有安装微信支付客户端，请点击“取消”并选择其它支付方式付款</p>
           </div>
-          <div>
-            <div>
-              <Button>取消</Button>
+          <div className={styles.buttonArea}>
+            <div className={styles.buttonWrap}>
+              <Button className={styles.cancelButton}>取消</Button>
             </div>
-            <div>
+            <div className={styles.buttonWrap}>
               <Button type="primary">已完成付款</Button>
             </div>
           </div>
