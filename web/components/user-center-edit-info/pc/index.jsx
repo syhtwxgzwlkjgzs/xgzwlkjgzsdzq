@@ -15,6 +15,7 @@ import UserCenterAdditionalInfo from '../../user-center/additional-info-pc/index
 import Copyright from '@components/copyright';
 import { getClientHeight } from '@common/utils/get-client-height';
 import isServer from '@common/utils/is-server';
+import { isExtFieldsOpen } from '@common/store/login/util';
 
 @inject('site')
 @inject('user')
@@ -289,7 +290,10 @@ class index extends Component {
         {
           name: '补充信息',
           display: 'show',
-          condition: () => true,
+          condition: () => {
+            const ISEXT_FIELD_OPENS = isExtFieldsOpen(this.props?.site);
+            return ISEXT_FIELD_OPENS;
+          },
           render: () => {
             '查看';
           },

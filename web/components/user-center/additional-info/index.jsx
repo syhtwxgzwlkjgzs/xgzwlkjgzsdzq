@@ -3,7 +3,7 @@ import styles from './index.module.scss';
 import { Spin, Input, Icon, Dialog, Toast, Button } from '@discuzq/design';
 import { inject, observer } from 'mobx-react';
 import Header from '@components/header';
-import additionalInfoData from '../additional-info-pc/test.json';
+
 @inject('user')
 @observer
 export default class UserCenterAdditionalInfo extends Component {
