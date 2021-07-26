@@ -420,7 +420,7 @@ class UserAction extends SiteStore {
     this.targetUserThreadsTotalPage = totalPage;
     this.targetUserThreads = {
       ...this.targetUserThreads,
-      [this.targetUserThreads]: pageData,
+      [this.targetUserThreadsPage]: pageData,
     };
     this.targetUserThreadsTotalCount = get(targetUserThreadList, 'data.totalCount', 0);
 
@@ -613,6 +613,7 @@ class UserAction extends SiteStore {
     });
 
     if (updateUserInfoRes.code === 0) {
+      this.userInfo.username = this.editUserName;
       return updateUserInfoRes.data;
     }
 

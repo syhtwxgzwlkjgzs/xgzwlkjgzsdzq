@@ -98,19 +98,19 @@ class ForumH5Page extends React.Component {
                 <span className={layout.forum_agent_name}>{siteAuthor.username}</span>
               </div>
             </div>
-          </div>
-          {/* 站长 end */}
-          {/* 成员 start */}
-          <div className={layout.list}>
-            <div className={layout.label}>成员</div>
-            <div className={layout.right} onClick={() => forum.setIsPopup(true)}>
-              <div className={layout.forum_member}>
-                {
-                    usersPageData?.slice(0, 3).map(item => (
-                      <Avatar size='small' key={item.userId} text={item.nickname?.substring(0, 1)?.toUpperCase()} className={layout.forum_member_img} image={item.avatar}/>
-                    ))
-                }
-                <Icon size={10} color='#8590A6' name='RightOutlined'/>
+            {/* 站长 end */}
+            {/* 成员 start */}
+            <div className={layout.list}>
+              <div className={layout.label}>成员</div>
+              <div className={layout.right} onClick={() => forum.setIsPopup(true)}>
+                <div className={layout.forum_member}>
+                  {
+                      usersPageData?.slice(0, 3).map(item => (
+                        <Avatar size='small' key={item.userId} text={item.nickname?.substring(0, 1)?.toUpperCase()} className={layout.forum_member_img} image={item.avatar}/>
+                      ))
+                  }
+                  <Icon size={10} color='#8590A6' name='RightOutlined'/>
+                </div>
               </div>
             </div>
           </div>

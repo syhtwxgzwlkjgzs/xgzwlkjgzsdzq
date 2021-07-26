@@ -107,7 +107,8 @@ class PostPage extends React.Component {
 
   handleRouteChange = (url) => {
     // 如果不是修改支付密码的页面则重置发帖信息
-    if ((url || '').indexOf('/my/edit/paypwd') === -1) {
+    if ((url || '').indexOf('/my/edit/paypwd') === -1
+      && (url || '').indexOf('/pay/middle') === -1) {
       this.props.threadPost.resetPostData();
     }
   }
@@ -529,10 +530,10 @@ class PostPage extends React.Component {
     const { audioRecordStatus } = postData;
     // 判断录音状态
     if (audioRecordStatus === 'began') {
-      Toast.info({ content: '您有录制中的录音未处理，请先上传或撤销录音', duration: 3000, });
+      Toast.info({ content: '您有录制中的录音未处理，请先上传或撤销录音', duration: 3000 });
       return false;
-    } else if (audioRecordStatus === 'completed') {
-      Toast.info({ content: '您有录制完成的录音未处理，请先上传或撤销录音', duration: 3000, });
+    } if (audioRecordStatus === 'completed') {
+      Toast.info({ content: '您有录制完成的录音未处理，请先上传或撤销录音', duration: 3000 });
       return false;
     }
 

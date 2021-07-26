@@ -19,19 +19,19 @@ class IndexStore {
     return (this.categories || []).filter(item => item.name !== '全部' && item.canCreateThread);
   }
 
-  @computed get categoriesNames() {
+  @computed get categoriesNames () {
     const categoriesNoAll = (this.categories || []).filter(item => item.name !== '全部');
     const nameArr = [];
     categoriesNoAll.forEach((item) => {
       nameArr.push({
         pid: item.pid,
-        name: item.name,
-      });
+        name: item.name
+      })
       item.children.forEach((child) => {
         nameArr.push({
           pid: child.pid,
-          name: `${item.name}/${child.name}`,
-        });
+          name: `${item.name}/${child.name}`
+        })
       });
     });
     return nameArr;
@@ -43,7 +43,7 @@ class IndexStore {
     sort: 1,
     attention: 0,
     types: 'all',
-    essence: 0,
+    essence: 0
   }
 
   // 首页当前分类是否是全部分类，这里会涉及到 action：isNeedAddThread 的判断，会涉及到发帖之后是否添加数据到首页的逻辑
@@ -62,13 +62,13 @@ class IndexStore {
   // 首页帖子报错信息
   @observable threadError = {
     isError: false,
-    errorText: '加载失败',
+    errorText: '加载失败'
   };
 
   // 首页分类报错信息
   @observable categoryError = {
     isError: false,
-    errorText: '加载失败',
+    errorText: '加载失败'
   };
 
   @observable recommends = null;
