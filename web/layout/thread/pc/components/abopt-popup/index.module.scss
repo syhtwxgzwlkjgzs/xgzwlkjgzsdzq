@@ -73,9 +73,14 @@
         .dzq-slider__progress--stick {
           height: rem(4);
         }
+        .dzq-slider__progress--max {
+          height: rem(4);
+          border-radius: 0 rem(2) rem(2) 0;
+        }
         .dzq-slider__feature {
           height: rem(4);
           border-radius: 0 rem(2) rem(2) 0;
+          background: $border-shadow-color;
         }
 
         .dzq-slider__progress__button {
@@ -85,6 +90,9 @@
         }
         .dzq-slider__value {
           font-size: rem($font-size-small);
+          margin-left: rem(4);
+          width: rem(15);
+          text-align: right;
         }
       }
     }
