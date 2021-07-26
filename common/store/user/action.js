@@ -613,6 +613,7 @@ class UserAction extends SiteStore {
     });
 
     if (updateUserInfoRes.code === 0) {
+      this.userInfo.username = this.editUserName;
       return updateUserInfoRes.data;
     }
 
@@ -914,10 +915,10 @@ class UserAction extends SiteStore {
 
       // 更新点赞
       if (
-        updateType === 'like'
-        && !typeofFn.isUndefined(updatedInfo.isLiked)
-        && !typeofFn.isNull(updatedInfo.isLiked)
-        && user
+        updateType === 'like' &&
+        !typeofFn.isUndefined(updatedInfo.isLiked) &&
+        !typeofFn.isNull(updatedInfo.isLiked) &&
+        user
       ) {
         const { isLiked, likePayCount = 0 } = updatedInfo;
         const theUserId = user.userId || user.id;
