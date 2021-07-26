@@ -91,7 +91,7 @@ export default class ReplyList extends React.Component {
 
   render() {
     const { canLike, canDelete, canHide } = this.generatePermissions(this.props.data);
-    const { groups } = this.props.data?.user;
+    const { groups } = this.props.data?.user || {};
 
     // 评论内容是否通过审核
     const isApproved = this.props?.data?.isApproved === 1;
