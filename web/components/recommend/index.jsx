@@ -4,9 +4,9 @@ import { Icon, Tag  } from '@discuzq/design';
 import { withRouter } from 'next/router';
 import { inject, observer } from 'mobx-react';
 import BottomView from '@components/list/BottomView';
+import FilterRichText from '@components/filter-rich-text'
 import isServer from '@common/utils/is-server';
 import { debounce } from '@common/utils/throttle-debounce';
-import replaceStringInRegex from '@common/utils/replace-string-in-regex';
 import classNames from 'classnames';
 
 @inject('index')
@@ -83,13 +83,11 @@ class Index extends React.Component {
         {
           recommendsStatus === 'none' && recommends?.filter((_, index) => index < filterCount).map((item, index) => {
             let titleString = item?.title || '';
-            titleString = replaceStringInRegex(titleString, "emotion", '[表情]');
-            titleString = replaceStringInRegex(titleString, "img", '[图片]');
             return (
               <div key={index} className={`${style.recommendBox} right-recommend-item`} onClick={() => {this.recommendDetails(item)}}>
                 <div className={style.recommendTitle}>
                   <p className={`${style.recommendSort} ${style[`itemIndex${index+1}`]}`}>{index + 1}</p>
-                  <p className={style.recommenText}>{`${titleString}`}</p>
+                  <FilterRichText className={style.recommenText} content={`${titleString}`}/>
                 </div>
                 <div className={style.browse}>
                   <div className={style.browseBox}>
