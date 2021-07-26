@@ -184,7 +184,9 @@ class H5OthersPage extends React.Component {
       >
         <View className={styles.mobileLayout}>
           {this.renderTitleContent()}
-          {this.state.fetchUserInfoLoading && <BottomView isBox loadingText="加载中..." />}
+          {this.state.fetchUserInfoLoading && (
+            <BottomView className={styles.loadMoreStyle} isBox loadingText="加载中..." />
+          )}
           {!this.state.fetchUserInfoLoading && (
             <>
               <View onClick={this.handlePreviewBgImage}>

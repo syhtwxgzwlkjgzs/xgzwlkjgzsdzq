@@ -1,12 +1,10 @@
 /**
  * 入口配置文件：https://taro-docs.jd.com/taro/docs/next/tutorial/
  */
- const config = {
+const config = {
   // TODO: 分包处理
   // 首页和详情页在主包
-  pages: [
-    'pages/index/index',
-  ],
+  pages: ['pages/index/index'],
   subPackages: [
     {
       root: 'indexPages',
@@ -21,7 +19,7 @@
         'thread/selectRedpacket/index',
         'thread/selectReward/index',
         'thread/selectPayment/index',
-      ]
+      ],
     },
     {
       root: 'subPages',
@@ -49,6 +47,8 @@
         'user/wx-authorization/index',
         'user/supplementary/index',
         'user/reset-password/index',
+        'user/rebind/index',
+        'user/wx-rebind-action/index',
         'wallet/index',
         'wallet/frozen/index',
         'wallet/withdrawal/index',
@@ -65,32 +65,33 @@
         'my/edit/reset/paypwd/index',
         'my/edit/find/paypwd/index',
         'my/edit/username/index',
+        'my/edit/additional-info/index',
         'my/fans/index',
         'my/follows/index',
         'my/block/index',
         'forum/index',
         'forum/partner-invite/index',
         'invite/index',
-        'user/index'
-      ]
-    }
+        'user/index',
+      ],
+    },
   ],
   permission: {
-    "scope.userLocation": {
-      "desc": "小程序将获取您的位置信息"
-    }
+    'scope.userLocation': {
+      desc: '小程序将获取您的位置信息',
+    },
   },
   window: {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#fff',
     navigationBarTextStyle: 'black',
   },
-  "preloadRule": {
-    "pages/index/index": {
-      "network": "all",
-      "packages": ["indexPages"]
-    }
-  }
+  preloadRule: {
+    'pages/index/index': {
+      network: 'all',
+      packages: ['indexPages'],
+    },
+  },
 };
 
 module.exports = config;

@@ -8,6 +8,8 @@ import classnames from 'classnames';
 import { inject, observer } from 'mobx-react';
 import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
+import s9e from '@common/utils/s9e';
+import xss from '@common/utils/xss';
 
 const DialogBox = (props) => {
   const { message, dialogId, showEmoji, keyboardHeight, hideEmoji, scrollEnd, messagesHistory, sendImageAttachment } = props;
@@ -132,7 +134,7 @@ const DialogBox = (props) => {
                   renderImage(item)
                 ) : (
                   <View className={styles.msgContent} dangerouslySetInnerHTML={{
-                    __html: text,
+                    __html: xss(s9e.parse(text)),
                   }}></View>
                 )}
               </View>
