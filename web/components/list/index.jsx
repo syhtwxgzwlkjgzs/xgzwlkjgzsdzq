@@ -4,7 +4,7 @@ import styles from './index.module.scss';
 import BottomView from './BottomView';
 import { inject, observer } from 'mobx-react';
 import backtoTopFn from '@common/utils/backto-top';
-import Copyright from '@components/copyright';
+
 
 /**
  * 列表组件，集成上拉刷新能力
@@ -37,8 +37,7 @@ const List = forwardRef(({
   errorText='加载失败',
   platform="",
   showLoadingInCenter = true,
-  site,
-  hideCopyright=false,
+  site
 }, ref) => {
   const listWrapper = useRef(null);
   const currentScrollTop = useRef(0);
@@ -48,8 +47,7 @@ const List = forwardRef(({
   const [isLoadingInCenter, setIsLoadingInCenter] = useState(false)
 
   // 提前加载
-  const isH5 = site?.platform === 'h5';
-  preload = !isH5 ? 3000 : 1000;
+  preload = site?.platform === 'pc' ? 3000 : 1000;
 
   useEffect(() => {
     if (noMore) {
@@ -89,7 +87,7 @@ const List = forwardRef(({
 
   //移动端没有更多内容样式才有下划线
   const noMoreType = useMemo(() => {
-    return isH5 ? 'line' : 'normal';
+    return site.platform === 'h5' ? 'line' : 'normal'
   },[site.platform])
 
   useImperativeHandle(
@@ -191,10 +189,10 @@ const List = forwardRef(({
     // }, 0)
   };
 
-  const renderPC = () => (
-    <div className={`${styles.container} ${className} ${styles.pc}`} style={{ height }}>
+  return (
+    <div className={`${styles.container} ${className}`} style={{ height }}>
       <div
-        className={`${styles.wrapper} ${wrapperClass} ${isLoadingInCenter ? styles.wrapperH5Center : ''}`}
+        className={`${styles.wrapper} ${wrapperClass} ${platform !== 'pc' ? styles.hideScrollBar : ""} ${isLoadingInCenter ? styles.wrapperH5Center : ''}`}
         ref={listWrapper}
         onScroll={onTouchMove}
       >
@@ -203,25 +201,8 @@ const List = forwardRef(({
       </div>
     </div>
   );
-
-  const renderH5 = () => (
-    <div className={`${styles.container} ${className} ${styles.h5}` } style={{ height }}>
-      <div
-        className={`${styles.wrapper} ${wrapperClass} ${styles.hideScrollBar} ${isLoadingInCenter ? styles.wrapperH5Center : ''}`}
-        ref={listWrapper}
-        onScroll={onTouchMove}
-      >
-        <div>
-          {children}
-          {onRefresh && showRefresh && <BottomView isError={isError} errorText={errText} noMore={noMore} handleError={handleError} noMoreType={noMoreType} />}
-        </div>
-        { !hideCopyright && <Copyright marginTop={0} /> }
-      </div>
-    </div>
-  );
-
-  return isH5 ? renderH5() : renderPC();
 });
 
 // export default React.memo(List);
 export default inject('site')(observer(List));
+

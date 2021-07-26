@@ -7,7 +7,7 @@ import classNames from 'classnames';
 const InputPop = (props) => {
   const { visible, onSubmit, onClose, onOperClick, permissions = {}, statuses = {} } = props;
 
-  const { canEdit, canDelete, canEssence, canStick, canShare, canWxShare, canCollect, isAdmini } = permissions;
+  const { canEdit, canDelete, canEssence, canStick, canShare, canCollect, isAdmini } = permissions;
   const { isEssence, isStick, isCollect } = statuses;
 
   const [essence, setEssence] = useState(isEssence);
@@ -87,27 +87,11 @@ const InputPop = (props) => {
               </div>
             )}
             {canShare && (
-              <div className={styles.moreItem} onClick={() => onOperClick('post')}>
+              <div className={styles.moreItem} onClick={() => onOperClick('share')}>
                 <div className={styles.icon}>
-                  <Icon name="PictureOutlinedBig" size={20}></Icon>
+                  <Icon name="ShareAltOutlined" size={20}></Icon>
                 </div>
-                <div className={styles.text}>生成海报</div>
-              </div>
-            )}
-            {canShare && (
-              <div className={styles.moreItem} onClick={() => onOperClick('copylink')}>
-                <div className={styles.icon}>
-                  <Icon name="PaperClipOutlined" size={20}></Icon>
-                </div>
-                <div className={styles.text}>复制链接</div>
-              </div>
-            )}
-            {canWxShare && (
-              <div className={styles.moreItem} onClick={() => onOperClick('wxshare')}>
-                <div className={styles.icon}>
-                  <Icon name="WeChatOutlined" size={20}></Icon>
-                </div>
-                <div className={styles.text}>微信分享</div>
+                <div className={styles.text}>分享</div>
               </div>
             )}
             {!isAdmini && (

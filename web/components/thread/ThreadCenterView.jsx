@@ -89,7 +89,7 @@ const Index = (props) => {
                 
               )}
               {imageData?.length > 0 && (
-                  <ImageDisplay
+                  <ImageDisplay 
                       platform={props.platform} 
                       imgData={imageData} 
                       isPay={needPay}

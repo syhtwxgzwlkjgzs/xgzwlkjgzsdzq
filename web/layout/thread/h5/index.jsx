@@ -33,8 +33,6 @@ import RenderCommentList from './comment-list';
 import classNames from 'classnames';
 
 import BottomView from '@components/list/BottomView';
-import MorePopop from '@components/more-popop';
-import Copyright from '@components/copyright';
 
 @inject('site')
 @inject('user')
@@ -43,7 +41,6 @@ import Copyright from '@components/copyright';
 @inject('index')
 @inject('topic')
 @inject('search')
-@inject('card')
 @inject('vlist')
 @observer
 class ThreadH5Page extends React.Component {
@@ -62,7 +59,6 @@ class ThreadH5Page extends React.Component {
       setTop: false, // 置顶
       showContent: '',
       // inputValue: '', // 评论内容
-      show: false, // 分享海报弹窗
     };
 
     this.perPage = 20;
@@ -107,8 +103,6 @@ class ThreadH5Page extends React.Component {
     // 当内容加载完成后，获取评论区所在的位置
     this.position = this.commentDataRef?.current?.offsetTop - 50;
 
-    this.setState({ loadWeiXin: isWeiXin() });
-
     // 是否定位到评论位置
     if (this.props?.thread?.isPositionToComment) {
       // TODO:需要监听帖子内容加载完成事件
@@ -119,6 +113,8 @@ class ThreadH5Page extends React.Component {
     }
     // 滚动到记录的指定位置
     this.threadBodyRef.current.scrollTo(0, this.props.thread.scrollDistance);
+
+    this.setState({ loadWeiXin: isWeiXin() });
   }
 
   componentDidUpdate() {
@@ -270,19 +266,9 @@ class ThreadH5Page extends React.Component {
       this.onCollectionClick();
     }
 
-    // 微信分享
-    if (type === 'wxshare') {
+    // 分享
+    if (type === 'share') {
       this.onShareClick();
-    }
-
-    // 复制链接
-    if (type === 'copylink') {
-      this.handleH5Share();
-    }
-
-    // 海报
-    if (type === 'post') {
-      this.createCard();
     }
   };
 
@@ -373,13 +359,7 @@ class ThreadH5Page extends React.Component {
     this.setState({ showDeletePopup: false });
     const id = this.props.thread?.threadData?.id;
 
-    const { success, msg } = await this.props.thread.delete(
-      id,
-      this.props.index,
-      this.props.search,
-      this.props.topic,
-      this.props.user,
-    );
+    const { success, msg } = await this.props.thread.delete(id, this.props.index, this.props.search, this.props.topic);
 
     if (success) {
       Toast.success({
@@ -427,7 +407,7 @@ class ThreadH5Page extends React.Component {
 
     if (imageList?.length) {
       params.attachments = imageList
-        .filter(item => item.status === 'success' && item.response)
+        .filter((item) => item.status === 'success' && item.response)
         .map((item) => {
           const { id } = item.response;
           return {
@@ -554,48 +534,24 @@ class ThreadH5Page extends React.Component {
     // 判断是否在微信浏览器
     if (isWeiXin()) {
       this.setState({ isShowWeiXinShare: true });
+    } else {
+      Toast.info({ content: '复制链接成功' });
+
+      const { title = '' } = this.props.thread?.threadData || {};
+      h5Share({ title, path: `thread/${this.props.thread?.threadData?.threadId}` });
+
+      const id = this.props.thread?.threadData?.id;
+
+      const { success, msg } = await this.props.thread.shareThread(id);
+
+      if (!success) {
+        Toast.error({
+          content: msg,
+        });
+      }
     }
   }
-  handleClick = () => {
-    const { user } = this.props;
-    if (!user.isLogin()) {
-      goToLoginPage({ url: '/user/login' });
-      return;
-    }
-    this.setState({ show: true });
-  };
-  onShareClose = () => {
-    this.setState({ show: false });
-  };
-  handleH5Share = async () => {
-    Toast.info({ content: '复制链接成功' });
 
-    this.onShareClose();
-
-    const { title = '' } = this.props.thread?.threadData || {};
-    h5Share({ title, path: `thread/${this.props.thread?.threadData?.threadId}` });
-
-    const id = this.props.thread?.threadData?.id;
-
-    const { success, msg } = await this.props.thread.shareThread(id);
-
-    if (!success) {
-      Toast.error({
-        content: msg,
-      });
-    }
-  };
-  handleWxShare = () => {
-    this.setState({ isShowWeiXinShare: true });
-    this.onShareClose();
-  };
-  createCard = () => {
-    const data = this.props.thread.threadData;
-    const threadId = data.id;
-    const { card } = this.props;
-    card.setThreadData(data);
-    Router.push({ url: `/card?threadId=${threadId}` });
-  };
   // 付费支付
   async onPayClick() {
     if (!this.props.user.isLogin()) {
@@ -708,7 +664,6 @@ class ThreadH5Page extends React.Component {
       canEssence: threadStore?.threadData?.ability?.canEssence,
       canStick: threadStore?.threadData?.ability?.canStick,
       canShare: this.props.user.isLogin(),
-      canWxShare: this.props.user.isLogin() && isWeiXin(),
       canCollect: this.props.user.isLogin(),
       isAdmini: this.props?.user?.isAdmini,
     };
@@ -747,14 +702,15 @@ class ThreadH5Page extends React.Component {
               store={threadStore}
               fun={fun}
               onLikeClick={() => this.onLikeClick()}
-              onOperClick={type => this.onOperClick(type)}
+              onOperClick={(type) => this.onOperClick(type)}
               onCollectionClick={() => this.onCollectionClick()}
+              onShareClick={() => this.onShareClick()}
               onReportClick={() => this.onReportClick()}
               onRewardClick={() => this.onRewardClick()}
               onTagClick={() => this.onTagClick()}
               onPayClick={() => this.onPayClick()}
               // onPayClick={() => this.onPayClick()}
-              onUserClick={e => this.onUserClick(e)}
+              onUserClick={(e) => this.onUserClick(e)}
             ></RenderThreadContent>
           ) : (
             <LoadingTips type="init"></LoadingTips>
@@ -767,8 +723,8 @@ class ThreadH5Page extends React.Component {
                 <Fragment>
                   <RenderCommentList
                     router={this.props.router}
-                    sort={flag => this.onSortChange(flag)}
-                    onEditClick={comment => this.onEditClick(comment)}
+                    sort={(flag) => this.onSortChange(flag)}
+                    onEditClick={(comment) => this.onEditClick(comment)}
                     replyAvatarClick={(comment, reply, floor) => this.replyAvatarClick(comment, reply, floor)}
                   ></RenderCommentList>
                   <BottomView noMoreType="line" isError={isCommentListError} noMore={isNoMore}></BottomView>
@@ -778,7 +734,6 @@ class ThreadH5Page extends React.Component {
               )}
             </div>
           )}
-          <Copyright margin-top={0} />
         </div>
 
         {/* 底部操作栏 */}
@@ -810,7 +765,7 @@ class ThreadH5Page extends React.Component {
                   name="CollectOutlinedBig"
                 ></Icon>
                 <Icon
-                  onClick={immediateDebounce(() => this.handleClick(), 1000)}
+                  onClick={immediateDebounce(() => this.onShareClick(), 1000)}
                   className={footer.icon}
                   size="20"
                   name="ShareAltOutlined"
@@ -819,15 +774,7 @@ class ThreadH5Page extends React.Component {
             </div>
           </div>
         )}
-        {this.state.show && (
-          <MorePopop
-            show={this.state.show}
-            onClose={this.onShareClose}
-            handleH5Share={this.handleH5Share}
-            handleWxShare={this.handleWxShare}
-            createCard={this.createCard}
-          ></MorePopop>
-        )}
+
         {isReady && (
           <Fragment>
             {/* 评论弹层 */}
@@ -846,14 +793,15 @@ class ThreadH5Page extends React.Component {
               visible={this.state.showMorePopup}
               onClose={() => this.setState({ showMorePopup: false })}
               onSubmit={() => this.setState({ showMorePopup: false })}
-              onOperClick={type => this.onOperClick(type)}
+              onOperClick={(type) => this.onOperClick(type)}
             ></MorePopup>
 
             {/* 删除弹层 */}
             <DeletePopup
               visible={this.state.showDeletePopup}
               onClose={() => this.setState({ showDeletePopup: false })}
-              onBtnClick={type => this.onBtnClick(type)}
+              onBtnClick={(type) => this.onBtnClick(type)}
+              type='thread'
             ></DeletePopup>
             {/* 举报弹层 */}
 
@@ -863,14 +811,14 @@ class ThreadH5Page extends React.Component {
               inputText={this.inputText}
               visible={this.state.showReportPopup}
               onCancel={() => this.setState({ showReportPopup: false })}
-              onOkClick={data => this.onReportOk(data)}
+              onOkClick={(data) => this.onReportOk(data)}
             ></ReportPopup>
 
             {/* 打赏弹窗 */}
             <RewardPopup
               visible={this.state.showRewardPopup}
               onCancel={() => this.setState({ showRewardPopup: false })}
-              onOkClick={value => this.onRewardSubmit(value)}
+              onOkClick={(value) => this.onRewardSubmit(value)}
             ></RewardPopup>
 
             {/* 微信浏览器内分享弹窗 */}

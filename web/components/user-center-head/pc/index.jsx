@@ -226,7 +226,7 @@ class index extends Component {
       <div className={styles.box}>
         <div className={styles.boxTop}>
           <div className={styles.headImgBox}>
-            <Avatar image={user.avatarUrl} size="big" name={user.nickname} level={2} />
+            <Avatar image={user.avatarUrl} size="big" name={user.nickname} level={2}/>
             {/* 相机图标 */}
             {!this.props.router.query?.id && (
               <div className={styles.userCenterEditCameraIcon} onClick={this.handleAvatarUpload}>
@@ -269,7 +269,7 @@ class index extends Component {
                   className={styles.shieldBtn}
                 >
                   <Icon name="ShieldOutlined" size={14} />
-                  <span className={styles.shieldText}>{user.isDeny ? '解除屏蔽' : '屏蔽'}</span>
+                  <span>{user.isDeny ? '解除屏蔽' : '屏蔽'}</span>
                 </div>
                 <div className={styles.userBtn}>
                   <Button

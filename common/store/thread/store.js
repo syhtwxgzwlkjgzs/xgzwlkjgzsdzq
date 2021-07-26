@@ -1,6 +1,5 @@
 import { observable, computed } from 'mobx';
 import htmlToString from '../../utils/html-to-string';
-import s9e from '../../utils/s9e';
 import { parseContentData } from '@layout/thread/utils';
 
 class ThreadStore {
@@ -59,8 +58,7 @@ class ThreadStore {
     // 文字内容
     const { text, indexes } = this?.threadData?.content || {};
     if (text) {
-      const newText = s9e.parse(text)
-      const parsedText = htmlToString(newText);
+      const parsedText = htmlToString(text);
       if (parsedText) {
         return parsedText.length > 33 ? `${parsedText.slice(0, 33)}...` : parsedText;
       }

@@ -1,6 +1,6 @@
 @import '@common/styles/index.scss';
 @mixin content {
-  padding: rem($padding-6n * 2) rem($padding-6n) $padding-2n;
+  padding: rem($padding-6n * 2) rem($padding-6n);;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -173,8 +173,7 @@
   margin: 0 auto;
   text-align: center;
   padding-bottom: $padding-10 * 5;
-  min-height: calc(100vh - 235px);
-  overflow: hidden;
+  min-height: calc(100vh - 198px);
 }
 @mixin pc_content {
   width: 300px;

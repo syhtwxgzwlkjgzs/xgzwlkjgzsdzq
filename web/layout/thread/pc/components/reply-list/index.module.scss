@@ -15,27 +15,16 @@
       .replyHeader {
         display: flex;
         justify-content: space-between;
-        .userInfo {
-          display: flex;
-          .replyListName {
-            padding-top: rem($padding-2n);
-            padding-left: rem($padding-3n);
-            padding-right: rem($padding-2n);
-            font-weight: $font-weight-regular;
-            font-size: rem($font-size-primary);
-            line-height: rem(20);
-            text-align: left;
-            color: $text-color-primary;
-          }
-          .groups {
-            color: var(--color-text-secondary);
-            font-size: $font-size-label;
-            max-width: rem(100);
-            white-space: nowrap;
-            overflow: hidden;
-            padding-top: rem($padding-2n);
-            line-height: rem(20);
-          }
+
+        .replyListName {
+          padding-top: rem($padding-2n);
+          padding-left: rem($padding-3n);
+          padding-right: rem($padding-3n);
+          font-weight: $font-weight-regular;
+          font-size: rem($font-size-primary);
+          line-height: rem(20);
+          text-align: left;
+          color: $text-color-primary;
         }
         .isApproved {
           font-size: $font-size-primary;

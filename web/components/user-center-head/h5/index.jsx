@@ -299,8 +299,8 @@ class index extends Component {
             }}
             className={styles.shieldBtn}
           >
-            <Icon name="ShieldOutlined" size={14} />
-            <span className={styles.shieldText}>{user.isDeny ? '解除屏蔽' : '屏蔽'}</span>
+            <Icon name="ShieldOutlined" />
+            <span>{user.isDeny ? '解除屏蔽' : '屏蔽'}</span>
           </div>
         )}
         {user.originalAvatarUrl && this.state.isPreviewAvatar && (

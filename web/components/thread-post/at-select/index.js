@@ -51,7 +51,7 @@ class AtSelect extends Component {
   async fetchAllUser() {
     const { search } = this.props;
     const { page, perPage, keywords } = this.state;
-    const ret = await search.getUsersList({ search: keywords, type: 'nickname', page, perPage });
+    const ret = await search.getUsersList({ search: keywords, type: 'username', page, perPage });
     const { code, data } = ret;
     if (code === 0) {
       this.setState({
@@ -111,10 +111,9 @@ class AtSelect extends Component {
     const isFollow = this.state.keywords === '';
     const avatar = isFollow ? item?.user?.avatar : item.avatar;
     const username = isFollow ? item?.user?.userName : item.username;
-    const nickname = isFollow ? item?.user?.nickName : item.nickname;
     const groupName = isFollow ? item?.group?.groupName : item.groupName;
     const userId = isFollow ? item.user?.pid : item.userId;
-    return { avatar, username, groupName, userId, nickname };
+    return { avatar, username, groupName, userId };
   }
 
   renderItem() {
@@ -123,25 +122,25 @@ class AtSelect extends Component {
 
     if (data.length === 0) return null;
     return data.map((item) => {
-      const { avatar, nickname, groupName, userId } = this.formatData(item);
+      const { avatar, username, groupName, userId } = this.formatData(item);
 
       return (
         <div className={styles['at-item']} key={userId}>
           <div className={styles['at-item__inner']} >
-            <Checkbox name={nickname}>
+            <Checkbox name={username}>
               <div className={styles.avatar}>
                 {avatar
                   ? <Avatar image={avatar} />
                   : <Avatar
-                    text={nickname.toUpperCase()}
+                    text={username}
                     style={{
-                      backgroundColor: `#${this.getBackgroundColor(nickname)}`,
+                      backgroundColor: `#${this.getBackgroundColor(username)}`,
                     }}
                   />
                 }
               </div>
               <div className={styles.info}>
-                <div className={styles.username}>{nickname}</div>
+                <div className={styles.username}>{username}</div>
                 <div className={styles.group}>{groupName}</div>
               </div>
             </Checkbox>

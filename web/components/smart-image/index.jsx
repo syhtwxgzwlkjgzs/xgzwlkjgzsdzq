@@ -1,36 +1,34 @@
-import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import React, {useState, useEffect, useCallback, useRef, useMemo} from 'react';
 import isServer from '@common/utils/is-server';
 import styles from './index.module.scss';
-import { isLongImage } from '@common/utils/calc-image-type';
+import {isLongImage} from '@common/utils/calc-image-type';
 import calcCosImageQuality from '@common/utils/calc-cos-image-quality';
-import { inject, observer } from 'mobx-react';
 
-const SmartImg = ({ level, type, src, onClick, noSmart = false, showLongPicture = true, card }) => {
-  const [isLong, changeIsLong] = useState(false);
-  const img = useRef(null);
+const SmartImg = ({level, type, src, onClick, noSmart = false}) => {
 
-  const imgSrc = useMemo(() => {
-    if (noSmart) return calcCosImageQuality(src, type, 0);
-    return calcCosImageQuality(src, type, level);
-  }, [noSmart, src, type, level]);
+    const [isLong, changeIsLong] = useState(false);
+    const img = useRef(null);
 
-  const imgOnload = useCallback(() => {
-    card.setImgReadyLength();
-    if (img && img.current) {
-      const width = img.current.naturalWidth;
-      const height = img.current.naturalHeight;
-      changeIsLong(isLongImage(width, height));
-    }
-    if (!showLongPicture) {
-      changeIsLong(false);
-    }
-  }, [img]);
-  return (
+    const imgSrc = useMemo(() => {
+        if (noSmart) return calcCosImageQuality(src, type, 0);
+        return calcCosImageQuality(src, type, level);
+    }, [noSmart, src, type, level])
+
+    const imgOnload = useCallback(() => {
+        if (img && img.current) {
+            const width = img.current.naturalWidth;
+            const height = img.current.naturalHeight;
+            changeIsLong(isLongImage(width, height));
+        }
+        
+    }, [img])
+    
+    return (
         <div className={styles.box}>
             <img ref={img} src={imgSrc} onLoad={imgOnload} onClick={onClick}/>
             {isLong && <div className={styles.longImgBox}><p className={styles.longImgText}>长图</p></div>}
         </div>
-  );
-};
+    );
+}
 
-export default inject('card')(observer(SmartImg));
+export default SmartImg;

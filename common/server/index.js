@@ -40,7 +40,6 @@ export { default as readTopics } from './thread-post/read-topic';
 export { default as createThreadVideoAudio } from './thread-post/create-video-audio';
 export { default as readPostCategories } from './thread-post/read-post-categories';
 
-// 注册登录部分
 export { default as smsVerify } from './smsVerify';
 export { default as smsResetPwd } from './smsResetPassword';
 export { default as createAttachment } from './thread-post/create-attachment';
@@ -62,8 +61,6 @@ export { default as readYundianboSignature } from './thread-post/read-yundianbo-
 export { default as setNickname } from './login/setNickname';
 export { default as transitionSmsBind } from './transitionSmsBind';
 export { default as getMiniCode } from './login/getMiniCode';
-export { default as h5Rebind } from './login/h5Rebind';
-export { default as miniRebind } from './login/miniRebind';
 
 // 支付
 export { default as createOrders } from './pay/createOrders';

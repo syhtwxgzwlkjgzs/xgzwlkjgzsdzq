@@ -358,7 +358,7 @@ class ThreadAction extends ThreadStore {
    * @returns {object} 处理结果
    */
   @action
-  async delete(id, IndexStore, SearchStore, TopicStore, SiteStore, UserStore) {
+  async delete(id, IndexStore, SearchStore, TopicStore, SiteStore) {
     if (!id) {
       return {
         msg: '参数不完整',
@@ -379,7 +379,6 @@ class ThreadAction extends ThreadStore {
       IndexStore?.deleteThreadsData && IndexStore.deleteThreadsData({ id }, SiteStore);
       SearchStore?.deleteThreadsData && SearchStore.deleteThreadsData({ id });
       TopicStore?.deleteThreadsData && TopicStore.deleteThreadsData({ id });
-      UserStore?.deleteUserThreads && UserStore?.deleteUserThreads(id);
 
       return {
         code: res.code,
