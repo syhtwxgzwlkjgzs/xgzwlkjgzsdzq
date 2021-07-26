@@ -12,11 +12,12 @@ class CopyRight extends React.Component {
 
   render() {
     const { site, center, line, className, mode, marginTop, marginBottom} = this.props;
-    if ( !site || !site.webConfig || !site.webConfig.setSite) return null;
+    if ( !site?.webConfig?.setSite ) {
+      return null;
+    }
 
-    const { setSite } = site.webConfig;
-
-    const { platform } = site;
+    const { platform, webConfig } = site;
+    const { setSite } = webConfig;
     const isH5 = platform === 'h5';
 
     const clsName = classnames(styles.container, {
