@@ -73,15 +73,20 @@ function AttachmentToolbar(props) {
     setShowAll(!showAll);
   };
 
-  const trggerInput = () => {
-    inputRef.current.click();
+  const trggerInput = (item) => {
+    if (item.type === THREAD_TYPE.video) {
+      const isUpload = onVideoUpload();
+      if (!isUpload) return false;
+      inputRef.current.click();
+    } else inputRef.current.click();
   };
 
   const uploadFiles = async (files, item = {}) => {
     const { onUploadComplete } = props;
     if (item.type === THREAD_TYPE.video) {
       file = files[0];
-      onVideoUpload();
+      const isUpload = onVideoUpload();
+      if (!isUpload) return false;
       tencentVodUpload({
         file,
         onUploading: () => {
@@ -184,7 +189,7 @@ function AttachmentToolbar(props) {
     return isShow ? (
       <div
         key={item.name}
-        onClick={trggerInput}
+        onClick={() => trggerInput(item)}
         className={clsName}
       >
         <Icon
