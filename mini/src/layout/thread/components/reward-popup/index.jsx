@@ -14,6 +14,10 @@ const InputPop = (props) => {
   const [refresh, setRefresh] = useState(true); // 手动刷新
   const [maxLength, setMaxLength] = useState(7); // 手动刷新
 
+  useEffect(() => {
+    setValue('');
+  }, [visible]);
+
   const onInputChange = (val) => {
     const arr = val.match(/([1-9]\d{0,6}|0)(\.\d{0,2})?/);
     const spot = arr ? arr[0].indexOf('.') : -1;
@@ -34,7 +38,6 @@ const InputPop = (props) => {
 
   const onCancel = () => {
     typeof props?.onCancel === 'function' && props.onCancel();
-    typeof props?.onCancel === 'function' && setValue('');
   }
 
   const onSubmitClick = async () => {
