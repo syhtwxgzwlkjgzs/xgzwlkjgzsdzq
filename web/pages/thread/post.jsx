@@ -666,21 +666,32 @@ class PostPage extends React.Component {
         duration: 0,
       });
       const res = await attachmentUploadMultiple(fileurls);
+      const sensitiveArr = [];
       res.forEach((ret, index) => {
         const { code, data = {} } = ret;
         if (code === 0) {
           const { url, id } = data;
           contentText = contentText.replace(images[index], `<img src=\"${url}\" alt=\"attachmentId-${id}\" />`);
+        } else if (code === -7075) {
+          sensitiveArr.push('');
+          contentText = contentText.replace(images[index], `<p>【敏感图片】</p>`);
         }
       });
       threadPost.setPostData({ contentText });
       toastInstance.destroy();
 
-      await new Promise(resolve => {
-        setTimeout(() => {
-          resolve();
-        }, 100);
-      });
+      if (sensitiveArr.length) {
+        Toast.info({
+          content: `帖子内容中的敏感图片已被删除`,
+          hasMask: true,
+          duration: 2000,
+        });
+        await new Promise(resolve => {
+          setTimeout(() => {
+            resolve();
+          }, 2000);
+        });
+      }
     }
 
     // 提交帖子数据
