@@ -30,7 +30,10 @@ class SearchPCPage extends React.Component {
     this.activeUsersRef = React.createRef();
     this.hotTopicRef = React.createRef();
 
+    // 是否点击step
     this.isClick = false
+
+    this.noDataViewH = 120
   }
 
   redirectToSearchResultPost = () => {
@@ -135,13 +138,16 @@ class SearchPCPage extends React.Component {
     }
 
     const { topicHeight, userHeight, threadHeight, totalHeight } = this.getDivHeight()
+    const { searchNoData = false } = this.props
+
+    const otherHeight = searchNoData ? this.noDataViewH + 12 : 12
 
     let stepIndex = 0
-    if (topicHeight !== 0 && scrollTop < topicHeight + 12) {
+    if (topicHeight !== 0 && scrollTop < topicHeight + otherHeight) {
       stepIndex = 0
-    } else if (userHeight !== 0 && scrollTop < topicHeight + userHeight + 12) {
+    } else if (userHeight !== 0 && scrollTop < topicHeight + userHeight + otherHeight) {
       stepIndex = 1
-    } else if (threadHeight !== 0 && scrollTop < totalHeight + 12) {
+    } else if (threadHeight !== 0 && scrollTop < totalHeight + otherHeight) {
       stepIndex = 2
     }
 
@@ -240,9 +246,11 @@ class SearchPCPage extends React.Component {
 
   renderContent = () => {
     const { hasTopics, hasUsers, hasThreads, isShowAll } = this.props.search.dataIndexStatus
+    const { searchNoData = false } = this.props
 
     return (
       <div className={styles.searchContent}>
+        { searchNoData && <div className={styles.noDataView}>暂无相关内容</div> }
         { (isShowAll || hasTopics) && this.renderContentPopTopic() }
         { (isShowAll || hasUsers) && this.renderContentActiveUser() }
         { (isShowAll || hasThreads) && this.renderContentHotThread() }

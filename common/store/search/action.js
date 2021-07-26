@@ -65,10 +65,13 @@ class SearchAction extends SearchStore {
     const hasUsers = !!(usersPageData?.length)
     const hasThreads = !!(threadsPageData?.length)
 
-    // 都没有值，或者都有值，则显示全部
-    const isShowAll = (!hasTopics && !hasUsers && !hasThreads) || (hasTopics && hasUsers && hasThreads)
+    // 都有值，则显示全部
+    const isShowAll = hasTopics && hasUsers && hasThreads
 
-    return { hasTopics, hasUsers, hasThreads, isShowAll }
+    // 都没值
+    const isNoData = !hasTopics && !hasUsers && !hasThreads
+
+    return { hasTopics, hasUsers, hasThreads, isShowAll, isNoData }
   }
 
   // 获取数据状态 - 用于小程序和H5
