@@ -8,8 +8,29 @@ import { inject, observer } from 'mobx-react';
 @inject('payBox')
 @observer
 class PayResultDialog extends React.Component {
-  constructor(props) {
-    super(props);
+  clearPayBox = () => {
+    setTimeout(() => {
+      this.props.payBox.clear();
+    }, 500);
+  }
+
+  handleCancel = () => {
+    this.props.payBox.visible = false;
+    this.props.payBox.h5SureDialogVisible = false;
+
+    this.clearPayBox();
+  }
+
+  handleSure = () => {
+    if (this.props.payBox.successCallback) {
+      this.props.payBox.successCallback();
+    }
+
+    if (this.props.payBox.completedCallback) {
+      this.props.payBox.completedCallback();
+    }
+
+    this.clearPayBox();
   }
 
   render() {
@@ -29,10 +50,10 @@ class PayResultDialog extends React.Component {
           </div>
           <div className={styles.buttonArea}>
             <div className={styles.buttonWrap}>
-              <Button className={styles.cancelButton}>取消</Button>
+              <Button className={styles.cancelButton} onClick={this.handleCancel}>取消</Button>
             </div>
             <div className={styles.buttonWrap}>
-              <Button type="primary">已完成付款</Button>
+              <Button type="primary" onClick={this.handleSure}>已完成付款</Button>
             </div>
           </div>
         </div>
