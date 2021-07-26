@@ -219,7 +219,7 @@ class Index extends React.Component {
     }
 
     render() {
-      const { data, className = '', site = {}, showBottomStyle = true, isShowIcon = false, unifyOnClick = null, relativeToViewport = true } = this.props;
+      const { data, className = '', site = {}, showBottomStyle = true, isShowIcon = false, unifyOnClick = null, relativeToViewport = true, autoplay = false } = this.props;
 
       const { platform = 'pc' } = site;
       if (!data) {
@@ -284,6 +284,7 @@ class Index extends React.Component {
               setUseShowMore={this.setUseShowMore}
               videoH={videoH}
               updateViewCount={this.updateViewCount}
+              autoplay={autoplay}
             />
 
             <BottomEvent

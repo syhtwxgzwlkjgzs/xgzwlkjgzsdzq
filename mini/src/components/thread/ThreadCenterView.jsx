@@ -30,7 +30,8 @@ const Index = (props) => {
     changeHeight = noop, 
     useShowMore = true, 
     setUseShowMore = noop,
-    updateViewCount
+    updateViewCount,
+    autoplay= false
   } = props;
 
   const wrapperId= useRef(`thread-wrapper-${randomStr()}`)
@@ -82,6 +83,7 @@ const Index = (props) => {
               relativeToViewport={relativeToViewport}
               changeHeight={changeHeight}
               updateViewCount={updateViewCount}
+              autoplay={autoplay}
             />
           </WrapperView>
         )}

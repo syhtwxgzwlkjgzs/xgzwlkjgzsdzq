@@ -97,16 +97,16 @@ const BaseLayout = (props) => {
       Taro.getSystemInfo({
         success(res) {
   
-          if (playingVideoDom) {
-            Taro.createSelectorQuery()
-            .select(`#${playingVideoDom}`)
-            .boundingClientRect((rect) => { 
-              if(rect.top > res.windowHeight || rect.bottom < 0) {
-                Taro.createVideoContext(playingVideoDom)?.pause();
-                baselayout.playingVideoDom = "";
-              }
-            }).exec();
-          }
+          // if (playingVideoDom) {
+          //   Taro.createSelectorQuery()
+          //   .select(`#${playingVideoDom}`)
+          //   .boundingClientRect((rect) => { 
+          //     if(rect.top > res.windowHeight || rect.bottom < 0) {
+          //       Taro.createVideoContext(playingVideoDom)?.pause();
+          //       baselayout.playingVideoDom = "";
+          //     }
+          //   }).exec();
+          // }
   
           if(playingAudioDom) {
             Taro.createSelectorQuery()

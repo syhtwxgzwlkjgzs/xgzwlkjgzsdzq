@@ -36,6 +36,7 @@ const Index = ({
   v_height = null,
   relativeToViewport = true,
   updateViewCount = noop,
+  autoplay = false
 }) => {
   let player = null;
   const videoId = useRef(`video${randomStr()}`);
@@ -118,6 +119,8 @@ const Index = ({
             height={`${height}px`}
             poster={coverUrl}
             duration={time}
+            autoplay={autoplay}
+            onPause={onPause}
           />
         )
       }
