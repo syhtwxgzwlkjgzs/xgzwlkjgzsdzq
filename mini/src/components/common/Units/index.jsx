@@ -8,17 +8,9 @@
  import styles from './index.module.scss';
 //  import Icon from '@discuzq/design/dist/components/icon/index';
  import Icon from '@discuzq/design/dist/components/icon/index';
-import getAttachmentIconLink from '@common/utils/get-attachment-icon-link';
 
 const Index = (props) => {
   const { type = 'upload', filename, size, src, className, onUpload, onDelete, productSrc, productDesc, productPrice, onTagRemoveClick, isCloseShow = true, onTagClick, tagContent, deleteShow = false, onVideoLoaded = () => { }, style = {}, icon, label } = props;
-
-  const getFileSrc = () => {
-    if(!filename) return "";
-    const name = filename;
-    const type = name.substr(name.lastIndexOf(`.`) + 1).toUpperCase() || "";
-    return getAttachmentIconLink(type);
-  }
 
   // 标签展示
   const tag = (
@@ -61,7 +53,7 @@ const Index = (props) => {
   const atta = (
     <View className={styles['atta']}>
       <View src={src} className={styles['left']}>
-        <Image src={getFileSrc()} mode="widthfix" className={styles['icon']}/>
+        <Icon name='DOCOutlined' size={16} color={'#3ac15f'} />
         <Text className={styles['name']}>{filename}</Text>
         <Text className={styles['size']}>{size}</Text>
       </View>

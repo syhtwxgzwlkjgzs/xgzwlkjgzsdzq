@@ -132,27 +132,21 @@
   }
   .shieldBtn {
     position: absolute;
-    top: rem(-48);
+    top: rem(-26);
     right: rem(16);
-    min-width: rem(86);
-    height: rem(36);
-    line-height: rem(36);
-    border-radius: rem(5);
-    background-color: rgba(11, 11, 55, 0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: rem($padding-2n);
-    box-sizing: border-box;
+    display: inline-block;
     :global {
       .dzq-icon {
+        vertical-align: middle;
+        font-size: rem($font-size-base);
         color: $white;
       }
     }
-    .shieldText {
+    span {
+      vertical-align: middle;
       font-size: rem($font-size-base);
       color: $white;
-      margin-left: rem($margin-1n);
+      margin-left: rem($margin-2n);
     }
   }
 }

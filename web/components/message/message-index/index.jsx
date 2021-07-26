@@ -76,7 +76,7 @@ export class MessageIndex extends Component {
         id: id,
         createdAt: dialogMessage?.createdAt,
         dialogId: dialogMessage?.dialogId,
-        content: dialogMessage?.imageUrl ? '[图片]' : dialogMessage?.messageText,
+        content: dialogMessage?.imageUrl ? '[图片]' : dialogMessage?.messageTextHtml,
         avatar: chatPerson?.avatar,
         userId: chatPerson?.id,
         nickname: chatPerson?.nickname,

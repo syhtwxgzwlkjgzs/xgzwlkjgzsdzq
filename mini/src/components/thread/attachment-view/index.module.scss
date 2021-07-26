@@ -1,5 +1,4 @@
 @import '@common/styles/index.scss';
-
 .wrapper {
   :last-child {
     margin-bottom: 0;
@@ -48,7 +47,7 @@
     flex-direction: column;
     overflow: hidden;
     white-space: nowrap;
-    margin-left: 10px;
+    margin-left: 8px;
     margin-right: 8px;
     margin-top: 2px;
     flex: 1;
@@ -59,8 +58,8 @@
     line-height: 17px;
   }
   .containerIcon {
-    width: 20px;
-    height: 20px;
+    color: $success-color;
+    font-size: 20px;
   }
   .content {
     color: $text-color-primary;

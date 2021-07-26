@@ -4,12 +4,6 @@
 
 .mobileLayout {
   background: $white;
-  .loadMoreStyle {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 380px;
-  }
 }
 
 .unit {
@@ -59,6 +53,13 @@
     // 这个目前也没有定义
     color: var(--color-text-secondary);
   }
+}
+
+.loadingSpin {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 380px;
 }
 /* 顶部title样式 */
 .topBar {

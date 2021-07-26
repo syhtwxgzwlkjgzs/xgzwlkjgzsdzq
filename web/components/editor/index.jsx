@@ -13,7 +13,6 @@ import './index.scss';
 import '@discuzq/vditor/src/assets/scss/index.scss';
 import { Toast } from '@discuzq/design';
 import browser, { constants } from '@common/utils/browser';
-import { attachmentUploadMultiple } from '@common/utils/attachment-upload';
 
 export default function DVditor(props) {
   const { pc, emoji = {}, atList = [], topic, value = '',
@@ -24,7 +23,6 @@ export default function DVditor(props) {
     onCountChange = () => { },
     hintCustom = () => { },
     hintHide = () => { },
-    site = {},
   } = props;
   const vditorId = 'dzq-vditor';
   let timeoutId = null;
@@ -42,18 +40,11 @@ export default function DVditor(props) {
     }
   };
 
-  const html2mdInserValue = (text, isImage) => {
+  const html2mdInserValue = (text) => {
     try {
-      if (!vditor && !window.vditorInstance) return;
-      const editorInstance = vditor || window.vditorInstance;
-      let md = editorInstance.html2md && editorInstance.html2md(text);
-      md = md.substr(0, md.length - 1);
-
-      if (isImage) {
-        md = `<p>${md}</p>`
-      }
-
-      editorInstance.insertValue && editorInstance.insertValue(md);
+      if (!vditor) return;
+      const md = vditor.html2md && vditor.html2md(text);
+      vditor.insertValue && vditor.insertValue(md.substr(0, md.length - 1));
     } catch (error) {
       console.error('html2mdInserValue', error);
     }
@@ -75,7 +66,7 @@ export default function DVditor(props) {
     if (emoji && emoji.code) {
       setState({ emoji: {} });
       // 因为vditor的lute中有一些emoji表情和 emoji.code 重叠了。这里直接先这样处理
-      let value = `<img alt="${emoji.code}dzqemoji" src="${emoji.url}" class="qq-emotion" />`;
+      let value = `<img alt="${emoji.code}emoji" src="${emoji.url}" class="qq-emotion" />`;
       value = emojiVditorCompatibilityDisplay(value);
       // setCursorPosition();
       html2mdInserValue(value);
@@ -236,14 +227,14 @@ export default function DVditor(props) {
     };
   };
 
-  const initVditor = () => {
+  function initVditor() {
     // https://ld246.com/article/1549638745630#options
     const editor = new Vditor(
       vditorId,
       {
         _lutePath: 'https://cdn.jsdelivr.net/npm/@discuzq/vditor@1.0.22/dist/js/lute/lute.min.js',
         ...baseOptions,
-        minHeight: pc ? 450 : 44,
+        minHeight: 44,
         // 编辑器初始化值
         tab: '  ',
         value,
@@ -324,96 +315,11 @@ export default function DVditor(props) {
             hintHide();
           },
         },
-        upload: {
-          url: 'upload',
-          accept: 'image/*',
-          handler: async (files) => {
-
-            const { webConfig: { other, setAttach } } = site;
-            const { canInsertThreadImage } = other;
-            const { supportImgExt, supportMaxSize } = setAttach;
-
-            if (!canInsertThreadImage) {
-              Toast.error({
-                content: '您没有上传图片的权限',
-                duration: 3000,
-              });
-              return;
-            }
-
-            // 检查文件类型，含有非图片文件则退出上传并提示用户
-            for (let i = 0; i < files.length; i++) {
-              const file = files[i];
-              const type = file.type;
-
-              if (!type.includes('image')) {
-                Toast.error({
-                  content: '暂不支持拖拽/复制上传非图片文件',
-                  duration: 3000,
-                });
-                return;
-              }
-
-              const types = supportImgExt.split(',');
-              if (!types.includes(type.substr(6))) {
-                Toast.error({
-                  content: `仅支持上传格式为${supportImgExt}的图片，请重新选择`,
-                  duration: 3000,
-                });
-                return;
-              }
-
-              if (file.size > (supportMaxSize * 1024 * 1024)) {
-                Toast.error({
-                  content: `仅支持上传小于${supportMaxSize}MB的图片，请重新选择`,
-                  duration: 3000,
-                });
-                return;
-              }
-            }
-
-            // 检查文件数量，超出max数量则退出上传并提示用户
-            if (window.vditorInstance) {
-              const text = window.vditorInstance.getHTML();
-              const images = text.match(/<img.*?\/>/g);
-
-              const max = 100;
-              if (images && (images.length + files.length) > max) {
-                Toast.error({
-                  content: `图文混排最多支持插入${max}张图片，现在还可以插入${max - images.length}张`,
-                  duration: 3000,
-                });
-                return;
-              }
-            }
-
-
-
-
-
-            // 执行上传
-            const toastInstance = Toast.loading({
-              content: `图片上传中...`,
-              hasMask: true,
-              duration: 0,
-            });
-            const res = await attachmentUploadMultiple(files);
-            res.forEach(ret => {
-              const { code, data = {} } = ret;
-              if (code === 0) {
-                const { url, id } = data;
-                html2mdInserValue(`<img src="${url}" alt="attachmentId-${id}" />`, true);
-              }
-            });
-            toastInstance.destroy();
-          }
-        }
       },
     );
 
     storeLastCursorPosition(editor);
     setVditor(editor);
-    window.vditorInstance = editor;
   }
 
   const className = pc ? 'dvditor pc' : classNames('dvditor h5', { 'no-focus': !pc && !isFocus });

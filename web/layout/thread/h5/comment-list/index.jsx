@@ -443,10 +443,9 @@ class RenderCommentList extends React.Component {
         />
 
         {/* 采纳弹层 */}
-        {parseContent?.REWARD?.money && parseContent?.REWARD?.remainMoney && (
+        {parseContent?.REWARD?.money && (
           <AboptPopup
-            money={Number(parseContent.REWARD.money)} // 悬赏总金额
-            remainMoney={Number(parseContent.REWARD.remainMoney)} // 需要传入剩余悬赏金额
+            rewardAmount={parseContent.REWARD.money} // 需要传入剩余悬赏金额
             visible={this.state.showAboptPopup}
             onCancel={() => this.onAboptCancel()}
             onOkClick={(data) => this.onAboptOk(data)}

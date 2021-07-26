@@ -26,9 +26,6 @@ export default function fuzzyCalcContentLength(content, lengthInLine = 50) {
     // 替换图片标签
     newContent = replaceStringInRegex(newContent, "img", '');
 
-    // 回车换成'\n'
-    newContent = replaceStringInRegex(newContent, "breakInCode", '\n');
-
     // 替换所有标签
     newContent = replaceStringInRegex(newContent, "tags", '');
 
@@ -40,7 +37,7 @@ export default function fuzzyCalcContentLength(content, lengthInLine = 50) {
         IMG_SIZE * (countImgs - countEmojs > 0 ? countImgs - countEmojs : 0); // 加上图片大小
 
     for(let i = 0; i < countReturns; i++) {
-        if(newContent.indexOf('\n') >= 0) {
+        if(newContent.indexOf('\n') > 0) {
             const restInLine = lengthInLine - newContent.indexOf('\n') > 0 ? // 防止长文章最后一个字是回车
                                 lengthInLine - newContent.indexOf('\n') : 0;
             totalCount += restInLine;

@@ -52,8 +52,6 @@ class Index extends React.Component {
         showHeader={true}
         noMore={currentPage >= totalPage}
         onRefresh={this.props.dispatch}
-        requestError={this.props.index.threadError.isError}
-        errorText={this.props.index.threadError.errorText}
       >
         {pageData?.length !== 0 && (
           <div className={styles.titleBox}>

@@ -54,7 +54,7 @@ class AtSelect extends Component {
   async fetchUserList() {
     const { getUsersList } = this.props.search;
     const { page, perPage, keywords } = this.state;
-    const params = { search: keywords, type: 'nickname', page, perPage };
+    const params = { search: keywords, type: 'username', page, perPage };
     const ret = await getUsersList(params);
     const { code, data } = ret;
     if (code === 0) {
@@ -148,10 +148,9 @@ class AtSelect extends Component {
     const isFollow = this.state.keywords === '';
     const avatar = isFollow ? item?.user?.avatar : item.avatar;
     const username = isFollow ? item?.user?.userName : item.username;
-    const nickname = isFollow ? item?.user?.nickName : item.nickname;
     const groupName = isFollow ? item?.group?.groupName : item.groupName;
     const userId = isFollow ? item.user?.pid : item.userId;
-    return { avatar, username, groupName, userId, nickname };
+    return { avatar, username, groupName, userId };
   }
 
   // 渲染列表内容
@@ -161,24 +160,24 @@ class AtSelect extends Component {
 
     if (data.length === 0) return null;
     return data.map(item => {
-      const { avatar, nickname, groupName, userId } = this.formatData(item);
+      const { avatar, username, groupName, userId } = this.formatData(item);
       return (
         <View className={styles['at-item']} key={userId}>
           <View className={styles['at-item__inner']} >
-            <Checkbox name={nickname}>
+            <Checkbox name={username}>
               <View className={styles.avatar}>
                 {avatar
                   ? <Avatar image={avatar} />
                   : <Avatar
-                    text={nickname.toUpperCase()}
+                    text={username}
                     style={{
-                      backgroundColor: `#${this.getBackgroundColor(nickname)}`
+                      backgroundColor: `#${this.getBackgroundColor(username)}`
                     }}
                   />
                 }
               </View>
               <View className={styles.info}>
-                <View className={styles.username}>{nickname}</View>
+                <View className={styles.username}>{username}</View>
                 <View className={styles.group}>{groupName}</View>
               </View>
             </Checkbox>

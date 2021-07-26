@@ -19,7 +19,7 @@ class PartnerInviteWrap extends React.Component {
     const { platform } = site;
     if (platform === 'h5') {
       return (
-        <List className={layout.page} allowRefresh={false} hideCopyright>
+        <List className={layout.page} allowRefresh={false}>
           <HomeHeader hideInfo mode='join'/>
           { children }
         </List>

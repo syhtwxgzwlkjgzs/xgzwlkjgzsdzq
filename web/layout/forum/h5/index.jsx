@@ -12,7 +12,6 @@ import { get } from '@common/utils/get';
 import layout from './index.module.scss';
 // import UserCenterFriends from '@components/user-center-friends';
 import { simpleRequest } from '@common/utils/simple-request';
-import Copyright from '@components/copyright';
 
 @inject('site')
 @inject('forum')
@@ -24,7 +23,7 @@ class ForumH5Page extends React.Component {
   }
 
   nextUsersPage = async () => {
-    const { forum } = this.props;
+    const { forum} = this.props;
     return await this.setUsersPageData(forum.userPage + 1);
   }
 
@@ -60,45 +59,43 @@ class ForumH5Page extends React.Component {
         <Header/>
         <HomeHeader/>
         <div className={layout.content}>
-          <div className={layout.mainContent}>
-            {/* 站点介绍 start */}
-            <div className={layout.list}>
-              <div className={layout.label}>站点介绍</div>
-              <div className={layout.right} title={site.siteIntroduction}>
-                <span className={layout.list_text_ellipsis}>{site.siteIntroduction}</span>
-              </div>
+          {/* 站点介绍 start */}
+          <div className={layout.list}>
+            <div className={layout.label}>站点介绍</div>
+            <div className={layout.right} title={site.siteIntroduction}>
+              <span className={layout.list_text_ellipsis}>{site.siteIntroduction}</span>
             </div>
-            {/* 站点介绍 end */}
-            {/* 创建时间 start */}
-            <div className={layout.list}>
-              <div className={layout.label}>创建时间</div>
-              <div className={layout.right}>{siteInstall}</div>
-            </div>
-            {/* 创建时间 end */}
-            {/* 站点模式 start */}
-            <div className={layout.list}>
-                <div className={layout.label}>站点模式</div>
-                <div className={layout.right}>
-                  {
-                    siteMode === 'public'
-                      ? '公开模式'
-                      : '付费模式'
-                  }
-                </div>
-            </div>
-            {/* 站点模式 end */}
-            {/* 站长 start */}
-            <div className={layout.list}>
-              <div className={layout.label}>站长</div>
+          </div>
+          {/* 站点介绍 end */}
+          {/* 创建时间 start */}
+          <div className={layout.list}>
+            <div className={layout.label}>创建时间</div>
+            <div className={layout.right}>{siteInstall}</div>
+          </div>
+          {/* 创建时间 end */}
+          {/* 站点模式 start */}
+          <div className={layout.list}>
+              <div className={layout.label}>站点模式</div>
               <div className={layout.right}>
-                <div className={layout.forum_agent}>
-                  {
-                    siteAuthor.avatar
-                      ? <Avatar size='small' className={layout.forum_agent_img} image={siteAuthor.avatar}/>
-                      : <></>
-                  }
-                  <span className={layout.forum_agent_name}>{siteAuthor.username}</span>
-                </div>
+                {
+                  siteMode === 'public'
+                    ? '公开模式'
+                    : '付费模式'
+                }
+              </div>
+          </div>
+          {/* 站点模式 end */}
+          {/* 站长 start */}
+          <div className={layout.list}>
+            <div className={layout.label}>站长</div>
+            <div className={layout.right}>
+              <div className={layout.forum_agent}>
+                {
+                  siteAuthor.avatar
+                    ? <Avatar size='small' className={layout.forum_agent_img} image={siteAuthor.avatar}/>
+                    : <></>
+                }
+                <span className={layout.forum_agent_name}>{siteAuthor.username}</span>
               </div>
             </div>
             {/* 站长 end */}
@@ -116,21 +113,20 @@ class ForumH5Page extends React.Component {
                 </div>
               </div>
             </div>
-            {/* 成员 end */}
-            {/* 我的角色 start */}
-            <div className={layout.list}>
-              <div className={layout.label}>我的角色</div>
-              <div className={layout.right}>{this.props.user?.userInfo?.group?.groupName}</div>
-            </div>
-            {/* 我的角色 end */}
-            {/* 当前版本 start */}
-            <div className={layout.list}>
-              <div className={layout.label}>当前版本</div>
-              <div className={layout.right}>{envConfig.version || '暂无版本号'}</div>
-            </div>
-            {/* 当前版本 end */}
           </div>
-          <Copyright />
+          {/* 成员 end */}
+          {/* 我的角色 start */}
+          <div className={layout.list}>
+            <div className={layout.label}>我的角色</div>
+            <div className={layout.right}>{this.props.user?.userInfo?.group?.groupName}</div>
+          </div>
+          {/* 我的角色 end */}
+          {/* 当前版本 start */}
+          <div className={layout.list}>
+            <div className={layout.label}>当前版本</div>
+            <div className={layout.right}>{envConfig.version || '暂无版本号'}</div>
+          </div>
+          {/* 当前版本 end */}
         </div>
         {/* 成员列表弹出 */}
         <Popup

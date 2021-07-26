@@ -212,10 +212,6 @@ const Index = ({ message, user, site: { webConfig, envConfig }, dialogId: _dialo
     });
   };
 
-  const filterTag = (html) =>{
-    return html?.replace(/<(\/)?([beprt]|br|div|h\d)[^>]*>|[\r\n]/gi, '');
-  }
-
   const messagesHistory = useMemo(() => {
     setTimeout(() => {
       scrollEnd();
@@ -259,7 +255,7 @@ const Index = ({ message, user, site: { webConfig, envConfig }, dialogId: _dialo
         userAvatar: item.user.avatar,
         displayTimePanel: true,
         textType: 'string',
-        text: filterTag(item.messageText),
+        text: item.messageTextHtml,
         ownedBy: user.id === item.userId ? 'myself' : 'itself',
         width: width,
         height: height,

@@ -15,7 +15,7 @@ class WXAuthorization extends React.Component {
               pc={
                 <Redirect jumpUrl={'/user/login'} />
               }
-              title='授权登录'
+              title={`授权登录`}
             />;
   }
 }

@@ -8,7 +8,6 @@ import fuzzyCalcContentLength from '@common/utils/fuzzy-calc-content-length';
 import s9e from '@common/utils/s9e';
 import xss from '@common/utils/xss';
 import { urlToLink } from '@common/utils/replace-url-to-a';
-import replaceStringInRegex from '@common/utils/replace-string-in-regex';
 
 import styles from './index.module.scss';
 
@@ -36,8 +35,7 @@ const PostContent = ({
   const [cutContentForDisplay, setCutContentForDisplay] = useState('');
   const [showMore, setShowMore] = useState(false); // 根据文本长度显示"查看更多"
   const [imageVisible, setImageVisible] = useState(false);
-  const [imageUrlList, setImageUrlList] = useState([]);
-  const [curImageUrl, setCurImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState('');
   const ImagePreviewerRef = useRef(null); // 富文本中的图片也要支持预览
   const contentWrapperRef = useRef(null);
 
@@ -92,7 +90,7 @@ const PostContent = ({
     updateViewCount();
     if (e?.attribs?.src) {
       setImageVisible(true);
-      setCurImageUrl(`${decodeURIComponent(e.attribs.src)}`);
+      setImageUrl(e.attribs.src);
     }
   };
 
@@ -114,22 +112,6 @@ const PostContent = ({
     setCutContentForDisplay(ctnSubstring);
   };
 
-  const getImagesFromText = (text) => {
-    const _text = replaceStringInRegex(text, "emoj", '');
-    const images = _text.match(/<img\s+[^<>]*src=[\"\'\\]+([^\"\']*)/gm) || [];
-
-    for(let i = 0; i < images.length; i++) {
-      images[i] = images[i].replace(/<img\s+[^<>]*src=[\"\'\\]+/gm, "") || "";
-      images[i] = decodeURIComponent(images[i]);
-      images[i] = images[i].replace(/&lt;/g, "<")
-                            .replace(/&gt;/g, ">")
-                            .replace(/&amp;/g, "&")
-                            .replace(/&quot;/g, '"')
-                            .replace(/&apos;/g, "'");
-    }
-    return images;
-  }
-
   useEffect(() => {
     const lengthInLine = parseInt((contentWrapperRef.current.offsetWidth || 704) / 16);
     const length = fuzzyCalcContentLength(filterContent, lengthInLine); // 大致计算文本长度
@@ -148,12 +130,6 @@ const PostContent = ({
     } else {
       setContentTooLong(false);
     }
-
-    const imageUrlList = getImagesFromText(filterContent);
-    if(imageUrlList.length) {
-      setImageUrlList(imageUrlList);
-    }
-
   }, [filterContent]);
 
   return (
@@ -177,8 +153,8 @@ const PostContent = ({
               onClose={() => {
                 setImageVisible(false);
               }}
-              imgUrls={imageUrlList}
-              currentUrl={curImageUrl}
+              imgUrls={[imageUrl]}
+              currentUrl={imageUrl}
             />
           )}
         </div>

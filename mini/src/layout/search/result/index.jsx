@@ -81,13 +81,11 @@ class SearchResultPage extends React.Component {
     const { pageData: usersPageData } = searchUsers || {};
     const { pageData: threadsPageData } = searchThreads || {};
 
-    const { hasTopics, hasUsers, hasThreads, isShowAll } = this.props.search.dataSearchStatus
-
     return (
       <BaseLayout allowRefresh={false} showHeader={false}>
         <SearchInput onSearch={this.onSearch} onCancel={this.onCancel} defaultValue={keyword} searchWhileTyping/>
 
-        {(isShowAll || hasUsers) && <SidebarPanel
+        <SidebarPanel
           title="用户" 
           onShowMore={this.redirectToSearchResultUser}
           isLoading={!usersPageData}
@@ -100,9 +98,9 @@ class SearchResultPage extends React.Component {
           {
             usersPageData?.length && <SearchUsers data={usersPageData} onItemClick={this.onUserClick} />
           }
-        </SidebarPanel>}
+        </SidebarPanel>
 
-        {(isShowAll || hasThreads) && <SidebarPanel
+        <SidebarPanel
           title="主题" 
           onShowMore={this.redirectToSearchResultPost}
           isLoading={!threadsPageData}
@@ -117,9 +115,9 @@ class SearchResultPage extends React.Component {
           {
             threadsPageData?.filter((_, index) => index < 3).map((item, index) => <ThreadContent data={item} key={index} />)
           }
-        </SidebarPanel>}
+        </SidebarPanel>
 
-        {(isShowAll || hasTopics) && <SidebarPanel
+        <SidebarPanel
           title="话题" 
           onShowMore={this.redirectToSearchResultTopic}
           isLoading={!topicsPageData}
@@ -132,7 +130,7 @@ class SearchResultPage extends React.Component {
           {
             topicsPageData?.length && <SearchTopics data={topicsPageData} onItemClick={this.onTopicClick} />
           }
-        </SidebarPanel>}
+        </SidebarPanel>
       </BaseLayout>
     );
   }

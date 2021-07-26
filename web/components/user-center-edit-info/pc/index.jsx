@@ -11,7 +11,7 @@ import HOCFetchSiteData from '../../../middleware/HOCFetchSiteData';
 import UserCenterEditAccountPwd from '../../user-center-edit-account-pwd-pc';
 import UserCenterEditMobile from '../../user-center-edit-mobile-pc';
 import UserCenterEditPaypwd from '../../user-center-edit-paypwd-pc';
-import UserCenterAdditionalInfo from '../../user-center/additional-info-pc/index';
+import WechatRebindDialog from '../../user-center/rebind-wechat';
 import Copyright from '@components/copyright';
 import { getClientHeight } from '@common/utils/get-client-height';
 import isServer from '@common/utils/is-server';
@@ -29,7 +29,6 @@ class index extends Component {
       payPwdEditorVisible: false,
       mobileEditorVisible: false,
       wechatRebindEditorVisible: false,
-      additionalUserInfoVisible: false, // 补充信息状态
       editorConfig: [
         {
           name: '昵称',
@@ -263,16 +262,6 @@ class index extends Component {
               <p className={styles.pcEditWeiName}>{this.user.wxNickname}</p>
             </div>
           ),
-          operation: () => (
-            <p
-              onClick={() => {
-                Router.push({ url: '/user/rebind' });
-              }}
-              className={styles.pcEditNicknameCallMsodify}
-            >
-              换绑
-            </p>
-          ),
           // <p
           //   onClick={() => {
           //     this.setState({
@@ -283,28 +272,7 @@ class index extends Component {
           // >
           //   换绑
           // </p>
-          // operation: () => null,
-          inputEditor: () => null,
-        },
-        {
-          name: '补充信息',
-          display: 'show',
-          condition: () => true,
-          render: () => {
-            '查看';
-          },
-          operation: () => (
-            <p
-              onClick={() => {
-                this.setState({
-                  additionalUserInfoVisible: true,
-                });
-              }}
-              className={styles.pcEditNicknameCallMsodify}
-            >
-              查看
-            </p>
-          ),
+          operation: () => null,
           inputEditor: () => null,
         },
       ],
@@ -407,7 +375,7 @@ class index extends Component {
       <div className={styles.pcEditBox} id={styles.pcEditContainer}>
         <Header className={styles.pcEditHeaser} />
         <div className={styles.pcEditContent}>
-          <div className={styles.pcEdit}>
+          <div className={styles.pcEdit} style={{ height: pcEditHeight }}>
             {/* 头部 */}
             <div>
               <UserCenterEditHeader />
@@ -448,14 +416,14 @@ class index extends Component {
               });
             }}
           />
-          <UserCenterAdditionalInfo
+          {/* <WechatRebindDialog
+            visible={this.state.wechatRebindEditorVisible}
             onClose={() => {
               this.setState({
-                additionalUserInfoVisible: false,
+                wechatRebindEditorVisible: false,
               });
             }}
-            visible={this.state.additionalUserInfoVisible}
-          />
+          /> */}
         </>
       </div>
     );

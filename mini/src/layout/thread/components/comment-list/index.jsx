@@ -160,19 +160,14 @@ class CommentList extends React.Component {
             <Avatar
               image={(this.props.data?.user?.nickname || this.props.data?.user?.userName) && this.props?.data?.user?.avatar}
               name={this.props.data?.user?.nickname || this.props.data?.user?.userName || '异'}
-              circle={true}
+              circle
             ></Avatar>
           </View>
           <View className={styles.commentListContent}>
             <View className={styles.commentListContentText}>
               <View className={styles.commentHeader}>
-                <View className={styles.userInfo}>
-                  <View className={styles.commentListName}>
-                    {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
-                  </View>
-                  {!!groups?.isDisplay  && (
-                    <View className={styles.groups}>{groups?.name || groups?.groupName}</View>
-                  )}
+                <View className={styles.commentListName}>
+                  {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
                 </View>
                 {!isApproved ? (
                   <View className={styles.isApproved}>审核中</View>
@@ -186,7 +181,7 @@ class CommentList extends React.Component {
                   onRedirectToDetail={() => this.toCommentDetail()}
                   useShowMore={!!this.state.isShowOne}
                   content={this.props?.data?.content}
-                  customHoverBg={true}
+                  customHoverBg
                   onClick={this.handleClick.bind(this)}
                 ></PostContent>
               </View>
@@ -248,7 +243,7 @@ class CommentList extends React.Component {
                       <ReplyList
                         data={this.needReply[0]}
                         key={this.needReply[0].id}
-                        isShowOne={true}
+                        isShowOne
                         avatarClick={(floor) => this.replyAvatarClick(this.needReply[0],floor)}
                         likeClick={() => this.replyLikeClick(this.needReply[0])}
                         replyClick={() => this.replyReplyClick(this.needReply[0])}
