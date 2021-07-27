@@ -116,6 +116,13 @@ import config from '../../../app.config';
     }
   }
 
+  // 点击富文本中的链接
+  const handleLinkClick = () => {
+    updateViewCount();
+    setTimeout(() => { // 等待store更新完成后跳转
+    }, 500);
+  }
+
   // 超过1200个字符，截断文本用于显示
   const getCutContentForDisplay = (maxContentLength) => {
     const ctn = filterContent;
@@ -143,8 +150,7 @@ import config from '../../../app.config';
     const lengthInLine = parseInt((contentWrapperRef.current.offsetWidth || 704) / 16);
 
     const length = fuzzyCalcContentLength(filterContent, lengthInLine); // 大致计算文本长度
-    const maxContentLength = lengthInLine * 6 / 2; // 如果默认长度是704，一共可容纳264个字符，rpx是px两倍
-
+    const maxContentLength = lengthInLine * 6; // 如果默认长度是704，一共可容纳264个字符
     if (length < maxContentLength && length <= 1200) {
       // 显示6行内容
       setShowMore(false);
