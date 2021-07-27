@@ -227,7 +227,7 @@ class Index extends React.Component {
     }
 
     render() {
-      const { data, className = '', site = {}, showBottomStyle = true ,  collect = '', unifyOnClick = null, isShowIcon = false } = this.props;
+      const { data, className = '', site = {}, showBottomStyle = true ,  collect = '', unifyOnClick = null, isShowIcon = false, autoplay = false } = this.props;
       const { platform = 'pc' } = site;
 
       const { onContentHeightChange = noop, onImageReady = noop, onVideoReady = noop } = this.props;
@@ -287,6 +287,7 @@ class Index extends React.Component {
             platform={platform}
             onOpen={this.onOpen}
             updateViewCount={this.updateViewCount}
+            autoplay={autoplay}
           />
 
           <BottomEvent

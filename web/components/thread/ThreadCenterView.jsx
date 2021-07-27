@@ -36,7 +36,8 @@ const Index = (props) => {
       onPay,
       onOpen,
       platform,
-      updateViewCount
+      updateViewCount,
+      autoplay = false
     } = props
 
     // 标题显示37个字符
@@ -84,6 +85,7 @@ const Index = (props) => {
                     status={videoData.status}
                     onVideoReady={props.onVideoReady}
                     updateViewCount={updateViewCount}
+                    autoplay={autoplay}
                   />
                 </WrapperView>
                 

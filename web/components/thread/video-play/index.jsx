@@ -31,6 +31,7 @@ const Index = ({
   v_height = null,
   onVideoReady = noop,
   updateViewCount = noop,
+  autoplay = false
 }) => {
   let player = null;
   const ref = useRef();
@@ -97,6 +98,8 @@ const Index = ({
             poster={coverUrl}
             duration={time}
             playsinline={true}
+            autoplay
+            muted={autoplay}
           />
         )
       }

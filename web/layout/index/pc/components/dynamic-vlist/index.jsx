@@ -120,6 +120,7 @@ export default class DynamicVList extends React.Component {
             data={item}
             className={styles.listItem}
             recomputeRowHeights={measure}
+            autoplay={index === 0}
           />
         )}
       >
