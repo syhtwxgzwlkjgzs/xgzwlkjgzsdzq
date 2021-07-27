@@ -651,8 +651,22 @@ class PostPage extends React.Component {
     const { threadPost, thread } = this.props;
 
     // 图文混排：第三方图片转存
+    const errorTips = '帖子内容中，有部分图片转存失败，请先替换相关图片再重新发布';
+    const vditorEl = document.getElementById('dzq-vditor');
+    if (vditorEl) {
+      const errorImg = vditorEl.querySelectorAll('.editor-upload-error');
+      if (errorImg.length) {
+        Toast.error({
+          content: errorTips,
+          hasMask: true,
+          duration: 3000,
+        });
+        return;
+      }
+    }
+
     let contentText = threadPost.postData.contentText;
-    const images = contentText.match(/<img.*?\/>/g)?.filter(image => (!image.match('alt="attachmentId-') && !image.includes('dzqemoji')));
+    const images = contentText.match(/<img.*?\/>/g)?.filter(image => (!image.match('alt="attachmentId-') && !image.includes('emoji')));
     if (images) {
       const fileurls = images.map(img => {
         const src = img.match(/\"(.*?)\"/);
@@ -667,6 +681,7 @@ class PostPage extends React.Component {
       });
       const res = await attachmentUploadMultiple(fileurls);
       const sensitiveArr = [];
+      const uploadError = [];
       res.forEach((ret, index) => {
         const { code, data = {} } = ret;
         if (code === 0) {
@@ -674,23 +689,35 @@ class PostPage extends React.Component {
           contentText = contentText.replace(images[index], `<img src=\"${url}\" alt=\"attachmentId-${id}\" />`);
         } else if (code === -7075) {
           sensitiveArr.push('');
-          contentText = contentText.replace(images[index], `<p>【敏感图片】</p>`);
+          contentText = contentText.replace(images[index], images[index].replace('alt=\"\"', 'alt=\"uploadError\"'));
+        } else {
+          uploadError.push('');
         }
       });
       threadPost.setPostData({ contentText });
+      this.vditor.setValue(this.vditor.html2md(contentText));
       toastInstance.destroy();
 
-      if (sensitiveArr.length) {
-        Toast.info({
-          content: `帖子内容中的敏感图片已被删除`,
+      const uploadErrorImages = document.querySelectorAll('img[alt=uploadError]');
+      for (let i = 0; i < uploadErrorImages.length; i++) {
+        const element = uploadErrorImages[i];
+        element.setAttribute('class', 'editor-upload-error');
+      }
+
+      if (sensitiveArr.length || uploadError.length) {
+        Toast.error({
+          content: errorTips,
           hasMask: true,
-          duration: 2000,
+          duration: 4000,
         });
+
         await new Promise(resolve => {
           setTimeout(() => {
             resolve();
-          }, 2000);
+          }, 4000);
         });
+
+        return;
       }
     }
 

@@ -17,6 +17,11 @@
   border: none !important;
   background-color: $white;
 
+
+  .editor-upload-error {
+    border: 3px solid $error-color;
+  }
+
   .vditor-reset {
     overflow: hidden;
     ol {
@@ -153,11 +158,9 @@
       width: 30px;
     }
 
-    // img[alt^="attachmentId-"] {
-    //   width: 50%;
-    //   margin: 5px;
-    //   display: block;
-    // }
+    img[alt^="attachmentId-"], img[alt=uploadError] {
+      max-width: 96%;
+    }
   }
 
   .vditor-ir {

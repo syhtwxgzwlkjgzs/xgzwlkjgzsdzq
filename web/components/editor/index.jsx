@@ -387,10 +387,6 @@ export default function DVditor(props) {
               }
             }
 
-
-
-
-
             // 执行上传
             const toastInstance = Toast.loading({
               content: `图片上传中...`,
@@ -398,14 +394,23 @@ export default function DVditor(props) {
               duration: 0,
             });
             const res = await attachmentUploadMultiple(files);
+            const error = [];
             res.forEach(ret => {
               const { code, data = {} } = ret;
               if (code === 0) {
                 const { url, id } = data;
                 html2mdInserValue(`<img src="${url}" alt="attachmentId-${id}" />`, true);
+              } else {
+                error.push(ret);
               }
             });
             toastInstance.destroy();
+            if (error.length) {
+              Toast.info({
+                content: `${error.length}张图片上传失败，请重新尝试上传`,
+                duration: 2000,
+              });
+            }
           }
         }
       },
