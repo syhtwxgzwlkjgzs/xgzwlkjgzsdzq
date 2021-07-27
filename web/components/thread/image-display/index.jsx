@@ -7,7 +7,7 @@ import { calcImageType, calcImageDefaultType } from '@common/utils/calc-image-ty
 const { Col, Row } = Flex;
 
 // TODO 图片懒加载
-const Index = ({ imgData = [], flat = false, platform = 'h5', isPay = false, onPay = noop, onImageReady = noop, updateViewCount = noop, showLongPicture = true }) => {
+const Index = ({ imgData = [], flat = false, platform = 'h5', isPay = false, onPay = noop, onImageReady = noop, updateViewCount = noop, showLongPicture = true, postLoad = '' }) => {
   const [visible, setVisible] = useState(false);
   const [defaultImg, setDefaultImg] = useState('');
   const ImagePreviewerRef = React.useRef(null);
@@ -129,6 +129,7 @@ const Index = ({ imgData = [], flat = false, platform = 'h5', isPay = false, onP
             {res.bigImages.map((item, index) => (
               <div key={index} className={styles.flatItem}>
                 <SmartImg
+                  postLoad={postLoad}
                   noSmart
                   type={item.fileType}
                   src={item.url}
@@ -143,16 +144,16 @@ const Index = ({ imgData = [], flat = false, platform = 'h5', isPay = false, onP
     const type = firstImgData === 'fail' ? calcImageDefaultType(imgData.length) : calcImageType(firstImgData.width, firstImgData.height);
 
     if (imgData.length === 1) {
-      return <One type={type} bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} />;
+      return <One type={type} bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} postLoad={postLoad}/>;
     }
     if (imgData.length === 2) {
-      return <Two type={type} bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} />;
+      return <Two type={type} bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} postLoad={postLoad}/>;
     }
     if (imgData.length === 3) {
-      return <Three type={type} bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} />;
+      return <Three type={type} bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} postLoad={postLoad}/>;
     }
     if (imgData.length === 4) {
-      return <Four type={type} bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} />;
+      return <Four type={type} bigImages={res.bigImages} onClick={onClick} smallImages={res.smallImages} style={style} postLoad={postLoad}/>;
     }
     if (imgData.length >= 5) {
       return (
@@ -189,11 +190,12 @@ const Index = ({ imgData = [], flat = false, platform = 'h5', isPay = false, onP
 
 export default React.memo(Index);
 
-const One = ({ type, bigImages, onClick, style, showLongPicture }) => {
+const One = ({ type, bigImages, onClick, style, showLongPicture, postLoad }) => {
   const item = bigImages[0];
   return (
     <div className={`${styles[style]} ${styles[type]}`}>
       <SmartImg
+        postLoad={postLoad}
         level={1}
         type={item.fileType}
         src={item.thumbUrl}
@@ -203,11 +205,12 @@ const One = ({ type, bigImages, onClick, style, showLongPicture }) => {
   );
 };
 
-const Two = ({ type, bigImages, onClick, style, showLongPicture }) => (
+const Two = ({ type, bigImages, onClick, style, showLongPicture, postLoad }) => (
   <Row gutter={4} className={`${styles[style]} ${styles[type]} ${styles.row}`}>
     {bigImages.map((item, index) => (
       <Col span={6} className={styles.col} key={index}>
         <SmartImg
+          postLoad={postLoad}
           level={1}
           type={item.fileType}
           src={item.thumbUrl}
@@ -218,7 +221,7 @@ const Two = ({ type, bigImages, onClick, style, showLongPicture }) => (
   </Row>
 );
 
-const Three = ({ type, bigImages, smallImages, onClick, style, showLongPicture }) => {
+const Three = ({ type, bigImages, smallImages, onClick, style, showLongPicture, postLoad }) => {
   if (type === 'long' || type === 'longitudinal') {
     return (
       <div className={`${styles[style]} ${styles[type]}`}>
@@ -226,6 +229,7 @@ const Three = ({ type, bigImages, smallImages, onClick, style, showLongPicture }
           <Col span={8} className={styles.col}>
             <SmartImg
               level={1}
+              postLoad={postLoad}
               type={bigImages[0].fileType}
               src={bigImages[0].thumbUrl}
               onClick={() => onClick(bigImages[0].id)}
@@ -236,6 +240,7 @@ const Three = ({ type, bigImages, smallImages, onClick, style, showLongPicture }
               {smallImages.map((item, index) => (
                 <Col span={12} key={index} className={styles.smallCol}>
                   <SmartImg
+                  postLoad={postLoad}
                   level={2}
                   type={item.fileType}
                   src={item.thumbUrl}
@@ -254,6 +259,7 @@ const Three = ({ type, bigImages, smallImages, onClick, style, showLongPicture }
     <div className={`${styles[style]} ${styles[type]}`}>
       <div className={styles.bigImages}>
         <SmartImg
+          postLoad={postLoad}
           level={1}
           type={bigImages[0].fileType}
           src={bigImages[0].thumbUrl}
@@ -264,6 +270,7 @@ const Three = ({ type, bigImages, smallImages, onClick, style, showLongPicture }
         {smallImages.map((item, index) => (
           <Col span={6} className={styles.col} key={index}>
             <SmartImg
+              postLoad={postLoad}
               level={2}
               type={item.fileType}
               src={item.thumbUrl}
@@ -276,10 +283,11 @@ const Three = ({ type, bigImages, smallImages, onClick, style, showLongPicture }
   );
 };
 
-const Four = ({ type, bigImages, smallImages, onClick, style, showLongPicture }) => (
+const Four = ({ type, bigImages, smallImages, onClick, style, showLongPicture, postLoad }) => (
   <Row gutter={4} className={styles[style]}>
     <Col span={8} className={styles.col}>
       <SmartImg
+      postLoad={postLoad}
         level={1}
         type={bigImages[0].fileType}
         src={bigImages[0].thumbUrl}
@@ -291,6 +299,7 @@ const Four = ({ type, bigImages, smallImages, onClick, style, showLongPicture })
         {smallImages.map((item, index) => (
           <Col span={12} key={index} className={styles.smallCol}>
             <SmartImg
+            postLoad={postLoad}
               level={3}
               type={item.fileType}
               src={item.thumbUrl}
@@ -304,12 +313,13 @@ const Four = ({ type, bigImages, smallImages, onClick, style, showLongPicture })
 );
 
 
-const Five = ({ type, bigImages, smallImages, onClick, style, imgData = [], onClickMore, showLongPicture }) => (
+const Five = ({ type, bigImages, smallImages, onClick, style, imgData = [], onClickMore, showLongPicture, postLoad }) => (
   <div className={styles[style]}>
     <Row gutter={4} className={styles.bigImages}>
       {bigImages.map((item, index) => (
         <Col span={6} className={styles.col} key={index}>
           <SmartImg
+          postLoad={postLoad}
           level={2}
           type={item.fileType}
           src={item.thumbUrl}
@@ -322,6 +332,7 @@ const Five = ({ type, bigImages, smallImages, onClick, style, imgData = [], onCl
       {smallImages.map((item, index) => (
         <Col span={4} className={styles.col} key={index}>
           <SmartImg
+          postLoad={postLoad}
           level={3}
           type={item.fileType}
           src={item.thumbUrl}
