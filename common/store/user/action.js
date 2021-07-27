@@ -381,6 +381,21 @@ class UserAction extends SiteStore {
     return userThreadList;
   };
 
+  /**
+   * 删除指定 id 的用户帖子
+   * @param {*} id
+   */
+  @action
+  deleteUserThreads = (id) => {
+    Object.keys(this.userThreads).forEach((pageNum) => {
+      const pageDataSet = this.userThreads[pageNum];
+
+      const itemIdx = pageDataSet.findIndex(item => item.topicId === id);
+
+      pageDataSet.splice(itemIdx, 1);
+    });
+  }
+
   // 获取用户主题列表的写方法
   // 读写分离，用于阻止多次请求的数据错乱
   setUserThreads = async (userThreadList) => {
