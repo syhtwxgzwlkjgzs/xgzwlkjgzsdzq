@@ -266,7 +266,7 @@ class ThreadPostAction extends ThreadPostStore {
     }
     text = emojiFormatForCommit(text)
       .replace(/@([^@<]+)<\/p>/g, '@$1 </p>')
-      .replace(/<code>\s*([^\s]+)\s*<\/code>/, '<code>$1</code>');
+      .replace(/<code>\s*([^\s]+)\s*<\/code>/g, '<code>$1</code>');
     const params = {
       title, categoryId, content: {
         text,
@@ -309,6 +309,9 @@ class ThreadPostAction extends ThreadPostStore {
     let contentText = content && content.text;
     // 目前只是简单的队小程序进行简单的处理
     if (isMini) contentText = contentText.replace(/<br \/>/g, '\n');
+    // 解决web端行内换行编辑问题
+    else contentText = contentText
+      .replace(/<br \/>\n/g, '<br />');
     const contentindexes = (content && content.indexes) || {};
     let audio = {};
     let rewardQa = {};

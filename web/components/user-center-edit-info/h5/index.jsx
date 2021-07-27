@@ -138,6 +138,7 @@ class index extends Component {
 
   render() {
     const { isConfirm } = this.state;
+    const { user, site } = this.props;
     // 条件都满足时才显示微信
     const IS_WECHAT_ACCESSABLE = this.props.site.wechatEnv !== 'none' && !!this.user.wxNickname;
     return (
@@ -200,22 +201,30 @@ class index extends Component {
                     <div className={styles.userCenterEditWeChat}>
                       <Avatar size="small" image={this.user.wxHeadImgUrl} name={this.user.wxNickname} />
                       <span>{this.user.wxNickname}</span>
+                      {
+                        site.isDomainWhiteList
+                        && user.isWhiteLsit
+                        && <div className={styles.linkText} onClick={() => {
+                          Router.push({ url: '/user/rebind' });
+                        }}
+                        >换绑</div>
+                      }
                     </div>
                   </div>
                 </div>
               )}
-            </div>
-            {/* bottom */}
-            {/* <div className={styles.userCenterEditBottom}>
-              <h3>实名认证</h3>
-              <div className={styles.userCenterEditItem}>
-                <div className={styles.userCenterEditLabel}>
-                  <label>申请实名认证</label>
-                  <div>去认证</div>
+              {/* bottom */}
+              {/* <div className={styles.userCenterEditBottom}>
+                <h3>实名认证</h3>
+                <div className={styles.userCenterEditItem}>
+                  <div className={styles.userCenterEditLabel}>
+                    <label>申请实名认证</label>
+                    <div>去认证</div>
+                  </div>
+                  <div><Icon name="RightOutlined" /></div>
                 </div>
-                <div><Icon name="RightOutlined" /></div>
-              </div>
-            </div> */}
+              </div> */}
+            </div>
           </div>
           <Copyright marginBottom={0} />
         </div>
