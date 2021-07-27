@@ -142,6 +142,7 @@ class index extends Component {
 
   render() {
     const { isConfirm } = this.state;
+    const { user, site } = this.props;
     // 条件都满足时才显示微信
     const IS_WECHAT_ACCESSABLE = this.props.site.wechatEnv !== 'none' && !!this.user.wxNickname;
     const ISEXT_FIELD_OPENS = isExtFieldsOpen(this.props?.site);
@@ -203,10 +204,14 @@ class index extends Component {
                 <div className={styles.userCenterEditWeChat}>
                   <Avatar size="small" image={this.user.wxHeadImgUrl} name={this.user.wxNickname} />
                   <span>{this.user.wxNickname}</span>
-                  <div className={styles.linkText} onClick={() => {
-                    Router.push({ url: '/user/rebind' });
-                  }}
-                  >换绑</div>
+                  {
+                    site.isDomainWhiteList
+                    && user.isWhiteLsit
+                    && <div className={styles.linkText} onClick={() => {
+                      Router.push({ url: '/user/rebind' });
+                    }}
+                    >换绑</div>
+                  }
                 </div>
               </div>
             </div>

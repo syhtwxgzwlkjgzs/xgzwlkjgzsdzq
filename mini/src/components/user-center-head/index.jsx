@@ -146,7 +146,7 @@ class index extends Component {
           this.props.user.removeUserInfo();
           this.props.site.getSiteInfo();
         }, 300);
-      }
+      },
     });
   };
 
