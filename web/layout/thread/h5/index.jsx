@@ -373,7 +373,13 @@ class ThreadH5Page extends React.Component {
     this.setState({ showDeletePopup: false });
     const id = this.props.thread?.threadData?.id;
 
-    const { success, msg } = await this.props.thread.delete(id, this.props.index, this.props.search, this.props.topic);
+    const { success, msg } = await this.props.thread.delete(
+      id,
+      this.props.index,
+      this.props.search,
+      this.props.topic,
+      this.props.user,
+    );
 
     if (success) {
       Toast.success({

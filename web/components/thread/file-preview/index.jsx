@@ -7,12 +7,11 @@ import styles from './index.module.scss';
 
 @inject('site')
 export default class FilePreview extends React.Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
-      errMsg: ''
+      errMsg: '',
     };
   }
 
@@ -21,10 +20,14 @@ export default class FilePreview extends React.Component {
       const { url } = this.props.file;
       const urlObj = new URL(url);
 
-      const params = urlObj.search.split('?')[1].split('&').map(item => item.split('=')).reduce((res, cur) => {
-        res[cur[0]] = cur[1];
-        return res;
-      }, {});
+      const params = urlObj.search
+        .split('?')[1]
+        .split('&')
+        .map((item) => item.split('='))
+        .reduce((res, cur) => {
+          res[cur[0]] = cur[1];
+          return res;
+        }, {});
 
       return decodeURIComponent(params.sign);
     } catch (err) {
@@ -34,7 +37,7 @@ export default class FilePreview extends React.Component {
 
   async componentDidMount() {
     try {
-      const {file} = this.props;
+      const { file } = this.props;
       if (!file?.url) {
         this.setState({ errMsg: '预览失败：文件地址为空' });
         return;
@@ -49,8 +52,8 @@ export default class FilePreview extends React.Component {
         credentials: {
           authorization,
           secretId: '',
-          secretKey: ''
-        }
+          secretKey: '',
+        },
       });
 
       if (!url) {
@@ -64,42 +67,33 @@ export default class FilePreview extends React.Component {
         mount,
         url,
       });
-    } catch(err) {
+    } catch (err) {
       this.setState({ errMsg: '预览失败，请下载到本地查看' });
     }
   }
 
   render() {
-    const { file, onClose, site: { isPC } } = this.props;
+    const {
+      file,
+      onClose,
+      site: { isPC },
+    } = this.props;
 
-    if(isPC) {
+    if (isPC) {
       return (
         <Dialog title={file.fileName} onClose={onClose} pc visible isCustomBtn className={styles.dialog}>
-          {
-            this.state.errMsg ? <div className={styles.errMsg}>{ this.state.errMsg }</div> : <div id="preview"></div>
-          }
+          {this.state.errMsg ? <div className={styles.errMsg}>{this.state.errMsg}</div> : <div id="preview"></div>}
         </Dialog>
       );
     }
 
     return (
-      <Popup
-        className={styles.popup}
-        position="center"
-        visible
-      >
+      <Popup className={styles.popup} position="center" visible>
         <div className={styles.header}>
           {file.fileName}
-          <Icon
-            className={styles['header-close']}
-            name="LeftOutlined"
-            size={18}
-            onClick={onClose}
-          />
+          <Icon className={styles['header-close']} name="LeftOutlined" size={18} onClick={onClose} />
         </div>
-        {
-          this.state.errMsg ? <div className={styles.errMsg}>{ this.state.errMsg }</div> : <div id="preview"></div>
-        }
+        {this.state.errMsg ? <div className={styles.errMsg}>{this.state.errMsg}</div> : <div id="preview"></div>}
       </Popup>
     );
   }

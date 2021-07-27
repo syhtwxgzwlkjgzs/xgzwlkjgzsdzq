@@ -6,6 +6,7 @@ import Avatar from '@components/avatar';
 import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
 import throttle from '@common/utils/thottle.js';
+import { isExtFieldsOpen } from '@common/store/login/util';
 import Copyright from '@components/copyright';
 
 @inject('site')
@@ -136,11 +137,16 @@ class index extends Component {
     Router.push({ url: '/my/edit/paypwd' });
   };
 
+  handleGoToAdditionalInfo = () => {
+    Router.push({ url: '/my/edit/additional-info' });
+  };
+
   render() {
     const { isConfirm } = this.state;
     const { user, site } = this.props;
     // 条件都满足时才显示微信
     const IS_WECHAT_ACCESSABLE = this.props.site.wechatEnv !== 'none' && !!this.user.wxNickname;
+    const ISEXT_FIELD_OPENS = isExtFieldsOpen(this.props?.site);
     return (
       <>
         <div className={styles.mainContent}>
@@ -201,29 +207,30 @@ class index extends Component {
                     <div className={styles.userCenterEditWeChat}>
                       <Avatar size="small" image={this.user.wxHeadImgUrl} name={this.user.wxNickname} />
                       <span>{this.user.wxNickname}</span>
-                      {
-                        site.isDomainWhiteList
-                        && user.isWhiteLsit
-                        && <div className={styles.linkText} onClick={() => {
-                          Router.push({ url: '/user/rebind' });
-                        }}
-                        >换绑</div>
-                      }
+                      {site.isDomainWhiteList && user.isWhiteLsit && (
+                        <div
+                          className={styles.linkText}
+                          onClick={() => {
+                            Router.push({ url: '/user/rebind' });
+                          }}
+                        >
+                          换绑
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
               )}
-              {/* bottom */}
-              {/* <div className={styles.userCenterEditBottom}>
-                <h3>实名认证</h3>
-                <div className={styles.userCenterEditItem}>
+              {ISEXT_FIELD_OPENS && (
+                <div className={styles.userCenterEditItem} onClick={this.handleGoToAdditionalInfo}>
                   <div className={styles.userCenterEditLabel}>
-                    <label>申请实名认证</label>
-                    <div>去认证</div>
+                    <label className={styles.userLabelName}>补充信息</label>
                   </div>
-                  <div><Icon name="RightOutlined" /></div>
+                  <div className={styles.userCenterEditValue}>
+                    <Icon name="RightOutlined" size={12} />
+                  </div>
                 </div>
-              </div> */}
+              )}
             </div>
           </div>
           <Copyright marginBottom={0} />

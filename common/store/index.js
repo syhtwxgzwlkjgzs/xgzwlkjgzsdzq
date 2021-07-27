@@ -33,7 +33,6 @@ import EmotionStore from './emotion/action';
 import CardStore from './card/action';
 useStaticRendering(isServer());
 
-
 export default function initializeStore(initProps = {}) {
   const { site = {}, user = {} } = initProps;
   if (isServer()) {
@@ -68,7 +67,7 @@ export default function initializeStore(initProps = {}) {
       baselayout: new BaseLayoutStore(),
       wallet: new WalletStore(),
       vlist: new VListStore(),
-      emotion: new EmotionStore()
+      emotion: new EmotionStore(),
     };
   }
   if (store.getStore() === null) {
@@ -103,7 +102,7 @@ export default function initializeStore(initProps = {}) {
       baselayout: new BaseLayoutStore(),
       wallet: new WalletStore(),
       vlist: new VListStore(),
-      emotion: new EmotionStore()
+      emotion: new EmotionStore(),
     });
   }
 
