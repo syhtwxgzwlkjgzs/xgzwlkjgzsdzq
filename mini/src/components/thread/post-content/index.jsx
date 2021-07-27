@@ -12,6 +12,7 @@ import xss from '@common/utils/xss';
 import { View } from '@tarojs/components'
 import styles from './index.module.scss';
 import { urlToLink } from '@common/utils/replace-url-to-a';
+import replaceStringInRegex from '@common/utils/replace-string-in-regex';
 
 import config from '../../../app.config';
 
@@ -40,8 +41,10 @@ import config from '../../../app.config';
   const [cutContentForDisplay, setCutContentForDisplay] = useState('');
   const [showMore, setShowMore] = useState(false); // 根据文本长度显示"查看更多"
   const [imageVisible, setImageVisible] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
+
   const [appPageLinks, setAppPageLinks] = useState([]);
+  const [imageUrlList, setImageUrlList] = useState([]);
+  const [curImageUrl, setCurImageUrl] = useState("");
   const ImagePreviewerRef = useRef(null); // 富文本中的图片也要支持预览
   const contentWrapperRef = useRef(null);
   const clickedImageId = useRef(null);
@@ -111,16 +114,9 @@ import config from '../../../app.config';
     updateViewCount();
     if(node?.attribs?.src) {
       setImageVisible(true);
-      setImageUrl(node.attribs.src);
+      setCurImageUrl(`${decodeURIComponent(node.attribs.src)}`);
       clickedImageId.current = event?.target?.id;
     }
-  }
-
-  // 点击富文本中的链接
-  const handleLinkClick = () => {
-    updateViewCount();
-    setTimeout(() => { // 等待store更新完成后跳转
-    }, 500);
   }
 
   // 超过1200个字符，截断文本用于显示
@@ -145,6 +141,22 @@ import config from '../../../app.config';
     }
     setAppPageLinks(pageLinks);
   }
+  
+  const getImagesFromText = (text) => {
+    const _text = replaceStringInRegex(text, "emoj", '');
+    const images = _text.match(/<img\s+[^<>]*src=[\"\'\\]+([^\"\']*)/gm) || [];
+
+    for(let i = 0; i < images.length; i++) {
+      images[i] = images[i].replace(/<img\s+[^<>]*src=[\"\'\\]+/gm, "") || "";
+      images[i] = decodeURIComponent(images[i]);
+      images[i] = images[i].replace(/&lt;/g, "<")
+                            .replace(/&gt;/g, ">")
+                            .replace(/&amp;/g, "&")
+                            .replace(/&quot;/g, '"')
+                            .replace(/&apos;/g, "'");
+    }
+    return images;
+  }
 
   useEffect(() => {
     const lengthInLine = parseInt((contentWrapperRef.current.offsetWidth || 704) / 16);
@@ -166,6 +178,10 @@ import config from '../../../app.config';
     }
 
     generateAppRelativePageLinks();
+    const imageUrlList = getImagesFromText(filterContent);
+    if(imageUrlList.length) {
+      setImageUrlList(imageUrlList);
+    }
 
   }, [filterContent]);
   
@@ -190,8 +206,8 @@ import config from '../../../app.config';
               onComplete={() => {
                 setImageVisible(false);
               }}
-              imgUrls={[imageUrl]}
-              currentUrl={imageUrl}
+              imgUrls={imageUrlList}
+              currentUrl={curImageUrl}
             />
           )}
         </View>
