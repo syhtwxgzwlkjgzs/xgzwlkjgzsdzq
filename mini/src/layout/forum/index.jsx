@@ -101,7 +101,7 @@ class ForumH5Page extends React.Component {
                   <Avatar
                     size="small"
                     key={item.userId}
-                    text={item.nickname.substring(0, 1)}
+                    text={item?.nickname?.substring(0, 1)?.toUpperCase()}
                     className={layout.forum_member_img}
                     image={item.avatar}
                   />
