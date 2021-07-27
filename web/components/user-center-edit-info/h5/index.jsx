@@ -101,7 +101,7 @@ class index extends Component {
       })
       .catch((error) => {
         Toast.error({
-          content: error.message || '更新用户信息失败',
+          content: error.Message || '更新用户信息失败',
           hasMask: false,
           duration: 2000,
         });
