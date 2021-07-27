@@ -364,6 +364,7 @@ class ThreadH5Page extends React.Component {
       this.props.index,
       this.props.search,
       this.props.topic,
+      this.props.site,
       this.props.user,
     );
 
@@ -807,6 +808,7 @@ class ThreadH5Page extends React.Component {
               visible={this.state.showDeletePopup}
               onClose={() => this.setState({ showDeletePopup: false })}
               onBtnClick={(type) => this.onBtnClick(type)}
+              type='thread'
             ></DeletePopup>
             {/* 举报弹层 */}
 
