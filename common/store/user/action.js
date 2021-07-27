@@ -390,9 +390,16 @@ class UserAction extends SiteStore {
     Object.keys(this.userThreads).forEach((pageNum) => {
       const pageDataSet = this.userThreads[pageNum];
 
-      const itemIdx = pageDataSet.findIndex(item => item.topicId === id);
+      const itemIdx = pageDataSet.findIndex(item => item.threadId === id);
+
+      if (itemIdx === -1) return;
 
       pageDataSet.splice(itemIdx, 1);
+
+      // 计数减少
+      this.userThreadsTotalCount -= 1;
+
+      this.userThreads[pageNum] = [...pageDataSet];
     });
   }
 
@@ -401,6 +408,7 @@ class UserAction extends SiteStore {
   setUserThreads = async (userThreadList) => {
     const pageData = get(userThreadList, 'data.pageData', []);
     const totalPage = get(userThreadList, 'data.totalPage', 1);
+
     this.userThreadsTotalPage = totalPage;
     this.userThreads = {
       ...this.userThreads,
