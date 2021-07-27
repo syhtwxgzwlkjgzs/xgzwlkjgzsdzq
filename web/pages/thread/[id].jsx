@@ -12,7 +12,8 @@ import ViewAdapter from '@components/view-adapter';
 import { Toast } from '@discuzq/design';
 import setWxShare from '@common/utils/set-wx-share';
 import htmlToString from '@common/utils/html-to-string';
-import { updateViewCountInStorage } from '@common/utils/viewcount-in-storage';
+import { updateViewCountInStores } from '@common/utils/viewcount-in-storage';
+import isWeiXin from '@common/utils/is-weixin';
 
 @inject('site')
 @inject('thread')
@@ -239,7 +240,7 @@ class Detail extends React.Component {
     }
 
     // 设置详情分享
-    this.handleWeiXinShare();
+    isWeiXin() && this.handleWeiXinShare();
 
     // 获取评论列表
     if (!this.props?.thread?.commentList || !this.hasMaybeCache()) {

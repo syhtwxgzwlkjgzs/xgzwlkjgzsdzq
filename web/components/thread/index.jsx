@@ -22,9 +22,9 @@ import { updateViewCountInStorage } from '@common/utils/viewcount-in-storage';
 @inject('thread')
 @inject('search')
 @inject('topic')
+@inject('card')
 @observer
 class Index extends React.Component {
-
     state = {
       isSendingLike: false,
     }
@@ -148,11 +148,11 @@ class Index extends React.Component {
     }, 1000)
 
     onClickUser = (e) => {
-      e && e.stopPropagation()
+      e && e.stopPropagation();
 
       const { user = {}, isAnonymous } = this.props.data || {};
-      if (!!isAnonymous) {
-        this.onClick()
+      if (isAnonymous) {
+        this.onClick();
       } else {
         this.props.router.push(`/user/${user?.userId}`);
       }
@@ -185,7 +185,7 @@ class Index extends React.Component {
       e && e.stopPropagation();
 
       const { onClickIcon = noop } = this.props;
-      onClickIcon(e)
+      onClickIcon(e);
     }
 
     onOpen = () => {
@@ -203,16 +203,16 @@ class Index extends React.Component {
       const { canViewPost } = ability;
 
       if (!canViewPost) {
-        const isLogin = this.props.user.isLogin()
+        const isLogin = this.props.user.isLogin();
         if (!isLogin) {
           Toast.info({ content: '请先登录!' });
           goToLoginPage({ url: '/user/login' });
         } else {
           Toast.info({ content: '暂无权限查看详情，请联系管理员' });
         }
-        return false
+        return false;
       }
-      return true
+      return true;
     }
 
     updateViewCount = async () => {
@@ -233,7 +233,7 @@ class Index extends React.Component {
     }
 
     render() {
-      const { data, className = '', site = {}, showBottomStyle = true ,  collect = '', unifyOnClick = null, isShowIcon = false } = this.props;
+      const { data, card, className = '', site = {}, showBottomStyle = true,  collect = '', unifyOnClick = null, isShowIcon = false, user: users } = this.props;
       const { platform = 'pc' } = site;
 
       const { onContentHeightChange = noop, onImageReady = noop, onVideoReady = noop } = this.props;
@@ -296,6 +296,9 @@ class Index extends React.Component {
           />
 
           <BottomEvent
+            data={data}
+            card={card}
+            user={users}
             userImgs={likeReward.users}
             wholeNum={likeReward.likePayCount || 0}
             comment={likeReward.postCount || 0}
