@@ -28,7 +28,7 @@ class PCCloseSite extends React.Component {
         <Header/>
         <div className={styles.page} style={{height: height}}>
           <img className={styles.img} src='/dzq-img/close.png'/>
-          <h1 className={styles.main}>关闭已站点</h1>
+          <h1 className={styles.main}>站点已关闭</h1>
           {closeSiteConfig && <p className={styles.sub}>{closeSiteConfig.detail}</p>}
           {false && <Button onClick={LoginHelper.saveAndLogin} size='large' className={styles.btn} type='primary'>管理员登录</Button>}
         </div>
