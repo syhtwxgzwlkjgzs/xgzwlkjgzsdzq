@@ -13,7 +13,7 @@ const InputPop = (props) => {
   const [isShowMaxMoney, setIsShowMaxMoney] = useState(false);
 
   useEffect(() => {
-    if(moneyNum >= remainMoney) {
+    if (moneyNum >= remainMoney) {
       setIsShowMaxMoney(true);
     } else {
       setIsShowMaxMoney(false);
@@ -59,16 +59,20 @@ const InputPop = (props) => {
                   defaultValue={value}
                   max={maxPercent}
                   min={0}
-                  step={1}
+                  step={5}
                   onChange={throttle((val) => onInputChange(val), 100)}
+                  formatter={(value) => `${value}`}
                 />
                 <div className={styles.perCent}>%</div>
-                {isShowMaxMoney && (<div className={styles.maxMoney}>*已达到最大可用金额</div>)}
+                {isShowMaxMoney && <div className={styles.maxMoney}>*已达到最大可用金额</div>}
               </div>
             </div>
             <div className={styles.rewardMoney}>
               <div className={styles.text}>悬赏金额</div>
-              <div className={styles.money}>{moneyNum}<span className={styles.unit}>元</span></div>
+              <div className={styles.money}>
+                {moneyNum}
+                <span className={styles.unit}>元</span>
+              </div>
             </div>
           </div>
         </div>

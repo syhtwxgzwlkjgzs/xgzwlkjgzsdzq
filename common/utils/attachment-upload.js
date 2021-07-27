@@ -27,7 +27,7 @@ const attachmentUploadOne = async (file, type = 1) => {
 const attachmentUploadMultiple = async (files, type = 1) => {
   const uploadPromises = [];
   for (let i = 0; i < files.length; i++) {
-    uploadPromises.push(attachmentUploadOne(files[i]), type);
+    uploadPromises.push(attachmentUploadOne(files[i], type));
   }
   return Promise.all(uploadPromises);
 };

@@ -33,6 +33,8 @@ import RenderCommentList from './comment-list';
 import classNames from 'classnames';
 
 import BottomView from '@components/list/BottomView';
+import Copyright from '@components/copyright';
+
 import MorePopop from '@components/more-popop';
 @inject('site')
 @inject('user')
@@ -776,6 +778,7 @@ class ThreadH5Page extends React.Component {
               )}
             </div>
           )}
+          <Copyright marginTop={0} />
         </div>
 
         {/* 底部操作栏 */}
@@ -850,7 +853,8 @@ class ThreadH5Page extends React.Component {
             <DeletePopup
               visible={this.state.showDeletePopup}
               onClose={() => this.setState({ showDeletePopup: false })}
-              onBtnClick={type => this.onBtnClick(type)}
+              onBtnClick={(type) => this.onBtnClick(type)}
+              type='thread'
             ></DeletePopup>
             {/* 举报弹层 */}
 
