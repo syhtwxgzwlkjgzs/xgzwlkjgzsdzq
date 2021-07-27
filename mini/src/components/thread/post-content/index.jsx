@@ -4,6 +4,7 @@ import RichText from '@discuzq/design/dist/components/rich-text/index';
 import ImagePreviewer from '@discuzq/design/dist/components/image-previewer/index';
 import { noop, handleLink } from '../utils'
 import Router from '@discuzq/sdk/dist/router';
+import Taro from '@tarojs/taro'
 
 import fuzzyCalcContentLength from '@common/utils/fuzzy-calc-content-length';
 import s9e from '@common/utils/s9e';
@@ -12,6 +13,7 @@ import { View } from '@tarojs/components'
 import styles from './index.module.scss';
 import { urlToLink } from '@common/utils/replace-url-to-a';
 
+import config from '../../../app.config';
 
 /**
  * 帖子内容展示
@@ -39,6 +41,7 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
   const [showMore, setShowMore] = useState(false); // 根据文本长度显示"查看更多"
   const [imageVisible, setImageVisible] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
+  const [appPageLinks, setAppPageLinks] = useState([]);
   const ImagePreviewerRef = useRef(null); // 富文本中的图片也要支持预览
   const contentWrapperRef = useRef(null);
   const clickedImageId = useRef(null);
@@ -88,10 +91,19 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
   }, [imageVisible]);
 
   // 点击富文本中的链接
-  const handleLinkClick = () => {
+  const handleLinkClick = (e) => {
     updateViewCount();
     setTimeout(() => { // 等待store更新完成后跳转
     }, 500);
+
+    // 内链跳转
+    let content = e?.children[0]?.data || "";
+    if(content.indexOf("http") === -1) {
+      content = content[0] !== '/' ? '/' + content : content;
+      if(appPageLinks.indexOf(content) !== -1) {
+        Taro.navigateTo({ url: content });
+      }
+    }
   }
 
   // 点击富文本中的图片
@@ -116,6 +128,17 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
     setCutContentForDisplay(ctnSubstring);
   };
 
+  const generateAppRelativePageLinks = () => {
+    const pageLinks = [];
+    for(const pkg of config.subPackages) {
+      const root = pkg.root;
+      for(const page of pkg.pages) {
+        pageLinks.push(`/${root}/${page}`);
+      }
+    }
+    setAppPageLinks(pageLinks);
+  }
+
   useEffect(() => {
     const lengthInLine = parseInt((contentWrapperRef.current.offsetWidth || 704) / 16);
 
@@ -135,6 +158,9 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
     } else {
       setContentTooLong(false);
     }
+
+    generateAppRelativePageLinks();
+
   }, [filterContent]);
   
   return (
