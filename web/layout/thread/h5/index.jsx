@@ -735,7 +735,7 @@ class ThreadH5Page extends React.Component {
               )}
             </div>
           )}
-          <Copyright margin-top={0} />
+          <Copyright marginTop={0} />
         </div>
 
         {/* 底部操作栏 */}
