@@ -1,4 +1,5 @@
 const miniConfig = require('../src/app.config');
+const getDefinePlugin = require('@discuzq/cli/config/taro/getDefinePlugin');
 
 let a = 1;
 
@@ -43,9 +44,13 @@ module.exports = {
     },
     webpackChain (chain, webpack) {
       // chain.plugin('analyzer').use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin, []);
-      chain.plugin().use(webpack.DefinePlugin, [{
-        'process.env.DISCUZ_ENV': JSON.stringify('mini')
-      }]);
+      const defaultDefinePlugin = getDefinePlugin();
+      chain.plugin()
+        .use(webpack.DefinePlugin, [
+          {
+            ...defaultDefinePlugin
+          }
+      ]);
       chain.merge({
         optimization: {
           splitChunks: {
