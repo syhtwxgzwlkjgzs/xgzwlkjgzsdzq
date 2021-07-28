@@ -26,7 +26,7 @@ class PayMiddlePage extends React.Component {
     // CSR 的情况下，打开确认支付结果窗口
     setTimeout(() => {
       this.props.payBox.h5SureDialogVisible = true;
-      this.props.payBox.visible = false;
+      this.props.payBox.visible = true;
     }, 500);
   };
 

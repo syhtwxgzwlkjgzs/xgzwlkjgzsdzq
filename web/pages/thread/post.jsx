@@ -107,7 +107,8 @@ class PostPage extends React.Component {
 
   handleRouteChange = (url) => {
     // 如果不是修改支付密码的页面则重置发帖信息
-    if ((url || '').indexOf('/my/edit/paypwd') === -1) {
+    if ((url || '').indexOf('/my/edit/paypwd') === -1
+    && (url || '').indexOf('/pay/middle') === -1) {
       this.props.threadPost.resetPostData();
     }
   }
