@@ -6,7 +6,7 @@ import DVditor from '@components/editor';
 import Title from '@components/thread-post/title';
 import { AttachmentToolbar, DefaultToolbar } from '@components/editor/toolbar';
 import Position from '@components/thread-post/position';
-import { Button, Audio, AudioRecord } from '@discuzq/design';
+import { Button, Audio, AudioRecord, Tag } from '@discuzq/design';
 import ClassifyPopup from '@components/thread-post/classify-popup';
 import { withRouter } from 'next/router';
 import Emoji from '@components/editor/emoji';
@@ -201,17 +201,31 @@ class ThreadPCPage extends React.Component {
                 )}
               </div>
               {/* 设置的金额相关展示 */}
-              <MoneyDisplay
-                pc
-                canEditReward={this.props.canEditReward}
-                canEditRedpacket={this.props.canEditRedpacket}
-                payTotalMoney={threadPost.payTotalMoney}
-                redTotalMoney={threadPost.redpacketTotalAmount}
-                postData={postData} setPostData={this.props.setPostData}
-                handleSetState={this.props.handleSetState}
-                onAttachClick={this.props.handleAttachClick}
-                onDefaultClick={this.props.handleDefaultIconClick}
-              />
+              <div className={styles.['editor-footer']}>
+                <div className={styles['editor-footer--left']}>
+                  <Tag
+                    closeable
+                    onClose={() => {}}
+                    onClick={() => {}}
+                  >有本地缓存
+                    <span className={styles['local-open']}>打开</span>
+                  </Tag>
+                  <MoneyDisplay
+                    pc
+                    canEditReward={this.props.canEditReward}
+                    canEditRedpacket={this.props.canEditRedpacket}
+                    payTotalMoney={threadPost.payTotalMoney}
+                    redTotalMoney={threadPost.redpacketTotalAmount}
+                    postData={postData} setPostData={this.props.setPostData}
+                    handleSetState={this.props.handleSetState}
+                    onAttachClick={this.props.handleAttachClick}
+                    onDefaultClick={this.props.handleDefaultIconClick}
+                  />
+                </div>
+                <div className={styles['editor-footer--right']}>
+                  最近保存20:04
+                </div>
+              </div>
             </div>
             <div className={styles.toolbar}>
               <div className={styles['toolbar-left']}>
