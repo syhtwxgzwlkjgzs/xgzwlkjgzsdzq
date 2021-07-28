@@ -45,7 +45,7 @@ export default observer((props) => {
   // }, [ref]);
 
   return (
-    <div ref={ref} style={{ overflow: 'hidden' }}>
+    <div ref={ref}>
       <ThreadContent
         onContentHeightChange={measure}
         onImageReady={measure}
