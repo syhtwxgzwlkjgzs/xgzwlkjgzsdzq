@@ -90,7 +90,10 @@ class Index extends React.Component {
                   <FilterRichText
                     className={style.recommenText}
                     content={`${titleString}`}
-                    onClick={() => {this.recommendDetails(item)}} // 富文本暴露了onClick事件，需要传点击跳转行为进去
+                    onClick={(e) => {
+                      e && e.stopPropagation();
+                      this.recommendDetails(item);
+                    }} // 富文本暴露了onClick事件，需要传点击跳转行为进去
                   />
                 </div>
                 <div className={style.browse}>
