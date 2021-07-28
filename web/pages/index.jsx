@@ -116,8 +116,10 @@ class Index extends React.Component {
           filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort },
           sequence,
         });
-      } 
-      return Promise.resolve()
+      } else {
+        this.page = currentPage
+        return Promise.resolve()
+      }
     } else if (type === 'refresh-recommend') {
       await index.getRecommends({ categoryIds });
     } else if (type === 'update-page') {// 单独更新页数

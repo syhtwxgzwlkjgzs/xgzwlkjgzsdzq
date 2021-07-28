@@ -31,21 +31,26 @@
     }
 
     .right {
-      width: rem(68);
+      min-width: rem(110);
       font-size: rem($font-size-label);
       color: $text-color-regular;
       display: flex;
       justify-content: flex-end;
       align-items: center;
+      & > * {
+        cursor: pointer;
+      }
+      & > * + * {
+        margin-left: rem($padding-4n);
+      }
+      .playIcon {
+        color: $text-color-secondary;
+      }
     }
   }
 
   .span {
     cursor: pointer;
-  }
-
-  .label {
-    margin-left: rem($padding-4n);
   }
 
   .containerText {
@@ -64,44 +69,8 @@
     line-height: rem(17);
   }
   .containerIcon {
-    background-size: rem(20);
-    color: $success-color;
-    font-size: rem(20);
-    width: rem(20);
+    width: rem(17);
     height: rem(20);
-    &.xlsOutlined {
-      background-image: $xls-outlined-icon;
-    }
-    &.docOutlined {
-      background-image: $doc-outlined-icon;
-    }
-    &.pptOutlined {
-      background-image: $ppt-outlined-icon;
-    }
-    &.zipOutlined {
-      background-image: $zip-outlined-icon;
-    }
-    &.pdfOutlined {
-      background-image: $pdf-outlined-icon;
-    }
-    &.textOutlined {
-      background-image: $text-outlined-icon;
-    }
-    &.videoOutlined {
-      background-image: $video-outlined-icon;
-    }
-    &.audioOutlined {
-      background-image: $audio-outlined-icon;
-    }
-    &.imageOutlined {
-      background-image: $image-outlined-icon;
-    }
-    &.formOutlined {
-      background-image: $form-outlined-icon;
-    }
-    &.fileOutlined {
-      background-image: $file-outlined-icon;
-    }
   }
   .content {
     color: $text-color-primary;
@@ -134,4 +103,10 @@
 
 .spinner {
   width: 22px;
+}
+
+:global {
+  .web-office-default-container {
+    z-index: $zindex-backtotop;
+  }
 }

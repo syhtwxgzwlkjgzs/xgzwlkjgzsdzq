@@ -3,8 +3,9 @@ import isServer from '@common/utils/is-server';
 import styles from './index.module.scss';
 import { isLongImage } from '@common/utils/calc-image-type';
 import calcCosImageQuality from '@common/utils/calc-cos-image-quality';
+import { inject, observer } from 'mobx-react';
 
-const SmartImg = ({ level, type, src, onClick, noSmart = false, showLongPicture = true }) => {
+const SmartImg = ({ level, type, src, onClick, noSmart = false, showLongPicture = true, postLoad = '' }) => {
   const [isLong, changeIsLong] = useState(false);
   const img = useRef(null);
 
@@ -14,6 +15,9 @@ const SmartImg = ({ level, type, src, onClick, noSmart = false, showLongPicture 
   }, [noSmart, src, type, level]);
 
   const imgOnload = useCallback(() => {
+    if (typeof postLoad === 'function') {
+      postLoad();
+    }
     if (img && img.current) {
       const width = img.current.naturalWidth;
       const height = img.current.naturalHeight;
@@ -23,7 +27,6 @@ const SmartImg = ({ level, type, src, onClick, noSmart = false, showLongPicture 
       changeIsLong(false);
     }
   }, [img]);
-  console.log(showLongPicture);
   return (
         <div className={styles.box}>
             <img ref={img} src={imgSrc} onLoad={imgOnload} onClick={onClick}/>
@@ -32,4 +35,4 @@ const SmartImg = ({ level, type, src, onClick, noSmart = false, showLongPicture 
   );
 };
 
-export default SmartImg;
+export default inject('card')(observer(SmartImg));

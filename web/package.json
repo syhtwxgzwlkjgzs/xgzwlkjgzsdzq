@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "cross-env DEBUG=dzq_error NODE_ENV=development dzq dev -port 9527",
     "build": "cross-env DEBUG=dzq_error NODE_ENV=production dzq build",
+    "build:custom": "cross-env DEBUG=dzq_error DISCUZ_CONFIG_HOST=https://discuz.chat NODE_ENV=production dzq build",
     "build:analyze": "cross-env DEBUG=dzq_error ANALYZE=true NODE_ENV=production dzq build",
     "static": "cross-env DEBUG=dzq_error NODE_ENV=production dzq build -s",
     "start": "cross-env DEBUG=dzq_error NODE_ENV=production dzq start -H 127.0.0.1 -port 9527",
@@ -12,10 +13,10 @@
     "update": "dzq update"
   },
   "dependencies": {
-    "@discuzq/design": "^1.0.54",
+    "@discuzq/design": "^1.0.57",
     "@discuzq/discuz-babel-plugin-import": "0.0.1",
-    "@discuzq/plugin": "^1.0.27",
-    "@discuzq/sdk": "^1.0.29",
+    "@discuzq/plugin": "^1.0.28",
+    "@discuzq/sdk": "^1.0.31",
     "@discuzq/vditor": "^1.0.25",
     "@popperjs/core": "^2.9.2",
     "@sandstreamdev/react-swipeable-list": "^1.0.1",
@@ -49,7 +50,7 @@
     "@babel/core": "7.11.1",
     "@babel/plugin-proposal-class-properties": "7.12.13",
     "@babel/plugin-proposal-decorators": "7.12.13",
-    "@discuzq/cli": "^1.0.27",
+    "@discuzq/cli": "^1.0.28",
     "@types/react": "17.0.3",
     "autoprefixer": "9.7.4",
     "babel-loader": "8.2.2",

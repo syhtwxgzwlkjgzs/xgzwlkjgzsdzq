@@ -10,38 +10,43 @@ const Index = ({ children, card }) => {
   const [url, setUrl] = useState('');
   const [ready, setReady] = useState(false);
   const post = useRef(null);
-  const { isReady } = card;
+  const { imgReady } = card;
   useEffect(() => {
-    if (ready && isReady) {
+    document.body.className = '';
+  }, []);
+  useEffect(() => {
+    if (ready && imgReady) {
       generateImageUrlByHtml(post.current).then((res) => {
         setUrl(res);
       });
     }
-  }, [ready, isReady]);
+  }, [ready, imgReady]);
   const saveImg = () => {
     savePic(url);
   };
-  if (!ready || !isReady) {
+  if (!ready || !imgReady) {
     Toast.loading({ content: '正在绘制...' });
   }
+
   return (
     <div className={styles.contain}>
       <div className={styles.poster} ref={post}>
         {children}
         <Footer setReady={setReady}></Footer>
       </div>
-      {ready && isReady ? (
+      {ready && imgReady ? (
         <div className={styles.imgbox}>
           <img className={styles.centImage} src={url} />
         </div>
       ) : (
-        <div className={styles.imgbox}>
-        </div>
+        <div className={styles.imgbox}></div>
       )}
       <div className={styles.emptyHeight}></div>
       <div className={styles.shareBtn}>
         {!isWeiXin() ? (
-          <Button className={styles.btn} onClick={isWeiXin() ? '' : saveImg}>保存到相册</Button>
+          <Button className={styles.btn} onClick={isWeiXin() ? '' : saveImg}>
+            保存到相册
+          </Button>
         ) : (
           <div className={styles.wxBtn}>长按图片保存到相册</div>
         )}

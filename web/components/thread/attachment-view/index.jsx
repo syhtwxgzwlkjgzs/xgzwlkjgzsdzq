@@ -5,7 +5,9 @@ import { extensionList, isPromise, noop } from '../utils';
 import { throttle } from '@common/utils/throttle-debounce.js';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import isWeiXin from '@common/utils/is-weixin';
-import classnames from 'classnames';
+import { FILE_PREVIEW_FORMAT } from '@common/constants/thread-post';
+import FilePreview from './../file-preview';
+import getAttachmentIconLink from '@common/utils/get-attachment-icon-link';
 
 import styles from './index.module.scss';
 
@@ -117,47 +119,32 @@ const Index = ({
     }
   };
 
-  const getIconClass = (type) => {
-    switch (type) {
-      case 'XLS':
-      case 'XLSX':
-        return "xlsOutlined";
-      case 'DOC':
-      case 'DOCX':
-        return "docOutlined";
-      case 'PPT':
-      case 'PPTX':
-        return "pptOutlined";
-      case 'RAR':
-      case 'ZIP':
-        return "zipOutlined";
-      case 'PDF':
-        return "pdfOutlined";
-      case 'TXT':
-        return "textOutlined";
-      case 'MP4':
-        return "videoOutlined";
-      case 'M4A':
-      case 'MP3':
-        return "audioOutlined";
-      case 'PNG':
-      case 'JPEG':
-        return "imageOutlined";
-      case 'FORM':
-        return "formOutlined";
-      default:
-        break;
+  // 文件是否可预览
+  const isAttachPreviewable = (file) => {
+    return FILE_PREVIEW_FORMAT.includes(file?.extension?.toUpperCase())
+  };
+
+  // 附件预览
+  const [previewFile, setPreviewFile] = useState(null);
+  const onAttachPreview = (file) => {
+    updateViewCount();
+    if (!isPay) {
+      if(!file || !threadId) return;
+
+      fetchDownloadUrl(threadId, file.id, () => { // 校验权限
+        setPreviewFile(file);
+      });
+    } else {
+      onPay();
     }
-    return "fileOutlined";
-  }
+  };
 
   const Normal = ({ item, index, type }) => {
-    const iconClass = getIconClass(type);
     return (
       <div className={styles.container} key={index} onClick={onClick} >
         <div className={styles.wrapper}>
           <div className={styles.left}>
-            <div className={classnames(styles.containerIcon, styles[iconClass])} />
+            <img className={styles.containerIcon} src={getAttachmentIconLink(type)}/>
             <div className={styles.containerText}>
               <span className={styles.content}>{item.fileName}</span>
               <span className={styles.size}>{handleFileSize(parseFloat(item.fileSize || 0))}</span>
@@ -165,6 +152,9 @@ const Index = ({
           </div>
 
           <div className={styles.right}>
+            {
+              isAttachPreviewable(item) ? <span onClick={throttle(() => onAttachPreview(item), 1000)}>预览</span> : <></>
+            }
             <span className={styles.span} onClick={throttle(() => onLinkShare(item), 1000)}>链接</span>
             <div className={styles.label}>
               { downloading[index] ?
@@ -179,10 +169,9 @@ const Index = ({
   };
 
   const Pay = ({ item, index, type }) => {
-    const iconLink = getIconClass(type);
     return (
       <div className={`${styles.container} ${styles.containerPay}`} key={index} onClick={onPay}>
-        <img className={styles.containerIcon} src={iconLink} />
+        <img className={styles.containerIcon} src={getAttachmentIconLink(type)}/>
         <span className={styles.content}>{item.fileName}</span>
       </div>
     );
@@ -206,6 +195,7 @@ const Index = ({
             );
           })
         }
+        { previewFile ? <FilePreview file={previewFile} onClose={() => setPreviewFile(null) } /> : <></> }
     </div>
   );
 };

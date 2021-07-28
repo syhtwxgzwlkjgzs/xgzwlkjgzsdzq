@@ -53,9 +53,9 @@ const Index = ({ page, subPage, dialogId, username, message, user, nickname }) =
       case 'index':
         return <MessageIndex rightContent={rightContent} />;
       case 'account':
-        return <MessageAccount subPage={subPage} rightContent={rightContent} />;
+        return <MessageAccount rightContent={rightContent} />;
       case 'thread':
-        return <MessageThread rightContent={rightContent} />;
+        return <MessageThread subPage={subPage} rightContent={rightContent} />;
       case 'financial':
         return <MessageFinancial rightContent={rightContent} />;
       case 'chat':
