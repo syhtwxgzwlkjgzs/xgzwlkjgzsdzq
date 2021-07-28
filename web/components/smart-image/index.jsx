@@ -5,7 +5,7 @@ import { isLongImage } from '@common/utils/calc-image-type';
 import calcCosImageQuality from '@common/utils/calc-cos-image-quality';
 import { inject, observer } from 'mobx-react';
 
-const SmartImg = ({ level, type, src, onClick, noSmart = false, showLongPicture = true, card }) => {
+const SmartImg = ({ level, type, src, onClick, noSmart = false, showLongPicture = true, postLoad = '' }) => {
   const [isLong, changeIsLong] = useState(false);
   const img = useRef(null);
 
@@ -15,7 +15,9 @@ const SmartImg = ({ level, type, src, onClick, noSmart = false, showLongPicture 
   }, [noSmart, src, type, level]);
 
   const imgOnload = useCallback(() => {
-    card.setImgReadyLength();
+    if (typeof postLoad === 'function') {
+      postLoad();
+    }
     if (img && img.current) {
       const width = img.current.naturalWidth;
       const height = img.current.naturalHeight;

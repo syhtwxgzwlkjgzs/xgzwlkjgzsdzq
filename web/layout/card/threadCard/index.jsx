@@ -6,6 +6,7 @@ import PostContent from '@components/thread/post-content';
 import UserInfo from '@components/thread/user-info';
 import styles from './index.module.scss';
 import Card from '../index';
+import card from '@pages/card';
 
 const ThreadCard = inject('user', 'card')(observer((props) => {
   const { card: threadStore } = props;
@@ -44,6 +45,9 @@ const ThreadCard = inject('user', 'card')(observer((props) => {
       setOverMaxHeight(true);
     }
   });
+  const postLoad = () => {
+    threadStore.setImgReadyLength();
+  };
   // 处理匿名情况
   if (isAnonymous) {
     nickname = '匿名用户';
@@ -92,6 +96,7 @@ const ThreadCard = inject('user', 'card')(observer((props) => {
               platform="h5"
               imgData={parseContent.IMAGE}
               showLongPicture={false}
+              postLoad={postLoad}
             />
           )}
           {/* 付费 */}
