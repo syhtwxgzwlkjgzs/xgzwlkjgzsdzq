@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef }from 'react';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import Spin from '@discuzq/design/dist/components/spin/index';
+import AudioPlayer from '@discuzq/design/dist/components/audio-player/index';
+import { AUDIO_FORMAT } from '@common/constants/thread-post';
 import { extensionList, isPromise, noop } from '../utils';
 import { View, Text, Image } from '@tarojs/components';
 import Taro from '@tarojs/taro';
@@ -150,7 +152,53 @@ const Index = ({
     }
   };
 
+    // 音频播放
+  const isAttachPlayable = (file) => {
+    return AUDIO_FORMAT.includes(file?.extension?.toUpperCase())
+  };
+
+  const onAttachPlay = async (file, audioRef) => {
+    // 该文件已经通过校验，能直接播放
+    if (file.readyToPlay) {
+      return;  
+    }
+
+    const audioPlayer = audioRef?.current?.getState()?.audioCtx;
+    audioPlayer?.pause();
+
+    // 播放前校验权限
+    updateViewCount();
+    if (!isPay) {
+      if(!file || !threadId) return;
+
+      await fetchDownloadUrl(threadId, file.id, noop);
+      audioPlayer.play();
+      file.readyToPlay = true;
+    } else {
+      onPay();
+    }
+  };
+
   const Normal = ({ item, index, type }) => {
+    if (isAttachPlayable(item)) {
+      const { url, fileName, fileSize } = item;
+      const audioRef = useRef();
+
+      return (
+        <View className={styles.audioContainer} key={index} onClick={onClick} >
+          <AudioPlayer
+            ref={audioRef}
+            src={url}
+            fileName={fileName}
+            fileSize={handleFileSize(parseFloat(item.fileSize || 0))}
+            onPlay={throttle(() => onAttachPlay(item, audioRef), 1000)}
+            onDownload={throttle(() => onDownLoad(item, index), 1000)}
+            onLink={throttle(() => onLinkShare(item), 1000)}
+          />
+        </View>
+      );
+    }
+
     return (
       <View className={styles.container} key={index} onClick={onClick}>
         <View className={styles.wrapper}>
