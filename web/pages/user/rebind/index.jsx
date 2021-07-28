@@ -12,7 +12,7 @@ class Rebind extends React.Component {
     return <ViewAdapter
               h5={<RebindPcPage/>}
               pc={<RebindPcPage/>}
-              title={`微信换绑 - ${this.props.site?.siteName}`}
+              title='微信换绑'
             />;
   }
 }
