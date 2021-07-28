@@ -20,6 +20,7 @@
 .additionalContent {
   height: rem(428);
   overflow-y: auto;
+  overflow-x: hidden;
   margin: rem(-$margin-6n);
   padding: rem($padding-6n);
   box-sizing: border-box;

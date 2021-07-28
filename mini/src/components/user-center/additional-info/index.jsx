@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
-import { View, Text } from '@tarojs/components';
+import { View, Text, Image } from '@tarojs/components';
 import Icon from '@discuzq/design/dist/components/icon/index';
 import Spin from '@discuzq/design/dist/components/spin/index';
 
@@ -71,12 +71,13 @@ export default class UserCenterAdditionalInfo extends Component {
         return (
           <View className={styles.cardItem}>
             {fieldsExt?.map((d, i) => {
+              console.log(d.url, d.name);
               return (
                 <View
                   key={`${d.name}-${i}`}
                   className={`${styles.identityCard} ${i != fieldsExt.length - 1 && styles.identityCardBottom}`}
                 >
-                  <img src={d.url} className={styles.identityImg} alt={d.name || '图片'} />
+                  <Image mode="scaleToFill" src={d.url} className={styles.identityImg} alt={d.name || '图片'} />
                 </View>
               );
             })}
