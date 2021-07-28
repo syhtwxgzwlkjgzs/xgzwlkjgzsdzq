@@ -11,6 +11,7 @@ import Avatar from '@components/avatar';
 import { inject, observer } from 'mobx-react';
 import throttle from '@common/utils/thottle.js';
 import { View, Text } from '@tarojs/components';
+import { isExtFieldsOpen } from '@common/store/login/util';
 
 @inject('site')
 @inject('user')
@@ -155,6 +156,7 @@ class index extends Component {
     const { isConfirm } = this.state;
     // 条件都满足时才显示微信
     const IS_WECHAT_ACCESSABLE = this.props.site.wechatEnv !== 'none' && !!this.user.wxNickname;
+    const ISEXT_FIELD_OPENS = isExtFieldsOpen(this.props?.site);
     return (
       <View className={styles.userCenterWrapper}>
         {/* 头部 */}
@@ -216,14 +218,16 @@ class index extends Component {
               </View>
             </View>
           )}
-          <View className={styles.userCenterEditItem} onClick={this.handleGoToAdditionalInfo}>
-            <View className={styles.userCenterEditLabel}>
-              <Text className={styles.userLabelName}>补充信息</Text>
+          {ISEXT_FIELD_OPENS && (
+            <View className={styles.userCenterEditItem} onClick={this.handleGoToAdditionalInfo}>
+              <View className={styles.userCenterEditLabel}>
+                <Text className={styles.userLabelName}>补充信息</Text>
+              </View>
+              <View className={styles.userCenterEditValue}>
+                <Icon name="RightOutlined" size={12} />
+              </View>
             </View>
-            <View className={styles.userCenterEditValue}>
-              <Icon name="RightOutlined" size={12} />
-            </View>
-          </View>
+          )}
         </View>
         {/* bottom */}
         <View className={styles.userCenterEditBtn}>

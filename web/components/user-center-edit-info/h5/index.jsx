@@ -6,6 +6,7 @@ import Avatar from '@components/avatar';
 import { inject, observer } from 'mobx-react';
 import Router from '@discuzq/sdk/dist/router';
 import throttle from '@common/utils/thottle.js';
+import { isExtFieldsOpen } from '@common/store/login/util';
 
 @inject('site')
 @inject('user')
@@ -143,6 +144,7 @@ class index extends Component {
     const { isConfirm } = this.state;
     // 条件都满足时才显示微信
     const IS_WECHAT_ACCESSABLE = this.props.site.wechatEnv !== 'none' && !!this.user.wxNickname;
+    const ISEXT_FIELD_OPENS = isExtFieldsOpen(this.props?.site);
     return (
       <div>
         {/* 头部 */}
@@ -205,14 +207,16 @@ class index extends Component {
               </div>
             </div>
           )}
-          <div className={styles.userCenterEditItem} onClick={this.handleGoToAdditionalInfo}>
-            <div className={styles.userCenterEditLabel}>
-              <label className={styles.userLabelName}>补充信息</label>
+          {ISEXT_FIELD_OPENS && (
+            <div className={styles.userCenterEditItem} onClick={this.handleGoToAdditionalInfo}>
+              <div className={styles.userCenterEditLabel}>
+                <label className={styles.userLabelName}>补充信息</label>
+              </div>
+              <div className={styles.userCenterEditValue}>
+                <Icon name="RightOutlined" size={12} />
+              </div>
             </div>
-            <div className={styles.userCenterEditValue}>
-              <Icon name="RightOutlined" size={12} />
-            </div>
-          </div>
+          )}
         </div>
         {/* bottom */}
         <div className={styles.userCenterEditBottom}>
