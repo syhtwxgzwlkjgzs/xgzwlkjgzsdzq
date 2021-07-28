@@ -1,3 +1,5 @@
+const getDefinePlugin = require('@discuzq/cli/config/taro/getDefinePlugin');
+
 module.exports = {
   env: {
     NODE_ENV: '"development"',
@@ -7,10 +9,11 @@ module.exports = {
       ignoreOrder: true
     },
     webpackChain(chain, webpack) {
+      const defaultDefinePlugin = getDefinePlugin();
       chain.plugin()
         .use(webpack.DefinePlugin, [
           {
-            'process.env.DISCUZ_ENV': JSON.stringify('mini')
+            ...defaultDefinePlugin
           }
       ]);
     },

@@ -39,6 +39,11 @@
       .wxNickname {
         margin-left: rem($margin-4n);
       }
+      .linkText {
+        color: $primary-color;
+        cursor: pointer;
+        margin-left: rem($margin-4n);
+      }
     }
   }
 }

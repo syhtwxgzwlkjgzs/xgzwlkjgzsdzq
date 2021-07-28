@@ -87,7 +87,7 @@ class index extends Component {
       })
       .catch((error) => {
         Toast.error({
-          content: error.message || '更新用户信息失败',
+          content: error.Message || '更新用户信息失败',
           hasMask: false,
           duration: 1000,
         });
@@ -138,7 +138,7 @@ class index extends Component {
         <View className={styles.uerInputItem}>
           {isClickNickName ? (
             <Input
-              focus={true}
+              focus
               maxLength={10}
               value={this.user.editNickName}
               onChange={this.handleChangeNickName}
@@ -154,6 +154,7 @@ class index extends Component {
 
   render() {
     const { isConfirm } = this.state;
+    const { user, site } = this.props;
     // 条件都满足时才显示微信
     const IS_WECHAT_ACCESSABLE = this.props.site.wechatEnv !== 'none' && !!this.user.wxNickname;
     const ISEXT_FIELD_OPENS = isExtFieldsOpen(this.props?.site);
@@ -214,6 +215,14 @@ class index extends Component {
                 <View className={styles.userCenterEditWeChat}>
                   <Avatar size="small" image={this.user.wxHeadImgUrl} name={this.user.wxNickname} />
                   <Text className={styles.wxNickname}>{this.user.wxNickname}</Text>
+                  {
+                    site.isDomainWhiteList
+                    && user.isWhiteLsit
+                    && <Text className={styles.linkText} onClick={() => {
+                      Taro.navigateTo({ url: '/subPages/user/rebind/index' });
+                    }}
+                    >换绑</Text>
+                  }
                 </View>
               </View>
             </View>

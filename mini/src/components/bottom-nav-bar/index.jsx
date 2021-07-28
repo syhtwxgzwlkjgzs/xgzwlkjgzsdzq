@@ -121,7 +121,7 @@ class BottomNavBar extends React.Component {
               {
                 i.icon === 'MailOutlined' ? (
                   <UnreadRedDot dotStyle={{top: "-6px"}} unreadCount={totalUnread}>
-                    <Icon name={i.icon} size={22} />
+                    <Icon name={i.icon} size={20} />
                   </UnreadRedDot>
                 ) : (
                   <Icon name={i.icon} size={20} />
