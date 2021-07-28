@@ -445,7 +445,7 @@ class UserAction extends SiteStore {
     this.targetUserThreadsTotalPage = totalPage;
     this.targetUserThreads = {
       ...this.targetUserThreads,
-      [this.targetUserThreads]: pageData,
+      [this.targetUserThreadsPage]: pageData,
     };
     this.targetUserThreadsTotalCount = get(targetUserThreadList, 'data.totalCount', 0);
 
