@@ -24,25 +24,25 @@ export default observer((props) => {
     measure();
   };
 
-  // const callback = () => {
-  //   measure && measure();
-  // };
+  const callback = () => {
+    measure && measure();
+  };
 
-  // useEffect(() => {
-  //   if (ref.current) {
-  //     const config = { attributes: true, childList: true, subtree: true };
+  useEffect(() => {
+    if (ref.current) {
+      const config = { attributes: true, childList: true, subtree: true };
 
-  //     try {
-  //       const observer = new MutationObserver(callback);
-  //       observer.observe(ref.current, config);
-  //       return () => {
-  //         observer.disconnect();
-  //       };
-  //     } catch (error) {
-  //       // console.log(error);
-  //     }
-  //   }
-  // }, [ref]);
+      try {
+        const observer = new MutationObserver(callback);
+        observer.observe(ref.current, config);
+        return () => {
+          observer.disconnect();
+        };
+      } catch (error) {
+        // console.log(error);
+      }
+    }
+  }, [ref]);
 
   return (
     <div ref={ref} style={{ display: 'inline-block', width: '100%' }}>
