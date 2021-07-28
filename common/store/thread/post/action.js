@@ -287,7 +287,8 @@ class ThreadPostAction extends ThreadPostStore {
     }
     text = emojiFormatForCommit(text)
       .replace(/@([^@<]+)<\/p>/g, '@$1 </p>')
-      .replace(/<code>\s*([^\s]+)\s*<\/code>/g, '<code>$1</code>');
+      .replace(/<code>\s*([^\s]+)\s*<\/code>/g, '<code>$1</code>') // 行内代码块空格问题
+      .replace(/<br \/>\n\s?/g, '<br />\n'); // 软换行来回切换到一行再软换行容易多出一个空格，先在业务侧进行处理
     const params = {
       title,
       categoryId,
