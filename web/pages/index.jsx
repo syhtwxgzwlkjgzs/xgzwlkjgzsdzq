@@ -106,13 +106,20 @@ class Index extends React.Component {
       this.props.vlist.setPosition(0);
       await index.screenData({ filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort }, sequence, page: this.page, });
     } else if (type === 'moreData') {
+      const { currentPage = 0 } = this.props.index.threads || {}
       this.page += 1;
-      return await index.getReadThreadList({
-        perPage: this.prePage,
-        page: this.page,
-        filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort },
-        sequence,
-      });
+
+      if (currentPage < this.page) {
+        return await index.getReadThreadList({
+          perPage: this.prePage,
+          page: this.page,
+          filter: { categoryids: categoryIds, types: newTypes, essence, attention, sort },
+          sequence,
+        });
+      } else {
+        this.page = currentPage
+        return Promise.resolve()
+      }
     } else if (type === 'refresh-recommend') {
       await index.getRecommends({ categoryIds });
     } else if (type === 'update-page') {// 单独更新页数

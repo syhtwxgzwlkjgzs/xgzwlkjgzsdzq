@@ -30,6 +30,7 @@ export const getUserProfile = (callback, isShowLoading = true) =>
     const getUserInfo = typeof wx.getUserProfile !== 'undefined' ? Taro.getUserProfile : Taro.getUserInfo;
     getUserInfo({
       desc: '账号绑定微信',
+      lang: 'zh_CN',
       success: async (res) => {
         if (isShowLoading) {
           Taro.showLoading({ title: '微信登录中', mask: true });

@@ -12,6 +12,23 @@ export const APP_THEME = {
   dark: 'dark',
 };
 
+export const ERROR_PAGE_TIPS = {
+  site: '获取站点接口信息失败',
+  apply: '出bug了 页面暂时无法展示'
+}
+
+// 用户名白名单（用户体验换绑）
+export const USERNAME_WHITE_LIST = [
+  'cody123', // 韩元杰
+  'jerryhan', // 韩元杰小号
+  '182796707977', // 郑剑熊
+  'LWL123', // 文溪
+  '黑哈哈', // 崔晋瑜
+  'LamHo', // 林浩
+]
+// 域名白名单（用户体验换绑）
+export const DOMAIN_WHITE_LIST = 'https://discuz.chat/';
+
 /**
  * 后端错误码
 **/
@@ -54,6 +71,8 @@ export const WEB_SITE_JOIN_WHITE_LIST = [
   '/user/agreement', // 协议
   '/user/bind-phone', // 绑定手机号
   '/user/bind-nickname', // 绑定昵称
+  '/user/rebind', // 微信换绑
+  '/user/wx-rebind-action', // 换绑授权
   '/my', // 个人中心
   '/forum/partner-invite', // 站点加入
 ];
@@ -71,6 +90,8 @@ export const MINI_SITE_JOIN_WHITE_LIST = [
   '/subPages/user/wx-bind-phone/index', // 绑定手机号
   '/subPages/my/edit/find/paypwd/index', // 忘记密码
   '/subPages/user/supplementary/index', // 补充信息
+  '/subPages/user/rebind/index', // 微信换绑
+  '/subPages/user/wx-rebind-action/index', // 换绑授权
   '/subPages/my/index', // 个人中心
   '/subPages/forum/partner-invite/index', // 站点加入
   '/subPages/my/edit/paypwd/index', // 设置支付密码
@@ -84,6 +105,7 @@ export const REVIEWING_USER_WHITE_LIST = [
   '/subPages/user/status/index', // 用户状态提示页
   '/subPages/forum/partner-invite/index', // 站点加入
   '/subPages/user/supplementary/index', // 补充信息
+  '/subPages/user/bind-phone/index', // 绑定手机号
 ];
 
 // web端站点，用户账号审核中可以访问的路由白名单
@@ -94,6 +116,8 @@ export const REVIEWING_USER_WHITE_LIST_WEB = [
   '/forum/partner-invite', // 站点加入
   '/user/bind-nickname', // 绑定昵称
   '/user/supplementary', // 补充信息
+  '/user/bind-phone', // 绑定手机号
+  '/user/bind-nickname', // 绑定昵称
 ];
 
 export const PERMISSION_PLATE = [

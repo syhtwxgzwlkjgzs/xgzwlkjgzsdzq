@@ -2,6 +2,9 @@ import { observable, computed } from 'mobx';
 import { get } from '../../utils/get';
 import { defaultOperation } from '../../constants/const';
 import { THREAD_TYPE } from '../../constants/thread-post';
+import { USERNAME_WHITE_LIST } from '../../constants/site';
+
+const noop = () => {};
 
 class UserStore {
   constructor(props) {
@@ -9,6 +12,9 @@ class UserStore {
   }
 
   rebindTimer = null;
+
+  // login 监听方法，由外层实现
+  @observable onLoginCallback = noop;
 
   @observable userInfo = null;
   @observable loginStatus = false;
@@ -43,6 +49,9 @@ class UserStore {
 
   // 换绑 QRCode
   @observable rebindQRCode = null;
+
+  // 换绑 QRCode是否有效
+  @observable isQrCodeValid = true;
 
   // 检索的目标用户，非自己
   @observable targetUser = null;
@@ -93,6 +102,11 @@ class UserStore {
   // 是否能使用钱包支付
   @computed get canWalletPay() {
     return get(this.userInfo, 'canWalletPay');
+  }
+
+  // 用户是否是白名单
+  @computed get isWhiteLsit() {
+    return USERNAME_WHITE_LIST.includes(this.username);
   }
 
   @computed get id() {
