@@ -19,6 +19,8 @@ import {
   readUsersDeny,
   wechatRebindQrCodeGen,
   getWechatRebindStatus,
+  h5Rebind,
+  miniRebind,
 } from '@server';
 import { get } from '../../utils/get';
 import set from '../../utils/set';
@@ -381,11 +383,34 @@ class UserAction extends SiteStore {
     return userThreadList;
   };
 
+  /**
+   * 删除指定 id 的用户帖子
+   * @param {*} id
+   */
+  @action
+  deleteUserThreads = (id) => {
+    Object.keys(this.userThreads).forEach((pageNum) => {
+      const pageDataSet = this.userThreads[pageNum];
+
+      const itemIdx = pageDataSet.findIndex(item => item.threadId === id);
+
+      if (itemIdx === -1) return;
+
+      pageDataSet.splice(itemIdx, 1);
+
+      // 计数减少
+      this.userThreadsTotalCount -= 1;
+
+      this.userThreads[pageNum] = [...pageDataSet];
+    });
+  }
+
   // 获取用户主题列表的写方法
   // 读写分离，用于阻止多次请求的数据错乱
   setUserThreads = async (userThreadList) => {
     const pageData = get(userThreadList, 'data.pageData', []);
     const totalPage = get(userThreadList, 'data.totalPage', 1);
+
     this.userThreadsTotalPage = totalPage;
     this.userThreads = {
       ...this.userThreads,
@@ -420,7 +445,7 @@ class UserAction extends SiteStore {
     this.targetUserThreadsTotalPage = totalPage;
     this.targetUserThreads = {
       ...this.targetUserThreads,
-      [this.targetUserThreads]: pageData,
+      [this.targetUserThreadsPage]: pageData,
     };
     this.targetUserThreadsTotalCount = get(targetUserThreadList, 'data.totalCount', 0);
 
@@ -982,9 +1007,15 @@ class UserAction extends SiteStore {
 
   // 生成微信换绑二维码，仅在 PC 使用
   @action
-  genRebindQrCode = async (scanSuccess = () => {}, scanFail = () => {}) => {
+  genRebindQrCode = async ({
+    scanSuccess = () => { },
+    scanFail = () => { },
+    onTimeOut = () => { },
+    option = {}
+  }) => {
     clearInterval(this.rebindTimer);
-    const qrCodeRes = await wechatRebindQrCodeGen();
+    this.isQrCodeValid = true;
+    const qrCodeRes = await wechatRebindQrCodeGen(option);
 
     if (qrCodeRes.code === 0) {
       this.rebindQRCode = get(qrCodeRes, 'data.base64Img');
@@ -1000,8 +1031,12 @@ class UserAction extends SiteStore {
 
       // 5min，二维码失效
       setTimeout(() => {
+        this.isQrCodeValid = false;
         clearInterval(this.rebindTimer);
-      }, 5 * 60 * 1000);
+        if (onTimeOut) {
+          onTimeOut();
+        }
+      }, 4 * 60 * 1000);
 
       return qrCodeRes.data;
     }
@@ -1011,6 +1046,86 @@ class UserAction extends SiteStore {
       Msg: qrCodeRes.msg,
     };
   };
+
+  // mini 换绑接口
+  @action
+  rebindWechatMini = async ({
+    jsCode,
+    iv,
+    encryptedData,
+    sessionToken,
+  }) => {
+    try {
+      const miniRebindResp = await miniRebind({
+        data: {
+          jsCode,
+          iv,
+          encryptedData,
+          sessionToken,
+        },
+      });
+
+      if (miniRebindResp.code === 0) {
+        return miniRebindResp;
+      }
+
+      // 不为零，实际是错误
+      throw miniRebindResp;
+    } catch (err) {
+      if (err.code) {
+        throw {
+          Code: err.code,
+          Msg: err.msg,
+        };
+      }
+
+      throw {
+        Code: 'rbd_9999',
+        Msg: '网络错误',
+        err,
+      };
+    }
+  }
+
+  // h5 换绑接口
+  @action
+  rebindWechatH5 = async ({
+    code,
+    sessionId,
+    sessionToken,
+    state
+  }) => {
+    try {
+      const h5RebindResp = await h5Rebind({
+        params: {
+          code,
+          sessionId,
+          sessionToken,
+          state
+        },
+      });
+
+      if (h5RebindResp.code === 0) {
+        return h5RebindResp;
+      }
+
+      // 不为零，实际是错误
+      throw h5RebindResp;
+    } catch (err) {
+      if (err.code) {
+        throw {
+          Code: err.code,
+          Msg: err.msg,
+        };
+      }
+
+      throw {
+        Code: 'rbd_9999',
+        Msg: '网络错误',
+        err,
+      };
+    }
+  }
 
   // 轮询重新绑定结果
   @action
@@ -1030,7 +1145,7 @@ class UserAction extends SiteStore {
     if (scanStatus.code !== 0) {
       if (scanStatus.msg !== '扫码中') {
         if (scanFail) {
-          scanFail();
+          scanFail(scanStatus);
         }
       }
     }
@@ -1041,6 +1156,7 @@ class UserAction extends SiteStore {
   clearWechatRebindTimer = () => {
     clearInterval(this.rebindTimer);
     this.rebindQRCode = null;
+    this.isQrCodeValid = true;
   };
 }
 
