@@ -5,6 +5,8 @@ import { extensionList, isPromise, noop } from '../utils';
 import { throttle } from '@common/utils/throttle-debounce.js';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import isWeiXin from '@common/utils/is-weixin';
+import { FILE_PREVIEW_FORMAT } from '@common/constants/thread-post';
+import FilePreview from './../file-preview';
 import getAttachmentIconLink from '@common/utils/get-attachment-icon-link';
 
 import styles from './index.module.scss';
@@ -117,6 +119,26 @@ const Index = ({
     }
   };
 
+  // 文件是否可预览
+  const isAttachPreviewable = (file) => {
+    return FILE_PREVIEW_FORMAT.includes(file?.extension?.toUpperCase())
+  };
+
+  // 附件预览
+  const [previewFile, setPreviewFile] = useState(null);
+  const onAttachPreview = (file) => {
+    updateViewCount();
+    if (!isPay) {
+      if(!file || !threadId) return;
+
+      fetchDownloadUrl(threadId, file.id, () => { // 校验权限
+        setPreviewFile(file);
+      });
+    } else {
+      onPay();
+    }
+  };
+
   const Normal = ({ item, index, type }) => {
     return (
       <div className={styles.container} key={index} onClick={onClick} >
@@ -130,6 +152,9 @@ const Index = ({
           </div>
 
           <div className={styles.right}>
+            {
+              isAttachPreviewable(item) ? <span onClick={throttle(() => onAttachPreview(item), 1000)}>预览</span> : <></>
+            }
             <span className={styles.span} onClick={throttle(() => onLinkShare(item), 1000)}>链接</span>
             <div className={styles.label}>
               { downloading[index] ?
@@ -170,6 +195,7 @@ const Index = ({
             );
           })
         }
+        { previewFile ? <FilePreview file={previewFile} onClose={() => setPreviewFile(null) } /> : <></> }
     </div>
   );
 };
