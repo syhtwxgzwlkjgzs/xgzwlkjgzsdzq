@@ -32,11 +32,12 @@ const BaseLayoutControl = forwardRef((props, ref) => {
     jumpTo = -1,
     pageName = '',
     ready = noop,
+    jumpRuleList = [],
     ...others
   } = props;
 
   const [listRef, setListRef] = useState(null);
-  const [baseLayoutWhiteList, setBaseLayoutWhiteList] = useState(['home', 'search', 'my', 'like', 'collect', 'buy']);
+  const [baseLayoutWhiteList, setBaseLayoutWhiteList] = useState(['home', 'search', 'like', 'collect', 'buy']);
   const layoutRef = useRef(null);
 
   useImperativeHandle(
@@ -47,6 +48,7 @@ const BaseLayoutControl = forwardRef((props, ref) => {
   );
 
   useEffect(() => {
+    setBaseLayoutWhiteList([...baseLayoutWhiteList, ...jumpRuleList]);
     ready();
   }, []);
 
@@ -54,8 +56,23 @@ const BaseLayoutControl = forwardRef((props, ref) => {
     if (hasListChild) setListRef(layoutRef?.current.listRef);
   }, [layoutRef]);
 
+  const isPageInWhiteList = () => {
+    for(const listItem of baseLayoutWhiteList) {
+      if(typeof listItem === 'string') {
+        if(listItem === pageName) {
+          return true;
+        }
+      } else if(typeof listItem.test === 'function') {
+        if(listItem.test(pageName)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   useEffect(() => {
-    if (hasListChild && listRef?.current && pageName && baseLayoutWhiteList.indexOf(pageName) !== -1) {
+    if (hasListChild && listRef?.current && pageName && isPageInWhiteList()) {
       if (jumpTo > 0) {
         baselayout[pageName] = jumpTo;
         listRef.current.jumpToScrollTop(jumpTo);
