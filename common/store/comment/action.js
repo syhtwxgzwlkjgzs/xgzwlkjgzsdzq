@@ -279,7 +279,7 @@ class CommentAction extends CommentStore {
    * @returns {object} 处理结果
    */
   @action
-  async updateLiked(params, ThreadStore) {
+  async updateLiked(params, ThreadStore, IndexStore, SearchStore, TopicStore) {
     const { id, isLiked } = params;
     if (!id) {
       return {
@@ -302,7 +302,8 @@ class CommentAction extends CommentStore {
       if (Number(res.data.redPacketAmount) > 0) {
         const threadId = ThreadStore?.threadData?.id;
         ThreadStore.setCommentListDetailField(res.data.pid, 'redPacketAmount', res.data.redPacketAmount);
-        ThreadStore.fetchThreadDetail(threadId);
+        await ThreadStore.fetchThreadDetail(threadId);
+        ThreadStore.updateListStore(IndexStore, SearchStore, TopicStore);
       }
 
       return {
