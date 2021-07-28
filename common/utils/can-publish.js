@@ -3,7 +3,7 @@ import Router from '@discuzq/sdk/dist/router';
 /**
  * 判断是否可以发布内容
  */
-export default function isCanPublish(userStore, siteStore) {
+export default function canPublish(userStore, siteStore) {
   if (!userStore.isLogin()) { // 是否登录
     loginHelper.gotoLogin();
     return false;

@@ -13,7 +13,7 @@ import typeofFn from '@common/utils/typeof';
 import setWxShare from '@common/utils/set-wx-share';
 import styles from './HOCFetchSiteData.module.scss';
 import initWXSDK from '@common/utils/init-wx-sdk';
-import isCanPublish from '@common/utils/is-can-publish';
+import canPublish from '@common/utils/can-publish';
 import {
   WEB_SITE_JOIN_WHITE_LIST,
   JUMP_TO_404,
@@ -99,7 +99,7 @@ export default function HOCFetchSiteData(Component, _isPass) {
     constructor(props) {
       super(props);
       this.handleWxShare = this.handleWxShare.bind(this);
-      this.isCanPublish = this.isCanPublish.bind(this);
+      this.canPublish = this.canPublish.bind(this);
 
       let isNoSiteData;
       const { serverUser, serverSite, user, site } = props;
@@ -406,9 +406,9 @@ export default function HOCFetchSiteData(Component, _isPass) {
       return newProps;
     }
 
-    isCanPublish() {
+    canPublish() {
       const { user, site } = this.props;
-      return isCanPublish(user, site);
+      return canPublish(user, site);
     }
 
     render() {
@@ -423,7 +423,7 @@ export default function HOCFetchSiteData(Component, _isPass) {
           </div>
         );
       }
-      return <Component isCanPublish={this.isCanPublish} {...this.filterProps(this.props)}/>;
+      return <Component canPublish={this.canPublish} {...this.filterProps(this.props)}/>;
     }
   }
 
