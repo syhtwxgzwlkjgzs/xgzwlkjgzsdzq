@@ -36,8 +36,6 @@ class CopyRight extends React.Component {
     const curSiteUrl = window.location.origin;
     const curYear = new Date().getFullYear();
 
-    console.log(111, setSite)
-
     return (
       <div className={clsName} style={style}>
         <div className={styles.text}>
