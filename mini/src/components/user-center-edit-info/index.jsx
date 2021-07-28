@@ -11,7 +11,7 @@ import Avatar from '@components/avatar';
 import { inject, observer } from 'mobx-react';
 import throttle from '@common/utils/thottle.js';
 import { View, Text } from '@tarojs/components';
-import { isExtFieldsOpen } from '@/common/store/login/util';
+import { isExtFieldsOpen } from '@common/store/login/util';
 
 @inject('site')
 @inject('user')
@@ -215,14 +215,16 @@ class index extends Component {
                 <View className={styles.userCenterEditWeChat}>
                   <Avatar size="small" image={this.user.wxHeadImgUrl} name={this.user.wxNickname} />
                   <Text className={styles.wxNickname}>{this.user.wxNickname}</Text>
-                  {
-                    site.isDomainWhiteList
-                    && user.isWhiteLsit
-                    && <Text className={styles.linkText} onClick={() => {
-                      Taro.navigateTo({ url: '/subPages/user/rebind/index' });
-                    }}
-                    >换绑</Text>
-                  }
+                  {site.isDomainWhiteList && user.isWhiteLsit && (
+                    <Text
+                      className={styles.linkText}
+                      onClick={() => {
+                        Taro.navigateTo({ url: '/subPages/user/rebind/index' });
+                      }}
+                    >
+                      换绑
+                    </Text>
+                  )}
                 </View>
               </View>
             </View>
