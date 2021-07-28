@@ -51,21 +51,28 @@ export default function replaceStringInRegex(text, type, newSubstr) {
       break;
     case "tags":
       newText = newText.replace(/<[^<>]*>|<\/[^<>]*>/g, newSubstr);
+      break;
     case "heading":
       newText = newText.replace(/<h[0-9][^\/\>]*>|<\/h[0-9]>/g, newSubstr);
+      break;
     case "headingWithContent":
       // 包括标签内文字
       newText = newText.replace(/<h[0-9][^\/]*[^\<\/]<\/h[0-9]>/g, newSubstr);
+      break;
     case "paragraph":
       newText = newText.replace(/<p[\s]?[^\/\>]*>|<\/p>/g, newSubstr);
+      break;
     case "list":
       newText = newText.replace(/<ol[^<>]*>|<(ul|li)[^<>]*>/g, newSubstr);
       newText = newText.replace(/<\/(li|ul|ol)>/g, newSubstr);
+      break;
     case "code":
       newText = newText.replace(/<code>[\s\S]*?<\/code>/g, newSubstr);
       newText = newText.replace(/<pre>[\s\S]*?<\/pre>/g, newSubstr);
+      break;
     case "emotion":
       newText = newText.replace(/:[0-9A-Za-z]{2,20}:/g, newSubstr)
+      break;
     default:
       break;
   }
