@@ -6,10 +6,10 @@ import Router from '@discuzq/sdk/dist/router';
 export default function isCanPublish(userStore, siteStore) {
   if (!userStore.isLogin()) { // 是否登录
     loginHelper.gotoLogin();
-    return;
+    return false;
   }
   if (!siteStore.publishNeedBindPhone) { // 是否开启发帖需要绑定手机号
-    return;
+    return true;
   }
   const type = `${siteStore.isSmsOpen && 'mobile'}${siteStore.wechatEnv !== 'none' && 'wechat'}`;
   let url = '';
@@ -26,4 +26,5 @@ export default function isCanPublish(userStore, siteStore) {
   }
   loginHelper.setUrl(url);
   Router.push({url});
+  return false;
 }

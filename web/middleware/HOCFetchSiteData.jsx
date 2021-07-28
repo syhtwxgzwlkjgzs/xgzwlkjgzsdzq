@@ -407,8 +407,8 @@ export default function HOCFetchSiteData(Component, _isPass) {
     }
 
     isCanPublish() {
-      const { user, sise } = this.props;
-      isCanPublish(user, sise);
+      const { user, site } = this.props;
+      return isCanPublish(user, site);
     }
 
     render() {
