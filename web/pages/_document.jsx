@@ -57,9 +57,9 @@ class MyDocument extends Document {
         </body>
         <script dangerouslySetInnerHTML={{__html: `
           var appid = '500D36509CE649E88446FB4E7A51B221';
-          var url = 'http://sdk.talkingdata.com/app/h5/v1?appid=' + appid + '&vn=' + 'discuzq3.0' + '&vc=' + 'v3.0.210722';
+          var url = 'http://sdk.talkingdata.com/app/h5/v1?appid=' + appid + '&vn=' + 'discuzq3.0' + '&vc=' + 'DISCUZ_CONFIG_VERSION';
           if ( window.location.protocol.indexOf('https') != -1 ) {
-            url = 'https://jic.talkingdata.com/app/h5/v1?appid=' + appid + '&vn=' + 'discuzq3.0' + '&vc=' + 'v3.0.210722';
+            url = 'https://jic.talkingdata.com/app/h5/v1?appid=' + appid + '&vn=' + 'discuzq3.0' + '&vc=' + 'DISCUZ_CONFIG_VERSION';
           }
           var talkingdata = document.createElement('script');
           talkingdata.type = 'text/javascript';
