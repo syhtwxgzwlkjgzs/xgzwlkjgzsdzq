@@ -45,7 +45,7 @@ export default observer((props) => {
   // }, [ref]);
 
   return (
-    <div ref={ref}>
+    <div ref={ref} style={{ display: 'inline-block', width: '100%' }}>
       <ThreadContent
         onContentHeightChange={measure}
         onImageReady={measure}
