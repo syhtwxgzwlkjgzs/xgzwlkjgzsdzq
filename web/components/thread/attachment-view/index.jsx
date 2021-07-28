@@ -140,11 +140,17 @@ const Index = ({
 
   // 附件预览
   const [previewFile, setPreviewFile] = useState(null);
-  const onAttachPreview = async (file) => {
-    if (!isAttachPreviewable(file)) {
-      return;
+  const onAttachPreview = (file) => {
+    updateViewCount();
+    if (!isPay) {
+      if(!file || !threadId) return;
+
+      fetchDownloadUrl(threadId, file.id, () => { // 校验权限
+        setPreviewFile(file);
+      });
+    } else {
+      onPay();
     }
-    setPreviewFile(file);
   };
 
   const Normal = ({ item, index, type }) => {
