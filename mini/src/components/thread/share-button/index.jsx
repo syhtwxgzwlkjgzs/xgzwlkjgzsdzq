@@ -6,7 +6,7 @@ import Taro, { useDidShow } from '@tarojs/taro'
 import classNames from 'classnames';
 import Popup from '@discuzq/design/dist/components/popup/index';
 
-const Index = ({setShow, tipData, data, getShareData, shareNickname, shareAvatar, shareThreadid}) => {
+const Index = ({setShow, tipData, data, getShareData, shareNickname, shareAvatar, shareThreadid, show=false}) => {
     const {threadId} = tipData
     let threadTitle = ''
     const thread = data
