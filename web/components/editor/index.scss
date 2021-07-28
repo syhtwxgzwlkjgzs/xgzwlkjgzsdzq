@@ -159,7 +159,7 @@
     }
 
     img[alt^="attachmentId-"], img[alt=uploadError] {
-      max-width: 96%;
+      max-width: 96% !important;
     }
   }
 
