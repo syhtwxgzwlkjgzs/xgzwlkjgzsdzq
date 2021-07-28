@@ -17,7 +17,6 @@ function withShare(opts = {}) {
   menus = ['shareAppMessage'];
   return function demoComponent(Component) {
     @inject('user')
-    @observer
     class WithShare extends Component {
       componentDidMount() {
         Taro.showShareMenu({
@@ -46,11 +45,16 @@ function withShare(opts = {}) {
         }
         const { title = defalutTitle, path = defalutPath, imageUrl = '' } = shareData;
         const encodePath = `/pages/index/index?path=${encodeURIComponent(path)}`;
-        return {
+        const value = {
           title,
           path: encodePath,
           imageUrl,
         };
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(value);
+          }, 1000);
+        });
       }
 
       render() {

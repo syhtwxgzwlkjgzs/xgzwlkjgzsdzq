@@ -39,21 +39,40 @@ export default function replaceStringInRegex(text, type, newSubstr) {
       newText = newText.replace(/<br[^<>]*>/g, newSubstr);
       newText = newText.replace(/<view[\s]+class=([^\/]*dzq\-br[^\/]*)(?:\"|\')[^\/]*<\/view>/g, newSubstr);
       break;
+    case "breakInCode":
+      let codeBlocks = newText.match(/<code>[\s\S]*?<\/code>/g) || []; // 找到代码块
+      const CODE_PLACEHOLDER = `#$#break#$#`;
+      let noCodeText = newText.replace(/<code>[\s\S]*?<\/code>/g, CODE_PLACEHOLDER); // 用占位符替代代码块
+      for(let i = 0; i < codeBlocks.length; i++) {
+        // 把代码块中的<br>换成*br*从而不参与计算长度，并换回占位符
+        noCodeText = noCodeText.replace(CODE_PLACEHOLDER, codeBlocks[i].replace(/<br[^<>]*>/g, newSubstr));
+      }
+      newText = noCodeText;
+      break;
     case "tags":
       newText = newText.replace(/<[^<>]*>|<\/[^<>]*>/g, newSubstr);
+      break;
     case "heading":
       newText = newText.replace(/<h[0-9][^\/\>]*>|<\/h[0-9]>/g, newSubstr);
+      break;
     case "headingWithContent":
       // 包括标签内文字
       newText = newText.replace(/<h[0-9][^\/]*[^\<\/]<\/h[0-9]>/g, newSubstr);
+      break;
     case "paragraph":
       newText = newText.replace(/<p[\s]?[^\/\>]*>|<\/p>/g, newSubstr);
+      break;
     case "list":
       newText = newText.replace(/<ol[^<>]*>|<(ul|li)[^<>]*>/g, newSubstr);
       newText = newText.replace(/<\/(li|ul|ol)>/g, newSubstr);
+      break;
     case "code":
       newText = newText.replace(/<code>[\s\S]*?<\/code>/g, newSubstr);
       newText = newText.replace(/<pre>[\s\S]*?<\/pre>/g, newSubstr);
+      break;
+    case "emotion":
+      newText = newText.replace(/:[0-9A-Za-z]{2,20}:/g, newSubstr)
+      break;
     default:
       break;
   }

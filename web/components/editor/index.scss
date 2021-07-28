@@ -17,6 +17,11 @@
   border: none !important;
   background-color: $white;
 
+
+  .editor-upload-error {
+    border: 3px solid $error-color;
+  }
+
   .vditor-reset {
     overflow: hidden;
     ol {
@@ -149,8 +154,12 @@
       background-color: $white;
     }
 
-    img[alt$=":emoji"] {
+    img[alt$=":dzqemoji"] {
       width: 30px;
+    }
+
+    img[alt^="attachmentId-"], img[alt=uploadError] {
+      max-width: 96% !important;
     }
   }
 
