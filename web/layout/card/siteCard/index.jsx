@@ -65,7 +65,7 @@ class SiteCard extends React.Component {
     const { siteName } = siteData || '';
     let { siteIntroduction } = siteData;
     if (!siteIntroduction) {
-      siteIntroduction = 'Discuz！Q官方站点，是中文 PC 互联网最知名的社区开源软件 Discuz!，在过去 15 年间，服务过超过 200 万网站客户。其推出的 UCenter、SupeSite，ECshop 等组件所代表的产品理念对今天移动互联网各类产品的技术架构至今仍有着深远的影响，毫不夸张的说，Discuz! 代表了互联网 2.0 时代里社交网络的最初形态。';
+      siteIntroduction = '来这里，发现更多精彩内容！';
     }
     let targetAvatarImage = userInfo?.avatarUrl;
     if (targetAvatarImage && targetAvatarImage !== '') {

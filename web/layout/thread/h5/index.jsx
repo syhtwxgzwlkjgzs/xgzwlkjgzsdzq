@@ -378,6 +378,7 @@ class ThreadH5Page extends React.Component {
       this.props.index,
       this.props.search,
       this.props.topic,
+      this.props.site,
       this.props.user,
     );
 

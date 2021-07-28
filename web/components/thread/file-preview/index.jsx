@@ -2,7 +2,7 @@ import React from 'react';
 import { inject } from 'mobx-react';
 import Dialog from '@components/dialog';
 import { Popup, Icon } from '@discuzq/design';
-
+import ReactDOM from 'react-dom';
 import styles from './index.module.scss';
 
 @inject('site')
@@ -72,20 +72,20 @@ export default class FilePreview extends React.Component {
     }
   }
 
-  render() {
-    const {
-      file,
-      onClose,
-      site: { isPC },
-    } = this.props;
+  renderPC() {
+    const { file, onClose } = this.props;
 
-    if (isPC) {
-      return (
-        <Dialog title={file.fileName} onClose={onClose} pc visible isCustomBtn className={styles.dialog}>
-          {this.state.errMsg ? <div className={styles.errMsg}>{this.state.errMsg}</div> : <div id="preview"></div>}
-        </Dialog>
-      );
-    }
+    return (
+      <Dialog title={file.fileName} onClose={onClose} pc visible isCustomBtn className={styles.dialog}>
+      {
+        this.state.errMsg ? <div className={styles.errMsg}>{ this.state.errMsg }</div> : <div id="preview"></div>
+      }
+      </Dialog>
+    );
+  }
+    
+  renderH5() {
+    const { file, onClose } = this.props;
 
     return (
       <Popup className={styles.popup} position="center" visible>
@@ -95,6 +95,15 @@ export default class FilePreview extends React.Component {
         </div>
         {this.state.errMsg ? <div className={styles.errMsg}>{this.state.errMsg}</div> : <div id="preview"></div>}
       </Popup>
+    );
+  }
+    
+  render() {
+    const { site: { isPC } } = this.props;
+
+    return ReactDOM.createPortal(
+      isPC ? this.renderPC() : this.renderH5(),
+      document.getElementsByTagName('body')[0],
     );
   }
 }
