@@ -86,7 +86,7 @@ class index extends Component {
       })
       .catch((error) => {
         Toast.error({
-          content: error.message || '更新用户信息失败',
+          content: error.Message || '更新用户信息失败',
           hasMask: false,
           duration: 1000,
         });
@@ -133,7 +133,7 @@ class index extends Component {
         <View className={styles.uerInputItem}>
           {isClickNickName ? (
             <Input
-              focus={true}
+              focus
               maxLength={10}
               value={this.user.editNickName}
               onChange={this.handleChangeNickName}
