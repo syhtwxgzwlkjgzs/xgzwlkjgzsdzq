@@ -1,4 +1,4 @@
 module.exports = {
-  TITLE: 'Discuz!Q',
-  COMMON_BASE_URL: 'https://bbsv3.techo.chat',
+  TITLE: DISCUZ_CONFIG_TITLE,
+  COMMON_BASE_URL: DISCUZ_CONFIG_HOST,
 };
