@@ -344,9 +344,12 @@ export default function DVditor(props) {
             // 检查文件类型，含有非图片文件则退出上传并提示用户
             for (let i = 0; i < files.length; i++) {
               const file = files[i];
-              const type = file.type;
+              const name = file.name;
+              const nameType = name.substr(name.indexOf('.') + 1);
+              const fileType = file.type;
 
-              if (!type.includes('image')) {
+
+              if (!fileType.includes('image')) {
                 Toast.error({
                   content: '暂不支持拖拽/复制上传非图片文件',
                   duration: 3000,
@@ -355,7 +358,7 @@ export default function DVditor(props) {
               }
 
               const types = supportImgExt.split(',');
-              if (!types.includes(type.substr(6))) {
+              if (!types.includes(nameType)) {
                 Toast.error({
                   content: `仅支持上传格式为${supportImgExt}的图片，请重新选择`,
                   duration: 3000,

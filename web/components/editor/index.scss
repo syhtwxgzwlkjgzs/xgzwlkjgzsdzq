@@ -159,7 +159,9 @@
     }
 
     img[alt^="attachmentId-"], img[alt=uploadError] {
-      max-width: 96% !important;
+      max-width: 95% !important;
+      display: block;
+      padding-right: 5px;
     }
   }
 
