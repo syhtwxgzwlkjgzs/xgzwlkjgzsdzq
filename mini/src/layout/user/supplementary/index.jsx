@@ -133,7 +133,7 @@ class SupplementaryH5Page extends React.Component {
         <View className={layout.content}>
           {values?.map((field) => this.createComponent(field))}
           <Button type="primary" className={layout.button} onClick={() => this.submit()}>
-            注册
+            确定
           </Button>
         </View>
       </View>
