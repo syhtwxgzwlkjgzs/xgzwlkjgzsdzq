@@ -222,9 +222,9 @@ class ThreadPCPage extends React.Component {
                     onDefaultClick={this.props.handleDefaultIconClick}
                   />
                 </div>
-                <div className={styles['editor-footer--right']}>
-                  最近保存20:04
-                </div>
+                {postData.autoSaveTime && (<div className={styles['editor-footer--right']}>
+                  最近保存{postData.autoSaveTime}
+                </div>)}
               </div>
             </div>
             <div className={styles.toolbar}>

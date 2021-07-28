@@ -17,6 +17,7 @@ import { tencentVodUpload } from '@common/utils/tencent-vod';
 import { plus } from '@common/utils/calculate';
 import { defaultOperation } from '@common/constants/const';
 import ViewAdapter from '@components/view-adapter';
+import { formatDate } from '@common/utils/format-date';
 
 @inject('site')
 @inject('threadPost')
@@ -63,6 +64,7 @@ class PostPage extends React.Component {
     this.isVideoUploadDone = true;
     this.imageList = [];
     this.fileList = [];
+    this.autoSaveInterval = null; // 自动保存计时器
   }
 
   componentDidMount() {
@@ -88,6 +90,7 @@ class PostPage extends React.Component {
 
   componentWillUnmount() {
     this.captcha = '';
+    if (this.autoSaveInterval) clearInterval(this.autoSaveInterval);
     this.props.router.events.off('routeChangeStart', this.handleRouteChange);
   }
 
@@ -172,6 +175,8 @@ class PostPage extends React.Component {
         Toast.error({ content: ret.msg });
       }
     }
+    // 非编辑情况
+    this.autoSaveData();
   }
 
   setPostData(data) {
@@ -540,6 +545,17 @@ class PostPage extends React.Component {
     return true;
   }
 
+  // 是否有内容
+  isHaveContent() {
+    const { postData } = this.props.threadPost;
+    const { images, video, files, audio } = postData;
+    if (!(postData.contentText || video.id || audio.id || Object.values(images).length
+      || Object.values(files).length)) {
+      return false;
+    }
+    return true;
+  }
+
   // 发布提交
   handleSubmit = async (isDraft) => {
     if (!isDraft) this.setPostData({ draft: 0 });
@@ -547,7 +563,6 @@ class PostPage extends React.Component {
       this.postToast(`不能超过${MAX_COUNT}字`);
       return;
     }
-    const { postData } = this.props.threadPost;
     if (!this.props.user.threadExtendPermissions.createThread) {
       Toast.info({ content: '您没有发帖权限' });
       this.postToast('您没有发帖权限');
@@ -572,9 +587,7 @@ class PostPage extends React.Component {
 
     if (!this.checkAudioRecordStatus()) return;
 
-    const { images, video, files, audio } = postData;
-    if (!(postData.contentText || video.id || audio.id || Object.values(images).length
-      || Object.values(files).length)) {
+    if (!this.isHaveContent()) {
       this.postToast('请至少填写您要发布的内容或者上传图片、附件、视频、语音');
       return;
     }
@@ -647,22 +660,36 @@ class PostPage extends React.Component {
     return false;
   };
 
-  async createThread(isDraft) {
+  // 自动保存
+  autoSaveData() {
+    if (this.autoSaveInterval) clearInterval(this.autoSaveInterval);
+    this.autoSaveInterval = setInterval(() => {
+      // 7.28 已发布的帖子也可以保存草稿
+      if (this.isHaveContent()) {
+        this.setPostData({ draft: 1 });
+        this.createThread(true, false);
+        const now = formatDate(new Date(), 'hh:mm');
+        this.setPostData({ autoSaveTime: now });
+      }
+    }, 30000);
+  }
+
+  async createThread(isDraft, isAutoSave = true) {
     const { threadPost, thread } = this.props;
     let ret = {};
-    this.toastInstance = Toast.loading({ content: '发布中...', hasMask: true });
+    if (isAutoSave) this.toastInstance = Toast.loading({ content: '发布中...', hasMask: true });
     if (threadPost.postData.threadId) ret = await threadPost.updateThread(threadPost.postData.threadId);
     else ret = await threadPost.createThread();
     const { code, data, msg } = ret;
     if (code === 0) {
       this.setState({ data });
       thread.reset({});
-      this.toastInstance?.destroy();
+      this.toastInstance && this.toastInstance?.destroy();
       this.setPostData({ threadId: data.threadId });
       // 防止被清除
 
       // 未支付的订单
-      if (isDraft
+      if (isDraft && !isAutoSave
         && threadPost.postData.orderInfo.orderSn
         && !threadPost.postData.orderInfo.status
         && !threadPost.postData.draft
@@ -676,7 +703,7 @@ class PostPage extends React.Component {
         this.props.router.replace(`/thread/${data.threadId}`);
       } else {
         const { jumpLink } = this.state;
-        Toast.info({ content: '保存草稿成功' });
+        isAutoSave && Toast.info({ content: '保存草稿成功' });
         if (!this.props.site.isPC) {
           jumpLink ? Router.push({ url: jumpLink }) : Router.back();
         }
