@@ -160,7 +160,7 @@ class SearchAction extends SearchStore {
     }
 
     if ( !hasThreads ) {
-      tasks.push(readThreadList({ params: { filter: { sort: '3', search }, perPage: newPerPage, page: 1 } }))
+      tasks.push(readThreadList({ params: { filter: { sort: '3', search }, perPage: newPerPage, page: 1, scope: '3' } }))
     } else {
       tasks.push(Promise.resolve({}))
     }
@@ -210,41 +210,8 @@ class SearchAction extends SearchStore {
       }
 
       type === 0 ? this.setIndexThreads(code === 0 ? data : {}) : this.setSearchThreads(code === 0 ? data : {});
-
-      await this.getThreadListAgain({ firstRes: data, search, type })
     }
   };
-
-  // 如果热门内容数量不够，需要再请求
-  @action
-  async getThreadListAgain({ firstRes, search, type }) {
-    const ids = firstRes.pageData.map(item => item.threadId)
-
-    // 发现页的最多展示10条数据，发现结果页最多展示3条数据
-    const isContinue = type === 1 ? ids.length < 3 : ids.length < 10
-    if (!isContinue) {
-      return
-    }
-    
-    const res = await readThreadList({ params: { filter: { sort: '4', search, repeatedIds: ids }, perPage: 10, page: 1 } })
-
-    const { code, data, msg } = res;
-    if (code !== 0) {
-      if (type === 0) {
-        this.indexThreadsError = { isError: true, errorText: msg || '加载失败' }
-      } else {
-        this.searchThreadsError = { isError: true, errorText: msg || '加载失败' }
-      }
-
-      return
-    }
-
-    const pageData = [...firstRes.pageData, ...data.pageData]
-
-    const newData = {...data, pageData }
-
-    type === 0 ? this.setIndexThreads(code === 0 ? newData : {}) : this.setSearchThreads(code === 0 ? newData : {});
-}
 
   /**
    * 发现模块 - 更多话题
