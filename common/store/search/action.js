@@ -160,7 +160,7 @@ class SearchAction extends SearchStore {
     }
 
     if ( !hasThreads ) {
-      tasks.push(readThreadList({ params: { filter: { sort: '3', search }, perPage: newPerPage, page: 1, scope: '3' } }))
+      tasks.push(readThreadList({ params: { filter: { search }, perPage: newPerPage, page: 1, scope: '3' } }))
     } else {
       tasks.push(Promise.resolve({}))
     }
@@ -271,10 +271,10 @@ class SearchAction extends SearchStore {
  */
  @action
   async getThreadList({ scope = 0, sort = '3', search = '', perPage = 10, page = 1, params = {} } = {}) {
-    const result = await readThreadList({ params: { filter: { sort, search }, scope, perPage, page, ...params } });
+    const result = await readThreadList({ params: { filter: { search }, scope, perPage, page, ...params } });
 
     if (result.code === 0 && result.data) {
-      if (this.threads && result.data.pageData && (page !== 1 || sort === '4')) {
+      if (this.threads && result.data.pageData && page !== 1) {
         this.threads.pageData.push(...result.data.pageData);
         const newPageData = this.threads.pageData.slice();
         this.setThreads({ ...result.data, pageData: newPageData });
