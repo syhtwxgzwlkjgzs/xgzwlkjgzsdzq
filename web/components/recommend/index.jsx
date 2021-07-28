@@ -87,7 +87,11 @@ class Index extends React.Component {
               <div key={index} className={`${style.recommendBox} right-recommend-item`} onClick={() => {this.recommendDetails(item)}}>
                 <div className={style.recommendTitle}>
                   <p className={`${style.recommendSort} ${style[`itemIndex${index+1}`]}`}>{index + 1}</p>
-                  <FilterRichText className={style.recommenText} content={`${titleString}`}/>
+                  <FilterRichText
+                    className={style.recommenText}
+                    content={`${titleString}`}
+                    onClick={() => {this.recommendDetails(item)}} // 富文本暴露了onClick事件，需要传点击跳转行为进去
+                  />
                 </div>
                 <div className={style.browse}>
                   <div className={style.browseBox}>
