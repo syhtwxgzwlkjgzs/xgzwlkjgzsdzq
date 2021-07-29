@@ -60,17 +60,16 @@ const BaseLayoutControl = forwardRef((props, ref) => {
         baselayout[pageName] = jumpTo;
         listRef.current.jumpToScrollTop(jumpTo);
       } else {
-        if(baselayout[pageName] > 0) {
-          if (pageName !== 'search' || // 首页在PC和H5都适用阅读区域跳转
-              (pageName === 'search' && site.platform === 'h5')) { // 搜索页只适用H5页面阅读区域跳转
-            // 需要异步触发，可能存在列表没有渲染出来
-            setTimeout(() => {
-              listRef.current.jumpToScrollTop(baselayout[pageName]);
-            });
-          }
+        if(baselayout[pageName] > 0 && !baselayout.isJumpingToTop) {
+          // 需要异步触发，可能存在列表没有渲染出来
+          setTimeout(() => {
+            listRef.current.jumpToScrollTop(baselayout[pageName]);
+          });
         } else if(baselayout.isJumpingToTop) {
-          baselayout.removeJumpingToTop();
           listRef.current.onBackTop();
+          setTimeout(() => { // 等待回到顶部操作结束
+            baselayout.removeJumpingToTop();
+          }, 500);
         }
       }
     }

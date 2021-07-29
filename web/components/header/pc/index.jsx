@@ -15,6 +15,8 @@ import LoginHelper from '@common/utils/login-helper';
 @inject('user')
 @inject('message')
 @inject('forum')
+@inject('search')
+@inject('baselayout')
 @observer
 class Header extends React.Component {
   timeoutId = null;
@@ -65,23 +67,27 @@ class Header extends React.Component {
 
   handleSearch = (e) => {
     const { value = '' } = this.state;
-    const { onSearch } = this.props;
+    const { onSearch, search, baselayout } = this.props;
+    search.currentKeyword = null;
+    baselayout["search"] = -1;
+    baselayout["isJumpingToTop"] = true;
     if (!onSearch) {
+      console.log("Router redirecting")
       Router.push({ url: `/search?keyword=${value}` });
     } else {
       onSearch(value);
     }
   };
 
-  handleIconClick = (e) => {
-    const { value = '' } = this.state;
-    const { onSearch } = this.props;
-    if (!onSearch) {
-      Router.push({ url: `/search?keyword=${value}` });
-    } else {
-      onSearch(value);
-    }
-  };
+  // handleIconClick = (e) => {
+  //   const { value = '' } = this.state;
+  //   const { onSearch } = this.props;
+  //   if (!onSearch) {
+  //     Router.push({ url: `/search?keyword=${value}` });
+  //   } else {
+  //     onSearch(value);
+  //   }
+  // };
 
   handleRouter = (url) => {
     this.props.router.push(url);
@@ -212,7 +218,7 @@ class Header extends React.Component {
                   value={this.state.value}
                   onEnter={this.handleSearch}
                   onChange={e => this.onChangeInput(e.target.value)}
-                  onIconClick={this.handleIconClick}
+                  onIconClick={this.handleSearch}
                 />
               </div>
             </div>

@@ -34,12 +34,13 @@ class Index extends React.Component {
 
   constructor(props) {
     super(props);
-    const { serverSearch, search } = this.props;
+    const { serverSearch, search, router } = this.props;
+    const { keyword = '' } = router?.query;
     // 初始化数据到store中
     const { platform } = this.props.site || {};
-
-    if (platform === 'pc') {
+    if (search.currentKeyword !== keyword) {
       search.resetIndexData();
+      search.currentKeyword = keyword;
     } else {
       serverSearch && serverSearch.indexTopics && search.setIndexTopics(serverSearch.indexTopics);
       serverSearch && serverSearch.indexUsers && search.setIndexUsers(serverSearch.indexUsers);
@@ -56,10 +57,10 @@ class Index extends React.Component {
     const { keyword = '' } = router?.query;
 
     const { platform } = this.props.site || {};
-
-    if (platform === 'pc') {
+    if (search.currentKeyword !== keyword) {
       await search.getSearchData({ hasTopics: false, hasUsers: false, hasThreads: false, search: keyword });
       this.setStepIndex()
+      search.currentKeyword = keyword;
     } else {
       const hasIndexTopics = !!search.indexTopics;
       const hasIndexUsers = !!search.indexUsers;
