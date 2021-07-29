@@ -11,6 +11,7 @@ import Avatar from '@components/avatar';
 import { inject, observer } from 'mobx-react';
 import throttle from '@common/utils/thottle.js';
 import { View, Text } from '@tarojs/components';
+import { isExtFieldsOpen } from '@common/store/login/util';
 
 @inject('site')
 @inject('user')
@@ -86,7 +87,7 @@ class index extends Component {
       })
       .catch((error) => {
         Toast.error({
-          content: error.message || '更新用户信息失败',
+          content: error.Message || '更新用户信息失败',
           hasMask: false,
           duration: 1000,
         });
@@ -124,6 +125,10 @@ class index extends Component {
     Taro.navigateTo({ url: '/subPages/my/edit/paypwd/index' });
   };
 
+  handleGoToAdditionalInfo = () => {
+    Taro.navigateTo({ url: '/subPages/my/edit/additional-info/index' });
+  };
+
   // 渲染修改用户名
   renderInputNickName = () => {
     const { isClickNickName } = this.state;
@@ -133,7 +138,7 @@ class index extends Component {
         <View className={styles.uerInputItem}>
           {isClickNickName ? (
             <Input
-              focus={true}
+              focus
               maxLength={10}
               value={this.user.editNickName}
               onChange={this.handleChangeNickName}
@@ -149,8 +154,10 @@ class index extends Component {
 
   render() {
     const { isConfirm } = this.state;
+    const { user, site } = this.props;
     // 条件都满足时才显示微信
     const IS_WECHAT_ACCESSABLE = this.props.site.wechatEnv !== 'none' && !!this.user.wxNickname;
+    const ISEXT_FIELD_OPENS = isExtFieldsOpen(this.props?.site);
     return (
       <View className={styles.userCenterWrapper}>
         {/* 头部 */}
@@ -202,13 +209,31 @@ class index extends Component {
             </View>
           </View>
           {IS_WECHAT_ACCESSABLE && (
-            <View className={styles.userCenterEditItem} style={{ border: 'none' }}>
+            <View className={styles.userCenterEditItem}>
               <View className={styles.userCenterEditLabel}>
                 <Text className={styles.userLabelName}>微信</Text>
                 <View className={styles.userCenterEditWeChat}>
                   <Avatar size="small" image={this.user.wxHeadImgUrl} name={this.user.wxNickname} />
                   <Text className={styles.wxNickname}>{this.user.wxNickname}</Text>
+                  {
+                    site.isDomainWhiteList
+                    && user.isWhiteLsit
+                    && <Text className={styles.linkText} onClick={() => {
+                      Taro.navigateTo({ url: '/subPages/user/rebind/index' });
+                    }}
+                    >换绑</Text>
+                  }
                 </View>
+              </View>
+            </View>
+          )}
+          {ISEXT_FIELD_OPENS && (
+            <View className={styles.userCenterEditItem} onClick={this.handleGoToAdditionalInfo}>
+              <View className={styles.userCenterEditLabel}>
+                <Text className={styles.userLabelName}>补充信息</Text>
+              </View>
+              <View className={styles.userCenterEditValue}>
+                <Icon name="RightOutlined" size={12} />
               </View>
             </View>
           )}

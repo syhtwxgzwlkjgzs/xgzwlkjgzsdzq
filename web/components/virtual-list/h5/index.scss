@@ -8,3 +8,8 @@
   height: 100%;
 
 }
+
+.ReactVirtualized__List {
+  will-change: initial !important;
+  -webkit-overflow-scrolling: auto !important;
+}
