@@ -279,7 +279,7 @@ class index extends Component {
               >
                 换绑
               </p>
-            )
+            );
           },
           // <p
           //   onClick={() => {

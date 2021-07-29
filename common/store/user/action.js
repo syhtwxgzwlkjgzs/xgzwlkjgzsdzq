@@ -399,7 +399,7 @@ class UserAction extends SiteStore {
     Object.keys(this.userThreads).forEach((pageNum) => {
       const pageDataSet = this.userThreads[pageNum];
 
-      const itemIdx = pageDataSet.findIndex(item => item.threadId === id);
+      const itemIdx = pageDataSet.findIndex((item) => item.threadId === id);
 
       if (itemIdx === -1) return;
 
@@ -410,7 +410,7 @@ class UserAction extends SiteStore {
 
       this.userThreads[pageNum] = [...pageDataSet];
     });
-  }
+  };
 
   // 获取用户主题列表的写方法
   // 读写分离，用于阻止多次请求的数据错乱
@@ -452,7 +452,7 @@ class UserAction extends SiteStore {
     this.targetUserThreadsTotalPage = totalPage;
     this.targetUserThreads = {
       ...this.targetUserThreads,
-      [this.targetUserThreads]: pageData,
+      [this.targetUserThreadsPage]: pageData,
     };
     this.targetUserThreadsTotalCount = get(targetUserThreadList, 'data.totalCount', 0);
 
