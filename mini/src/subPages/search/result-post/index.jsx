@@ -27,7 +27,7 @@ class Index extends React.Component {
     const { search, router } = this.props;
     const { keyword = '' } = getCurrentInstance().router.params;
     this.page = 1;
-    await search.getThreadList({ search: keyword, scope: '3' });
+    await search.getThreadList({ search: keyword, scope: '2' });
   }
   getShareData (data) {
     const shareData = data.target?.dataset?.shareData
@@ -62,7 +62,7 @@ class Index extends React.Component {
       this.page += 1;
     }
 
-    await search.getThreadList({ search: keyword, perPage: this.perPage, page: this.page, scope: '3' });
+    await search.getThreadList({ search: keyword, perPage: this.perPage, page: this.page, scope: '2' });
 
     return;
   }

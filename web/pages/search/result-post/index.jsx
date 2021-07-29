@@ -39,7 +39,7 @@ class Index extends React.Component {
     const hasThreads = !!search.threads;
 
     this.page = 1;
-    const res = await search.getThreadList({ search: keyword, scope: '3' });
+    await search.getThreadList({ search: keyword, scope: '2' });
   }
 
   dispatch = async (type, keyword) => {
@@ -51,7 +51,7 @@ class Index extends React.Component {
       this.page += 1;
     }
 
-    await search.getThreadList({ search: keyword, perPage: this.perPage, page: this.page, scope: '3' });
+    await search.getThreadList({ search: keyword, perPage: this.perPage, page: this.page, scope: '2' });
 
     return;
   }

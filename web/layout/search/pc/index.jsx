@@ -270,16 +270,27 @@ class SearchPCPage extends React.Component {
   }
 
   render() {
+    const { isNoData } = this.props.search.dataIndexStatus
+
+    const { indexTopics, indexUsers, indexThreads, indexTopicsError, indexUsersError, indexThreadsError } = this.props.search;
+    const { pageData: topicsPageData } = indexTopics || {};
+    const { pageData: usersPageData } = indexUsers || {};
+    const { pageData: threadsPageData } = indexThreads || {};
+
+    const noMore = !!topicsPageData && !!usersPageData && !!threadsPageData
+
     return (
         <BaseLayout
-          allowRefresh={false}
           onSearch={this.onSearch}
           right={ this.renderRight }
           onScroll={ this.handleScroll }
           jumpTo={this.state.position}
           pageName="search"
-          showRefresh={false}
           className="search-page"
+          onRefresh={() => {}}
+          isShowLayoutRefresh={isNoData && !noMore}
+          loadingText='正在加载'
+          showRefresh={false}
         >
           { this.renderContent() }
         </BaseLayout>

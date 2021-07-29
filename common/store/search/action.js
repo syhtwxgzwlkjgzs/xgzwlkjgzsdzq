@@ -160,7 +160,7 @@ class SearchAction extends SearchStore {
     }
 
     if ( !hasThreads ) {
-      tasks.push(readThreadList({ params: { filter: { search }, perPage: newPerPage, page: 1, scope: '3' } }))
+      tasks.push(readThreadList({ params: { filter: { search }, perPage: newPerPage, page: 1, scope: '2' } }))
     } else {
       tasks.push(Promise.resolve({}))
     }

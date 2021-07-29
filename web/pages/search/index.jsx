@@ -93,11 +93,15 @@ class Index extends React.Component {
   }
 
   dispatch = async (type, data = '') => {
-    const { search } = this.props;
+    const { search, site } = this.props;
 
     if (type === 'refresh') {
       search.getSearchData({ hasTopics: false, hasUsers: false, hasThreads: false });
     } else if (type === 'search') {
+      // 判断，如果是PC端，先执行清除数据操作
+      if (site.platform === 'pc') {
+        search.resetIndexData()
+      }
       this.setState({ searchNoData: false })
       await search.getSearchData({ search: data });
       this.requestAgain()
@@ -110,6 +114,7 @@ class Index extends React.Component {
     const { platform } = this.props.site || {};
     const { isNoData } = this.props.search.dataIndexStatus
 
+    // 若搜索数据为空，在发起一次请求
     if (platform === 'pc' && isNoData) {
       this.setState({ searchNoData: true })
       await this.props.search.getSearchData({ hasTopics: false, hasUsers: false, hasThreads: false });
