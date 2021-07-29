@@ -46,7 +46,7 @@ const PostContent = ({
   // 过滤内容
   const filterContent = useMemo(() => {
     let newContent = content ? s9e.parse(content) : '';
-    // newContent = xss(newContent);
+    newContent = xss(newContent);
     return newContent;
   }, [content]);
 
