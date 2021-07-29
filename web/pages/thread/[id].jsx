@@ -94,6 +94,7 @@ class Detail extends React.Component {
     }
   }
 
+
   updateViewCount = async (id) => {
     const threadId = Number(id);
     const viewCount = await updateViewCountInStores(threadId);
@@ -129,7 +130,7 @@ class Detail extends React.Component {
           const contentStr = htmlToString(text);
           if (contentStr) {
             return contentStr.length > 28 ? `${contentStr.substr(0, 28)}...` : contentStr;
-          };
+          }
         }
 
         const arr = [];

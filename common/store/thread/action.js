@@ -88,7 +88,17 @@ class ThreadAction extends ThreadStore {
     if (code === 0) this.setThreadData(data);
     return ret;
   }
-
+  /**
+   * 图片加载完成后数量加一
+   */
+  @action
+  setContentImgLength() {
+    this.contentImgLength += 1;
+  }
+  @action
+  clearContentImgState() {
+    this.contentImgLength = 0;
+  }
   /**
    * 获取帖子内的附件url
    * @param {number} id 帖子id

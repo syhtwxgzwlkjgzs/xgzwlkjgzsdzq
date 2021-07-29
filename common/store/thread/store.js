@@ -15,7 +15,7 @@ class ThreadStore {
 
   @observable isCommentListError = false;
   @observable isAuthorInfoError = false;
-
+  @observable contentImgLength = 0; // 内容区域的加载完成的图片的个数
   @observable scrollDistance = 0;
 
   // 是否帖子数据准备好
@@ -87,7 +87,7 @@ class ThreadStore {
               return '附件';
           }
         })
-        .filter((item) => !!item)
+        .filter(item => !!item)
         .join('/');
     }
   }

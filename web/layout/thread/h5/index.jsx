@@ -61,6 +61,7 @@ class ThreadH5Page extends React.Component {
       showContent: '',
       // inputValue: '', // 评论内容
       show: false, // 分享海报弹窗
+      contentImgIsReady: false, // 内容区域图片是否加载完成
     };
 
     this.perPage = 20;
@@ -102,27 +103,26 @@ class ThreadH5Page extends React.Component {
   }
 
   componentDidMount() {
-    // 当内容加载完成后，获取评论区所在的位置
-    this.position = this.commentDataRef?.current?.offsetTop - 50;
-
     this.setState({ loadWeiXin: isWeiXin() });
-
-    // 是否定位到评论位置
-    if (this.props?.thread?.isPositionToComment) {
-      // TODO:需要监听帖子内容加载完成事件
-      setTimeout(() => {
-        this.threadBodyRef.current.scrollTo(0, this.position);
-      }, 1000);
-      return;
-    }
-    // 滚动到记录的指定位置
-    this.threadBodyRef.current.scrollTo(0, this.props.thread.scrollDistance);
   }
 
   componentDidUpdate() {
-    // 当内容加载完成后，获取评论区所在的位置
-    if (this.props.thread.isReady) {
+    const { thread } = this.props;
+    // 当图片都加载完成后
+    if (this.state.contentImgIsReady) {
+      // 当内容加载完成后，获取评论区所在的位置
       this.position = this.commentDataRef?.current?.offsetTop - 50;
+      thread.clearContentImgState();
+      // 是否定位到评论位置
+      if (this.props?.thread?.isPositionToComment) {
+      // TODO:需要监听帖子内容加载完成事件
+        setTimeout(() => {
+          this.threadBodyRef.current.scrollTo(0, this.position);
+        }, 1000);
+        return;
+      }
+      // 滚动到记录的指定位置
+      this.threadBodyRef.current.scrollTo(0, this.props.thread.scrollDistance);
     }
   }
 
@@ -130,7 +130,9 @@ class ThreadH5Page extends React.Component {
     // 清空数据
     // this.props?.thread && this.props.thread.reset();
   }
-
+  setContentImgReady = () =>  {
+    this.setState({ contentImgIsReady: true });
+  }
   // 点击信息icon
   onMessageClick() {
     const position = this.flag ? this.position : this.nextPosition;
@@ -732,7 +734,6 @@ class ThreadH5Page extends React.Component {
             </div>
           )}
         </div>
-
         <div
           className={layout.body}
           ref={this.threadBodyRef}
@@ -744,6 +745,7 @@ class ThreadH5Page extends React.Component {
           {isReady ? (
             <RenderThreadContent
               store={threadStore}
+              setContentImgReady={this.setContentImgReady}
               fun={fun}
               onLikeClick={() => this.onLikeClick()}
               onOperClick={type => this.onOperClick(type)}
@@ -851,7 +853,7 @@ class ThreadH5Page extends React.Component {
             <DeletePopup
               visible={this.state.showDeletePopup}
               onClose={() => this.setState({ showDeletePopup: false })}
-              onBtnClick={(type) => this.onBtnClick(type)}
+              onBtnClick={type => this.onBtnClick(type)}
               type='thread'
             ></DeletePopup>
             {/* 举报弹层 */}
