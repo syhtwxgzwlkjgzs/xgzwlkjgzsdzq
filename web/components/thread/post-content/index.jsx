@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import { inject, observer } from 'mobx-react';
 import { Icon, RichText, ImagePreviewer } from '@discuzq/design';
 import { noop } from '../utils';
 import classnames from 'classnames';
@@ -25,6 +26,8 @@ const PostContent = ({
   customHoverBg = false,
   usePointer = true,
   onOpen = noop,
+  updateViewCount = noop,
+  transformer = parsedDom => parsedDom,
   ...props
 }) => {
   // 内容是否超出屏幕高度
@@ -32,7 +35,7 @@ const PostContent = ({
   const [cutContentForDisplay, setCutContentForDisplay] = useState('');
   const [showMore, setShowMore] = useState(false); // 根据文本长度显示"查看更多"
   const [imageVisible, setImageVisible] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState('');
   const ImagePreviewerRef = useRef(null); // 富文本中的图片也要支持预览
   const contentWrapperRef = useRef(null);
 
@@ -51,6 +54,7 @@ const PostContent = ({
   const onShowMore = useCallback(
     (e) => {
       e && e.stopPropagation();
+      updateViewCount();
       if (contentTooLong) {
         // 内容过长直接跳转到详情页面
         onRedirectToDetail && onRedirectToDetail();
@@ -68,7 +72,10 @@ const PostContent = ({
       return;
     }
     e && e.stopPropagation();
-    if(!e?.target?.getAttribute('src')) onRedirectToDetail();
+    // 点击图片不跳转，图片不包含表情
+    if (!(e?.target?.getAttribute('src') && e?.target?.className?.indexOf('qq-emotion') === -1)) {
+      onRedirectToDetail();
+    }
   };
 
   // 显示图片的预览
@@ -80,11 +87,19 @@ const PostContent = ({
 
   // 点击富文本中的图片
   const handleImgClick = (e) => {
-    if(e?.attribs?.src) {
+    updateViewCount();
+    if (e?.attribs?.src) {
       setImageVisible(true);
       setImageUrl(e.attribs.src);
     }
-  }
+  };
+
+  // 点击富文本中的链接
+  const handleLinkClick = () => {
+    updateViewCount();
+    setTimeout(() => { // 等待store更新完成后跳转
+    }, 500);
+  };
 
   // 超过1200个字符，截断文本用于显示
   const getCutContentForDisplay = (maxContentLength) => {
@@ -129,6 +144,8 @@ const PostContent = ({
             content={useShowMore && cutContentForDisplay ? cutContentForDisplay : urlToLink(filterContent)}
             onClick={handleClick}
             onImgClick={handleImgClick}
+            onLinkClick={handleLinkClick}
+            transformer={transformer}
           />
           {imageVisible && (
             <ImagePreviewer
@@ -150,6 +167,6 @@ const PostContent = ({
       )}
     </div>
   );
-}
+};
 
 export default React.memo(PostContent);

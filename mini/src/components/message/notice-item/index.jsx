@@ -21,35 +21,59 @@ import defaultFavicon from '../../../public/dzq-img/default-favicon.png';
 @inject('site')
 @observer
 class Index extends Component {
-  // 获取头像地址,非帖子使用自己的url头像，帖子使用站点logo
+  // 获取头像地址,非账户消息使用自己的url头像，账户消息使用站点logo
   getAvatar = (avatar) => {
     const { type, site } = this.props;
     const url = site?.webConfig?.setSite?.siteFavicon;
-    if (type === 'thread') {
+    if (type === 'account') {
       return url || defaultFavicon;
     }
     return avatar;
   }
 
-  // 针对财务消息，获取后缀提示语
-  getFinancialTips = (item) => {
-    if (item.type === 'rewarded') {
-      if (item.orderType === 3 || item.orderType === 7) return '支付了你';
-      return '打赏了你';
-    }
-    if (item.type === 'receiveredpacket') {
-      return '获取红包';
-    }
-    if (item.type === 'threadrewarded') {
-      return '悬赏了你';
-    }
-    if (item.type === 'threadrewardedexpired') {
-      return `悬赏到期，未领取金额${item.amount}元被退回`;
-    }
-  };
+  // 获取财务消息展示内容
+  getFinancialContent = () => {
+    const { item, site } = this.props;
 
-  // 账号信息前置语
-  getAccountTips = (item) => {
+    let tips = '';
+    switch (item.type) {
+      case 'rewarded':
+        if (item.orderType === 1) return (<>
+          邀请{item.nickname}加入{site?.webConfig?.setSite?.siteName}
+        </>);
+        if (item.orderType === 3 || item.orderType === 7) {
+          tips = '支付了你';
+        } else {
+          tips = '打赏了你';
+        }
+        break;
+      case 'receiveredpacket':
+        tips = '获取红包';
+        break;
+      case 'threadrewarded':
+        tips = '悬赏了你';
+        break;
+      case 'threadrewardedexpired':
+        tips = `悬赏到期，未领取金额${item.amount}元被退回`;
+        break;
+    }
+
+    return (<>
+      在帖子"
+      <View
+        className={`${styles['financial-content']} ${styles['single-line']}`}
+        style={{
+          maxWidth: `90px`,
+          display: 'inline-block',
+          verticalAlign: 'bottom'
+        }}
+        dangerouslySetInnerHTML={{ __html: this.parseHTML() }}
+      />"中{tips}
+    </>)
+  }
+
+  // 帖子消息前置语
+  getThreadTips = (item) => {
     switch (item.type) {
       case 'replied':
         return `回复了你的${item.isFirst ? '主题' : '评论'}`;
@@ -72,8 +96,8 @@ class Index extends Component {
     const { type, item } = this.props;
     let _content = (typeof item.content === 'string' && item.content !== 'undefined') ? item.content : '';
 
-    if (type === 'account') {
-      const tip = `<span class=\"${styles.tip}\">${this.getAccountTips(item)}</span>`;
+    if (type === 'thread') {
+      const tip = `<span class=\"${styles.tip}\">${this.getThreadTips(item)}</span>`;
       _content = tip + _content;
     }
 
@@ -125,7 +149,7 @@ class Index extends Component {
           {/* 头像 */}
           <View
             className={styles.avatar}
-            onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
+            onClick={(e) => this.toUserCenter(e, type !== 'account', item)}
           >
             <UnreadRedDot type='avatar' unreadCount={item.unreadCount}>
               <Avatar image={avatarUrl} name={item.nickname} />
@@ -146,11 +170,11 @@ class Index extends Component {
                 className={classNames(styles.name, {
                   [styles['single-line']]: true,
                 })}
-                onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
+                onClick={(e) => this.toUserCenter(e, type !== 'account', item)}
               >
                 {item.nickname || this.filterTag(item.title) || "用户已删除"}
               </View>
-              {['chat', 'thread'].includes(type) &&
+              {['chat', 'account'].includes(type) &&
                 <View className={styles.time}>{diffDate(item.createdAt)}</View>
               }
               {type === 'financial' &&
@@ -162,20 +186,8 @@ class Index extends Component {
             <View className={classNames(styles.middle)}>
               {/* 财务内容 */}
               {type === 'financial' &&
-                <View
-                  className={styles['content-html']}
-                >
-                  在帖子"
-                  <View
-                    className={`${styles['financial-content']} ${styles['single-line']}`}
-                    style={{
-                      maxWidth: `90px`,
-                      display: 'inline-block',
-                      verticalAlign: 'bottom'
-                    }}
-                    dangerouslySetInnerHTML={{ __html: this.parseHTML() }}
-                  />
-                  "中{this.getFinancialTips(item)}
+                <View className={styles['content-html']}>
+                  {this.getFinancialContent()}
                 </View>
               }
               {/* 私信 */}
@@ -192,7 +204,7 @@ class Index extends Component {
             </View>
 
             {/* 底部 */}
-            {['financial', 'account'].includes(type) &&
+            {['financial', 'thread'].includes(type) &&
               <View className={`${styles.bottom} ${styles.time}`}>
                 {diffDate(item.createdAt)}
               </View>
@@ -210,7 +222,7 @@ Index.propTypes = {
 }
 
 Index.defaultProps = {
-  type: 'thread',
+  type: 'account',
   item: {},
 }
 

@@ -50,7 +50,7 @@ const Index = (props) => {
           {!id ? (
             <UserCenterFllows
               style={{
-                height: 'calc(100% - 60px)',
+                height: 'calc(100% - 80px)',
               }}
               dataSource={dataSource}
               setDataSource={setDataSource}
@@ -64,7 +64,7 @@ const Index = (props) => {
           ) : (
             <UserCenterFllows
               style={{
-                height: 'calc(100% - 60px)',
+                height: 'calc(100% - 80px)',
               }}
               userId={id}
               dataSource={dataSource}

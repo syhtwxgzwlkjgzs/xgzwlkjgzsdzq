@@ -100,7 +100,6 @@ export default inject('threadPost', 'site')(observer(({ type, threadPost, site, 
         filePath: tempFilePath,
         name: 'file',
         header: {
-          'Content-Type': 'multipart/form-data',
           'authorization': `Bearer ${token}`
         },
         formData: formData,

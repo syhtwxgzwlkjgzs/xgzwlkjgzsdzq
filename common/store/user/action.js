@@ -19,6 +19,9 @@ import {
   readUsersDeny,
   wechatRebindQrCodeGen,
   getWechatRebindStatus,
+  getSignInFields,
+  h5Rebind,
+  miniRebind,
 } from '@server';
 import { get } from '../../utils/get';
 import set from '../../utils/set';
@@ -96,15 +99,17 @@ class UserAction extends SiteStore {
       const originBackgroundFilename = this.backgroundUrl?.split('?')[0];
       const nextBackgroundFilename = data.backgroundUrl?.split('?')[0];
 
+      if (originBackgroundFilename === nextBackgroundFilename) {
+        transformedData.backgroundUrl = this.backgroundUrl;
+      }
+    }
+
+    if (data.avatarUrl && this.avatarUrl) {
       const originAvatarFilename = this.avatarUrl?.split('?')[0];
       const nextAvatarFilename = data.avatarUrl?.split('?')[0];
 
       if (originAvatarFilename === nextAvatarFilename) {
         transformedData.avatarUrl = this.avatarUrl;
-      }
-
-      if (originBackgroundFilename === nextBackgroundFilename) {
-        transformedData.backgroundUrl = this.backgroundUrl;
       }
     }
 
@@ -118,10 +123,41 @@ class UserAction extends SiteStore {
     if (!userInfo || userInfo?.code !== 0) {
       return;
     }
+
+    if (!this.id && this.onLoginCallback) {
+      this.onLoginCallback(userInfo.data);
+    }
     const userPermissions = await readPermissions({});
     userInfo?.data && this.diffPicAndUpdateUserInfo(userInfo.data);
     userPermissions?.data && this.setUserPermissions(userPermissions.data);
+
     return userInfo?.code === 0 && userInfo.data;
+  }
+
+  @action
+  diffPicAndUpdateTargetUserInfo(data) {
+    const transformedData = Object.assign({}, data);
+
+    // 如下操作是为了避免因为签名导致的图片重加载问题
+    if (data.backgroundUrl && this.targetUserBackgroundUrl) {
+      const originBackgroundFilename = this.targetUserBackgroundUrl?.split('?')[0];
+      const nextBackgroundFilename = data.backgroundUrl?.split('?')[0];
+
+      if (originBackgroundFilename === nextBackgroundFilename) {
+        transformedData.backgroundUrl = this.targetUserBackgroundUrl;
+      }
+    }
+
+    if (data.avatarUrl && this.targetUserAvatarUrl) {
+      const originAvatarFilename = this.targetUserAvatarUrl?.split('?')[0];
+      const nextAvatarFilename = data.avatarUrl?.split('?')[0];
+
+      if (originAvatarFilename === nextAvatarFilename) {
+        transformedData.avatarUrl = this.targetUserAvatarUrl;
+      }
+    }
+
+    return transformedData;
   }
 
   // 获取指定用户的用户信息，用于获取他人首页
@@ -129,7 +165,7 @@ class UserAction extends SiteStore {
   async getTargetUserInfo(id) {
     this.targetUserId = id;
     const userInfo = await this.getAssignUserInfo(id);
-    this.targetUser = userInfo;
+    this.targetUser = this.diffPicAndUpdateTargetUserInfo(userInfo);
     return userInfo;
   }
 
@@ -181,60 +217,6 @@ class UserAction extends SiteStore {
     }
     this.userFans = { ...this.userFans };
   };
-
-  // @action
-  // getTargetUserFollow = async (id) => {
-  //   const followsRes = await getUserFollow({
-  //     params: {
-  //       page: this.targetUserFollowsPage,
-  //       perPage: 20,
-  //       filter: {
-  //         userId: id,
-  //       },
-  //     },
-  //   });
-
-  //   if (followsRes.code !== 0) {
-  //     console.error(followsRes);
-  //     return;
-  //   }
-
-  //   const pageData = get(followsRes, 'data.pageData', []);
-  //   const totalPage = get(followsRes, 'data.totalPage', 1);
-  //   this.targetUserFollowsTotalPage = totalPage;
-  //   this.targetUserFollows[this.targetUserFollowsPage] = pageData;
-  //   if (this.targetUserFollowsPage <= this.targetUserFollowsTotalPage) {
-  //     this.targetUserFollowsPage += 1;
-  //   }
-  //   this.targetUserFollows = { ...this.targetUserFollows };
-  // }
-
-  // @action
-  // getTargetUserFans = async (id) => {
-  //   const fansRes = await getUserFans({
-  //     params: {
-  //       page: this.targetUserFansPage,
-  //       perPage: 20,
-  //       filter: {
-  //         userId: id,
-  //       },
-  //     },
-  //   });
-
-  //   if (fansRes.code !== 0) {
-  //     console.error(fansRes);
-  //     return;
-  //   }
-
-  //   const pageData = get(fansRes, 'data.pageData', []);
-  //   const totalPage = get(fansRes, 'data.totalPage', 1);
-  //   this.targetUserFansTotalPage = totalPage;
-  //   this.targetUserFans[this.targetUserFansPage] = pageData;
-  //   if (this.targetUserFansPage <= this.targetUserFansTotalPage) {
-  //     this.targetUserFansPage += 1;
-  //   }
-  //   this.targetUserFans = { ...this.targetUserFans };
-  // }
 
   /**
    * 取消屏蔽指定 id 的用户
@@ -402,11 +384,34 @@ class UserAction extends SiteStore {
     return userThreadList;
   };
 
+  /**
+   * 删除指定 id 的用户帖子
+   * @param {*} id
+   */
+  @action
+  deleteUserThreads = (id) => {
+    Object.keys(this.userThreads).forEach((pageNum) => {
+      const pageDataSet = this.userThreads[pageNum];
+
+      const itemIdx = pageDataSet.findIndex((item) => item.threadId === id);
+
+      if (itemIdx === -1) return;
+
+      pageDataSet.splice(itemIdx, 1);
+
+      // 计数减少
+      this.userThreadsTotalCount -= 1;
+
+      this.userThreads[pageNum] = [...pageDataSet];
+    });
+  };
+
   // 获取用户主题列表的写方法
   // 读写分离，用于阻止多次请求的数据错乱
   setUserThreads = async (userThreadList) => {
     const pageData = get(userThreadList, 'data.pageData', []);
     const totalPage = get(userThreadList, 'data.totalPage', 1);
+
     this.userThreadsTotalPage = totalPage;
     this.userThreads = {
       ...this.userThreads,
@@ -441,7 +446,7 @@ class UserAction extends SiteStore {
     this.targetUserThreadsTotalPage = totalPage;
     this.targetUserThreads = {
       ...this.targetUserThreads,
-      [this.targetUserThreads]: pageData,
+      [this.targetUserThreadsPage]: pageData,
     };
     this.targetUserThreadsTotalCount = get(targetUserThreadList, 'data.totalCount', 0);
 
@@ -477,6 +482,7 @@ class UserAction extends SiteStore {
     if (updateAvatarRes.code === 0) {
       this.userInfo.avatarUrl = updateAvatarRes.data.avatarUrl;
       this.userInfo = { ...this.userInfo };
+      this.updateUserThreadsAvatar(updateAvatarRes.data.avatarUrl);
       return updateAvatarRes.data;
     }
 
@@ -484,6 +490,19 @@ class UserAction extends SiteStore {
       Code: updateAvatarRes.code,
       Msg: updateAvatarRes.msg,
     };
+  }
+
+  // 更新头像后，更新用户 threads 列表的 avatar url
+  @action
+  updateUserThreadsAvatar(avatarUrl) {
+    Object.keys(this.userThreads).forEach((key) => {
+      this.userThreads[key].forEach((thread) => {
+        if (!thread.user) {
+          thread.user = {};
+        }
+        thread.user.avatar = avatarUrl;
+      });
+    });
   }
 
   /**
@@ -989,9 +1008,10 @@ class UserAction extends SiteStore {
 
   // 生成微信换绑二维码，仅在 PC 使用
   @action
-  genRebindQrCode = async (scanSuccess = () => {}, scanFail = () => {}) => {
+  genRebindQrCode = async ({ scanSuccess = () => {}, scanFail = () => {}, onTimeOut = () => {}, option = {} }) => {
     clearInterval(this.rebindTimer);
-    const qrCodeRes = await wechatRebindQrCodeGen();
+    this.isQrCodeValid = true;
+    const qrCodeRes = await wechatRebindQrCodeGen(option);
 
     if (qrCodeRes.code === 0) {
       this.rebindQRCode = get(qrCodeRes, 'data.base64Img');
@@ -1007,8 +1027,12 @@ class UserAction extends SiteStore {
 
       // 5min，二维码失效
       setTimeout(() => {
+        this.isQrCodeValid = false;
         clearInterval(this.rebindTimer);
-      }, 5 * 60 * 1000);
+        if (onTimeOut) {
+          onTimeOut();
+        }
+      }, 4 * 60 * 1000);
 
       return qrCodeRes.data;
     }
@@ -1017,6 +1041,76 @@ class UserAction extends SiteStore {
       Code: qrCodeRes.code,
       Msg: qrCodeRes.msg,
     };
+  };
+
+  // mini 换绑接口
+  @action
+  rebindWechatMini = async ({ jsCode, iv, encryptedData, sessionToken }) => {
+    try {
+      const miniRebindResp = await miniRebind({
+        data: {
+          jsCode,
+          iv,
+          encryptedData,
+          sessionToken,
+        },
+      });
+
+      if (miniRebindResp.code === 0) {
+        return miniRebindResp;
+      }
+
+      // 不为零，实际是错误
+      throw miniRebindResp;
+    } catch (err) {
+      if (err.code) {
+        throw {
+          Code: err.code,
+          Msg: err.msg,
+        };
+      }
+
+      throw {
+        Code: 'rbd_9999',
+        Msg: '网络错误',
+        err,
+      };
+    }
+  };
+
+  // h5 换绑接口
+  @action
+  rebindWechatH5 = async ({ code, sessionId, sessionToken, state }) => {
+    try {
+      const h5RebindResp = await h5Rebind({
+        params: {
+          code,
+          sessionId,
+          sessionToken,
+          state,
+        },
+      });
+
+      if (h5RebindResp.code === 0) {
+        return h5RebindResp;
+      }
+
+      // 不为零，实际是错误
+      throw h5RebindResp;
+    } catch (err) {
+      if (err.code) {
+        throw {
+          Code: err.code,
+          Msg: err.msg,
+        };
+      }
+
+      throw {
+        Code: 'rbd_9999',
+        Msg: '网络错误',
+        err,
+      };
+    }
   };
 
   // 轮询重新绑定结果
@@ -1037,9 +1131,53 @@ class UserAction extends SiteStore {
     if (scanStatus.code !== 0) {
       if (scanStatus.msg !== '扫码中') {
         if (scanFail) {
-          scanFail();
+          scanFail(scanStatus);
         }
       }
+    }
+  };
+
+  // 获取用户注册扩展信息
+  @action
+  getUserSigninFields = async () => {
+    let signinFieldsResp = {
+      code: 0,
+      data: [],
+    };
+
+    const safeParse = (value) => {
+      try {
+        return JSON.parse(value);
+      } catch (e) {
+        console.error(e);
+        console.error('解析JSON错误', value);
+        return value;
+      }
+    };
+
+    try {
+      signinFieldsResp = await getSignInFields();
+    } catch (e) {
+      console.error(e);
+      throw {
+        Code: 'usr_9999',
+        Message: '网络错误',
+      };
+    }
+    if (signinFieldsResp.code === 0) {
+      this.userSigninFields = signinFieldsResp.data.map((item) => {
+        if (!item.fieldsExt) {
+          item.fieldsExt = '';
+        } else {
+          item.fieldsExt = safeParse(item.fieldsExt);
+        }
+        return item;
+      });
+    } else {
+      throw {
+        Code: signinFieldsResp.code,
+        Message: signinFieldsResp.msg,
+      };
     }
   };
 
@@ -1048,6 +1186,7 @@ class UserAction extends SiteStore {
   clearWechatRebindTimer = () => {
     clearInterval(this.rebindTimer);
     this.rebindQRCode = null;
+    this.isQrCodeValid = true;
   };
 }
 

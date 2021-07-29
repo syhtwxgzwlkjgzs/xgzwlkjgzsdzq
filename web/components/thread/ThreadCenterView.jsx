@@ -35,7 +35,8 @@ const Index = (props) => {
       onClick,
       onPay,
       onOpen,
-      platform
+      platform,
+      updateViewCount
     } = props
 
     // 标题显示37个字符
@@ -65,7 +66,7 @@ const Index = (props) => {
               {text && <PostContent
                 onContentHeightChange={props.onContentHeightChange}
                 content={text}
-                onPay={onPay}
+                updateViewCount={updateViewCount}
                 useShowMore={!openedMore}
                 onRedirectToDetail={onClick}
                 onOpen={onOpen}/>
@@ -82,18 +83,21 @@ const Index = (props) => {
                     isPay={needPay}
                     status={videoData.status}
                     onVideoReady={props.onVideoReady}
+                    updateViewCount={updateViewCount}
                   />
                 </WrapperView>
                 
               )}
               {imageData?.length > 0 && (
-                  <ImageDisplay 
+                  <ImageDisplay
                       platform={props.platform} 
                       imgData={imageData} 
                       isPay={needPay}
                       onPay={onPay}
                       onClickMore={onClick} 
-                      onImageReady={props.onImageReady}/>
+                      onImageReady={props.onImageReady}
+                      updateViewCount={updateViewCount}
+                  />
                   )
               }
               {rewardData && <Packet
@@ -108,8 +112,8 @@ const Index = (props) => {
                   title={goodsData.title}
                   onClick={onClick}
               />}
-              {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} />}
-              {fileData?.length > 0 && <AttachmentView threadId={threadId} attachments={fileData} onPay={onPay} isPay={needPay} />}
+              {audioData && <AudioPlay url={audioData.mediaUrl} isPay={needPay} onPay={onPay} updateViewCount={updateViewCount}/>}
+              {fileData?.length > 0 && <AttachmentView threadId={threadId} attachments={fileData} onPay={onPay} isPay={needPay} updateViewCount={updateViewCount}/>}
           </>
         );
     }

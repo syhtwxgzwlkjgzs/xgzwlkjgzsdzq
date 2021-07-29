@@ -124,8 +124,19 @@ class Index extends React.Component {
       backgroundColor: '#ffffff'
     });
   }
+
+  resetData = () => {
+    this.props.index.resetHomeThreadData()
+    this.page = 1
+  }
+
   componentDidMount() {
     this.setNavigationBarStyle();
+
+    this.resetData()
+    this.props.user.onLoginCallback = () => {
+      this.resetData()
+    }
   }
 
   render() {

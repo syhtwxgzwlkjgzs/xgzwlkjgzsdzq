@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { arrTrans, getWindowHeight } from './utils';
 import List from './List';
+import { inject, observer } from 'mobx-react';
+import { useMemo } from 'react';
 
 /**
  * 列表组件，集成上拉刷新能力
@@ -13,7 +15,8 @@ import List from './List';
 const VirtualList = ({
   data,
   isClickTab,
-  wholePageIndex
+  wholePageIndex,
+  index: indexStore
 }) => {
   const [dataSource, setDataSource] = useState([]);
   const windowHeight = useRef(null)
@@ -25,15 +28,54 @@ const VirtualList = ({
         resetAllData()
       } else {
         const arr = arrTrans(10, data)
-        const length = arr.length
-        if (arr.length) {
-          const newArr = dataSource.slice()
-          newArr.push(arr[length - 1]) 
-          setDataSource(newArr)    
+        const { changeInfo } = indexStore
+
+        if (changeInfo) {
+          const { type = '' } = changeInfo
+          if (type === 'delete' || type === 'add' || type === 'edit' || type === 'pay') {
+            setDataSource(arr) 
+          }
+
+          indexStore.changeInfo = null
+        } else {
+          const length = arr.length
+          if (length && data.length > arrLength) {
+            if (arrLength === 0) {
+              setDataSource(arr)
+            } else {
+              const newArr = dataSource.slice()
+              newArr.push(arr[length - 1]) 
+              setDataSource(newArr)
+            }
+          }
+        }
+      } 
+  }, [data?.length, indexStore.changeInfo])
+
+
+  const getThreadInfo = (threadId) => {
+    let pIndex = -1
+    let sIndex = -1
+    let newArr = [ ...dataSource ];
+    newArr.forEach((subArr, index) => {
+      for(let i = 0; i < subArr.length; i++) {
+        if(subArr[i].threadId === threadId) {
+          pIndex = index
+          sIndex = i
         }
       }
-    
-  }, [data?.length])
+    });
+
+    return { pIndex, sIndex }
+  }
+
+  const arrLength = useMemo(() => {
+    let length = 0
+    dataSource.forEach(item => {
+      length += item.length
+    })
+    return length
+  }, [dataSource])
 
 //   通知子组件去监听
   useEffect(() => {
@@ -61,24 +103,24 @@ const VirtualList = ({
     }
 
   const dispatch = (threadId, updatedThreadData) => {
-    if(!threadId || !updatedThreadData) return;
+    // if(!threadId || !updatedThreadData) return;
 
-    let newArr = [ ...dataSource ];
-    newArr.forEach((subArr) => {
-      for(let i = 0; i < subArr.length; i++) {
-        if(subArr[i].threadId === threadId) {
-          subArr[i] = updatedThreadData;
-          break;
-        }
-      }
-    });
-    setDataSource(newArr);
+    // let newArr = [ ...dataSource ];
+    // newArr.forEach((subArr) => {
+    //   for(let i = 0; i < subArr.length; i++) {
+    //     if(subArr[i].threadId === threadId) {
+    //       subArr[i] = updatedThreadData;
+    //       break;
+    //     }
+    //   }
+    // });
+    // setDataSource(newArr);
   }
 
   return (
       <>
         {
-            !isClickTab && <List 
+            (!isClickTab && dataSource?.length > 0) && <List 
                 ref={(e) => { listRef.current = e }}
                 dataSource={dataSource} 
                 wholePageIndex={wholePageIndex} 
@@ -91,4 +133,5 @@ const VirtualList = ({
     
   );
 }
-export default VirtualList;
+
+export default inject('index')(observer(VirtualList));

@@ -2,6 +2,9 @@ import { observable, computed } from 'mobx';
 import { get } from '../../utils/get';
 import { defaultOperation } from '../../constants/const';
 import { THREAD_TYPE } from '../../constants/thread-post';
+import { USERNAME_WHITE_LIST } from '../../constants/site';
+
+const noop = () => {};
 
 class UserStore {
   constructor(props) {
@@ -9,6 +12,9 @@ class UserStore {
   }
 
   rebindTimer = null;
+
+  // login 监听方法，由外层实现
+  @observable onLoginCallback = noop;
 
   @observable userInfo = null;
   @observable loginStatus = false;
@@ -44,12 +50,17 @@ class UserStore {
   // 换绑 QRCode
   @observable rebindQRCode = null;
 
+  // 换绑 QRCode是否有效
+  @observable isQrCodeValid = true;
+
+  // 用户注册扩展信息
+  @observable userSigninFields = [];
+
   // 检索的目标用户，非自己
   @observable targetUser = null;
 
   // 检索的目标用户id
   @observable targetUserId = null;
-
 
   @observable targetUserThreads = {};
   @observable targetUserThreadsPage = 1;
@@ -88,13 +99,17 @@ class UserStore {
   @observable userShieldTotalPage = 1; // 总页数
   @observable userShieldTotalCount = 0; // 总条数
 
-
   @computed get userStatus() {
     return get(this.userInfo, 'status');
   }
   // 是否能使用钱包支付
   @computed get canWalletPay() {
     return get(this.userInfo, 'canWalletPay');
+  }
+
+  // 用户是否是白名单
+  @computed get isWhiteLsit() {
+    return USERNAME_WHITE_LIST.includes(this.username);
   }
 
   @computed get id() {
@@ -131,6 +146,11 @@ class UserStore {
     return get(this.userInfo, 'backgroundUrl');
   }
 
+  // 获取用户原背景图
+  @computed get originalBackGroundUrl() {
+    return get(this.userInfo, 'originalBackGroundUrl');
+  }
+
   // 用户签名
   @computed get signature() {
     return get(this.userInfo, 'signature');
@@ -139,6 +159,10 @@ class UserStore {
   // 用户头像
   @computed get avatarUrl() {
     return get(this.userInfo, 'avatarUrl');
+  }
+  // 用户原头像
+  @computed get originalAvatarUrl() {
+    return get(this.userInfo, 'originalAvatarUrl');
   }
 
   // 用户手机号
@@ -181,7 +205,6 @@ class UserStore {
     return get(this.userInfo, 'wxHeadImgUrl');
   }
 
-
   // 用户是否可以编辑用户名
   // 规则为一年一次
   @computed get canEditUsername() {
@@ -218,6 +241,11 @@ class UserStore {
     return get(this.targetUser, 'backgroundUrl');
   }
 
+  // 获取他人原背景图
+  @computed get targetOriginalBackGroundUrl() {
+    return get(this.targetUser, 'originalBackGroundUrl');
+  }
+
   // 目标用户签名
   @computed get targetUserSignature() {
     return get(this.targetUser, 'signature');
@@ -226,6 +254,11 @@ class UserStore {
   // 目标用户头像
   @computed get targetUserAvatarUrl() {
     return get(this.targetUser, 'avatarUrl');
+  }
+
+  // 获取他人原头像
+  @computed get targetOriginalAvatarUrl() {
+    return get(this.targetUser, 'originalAvatarUrl');
   }
 
   // 目标用户手机号
@@ -247,7 +280,6 @@ class UserStore {
   @computed get isAdmini() {
     return get(this.userInfo, 'group.pid') === 1;
   }
-
 
   // 发帖扩展的权限
   @computed get threadExtendPermissions() {

@@ -5,6 +5,7 @@ module.exports = {
     ['taro', {
       framework: 'react',
       ts: false,
+      useBuiltIns: false
     }],
   ],
   plugins: [
@@ -12,7 +13,7 @@ module.exports = {
       "@discuzq/discuz-babel-plugin-import",
       {
         "libraryName": "@discuzq/design",
-        "libraryDirectory": "dist/components"
+        "libraryDirectory": "dist-pure/components"
       }
     ]
   ]

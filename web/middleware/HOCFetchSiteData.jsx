@@ -3,7 +3,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import isServer from '@common/utils/is-server';
 import getPlatform from '@common/utils/get-platform';
-import { readForum, readUser, readPermissions } from '@server';
+import { readForum, readUser, readPermissions, readEmoji } from '@server';
 import Router from '@discuzq/sdk/dist/router';
 import { withRouter } from 'next/router';
 import clearLoginStatus from '@common/utils/clear-login-status';
@@ -35,6 +35,7 @@ import LoginHelper from '@common/utils/login-helper';
 export default function HOCFetchSiteData(Component, _isPass) {
   @inject('site')
   @inject('user')
+  @inject('emotion')
   @observer
   class FetchSiteData extends React.Component {
     // 应用初始化
@@ -52,6 +53,10 @@ export default function HOCFetchSiteData(Component, _isPass) {
         if (isServer()) {
           const { headers } = ctx.req;
           platform = (headers && !typeofFn.isEmptyObject(headers)) ? getPlatform(headers['user-agent']) : 'static';
+
+          // 请求并保持表情数据
+          readEmoji({}, ctx);
+
           // 获取站点信息
           siteConfig = await readForum({}, ctx);
           serverSite = {
@@ -59,7 +64,6 @@ export default function HOCFetchSiteData(Component, _isPass) {
             closeSite: siteConfig.code === -3005 ? siteConfig.data : null,
             webConfig: siteConfig && siteConfig.data || null,
           };
-
           // 当站点信息获取成功，进行当前用户信息查询
           if (siteConfig && siteConfig.code === 0 && siteConfig?.data?.user?.userId) {
             userInfo = await readUser({
@@ -97,14 +101,18 @@ export default function HOCFetchSiteData(Component, _isPass) {
 
     constructor(props) {
       super(props);
+      this.handleWxShare = this.handleWxShare.bind(this);
+
       let isNoSiteData;
-      const { serverUser, serverSite, user, site } = props;
+      const { serverUser, serverSite, serverEmotion, user, site, emotion } = props;
 
       serverSite && serverSite.platform && site.setPlatform(serverSite.platform);
       serverSite && serverSite.closeSite && site.setCloseSiteConfig(serverSite.closeSite);
       serverSite && serverSite.webConfig && site.setSiteConfig(serverSite.webConfig);
       serverUser && serverUser.userInfo && user.setUserInfo(serverUser.userInfo);
       serverUser && serverUser.userPermissions && user.setUserPermissions(serverUser.userPermissions);
+      serverUser && serverUser.userPermissions && user.setUserPermissions(serverUser.userPermissions);
+      serverEmotion && serverEmotion.emojis && emotion.setEmoji(serverEmotion.emojis);
 
       if (!isServer()) {
         isNoSiteData = !((site && site.webConfig));
@@ -119,9 +127,14 @@ export default function HOCFetchSiteData(Component, _isPass) {
 
     async componentDidMount() {
       const { isNoSiteData } = this.state;
-      const { serverUser, serverSite, user, site } = this.props;
+      const { serverUser, serverSite, user, site, emotion } = this.props;
       let siteConfig;
       let loginStatus = false;
+
+      // 请求并保持表情数据
+      if (!emotion.emojis?.length) {
+        emotion.fetchEmoji()
+      }
 
       // 设置平台标识
       site.setPlatform(getPlatform(window.navigator.userAgent));
@@ -131,7 +144,7 @@ export default function HOCFetchSiteData(Component, _isPass) {
         if (!siteConfig) {
           const result = await readForum({});
           result.data && site.setSiteConfig(result.data);
-          
+
           // 设置全局状态
           this.setAppCommonStatus(result);
           siteConfig = result.data || null;
@@ -168,14 +181,86 @@ export default function HOCFetchSiteData(Component, _isPass) {
       }
       this.setState({ isPass: defaultPass });
 
-      // 初始化分享配置
+      // 初始化微信jssdk配置
       const isInit = await initWXSDK(siteConfig && siteConfig.passport && siteConfig.passport.offiaccountOpen);
-      if ( isInit && siteConfig && siteConfig.setSite ) {
-        const {setSite} = siteConfig;
-        const {siteName, siteIntroduction, siteFavicon} = setSite;
-        setWxShare(siteName, siteIntroduction, window.location.href, siteFavicon);
+      if (isInit) {
+
+        // 微信分享全局处理
+        // step1: 初始化分享配置，需要等forum接口及offiaccount/jssdk接口返回并完成wx.config后执行
+        this.handleWxShare(this.props.router.asPath);
+        // step2: 路由守卫，每次路由变更后根据分享规则重新进行分享配置
+        this.props.router.events.on('routeChangeComplete', this.handleWxShare);
+
       }
-      
+    }
+
+    // 每次跳转，重新进行微信分享设置：（分享规则：https://docs.qq.com/sheet/DYWpnQkZZZFR3YWN3）
+    handleWxShare(route) {
+      if (!(window.wx && window.wx.hasDoneConfig)) {
+        return;
+      }
+
+      const { user, site } = this.props;
+      const { userInfo } = user;
+      const { webConfig: { setSite } } = site;
+      const { siteName, siteIntroduction, siteHeaderLogo } = setSite;
+      const { nickname, avatarUrl, signature, id } = userInfo;
+
+      // 默认分享标题
+      let title = document.title;
+      // 默认分享描述内容：站点介绍前35个字符 + ‘...’
+      let desc = siteIntroduction ?
+      (siteIntroduction.length > 35 ? `${siteIntroduction.substr(0, 35)}...` : siteIntroduction) :
+      '在这里，发现更多精彩内容';
+      // 默认分享链接
+      let link = window.location.href;
+      // 默认分享图片
+      let img = siteHeaderLogo;
+
+      /**
+       * 不适用默认分享，需要特殊处理的页面
+       */
+
+      // 详情页分享逻辑较复杂，已在业务单独处理
+      if (route.match(/\/thread\/\d+/)) {
+        return;
+      }
+
+      // 他人主页 - 业务处理
+      if (route.match(/\/user\/\d+/)) {
+        return;
+      }
+
+      // 我的主页
+      if (route === '/my') {
+        if (nickname) {
+          title = `${nickname}的主页`;
+          img = avatarUrl;
+          desc = signature ?
+          (signature.length > 35 ? `${signature.substr(0, 35)}...` : signature) :
+          '在这里，发现更多精彩内容';
+          link = `${window.location.origin}/user/${id}`;
+        }
+      }
+
+      // 注册、登录、付费加入页
+      if (route.includes('/forum/partner-invite') || route.match(/\/user\/(username|wx|phone)-login/) || route.includes('/user/register')) {
+        title = `邀请您加入${siteName}`;
+      }
+
+      // 首页、推广邀请
+      if (route.includes('/invite') || route === '/') {
+        title = `${nickname}邀请您加入${siteName}`;
+      }
+
+      // 私聊页面分享出去点击访问消息模块首页
+      if (route.includes('/message?page=chat')) {
+        title = `我的私信 - ${siteName}`;
+        link = `${window.location.origin}/message`;
+      }
+
+      // 设置分享
+      setWxShare(title, desc, link, img);
     }
 
     setAppCommonStatus(result) {
@@ -228,7 +313,9 @@ export default function HOCFetchSiteData(Component, _isPass) {
         case JUMP_TO_PAY_SITE:// 到付费加入页面
           LoginHelper.saveAndRedirect('/forum/partner-invite');
           break;
-        default: Router.redirect({ url: '/500' });
+        default:
+          site.setErrPageType('site');
+          Router.redirect({ url: '/500' });
           break;
       }
     }

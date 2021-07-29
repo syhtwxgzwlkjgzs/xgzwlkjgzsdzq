@@ -56,6 +56,18 @@ class MyDocument extends Document {
             <NextScript/>
         </body>
         <script dangerouslySetInnerHTML={{__html: `
+          var appid = '500D36509CE649E88446FB4E7A51B221';
+          var url = 'http://sdk.talkingdata.com/app/h5/v1?appid=' + appid + '&vn=' + 'discuzq3.0' + '&vc=' + 'DISCUZ_CONFIG_VERSION';
+          if ( window.location.protocol.indexOf('https') != -1 ) {
+            url = 'https://jic.talkingdata.com/app/h5/v1?appid=' + appid + '&vn=' + 'discuzq3.0' + '&vc=' + 'DISCUZ_CONFIG_VERSION';
+          }
+          var talkingdata = document.createElement('script');
+          talkingdata.type = 'text/javascript';
+          talkingdata.async = true;
+          talkingdata.src = url;
+          document.getElementsByTagName('body')[0].appendChild(talkingdata);
+        `}}/>
+        <script dangerouslySetInnerHTML={{__html: `
           window.sessionStorage.setItem('__TD_td_channel', window.location.hostname.replace(/\./g, '_'));
           var tdjs = document.createElement('script');
           tdjs.type = 'text/javascript';
@@ -103,6 +115,7 @@ class MyDocument extends Document {
         <script async={true} src="https://mapapi.qq.com/web/mapComponents/geoLocation/v/geolocation.min.js"></script>
         {/* 编辑器markdown依赖 */}
         <script async={true} src="https://cdn.jsdelivr.net/npm/@discuzq/vditor@1.0.22/dist/js/lute/lute.min.js" ></script>
+        <script src="/js/cos-document-preview-sdk-v0.1.1.js"></script>
         {this.createMonitor()}
       </Html>
     );

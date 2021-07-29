@@ -5,6 +5,7 @@ import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import HOCTencentCaptcha from '@middleware/HOCTencentCaptcha';
 import ViewAdapter from '@components/view-adapter';
 import { inject, observer } from 'mobx-react';
+import Redirect from '@components/redirect';
 
 @inject('site')
 @observer
@@ -17,8 +18,10 @@ class EditMobilePage extends React.Component {
             <UserCenterEditMobile {...this.props} />
           </div>
         }
-        pc={null}
-        title={`修改手机`}
+        pc={
+          <Redirect jumpUrl={'/my/edit'} />
+        }
+        title={'修改手机'}
       />
     );
   }

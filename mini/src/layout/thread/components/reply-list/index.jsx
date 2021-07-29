@@ -13,12 +13,12 @@ import { handleLink } from '@components/thread/utils';
 import Router from '@discuzq/sdk/dist/router';
 import { debounce } from '@common/utils/throttle-debounce';
 import { urlToLink } from '@common/utils/replace-url-to-a';
+import PostContent from '@components/thread/post-content';
 
 @observer
 export default class ReplyList extends React.Component {
   // 跳转至评论详情
-  toCommentDetail() {
-  }
+  toCommentDetail() {}
 
   likeClick() {
     typeof this.props.likeClick === 'function' && this.props.likeClick();
@@ -65,17 +65,68 @@ export default class ReplyList extends React.Component {
     }
   }
 
+  transformer = (parsedDom) => {
+    const element =
+      this.props.data.commentUserId && this.props?.data?.commentUser ? (
+        <View className={styles.commentUser}>
+          <View
+            className={styles.replyedAvatar}
+            onClick={() => {
+              this.avatarClick(3);
+            }}
+          >
+            <Avatar
+              className={styles.avatar}
+              image={
+                (this.props.data.commentUser.nickname || this.props.data.commentUser.userName) &&
+                this.props.data.commentUser.avatar
+              }
+              name={this.props.data.commentUser.nickname || this.props.data.commentUser.userName || '异'}
+              circle={true}
+              size="small"
+            ></Avatar>
+          </View>
+          <Text
+            className={styles.replyedUserName}
+            onClick={() => {
+              this.avatarClick(3);
+            }}
+          >
+            {this.props.data.commentUser.nickname || this.props.data.commentUser.userName || '用户异常'}
+          </Text>
+        </View>
+      ) : (
+        ''
+      );
+
+    parsedDom.unshift(element);
+
+    return parsedDom;
+  };
+
+  toCommentDetail = () => {
+    typeof this.props.toCommentDetail === 'function' && this.props.toCommentDetail()
+  }
+
   render() {
     const { canLike, canDelete, canHide } = this.generatePermissions(this.props.data);
+    const { groups } = this.props.data?.user || {};
 
     // 评论内容是否通过审核
     const isApproved = this.props?.data?.isApproved === 1;
 
     return (
       <View className={styles.replyList}>
-        <View className={styles.replyListAvatar} onClick={() => {this.avatarClick(2)}}>
+        <View
+          className={styles.replyListAvatar}
+          onClick={() => {
+            this.avatarClick(2);
+          }}
+        >
           <Avatar
-            image={(this.props.data?.user?.nickname || this.props.data?.user?.userName) && this.props?.data?.user?.avatar}
+            image={
+              (this.props.data?.user?.nickname || this.props.data?.user?.userName) && this.props?.data?.user?.avatar
+            }
             name={this.props?.data?.user?.nickname || this?.props?.data?.user?.userName || '异'}
             circle={true}
             size="small"
@@ -84,9 +135,14 @@ export default class ReplyList extends React.Component {
         <View className={styles.replyListContent}>
           <View className={styles.replyListContentText}>
             <View className={styles.replyListName}>
+              <View className={styles.userInfo}>
                 <View className={styles.replyListName} onClick={() => {this.avatarClick(2)}}>
                     {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
                 </View>
+                {!!groups?.isDisplay  && (
+                  <View className={styles.groups}>{groups?.name || groups?.groupName}</View>
+                )}
+              </View>
                 {!isApproved ? (
                   <View className={styles.isApproved}>审核中</View>
                 ) : (
@@ -94,39 +150,22 @@ export default class ReplyList extends React.Component {
                 )}
             </View>
             <View className={styles.replyListText}>
-              {/* 二级回复用户 */}
-              {this.props.data.commentUserId && this.props?.data?.commentUser ? (
-                <View className={styles.commentUser}>
-                  <View className={styles.replyedAvatar} onClick={() => {this.avatarClick(3)}}>
-                    <Avatar
-                      className={styles.avatar}
-                      image={(this.props.data.commentUser.nickname || this.props.data.commentUser.userName) && this.props.data.commentUser.avatar}
-                      name={this.props.data.commentUser.nickname || this.props.data.commentUser.userName || '异'}
-                      circle={true}
-                      size="small"
-                    ></Avatar>
-                  </View>
-                  <Text className={styles.replyedUserName} onClick={() => {this.avatarClick(3)}}>
-                    {this.props.data.commentUser.nickname || this.props.data.commentUser.userName || '用户异常'}
-                  </Text>
-                </View>
-              ) : (
-                ''
-              )}
               {/* 回复内容 */}
-              <RichText
-                className={classNames(styles.content, this.props.isShowOne && styles.isShowOne)}
-                content={this.filterContent()}
-                onClick={this.handleClick.bind(this)}
-              />
+              <View className={classNames(styles.content)}>
+                <PostContent
+                  onRedirectToDetail={() => this.toCommentDetail()}
+                  useShowMore={!!this.props.isShowOne}
+                  content={this.props?.data?.content}
+                  customHoverBg={true}
+                  transformer={this.transformer}
+                ></PostContent>
+              </View>
 
               {/* 图片展示 */}
-              {this.props.data?.images || this.props.data?.attachments ? (
+              {(this.props.data?.images?.length || this.props.data?.attachments?.length) && (
                 <View className={styles.imageDisplay}>
                   <ImageDisplay platform="h5" imgData={this.props.data.images || this.props.data.attachments} />
                 </View>
-              ) : (
-                ''
               )}
             </View>
           </View>

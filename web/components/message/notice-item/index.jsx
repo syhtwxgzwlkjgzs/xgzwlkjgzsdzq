@@ -5,7 +5,7 @@
  * 未读私信内容，在头像上展示未读信息条数，超过99条，则显示99+
  * 点击进入消息页面
  *
- * 帖子通知，原网的系统通知，
+ * 账号消息（系统通知）
  * 头像默认为Q的头像，昵称默认为“内容通知”
  * 通知类型包括：编辑、举报、指定、精华、删除、注册申请、欢迎词、角色变更
  * 左滑出现删除按钮，点击删除可删除通知内容
@@ -14,7 +14,7 @@
  * 内容区显示：用户头像、名称、金额、内容、时间（12px）
  * 注：帖子内容中默认显示标题，如果没有标题则显示内容，长度限制为90px
  *
- * 账号消息，@、点赞、回复主题、回复评论
+ * 帖子通知，@、点赞、回复主题、回复评论
  *
  */
 import React, { Component } from 'react';
@@ -34,35 +34,59 @@ import UnreadRedDot from '@components/unread-red-dot';
 @inject('site')
 @observer
 class Index extends Component {
-  // 获取头像地址,非帖子使用自己的url头像，帖子使用站点logo
+  // 获取头像地址,非账号消息使用自己的url头像，账号消息使用站点logo
   getAvatar = (avatar) => {
     const { type, site } = this.props;
     const url = site?.webConfig?.setSite?.siteFavicon;
-    if (type === 'thread') {
+    if (type === 'account') {
       return url || '/dzq-img/default-favicon.png';
     }
     return avatar;
   };
 
-  // 针对财务消息，获取后缀提示语
-  getFinancialTips = (item) => {
-    if (item.type === 'rewarded') {
-      if (item.orderType === 3 || item.orderType === 7) return '支付了你';
-      return '打赏了你';
-    }
-    if (item.type === 'receiveredpacket') {
-      return '获取红包';
-    }
-    if (item.type === 'threadrewarded') {
-      return '悬赏了你';
-    }
-    if (item.type === 'threadrewardedexpired') {
-      return `悬赏到期，未领取金额${item.amount}元被退回`;
-    }
-  };
+  // 获取财务消息展示内容
+  getFinancialContent = () => {
+    const { item, site } = this.props;
 
-  // 账号信息前置语
-  getAccountTips = (item) => {
+    let tips = '';
+    switch (item.type) {
+      case 'rewarded':
+        if (item.orderType === 1) return (<>
+          邀请{item.nickname}加入{site?.webConfig?.setSite?.siteName}
+        </>);
+        if (item.orderType === 3 || item.orderType === 7) {
+          tips = '支付了你';
+        } else {
+          tips = '打赏了你';
+        }
+        break;
+      case 'receiveredpacket':
+        tips = '获取红包';
+        break;
+      case 'threadrewarded':
+        tips = '悬赏了你';
+        break;
+      case 'threadrewardedexpired':
+        tips = `悬赏到期，未领取金额${item.amount}元被退回`;
+        break;
+    }
+
+    return (<>
+      在帖子"
+      <span
+        className={`${styles['financial-content']} ${styles['single-line']}`}
+        style={{
+          maxWidth: `${site.isPC ? '400px' : '90px'}`,
+          display: 'inline-block',
+          verticalAlign: 'bottom',
+        }}
+        dangerouslySetInnerHTML={{ __html: this.parseHTML() }}
+      />"中{tips}
+    </>)
+  }
+
+  // 帖子消息前置语
+  getThreadTips = (item) => {
     switch (item.type) {
       case 'replied':
         return `回复了你的${item.isFirst ? '主题' : '评论'}`;
@@ -85,8 +109,8 @@ class Index extends Component {
     const { type, item } = this.props;
     let _content = (typeof item.content === 'string' && item.content !== 'undefined') ? item.content : '';
 
-    if (type === 'account') {
-      const tip = `<span class=\"${styles.tip}\">${this.getAccountTips(item)}</span>`;
+    if (type === 'thread') {
+      const tip = `<span class=\"${styles.tip}\">${this.getThreadTips(item)}</span>`;
       _content = tip + _content;
     }
 
@@ -130,15 +154,15 @@ class Index extends Component {
           {/* 头像 */}
           <div
             className={classNames(styles.avatar, {
-              [styles['unset-cursor']]: type === 'thread' || !item.nickname || !item.userId
+              [styles['unset-cursor']]: type === 'account' || !item.nickname || !item.userId
             })}
-            onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
+            onClick={(e) => this.toUserCenter(e, type !== 'account', item)}
           >
 
             {/* 未读消息红点 */}
             <UnreadRedDot type='avatar' unreadCount={item.unreadCount}>
               <Avatar
-                isShowUserInfo={isPC && item.nickname && type !== 'thread'}
+                isShowUserInfo={isPC && item.nickname && type !== 'account'}
                 userId={item.userId}
                 image={avatarUrl}
                 name={item.nickname}
@@ -163,14 +187,14 @@ class Index extends Component {
               <div
                 className={classNames(styles.name, {
                   [styles['single-line']]: true,
-                  [styles['unset-cursor']]: type === 'thread' || !item.nickname || !item.userId
+                  [styles['unset-cursor']]: type === 'account' || !item.nickname || !item.userId
                 })}
-                onClick={(e) => this.toUserCenter(e, type !== 'thread', item)}
+                onClick={(e) => this.toUserCenter(e, type !== 'account', item)}
               >
-                {/* 仅帖子通知没有nickname，使用title代替显示 */}
+                {/* 仅账号消息没有nickname，使用title代替显示 */}
                 {item.nickname || this.filterTag(item.title) || "用户已删除"}
               </div>
-              {['chat', 'thread'].includes(type) && (
+              {['chat', 'account'].includes(type) && (
                 <div className={styles.time}>{diffDate(item.createdAt)}</div>
               )}
               {type === 'financial' && <div className={styles.amount}>+{parseFloat(item.amount).toFixed(2)}</div>}
@@ -181,17 +205,7 @@ class Index extends Component {
               {/* 财务内容 */}
               {type === 'financial' && (
                 <p className={styles['content-html']} style={isPC ? { paddingRight: '20px' } : {}}>
-                  在帖子"
-                  <span
-                    className={`${styles['financial-content']} ${styles['single-line']}`}
-                    style={{
-                      maxWidth: `${isPC ? '400px' : '90px'}`,
-                      display: 'inline-block',
-                      verticalAlign: 'bottom',
-                    }}
-                    dangerouslySetInnerHTML={{ __html: this.parseHTML() }}
-                  />
-                  "中{this.getFinancialTips(item)}
+                  {this.getFinancialContent()}
                 </p>
               )}
               {/* 私信、帖子、账户 */}
@@ -220,7 +234,7 @@ class Index extends Component {
             </div>
 
             {/* 底部 */}
-            {['financial', 'account'].includes(type) && (
+            {['financial', 'thread'].includes(type) && (
               <div className={`${styles.bottom} ${styles.time}`}>{diffDate(item.createdAt)}</div>
             )}
           </div>
@@ -238,7 +252,7 @@ Index.propTypes = {
 };
 
 Index.defaultProps = {
-  type: 'thread',
+  type: 'account',
   item: {},
   onBtnClick: () => { },
 };

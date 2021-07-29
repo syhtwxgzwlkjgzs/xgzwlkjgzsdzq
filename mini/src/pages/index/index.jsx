@@ -31,6 +31,7 @@ const CLOSE_URL = '/subPage/close/index';
 
 @inject('site')
 @inject('user')
+@inject('emotion')
 @observer
 class Index extends React.Component {
 
@@ -47,6 +48,7 @@ class Index extends React.Component {
         case 0:
           // 未开启小程序，展示错误页面信息
           if(result?.data?.passport?.miniprogramOpen === false) {
+            site.setErrPageType('site');
             Router.redirect({
               url: '/subPages/500/index'
             });
@@ -98,6 +100,7 @@ class Index extends React.Component {
           Router.push({ url: '/subPages/no-install/index' });
           break;
         default:
+          site.setErrPageType('site');
           Router.redirect({url: '/subPages/500/index'});
           clearLoginStatus();
           Toast.error({
@@ -111,7 +114,10 @@ class Index extends React.Component {
     // 初始化站点数据
     async initSiteData() {
 
-      const { site, user} = this.props;
+      const { site, user, emotion } = this.props;
+
+      // 请求并保持表情数据
+      emotion.fetchEmoji()
 
       let loginStatus = false;
 
@@ -183,6 +189,7 @@ class Index extends React.Component {
           });
         }
       } else {
+        site.setErrPageType('site');
         Router.redirect({
           url: '/subPages/500/index'
         });

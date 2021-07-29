@@ -5,6 +5,7 @@ import { LOADING_TOTAL_TYPE, THREAD_TYPE, THREAD_STATUS } from '@common/constant
 import { emojiFromEditFormat, emojiFormatForCommit } from '@common/utils/emoji-regexp';
 import { formatDate } from '@common/utils/format-date';
 import { initPostData } from './common';
+import { tags as s9e } from '@common/utils/s9e';
 
 class ThreadPostAction extends ThreadPostStore {
   /**
@@ -190,6 +191,7 @@ class ThreadPostAction extends ThreadPostStore {
   @action.bound
   resetPostData() {
     this.postData = { ...initPostData };
+    this.currentSelectedToolbar = false;
     this.setCategorySelected();
   }
 
@@ -264,7 +266,9 @@ class ThreadPostAction extends ThreadPostStore {
       text = `${text.replace(/(\n*)$/, '').replace(/\n/g, '<br />')}`;
     }
     text = emojiFormatForCommit(text)
-      .replace(/@([^@<]+)<\/p>/g, '@$1 </p>');
+      .replace(/@([^@<]+)<\/p>/g, '@$1 </p>')
+      .replace(/<code>\s*([^\s]+)\s*<\/code>/g, '<code>$1</code>') // 行内代码块空格问题
+      .replace(/<br \/>\n\s?/g, '<br />\n'); // 软换行来回切换到一行再软换行容易多出一个空格，先在业务侧进行处理
     const params = {
       title, categoryId, content: {
         text,
@@ -306,7 +310,12 @@ class ThreadPostAction extends ThreadPostStore {
     if (detail.position && detail.position.address) position = detail.position;
     let contentText = content && content.text;
     // 目前只是简单的队小程序进行简单的处理
-    if (isMini) contentText = contentText.replace(/<br \/>/g, '\n');
+    if (isMini) {
+      contentText = contentText.replace(/<br \/>/g, '\n');
+    } else {
+      contentText = s9e.emotion(contentText); // 小程序发帖不用转换表情，web端需要
+      contentText = contentText.replace(/<br \/>\n/g, '<br />');
+    }
     const contentindexes = (content && content.indexes) || {};
     let audio = {};
     let rewardQa = {};
@@ -367,7 +376,7 @@ class ThreadPostAction extends ThreadPostStore {
       price,
       attachmentPrice,
       position,
-      contentText: emojiFromEditFormat(contentText),
+      contentText: contentText ? emojiFromEditFormat(contentText) : '',
       audio,
       rewardQa,
       product,

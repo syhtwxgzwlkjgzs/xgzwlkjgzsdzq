@@ -3,6 +3,7 @@ import PopupList from '../popup-list';
 import Avatar from '../../avatar';
 import { Icon } from '@discuzq/design';
 import { debounce } from '@common/utils/throttle-debounce.js';
+import { noop } from '../utils';
 
 import styles from './index.module.scss';
 
@@ -14,11 +15,12 @@ import styles from './index.module.scss';
  * platform: pc展示最大宽度为10个头像，其他端为5个
  */
 
-const Index = ({ imgs = [], tipData = {}, wholeNum = 1, showMore= false, showCount = 5, platform = 'h5' }) => {
+const Index = ({ imgs = [], tipData = {}, wholeNum = 1, showMore= false, showCount = 5, platform = 'h5', updateViewCount = noop }) => {
   const [visible, setVisible] = useState(false);
 
   const onClick = debounce((e) => {
     e.stopPropagation();
+    updateViewCount();
     setVisible(true);
   }, 200);
 

@@ -59,6 +59,8 @@ class CollectPCPage extends React.Component {
             icon={{ type: 3, name: 'CollectOutlined' }}
             rightText={`共有${this.props.totalCount}条收藏`}
             mold='plane'
+            isError={this.props.index.threadError.isError}
+            errorText={this.props.index.threadError.errorText}
           >
             {pageData?.map((item, index) => (
               <ThreadContent className={index === 0 && styles.threadStyle} data={item} key={index} />

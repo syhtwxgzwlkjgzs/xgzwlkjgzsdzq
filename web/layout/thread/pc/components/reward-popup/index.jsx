@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Popup, Button, Input, Icon, Toast } from '@discuzq/design';
 import styles from './index.module.scss';
 import className from 'classnames';
@@ -7,6 +7,10 @@ const InputPop = (props) => {
   const { visible, onOkClick } = props;
 
   const [value, setValue] = useState('');
+
+  useEffect(() => {
+    setValue('');
+  }, [visible]);
 
   const onInputChange = (val) => {
     const arr = val.match(/([1-9]\d{0,6}|0)(\.\d{0,2})?/);
@@ -21,7 +25,6 @@ const InputPop = (props) => {
 
   const onCancel = () => {
     typeof props?.onCancel === 'function' && props.onCancel();
-    typeof props?.onCancel === 'function' && setValue('');
   }
 
   const onSubmitClick = async () => {

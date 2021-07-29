@@ -16,15 +16,26 @@
       .replyListName {
         display: flex;
         justify-content: space-between;
-
-        .replyListName {
-          max-width: 100px;
-          font-size: $font-size-primary;
-          font-weight: bold;
-          line-height: 20px;
-          text-align: left;
-          color: $text-color-primary;
-          @include text-ellipsis();
+        .userInfo {
+          display: flex;
+          .replyListName {
+            max-width: 100px;
+            font-size: $font-size-primary;
+            font-weight: bold;
+            line-height: 20px;
+            text-align: left;
+            color: $text-color-primary;
+            @include text-ellipsis();
+          }
+          .groups {
+            color: var(--color-text-secondary);
+            font-size: $font-size-label;
+            max-width: 100px;
+            white-space: nowrap;
+            overflow: hidden;
+            padding-left: $padding-2n;
+            line-height: 20px;
+          }
         }
         .isApproved {
           font-size: $font-size-primary;
@@ -51,34 +62,16 @@
           vertical-align: text-bottom;
           word-break: break-all;
 
-          View {
-            display: inline;
-          }
-          .p {
-            display: inline;
-          }
+          :global {
+            .qq-emotion {
+              width: rem(22);
+              height: rem(22);
+            }
 
-          &.isShowOne {
-            // @include lamp-clamp(3);
-
-            // p {
-            //   @include lamp-clamp(3);
-            // }
+            .dzq-p {
+              margin-bottom: 0;
+            }
           }
-        }
-
-        :global {
-          .qq-emotion {
-            width: 22px;
-            height: 22px;
-            position: relative;
-            top: 6px;
-            display: inline-block;
-          }
-        }
-
-        img {
-          height: 22px;
         }
 
         .commentUser {
@@ -87,6 +80,8 @@
           align-items: center;
           justify-content: flex-start;
           height: 28px;
+          position: relative;
+          top: 3px;
 
           .replyedUserName {
             max-width: 100px;

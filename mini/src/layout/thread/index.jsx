@@ -425,7 +425,14 @@ class ThreadH5Page extends React.Component {
     this.setState({ showDeletePopup: false });
     const id = this.props.thread?.threadData?.id;
 
-    const { success, msg } = await this.props.thread.delete(id, this.props.index);
+    const { success, msg } = await this.props.thread.delete(
+      id,
+      this.props.index,
+      this.props.search,
+      this.props.topic,
+      this.props.site,
+      this.props.user,
+    );
 
     if (success) {
       Toast.success({
@@ -500,16 +507,17 @@ class ThreadH5Page extends React.Component {
     if (success) {
       // 更新帖子中的评论数据
       this.props.thread.updatePostCount(this.props.thread.totalCount);
-      // 更新列表store数据
-      this.props.thread.updateListStore(this.props.index, this.props.search, this.props.topic);
 
       // 是否红包帖
       const isRedPack = this.props.thread?.threadData?.displayTag?.isRedPack;
       // TODO:可以进一步细化判断条件，是否还有红包
       if (isRedPack) {
         // 评论获得红包帖，更新帖子数据
-        this.props.thread.fetchThreadDetail(id);
+        await this.props.thread.fetchThreadDetail(id);
       }
+
+      // 更新列表store数据
+      this.props.thread.updateListStore(this.props.index, this.props.search, this.props.topic);
 
       if (isApproved) {
         Toast.success({
@@ -1016,7 +1024,6 @@ class ThreadH5Page extends React.Component {
 
             {/* 更多弹层 */}
             <MorePopup
-              thread={threadStore}
               shareData={this.shareData}
               permissions={morePermissions}
               statuses={moreStatuses}
@@ -1032,6 +1039,7 @@ class ThreadH5Page extends React.Component {
               visible={this.state.showDeletePopup}
               onClose={() => this.setState({ showDeletePopup: false })}
               onBtnClick={(type) => this.onBtnClick(type)}
+              type='thread'
             ></DeletePopup>
             {/* 举报弹层 */}
 
@@ -1052,9 +1060,10 @@ class ThreadH5Page extends React.Component {
             ></RewardPopup>
 
             {/* 采纳弹层 */}
-            {parseContent?.REWARD?.money && (
+            {parseContent?.REWARD?.money && parseContent?.REWARD?.remainMoney && (
               <AboptPopup
-                rewardAmount={parseContent?.REWARD?.money} // 需要传入剩余悬赏金额
+                money={Number(parseContent.REWARD.money)} // 悬赏总金额
+                remainMoney={Number(parseContent.REWARD.remainMoney)} // 需要传入剩余悬赏金额
                 visible={this.state.showAboptPopup}
                 onCancel={() => this.onAboptCancel()}
                 onOkClick={(data) => this.onAboptOk(data)}

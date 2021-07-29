@@ -29,6 +29,8 @@ class SearchPCPage extends React.Component {
     this.treadingTopicRef = React.createRef();
     this.activeUsersRef = React.createRef();
     this.hotTopicRef = React.createRef();
+
+    this.isClick = false
   }
 
   redirectToSearchResultPost = () => {
@@ -87,7 +89,17 @@ class SearchPCPage extends React.Component {
       })
     }
   }
+
   itemClick = (index) => {
+    const { hasTopics = false, hasUsers = false, hasThreads = false, isShowAll = true } = this.props.search.dataIndexStatus || {}
+
+    const disableClickTopic = !hasTopics && !isShowAll && index === 0
+    const disableClickUser = !hasUsers && !isShowAll && index === 1
+    const disableClickThread = !hasThreads && !isShowAll && index === 2
+    if (disableClickTopic || disableClickUser || disableClickThread) {
+      return
+    }
+
     const HEADER_HEIGHT = 57;
     const STEPPER_PADDING = 24;
     let pos = -1, scrollTo = -1;
@@ -107,59 +119,81 @@ class SearchPCPage extends React.Component {
     }
     scrollTo = pos + parseInt(HEADER_HEIGHT / 2) - STEPPER_PADDING;
 
-    const stepIndex = this.state.stepIndex;
+    const stepIndex = this.props.stepIndex;
     if (stepIndex !== index) {
       this.setState({position: scrollTo});
-      this.setState({stepIndex: index});
+      // this.setState({stepIndex: index});
+      this.isClick = true
+      this.props.dispatch('update-step-index', index)
     }
   }
 
-  // 右侧 - 步骤条
-  renderRight = () => {
-    return (
-      <div className={styles.searchRight}>
-        <Stepper onItemClick={this.itemClick} selectIndex={this.state.stepIndex}/>
-        <Copyright/>
-      </div>
-    )
-  }
-  handleScroll = ({ scrollTop } = {}) => {
-    const HEADER_HEIGHT = 57;
-    const STEPPER_PADDING = 30;
-
-    const activeUsersPos = this.activeUsersRef?.current?.offsetTop || 0,
-          activeUsersScrollTo = activeUsersPos + parseInt(HEADER_HEIGHT / 2) - STEPPER_PADDING;
-
-    const hotTopicPos = this.hotTopicRef?.current?.offsetTop || 0,
-          hotTopicScrollTo = hotTopicPos + parseInt(HEADER_HEIGHT / 2) - STEPPER_PADDING;
-
-    if(scrollTop) {
-      if(scrollTop < activeUsersScrollTo) {
-        this.setState({stepIndex: 0});
-      } else if(scrollTop < hotTopicScrollTo && scrollTop >= activeUsersScrollTo) {
-        this.setState({stepIndex: 1});
-      } else if(scrollTop >= hotTopicScrollTo) {
-        this.setState({stepIndex: 2});
-      }
+  handleScroll = ({ scrollTop = 0 } = {}) => {
+    if (isNaN(scrollTop) || this.isClick) {
+      this.isClick = false
+      return
     }
+
+    const { topicHeight, userHeight, threadHeight, totalHeight } = this.getDivHeight()
+
+    let stepIndex = 0
+    if (topicHeight !== 0 && scrollTop < topicHeight + 12) {
+      stepIndex = 0
+    } else if (userHeight !== 0 && scrollTop < topicHeight + userHeight + 12) {
+      stepIndex = 1
+    } else if (threadHeight !== 0 && scrollTop < totalHeight + 12) {
+      stepIndex = 2
+    }
+
+    this.props.dispatch('update-step-index', stepIndex)
 
     // 滑动之后，重置position
     this.setState({position: -1});
   }
 
-  // 中间 -- 潮流话题 活跃用户 热门内容
-  renderContent = () => {
+  // 右侧 - 步骤条
+  renderRight = () => {
+    const { stepIndex } = this.props
+  
+    return (
+      <div className={styles.searchRight}>
+        <Stepper onItemClick={this.itemClick} selectIndex={stepIndex}/>
+        <Copyright/>
+      </div>
+    )
+  }
 
-    const { indexTopics, indexUsers, indexThreads, indexTopicsError, indexUsersError, indexThreadsError } = this.props.search;
-    const userId = this.props.user?.userInfo?.id
-
-    const { pageData: topicsPageData } = indexTopics || {};
-    const { pageData: usersPageData } = indexUsers || {};
+  // 中间 -- 热门内容
+  renderContentHotThread = () => {
+    const { indexThreads, indexThreadsError } = this.props.search;
     const { pageData: threadsPageData } = indexThreads || {};
 
     return (
-      <div className={styles.searchContent}>
-        <div ref={this.treadingTopicRef}>
+        <div ref={this.hotTopicRef}>
+          <SidebarPanel
+            type='normal'
+            isLoading={!threadsPageData}
+            noData={!threadsPageData?.length}
+            title="热门内容"
+            icon={{ type: 3, name: 'HotOutlined' }}
+            onShowMore={this.redirectToSearchResultPost}
+            mold='plane'
+            isError={indexThreadsError.isError}
+            errorText={indexThreadsError.errorText}
+          >
+            {threadsPageData?.filter((_, index) => index < 10).map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />)}
+          </SidebarPanel>
+        </div>
+    )
+  }
+
+  // 中间 -- 潮流话题
+  renderContentPopTopic = () => {
+    const { indexTopics, indexTopicsError } = this.props.search;
+    const { pageData: topicsPageData } = indexTopics || {};
+
+    return (
+      <div ref={this.treadingTopicRef}>
           <SidebarPanel
             title="潮流话题"
             type='normal'
@@ -176,41 +210,57 @@ class SearchPCPage extends React.Component {
               ))}
             </div>
           </SidebarPanel>
-        </div>
-
-        <div ref={this.activeUsersRef}>
-          <SidebarPanel
-            title="活跃用户"
-            type='normal'
-            isLoading={!usersPageData}
-            noData={!usersPageData?.length}
-            onShowMore={this.redirectToSearchResultUser}
-            icon={{ type: 2, name: 'MemberOutlined' }}
-            isError={indexUsersError.isError}
-            errorText={indexUsersError.errorText}
-          >
-            <ActiveUsersMore data={usersPageData} onItemClick={this.onUserClick} onFollow={this.onFollow} userId={userId} />
-          </SidebarPanel>
-        </div>
-
-        <div ref={this.hotTopicRef}>
-          <SidebarPanel
-            type='normal'
-            isLoading={!threadsPageData}
-            noData={!threadsPageData?.length}
-            title="热门内容"
-            icon={{ type: 3, name: 'HotOutlined' }}
-            onShowMore={this.redirectToSearchResultPost}
-            mold='plane'
-            isError={indexThreadsError.isError}
-            errorText={indexThreadsError.errorText}
-          >
-            {threadsPageData?.map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />)}
-          </SidebarPanel>
-        </div>
       </div>
     )
   }
+
+  // 中间 -- 活跃用户
+  renderContentActiveUser = () => {
+    const { indexUsers, indexUsersError } = this.props.search;
+    const userId = this.props.user?.userInfo?.id
+    const { pageData: usersPageData } = indexUsers || {};
+
+    return (
+      <div ref={this.activeUsersRef}>
+        <SidebarPanel
+          title="活跃用户"
+          type='normal'
+          isLoading={!usersPageData}
+          noData={!usersPageData?.length}
+          onShowMore={this.redirectToSearchResultUser}
+          icon={{ type: 2, name: 'MemberOutlined' }}
+          isError={indexUsersError.isError}
+          errorText={indexUsersError.errorText}
+        >
+          <ActiveUsersMore data={usersPageData} onItemClick={this.onUserClick} onFollow={this.onFollow} userId={userId} />
+        </SidebarPanel>
+      </div>
+    )
+  }
+
+  renderContent = () => {
+    const { hasTopics, hasUsers, hasThreads, isShowAll } = this.props.search.dataIndexStatus
+
+    return (
+      <div className={styles.searchContent}>
+        { (isShowAll || hasTopics) && this.renderContentPopTopic() }
+        { (isShowAll || hasUsers) && this.renderContentActiveUser() }
+        { (isShowAll || hasThreads) && this.renderContentHotThread() }
+      </div>
+    )
+  }
+
+  // 获取各模块的高度
+  getDivHeight = () => {
+    const topicHeight = this.treadingTopicRef.current?.clientHeight || 0;
+    const userHeight = this.activeUsersRef.current?.clientHeight || 0;
+    const threadHeight = this.hotTopicRef.current?.clientHeight || 0;
+
+    const totalHeight = topicHeight + userHeight + threadHeight
+
+    return { topicHeight, userHeight, threadHeight, totalHeight }
+  }
+
   render() {
     return (
         <BaseLayout

@@ -9,6 +9,8 @@ import { get } from '@common/utils/get';
 import h5Share from '@discuzq/sdk/dist/common_modules/share/h5';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import { numberFormat } from '@common/utils/number-format';
+import LoginHelper from '@common/utils/login-helper';
+import MorePopop from '@components/more-popop';
 
 /**
  * 帖子头部
@@ -18,12 +20,14 @@ import { numberFormat } from '@common/utils/number-format';
 
  @inject('site')
  @inject('user')
+ @inject('index')
  @observer
 class HomeHeader extends React.Component {
   state = {
     visible: false,
     height: 180,
     loadWeiXin: false,
+    show: false,
   }
 
   domRef = React.createRef(null)
@@ -78,28 +82,33 @@ class HomeHeader extends React.Component {
 
     return siteInfo;
   }
-
-  onShare = () => {
+  onClose = () => {
+    this.setState({ visible: false });
+  }
+  onCancel = () => {
+    this.setState({ show: false });
+  }
+  handleH5Share = () => {
+    const title = document?.title || '';
+    h5Share(title);
+    Toast.info({ content: '复制链接成功' });
+    this.onCancel();
+  }
+  handleWxShare = () => {
+    this.setState({ visible: true });
+    this.onCancel();
+  }
+  handleClick = () => {
     const { user } = this.props;
     if (!user.isLogin()) {
       goToLoginPage({ url: '/user/login' });
       return;
     }
-
-    // 判断是否在微信浏览器
-    if (isWeiXin()) {
-      this.setState({ visible: true });
-    } else {
-      const title = document?.title || '';
-      h5Share(title);
-      Toast.info({ content: '复制链接成功' });
-    }
+    this.setState({ show: true });
   }
-
-  onClose = () => {
-    this.setState({ visible: false });
+  createCard = () => {
+    Router.push({ url: '/card' });
   }
-
   componentDidMount() {
     this.setState({ loadWeiXin: isWeiXin() });
     if (this.domRef.current) {
@@ -126,9 +135,7 @@ class HomeHeader extends React.Component {
               : <></>
           }
           <div>
-            <Icon onClick={() => {
-              Router.redirect({ url: '/' });
-            }} name="HomeOutlined" color="#fff" size={20} />
+            <Icon onClick={() => LoginHelper.gotoIndex()} name="HomeOutlined" color="#fff" size={20} />
           </div>
         </div>}
         {
@@ -161,11 +168,19 @@ class HomeHeader extends React.Component {
             <span className={styles.text}>内容</span>
             <span className={styles.content}>{countThreads}</span>
           </li>
-          <li className={styles.item} onClick={this.onShare}>
+          <li className={styles.item} onClick={this.handleClick}>
             <Icon className={styles.shareIcon} color="#fff" name="ShareAltOutlined"/>
             <span className={styles.shareText}>分享</span>
           </li>
         </ul>}
+        {this.state.show
+        && <MorePopop
+        show={this.state.show}
+        onClose={this.onCancel}
+        handleH5Share={this.handleH5Share}
+        handleWxShare={this.handleWxShare}
+        createCard={this.createCard}
+        ></MorePopop>}
         {
           mode === 'join' && <ul className={`${styles.siteInfo} ${styles.joinInfo}`}>
             <li className={styles.item}>

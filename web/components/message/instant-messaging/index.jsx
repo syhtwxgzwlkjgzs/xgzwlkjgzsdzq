@@ -237,6 +237,10 @@ const Index = (props) => {
     submit({ messageText: typingValue, isImage: false });
   };
 
+  const filterTag = (html) => {
+    return html?.replace(/<(\/)?([beprt]|br|div|h\d)[^>]*>|[\r\n]/gi, '');
+  }
+
   const messagesList = useMemo(() => {
     const listData = dialogMsgList.list.map((item) => {
       if (item.isImageLoading && uploadingImagesRef.current.length) {
@@ -264,7 +268,7 @@ const Index = (props) => {
         userAvatar: item.user.avatar,
         displayTimePanel: true,
         textType: 'string',
-        text: item.messageTextHtml,
+        text: filterTag(item.messageText),
         ownedBy: user.id === item.userId ? 'myself' : 'itself',
         nickname: item.user.username,
       };
@@ -296,6 +300,8 @@ const Index = (props) => {
   }, [username, dialogId]);
 
   useEffect(() => {
+    document.body.className = '';
+
     if (!threadPost.emojis.length) {
       threadPost.fetchEmoji();
     }

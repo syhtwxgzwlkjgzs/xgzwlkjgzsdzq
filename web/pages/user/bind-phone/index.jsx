@@ -12,7 +12,7 @@ class BindPhone extends React.Component {
     return <ViewAdapter
               h5={<BindPhoneH5Page />}
               pc={<BindPhoneH5Page />}
-              title={`绑定手机号 - ${this.props.site?.siteName}`}
+              title={`绑定手机号`}
             />;
   }
 }

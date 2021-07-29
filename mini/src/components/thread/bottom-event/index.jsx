@@ -8,6 +8,7 @@ import Popup from '@discuzq/design/dist/components/popup/index';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import Taro from '@tarojs/taro'
 import Toast from '@discuzq/design/dist/components/toast';
+import { noop } from '../utils';
 
 /**
  * 帖子底部内容
@@ -41,6 +42,7 @@ const Index = ({
   onShare = () => {},
   onComment = () => {},
   onPraise = () => {},
+  updateViewCount = noop,
 }) => {
   const postList = useMemo(() => {
     const praise =  {
@@ -65,6 +67,7 @@ const Index = ({
   }, [isLiked]);
   const [ show, setShow ] = useState(false)
   const handleClickShare = () => {
+    updateViewCount();
     // 对没有登录的先登录
     if (!user.isLogin()) {
       Toast.info({ content: '请先登录!' });
@@ -88,7 +91,14 @@ const Index = ({
       <View className={needHeight ? styles.user : styles.users}>
         {userImgs.length !== 0 ? <View className={styles.userImg}>
           <View className={styles.portrait}>
-            <Tip tipData={tipData} imgs={userImgs} wholeNum={wholeNum} showCount={5} unifyOnClick={unifyOnClick}></Tip>
+            <Tip
+              tipData={tipData}
+              imgs={userImgs}
+              wholeNum={wholeNum}
+              showCount={5}
+              unifyOnClick={unifyOnClick}
+              updateViewCount={updateViewCount}
+            ></Tip>
           </View>
           {
             wholeNum !== 0 && (
@@ -137,14 +147,7 @@ const Index = ({
           ))
         }
       </View>
-
-      {show && <Popup
-        position="bottom"
-        visible={show}
-        onClose={onClose}
-      >
-        <ShareButton data={data} setShow={setShow} tipData={tipData} index={thread} shareContent={shareContent} getShareContent={getShareContent} shareThreadid={shareThreadid} shareAvatar={shareAvatar} shareNickname={shareNickname} getShareData={getShareData}></ShareButton>
-      </Popup>}
+      <ShareButton show={show} data={data} setShow={setShow} tipData={tipData} shareThreadid={shareThreadid} shareAvatar={shareAvatar} shareNickname={shareNickname} getShareData={getShareData}></ShareButton>
     </View>
   );
 };

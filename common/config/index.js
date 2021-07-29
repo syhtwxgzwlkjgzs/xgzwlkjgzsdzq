@@ -1,5 +1,5 @@
 const config = {
-  version: 'v3.21.0713'
+  version: DISCUZ_CONFIG_VERSION
 };
 
 module.exports = function () {

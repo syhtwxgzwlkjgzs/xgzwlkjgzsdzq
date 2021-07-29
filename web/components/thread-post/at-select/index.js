@@ -9,7 +9,6 @@ import { Popup, Input, Checkbox, Avatar, Button, Icon, Toast } from '@discuzq/de
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
-import DDialog from '@components/dialog';
 import List from '@components/list';
 
 import stringToColor from '@common/utils/string-to-color';
@@ -52,7 +51,7 @@ class AtSelect extends Component {
   async fetchAllUser() {
     const { search } = this.props;
     const { page, perPage, keywords } = this.state;
-    const ret = await search.getUsersList({ search: keywords, type: 'username', page, perPage });
+    const ret = await search.getUsersList({ search: keywords, type: 'nickname', page, perPage });
     const { code, data } = ret;
     if (code === 0) {
       this.setState({
@@ -112,9 +111,10 @@ class AtSelect extends Component {
     const isFollow = this.state.keywords === '';
     const avatar = isFollow ? item?.user?.avatar : item.avatar;
     const username = isFollow ? item?.user?.userName : item.username;
+    const nickname = isFollow ? item?.user?.nickName : item.nickname;
     const groupName = isFollow ? item?.group?.groupName : item.groupName;
     const userId = isFollow ? item.user?.pid : item.userId;
-    return { avatar, username, groupName, userId };
+    return { avatar, username, groupName, userId, nickname };
   }
 
   renderItem() {
@@ -123,25 +123,25 @@ class AtSelect extends Component {
 
     if (data.length === 0) return null;
     return data.map((item) => {
-      const { avatar, username, groupName, userId } = this.formatData(item);
+      const { avatar, nickname, groupName, userId } = this.formatData(item);
 
       return (
         <div className={styles['at-item']} key={userId}>
           <div className={styles['at-item__inner']} >
-            <Checkbox name={username}>
+            <Checkbox name={nickname}>
               <div className={styles.avatar}>
                 {avatar
                   ? <Avatar image={avatar} />
                   : <Avatar
-                    text={username}
+                    text={nickname.toUpperCase()}
                     style={{
-                      backgroundColor: `#${this.getBackgroundColor(username)}`,
+                      backgroundColor: `#${this.getBackgroundColor(nickname)}`,
                     }}
                   />
                 }
               </div>
               <div className={styles.info}>
-                <div className={styles.username}>{username}</div>
+                <div className={styles.username}>{nickname}</div>
                 <div className={styles.group}>{groupName}</div>
               </div>
             </Checkbox>
@@ -152,7 +152,7 @@ class AtSelect extends Component {
   }
 
   render() {
-    const { pc, visible } = this.props;
+    const { pc, visible, style = {} } = this.props;
     const { keywords, checkUser, finish } = this.state;
     const platform = pc ? 'pc' : 'h5';
     const content = (
@@ -213,15 +213,10 @@ class AtSelect extends Component {
     );
 
     if (pc) return (
-      <DDialog
-        visible={visible}
-        className={styles.pc}
-        onClose={this.handleCancel}
-        isCustomBtn={true}
-        title="@圈友"
-      >
+      <div className={styles.pc} style={style} id="dzq-toolbar-at">
+        <div className={styles.pcHeader}>@圈友</div>
         {content}
-      </DDialog>
+      </div>
     );
 
     return (
