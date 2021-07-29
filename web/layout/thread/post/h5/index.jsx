@@ -74,6 +74,8 @@ class ThreadCreate extends React.Component {
   }
 
   androidHandler = () => {
+    // 如果是操作栏则不进行resize时间的判断
+    if (this.props.currentDefaultOperation || this.props.currentAttachOperation) return;
     const winHeight = getVisualViewpost();
     if (!judgeDeviceType().isAndroid) return;
     if (window.innerHeight === winHeight) {

@@ -31,6 +31,11 @@ class StatusH5Page extends React.Component {
     //     commonLogin.setStatusCountDown(commonLogin.statusCountDown - 1);
     //   }, 1000)
     // }
+
+    // 状态页刷新，若状态翻转，跳转首页
+    if (this.props.user.userInfo?.status === 0) {
+      LoginHelper.gotoIndex();
+    }
   }
 
   componentWillUnmount() {

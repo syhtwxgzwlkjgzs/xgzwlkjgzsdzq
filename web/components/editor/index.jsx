@@ -66,7 +66,7 @@ export default function DVditor(props) {
     if (emoji && emoji.code) {
       setState({ emoji: {} });
       // 因为vditor的lute中有一些emoji表情和 emoji.code 重叠了。这里直接先这样处理
-      let value = `<img alt="${emoji.code}emoji" src="${emoji.url}" class="qq-emotion" />`;
+      let value = `<img alt="${emoji.code}dzqemoji" src="${emoji.url}" class="qq-emotion" />`;
       value = emojiVditorCompatibilityDisplay(value);
       // setCursorPosition();
       html2mdInserValue(value);
@@ -121,7 +121,6 @@ export default function DVditor(props) {
         errorNum += 1;
         if (errorNum <= 5) setEditorInitValue();
       }
-      vditor.vditor[vditor.vditor.currentMode].element.blur();
     }, 300);
   };
 
@@ -244,8 +243,6 @@ export default function DVditor(props) {
           onInit(editor);
           editor.setValue('');
           setEditorInitValue();
-          // 去掉异步渲染之后的光标focus
-          editor.vditor[editor.vditor.currentMode].element.blur();
           if (!pc && getSelection().rangeCount > 0) {
             getSelection().removeAllRanges();
           }

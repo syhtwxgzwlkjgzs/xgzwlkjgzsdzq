@@ -23,8 +23,8 @@ const Index = ({ message, user }) => {
       {
         iconName: 'RemindOutlined',
         title: '账号消息',
-        link: '/subPages/message/index?page=thread',
-        totalCount: threadUnread || 0,
+        link: '/subPages/message/index?page=account',
+        totalCount: accountUnread  || 0,
       },
       {
         iconName: 'RenminbiOutlined',
@@ -35,8 +35,8 @@ const Index = ({ message, user }) => {
       {
         iconName: 'LeaveWordOutlined',
         title: '帖子通知',
-        link: '/subPages/message/index?page=account',
-        totalCount: accountUnread || 0,
+        link: '/subPages/message/index?page=thread',
+        totalCount: threadUnread || 0,
       },
     ]
   }, [threadUnread, financialUnread, accountUnread]);
@@ -56,7 +56,7 @@ const Index = ({ message, user }) => {
         id: id,
         createdAt: dialogMessage?.createdAt,
         dialogId: dialogMessage?.dialogId,
-        content: dialogMessage?.imageUrl ? '[图片]' : dialogMessage?.messageTextHtml,
+        content: dialogMessage?.imageUrl ? '[图片]' : dialogMessage?.messageText,
         avatar: chatPerson?.avatar,
         userId: chatPerson?.id,
         nickname: chatPerson?.nickname,
