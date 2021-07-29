@@ -5,6 +5,7 @@ import { LOADING_TOTAL_TYPE, THREAD_TYPE, THREAD_STATUS } from '@common/constant
 import { emojiFromEditFormat, emojiFormatForCommit } from '@common/utils/emoji-regexp';
 import { formatDate } from '@common/utils/format-date';
 import { initPostData } from './common';
+import { tags as s9e } from '@common/utils/s9e';
 
 class ThreadPostAction extends ThreadPostStore {
   /**
@@ -309,10 +310,12 @@ class ThreadPostAction extends ThreadPostStore {
     if (detail.position && detail.position.address) position = detail.position;
     let contentText = content && content.text;
     // 目前只是简单的队小程序进行简单的处理
-    if (isMini) contentText = contentText.replace(/<br \/>/g, '\n');
-    // 解决web端行内换行编辑问题
-    else contentText = contentText
-      .replace(/<br \/>\n/g, '<br />');
+    if (isMini) {
+      contentText = contentText.replace(/<br \/>/g, '\n');
+    } else {
+      contentText = s9e.emotion(contentText); // 小程序发帖不用转换表情，web端需要
+      contentText = contentText.replace(/<br \/>\n/g, '<br />');
+    }
     const contentindexes = (content && content.indexes) || {};
     let audio = {};
     let rewardQa = {};
@@ -373,7 +376,7 @@ class ThreadPostAction extends ThreadPostStore {
       price,
       attachmentPrice,
       position,
-      contentText: emojiFromEditFormat(contentText),
+      contentText: contentText ? emojiFromEditFormat(contentText) : '',
       audio,
       rewardQa,
       product,
