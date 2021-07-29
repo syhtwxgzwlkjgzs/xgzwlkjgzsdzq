@@ -107,7 +107,9 @@ class PostPage extends React.Component {
 
   handleRouteChange = (url) => {
     // 如果不是修改支付密码的页面则重置发帖信息
-    if ((url || '').indexOf('/my/edit/paypwd') === -1) {
+    if ((url || '').indexOf('/my/edit/paypwd') === -1
+    && (url || '').indexOf('/pay/middle') === -1) {
+      if (this.vditor) this.vditor.setValue('');
       this.props.threadPost.resetPostData();
     }
   }
@@ -201,8 +203,15 @@ class PostPage extends React.Component {
     });
   };
 
+  // 上传视频之前判断是否已经有了视频，如果有了视频提示只能上传一个视频
   handleVideoUpload = () => {
     this.isVideoUploadDone = false;
+    const { postData } = this.props.threadPost;
+    if (postData.video && postData.video.id) {
+      Toast.info({ content: '只能上传一个视频' });
+      return false;
+    }
+    return true;
   };
 
   // 通过云点播上传成功之后处理：主要是针对语音和视频
@@ -522,10 +531,10 @@ class PostPage extends React.Component {
     const { audioRecordStatus } = postData;
     // 判断录音状态
     if (audioRecordStatus === 'began') {
-      Toast.info({ content: '您有录制中的录音未处理，请先上传或撤销录音', duration: 3000, });
+      Toast.info({ content: '您有录制中的录音未处理，请先上传或撤销录音', duration: 3000 });
       return false;
-    } else if (audioRecordStatus === 'completed') {
-      Toast.info({ content: '您有录制完成的录音未处理，请先上传或撤销录音', duration: 3000, });
+    } if (audioRecordStatus === 'completed') {
+      Toast.info({ content: '您有录制完成的录音未处理，请先上传或撤销录音', duration: 3000 });
       return false;
     }
 
