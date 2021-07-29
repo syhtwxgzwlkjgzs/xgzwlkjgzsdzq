@@ -71,7 +71,6 @@ export default class UserCenterAdditionalInfo extends Component {
         return (
           <View className={styles.cardItem}>
             {fieldsExt?.map((d, i) => {
-              console.log(d.url, d.name);
               return (
                 <View
                   key={`${d.name}-${i}`}
