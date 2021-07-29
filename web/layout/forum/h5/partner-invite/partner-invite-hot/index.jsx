@@ -48,7 +48,7 @@ class PartnerInviteHot extends React.Component {
   async initThreadList() {
     const { forum, search } = this.props;
 
-    const INVITE_THREADLIST_SCOPE = 2;
+    const INVITE_THREADLIST_SCOPE = 3;
     const threadList = await search.getThreadList({
       scope: INVITE_THREADLIST_SCOPE,
     });
