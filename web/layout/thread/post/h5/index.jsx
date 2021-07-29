@@ -412,6 +412,7 @@ class ThreadCreate extends React.Component {
         {/* 选择帖子类别 */}
         <ClassifyPopup
           show={categoryChooseShow}
+          categoryId={threadPost.postData.categoryId}
           onVisibleChange={val => this.props.handleSetState({ categoryChooseShow: val })}
         />
         {/* 插入 at 关注的人 */}

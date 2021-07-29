@@ -200,16 +200,20 @@ class ThreadPCPage extends React.Component {
                   />
                 )}
               </div>
-              {/* 设置的金额相关展示 */}
+              {/* 设置的金额相关展示 + 本地缓存设置 */}
               <div className={styles.['editor-footer']}>
                 <div className={styles['editor-footer--left']}>
-                  <Tag
+                  {threadPost.isHaveLocalData && (<Tag
                     closeable
-                    onClose={() => {}}
-                    onClick={() => {}}
+                    onClose={() => {
+                      threadPost.setLocalDataStatus(false);
+                    }}
+                    onClick={() => {
+                      this.props.openLocalData();
+                    }}
                   >有本地缓存
                     <span className={styles['local-open']}>打开</span>
-                  </Tag>
+                  </Tag>)}
                   <MoneyDisplay
                     pc
                     canEditReward={this.props.canEditReward}
@@ -289,7 +293,7 @@ class ThreadPCPage extends React.Component {
                 )}
               </div>
             </div>
-            <ClassifyPopup pc onClick={this.hintHide} />
+            <ClassifyPopup pc onClick={this.hintHide} categoryId={threadPost.postData.categoryId} />
             <div className={styles.footer}>
               <Button type="info" disabled={this.props.postType === "isEdit" && !postData.isDraft}
                 onClick={() => this.props.handleDraft()}>保存至草稿箱</Button>

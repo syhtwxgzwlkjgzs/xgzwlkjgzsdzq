@@ -73,19 +73,10 @@ class PostPage extends React.Component {
     this.props.router.events.on('routeChangeStart', this.handleRouteChange);
     this.fetchPermissions();
     // 如果本地缓存有数据，这个目前主要用于定位跳出的情况
-    // const postData = this.getPostDataFromLocal();
-    // const { category, emoji } = localData.getCategoryEmoji() || {};
-    // if (postData) {
-    //   this.props.index.setCategories(category);
-    //   this.props.threadPost.setEmoji(emoji);
-    //   localData.removeCategoryEmoji();
-    //   if (postData.categoryId) this.setCategory(postData.categoryId);
-    //   this.setPostData({ ...postData, position: this.props.threadPost.postData.position });
-    // } else {
+    if (this.getPostDataFromLocal()) this.props.threadPost.setLocalDataStatus(true);
     const { fetchEmoji, emojis } = this.props.threadPost;
     if (emojis.length === 0) fetchEmoji();
     this.fetchDetail();
-    // }
   }
 
   componentWillUnmount() {
@@ -117,16 +108,21 @@ class PostPage extends React.Component {
   }
 
   saveDataLocal = () => {
-    const { index, threadPost } = this.props;
-    // localData.setThreadPostDataLocal(threadPost.postData);
-    localData.setCategoryEmoji({ category: index.categoriesNoAll, emoji: threadPost.emojis });
+    const { threadPost, user } = this.props;
+    localData.setThreadPostDataLocal({ postData: threadPost.postData, userId: user.userInfo.id });
   };
 
   // 从本地缓存中获取数据
-  getPostDataFromLocal() {
-    const postData = localData.getThreadPostDataLocal();
+  getPostDataFromLocal = () => localData.getThreadPostDataLocal(this.props.user.userInfo.id);
+
+  removeLocalData = () => {
     localData.removeThreadPostDataLocal();
-    return postData;
+  }
+
+  openLocalData = () => {
+    const data = this.getPostDataFromLocal();
+    this.props.threadPost.setLocalDataStatus(false);
+    this.setPostData(data);
   }
 
   fetchPermissions() {
@@ -535,10 +531,10 @@ class PostPage extends React.Component {
     const { audioRecordStatus } = postData;
     // 判断录音状态
     if (audioRecordStatus === 'began') {
-      Toast.info({ content: '您有录制中的录音未处理，请先上传或撤销录音', duration: 3000, });
+      Toast.info({ content: '您有录制中的录音未处理，请先上传或撤销录音', duration: 3000 });
       return false;
-    } else if (audioRecordStatus === 'completed') {
-      Toast.info({ content: '您有录制完成的录音未处理，请先上传或撤销录音', duration: 3000, });
+    } if (audioRecordStatus === 'completed') {
+      Toast.info({ content: '您有录制完成的录音未处理，请先上传或撤销录音', duration: 3000 });
       return false;
     }
 
@@ -600,6 +596,8 @@ class PostPage extends React.Component {
     //   return;
     // }
 
+    // 在提交之前也保存一下本地数据
+    this.saveDataLocal();
     const { threadPost } = this.props;
 
     // 2 验证码
@@ -650,6 +648,7 @@ class PostPage extends React.Component {
         },
         success: async () => {
           this.setIndexPageData();
+          this.removeLocalData(); // 支付成功删除本地缓存
           const { threadId } = this.props.threadPost.postData;
           if (threadId) this.props.router.replace(`/thread/${threadId}`);
         }, // 支付成功回调
@@ -667,6 +666,7 @@ class PostPage extends React.Component {
       // 7.28 已发布的帖子也可以保存草稿
       if (this.isHaveContent()) {
         this.setPostData({ draft: 1 });
+        this.saveDataLocal();
         this.createThread(true, false);
         const now = formatDate(new Date(), 'hh:mm');
         this.setPostData({ autoSaveTime: now });
@@ -700,6 +700,7 @@ class PostPage extends React.Component {
 
       if (!isDraft) {
         this.setIndexPageData();
+        this.removeLocalData(); // 非草稿删除本地缓存
         this.props.router.replace(`/thread/${data.threadId}`);
       } else {
         const { jumpLink } = this.state;
@@ -710,6 +711,7 @@ class PostPage extends React.Component {
       }
       return true;
     }
+    this.saveDataLocal();
     Toast.error({ content: msg });
   }
 
@@ -787,6 +789,7 @@ class PostPage extends React.Component {
         handleVditorInit={this.handleVditorInit}
         onVideoReady={this.onVideoReady}
         handleDraft={this.handleDraft}
+        openLocalData={this.openLocalData}
         {...this.state}
       />
     );
@@ -813,6 +816,7 @@ class PostPage extends React.Component {
         handleDraft={this.handleDraft}
         handleEditorBoxScroller={this.handleEditorBoxScroller}
         checkAudioRecordStatus={this.checkAudioRecordStatus.bind(this)}
+        openLocalData={this.openLocalData}
         {...this.state}
       />
     );

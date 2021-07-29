@@ -491,6 +491,11 @@ class ThreadPostAction extends ThreadPostStore {
   setThreadStatus(status) {
     this.threadStatus = status || THREAD_STATUS.create;
   }
+
+  @action
+  setLocalDataStatus(status) {
+    this.isHaveLocalData = status;
+  }
 }
 
 export default ThreadPostAction;
