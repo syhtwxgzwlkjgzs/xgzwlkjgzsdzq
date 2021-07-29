@@ -146,6 +146,7 @@ const PostContent = ({
             onImgClick={handleImgClick}
             onLinkClick={handleLinkClick}
             transformer={transformer}
+            iframeWhiteList={['bilibili', 'youku', 'iqiyi']}
           />
           {imageVisible && (
             <ImagePreviewer
