@@ -26,7 +26,7 @@ class Index extends Component {
       <Page>
         <View className={styles.page}>
           <Image className={styles.img} src={imgClose}/>
-          <Text className={styles.main}>关闭已站点</Text>
+          <Text className={styles.main}>站点已关闭</Text>
           {closeSiteConfig && <Text className={styles.sub}>{closeSiteConfig.detail}</Text>}
           {/* <View className={styles.fixedBox}>
             <Button onClick={LoginHelper.saveAndLogin} size='large' className={styles.btn} type='primary'>管理员登录</Button>

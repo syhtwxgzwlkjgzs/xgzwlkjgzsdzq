@@ -6,7 +6,7 @@ import { readEmoji } from '@common/server';
 import { THREAD_TYPE } from '@common/constants/thread-post';
 import ImageUpload from '@components/thread-post/image-upload';
 import Emoji from '@components/editor/emoji';
-import AtSelect from '@components/thread-detail-pc/at-select';
+import AtSelect from '@components/thread-post/at-select';
 
 import classnames from 'classnames';
 import { inject } from 'mobx-react';

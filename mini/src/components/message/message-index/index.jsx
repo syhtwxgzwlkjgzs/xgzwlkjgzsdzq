@@ -56,7 +56,7 @@ const Index = ({ message, user }) => {
         id: id,
         createdAt: dialogMessage?.createdAt,
         dialogId: dialogMessage?.dialogId,
-        content: dialogMessage?.imageUrl ? '[图片]' : dialogMessage?.messageTextHtml,
+        content: dialogMessage?.imageUrl ? '[图片]' : dialogMessage?.messageText,
         avatar: chatPerson?.avatar,
         userId: chatPerson?.id,
         nickname: chatPerson?.nickname,

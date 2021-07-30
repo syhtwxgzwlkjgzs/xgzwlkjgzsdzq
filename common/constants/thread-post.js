@@ -82,3 +82,9 @@ export const THREAD_STATUS = {
   // 草稿
   draft: 'draft',
 };
+
+// 附件音频类型
+export const AUDIO_FORMAT = ['WAV', 'MP3', 'M4A'];
+
+// 附件文档类型
+export const FILE_PREVIEW_FORMAT = ['PPTX', 'PPT', 'POT', 'POTX', 'PPS', 'PPSX', 'DPS', 'DPT', 'PPTM', 'POTM', 'PPSM', 'DOC', 'DOT', 'WPS', 'WPT', 'DOCX', 'DOTX', 'DOCM', 'DOTM', 'XLS', 'XLT', 'ET', 'ETT', 'XLSX', 'XLTX', 'CSV', 'XLSB', 'XLSM', 'XLTM', 'ETS', 'PDF', 'LRC', 'C', 'CPP', 'H', 'ASM', 'S', 'JAVA', 'ASP', 'BAT', 'BAS', 'PRG', 'CMD', 'RTF', 'TXT', 'LOG', 'XML', 'HTM', 'HTML'];
