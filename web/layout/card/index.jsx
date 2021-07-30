@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import styles from './index.module.scss';
 import { Button, Toast } from '@discuzq/design';
 import Footer from './footer';
+import Header from '@components/header';
 import isWeiXin from '@common/utils/is-weixin';
 import { inject, observer } from 'mobx-react';
 
@@ -29,6 +30,8 @@ const Index = ({ children, card }) => {
   }
 
   return (
+    <div>
+      <Header />
     <div className={styles.contain}>
       <div className={styles.poster} ref={post}>
         {children}
@@ -51,6 +54,7 @@ const Index = ({ children, card }) => {
           <div className={styles.wxBtn}>长按图片保存到相册</div>
         )}
       </div>
+    </div>
     </div>
   );
 };

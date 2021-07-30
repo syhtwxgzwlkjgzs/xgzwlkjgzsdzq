@@ -14,10 +14,11 @@ export const setThreadPostDataLocal = (data) => {
  * 从本地缓存获取要创建的帖子数据
  * @returns 要创建的postData
  */
-export const getThreadPostDataLocal = (uid) => {
+export const getThreadPostDataLocal = (uid, pid) => {
   const data = locals.get(threadPostData);
   if (data && uid === data?.userId) {
-    return data?.postData;
+    if (!pid || pid === data?.postData?.threadId) return data?.postData;
+    return null;
   }
   return null;
 };

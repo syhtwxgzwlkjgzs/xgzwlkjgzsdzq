@@ -334,7 +334,7 @@ class ThreadPostAction extends ThreadPostStore {
     let contentText = content && content.text;
     // 目前只是简单的队小程序进行简单的处理
     if (isMini) {
-      contentText = contentText.replace(/<br \/>/g, '\n');
+      contentText =  contentText.replace(/<br \/>\n/g, '\n').replace(/<br \/>/g, '\n');
     } else {
       // 小程序发帖不用转换表情，web端需要
       contentText = s9e.emotion(contentText);
@@ -518,6 +518,11 @@ class ThreadPostAction extends ThreadPostStore {
   @action
   setThreadStatus(status) {
     this.threadStatus = status || THREAD_STATUS.create;
+  }
+
+  @action
+  setLocalDataStatus(status) {
+    this.isHaveLocalData = status;
   }
 }
 
