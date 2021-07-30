@@ -71,7 +71,6 @@ class Header extends React.Component {
     baselayout["search"] = -1;
     baselayout["isJumpingToTop"] = true;
     if (!onSearch) {
-      console.log("Router redirecting")
       Router.push({ url: `/search?keyword=${value}` });
     } else {
       onSearch(value);
