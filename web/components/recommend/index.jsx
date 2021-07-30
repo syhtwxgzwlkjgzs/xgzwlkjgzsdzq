@@ -83,7 +83,7 @@ class Index extends React.Component {
         {
           recommendsStatus === 'none' && recommends?.filter((_, index) => index < filterCount).map((item, index) => {
             let titleString = item?.title || '';
-            titleString = replaceStringInRegex(titleString, "emoj", '[表情]');
+            titleString = replaceStringInRegex(titleString, "emotion", '[表情]');
             titleString = replaceStringInRegex(titleString, "img", '[图片]');
             return (
               <div key={index} className={`${style.recommendBox} right-recommend-item`} onClick={() => {this.recommendDetails(item)}}>
