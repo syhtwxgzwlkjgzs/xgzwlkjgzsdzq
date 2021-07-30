@@ -18,7 +18,7 @@ const DynamicVListLoading = dynamic(
   { loading: (res) => {
       return (
           <div style={{width: '100%', maxWidth: '1420px'}}>
-              <DynamicLoading data={res} style={{padding: '0 0 20px 0'}} loadComponent={<Placeholder/>}/>
+              <DynamicLoading data={res} style={{padding: '0 0 20px'}} loadComponent={<Placeholder/>}/>
           </div>
       )
     } }
@@ -56,12 +56,12 @@ class IndexPCPage extends React.Component {
   }
 
   componentDidMount() {
-    const { router } = this.props;
-    const { categoryId = '' } = router.query
-    if (categoryId) {
-      this.changeFilter({ categoryids: categoryId });
-      this.props.router.replace(`/`);
-    }
+    // const { router } = this.props;
+    // const { categoryId = '' } = router.query
+    // if (categoryId) {
+    //   this.changeFilter({ categoryids: categoryId });
+    //   this.props.router.replace(`/`);
+    // }
 
     if (this.timer) {
       clearInterval(this.timer);

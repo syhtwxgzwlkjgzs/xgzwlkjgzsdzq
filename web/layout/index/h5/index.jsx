@@ -2,6 +2,7 @@ import React, { createRef, Fragment } from 'react';
 import { inject, observer, Observer } from 'mobx-react';
 import { Icon, Tabs, Spin } from '@discuzq/design';
 // import ThreadContent from '@components/thread';
+import { withRouter } from 'next/router';
 import HomeHeader from '@components/home-header';
 import styles from './index.module.scss';
 import TopNew from './components/top-news';
@@ -43,7 +44,7 @@ class IndexH5Page extends React.Component {
     { loading: (res) => (
             <div>
                 <HomeHeader ref={this.headerRef} />
-                <DynamicLoading data={res} style={{padding: '0 0 20px 0'}} loadComponent={
+                <DynamicLoading data={res} style={{padding: '0 0 20px'}} loadComponent={
                   <div style={{width: '100%'}}>
                     <div className={styles.placeholder}>
                       <div className={styles.header}>
@@ -78,6 +79,15 @@ class IndexH5Page extends React.Component {
   )
 
   componentDidMount() {
+    // 识别通过分享过来的url
+    // 若包含categoryId参数，则定位到具体的categoryId数据
+    const { router } = this.props;
+    const { categoryId = '' } = router.query
+    if (categoryId) {
+      this.changeFilter({ categoryids: [categoryId] });
+      this.props.router.replace(`/`);
+    }
+
     // 是否有推荐
     const isDefault = this.props.site.checkSiteIsOpenDefautlThreadListData();
     this.props.index.setNeedDefault(isDefault);
@@ -116,7 +126,7 @@ class IndexH5Page extends React.Component {
       const newCategoryIds = getSelectedCategoryIds(categories, id);
 
       const newFilter = { ...index.filter, ...params, categoryids: newCategoryIds };
-
+debugger
       index.setFilter(newFilter);
     }
 
@@ -245,4 +255,4 @@ class IndexH5Page extends React.Component {
   }
 }
 
-export default IndexH5Page;
+export default withRouter(IndexH5Page);
