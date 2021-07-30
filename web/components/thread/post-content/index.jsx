@@ -35,7 +35,7 @@ const PostContent = ({
   const [cutContentForDisplay, setCutContentForDisplay] = useState('');
   const [showMore, setShowMore] = useState(false); // 根据文本长度显示"查看更多"
   const [imageVisible, setImageVisible] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState('');
   const ImagePreviewerRef = useRef(null); // 富文本中的图片也要支持预览
   const contentWrapperRef = useRef(null);
 
@@ -73,7 +73,7 @@ const PostContent = ({
     }
     e && e.stopPropagation();
     // 点击图片不跳转，图片不包含表情
-    if( !(e?.target?.getAttribute('src') && e?.target?.className?.indexOf("qq-emotion") === -1) ) {
+    if (!(e?.target?.getAttribute('src') && e?.target?.className?.indexOf('qq-emotion') === -1)) {
       onRedirectToDetail();
     }
   };
@@ -88,18 +88,18 @@ const PostContent = ({
   // 点击富文本中的图片
   const handleImgClick = (e) => {
     updateViewCount();
-    if(e?.attribs?.src) {
+    if (e?.attribs?.src) {
       setImageVisible(true);
       setImageUrl(e.attribs.src);
     }
-  }
+  };
 
   // 点击富文本中的链接
   const handleLinkClick = () => {
     updateViewCount();
     setTimeout(() => { // 等待store更新完成后跳转
     }, 500);
-  }
+  };
 
   // 超过1200个字符，截断文本用于显示
   const getCutContentForDisplay = (maxContentLength) => {
@@ -167,6 +167,6 @@ const PostContent = ({
       )}
     </div>
   );
-}
+};
 
 export default React.memo(PostContent);

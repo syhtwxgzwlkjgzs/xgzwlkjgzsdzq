@@ -19,6 +19,7 @@ import {
   readUsersDeny,
   wechatRebindQrCodeGen,
   getWechatRebindStatus,
+  getSignInFields,
   h5Rebind,
   miniRebind,
 } from '@server';
@@ -383,11 +384,34 @@ class UserAction extends SiteStore {
     return userThreadList;
   };
 
+  /**
+   * 删除指定 id 的用户帖子
+   * @param {*} id
+   */
+  @action
+  deleteUserThreads = (id) => {
+    Object.keys(this.userThreads).forEach((pageNum) => {
+      const pageDataSet = this.userThreads[pageNum];
+
+      const itemIdx = pageDataSet.findIndex((item) => item.threadId === id);
+
+      if (itemIdx === -1) return;
+
+      pageDataSet.splice(itemIdx, 1);
+
+      // 计数减少
+      this.userThreadsTotalCount -= 1;
+
+      this.userThreads[pageNum] = [...pageDataSet];
+    });
+  };
+
   // 获取用户主题列表的写方法
   // 读写分离，用于阻止多次请求的数据错乱
   setUserThreads = async (userThreadList) => {
     const pageData = get(userThreadList, 'data.pageData', []);
     const totalPage = get(userThreadList, 'data.totalPage', 1);
+
     this.userThreadsTotalPage = totalPage;
     this.userThreads = {
       ...this.userThreads,
@@ -422,7 +446,7 @@ class UserAction extends SiteStore {
     this.targetUserThreadsTotalPage = totalPage;
     this.targetUserThreads = {
       ...this.targetUserThreads,
-      [this.targetUserThreads]: pageData,
+      [this.targetUserThreadsPage]: pageData,
     };
     this.targetUserThreadsTotalCount = get(targetUserThreadList, 'data.totalCount', 0);
 
@@ -916,10 +940,10 @@ class UserAction extends SiteStore {
 
       // 更新点赞
       if (
-        updateType === 'like'
-        && !typeofFn.isUndefined(updatedInfo.isLiked)
-        && !typeofFn.isNull(updatedInfo.isLiked)
-        && user
+        updateType === 'like' &&
+        !typeofFn.isUndefined(updatedInfo.isLiked) &&
+        !typeofFn.isNull(updatedInfo.isLiked) &&
+        user
       ) {
         const { isLiked, likePayCount = 0 } = updatedInfo;
         const theUserId = user.userId || user.id;
@@ -984,12 +1008,7 @@ class UserAction extends SiteStore {
 
   // 生成微信换绑二维码，仅在 PC 使用
   @action
-  genRebindQrCode = async ({
-    scanSuccess = () => { },
-    scanFail = () => { },
-    onTimeOut = () => { },
-    option = {}
-  }) => {
+  genRebindQrCode = async ({ scanSuccess = () => {}, scanFail = () => {}, onTimeOut = () => {}, option = {} }) => {
     clearInterval(this.rebindTimer);
     this.isQrCodeValid = true;
     const qrCodeRes = await wechatRebindQrCodeGen(option);
@@ -1026,12 +1045,7 @@ class UserAction extends SiteStore {
 
   // mini 换绑接口
   @action
-  rebindWechatMini = async ({
-    jsCode,
-    iv,
-    encryptedData,
-    sessionToken,
-  }) => {
+  rebindWechatMini = async ({ jsCode, iv, encryptedData, sessionToken }) => {
     try {
       const miniRebindResp = await miniRebind({
         data: {
@@ -1062,23 +1076,18 @@ class UserAction extends SiteStore {
         err,
       };
     }
-  }
+  };
 
   // h5 换绑接口
   @action
-  rebindWechatH5 = async ({
-    code,
-    sessionId,
-    sessionToken,
-    state
-  }) => {
+  rebindWechatH5 = async ({ code, sessionId, sessionToken, state }) => {
     try {
       const h5RebindResp = await h5Rebind({
         params: {
           code,
           sessionId,
           sessionToken,
-          state
+          state,
         },
       });
 
@@ -1102,7 +1111,7 @@ class UserAction extends SiteStore {
         err,
       };
     }
-  }
+  };
 
   // 轮询重新绑定结果
   @action
@@ -1125,6 +1134,50 @@ class UserAction extends SiteStore {
           scanFail(scanStatus);
         }
       }
+    }
+  };
+
+  // 获取用户注册扩展信息
+  @action
+  getUserSigninFields = async () => {
+    let signinFieldsResp = {
+      code: 0,
+      data: [],
+    };
+
+    const safeParse = (value) => {
+      try {
+        return JSON.parse(value);
+      } catch (e) {
+        console.error(e);
+        console.error('解析JSON错误', value);
+        return value;
+      }
+    };
+
+    try {
+      signinFieldsResp = await getSignInFields();
+    } catch (e) {
+      console.error(e);
+      throw {
+        Code: 'usr_9999',
+        Message: '网络错误',
+      };
+    }
+    if (signinFieldsResp.code === 0) {
+      this.userSigninFields = signinFieldsResp.data.map((item) => {
+        if (!item.fieldsExt) {
+          item.fieldsExt = '';
+        } else {
+          item.fieldsExt = safeParse(item.fieldsExt);
+        }
+        return item;
+      });
+    } else {
+      throw {
+        Code: signinFieldsResp.code,
+        Message: signinFieldsResp.msg,
+      };
     }
   };
 
