@@ -706,19 +706,21 @@ class PostPage extends React.Component {
         element.setAttribute('class', 'editor-upload-error');
       }
 
-      if (sensitiveArr.length || uploadError.length) {
+      if (sensitiveArr.length) {
         Toast.error({
-          content: errorTips,
+          content: '帖子内容中含有敏感图片，请先处理相关图片再重新发布',
           hasMask: true,
           duration: 4000,
         });
+        return;
+      }
 
-        await new Promise(resolve => {
-          setTimeout(() => {
-            resolve();
-          }, 4000);
+      if (uploadError.length) {
+        Toast.error({
+          content: '帖子内容中，有部分图片转存失败，请先处理相关图片再重新发布',
+          hasMask: true,
+          duration: 4000,
         });
-
         return;
       }
     }
