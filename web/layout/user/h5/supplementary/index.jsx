@@ -152,7 +152,7 @@ class SupplementaryH5Page extends React.Component {
                 });
               }
             }}>
-              注册
+              确定
             </Button>
           </div>
         </div>

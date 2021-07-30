@@ -36,9 +36,17 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: $padding-2n;
+      padding-bottom: $padding-3n;
+      position: relative;
       .perCent {
         color: $text-color-primary;
+      }
+      .maxMoney {
+        color: $error-color;
+        font-size: $font-size-small;
+        position: absolute;
+        right: 0;
+        bottom: 1px;
       }
       :global {
         .dzq-slider__progress__button {
@@ -46,13 +54,18 @@
           height: 0px;
           padding: 5px;
           border-radius: 50%;
-          border: solid 7px $primary-color;
+          border: solid 8px $primary-color;
         }
         .dzq-slider__progress--active {
           height: 4px;
         }
         .dzq-slider__feature {
           height: 4px;
+          // background: $border-shadow-color;
+        }
+        .dzq-slider__progress--max {
+          height: 4px;
+          border-radius: 0 2px 2px 0;
         }
       }
     }

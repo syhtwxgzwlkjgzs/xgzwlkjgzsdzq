@@ -57,6 +57,7 @@
     align-items: center;
     .forum_member_img{
       @include img;
+      line-height: $font-line-height-xs;
     }
     .forum_member_img:nth-child(2){
       position: relative;
