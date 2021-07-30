@@ -380,6 +380,8 @@ class CommentH5Page extends React.Component {
 
   render() {
     const { commentDetail: commentData, isReady } = this.props.comment;
+    const isSelf =
+      this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === this.props.thread?.threadData?.userId;
 
     // 更多弹窗权限
     const morePermissions = {
@@ -437,7 +439,8 @@ class CommentH5Page extends React.Component {
               replyDeleteClick={(reply) => this.replyDeleteClick(reply, commentData)}
               replyAvatarClick={(reply,floor) =>this.replyAvatarClick(reply,commentData,floor)}
               onMoreClick={() => this.onMoreClick()}
-              isHideEdit={true}
+              isHideEdit
+              isSelf={isSelf}
             ></CommentList>
           )}
         </View>
