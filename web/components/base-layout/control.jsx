@@ -39,6 +39,8 @@ const BaseLayoutControl = forwardRef((props, ref) => {
   const [baseLayoutWhiteList, setBaseLayoutWhiteList] = useState(['home', 'search', 'my', 'like', 'collect', 'buy']);
   const layoutRef = useRef(null);
 
+  const disableEffect = useRef(false)
+
   useImperativeHandle(
     ref,
     () => ({
@@ -55,6 +57,17 @@ const BaseLayoutControl = forwardRef((props, ref) => {
   }, [layoutRef]);
 
   useEffect(() => {
+    if (!disableEffect.current) {
+      handleListPosition()
+    }
+    disableEffect.current = false
+  }, [listRef?.current]);
+
+  useEffect(() => {
+    handleListPosition()
+  }, [jumpTo, hasListChild, pageName]);
+
+  const handleListPosition = () => {
     if (hasListChild && listRef?.current && pageName && baseLayoutWhiteList.indexOf(pageName) !== -1) {
       if (jumpTo > 0) {
         baselayout[pageName] = jumpTo;
@@ -71,10 +84,10 @@ const BaseLayoutControl = forwardRef((props, ref) => {
         }
       }
     }
-  }, [jumpTo, hasListChild, listRef?.current, pageName]);
-
+  }
 
   const quickScrolling = (e) => {
+    disableEffect.current = true
 
     if (!e || !e.scrollTop || !hasListChild || !listRef?.current?.currentScrollTop) {
       onScroll();

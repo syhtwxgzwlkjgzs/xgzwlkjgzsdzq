@@ -39,14 +39,15 @@ class Index extends React.Component {
     // 初始化数据到store中
     const { platform } = this.props.site || {};
 
-    if (search.currentKeyword !== keyword) {
-      search.resetIndexData();
+    // if (platform === 'pc') {
+    //   search.resetIndexData();
+    // } else {
       search.currentKeyword = keyword;
-    } else {
+
       serverSearch && serverSearch.indexTopics && search.setIndexTopics(serverSearch.indexTopics);
       serverSearch && serverSearch.indexUsers && search.setIndexUsers(serverSearch.indexUsers);
       serverSearch && serverSearch.indexThreads && search.setIndexThreads(serverSearch.indexThreads);
-    }
+    // }
 
     this.state = {
       stepIndex: 0,
