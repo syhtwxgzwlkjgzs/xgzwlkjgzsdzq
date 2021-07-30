@@ -84,10 +84,13 @@ class IndexH5Page extends React.Component {
     const { router } = this.props;
     const { categoryId = '' } = router.query
     if (categoryId) {
-      this.changeFilter({ categoryids: [categoryId] });
+      // 判断categoryId是否是数字。可能是all/default
+      const id = /^\d+$/.test(categoryId) ? Number(categoryId) : categoryId
+
+      this.changeFilter({ categoryids: [id] });
       this.props.router.replace(`/`);
     }
-
+   
     // 是否有推荐
     const isDefault = this.props.site.checkSiteIsOpenDefautlThreadListData();
     this.props.index.setNeedDefault(isDefault);
@@ -126,7 +129,7 @@ class IndexH5Page extends React.Component {
       const newCategoryIds = getSelectedCategoryIds(categories, id);
 
       const newFilter = { ...index.filter, ...params, categoryids: newCategoryIds };
-debugger
+
       index.setFilter(newFilter);
     }
 
