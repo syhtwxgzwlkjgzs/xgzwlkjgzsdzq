@@ -119,12 +119,6 @@ class PostPage extends React.Component {
     localData.removeThreadPostDataLocal();
   }
 
-  openLocalData = () => {
-    const data = this.getPostDataFromLocal();
-    this.props.threadPost.setLocalDataStatus(false);
-    this.setPostData(data);
-  }
-
   fetchPermissions() {
     const { user } = this.props;
     if (!user.permissions) user.updateUserInfo();
@@ -667,17 +661,17 @@ class PostPage extends React.Component {
       if (this.isHaveContent()) {
         this.setPostData({ draft: 1 });
         this.saveDataLocal();
-        this.createThread(true, false);
+        this.createThread(true, true);
         const now = formatDate(new Date(), 'hh:mm');
         this.setPostData({ autoSaveTime: now });
       }
     }, 30000);
   }
 
-  async createThread(isDraft, isAutoSave = true) {
+  async createThread(isDraft, isAutoSave = false) {
     const { threadPost, thread } = this.props;
     let ret = {};
-    if (isAutoSave) this.toastInstance = Toast.loading({ content: '发布中...', hasMask: true });
+    if (!isAutoSave) this.toastInstance = Toast.loading({ content: '发布中...', hasMask: true });
     if (threadPost.postData.threadId) ret = await threadPost.updateThread(threadPost.postData.threadId);
     else ret = await threadPost.createThread();
     const { code, data, msg } = ret;
@@ -704,8 +698,9 @@ class PostPage extends React.Component {
         this.props.router.replace(`/thread/${data.threadId}`);
       } else {
         const { jumpLink } = this.state;
-        isAutoSave && Toast.info({ content: '保存草稿成功' });
-        if (!this.props.site.isPC) {
+        !isAutoSave && Toast.info({ content: '保存草稿成功' });
+        // 移动端非自动保存
+        if (!this.props.site.isPC && !isAutoSave) {
           jumpLink ? Router.push({ url: jumpLink }) : Router.back();
         }
       }
@@ -789,7 +784,6 @@ class PostPage extends React.Component {
         handleVditorInit={this.handleVditorInit}
         onVideoReady={this.onVideoReady}
         handleDraft={this.handleDraft}
-        openLocalData={this.openLocalData}
         {...this.state}
       />
     );
@@ -816,7 +810,6 @@ class PostPage extends React.Component {
         handleDraft={this.handleDraft}
         handleEditorBoxScroller={this.handleEditorBoxScroller}
         checkAudioRecordStatus={this.checkAudioRecordStatus.bind(this)}
-        openLocalData={this.openLocalData}
         {...this.state}
       />
     );

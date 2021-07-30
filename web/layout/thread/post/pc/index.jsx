@@ -24,6 +24,7 @@ import Copyright from '@components/copyright';
 import ForTheForm from '@components/thread/for-the-form';
 import VideoDisplay from '@components/thread-post/video-display';
 import MoneyDisplay from '@components/thread-post/money-display';
+import TagLocalData from '@components/thread-post/tag-localdata';
 
 @inject('threadPost')
 @inject('index')
@@ -203,17 +204,7 @@ class ThreadPCPage extends React.Component {
               {/* 设置的金额相关展示 + 本地缓存设置 */}
               <div className={styles.['editor-footer']}>
                 <div className={styles['editor-footer--left']}>
-                  {threadPost.isHaveLocalData && (<Tag
-                    closeable
-                    onClose={() => {
-                      threadPost.setLocalDataStatus(false);
-                    }}
-                    onClick={() => {
-                      this.props.openLocalData();
-                    }}
-                  >有本地缓存
-                    <span className={styles['local-open']}>打开</span>
-                  </Tag>)}
+                  <TagLocalData pc />
                   <MoneyDisplay
                     pc
                     canEditReward={this.props.canEditReward}
