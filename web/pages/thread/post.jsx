@@ -6,7 +6,7 @@ import IndexPCPage from '@layout/thread/post/pc';
 import HOCTencentCaptcha from '@middleware/HOCTencentCaptcha';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 import HOCWithLogin from '@middleware/HOCWithLogin';
-import * as localData from '@layout/thread/post/common';
+import * as localData from '@common/utils/thread-post-localdata';
 import { Toast } from '@discuzq/design';
 import { THREAD_TYPE, MAX_COUNT, THREAD_STATUS } from '@common/constants/thread-post';
 import Router from '@discuzq/sdk/dist/router';
@@ -72,8 +72,6 @@ class PostPage extends React.Component {
     this.redirectToHome();
     this.props.router.events.on('routeChangeStart', this.handleRouteChange);
     this.fetchPermissions();
-    // 如果本地缓存有数据，这个目前主要用于定位跳出的情况
-    if (this.getPostDataFromLocal()) this.props.threadPost.setLocalDataStatus(true);
     const { fetchEmoji, emojis } = this.props.threadPost;
     if (emojis.length === 0) fetchEmoji();
     this.fetchDetail();
@@ -113,7 +111,10 @@ class PostPage extends React.Component {
   };
 
   // 从本地缓存中获取数据
-  getPostDataFromLocal = () => localData.getThreadPostDataLocal(this.props.user.userInfo.id);
+  getPostDataFromLocal = () => localData.getThreadPostDataLocal(
+    this.props.user.userInfo.id,
+    this.props.router.query.id,
+  );
 
   removeLocalData = () => {
     localData.removeThreadPostDataLocal();
@@ -164,8 +165,10 @@ class PostPage extends React.Component {
       } else {
         Toast.error({ content: ret.msg });
       }
+    } else {
+      // 如果本地缓存有数据，编辑帖子不进行本地缓存的获取
+      if (this.getPostDataFromLocal()) this.props.threadPost.setLocalDataStatus(true);
     }
-    // 非编辑情况
     this.autoSaveData();
   }
 

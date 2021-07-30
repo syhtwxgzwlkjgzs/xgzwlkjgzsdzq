@@ -2,11 +2,12 @@
  * 提示有本地缓存标签
  */
 import React from 'react';
-import { Tag } from '@discuzq/design';
+import { Text } from '@tarojs/components';
+import Tag from '@discuzq/design/dist/components/tag/index';
 import { inject, observer } from 'mobx-react';
 import * as localData from '@common/utils/thread-post-localdata';
-import styles from './index.module.scss';
 import classNames from 'classnames';
+import styles from './index.module.scss';
 
 const TagLocalData = (props) => {
   const { threadPost, user, className = '', pc } = props;
@@ -17,7 +18,7 @@ const TagLocalData = (props) => {
     threadPost.setLocalDataStatus(false); // 隐藏本地缓存提示
     threadPost.setPostData({
       ...data,
-      contentText: text.replace(/<br \/>\n/g, '<br />'),
+      contentText: text.replace(/<br \/>\n/g, '\n'),
       autoSaveTime: '',
     }); // 设置发帖内容
   };
@@ -34,7 +35,7 @@ const TagLocalData = (props) => {
         }}
         onClick={openLocalData}
       >有本地缓存
-        <span className={styles['local-open']}>打开</span>
+        <Text className={styles['local-open']}>打开</Text>
       </Tag>
     );
   }

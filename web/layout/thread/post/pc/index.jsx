@@ -204,7 +204,7 @@ class ThreadPCPage extends React.Component {
               {/* 设置的金额相关展示 + 本地缓存设置 */}
               <div className={styles.['editor-footer']}>
                 <div className={styles['editor-footer--left']}>
-                  <TagLocalData pc />
+                  {threadPost.isHaveLocalData && <TagLocalData pc />}
                   <MoneyDisplay
                     pc
                     canEditReward={this.props.canEditReward}

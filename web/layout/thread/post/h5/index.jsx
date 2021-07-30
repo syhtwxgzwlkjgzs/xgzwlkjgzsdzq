@@ -345,9 +345,9 @@ class ThreadCreate extends React.Component {
           )}
         </div>
         <div id="post-bottombar" className={styles['post-bottombar']}>
-          <div id="post-localdata" className={styles['post-localdata']}>
+          {threadPost.isHaveLocalData && (<div id="post-localdata" className={styles['post-localdata']}>
             <TagLocalData />
-          </div>
+          </div>)}
           {/* 插入位置和自动保存 */}
           {((permissions?.insertPosition?.enable && webConfig?.lbs?.lbs) || postData.autoSaveTime) && (
             <div id="post-position" className={styles['position-box']}>
