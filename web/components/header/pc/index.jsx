@@ -15,6 +15,7 @@ import LoginHelper from '@common/utils/login-helper';
 @inject('user')
 @inject('message')
 @inject('forum')
+@inject('search')
 @observer
 class Header extends React.Component {
   timeoutId = null;
@@ -66,6 +67,7 @@ class Header extends React.Component {
   handleSearch = (e) => {
     const { value = '' } = this.state;
     const { onSearch } = this.props;
+    this.props.search.currentKeyword = null;
     if (!onSearch) {
       Router.push({ url: `/search?keyword=${value}` });
     } else {
@@ -76,6 +78,7 @@ class Header extends React.Component {
   handleIconClick = (e) => {
     const { value = '' } = this.state;
     const { onSearch } = this.props;
+    this.props.search.currentKeyword = null;
     if (!onSearch) {
       Router.push({ url: `/search?keyword=${value}` });
     } else {
