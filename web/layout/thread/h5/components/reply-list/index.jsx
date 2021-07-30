@@ -119,6 +119,11 @@ export default class ReplyList extends React.Component {
                 <div className={styles.replyListName} onClick={() => {this.avatarClick(2)}}>
                     {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
                 </div>
+                {this.props.isSelf && (
+                    <div className={styles.masterBox}>
+                      <span className={styles.masterText}>楼主</span>
+                    </div>
+                  )}
                 {!!groups?.isDisplay && (
                   <div className={styles.groups}>{groups?.name || groups?.groupName}</div>
                 )}
