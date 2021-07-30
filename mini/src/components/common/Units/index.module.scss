@@ -71,6 +71,11 @@
     color: $text-color-regular;
     font-size: $font-size-label;
   }
+
+  .icon {
+    width: 17px;
+    height: 20px;
+  }
 }
 
 .img {
@@ -194,10 +199,5 @@
 
   .remove {
     margin-left: $margin-2n;
-  }
-
-  .icon {
-    width: 20px;
-    height: 20px;
   }
 }
