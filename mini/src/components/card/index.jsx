@@ -7,7 +7,6 @@ import getConfig from './config/thread-card';
 import { throttle } from '@common/utils/throttle-debounce.js';
 import { inject, observer } from 'mobx-react';
 import getSiteConfig from './config/site-card'
-import s9e from '@common/utils/s9e'
 
 const Index = ({
   thread,
@@ -17,24 +16,19 @@ const Index = ({
   data
 }) => {
   useEffect(() => {
-
-    if (thread?.content?.text) {
-      const text = thread?.content?.text
-      thread.content.text = s9e.parse(text)
-    }
-
     if(thread) {
       getConfig({ thread, miniCode, siteName }).then(
         config => {
           setConfig(config);
         }
       )
+    } else {
+      getSiteConfig({ data, miniCode, siteName, user }).then(
+        config => {
+          setConfig(config)
+        }
+      )
     }
-    getSiteConfig({ data, miniCode, siteName, user }).then(
-      config => {
-        setConfig(config)
-      }
-    )
   }, [miniCode])
   const [config, setConfig] = useState('')
   const [shareImage, setShareImage] = useState('')
