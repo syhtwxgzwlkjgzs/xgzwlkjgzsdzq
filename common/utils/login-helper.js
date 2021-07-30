@@ -137,10 +137,10 @@ class LoginHelper {
   // 保存当前地址，并跳转目标地址targetUrl
   saveAndRedirect = (targetUrl) => {
     this.saveCurrentUrl();
-
-    Router.redirect({
-      url: targetUrl,
-    });
+    // Router.redirect({
+    //   url: targetUrl,
+    // });
+    window.location.replace(targetUrl); // 使用Router.redirect无法顺利跳转
   };
 
   // 自动记录当前的地址，再跳转登录页

@@ -264,6 +264,7 @@ class ThreadCreate extends React.Component {
             }}
             onInit={this.props.handleVditorInit}
             setState={this.props.handleSetState}
+            site={site}
           />
           {/* 图片 */}
           {(currentAttachOperation === THREAD_TYPE.image || Object.keys(postData.images).length > 0) && (
