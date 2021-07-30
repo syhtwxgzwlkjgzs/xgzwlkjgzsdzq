@@ -12,6 +12,7 @@ import { get } from '@common/utils/get';
 import { BANNED_USER, REVIEWING, REVIEW_REJECT, isExtFieldsOpen } from '@common/store/login/util';
 import LoginHelper from '@common/utils/login-helper';
 import Router from '@discuzq/sdk/dist/router';
+import Page from '@components/page';
 
 @inject('site')
 @inject('user')
@@ -43,7 +44,7 @@ class BindNicknameH5Page extends React.Component {
         hasMask: false,
         duration: 1000,
         onClose: () => {
-          const { site, platform } = this.props;
+          const { site, commonLogin } = this.props;
           const { statusCode, statusMsg, needToCompleteExtraInfo, needToBindPhone, needToBindWechat, nickName, sessionToken } = commonLogin;
           // 跳转补充信息页
           if (needToCompleteExtraInfo) {
@@ -117,34 +118,36 @@ class BindNicknameH5Page extends React.Component {
   render() {
     const { site, nicknameBind, commonLogin: { loginLoading } } = this.props;
     return (
-      <View className={layout.container}>
-        <HomeHeader hideInfo hideMinibar mode="supplementary"/>
-        <View className={layout.content}>
-          <View className={layout.title}>设置昵称</View>
-          <Input
-            className={layout.input}
-            value={nicknameBind.nickname}
-            placeholder="昵称"
-            clearable={true}
-            onChange={this.handleNicknameChange}
-            onEnter={this.handleBindButtonClick}
-          />
-          <Button
-            disabled={!nicknameBind.nickname}
-            loading={!loginLoading}
-            className={layout.button}
-            type="primary"
-            onClick={this.handleBindButtonClick}
-          >
-            下一步
-          </Button>
-          <View className={layout.functionalRegion}>
-            <View className={layout.clickBtn} onClick={() => { this.logout() }}>
-              退出登录
+      <Page>
+        <View className={layout.container}>
+          <HomeHeader hideInfo hideMinibar mode="supplementary"/>
+          <View className={layout.content}>
+            <View className={layout.title}>设置昵称</View>
+            <Input
+              className={layout.input}
+              value={nicknameBind.nickname}
+              placeholder="昵称"
+              clearable={true}
+              onChange={this.handleNicknameChange}
+              onEnter={this.handleBindButtonClick}
+            />
+            <Button
+              disabled={!nicknameBind.nickname}
+              loading={!loginLoading}
+              className={layout.button}
+              type="primary"
+              onClick={this.handleBindButtonClick}
+            >
+              下一步
+            </Button>
+            <View className={layout.functionalRegion}>
+              <View className={layout.clickBtn} onClick={() => { this.logout() }}>
+                退出登录
+              </View>
             </View>
           </View>
         </View>
-      </View>
+      </Page>
     );
   }
 }
