@@ -42,6 +42,13 @@ class PartnerInviteH5Page extends React.Component {
 
   async componentDidMount() {
     try {
+      // 若用户已登录，实时刷新站点付费及用户是否付费信息
+      const {site, user} = this.props;
+      if (user.isLogin()) {
+        user.updateUserInfo(user.id);
+        site.getSiteInfo();
+      }
+
       await Promise.all([
         this.initInviteCode(),
         this.initUserList(),
@@ -177,7 +184,7 @@ class PartnerInviteH5Page extends React.Component {
             ) : (
               <></>
             )}
-            {!isLoading && !threadsPageData?.length ? <NoData /> : <></>}
+            {!isLoading && !usersPageData?.length ? <NoData /> : <></>}
             {isLoading ? (
               <View className={layout.spinner}>
                 <Spin type="spinner" />
