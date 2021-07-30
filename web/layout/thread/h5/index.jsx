@@ -31,6 +31,7 @@ import isWeiXin from '@common/utils/is-weixin';
 import RenderThreadContent from './content';
 import RenderCommentList from './comment-list';
 import classNames from 'classnames';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
 import BottomView from '@components/list/BottomView';
 import MorePopop from '@components/more-popop';
@@ -209,7 +210,7 @@ class ThreadH5Page extends React.Component {
       goToLoginPage({ url: '/user/login' });
       return;
     }
-
+    if (!this.props.canPublish()) return;
     this.setState({
       showCommentInput: true,
     });
@@ -851,7 +852,7 @@ class ThreadH5Page extends React.Component {
             <DeletePopup
               visible={this.state.showDeletePopup}
               onClose={() => this.setState({ showDeletePopup: false })}
-              onBtnClick={(type) => this.onBtnClick(type)}
+              onBtnClick={type => this.onBtnClick(type)}
               type='thread'
             ></DeletePopup>
             {/* 举报弹层 */}
@@ -887,4 +888,4 @@ class ThreadH5Page extends React.Component {
   }
 }
 
-export default withRouter(ThreadH5Page);
+export default HOCFetchSiteData(withRouter(ThreadH5Page));

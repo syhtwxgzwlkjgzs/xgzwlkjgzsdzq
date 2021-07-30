@@ -160,7 +160,7 @@ class RenderCommentList extends React.Component {
     });
   }
 
-  //删除回复
+  // 删除回复
   async replyDeleteComment() {
     if (!this.replyData.id) return;
 
@@ -255,7 +255,7 @@ class RenderCommentList extends React.Component {
 
     if (imageList?.length) {
       params.attachments = imageList
-        .filter((item) => item.status === 'success' && item.response)
+        .filter(item => item.status === 'success' && item.response)
         .map((item) => {
           const { id } = item.response;
           return {
@@ -381,6 +381,7 @@ class RenderCommentList extends React.Component {
       goToLoginPage({ url: '/user/login' });
       return;
     }
+    if (!this.props.canPublish()) return;
     return true;
   }
 
@@ -388,8 +389,7 @@ class RenderCommentList extends React.Component {
     const { totalCount, commentList } = this.props.thread;
 
     // 是否作者自己
-    const isSelf =
-      this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === this.props.thread?.threadData?.userId;
+    const isSelf =      this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === this.props.thread?.threadData?.userId;
 
     const isReward = this.props.thread?.threadData?.displayTag?.isReward;
 
@@ -425,13 +425,12 @@ class RenderCommentList extends React.Component {
             onSubmit={(value, imageList) => this.props.onPublishClick(value, imageList)}
             initValue={this.state.inputValue}
             placeholder={this.state.placeholder}
-            onFocus={(e) => this.onFocus(e)}
+            onFocus={e => this.onFocus(e)}
             onEmojiIconClick={() => this.onFocus()}
             onAtIconClick={() => this.onFocus()}
             onPcitureIconClick={() => this.onFocus()}
           ></CommentInput>
         </div>
-
         {/* 评论弹层 */}
         {/* <InputPopup
             visible={this.state.showCommentInput}
@@ -446,15 +445,15 @@ class RenderCommentList extends React.Component {
               <CommentList
                 data={val}
                 key={val.id}
-                avatarClick={(userId) => this.onUserClick(userId)}
+                avatarClick={userId => this.onUserClick(userId)}
                 replyAvatarClick={(reply, floor) => this.replyAvatarClick(reply, val, floor)}
                 likeClick={() => this.likeClick(val)}
                 replyClick={() => this.replyClick(val)}
                 deleteClick={() => this.deleteClick(val)}
                 editClick={() => this.editClick(val)}
-                replyLikeClick={(reply) => this.replyLikeClick(reply, val)}
-                replyReplyClick={(reply) => this.replyReplyClick(reply, val)}
-                replyDeleteClick={(reply) => this.replyDeleteClick(reply, val)}
+                replyLikeClick={reply => this.replyLikeClick(reply, val)}
+                replyReplyClick={reply => this.replyReplyClick(reply, val)}
+                replyDeleteClick={reply => this.replyDeleteClick(reply, val)}
                 reportClick={() => this.reportClick(val)}
                 onCommentClick={() => this.onCommentClick(val)}
                 onSubmit={(val, imageList) => this.createReply(val, imageList)}
@@ -491,7 +490,7 @@ class RenderCommentList extends React.Component {
             remainMoney={Number(parseContent.REWARD.remainMoney)} // 需要传入剩余悬赏金额
             visible={this.state.showAboptPopup}
             onCancel={() => this.onAboptCancel()}
-            onOkClick={(data) => this.onAboptOk(data)}
+            onOkClick={data => this.onAboptOk(data)}
           ></AboptPopup>
         )}
       </div>
