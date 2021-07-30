@@ -76,7 +76,7 @@
 
 .vFixed {
   visibility: visible;
-  z-index: 1000;
+  z-index: $zindex-backtotop;
 }
 
 .placeholder {
