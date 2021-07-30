@@ -37,10 +37,13 @@ const List = forwardRef(({
   errorText='加载失败',
   platform="",
   showLoadingInCenter = true,
-  site
+  site,
+  baselayout
 }, ref) => {
   const listWrapper = useRef(null);
   const currentScrollTop = useRef(0);
+  const targetScrollTop = useRef(null);
+  const isListScrolling = useRef(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errText, setErrText] = useState(errorText);
@@ -96,6 +99,7 @@ const List = forwardRef(({
       onBackTop,
       jumpToScrollTop,
       currentScrollTop,
+      isListScrolling,
       isLoading,
       resetList,
       listWrapper,
@@ -120,15 +124,15 @@ const List = forwardRef(({
 
   const onBackTop = () => {
     backtoTopFn(listWrapper.current.scrollTop, (top) => {
+      baselayout["isJumpingToTop"] = top > 0;
       listWrapper.current.scrollTop = top;
-      currentScrollTop.current = top;
     });
   };
 
   const jumpToScrollTop = (scrollTop) => {
     if (scrollTop && scrollTop > 0) {
       listWrapper.current.scrollTop = scrollTop;
-      currentScrollTop.current = scrollTop;
+      targetScrollTop.current = scrollTop;
     }
   };
   const onTouchMove = throttle(({ isFirst = false }) => {
@@ -144,6 +148,15 @@ const List = forwardRef(({
     // 滑动事件
     onScroll({ scrollTop });
     currentScrollTop.current = scrollTop;
+
+    if(targetScrollTop.current && Math.abs(scrollTop - targetScrollTop.current) > 1) { // scrollTop 和 targetScrollTop 有1个像素差距
+      isListScrolling.current = true; // 用于防止useEffect和scroll函数互调
+    }
+    setTimeout(() => { // 要重置滚动状态为false
+      isListScrolling.current = false;
+      targetScrollTop.current = null;
+    });
+
 
     if (!onRefresh) return;
 
@@ -204,5 +217,5 @@ const List = forwardRef(({
 });
 
 // export default React.memo(List);
-export default inject('site')(observer(List));
+export default inject('site', 'baselayout')(observer(List));
 

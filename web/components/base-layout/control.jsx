@@ -58,9 +58,9 @@ const BaseLayoutControl = forwardRef((props, ref) => {
     if (hasListChild && listRef?.current && pageName && baseLayoutWhiteList.indexOf(pageName) !== -1) {
       if (jumpTo > 0) {
         baselayout[pageName] = jumpTo;
-        listRef.current.jumpToScrollTop(jumpTo);
+        if(!listRef.current.isListScrolling.current) listRef.current.jumpToScrollTop(jumpTo);
       } else {
-        if(baselayout[pageName] > 0 && !baselayout.isJumpingToTop) {
+        if(baselayout[pageName] > 0 && !baselayout.isJumpingToTop && !listRef.current.isListScrolling.current) {
           // 需要异步触发，可能存在列表没有渲染出来
           setTimeout(() => {
             listRef.current.jumpToScrollTop(baselayout[pageName]);
@@ -77,8 +77,7 @@ const BaseLayoutControl = forwardRef((props, ref) => {
 
 
   const quickScrolling = (e) => {
-
-    if (!e || !e.scrollTop || !hasListChild || !listRef?.current?.currentScrollTop) {
+    if (!e || !e.scrollTop || !hasListChild) {
       onScroll();
       return;
     }

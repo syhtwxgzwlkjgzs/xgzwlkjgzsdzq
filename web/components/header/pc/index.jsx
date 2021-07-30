@@ -67,8 +67,7 @@ class Header extends React.Component {
 
   handleSearch = (e) => {
     const { value = '' } = this.state;
-    const { onSearch, search, baselayout } = this.props;
-    search.currentKeyword = null;
+    const { onSearch, baselayout } = this.props;
     baselayout["search"] = -1;
     baselayout["isJumpingToTop"] = true;
     if (!onSearch) {
@@ -79,15 +78,13 @@ class Header extends React.Component {
     }
   };
 
-  // handleIconClick = (e) => {
-  //   const { value = '' } = this.state;
-  //   const { onSearch } = this.props;
-  //   if (!onSearch) {
-  //     Router.push({ url: `/search?keyword=${value}` });
-  //   } else {
-  //     onSearch(value);
-  //   }
-  // };
+  handleClickSearchIcon = () => {
+    const { search, baselayout } = this.props;
+    search.currentKeyword = null;
+    baselayout["search"] = -1;
+    baselayout["isJumpingToTop"] = true;
+    this.handleRouter('/search');
+  }
 
   handleRouter = (url) => {
     this.props.router.push(url);
@@ -251,7 +248,7 @@ class Header extends React.Component {
                 {!otherPermissions?.canViewThreads ? (
                   <></>
                 ) : (
-                  <div className={styles.iconItem} onClick={() => this.handleRouter('/search')}>
+                  <div className={styles.iconItem} onClick={() => this.handleClickSearchIcon()}>
                     <Icon
                       onClick={() => {
                         this.iconClickHandle('home');

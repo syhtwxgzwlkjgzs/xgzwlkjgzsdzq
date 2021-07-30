@@ -37,7 +37,6 @@ class Index extends React.Component {
     const { serverSearch, search, router } = this.props;
     const { keyword = '' } = router?.query;
     // 初始化数据到store中
-    const { platform } = this.props.site || {};
     if (search.currentKeyword !== keyword) {
       search.resetIndexData();
       search.currentKeyword = keyword;
@@ -56,7 +55,6 @@ class Index extends React.Component {
     const { search, router } = this.props;
     const { keyword = '' } = router?.query;
 
-    const { platform } = this.props.site || {};
     if (search.currentKeyword !== keyword) {
       await search.getSearchData({ hasTopics: false, hasUsers: false, hasThreads: false, search: keyword });
       this.setStepIndex()

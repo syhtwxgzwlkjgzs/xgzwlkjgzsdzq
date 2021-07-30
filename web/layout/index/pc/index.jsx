@@ -27,6 +27,7 @@ const DynamicVListLoading = dynamic(
 @inject('site')
 @inject('user')
 @inject('index')
+@inject('search')
 @observer
 class IndexPCPage extends React.Component {
   constructor(props) {
@@ -56,6 +57,7 @@ class IndexPCPage extends React.Component {
   }
 
   componentDidMount() {
+    this.props.search.currentKeyword = null;
     if (this.timer) {
       clearInterval(this.timer);
     }
