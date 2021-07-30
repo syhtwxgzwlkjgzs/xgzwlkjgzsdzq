@@ -20,6 +20,15 @@ import LoginHelper from '@common/utils/login-helper';
 @inject('commonLogin')
 @observer
 class WXBind extends Component {
+  constructor(props) {
+    super(props);
+    this.handleBindButtonClick = this.handleBindButtonClick.bind(this);
+  }
+
+  componentWillUnmount() {
+    this.props.commonLogin.reset();
+  }
+
   getUserProfileCallback = async (params) => {
     const { scene: sessionToken } = getCurrentInstance().router.params;
 
@@ -32,6 +41,7 @@ class WXBind extends Component {
         sessionToken,
         type: 'pc'
       });
+      this.props.commonLogin.setLoginLoading(true);
       checkUserStatus(res);
       if (res.code === 0) {
         this.props.h5QrCode.bindTitle = '已成功绑定';
@@ -43,6 +53,7 @@ class WXBind extends Component {
         Message: res.msg,
       };
     } catch (error) {
+      this.props.commonLogin.setLoginLoading(true);
       // 注册信息补充
       if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
         if (isExtFieldsOpen(this.props.site)) {
@@ -78,6 +89,17 @@ class WXBind extends Component {
     }
   }
 
+  handleBindButtonClick() {
+    const { commonLogin } = this.props;
+    if (!commonLogin.loginLoading) {
+      return;
+    }
+    commonLogin.setLoginLoading(false);
+    getUserProfile(this.getUserProfileCallback, true, () => {
+      commonLogin.setLoginLoading(true);
+    });
+  }
+
   render() {
     const { nickname } = getCurrentInstance().router.params;
 
@@ -95,7 +117,7 @@ class WXBind extends Component {
                 ? <Button
                   className={layout.button}
                   type="primary"
-                  onClick={() => {getUserProfile(this.getUserProfileCallback)}}
+                  onClick={this.handleBindButtonClick}
                 >
                   点此，绑定小程序，并继续访问
                 </Button>

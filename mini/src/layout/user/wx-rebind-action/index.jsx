@@ -25,7 +25,13 @@ class WXRebindActionPage extends Component {
       currentStatus: '',
       errorTips: '扫码失败',
     };
+    this.handleRebindButtonClick = this.handleRebindButtonClick.bind(this);
   }
+
+  componentWillUnmount() {
+    this.props.commonLogin.reset();
+  }
+
   getUserProfileCallback = async (params) => {
     const { scene: sessionToken } = getCurrentInstance().router.params;
 
@@ -38,15 +44,28 @@ class WXRebindActionPage extends Component {
         encryptedData: params.encryptedData,
         sessionToken,
       });
+      this.props.commonLogin.setLoginLoading(true);
       this.setState({
         currentStatus: 'success'
       });
     } catch (e) {
+      this.props.commonLogin.setLoginLoading(true);
       this.setState({
         currentStatus: 'error',
         errorTips: e.Msg
       });
     }
+  }
+
+  handleRebindButtonClick() {
+    const { commonLogin } = this.props;
+    if (!commonLogin.loginLoading) {
+      return;
+    }
+    commonLogin.setLoginLoading(false);
+    getUserProfile(this.getUserProfileCallback, true, () => {
+      commonLogin.setLoginLoading(true);
+    });
   }
 
 
@@ -80,7 +99,7 @@ class WXRebindActionPage extends Component {
             <Button
                 className={styles.button}
                 type="primary"
-                onClick={() => {getUserProfile(this.getUserProfileCallback)}}
+                onClick={this.handleRebindButtonClick}
               >
               确认
             </Button>

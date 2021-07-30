@@ -27,7 +27,9 @@ class MiniAuth extends React.Component {
     this.state = {
       isVisible: true
     }
+    this.handleLoginButtonClick = this.handleLoginButtonClick.bind(this);
   }
+
   async componentDidMount() {
     const { action, sessionToken } = getCurrentInstance().router.params;
     await getParamCode(this.props.commonLogin)
@@ -37,6 +39,10 @@ class MiniAuth extends React.Component {
         url: `/subPages/user/wx-bind/index?sessionToken=${sessionToken}`
       })
     }
+  }
+
+  componentWillUnmount() {
+    this.props.commonLogin.reset();
   }
 
   getUserProfileCallback = async (params) => {
@@ -58,6 +64,7 @@ class MiniAuth extends React.Component {
           inviteCode
         },
       });
+      commonLogin.setLoginLoading(true);
 
       // 优先判断是否能登录
       if (resp.code === 0) {
@@ -88,6 +95,7 @@ class MiniAuth extends React.Component {
         Message: resp.msg,
       };
     } catch (error) {
+      this.props.commonLogin.setLoginLoading(true);
       // 注册信息补充
       if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
         const uid = get(error, 'uid', '');
@@ -123,6 +131,17 @@ class MiniAuth extends React.Component {
     }
   }
 
+  handleLoginButtonClick() {
+    const { commonLogin } = this.props;
+    if (!commonLogin.loginLoading) {
+      return;
+    }
+    commonLogin.setLoginLoading(false);
+    getUserProfile(this.getUserProfileCallback, true, () => {
+      commonLogin.setLoginLoading(true);
+    });
+  }
+
   render() {
     return (
       <Page>
@@ -131,7 +150,7 @@ class MiniAuth extends React.Component {
           visible={this.state.isVisible}
         >
           <View  className={layout.modal} >
-            <Button className={layout.button} onClick={() => {getUserProfile(this.getUserProfileCallback)}}>微信快捷登录</Button>
+            <Button className={layout.button} onClick={this.handleLoginButtonClick}>微信快捷登录</Button>
           </View>
         </Popup>
       </Page>
