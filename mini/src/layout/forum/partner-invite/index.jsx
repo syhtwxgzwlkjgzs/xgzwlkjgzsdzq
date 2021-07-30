@@ -17,7 +17,7 @@ import layout from './index.module.scss';
 import SiteInfo from '../site-info';
 import PayBox from '@components/payBox';
 import { simpleRequest } from '@common/utils/simple-request';
-import { getCurrentInstance } from '@tarojs/taro';
+import Taro, { getCurrentInstance } from '@tarojs/taro';
 import { readUser } from '@server';
 import LoginHelper from '@common/utils/login-helper';
 
@@ -40,8 +40,24 @@ class PartnerInviteH5Page extends React.Component {
     };
   }
 
+  setNavigationBarStyle = () => {
+    Taro.setNavigationBarColor({
+      frontColor: '#000000',
+      backgroundColor: '#ffffff'
+    })
+  }
+
   async componentDidMount() {
+    this.setNavigationBarStyle();
+    
     try {
+      // 若用户已登录，实时刷新站点付费及用户是否付费信息
+      const {site, user} = this.props;
+      if (user.isLogin()) {
+        user.updateUserInfo(user.id);
+        site.getSiteInfo();
+      }
+
       await Promise.all([
         this.initInviteCode(),
         this.initUserList(),
@@ -177,7 +193,7 @@ class PartnerInviteH5Page extends React.Component {
             ) : (
               <></>
             )}
-            {!isLoading && !threadsPageData?.length ? <NoData /> : <></>}
+            {!isLoading && !usersPageData?.length ? <NoData /> : <></>}
             {isLoading ? (
               <View className={layout.spinner}>
                 <Spin type="spinner" />

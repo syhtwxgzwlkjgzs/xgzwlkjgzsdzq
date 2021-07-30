@@ -28,7 +28,7 @@ class WalletPage extends React.Component {
   setNavigationBarStyle = () => {
     Taro.setNavigationBarColor({
       frontColor: '#ffffff',
-      backgroundColor: '#000000',
+      backgroundColor: '#ffffff',
     })
   }
 

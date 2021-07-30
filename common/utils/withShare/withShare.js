@@ -16,7 +16,6 @@ function withShare(opts = {}) {
   const { needShareline = true, needLogin = true } = opts;
   menus = ['shareAppMessage'];
   return function demoComponent(Component) {
-    @inject('user')
     class WithShare extends Component {
       componentDidMount() {
         Taro.showShareMenu({
@@ -28,16 +27,6 @@ function withShare(opts = {}) {
         }
       }
       onShareAppMessage = (res) => {
-        const { user } = this.props;
-        // 是否必须登录
-        if (needLogin && !user.isLogin()) {
-          Toast.info({ content: '请先登录!' });
-          goToLoginPage({ url: '/subPages/user/wx-auth/index' });
-          const promise = Promise.reject();
-          return {
-            promise,
-          };
-        }
         const data = res.target?.dataset?.shareData || '';
         let shareData = '';
         if (this.getShareData && typeof this.getShareData === 'function') {

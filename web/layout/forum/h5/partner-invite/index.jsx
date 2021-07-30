@@ -34,8 +34,15 @@ class PartnerInviteH5Page extends React.Component {
     };
   }
   async componentDidMount() {
-    const { forum, router, invite } = this.props;
+    const { forum, router, invite, user, site } = this.props;
     try {
+      // 若用户已登录，实时刷新站点付费及用户是否付费信息
+      const {site, user} = this.props;
+      if (user.isLogin()) {
+        user.updateUserInfo(user.id);
+        site.getSiteInfo();
+      }
+
       const inviteCode = invite.getInviteCode(router);
       if (inviteCode) {
         invite.setInviteCode(inviteCode);
@@ -265,7 +272,7 @@ class PartnerInviteH5Page extends React.Component {
           {/* 热门内容预览 start */}
           <PartnerInviteHot unifyOnClick={this.handleJoinSite}/>
           {/* 热门内容预览 end */}
-          {platform === 'h5' && <Copyright />}
+          {platform === 'h5' && <Copyright className={layout.copyright} />}
           {
             platform === 'h5'
               ? (
