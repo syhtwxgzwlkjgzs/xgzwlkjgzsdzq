@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle, useMemo } from 'react';
 import { inject, observer } from 'mobx-react';
 import { noop } from '@components/thread/utils';
 import { throttle } from '@common/utils/throttle-debounce.js';
@@ -37,7 +37,6 @@ const BaseLayoutControl = forwardRef((props, ref) => {
   } = props;
 
   const [listRef, setListRef] = useState(null);
-  const [baseLayoutWhiteList, setBaseLayoutWhiteList] = useState(['home', 'search', 'like', 'collect', 'buy']);
   const layoutRef = useRef(null);
 
   useImperativeHandle(
@@ -47,8 +46,15 @@ const BaseLayoutControl = forwardRef((props, ref) => {
     }),
   );
 
+  const baseLayoutWhiteList = useMemo(() => {
+    const defaultWhiteList = ['home', 'search', 'my', 'like', 'collect', 'buy'];
+    if(Array.isArray(jumpRuleList)) {
+      return [...defaultWhiteList, ...jumpRuleList];
+    }
+    return defaultWhiteList;
+  }, [jumpRuleList]);
+
   useEffect(() => {
-    setBaseLayoutWhiteList([...baseLayoutWhiteList, ...jumpRuleList]);
     ready();
   }, []);
 
