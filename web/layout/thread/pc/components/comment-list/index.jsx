@@ -108,8 +108,8 @@ class CommentList extends React.Component {
   }
 
   // 点击评论列表用户头像
-  replyAvatarClick(data,floor) {
-    typeof this.props.replyAvatarClick === 'function' && this.props.replyAvatarClick(data,floor);
+  replyAvatarClick(data, floor) {
+    typeof this.props.replyAvatarClick === 'function' && this.props.replyAvatarClick(data, floor);
   }
 
   async onSubmit(value, imageList) {
@@ -136,10 +136,8 @@ class CommentList extends React.Component {
   render() {
     const { canDelete, canEdit, canLike, canHide } = this.generatePermissions(this.props.data);
     const { groups } = this.props.data?.user || {};
-
     // 评论内容是否通过审核
     const isApproved = this.props?.data?.isApproved === 1;
-
     return (
       <div className={`${styles.commentList} dzq-comment`}>
         {this.props.data?.rewards || this.props.data?.redPacketAmount ? (
@@ -177,6 +175,11 @@ class CommentList extends React.Component {
                   <div className={styles.commentListName}>
                     {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
                   </div>
+                  {this.props.isSelf && (
+                    <div className={styles.masterBox}>
+                      <span className={styles.masterText}>楼主</span>
+                    </div>
+                  )}
                   {!!groups?.isDisplay  && (
                       <div className={styles.groups}>{groups?.name || groups?.groupName}</div>
                   )}
@@ -287,10 +290,11 @@ class CommentList extends React.Component {
                   <div className={styles.replyList}>
                     {this.state.isShowOne ? (
                       <ReplyList
+                        isSelf={this.props.isSelf}
                         data={this.needReply[0]}
                         key={this.needReply[0].id}
                         isShowOne={true}
-                        avatarClick={(floor) => this.replyAvatarClick(this.needReply[0],floor)}
+                        avatarClick={floor => this.replyAvatarClick(this.needReply[0], floor)}
                         likeClick={() => this.replyLikeClick(this.needReply[0])}
                         replyClick={() => this.replyReplyClick(this.needReply[0])}
                         deleteClick={() => this.replyDeleteClick(this.needReply[0])}
@@ -301,9 +305,10 @@ class CommentList extends React.Component {
                     ) : (
                       (this.needReply || []).map((val, index) => (
                         <ReplyList
+                          isSelf={this.props.isSelf}
                           data={val}
                           key={val.id || index}
-                          avatarClick={(floor) => this.replyAvatarClick(val,floor)}
+                          avatarClick={floor => this.replyAvatarClick(val, floor)}
                           likeClick={() => this.replyLikeClick(val)}
                           replyClick={() => this.replyReplyClick(val)}
                           deleteClick={() => this.replyDeleteClick(val)}

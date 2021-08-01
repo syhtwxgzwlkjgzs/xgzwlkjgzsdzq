@@ -2,23 +2,15 @@ import React from 'react'
 import { View, Button, Text } from '@tarojs/components'
 import styles from './index.module.scss'
 import Icon from '@discuzq/design/dist/components/icon/index';
-import Taro, { useDidHide, useDidShow } from '@tarojs/taro'
+import Taro, { useDidShow } from '@tarojs/taro'
 import classNames from 'classnames';
 import Popup from '@discuzq/design/dist/components/popup/index';
 
-const index = ({show, setShow, tipData, data, getShareData, shareNickname, shareAvatar, shareThreadid}) => {
+const Index = ({setShow, tipData, data, getShareData, shareNickname, shareAvatar, shareThreadid, show=false}) => {
     const {threadId} = tipData
     let threadTitle = ''
     const thread = data
     threadTitle = thread.title
-    const shareData = {
-        comeFrom:'thread',
-        threadId,
-        title:threadTitle,
-        path: `/indexPages/thread/index?id=${threadId}`,
-        isAnonymous: thread.isAnonymous,
-        isPrice: thread.displayTag.isPrice,
-    }
     const handleClick = () => {
         setShow(false)
         const {nickname} = thread.user || ''
@@ -28,6 +20,14 @@ const index = ({show, setShow, tipData, data, getShareData, shareNickname, share
             thread.user.nickname = '匿名用户'
             thread.user.avatar = ''
         }
+    }
+    const shareData = {
+        comeFrom:'thread',
+        threadId,
+        title:threadTitle,
+        path: `/indexPages/thread/index?id=${threadId}`,
+        isAnonymous: thread.isAnonymous,
+        isPrice: thread.displayTag.isPrice,
     }
     const CreateCard = () => {
         setShow(false)
@@ -90,4 +90,4 @@ const index = ({show, setShow, tipData, data, getShareData, shareNickname, share
     )
 }
 
-export default React.memo(index)
+export default React.memo(Index)
