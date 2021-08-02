@@ -107,6 +107,7 @@ class ThreadPCPage extends React.Component {
                 <DVditor
                   pc
                   value={postData.contentText}
+                  isResetContentText={postData.isResetContentText}
                   emoji={emoji}
                   atList={atList}
                   topic={topic}
