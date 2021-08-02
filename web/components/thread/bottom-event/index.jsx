@@ -57,6 +57,7 @@ const Index = ({
   }, [isLiked]);
   const handleClick = () => {
     if (!user.isLogin()) {
+      updateViewCount();
       goToLoginPage({ url: '/user/login' });
       return;
     }
