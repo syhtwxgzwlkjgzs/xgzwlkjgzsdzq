@@ -22,10 +22,10 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
 
   const [tabs, setTabs] = useState([
     { icon: 'HomeOutlined', text: '首页', active: checkCurrActiveTab(curr, 'home'), router: '/?refresh' },
-    { icon: 'FindOutlined', text: '发现', active: checkCurrActiveTab(curr, 'search'), router: '/search' },
+    { icon: 'FindOutlined', text: '发现', active: checkCurrActiveTab(curr, 'search'), router: '/search?refresh' },
     { icon: 'PlusOutlined', router: '/thread/post' },
-    { icon: 'MailOutlined', text: '消息', active: checkCurrActiveTab(curr, 'message'), router: '/message' },
-    { icon: 'ProfessionOutlined', text: '我的', active: checkCurrActiveTab(curr, 'my'), router: '/my' },
+    { icon: 'MailOutlined', text: '消息', active: checkCurrActiveTab(curr, 'message'), router: '/message?refresh' },
+    { icon: 'ProfessionOutlined', text: '我的', active: checkCurrActiveTab(curr, 'my'), router: '/my?refresh' },
   ]);
 
   // 轮询更新未读消息
