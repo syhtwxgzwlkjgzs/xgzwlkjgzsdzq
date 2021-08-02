@@ -39,6 +39,8 @@ const BaseLayoutControl = forwardRef((props, ref) => {
   const [listRef, setListRef] = useState(null);
   const layoutRef = useRef(null);
 
+  const disableEffect = useRef(false)
+
   useImperativeHandle(
     ref,
     () => ({
@@ -78,29 +80,38 @@ const BaseLayoutControl = forwardRef((props, ref) => {
   }
 
   useEffect(() => {
+    if (!disableEffect.current) {
+      handleListPosition()
+    }
+    disableEffect.current = false
+  }, [listRef?.current]);
+
+  useEffect(() => {
+    handleListPosition()
+  }, [jumpTo, hasListChild, pageName]);
+
+  const handleListPosition = () => {
     if (hasListChild && listRef?.current && pageName && isPageInWhiteList()) {
+
       if (jumpTo > 0) {
         baselayout[pageName] = jumpTo;
         listRef.current.jumpToScrollTop(jumpTo);
       } else {
         if(baselayout[pageName] > 0) {
-          if (pageName !== 'search' || // 首页在PC和H5都适用阅读区域跳转
-              (pageName === 'search' && site.platform === 'h5')) { // 搜索页只适用H5页面阅读区域跳转
-            // 需要异步触发，可能存在列表没有渲染出来
-            setTimeout(() => {
-              listRef.current.jumpToScrollTop(baselayout[pageName]);
-            });
-          }
+          // 需要异步触发，可能存在列表没有渲染出来
+          setTimeout(() => {
+            listRef.current.jumpToScrollTop(baselayout[pageName]);
+          });
         } else if(baselayout.isJumpingToTop) {
           baselayout.removeJumpingToTop();
           listRef.current.onBackTop();
         }
       }
     }
-  }, [jumpTo, hasListChild, listRef?.current, pageName]);
-
+  }
 
   const quickScrolling = (e) => {
+    disableEffect.current = true
 
     if (!e || !e.scrollTop || !hasListChild || !listRef?.current?.currentScrollTop) {
       onScroll();
