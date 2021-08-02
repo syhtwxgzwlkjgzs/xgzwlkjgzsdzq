@@ -35,6 +35,7 @@ export default class ReplyList extends React.Component {
     typeof this.props.likeClick === 'function' && this.props.likeClick();
   }
   replyClick() {
+    if(!this.props.canPublish()) return;
     const userName = this.props.data?.user?.nickname || this.props.data?.user?.userName;
 
     this.setState({

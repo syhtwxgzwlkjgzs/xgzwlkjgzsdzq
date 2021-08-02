@@ -191,7 +191,7 @@ class RenderCommentList extends React.Component {
       goToLoginPage({ url: '/user/login' });
       return;
     }
-
+    if (!this.props.canPublish()) return;
     this.commentData = comment;
     this.replyData = null;
     const userName = comment?.user?.nickname || comment?.user?.userName;
@@ -209,7 +209,7 @@ class RenderCommentList extends React.Component {
       goToLoginPage({ url: '/user/login' });
       return;
     }
-
+    if (!this.props.canPublish()) return;
     this.commentData = null;
     this.replyData = reply;
     this.replyData.commentId = comment.id;

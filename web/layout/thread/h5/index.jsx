@@ -766,6 +766,7 @@ class ThreadH5Page extends React.Component {
               {isCommentReady ? (
                 <Fragment>
                   <RenderCommentList
+                    canPublish={this.props.canPublish}
                     router={this.props.router}
                     sort={flag => this.onSortChange(flag)}
                     onEditClick={comment => this.onEditClick(comment)}
