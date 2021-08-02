@@ -97,7 +97,7 @@ const BaseLayoutControl = forwardRef((props, ref) => {
         }
       }
     }
-  }, [jumpTo, hasListChild, listRef?.current, pageName]);
+  }, [jumpTo, hasListChild, listRef?.current, pageName, jumpRuleList]);
 
 
   const quickScrolling = (e) => {
