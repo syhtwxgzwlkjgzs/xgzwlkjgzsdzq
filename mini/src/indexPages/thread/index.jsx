@@ -86,7 +86,7 @@ class Detail extends React.Component {
 
   async componentDidShow() {
     const { id, postId } = getCurrentInstance().router.params;
-    console.log(id, postId)
+
     // 判断缓存
     // const oldId = this.props?.thread?.threadData?.threadId;
     // if (Number(id) === oldId && id && oldId) {

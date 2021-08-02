@@ -26,8 +26,6 @@ class CommentDetail extends React.Component {
   async componentDidShow() {
     const { id, threadId, postId } = getCurrentInstance().router.params;
     
-    console.log(id, threadId, postId)
-
     if (threadId) {
       this.props.comment.setThreadId(threadId);
     }
