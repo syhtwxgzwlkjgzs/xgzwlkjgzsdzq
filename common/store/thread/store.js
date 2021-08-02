@@ -8,7 +8,9 @@ class ThreadStore {
   }
   @observable threadData = null; // 帖子信息
   @observable commentList = null; // 评论列表数据
+  @observable page = null; // 评论列表page
   @observable totalCount = 0; // 评论列表总条数
+  @observable totalPage = 0; // 评论总页数
   @observable authorInfo = null; // 作者信息
   @observable isPositionToComment = false; // 是否定位到评论位置
   @observable checkUser = null; // @ren数据
@@ -38,9 +40,9 @@ class ThreadStore {
     return !!this.threadData?.displayTag?.isEssence;
   }
 
-  // 是否还有更多
+  // 是否没有更多
   @computed get isNoMore() {
-    return this.commentList?.length >= this.totalCount;
+    return this.page >= this.totalPage;
   }
 
   /**
