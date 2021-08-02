@@ -225,7 +225,7 @@ class PCMyPage extends React.Component {
           curr={'my'}
           pageName="my"
           onRefresh={this.fetchUserThreads}
-          showLayoutRefresh={!isLoading && !!formattedUserThreads?.length}
+          isShowLayoutRefresh={!isLoading && !!formattedUserThreads?.length}
           showHeaderLoading={IS_USER_INFO_LOADING}
         >
           <div>
