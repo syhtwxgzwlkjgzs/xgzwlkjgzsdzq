@@ -15,10 +15,14 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: $white;
+  background-color: transparent;
   z-index: $zindex-popup;
 
   .post-localdata {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background-color: transparent;
     text-align: right;
 
     :global {
@@ -71,6 +75,7 @@
   padding: 0 rem(16);
   align-items: flex-start;
   justify-content: space-between;
+  background-color: $white;
   :global { /* stylelint-disable-line */
     .dzq-tag {
       display: flex;
