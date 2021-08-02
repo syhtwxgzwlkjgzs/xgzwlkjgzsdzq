@@ -51,7 +51,7 @@ const Index = ({
     {
       icon: 'ShareAltOutlined',
       name: '分享',
-      event: handleClick,
+      event: null,
       type: 'share',
     }];
   }, [isLiked]);
@@ -70,6 +70,7 @@ const Index = ({
       setShow(true);
     }
   };
+  
   const [show, setShow] = useState(false);
   const onClose = () => {
     setShow(false);
@@ -116,7 +117,7 @@ const Index = ({
       <div className={needHeight ? styles.operation : styles.operations}>
         {
           postList.map((item, index) => (
-              <div key={index} className={styles.fabulous} onClick={item.event}>
+              <div key={index} className={styles.fabulous} onClick={item.name === '分享' ? handleClick : item.event}>
                 <Icon
                   className={`${styles.icon} ${item.type} ${isLiked && item.name === '赞' ? styles.likedColor : styles.dislikedColor}`}
                   name={item.icon}
