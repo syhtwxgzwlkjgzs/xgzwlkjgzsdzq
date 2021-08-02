@@ -29,7 +29,7 @@ class CommentH5Page extends React.Component {
       showCommentInput: false, // 是否弹出评论框
       commentSort: true, // ture 评论从旧到新 false 评论从新到旧
       showDeletePopup: false, // 是否弹出删除弹框
-      showReplyDeletePopup:false, // 是否弹出回复删除弹框
+      showReplyDeletePopup: false, // 是否弹出回复删除弹框
       inputText: '请输入内容', // 默认回复框placeholder内容
     };
 
@@ -49,7 +49,19 @@ class CommentH5Page extends React.Component {
     // 举报内容选项
     this.reportContent = ['广告垃圾', '违规内容', '恶意灌水', '重复发帖'];
     this.inputText = '其他理由...';
+
+    this.positionRef = React.createRef();
+    this.isPositioned = false;
   }
+
+  componentDidUpdate() {
+    // 滚动到指定的评论定位位置
+    if (!this.isPositioned && this.positionRef?.current) {
+      this.isPositioned = true;
+      this.positionRef.current.scrollIntoView();
+    }
+  }
+
   // 点击更多
   onMoreClick() {
     this.setState({ showMorePopup: true });
@@ -194,7 +206,7 @@ class CommentH5Page extends React.Component {
   }
 
   // 点击回复的删除
-  async replyDeleteClick(reply,comment) {
+  async replyDeleteClick(reply, comment) {
     this.commentData = comment;
     this.replyData = reply;
     this.setState({
@@ -202,14 +214,14 @@ class CommentH5Page extends React.Component {
     });
   }
 
-  //删除回复评论
+  // 删除回复评论
   async replyDeleteComment() {
     if (!this.replyData.id) return;
 
-    const params = {}
+    const params = {};
     if (this.replyData && this.commentData) {
-      params.replyData = this.replyData;//本条回复信息
-      params.commentData = this.commentData;//回复对应的评论信息
+      params.replyData = this.replyData; //本条回复信息
+      params.commentData = this.commentData; //回复对应的评论信息
     }
     const { success, msg } = await this.props.comment.deleteReplyComment(params, this.props.thread);
     this.setState({
@@ -293,7 +305,7 @@ class CommentH5Page extends React.Component {
 
     if (imageList?.length) {
       params.attachments = imageList
-        .filter((item) => item.status === 'success' && item.response)
+        .filter(item => item.status === 'success' && item.response)
         .map((item) => {
           const { id } = item.response;
           return {
@@ -356,26 +368,26 @@ class CommentH5Page extends React.Component {
 
   avatarClick(commentData) {
     const { userId } = commentData;
-    if(!userId) return;
+    if (!userId) return;
     this.props.router.push(`/user/${userId}`);
   }
 
   replyAvatarClick(reply, comment, floor) {
     if (floor === 2) {
       const { userId } = reply;
-      if(!userId) return;
-      this.props.router.push(`/user/${userId}`)
+      if (!userId) return;
+      this.props.router.push(`/user/${userId}`);
     }
     if (floor === 3) {
       const { commentUserId } = reply;
-      if(!commentUserId) return;
-      this.props.router.push(`/user/${commentUserId}`)
+      if (!commentUserId) return;
+      this.props.router.push(`/user/${commentUserId}`);
     }
   }
 
   render() {
     const { commentDetail: commentData, isReady } = this.props.comment;
-
+    const isSelf = this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === commentData?.userId;
     // 更多弹窗权限
     const morePermissions = {
       // canEdit: commentData?.canEdit,
@@ -429,10 +441,13 @@ class CommentH5Page extends React.Component {
               deleteClick={() => this.deleteClick(commentData)}
               replyLikeClick={(reply) => this.replyLikeClick(reply, commentData)}
               replyReplyClick={(reply) => this.replyReplyClick(reply, commentData)}
-              replyAvatarClick={(reply,floor) =>this.replyAvatarClick(reply,commentData,floor)}
+              replyAvatarClick={(reply, floor) => this.replyAvatarClick(reply, commentData, floor)}
               replyDeleteClick={(reply) => this.replyDeleteClick(reply, commentData)}
               onMoreClick={() => this.onMoreClick()}
               isHideEdit={true}
+              isSelf={isSelf}
+              postId={this.props.comment.postId}
+              positionRef={this.positionRef}
             ></CommentList>
           )}
         </div>
@@ -454,21 +469,21 @@ class CommentH5Page extends React.Component {
             visible={this.state.showMorePopup}
             onClose={() => this.setState({ showMorePopup: false })}
             onSubmit={() => this.setState({ showMorePopup: false })}
-            onOperClick={(type) => this.onOperClick(type)}
+            onOperClick={type => this.onOperClick(type)}
           />
 
           {/* 删除弹层 */}
           <DeletePopup
-              visible={this.state.showDeletePopup}
-              onClose={() => this.setState({ showDeletePopup: false })}
-              onBtnClick={() => this.deleteComment()}
+            visible={this.state.showDeletePopup}
+            onClose={() => this.setState({ showDeletePopup: false })}
+            onBtnClick={() => this.deleteComment()}
           ></DeletePopup>
 
           {/* 删除回复弹层 */}
           <DeletePopup
-              visible={this.state.showReplyDeletePopup}
-              onClose={() => this.setState({ showReplyDeletePopup: false })}
-              onBtnClick={() => this.replyDeleteComment()}
+            visible={this.state.showReplyDeletePopup}
+            onClose={() => this.setState({ showReplyDeletePopup: false })}
+            onBtnClick={() => this.replyDeleteComment()}
           />
 
           {/* 举报弹层 */}
@@ -477,7 +492,7 @@ class CommentH5Page extends React.Component {
             inputText={this.inputText}
             visible={this.state.showReportPopup}
             onCancel={() => this.setState({ showReportPopup: false })}
-            onOkClick={(data) => this.onReportOk(data)}
+            onOkClick={data => this.onReportOk(data)}
           ></ReportPopup>
         </div>
       </div>

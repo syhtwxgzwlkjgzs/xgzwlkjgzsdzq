@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle, useMemo } from 'react';
 import { inject, observer } from 'mobx-react';
 import { noop } from '@components/thread/utils';
 import { throttle } from '@common/utils/throttle-debounce.js';
@@ -32,11 +32,11 @@ const BaseLayoutControl = forwardRef((props, ref) => {
     jumpTo = -1,
     pageName = '',
     ready = noop,
+    jumpRuleList = [],
     ...others
   } = props;
 
   const [listRef, setListRef] = useState(null);
-  const [baseLayoutWhiteList, setBaseLayoutWhiteList] = useState(['home', 'search', 'my', 'like', 'collect', 'buy']);
   const layoutRef = useRef(null);
 
   const disableEffect = useRef(false)
@@ -48,6 +48,14 @@ const BaseLayoutControl = forwardRef((props, ref) => {
     }),
   );
 
+  const baseLayoutWhiteList = useMemo(() => {
+    const defaultWhiteList = ['home', 'search', 'my', 'like', 'collect', 'buy'];
+    if(Array.isArray(jumpRuleList)) {
+      return [...defaultWhiteList, ...jumpRuleList];
+    }
+    return defaultWhiteList;
+  }, [jumpRuleList]);
+
   useEffect(() => {
     ready();
   }, []);
@@ -55,6 +63,21 @@ const BaseLayoutControl = forwardRef((props, ref) => {
   useEffect(() => {
     if (hasListChild) setListRef(layoutRef?.current.listRef);
   }, [layoutRef]);
+
+  const isPageInWhiteList = () => {
+    for(const listItem of baseLayoutWhiteList) {
+      if(typeof listItem === 'string') {
+        if(listItem === pageName) {
+          return true;
+        }
+      } else if(typeof listItem.test === 'function') {
+        if(listItem.test(pageName)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 
   useEffect(() => {
     if (!disableEffect.current) {
@@ -68,7 +91,8 @@ const BaseLayoutControl = forwardRef((props, ref) => {
   }, [jumpTo, hasListChild, pageName]);
 
   const handleListPosition = () => {
-    if (hasListChild && listRef?.current && pageName && baseLayoutWhiteList.indexOf(pageName) !== -1) {
+    if (hasListChild && listRef?.current && pageName && isPageInWhiteList()) {
+
       if (jumpTo > 0) {
         baselayout[pageName] = jumpTo;
         listRef.current.jumpToScrollTop(jumpTo);

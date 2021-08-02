@@ -28,9 +28,11 @@ import store from './store';
 import BaseLayoutStore from './baselayout/action';
 import WalletStore from './wallet/action';
 import VListStore from './vlist/action';
-import CardStore from './card/action';
-useStaticRendering(isServer());
+import EmotionStore from './emotion/action';
 
+import CardStore from './card/action';
+import CommentPosition from './thread/comment-position/action';
+useStaticRendering(isServer());
 
 export default function initializeStore(initProps = {}) {
   const { site = {}, user = {} } = initProps;
@@ -66,6 +68,8 @@ export default function initializeStore(initProps = {}) {
       baselayout: new BaseLayoutStore(),
       wallet: new WalletStore(),
       vlist: new VListStore(),
+      emotion: new EmotionStore(),
+      commentPosition: new CommentPosition(),
     };
   }
   if (store.getStore() === null) {
@@ -100,6 +104,8 @@ export default function initializeStore(initProps = {}) {
       baselayout: new BaseLayoutStore(),
       wallet: new WalletStore(),
       vlist: new VListStore(),
+      emotion: new EmotionStore(),
+      commentPosition: new CommentPosition(),
     });
   }
 

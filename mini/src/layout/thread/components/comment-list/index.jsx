@@ -85,8 +85,8 @@ class CommentList extends React.Component {
     typeof this.props?.avatarClick === 'function' && this.props.avatarClick();
   }
   // 点击评论列表用户头像
-  replyAvatarClick(data,floor) {
-    typeof this.props.replyAvatarClick === 'function' && this.props.replyAvatarClick(data,floor);
+  replyAvatarClick(data, floor) {
+    typeof this.props.replyAvatarClick === 'function' && this.props.replyAvatarClick(data, floor);
   }
 
   generatePermissions(data = {}) {
@@ -101,8 +101,8 @@ class CommentList extends React.Component {
 
   handleClick(e, node) {
     e && e.stopPropagation();
-    const {url, isExternaLink } = handleLink(node)
-    if(isExternaLink) return
+    const { url, isExternaLink } = handleLink(node);
+    if (isExternaLink) return;
 
     if (url) {
       Router.push({ url });
@@ -114,10 +114,9 @@ class CommentList extends React.Component {
   render() {
     const { canDelete, canEdit, canLike, canHide } = this.generatePermissions(this.props.data);
     const { groups } = this.props.data?.user || {};
-
     // 评论内容是否通过审核
     const isApproved = this.props?.data?.isApproved === 1;
-    
+
     return (
       <View className={styles.commentList}>
         <View className={styles.header}>
@@ -158,27 +157,30 @@ class CommentList extends React.Component {
           {/* 评论用户头像 */}
           <View className={styles.commentListAvatar} onClick={() => this.avatarClick()}>
             <Avatar
-              image={(this.props.data?.user?.nickname || this.props.data?.user?.userName) && this.props?.data?.user?.avatar}
+              image={
+                (this.props.data?.user?.nickname || this.props.data?.user?.userName) && this.props?.data?.user?.avatar
+              }
               name={this.props.data?.user?.nickname || this.props.data?.user?.userName || '异'}
-              circle={true}
+              circle
             ></Avatar>
           </View>
           <View className={styles.commentListContent}>
-            <View className={styles.commentListContentText}>
+            <View className={`${styles.commentListContentText} ${this.props.active && styles.active}`}>
               <View className={styles.commentHeader}>
                 <View className={styles.userInfo}>
                   <View className={styles.commentListName}>
                     {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
                   </View>
+                  {!!this.props.isSelf && (
+                    <View className={styles.masterBox}>
+                      <Text className={styles.masterText}>楼主</Text>
+                    </View>
+                  )}
                   {!!groups?.isDisplay  && (
                     <View className={styles.groups}>{groups?.name || groups?.groupName}</View>
                   )}
                 </View>
-                {!isApproved ? (
-                  <View className={styles.isApproved}>审核中</View>
-                ) : (
-                  <View></View>
-                )}
+                {!isApproved ? <View className={styles.isApproved}>审核中</View> : <View></View>}
               </View>
               {/* 评论内容 */}
               <View className={classNames(styles.commentListText)}>
@@ -186,7 +188,7 @@ class CommentList extends React.Component {
                   onRedirectToDetail={() => this.toCommentDetail()}
                   useShowMore={!!this.state.isShowOne}
                   content={this.props?.data?.content}
-                  customHoverBg={true}
+                  customHoverBg
                   onClick={this.handleClick.bind(this)}
                 ></PostContent>
               </View>
@@ -249,23 +251,27 @@ class CommentList extends React.Component {
                         data={this.needReply[0]}
                         key={this.needReply[0].id}
                         isShowOne={true}
-                        avatarClick={(floor) => this.replyAvatarClick(this.needReply[0],floor)}
+                        avatarClick={(floor) => this.replyAvatarClick(this.needReply[0], floor)}
                         likeClick={() => this.replyLikeClick(this.needReply[0])}
                         replyClick={() => this.replyReplyClick(this.needReply[0])}
                         deleteClick={() => this.replyDeleteClick(this.needReply[0])}
                         toCommentDetail={() => this.toCommentDetail()}
+                        isSelf={this.props.isSelf}
                       ></ReplyList>
                     ) : (
                       (this.needReply || []).map((val, index) => (
-                        <ReplyList
-                          data={val}
-                          key={val.id || index}
-                          avatarClick={(floor) => this.replyAvatarClick(val,floor)}
-                          likeClick={() => this.replyLikeClick(val)}
-                          replyClick={() => this.replyReplyClick(val)}
-                          deleteClick={() => this.replyDeleteClick(val)}
-                          toCommentDetail={() => this.toCommentDetail()}
-                        ></ReplyList>
+                        <View key={val.id || index} ref={val.id === this.props.postId ? this.props.positionRef : null}>
+                          <ReplyList
+                            data={val}
+                            avatarClick={(floor) => this.replyAvatarClick(val, floor)}
+                            likeClick={() => this.replyLikeClick(val)}
+                            replyClick={() => this.replyReplyClick(val)}
+                            deleteClick={() => this.replyDeleteClick(val)}
+                            toCommentDetail={() => this.toCommentDetail()}
+                            isSelf={this.props.isSelf}
+                            active={val.id === this.props.postId}
+                          ></ReplyList>
+                        </View>
                       ))
                     )}
                   </View>

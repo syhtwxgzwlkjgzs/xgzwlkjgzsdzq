@@ -6,6 +6,7 @@ import { noop } from '@components/thread/utils';
 import { withRouter } from 'next/router';
 import UnreadRedDot from '@components/unread-red-dot';
 import { unreadUpdateInterval } from '@common/constants/message';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
 /**
  * BottomNavBar组件
@@ -13,14 +14,14 @@ import { unreadUpdateInterval } from '@common/constants/message';
  * @prop {boolean} curr 常亮icon
  */
 
-const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 'home', onClick = noop, message }) => {
+const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 'home', onClick = noop, message, canPublish }) => {
   const { totalUnread, readUnreadCount } = message;
   const checkCurrActiveTab = useCallback((curr, target) => {
     return curr === target;
   }, [curr]);
 
   const [tabs, setTabs] = useState([
-    { icon: 'HomeOutlined', text: '首页', active: checkCurrActiveTab(curr, 'home'), router: '/' },
+    { icon: 'HomeOutlined', text: '首页', active: checkCurrActiveTab(curr, 'home'), router: '/?refresh' },
     { icon: 'FindOutlined', text: '发现', active: checkCurrActiveTab(curr, 'search'), router: '/search' },
     { icon: 'PlusOutlined', router: '/thread/post' },
     { icon: 'MailOutlined', text: '消息', active: checkCurrActiveTab(curr, 'message'), router: '/message' },
@@ -49,6 +50,7 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
         Toast.info({ content: '您暂无发帖权限' });
         return;
       }
+      if (!canPublish()) return;
     }
 
     onClick(i, idx)
@@ -94,4 +96,4 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
   );
 };
 
-export default withRouter(inject('user', 'message')(observer(BottomNavBar)));
+export default HOCFetchSiteData(withRouter(inject('user', 'message')(observer(BottomNavBar))));
