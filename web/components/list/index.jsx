@@ -77,7 +77,7 @@ const List = forwardRef(({
     } else {
       setIsLoadingInCenter(false);
     }
-  }, [listWrapper.current, children])
+  }, [listWrapper.current, children, noMore])
 
   useEffect(() => {
     setIsError(requestError)
