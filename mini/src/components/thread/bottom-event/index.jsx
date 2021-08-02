@@ -147,7 +147,16 @@ const Index = ({
           ))
         }
       </View>
-      <ShareButton show={show} data={data} setShow={setShow} tipData={tipData} shareThreadid={shareThreadid} shareAvatar={shareAvatar} shareNickname={shareNickname} getShareData={getShareData}></ShareButton>
+      <ShareButton 
+        show={show} 
+        data={data} 
+        setShow={setShow} 
+        tipData={tipData} 
+        shareThreadid={shareThreadid} 
+        shareAvatar={shareAvatar} 
+        shareNickname={shareNickname} 
+        getShareData={getShareData}
+      ></ShareButton>
     </View>
   );
 };

@@ -817,7 +817,6 @@ class ThreadH5Page extends React.Component {
             </div>
           </div>
         )}
-        {this.state.show && (
           <MorePopop
             show={this.state.show}
             onClose={this.onShareClose}
@@ -825,7 +824,6 @@ class ThreadH5Page extends React.Component {
             handleWxShare={this.handleWxShare}
             createCard={this.createCard}
           ></MorePopop>
-        )}
         {isReady && (
           <Fragment>
             {/* 评论弹层 */}
@@ -851,7 +849,7 @@ class ThreadH5Page extends React.Component {
             <DeletePopup
               visible={this.state.showDeletePopup}
               onClose={() => this.setState({ showDeletePopup: false })}
-              onBtnClick={(type) => this.onBtnClick(type)}
+              onBtnClick={type => this.onBtnClick(type)}
               type='thread'
             ></DeletePopup>
             {/* 举报弹层 */}

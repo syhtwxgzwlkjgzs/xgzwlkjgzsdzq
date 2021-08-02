@@ -121,13 +121,13 @@ const Index = ({
           ))
         }
       </div>
-      {show && <MorePopop
+      <MorePopop
         show={show}
         fromThread
         handleH5Share={handleH5Share}
         onClose={onClose}
         createCard={createCard}>
-      </MorePopop>}
+      </MorePopop>
     </div>
   );
 };
