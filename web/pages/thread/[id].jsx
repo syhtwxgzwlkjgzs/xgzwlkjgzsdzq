@@ -95,6 +95,7 @@ class Detail extends React.Component {
     }
   }
 
+
   updateViewCount = async (id) => {
     const { site } = this.props;
     const { openViewCount } = site?.webConfig?.setSite || {};

@@ -120,11 +120,13 @@ class ThreadH5Page extends React.Component {
     }
 
     // 滚动到指定的评论定位位置
-    if (!this.isPositioned && this.positionRef?.current) {
+    if (this.props.commentPosition?.postId && !this.isPositioned && this.positionRef?.current) {
       this.isPositioned = true;
-      this.setState({
-        toView: `position${this.props.commentPosition?.postId}`,
-      });
+      setTimeout(() => {
+        this.setState({
+          toView: `position${this.props.commentPosition?.postId}`,
+        });
+      }, 1000);
     }
   }
 

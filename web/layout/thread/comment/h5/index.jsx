@@ -56,9 +56,11 @@ class CommentH5Page extends React.Component {
 
   componentDidUpdate() {
     // 滚动到指定的评论定位位置
-    if (!this.isPositioned && this.positionRef?.current) {
+    if (this.props.comment?.postId && !this.isPositioned && this.positionRef?.current) {
       this.isPositioned = true;
-      this.positionRef.current.scrollIntoView();
+      setTimeout(() => {
+        this.positionRef.current.scrollIntoView();
+      }, 1000);
     }
   }
 
