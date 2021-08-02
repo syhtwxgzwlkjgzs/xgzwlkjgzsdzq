@@ -194,9 +194,9 @@ class Index extends Component {
   }
 
   autoSaveDraft = async () => {
-    const { postData, setPostData } = this.props.threadPost;
+    const { setPostData } = this.props.threadPost;
     if (this.isHaveContent()) {
-      !postData.draft && setPostData({ draft: 1 });
+      // !postData.draft && setPostData({ draft: 1 });
       this.saveDataLocal();
       // this.createThread(true, false, true);
       const now = formatDate(new Date(), 'hh:mm');

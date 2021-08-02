@@ -661,7 +661,7 @@ class PostPage extends React.Component {
     this.autoSaveInterval = setInterval(() => {
       // 7.28 已发布的帖子也可以保存草稿
       if (this.isHaveContent()) {
-        this.setPostData({ draft: 1 });
+        // this.setPostData({ draft: 1 });
         this.saveDataLocal();
         // this.createThread(true, true);
         const now = formatDate(new Date(), 'hh:mm');
