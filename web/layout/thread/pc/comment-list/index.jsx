@@ -38,7 +38,7 @@ class RenderCommentList extends React.Component {
       commentSort: true, // ture 评论从旧到新 false 评论从新到旧
       showDeletePopup: false, // 是否弹出删除弹框
       showReplyDeletePopup: false, // 是否弹出回复删除弹框
-      placeholder: '写下我评论...', // 默认回复框placeholder内容
+      placeholder: '写下我的评论...', // 默认回复框placeholder内容
       commentId: null,
     };
 
@@ -194,10 +194,8 @@ class RenderCommentList extends React.Component {
 
     this.commentData = comment;
     this.replyData = null;
-    const userName = comment?.user?.nickname || comment?.user?.userName;
     this.setState({
       showCommentInput: true,
-      placeholder: userName ? `回复${userName}` : '请输入内容',
       commentId: comment.id,
     });
   }
@@ -213,11 +211,9 @@ class RenderCommentList extends React.Component {
     this.commentData = null;
     this.replyData = reply;
     this.replyData.commentId = comment.id;
-    const userName = reply?.user?.nickname || reply?.user?.userName;
 
     this.setState({
       showCommentInput: true,
-      placeholder: userName ? `回复${userName}` : '请输入内容',
       commentId: null,
     });
   }
