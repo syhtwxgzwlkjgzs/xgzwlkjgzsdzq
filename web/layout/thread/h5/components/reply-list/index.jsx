@@ -47,6 +47,7 @@ export default class ReplyList extends React.Component {
   }
 
   transformer = (parsedDom) => {
+    const isSelf = this.props.threadId === this.props?.data?.userId; 
     const element = this.props.data.commentUserId ? (
       <div className={styles.commentUser}>
         <div
@@ -74,6 +75,11 @@ export default class ReplyList extends React.Component {
         >
           {this.props.data.commentUser.nickname || this.props.data.commentUser.userName || '用户异常'}
         </span>
+        {isSelf && (
+          <div className={styles.masterBox}>
+            <span className={styles.masterText}>楼主</span>
+          </div>
+        )}
       </div>
     ) : (
       ''
