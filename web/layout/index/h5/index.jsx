@@ -79,18 +79,6 @@ class IndexH5Page extends React.Component {
   )
 
   componentDidMount() {
-    // 识别通过分享过来的url
-    // 若包含categoryId参数，则定位到具体的categoryId数据
-    const { router } = this.props;
-    const { categoryId = '' } = router.query
-    if (categoryId) {
-      // 判断categoryId是否是数字。可能是all/default
-      const id = /^\d+$/.test(categoryId) ? Number(categoryId) : categoryId
-
-      this.changeFilter({ categoryids: [id] });
-      this.props.router.replace(`/`);
-    }
-   
     // 是否有推荐
     const isDefault = this.props.site.checkSiteIsOpenDefautlThreadListData();
     this.props.index.setNeedDefault(isDefault);

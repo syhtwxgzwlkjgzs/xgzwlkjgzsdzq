@@ -56,15 +56,6 @@ class IndexPCPage extends React.Component {
   }
 
   componentDidMount() {
-    // const { router } = this.props;
-    // const { categoryId = '' } = router.query
-    // if (categoryId) {
-    //   const id = /^\d+$/.test(categoryId) ? Number(categoryId) : categoryId
-
-    //   this.changeFilter({ categoryids: id });
-    //   this.props.router.replace(`/`);
-    // }
-
     if (this.timer) {
       clearInterval(this.timer);
     }
