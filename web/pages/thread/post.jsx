@@ -167,10 +167,8 @@ class PostPage extends React.Component {
       } else {
         Toast.error({ content: ret.msg });
       }
-    } else {
-      // 如果本地缓存有数据，编辑帖子不进行本地缓存的获取
-      if (this.getPostDataFromLocal()) this.props.threadPost.setLocalDataStatus(true);
     }
+    if (this.getPostDataFromLocal()) this.props.threadPost.setLocalDataStatus(true);
     this.autoSaveData();
   }
 
@@ -492,7 +490,7 @@ class PostPage extends React.Component {
     if (vditor) {
       this.vditor = vditor;
       const htmlString = vditor.getHTML();
-      this.setPostData({ contentText: htmlString });
+      this.setPostData({ contentText: htmlString, isResetContentText: false });
       if (!this.props.threadPost.postData.title) {
         if (!this.state.isTitleShow || this.props.site.platform === 'pc' || !event) return;
         this.setState({ isTitleShow: false });
@@ -664,9 +662,9 @@ class PostPage extends React.Component {
     this.autoSaveInterval = setInterval(() => {
       // 7.28 已发布的帖子也可以保存草稿
       if (this.isHaveContent()) {
-        this.setPostData({ draft: 1 });
+        // this.setPostData({ draft: 1 });
         this.saveDataLocal();
-        this.createThread(true, true);
+        // this.createThread(true, true);
         const now = formatDate(new Date(), 'hh:mm');
         this.setPostData({ autoSaveTime: now });
       }

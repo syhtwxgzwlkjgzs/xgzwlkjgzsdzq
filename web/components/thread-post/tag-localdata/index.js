@@ -7,18 +7,20 @@ import { inject, observer } from 'mobx-react';
 import * as localData from '@common/utils/thread-post-localdata';
 import styles from './index.module.scss';
 import classNames from 'classnames';
+import { withRouter } from 'next/router';
 
 const TagLocalData = (props) => {
-  const { threadPost, user, className = '', pc } = props;
+  const { threadPost, user, className = '', pc, router } = props;
 
   const openLocalData = () => {
-    const data = localData.getThreadPostDataLocal(user.userInfo.id) || {};
+    const data = localData.getThreadPostDataLocal(user.userInfo.id, router.query.id) || {};
     const text = data.contentText || '';
     threadPost.setLocalDataStatus(false); // 隐藏本地缓存提示
     threadPost.setPostData({
       ...data,
       contentText: text.replace(/<br \/>\n/g, '<br />'),
       autoSaveTime: '',
+      isResetContentText: true,
     }); // 设置发帖内容
   };
 
@@ -41,4 +43,4 @@ const TagLocalData = (props) => {
   return null;
 };
 
-export default inject('threadPost', 'user')(observer(TagLocalData));
+export default inject('threadPost', 'user')(observer(withRouter(TagLocalData)));
