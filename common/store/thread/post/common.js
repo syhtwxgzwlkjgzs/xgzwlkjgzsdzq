@@ -22,4 +22,5 @@ export const initPostData = {
   orderInfo: {}, // 订单信息
   threadId: '', // 文章id
   autoSaveTime: '', // 自动保存时间
+  isResetContentText: false, // 是否重置编辑器中的值
 };

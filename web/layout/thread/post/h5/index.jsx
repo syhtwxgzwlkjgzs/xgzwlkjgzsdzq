@@ -256,6 +256,7 @@ class ThreadCreate extends React.Component {
           {/* 编辑器 */}
           <DVditor
             value={postData.contentText}
+            isResetContentText={postData.isResetContentText}
             emoji={emoji}
             atList={atList}
             topic={topic}

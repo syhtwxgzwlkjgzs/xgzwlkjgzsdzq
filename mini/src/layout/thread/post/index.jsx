@@ -65,10 +65,9 @@ class Index extends Component {
     } else {
       this.props.threadPost.setThreadStatus(THREAD_STATUS.create);
       this.setCategory();
-      this.openSaveDraft();
-      // 非编辑的时候进行本地缓存数据的判断
-      if (this.getPostDataFromLocal()) this.props.threadPost.setLocalDataStatus(true);
     }
+    this.openSaveDraft();
+    if (this.getPostDataFromLocal()) this.props.threadPost.setLocalDataStatus(true);
     // 监听腾讯验证码事件
     Taro.eventCenter.on('captchaResult', this.handleCaptchaResult);
     Taro.eventCenter.on('closeChaReault', this.handleCloseChaReault);
@@ -195,11 +194,11 @@ class Index extends Component {
   }
 
   autoSaveDraft = async () => {
-    const { postData, setPostData } = this.props.threadPost;
+    const { setPostData } = this.props.threadPost;
     if (this.isHaveContent()) {
-      !postData.draft && setPostData({ draft: 1 });
+      // !postData.draft && setPostData({ draft: 1 });
       this.saveDataLocal();
-      this.createThread(true, false, true);
+      // this.createThread(true, false, true);
       const now = formatDate(new Date(), 'hh:mm');
       setPostData({ autoSaveTime: now });
     }
@@ -826,7 +825,7 @@ class Index extends Component {
             {/* 插入内容tag展示区 */}
             <View className={styles.tags} style={{ display: bottomHeight ? 'none' : 'block' }}>
               {this.props.threadPost.isHaveLocalData && (<View className={styles['post-localdata']}>
-                <TagLocalData />
+                <TagLocalData pid={this.inst.router.params.id} />
               </View>)}
               {(permissions?.insertPosition?.enable || postData.autoSaveTime) &&
                 <View className={styles['location-bar']}>

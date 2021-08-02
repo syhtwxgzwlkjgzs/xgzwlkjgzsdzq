@@ -10,10 +10,10 @@ import classNames from 'classnames';
 import styles from './index.module.scss';
 
 const TagLocalData = (props) => {
-  const { threadPost, user, className = '', pc } = props;
+  const { threadPost, user, className = '', pc, pid } = props;
 
   const openLocalData = () => {
-    const data = localData.getThreadPostDataLocal(user.userInfo.id) || {};
+    const data = localData.getThreadPostDataLocal(user.userInfo.id, pid) || {};
     const text = data.contentText || '';
     threadPost.setLocalDataStatus(false); // 隐藏本地缓存提示
     threadPost.setPostData({

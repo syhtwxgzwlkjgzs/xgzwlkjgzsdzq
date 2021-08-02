@@ -17,7 +17,7 @@ export const setThreadPostDataLocal = (data) => {
 export const getThreadPostDataLocal = (uid, pid) => {
   const data = locals.get(threadPostData);
   if (data && uid === data?.userId) {
-    if (!pid || pid === data?.postData?.threadId) return data?.postData;
+    if (!pid || parseInt(pid, 10) === parseInt(data?.postData?.threadId, 10)) return data?.postData;
     return null;
   }
   return null;
