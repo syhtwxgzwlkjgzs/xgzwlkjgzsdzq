@@ -460,11 +460,11 @@ class RenderCommentList extends React.Component {
                 isShowOne={true}
                 isShowInput={this.state.commentId === val.id}
                 onAboptClick={() => this.onAboptClick(val)}
-                isSelf={isSelf}
                 isShowAdopt={
                   // 是帖子作者 && 是悬赏帖 && 评论人不是作者本人
                   isSelf && isReward && this.props.thread?.threadData?.userId !== val.userId
                 }
+                threadId={this.props.thread.threadData.userId}
               ></CommentList>
             </div>
           ))}

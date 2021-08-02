@@ -95,7 +95,7 @@ class CommentList extends React.Component {
   render() {
     const { canDelete, canEdit, canLike, canHide } = this.generatePermissions(this.props.data);
     const { groups } = this.props.data?.user || {};
-
+    const isSelf = this.props.threadId === this.props?.data?.userId;
     // 评论内容是否通过审核
     const isApproved = this.props?.data?.isApproved === 1;
     return (
@@ -151,7 +151,7 @@ class CommentList extends React.Component {
                   <div className={styles.commentListName}>
                     {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
                   </div>
-                  {this.props.isSelf && (
+                  {isSelf && (
                     <div className={styles.masterBox}>
                       <span className={styles.masterText}>楼主</span>
                     </div>
@@ -236,7 +236,7 @@ class CommentList extends React.Component {
                         replyClick={() => this.replyReplyClick(this.needReply[0])}
                         deleteClick={() => this.replyDeleteClick(this.needReply[0])}
                         toCommentDetail={() => this.toCommentDetail()}
-                        isSelf={this.props.isSelf}
+                        threadId={this.props.threadId}
                       ></ReplyList>
                     ) : (
                       (this.needReply || []).map((val, index) => (
@@ -248,7 +248,7 @@ class CommentList extends React.Component {
                           replyClick={() => this.replyReplyClick(val)}
                           deleteClick={() => this.replyDeleteClick(val)}
                           toCommentDetail={() => this.toCommentDetail()}
-                          isSelf={this.props.isSelf}
+                          threadId={this.props.threadId}
                         ></ReplyList>
                       ))
                     )}

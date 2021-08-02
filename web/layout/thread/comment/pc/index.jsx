@@ -306,7 +306,7 @@ class CommentPCPage extends React.Component {
   render() {
     const { commentDetail: commentData, isReady, isAuthorInfoError } = this.props.comment;
     const isSelf = this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === commentData?.userId;
-
+    console.log(this.props);
     return (
       <div className={styles.container}>
         <div className={styles.header}>
@@ -358,9 +358,9 @@ class CommentPCPage extends React.Component {
                   avatarClick={userId => this.onUserClick(userId)}
                   isHideEdit={true}
                   isFirstDivider={true}
-                  isSelf={isSelf}
                   isShowInput={this.state.commentId === commentData.id}
                   onSubmit={(value, imageList) => this.createReply(value, imageList)}
+                  threadId={this.props.thread?.threadData?.userId}
                 ></CommentList>
               ) : (
                 <LoadingTips type="init"></LoadingTips>

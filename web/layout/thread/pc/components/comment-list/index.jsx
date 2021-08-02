@@ -138,6 +138,7 @@ class CommentList extends React.Component {
     const { groups } = this.props.data?.user || {};
     // 评论内容是否通过审核
     const isApproved = this.props?.data?.isApproved === 1;
+    const isSelf = this.props.threadId === this.props?.data?.userId;
     return (
       <div className={`${styles.commentList} dzq-comment`}>
         {this.props.data?.rewards || this.props.data?.redPacketAmount ? (
@@ -175,7 +176,7 @@ class CommentList extends React.Component {
                   <div className={styles.commentListName}>
                     {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
                   </div>
-                  {this.props.isSelf && (
+                  {isSelf && (
                     <div className={styles.masterBox}>
                       <span className={styles.masterText}>楼主</span>
                     </div>
@@ -290,7 +291,7 @@ class CommentList extends React.Component {
                   <div className={styles.replyList}>
                     {this.state.isShowOne ? (
                       <ReplyList
-                        isSelf={this.props.isSelf}
+                        threadId={this.props.threadId}
                         data={this.needReply[0]}
                         key={this.needReply[0].id}
                         isShowOne={true}
@@ -305,7 +306,7 @@ class CommentList extends React.Component {
                     ) : (
                       (this.needReply || []).map((val, index) => (
                         <ReplyList
-                          isSelf={this.props.isSelf}
+                          threadId={this.props.threadId}
                           data={val}
                           key={val.id || index}
                           avatarClick={floor => this.replyAvatarClick(val, floor)}

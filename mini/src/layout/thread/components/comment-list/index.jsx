@@ -116,7 +116,7 @@ class CommentList extends React.Component {
     const { groups } = this.props.data?.user || {};
     // 评论内容是否通过审核
     const isApproved = this.props?.data?.isApproved === 1;
-    
+    const isSelf = this.props.threadId === this.props?.data?.userId
     return (
       <View className={styles.commentList}>
         <View className={styles.header}>
@@ -169,7 +169,7 @@ class CommentList extends React.Component {
                   <View className={styles.commentListName}>
                     {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
                   </View>
-                  {!!this.props.isSelf && (
+                  {!!isSelf && (
                     <View className={styles.masterBox}>
                       <Text className={styles.masterText}>楼主</Text>
                     </View>
@@ -258,7 +258,7 @@ class CommentList extends React.Component {
                         replyClick={() => this.replyReplyClick(this.needReply[0])}
                         deleteClick={() => this.replyDeleteClick(this.needReply[0])}
                         toCommentDetail={() => this.toCommentDetail()}
-                        isSelf={this.props.isSelf}
+                        threadId={this.props.threadId}
                       ></ReplyList>
                     ) : (
                       (this.needReply || []).map((val, index) => (
@@ -270,7 +270,7 @@ class CommentList extends React.Component {
                           replyClick={() => this.replyReplyClick(val)}
                           deleteClick={() => this.replyDeleteClick(val)}
                           toCommentDetail={() => this.toCommentDetail()}
-                          isSelf={this.props.isSelf}
+                          threadId={this.props.threadId}
                         ></ReplyList>
                       ))
                     )}
