@@ -12,8 +12,8 @@ import ViewAdapter from '@components/view-adapter';
 import { Toast } from '@discuzq/design';
 import setWxShare from '@common/utils/set-wx-share';
 import htmlToString from '@common/utils/html-to-string';
-import isWeiXin from '@common/utils/is-weixin';
 import { updateViewCountInStorage } from '@common/utils/viewcount-in-storage';
+import isWeiXin from '@common/utils/is-weixin';
 
 @inject('site')
 @inject('thread')

@@ -114,7 +114,6 @@ class CommentList extends React.Component {
   render() {
     const { canDelete, canEdit, canLike, canHide } = this.generatePermissions(this.props.data);
     const { groups } = this.props.data?.user || {};
-
     // 评论内容是否通过审核
     const isApproved = this.props?.data?.isApproved === 1;
     
@@ -160,7 +159,7 @@ class CommentList extends React.Component {
             <Avatar
               image={(this.props.data?.user?.nickname || this.props.data?.user?.userName) && this.props?.data?.user?.avatar}
               name={this.props.data?.user?.nickname || this.props.data?.user?.userName || '异'}
-              circle={true}
+              circle
             ></Avatar>
           </View>
           <View className={styles.commentListContent}>
@@ -170,6 +169,11 @@ class CommentList extends React.Component {
                   <View className={styles.commentListName}>
                     {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
                   </View>
+                  {!!this.props.isSelf && (
+                    <View className={styles.masterBox}>
+                      <Text className={styles.masterText}>楼主</Text>
+                    </View>
+                  )}
                   {!!groups?.isDisplay  && (
                     <View className={styles.groups}>{groups?.name || groups?.groupName}</View>
                   )}
@@ -186,7 +190,7 @@ class CommentList extends React.Component {
                   onRedirectToDetail={() => this.toCommentDetail()}
                   useShowMore={!!this.state.isShowOne}
                   content={this.props?.data?.content}
-                  customHoverBg={true}
+                  customHoverBg
                   onClick={this.handleClick.bind(this)}
                 ></PostContent>
               </View>
@@ -248,12 +252,13 @@ class CommentList extends React.Component {
                       <ReplyList
                         data={this.needReply[0]}
                         key={this.needReply[0].id}
-                        isShowOne={true}
+                        isShowOne
                         avatarClick={(floor) => this.replyAvatarClick(this.needReply[0],floor)}
                         likeClick={() => this.replyLikeClick(this.needReply[0])}
                         replyClick={() => this.replyReplyClick(this.needReply[0])}
                         deleteClick={() => this.replyDeleteClick(this.needReply[0])}
                         toCommentDetail={() => this.toCommentDetail()}
+                        isSelf={this.props.isSelf}
                       ></ReplyList>
                     ) : (
                       (this.needReply || []).map((val, index) => (
@@ -265,6 +270,7 @@ class CommentList extends React.Component {
                           replyClick={() => this.replyReplyClick(val)}
                           deleteClick={() => this.replyDeleteClick(val)}
                           toCommentDetail={() => this.toCommentDetail()}
+                          isSelf={this.props.isSelf}
                         ></ReplyList>
                       ))
                     )}

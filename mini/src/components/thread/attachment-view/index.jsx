@@ -1,16 +1,16 @@
-import React, { useState }from 'react';
+import React, { useState, useRef }from 'react';
 import styles from './index.module.scss';
 import { inject, observer } from 'mobx-react';
 import Toast from '@discuzq/design/dist/components/toast/index';
 import Spin from '@discuzq/design/dist/components/spin/index';
+import AudioPlayer from '@discuzq/design/dist/components/audio-player/index';
+import { AUDIO_FORMAT } from '@common/constants/thread-post';
 import { extensionList, isPromise, noop } from '../utils';
 import { View, Text, Image } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import getAttachmentIconLink from '@common/utils/get-attachment-icon-link';
 
 import { throttle } from '@common/utils/throttle-debounce.js';
-
-
 
 /**
  * 附件
@@ -42,53 +42,55 @@ const Index = ({
   };
 
   const fetchDownloadUrl = (threadId, attachmentId, callback) => {
-    if(!threadId || !attachmentId) return;
+    if (!threadId || !attachmentId) return;
 
     // TODO: toastInstance 返回的是boolean
     // let toastInstance = Toast.loading({
     //   duration: 0,
     // });
 
-    thread.fetchThreadAttachmentUrl(threadId, attachmentId).then((res) => {
-      if(res?.code === 0 && res?.data) {
-        const { url } = res.data;
-        if(!url) {
-          Toast.info({ content: '获取下载链接失败' });
+    thread
+      .fetchThreadAttachmentUrl(threadId, attachmentId)
+      .then((res) => {
+        if (res?.code === 0 && res?.data) {
+          const { url } = res.data;
+          if (!url) {
+            Toast.info({ content: '获取下载链接失败' });
+          }
+
+          callback(url);
+        } else {
+          Toast.info({ content: res?.msg });
         }
+      })
+      .catch((error) => {
+        Toast.info({ content: '获取下载链接失败' });
+        console.error(error);
+        return;
+      })
+      .finally(() => {
+        // toastInstance?.destroy();
+      });
+  };
 
-        callback(url);
-      } else {
-        Toast.info({ content: res?.msg });
-      }
-    }).catch((error) => {
-      Toast.info({ content: '获取下载链接失败' });
-      console.error(error);
-      return;
-    }).finally(() => {
-      // toastInstance?.destroy();
-    });
-  }
+  const [downloading, setDownloading] = useState(Array.from({ length: attachments.length }, () => false));
 
-  const [downloading, setDownloading] =
-        useState(Array.from({length: attachments.length}, () => false));
-
-  const onDownLoad = (item, index) => {
+  const onDownload = (item, index) => {
     updateViewCount();
     if (!isPay) {
-
       // 下载中
-      if(downloading?.length && downloading[index]) {
-        Toast.info({content: "下载中，请稍后"});
+      if (downloading?.length && downloading[index]) {
+        Toast.info({ content: '下载中，请稍后' });
         return;
       }
 
-      if(!item || !threadId) return;
+      if (!item || !threadId) return;
 
       downloading[index] = true;
       setDownloading([...downloading]);
 
-      if(!item?.url) {
-        Toast.info({content: "获取下载链接失败"});
+      if (!item?.url) {
+        Toast.info({ content: '获取下载链接失败' });
         downloading[index] = false;
         setDownloading([...downloading]);
         return;
@@ -100,32 +102,30 @@ const Index = ({
           Taro.openDocument({
             filePath: res.tempFilePath,
             success: function (res) {
-              Toast.info({content: "下载成功"});
+              Toast.info({ content: '下载成功' });
             },
             fail: function (error) {
-              Toast.info({ content: "小程序暂不支持下载此类文件，请点击“链接”复制下载链接" });
-              console.error(error.errMsg)
+              Toast.info({ content: '小程序暂不支持下载此类文件，请点击“链接”复制下载链接' });
+              console.error(error.errMsg);
             },
-            complete: function () {
-            }
-          })
+            complete: function () {},
+          });
         },
         fail: function (error) {
-          if(error?.errMsg.indexOf("domain list") !== -1) {
-            Toast.info({ content: "下载链接不在域名列表中" });
-          } else if(error?.errMsg.indexOf("invalid url") !== -1) {
-            Toast.info({ content: "下载链接无效" });
+          if (error?.errMsg.indexOf('domain list') !== -1) {
+            Toast.info({ content: '下载链接不在域名列表中' });
+          } else if (error?.errMsg.indexOf('invalid url') !== -1) {
+            Toast.info({ content: '下载链接无效' });
           } else {
             Toast.info({ content: error.errMsg });
           }
-          console.error(error.errMsg)
+          console.error(error.errMsg);
         },
         complete: function () {
           downloading[index] = false;
           setDownloading([...downloading]);
-        }
-      })
-
+        },
+      });
     } else {
       onPay();
     }
@@ -134,7 +134,7 @@ const Index = ({
   const onLinkShare = (item, index) => {
     updateViewCount();
     if (!isPay) {
-      if(!item || !threadId) return;
+      if (!item || !threadId) return;
 
       const attachmentId = item.id;
       fetchDownloadUrl(threadId, attachmentId, (url) => {
@@ -142,24 +142,68 @@ const Index = ({
           data: url,
           success: function (res) {
             Taro.getClipboardData({
-              success: function (res) {
-              }
-            })
-          }
-        })
+              success: function (res) {},
+            });
+          },
+        });
       });
+    } else {
+      onPay();
+    }
+  };
 
+    // 音频播放
+  const isAttachPlayable = (file) => {
+    return AUDIO_FORMAT.includes(file?.extension?.toUpperCase())
+  };
+
+  const onAttachPlay = async (file, audioRef) => {
+    // 该文件已经通过校验，能直接播放
+    if (file.readyToPlay) {
+      return;  
+    }
+
+    const audioPlayer = audioRef?.current?.getState()?.audioCtx;
+    audioPlayer?.pause();
+
+    // 播放前校验权限
+    updateViewCount();
+    if (!isPay) {
+      if(!file || !threadId) return;
+
+      await fetchDownloadUrl(threadId, file.id, noop);
+      audioPlayer.play();
+      file.readyToPlay = true;
     } else {
       onPay();
     }
   };
 
   const Normal = ({ item, index, type }) => {
+    if (isAttachPlayable(item)) {
+      const { url, fileName, fileSize } = item;
+      const audioRef = useRef();
+
+      return (
+        <View className={styles.audioContainer} key={index} onClick={onClick} >
+          <AudioPlayer
+            ref={audioRef}
+            src={url}
+            fileName={fileName}
+            fileSize={handleFileSize(parseFloat(item.fileSize || 0))}
+            onPlay={throttle(() => onAttachPlay(item, audioRef), 1000)}
+            onDownload={throttle(() => onDownLoad(item, index), 1000)}
+            onLink={throttle(() => onLinkShare(item), 1000)}
+          />
+        </View>
+      );
+    }
+
     return (
-      <View className={styles.container} key={index} onClick={onClick} >
+      <View className={styles.container} key={index} onClick={onClick}>
         <View className={styles.wrapper}>
           <View className={styles.left}>
-          <Image src={getAttachmentIconLink(type)} className={styles.containerIcon} mode="widthfix"/>
+            <Image src={getAttachmentIconLink(type)} className={styles.containerIcon} mode="widthfix" />
             <View className={styles.containerText}>
               <Text className={styles.content}>{item.fileName}</Text>
               <Text className={styles.size}>{handleFileSize(parseFloat(item.fileSize || 0))}</Text>
@@ -169,10 +213,11 @@ const Index = ({
           <View className={styles.right}>
             <Text onClick={throttle(() => onLinkShare(item), 1000)}>链接</Text>
             <View className={styles.label}>
-              { downloading[index] ?
-                <Spin className={styles.spinner} type="spinner" /> :
-                <Text onClick={throttle(() => onDownLoad(item, index), 1000)}>下载</Text>
-              }
+              {downloading[index] ? (
+                <Spin className={styles.spinner} type="spinner" />
+              ) : (
+                <Text onClick={throttle(() => onDownload(item, index), 1000)}>下载</Text>
+              )}
             </View>
           </View>
         </View>
@@ -183,7 +228,7 @@ const Index = ({
   const Pay = ({ item, index, type }) => {
     return (
       <View className={`${styles.container} ${styles.containerPay}`} key={index} onClick={onPay}>
-        <Image src={getAttachmentIconLink(type)} className={styles.containerIcon} mode="widthfix"/>
+        <Image src={getAttachmentIconLink(type)} className={styles.containerIcon} mode="widthfix" />
         <Text className={styles.content}>{item.fileName}</Text>
       </View>
     );
@@ -191,22 +236,16 @@ const Index = ({
 
   return (
     <View className={styles.wrapper}>
-        {
-          attachments.map((item, index) => {
-            // 获取文件类型
-            const extension = item?.extension || '';
-            const type = extensionList.indexOf(extension.toUpperCase()) > 0
-              ? extension.toUpperCase()
-              : 'UNKNOWN';
-            return (
-              !isPay ? (
-                <Normal key={index} item={item} index={index} type={type} />
-              ) : (
-                <Pay key={index} item={item} index={index} type={type} />
-              )
-            );
-          })
-        }
+      {attachments.map((item, index) => {
+        // 获取文件类型
+        const extension = item?.extension || '';
+        const type = extensionList.indexOf(extension.toUpperCase()) > 0 ? extension.toUpperCase() : 'UNKNOWN';
+        return !isPay ? (
+          <Normal key={index} item={item} index={index} type={type} />
+        ) : (
+          <Pay key={index} item={item} index={index} type={type} />
+        );
+      })}
     </View>
   );
 };

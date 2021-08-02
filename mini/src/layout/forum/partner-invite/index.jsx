@@ -17,7 +17,7 @@ import layout from './index.module.scss';
 import SiteInfo from '../site-info';
 import PayBox from '@components/payBox';
 import { simpleRequest } from '@common/utils/simple-request';
-import { getCurrentInstance } from '@tarojs/taro';
+import Taro, { getCurrentInstance } from '@tarojs/taro';
 import { readUser } from '@server';
 import LoginHelper from '@common/utils/login-helper';
 
@@ -40,8 +40,24 @@ class PartnerInviteH5Page extends React.Component {
     };
   }
 
+  setNavigationBarStyle = () => {
+    Taro.setNavigationBarColor({
+      frontColor: '#000000',
+      backgroundColor: '#ffffff'
+    })
+  }
+
   async componentDidMount() {
+    this.setNavigationBarStyle();
+    
     try {
+      // 若用户已登录，实时刷新站点付费及用户是否付费信息
+      const {site, user} = this.props;
+      if (user.isLogin()) {
+        user.updateUserInfo(user.id);
+        site.getSiteInfo();
+      }
+
       await Promise.all([
         this.initInviteCode(),
         this.initUserList(),
@@ -98,33 +114,18 @@ class PartnerInviteH5Page extends React.Component {
   async initThreadList() {
     const { forum, search } = this.props;
 
-    // 1.获取后台设置的付费推荐内容，最多10条。pay===1时，后台默认返回10条，无法修改
+    const INVITE_THREADLIST_SCOPE = 3;
     const threadList = await search.getThreadList({
-      site: 1, // 后台设置的热门推荐
-      params: {
-        pay: 1,
-      },
+      scope: INVITE_THREADLIST_SCOPE,
     });
 
-    // 2.推荐内容数量大于0则title为精彩内容预览，否则为热门内容预览
+     forum.setThreadsPageData(threadList);
+
+    // 推荐内容数量大于0则title为精彩内容预览，否则为热门内容预览
+    const isHot = !threadList?.pageData?.some(item => item.isSite);
     this.setState({
-      isHot: !(threadList?.pageData?.length > 0),
+      isHot,
     });
-
-    // 3.如果付费推荐少于MAX_THREAD_COUNT条，取热门推荐，凑齐MAX_THREAD_COUNT条
-    if (threadList?.pageData?.length < MAX_THREAD_COUNT) {
-      const repeatedIds = threadList?.pageData?.map(item => item.threadId);
-      const hotThreads = await search.getThreadList({
-        repeatedIds,
-        params: {
-          pay: 1,
-        },
-      });
-
-      threadList?.pageData?.push(...hotThreads?.pageData?.slice(0, MAX_THREAD_COUNT - threadList?.pageData?.length));
-    }
-
-    forum.setThreadsPageData(threadList);
   }
 
   handleJoinSite = () => {
@@ -192,7 +193,7 @@ class PartnerInviteH5Page extends React.Component {
             ) : (
               <></>
             )}
-            {!isLoading && !threadsPageData?.length ? <NoData /> : <></>}
+            {!isLoading && !usersPageData?.length ? <NoData /> : <></>}
             {isLoading ? (
               <View className={layout.spinner}>
                 <Spin type="spinner" />
