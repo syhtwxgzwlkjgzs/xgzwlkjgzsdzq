@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Popup from '@discuzq/design/dist/components/popup/index';
 import Button from '@discuzq/design/dist/components/button/index';
 import Slider from '@discuzq/design/dist/components/slider/index';
@@ -7,10 +7,21 @@ import { View } from '@tarojs/components';
 import styles from './index.module.scss';
 
 const InputPop = (props) => {
-  const { visible, onOkClick, onCancel, rewardAmount } = props;
+  const { visible, onOkClick, onCancel, remainMoney, money } = props;
+
+  const maxPercent = parseInt((remainMoney / money) * 100);
 
   const [value, setValue] = useState(0);
   const [moneyNum, setMoneyNum] = useState(0);
+  const [isShowMaxMoney, setIsShowMaxMoney] = useState(false);
+
+  useEffect(() => {
+    if(moneyNum >= remainMoney) {
+      setIsShowMaxMoney(true);
+    } else {
+      setIsShowMaxMoney(false);
+    }
+  }, [moneyNum]);
 
   // const onInputChange = (val) => {
   //   if (Number(val) >= 0 && Number(val) <= 100) {
@@ -24,7 +35,7 @@ const InputPop = (props) => {
   // };
   const onInputChange = (val) => {
     setValue(Number(val));
-    setMoneyNum((Number(val) * 0.01 * rewardAmount).toFixed(2));
+    setMoneyNum((Number(val) * 0.01 * money).toFixed(2));
   };
 
   const onSubmitClick = async () => {
@@ -53,12 +64,14 @@ const InputPop = (props) => {
                 <Slider
                   defaultValue={value}
                   value={value}
-                  max={100}
+                  max={maxPercent}
                   min={0}
-                  step={1}
+                  step={5}
                   onChange={debounce((val) => onInputChange(val), 200)}
+                  formatter={(value) => `${value}`}
                 />
                 <View className={styles.perCent}>%</View>
+                {isShowMaxMoney && (<View className={styles.maxMoney}>*已达到最大可用金额</View>)}
               </View>
             </View>
             <View className={styles.rewardMoney}>

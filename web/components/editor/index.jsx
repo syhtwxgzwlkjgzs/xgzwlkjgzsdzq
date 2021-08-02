@@ -66,7 +66,7 @@ export default function DVditor(props) {
     if (emoji && emoji.code) {
       setState({ emoji: {} });
       // 因为vditor的lute中有一些emoji表情和 emoji.code 重叠了。这里直接先这样处理
-      let value = `<img alt="${emoji.code}emoji" src="${emoji.url}" class="qq-emotion" />`;
+      let value = `<img alt="${emoji.code}dzqemoji" src="${emoji.url}" class="qq-emotion" />`;
       value = emojiVditorCompatibilityDisplay(value);
       // setCursorPosition();
       html2mdInserValue(value);
@@ -326,7 +326,10 @@ export default function DVditor(props) {
 
   return (
     <>
-      <div id={vditorId} className={className} onClick={e => e.stopPropagation()}>
+      <div id={vditorId} className={className} onClick={e => {
+        e.stopPropagation()
+        setState({ currentDefaultOperation: '' })
+      }}>
         <LoadingBox>编辑器加载中...</LoadingBox>
       </div>
       {/* {!pc && isFocus && <div className="dvditor__placeholder"></div>} */}

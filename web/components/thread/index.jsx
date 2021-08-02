@@ -13,7 +13,7 @@ import ThreadCenterView from './ThreadCenterView';
 import { throttle } from '@common/utils/throttle-debounce';
 import { debounce } from './utils';
 import { noop } from '@components/thread/utils';
-import { updateViewCountInStores } from '@common/utils/viewcount-in-storage';
+import { updateViewCountInStorage } from '@common/utils/viewcount-in-storage';
 
 
 @inject('site')
@@ -22,9 +22,9 @@ import { updateViewCountInStores } from '@common/utils/viewcount-in-storage';
 @inject('thread')
 @inject('search')
 @inject('topic')
+@inject('card')
 @observer
 class Index extends React.Component {
-
     state = {
       isSendingLike: false,
     }
@@ -148,11 +148,11 @@ class Index extends React.Component {
     }, 1000)
 
     onClickUser = (e) => {
-      e && e.stopPropagation()
+      e && e.stopPropagation();
 
       const { user = {}, isAnonymous } = this.props.data || {};
-      if (!!isAnonymous) {
-        this.onClick()
+      if (isAnonymous) {
+        this.onClick();
       } else {
         this.props.router.push(`/user/${user?.userId}`);
       }
@@ -185,7 +185,7 @@ class Index extends React.Component {
       e && e.stopPropagation();
 
       const { onClickIcon = noop } = this.props;
-      onClickIcon(e)
+      onClickIcon(e);
     }
 
     onOpen = () => {
@@ -203,22 +203,28 @@ class Index extends React.Component {
       const { canViewPost } = ability;
 
       if (!canViewPost) {
-        const isLogin = this.props.user.isLogin()
+        const isLogin = this.props.user.isLogin();
         if (!isLogin) {
           Toast.info({ content: '请先登录!' });
           goToLoginPage({ url: '/user/login' });
         } else {
           Toast.info({ content: '暂无权限查看详情，请联系管理员' });
         }
-        return false
+        return false;
       }
-      return true
+      return true;
     }
 
     updateViewCount = async () => {
-      const { threadId = '' } = this.props.data || {};
+      const { data, site } = this.props;
+      const { threadId = '' } = data || {};
+      const { openViewCount } = site?.webConfig?.setSite || {};
+
+      const viewCountMode = Number(openViewCount);
+      if(viewCountMode === 1) return;
+
       const threadIdNumber = Number(threadId);
-      const viewCount = await updateViewCountInStores(threadIdNumber);
+      const viewCount = await updateViewCountInStorage(threadIdNumber);
       if(viewCount) {
         this.props.index.updateAssignThreadInfo(threadIdNumber, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
         this.props.search.updateAssignThreadInfo(threadIdNumber, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
@@ -227,7 +233,7 @@ class Index extends React.Component {
     }
 
     render() {
-      const { data, className = '', site = {}, showBottomStyle = true ,  collect = '', unifyOnClick = null, isShowIcon = false } = this.props;
+      const { data, card, className = '', site = {}, showBottomStyle = true,  collect = '', unifyOnClick = null, isShowIcon = false, user: users } = this.props;
       const { platform = 'pc' } = site;
 
       const { onContentHeightChange = noop, onImageReady = noop, onVideoReady = noop } = this.props;
@@ -290,6 +296,9 @@ class Index extends React.Component {
           />
 
           <BottomEvent
+            data={data}
+            card={card}
+            user={users}
             userImgs={likeReward.users}
             wholeNum={likeReward.likePayCount || 0}
             comment={likeReward.postCount || 0}

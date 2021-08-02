@@ -11,9 +11,11 @@ import HOCFetchSiteData from '../../../middleware/HOCFetchSiteData';
 import UserCenterEditAccountPwd from '../../user-center-edit-account-pwd-pc';
 import UserCenterEditMobile from '../../user-center-edit-mobile-pc';
 import UserCenterEditPaypwd from '../../user-center-edit-paypwd-pc';
+import UserCenterAdditionalInfo from '../../user-center/additional-info-pc/index';
 import Copyright from '@components/copyright';
 import { getClientHeight } from '@common/utils/get-client-height';
 import isServer from '@common/utils/is-server';
+import { isExtFieldsOpen } from '@common/store/login/util';
 
 @inject('site')
 @inject('user')
@@ -28,6 +30,7 @@ class index extends Component {
       payPwdEditorVisible: false,
       mobileEditorVisible: false,
       wechatRebindEditorVisible: false,
+      additionalUserInfoVisible: false, // 补充信息状态
       editorConfig: [
         {
           name: '昵称',
@@ -276,7 +279,7 @@ class index extends Component {
               >
                 换绑
               </p>
-            )
+            );
           },
           // <p
           //   onClick={() => {
@@ -289,6 +292,30 @@ class index extends Component {
           //   换绑
           // </p>
           // operation: () => null,
+          inputEditor: () => null,
+        },
+        {
+          name: '补充信息',
+          display: 'show',
+          condition: () => {
+            const ISEXT_FIELD_OPENS = isExtFieldsOpen(this.props?.site);
+            return ISEXT_FIELD_OPENS;
+          },
+          render: () => {
+            '查看';
+          },
+          operation: () => (
+            <p
+              onClick={() => {
+                this.setState({
+                  additionalUserInfoVisible: true,
+                });
+              }}
+              className={styles.pcEditNicknameCallMsodify}
+            >
+              查看
+            </p>
+          ),
           inputEditor: () => null,
         },
       ],
@@ -391,7 +418,7 @@ class index extends Component {
       <div className={styles.pcEditBox} id={styles.pcEditContainer}>
         <Header className={styles.pcEditHeaser} />
         <div className={styles.pcEditContent}>
-          <div className={styles.pcEdit} style={{ height: pcEditHeight }}>
+          <div className={styles.pcEdit}>
             {/* 头部 */}
             <div>
               <UserCenterEditHeader />
@@ -431,6 +458,14 @@ class index extends Component {
                 payPwdEditorVisible: false,
               });
             }}
+          />
+          <UserCenterAdditionalInfo
+            onClose={() => {
+              this.setState({
+                additionalUserInfoVisible: false,
+              });
+            }}
+            visible={this.state.additionalUserInfoVisible}
           />
         </>
       </div>
