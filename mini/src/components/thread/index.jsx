@@ -10,10 +10,10 @@ import styles from './index.module.scss';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import threadPay from '@common/pay-bussiness/thread-pay';
 import ThreadCenterView from './ThreadCenterView';
-import { debounce, noop } from './utils'
+import { debounce, noop , getElementRect, randomStr } from './utils'
 import { View, Text } from '@tarojs/components'
 import { getImmutableTypeHeight } from './getHeight'
-import { getElementRect, randomStr } from './utils'
+
 import Skeleton from './skeleton';
 import { updateViewCountInStorage } from '@common/utils/viewcount-in-storage';
 
@@ -51,7 +51,7 @@ class Index extends React.Component {
       // 保存视频高度
       const { videoH } = this.state
       if (params?.type === 'video' && videoH === 0) {
-        this.setState({ videoH: params['height'] })
+        this.setState({ videoH: params.height })
       }
 
       // 更新帖子组件高度
@@ -86,7 +86,6 @@ class Index extends React.Component {
       this.updateViewCount();
       this.handlePraise();
     }
-
     handlePraise = debounce(() => {
 
       if(this.state.isSendingLike) return;
