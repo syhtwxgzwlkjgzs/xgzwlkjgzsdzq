@@ -12,10 +12,10 @@ export const getParamCode = (commonLogin) =>
           commonLogin.setJsCode(res.code);
           return resolve(res);
         }
-        reject(res);
+        return reject(res);
       },
       fail: (err) => {
-        reject(err);
+        return reject(err);
       },
     });
   });

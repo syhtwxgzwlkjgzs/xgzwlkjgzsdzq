@@ -28,6 +28,10 @@ class WXRebindActionPage extends Component {
     this.handleRebindButtonClick = this.handleRebindButtonClick.bind(this);
   }
 
+  async componentDidMount() {
+    await getParamCode(this.props.commonLogin);
+  }
+
   componentWillUnmount() {
     this.props.commonLogin.reset();
   }
@@ -37,7 +41,6 @@ class WXRebindActionPage extends Component {
 
     try {
       const { user, commonLogin } = this.props;
-      await getParamCode(commonLogin);
       await user.rebindWechatMini({
         jsCode: commonLogin.jsCode,
         iv: params.iv,
@@ -50,6 +53,7 @@ class WXRebindActionPage extends Component {
       });
     } catch (e) {
       this.props.commonLogin.setLoginLoading(true);
+      await getParamCode(this.props.commonLogin);
       this.setState({
         currentStatus: 'error',
         errorTips: e.Msg
@@ -63,8 +67,9 @@ class WXRebindActionPage extends Component {
       return;
     }
     commonLogin.setLoginLoading(false);
-    getUserProfile(this.getUserProfileCallback, true, () => {
+    getUserProfile(this.getUserProfileCallback, true, async () => {
       commonLogin.setLoginLoading(true);
+      await getParamCode(this.props.commonLogin);
     });
   }
 

@@ -32,7 +32,7 @@ class MiniAuth extends React.Component {
 
   async componentDidMount() {
     const { action, sessionToken } = getCurrentInstance().router.params;
-    await getParamCode(this.props.commonLogin)
+    await getParamCode(this.props.commonLogin);
     // 其他地方跳入的小程序绑定流程
     if(action === 'mini-bind'){
       Router.redirect({
@@ -96,6 +96,7 @@ class MiniAuth extends React.Component {
       };
     } catch (error) {
       this.props.commonLogin.setLoginLoading(true);
+      await getParamCode(this.props.commonLogin);
       // 注册信息补充
       if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
         const uid = get(error, 'uid', '');
@@ -137,8 +138,9 @@ class MiniAuth extends React.Component {
       return;
     }
     commonLogin.setLoginLoading(false);
-    getUserProfile(this.getUserProfileCallback, true, () => {
+    getUserProfile(this.getUserProfileCallback, true, async () => {
       commonLogin.setLoginLoading(true);
+      await getParamCode(this.props.commonLogin);
     });
   }
 

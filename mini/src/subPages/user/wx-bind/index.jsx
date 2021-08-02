@@ -25,6 +25,10 @@ class WXBind extends Component {
     this.handleBindButtonClick = this.handleBindButtonClick.bind(this);
   }
 
+  async componentDidMount() {
+    await getParamCode(this.props.commonLogin);
+  }
+
   componentWillUnmount() {
     this.props.commonLogin.reset();
   }
@@ -33,7 +37,6 @@ class WXBind extends Component {
     const { scene: sessionToken } = getCurrentInstance().router.params;
 
     try {
-      await getParamCode(this.props.commonLogin);
       const res = await this.props.miniBind.mobilebrowserBind({
         jsCode: this.props.commonLogin.jsCode,
         iv: params.iv,
@@ -54,6 +57,7 @@ class WXBind extends Component {
       };
     } catch (error) {
       this.props.commonLogin.setLoginLoading(true);
+      await getParamCode(this.props.commonLogin);
       // 注册信息补充
       if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
         if (isExtFieldsOpen(this.props.site)) {
@@ -95,8 +99,9 @@ class WXBind extends Component {
       return;
     }
     commonLogin.setLoginLoading(false);
-    getUserProfile(this.getUserProfileCallback, true, () => {
+    getUserProfile(this.getUserProfileCallback, true, async () => {
       commonLogin.setLoginLoading(true);
+      await getParamCode(this.props.commonLogin);
     });
   }
 
