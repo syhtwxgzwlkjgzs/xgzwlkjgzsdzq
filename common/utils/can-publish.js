@@ -11,7 +11,7 @@ export default function canPublish(userStore, siteStore) {
   if (!siteStore.publishNeedBindPhone) { // 是否开启发帖需要绑定手机号
     return true;
   }
-  const type = `${siteStore.isSmsOpen && 'mobile'}${siteStore.wechatEnv !== 'none' && 'wechat'}`;
+  const type = `${(siteStore.isSmsOpen && 'mobile') || ''}${siteStore.wechatEnv !== 'none' && 'wechat'}`;
   let url = '';
   switch (type) {
     case 'mobile': // 手机模式
@@ -24,7 +24,7 @@ export default function canPublish(userStore, siteStore) {
       url = !userStore.isBindWechat && !userStore.mobile ? '/user/wx-bind-qrcode' : '';
       break;
   }
-  loginHelper.setUrl(url);
-  Router.push({url});
-  return false;
+  url && loginHelper.setUrl(url);
+  url && Router.push({url});
+  return !url;
 }
