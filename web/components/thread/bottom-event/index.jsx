@@ -55,9 +55,11 @@ const Index = ({
       type: 'share',
     }];
   }, [isLiked]);
+
+  // TODO：此处逻辑需要移植到thread/index中，方便逻辑复用
   const handleClick = () => {
     updateViewCount();
-    
+
     if (platform === 'pc') {
       onShare()
     } else {
