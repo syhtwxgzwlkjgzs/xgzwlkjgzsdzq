@@ -42,13 +42,13 @@ const BaseLayoutControl = forwardRef((props, ref) => {
   useImperativeHandle(
     ref,
     () => ({
-      listRef
+      listRef,
     }),
   );
 
   const baseLayoutWhiteList = useMemo(() => {
-    const defaultWhiteList = ['home', 'search', 'my', 'like', 'collect', 'buy'];
-    if(Array.isArray(jumpRuleList)) {
+    const defaultWhiteList = ['home', 'search', 'my', 'like', 'collect', 'buy', 'block'];
+    if (Array.isArray(jumpRuleList)) {
       return [...defaultWhiteList, ...jumpRuleList];
     }
     return defaultWhiteList;
@@ -63,19 +63,19 @@ const BaseLayoutControl = forwardRef((props, ref) => {
   }, [layoutRef]);
 
   const isPageInWhiteList = () => {
-    for(const listItem of baseLayoutWhiteList) {
-      if(typeof listItem === 'string') {
-        if(listItem === pageName) {
+    for (const listItem of baseLayoutWhiteList) {
+      if (typeof listItem === 'string') {
+        if (listItem === pageName) {
           return true;
         }
-      } else if(typeof listItem.test === 'function') {
-        if(listItem.test(pageName)) {
+      } else if (typeof listItem.test === 'function') {
+        if (listItem.test(pageName)) {
           return true;
         }
       }
     }
     return false;
-  }
+  };
 
   useEffect(() => {
     if (hasListChild && listRef?.current && pageName && isPageInWhiteList()) {
@@ -83,15 +83,15 @@ const BaseLayoutControl = forwardRef((props, ref) => {
         baselayout[pageName] = jumpTo;
         listRef.current.jumpToScrollTop(jumpTo);
       } else {
-        if(baselayout[pageName] > 0) {
-          if (pageName !== 'search' || // 首页在PC和H5都适用阅读区域跳转
-              (pageName === 'search' && site.platform === 'h5')) { // 搜索页只适用H5页面阅读区域跳转
+        if (baselayout[pageName] > 0) {
+          if (pageName !== 'search' // 首页在PC和H5都适用阅读区域跳转
+              || (pageName === 'search' && site.platform === 'h5')) { // 搜索页只适用H5页面阅读区域跳转
             // 需要异步触发，可能存在列表没有渲染出来
             setTimeout(() => {
               listRef.current.jumpToScrollTop(baselayout[pageName]);
             });
           }
-        } else if(baselayout.isJumpingToTop) {
+        } else if (baselayout.isJumpingToTop) {
           baselayout.removeJumpingToTop();
           listRef.current.onBackTop();
         }
@@ -101,7 +101,6 @@ const BaseLayoutControl = forwardRef((props, ref) => {
 
 
   const quickScrolling = (e) => {
-
     if (!e || !e.scrollTop || !hasListChild || !listRef?.current?.currentScrollTop) {
       onScroll();
       return;
@@ -131,7 +130,6 @@ const BaseLayoutControl = forwardRef((props, ref) => {
       if (playingAudioTop > 0
         && (playingAudioBottom < scrollTop // 音频在视窗下面
           || playingAudioTop > window.innerHeight + scrollTop)) { // 音频在视窗上面
-
         baselayout.pauseWebPlayingAudio();
       }
     }
