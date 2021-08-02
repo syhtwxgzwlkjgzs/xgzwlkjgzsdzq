@@ -2,7 +2,6 @@ import React, { createRef, Fragment } from 'react';
 import { inject, observer, Observer } from 'mobx-react';
 import { Icon, Tabs, Spin } from '@discuzq/design';
 // import ThreadContent from '@components/thread';
-import { withRouter } from 'next/router';
 import HomeHeader from '@components/home-header';
 import styles from './index.module.scss';
 import TopNew from './components/top-news';
@@ -246,4 +245,4 @@ class IndexH5Page extends React.Component {
   }
 }
 
-export default withRouter(IndexH5Page);
+export default IndexH5Page;
