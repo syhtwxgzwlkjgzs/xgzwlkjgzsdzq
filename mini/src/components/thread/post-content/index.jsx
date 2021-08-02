@@ -145,7 +145,7 @@ import config from '../../../app.config';
     }
     return images;
   }
-  
+
   const generateAppRelativePageLinks = () => {
     const pageLinks = [];
     for(const pkg of config.subPackages) {
@@ -181,6 +181,7 @@ import config from '../../../app.config';
     if(imageUrlList.length) {
       setImageUrlList(imageUrlList);
     }
+
     generateAppRelativePageLinks();
 
   }, [filterContent]);
