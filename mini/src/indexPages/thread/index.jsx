@@ -18,6 +18,7 @@ import { updateViewCountInStorage } from '@common/utils/viewcount-in-storage';
 @inject('index')
 @inject('search')
 @inject('topic')
+@inject('baselayout')
 @withShare()
 class Detail extends React.Component {
   constructor(props) {
@@ -26,6 +27,17 @@ class Detail extends React.Component {
       isServerError: false,
       serverErrorMsg: '',
     };
+  }
+
+  componentDidHide() {
+    const { baselayout } = this.props;
+
+    const playingAudioDom = baselayout?.playingAudioDom;
+
+    if(playingAudioDom) {
+      baselayout.playingAudioDom.pause();
+      baselayout.playingAudioDom = null;
+    }
   }
 
   componentDidUpdate(prevProps) {

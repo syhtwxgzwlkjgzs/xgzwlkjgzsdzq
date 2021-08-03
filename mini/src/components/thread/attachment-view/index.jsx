@@ -27,6 +27,7 @@ const Index = ({
   user = null,
   threadId = null,
   thread = null,
+  baselayout,
   updateViewCount = noop,
 }) => {
   // 处理文件大小的显示
@@ -178,17 +179,42 @@ const Index = ({
     return !!file.readyToPlay;
   };
 
+  const onPlay = (audioRef, audioWrapperRef) => {
+    const audioContext = audioRef?.current?.getState()?.audioCtx;
+    updateViewCount();
+    if( audioContext && baselayout && audioWrapperRef) {
+      
+      // 暂停之前正在播放的视频
+      if(baselayout.playingVideoDom) {
+        Taro.createVideoContext(baselayout.playingVideoDom)?.pause();
+      }
+
+       // 暂停之前正在播放的音频
+      if (baselayout.playingAudioDom) {
+        if(baselayout.playingAudioWrapperId !== audioWrapperRef.current.uid) {
+          baselayout.playingAudioDom?.pause();
+          baselayout.playingAudioWrapperId = audioWrapperRef.current.uid;
+        }
+      }
+
+      baselayout.playingAudioDom = audioContext;
+      baselayout.playingAudioWrapperId = audioWrapperRef.current.uid;
+    }
+  };
+
   const Normal = ({ item, index, type }) => {
     if (isAttachPlayable(item)) {
       const { url, fileName, fileSize } = item;
       const audioRef = useRef();
+      const audioWrapperRef = useRef();
 
       return (
-        <View className={styles.audioContainer} key={index} onClick={onClick} >
+        <View className={styles.audioContainer} key={index} onClick={onClick} ref={audioWrapperRef}>
           <AudioPlayer
             ref={audioRef}
             src={url}
             fileName={fileName}
+            onPlay={() => onPlay(audioRef, audioWrapperRef)}
             fileSize={handleFileSize(parseFloat(item.fileSize || 0))}
             beforePlay={async () => await beforeAttachPlay(item)}
             onDownload={throttle(() => onDownLoad(item, index), 1000)}
@@ -249,4 +275,4 @@ const Index = ({
   );
 };
 
-export default inject('user', 'thread')(observer(Index));
+export default inject('user', 'baselayout', 'thread')(observer(Index));
