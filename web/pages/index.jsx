@@ -90,24 +90,36 @@ class Index extends React.Component {
     // 识别通过分享过来的url
     // 若包含categoryId参数，则定位到具体的categoryId数据
     const { router, index } = this.props;
-    const { categoryId = '' } = router.query
-    if (categoryId) {
-      const ids = categoryId.split('_').map(item => {
+    let { categoryId = '', sequence = '0' } = router.query || {}
+
+    if (categoryId || sequence !== '0') {
+      let ids = categoryId.split('_').map(item => {
         // 判断categoryId是否是数字。可能是all/default
         const id = /^\d+$/.test(item) ? Number(item) : item
 
         return id
-      })
+      }).filter(item => item)
 
-      const newFilter = { ...index.filter, categoryids: ids };
+      if (sequence === '1' && !ids?.length) {
+        ids = ['default']
+      }
+
+      if (ids.indexOf('default') !== -1 && sequence === '0') {
+        sequence = '1'
+      }
+
+      const newFilter = { ...index.filter, categoryids: ids, sequence };
 
       index.setFilter(newFilter);
+    } else {
+      const { categoryids, sequence: seq } = index.filter || {}
+      this.setUrl(categoryids, seq)
     }
   }
 
   // 根据选中的筛选项，设置地址栏 
-  setUrl = (categoryIds = []) => {
-    const url = categoryIds?.length ? `/?categoryId=${categoryIds.join('_')}` : '/'
+  setUrl = (categoryIds = [], sequence = 0) => {
+    const url = (categoryIds?.length || sequence !== 0)  ? `/?categoryId=${categoryIds.join('_')}&sequence=${sequence}` : '/'
     this.props.router.replace(url)
   }
 
@@ -129,7 +141,7 @@ class Index extends React.Component {
     }
 
     if (type === 'click-filter') { // 点击tab
-      this.setUrl(categoryIds)
+      this.setUrl(categoryIds, sequence)
 
       this.page = 1;
       this.props.baselayout.setJumpingToTop();
