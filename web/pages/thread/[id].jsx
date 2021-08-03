@@ -84,6 +84,10 @@ class Detail extends React.Component {
       this.props.thread.reset();
       this.getPageDate(this.props.router.query.id);
     }
+
+    if (this.props.router?.query?.postId && this.props.router.query.postId !== prevProps.router.query.postId) {
+      this.getPositionComment(this.props.router?.query?.id, this.props.router.query.postId);
+    }
   }
 
   async componentDidMount() {
@@ -266,7 +270,7 @@ class Detail extends React.Component {
   // 获取指定评论位置的相关信息
   async getPositionComment(id, postId) {
     // 获取评论所在的页面位置
-    if (id && postId && (!this.props?.commentPosition?.postsPositionPage || !this.hasMaybeCache())) {
+    if (id && postId) {
       this.props.commentPosition.setPostId(Number(postId));
       const params = {
         threadId: id,
