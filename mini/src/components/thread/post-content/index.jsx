@@ -151,7 +151,7 @@ import { urlToLink } from '@common/utils/replace-url-to-a';
             onImgClick={handleImgClick}
             onLinkClick={handleLinkClick}
             transformer={transformer}
-            iframeWhiteList={[ 'bilibili', 'youku', 'iqiyi' ]}
+            iframeWhiteList={['bilibili', 'youku', 'iqiyi', 'music.163.com', 'qq.com']}
           />
           {imageVisible && (
             <ImagePreviewer
