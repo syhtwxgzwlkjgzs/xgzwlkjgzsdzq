@@ -446,7 +446,6 @@ class CommentH5Page extends React.Component {
               replyDeleteClick={(reply) => this.replyDeleteClick(reply, commentData)}
               onMoreClick={() => this.onMoreClick()}
               isHideEdit={true}
-              isSelf={isSelf}
               postId={this.props.comment.postId}
               positionRef={this.positionRef}
               threadId={this.props.thread?.threadData?.userId}

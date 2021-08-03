@@ -58,7 +58,7 @@ class CommentList extends React.Component {
   // 点击评论回复
   replyClick() {
     const userName = this.props.data?.user?.nickname || this.props.data?.user?.userName;
-   
+
     this.setState({
       isShowInput: !this.state.isShowInput,
       replyId: null,
@@ -313,15 +313,15 @@ class CommentList extends React.Component {
                         <div key={val.id || index} ref={val.id === this.props.postId ? this.props.positionRef : null}>
                           <ReplyList
                             data={val}
+                            threadId={this.props.threadId}
                             key={val.id || index}
-                            avatarClick={(floor) => this.replyAvatarClick(val, floor)}
+                            avatarClick={floor => this.replyAvatarClick(val, floor)}
                             likeClick={() => this.replyLikeClick(val)}
                             replyClick={() => this.replyReplyClick(val)}
                             deleteClick={() => this.replyDeleteClick(val)}
                             toCommentDetail={() => this.toCommentDetail()}
                             onSubmit={(value, imageList) => this.onSubmit(value, imageList)}
                             isShowInput={this.state.replyId && this.state.replyId === val.id}
-                            isSelf={this.props.isSelf}
                             active={this.props.postId === val.id}
                           ></ReplyList>
                         </div>
