@@ -830,7 +830,8 @@ class ThreadH5Page extends React.Component {
         this.setState({ showAboptPopup: false });
 
         // 重新获取帖子详细
-        this.props.thread.fetchThreadDetail(params.threadId);
+        await this.props.thread.fetchThreadDetail(params.threadId);
+        this.props.thread.updateListStore(this.props.index, this.props.search, this.props.topic);
 
         Toast.success({
           content: `悬赏${data}元`,
