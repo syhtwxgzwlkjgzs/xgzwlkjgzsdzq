@@ -17,6 +17,7 @@ import { updateViewCountInStorage } from '@common/utils/viewcount-in-storage';
 @inject('index')
 @inject('search')
 @inject('topic')
+@inject('baselayout')
 @withShare()
 class Detail extends React.Component {
   constructor(props) {
@@ -25,6 +26,23 @@ class Detail extends React.Component {
       isServerError: false,
       serverErrorMsg: '',
     };
+  }
+
+  componentDidHide() {
+    const { baselayout } = this.props;
+
+    const playingVideoDom = baselayout?.playingVideoDom;
+    const playingAudioDom = baselayout?.playingAudioDom;
+
+    if (playingVideoDom) {
+      Taro.createVideoContext(playingVideoDom)?.pause();
+      baselayout.playingVideoDom = "";
+    }
+
+    if(playingAudioDom) {
+      baselayout.playingAudioDom.pause();
+      baselayout.playingAudioDom = null;
+    }
   }
 
   componentDidUpdate(prevProps) {
