@@ -187,10 +187,12 @@ http.interceptors.response.use((res) => {
     case JUMP_TO_PAY_SITE: {
       if (process.env.DISCUZ_ENV === 'web') {
         url = '/forum/partner-invite';
+        LoginHelper.saveCurrentUrl();
+        window.location.replace(url); // 此处LoginHelper的saveAndRedirect跳转失败
       } else {
         url = '/subPages/forum/partner-invite/index'
+        LoginHelper.saveAndRedirect(url);
       }
-      LoginHelper.saveAndRedirect(url);
       break;
     }
     case NEED_BIND_WEIXIN_FLAG: {
