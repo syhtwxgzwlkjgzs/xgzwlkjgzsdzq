@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle, useMemo } from 'react';
 import { inject, observer } from 'mobx-react';
 import { noop } from '@components/thread/utils';
 import { throttle } from '@common/utils/throttle-debounce.js';
@@ -32,12 +32,14 @@ const BaseLayoutControl = forwardRef((props, ref) => {
     jumpTo = -1,
     pageName = '',
     ready = noop,
+    jumpRuleList = [],
     ...others
   } = props;
 
   const [listRef, setListRef] = useState(null);
-  const [baseLayoutWhiteList, setBaseLayoutWhiteList] = useState(['home', 'search', 'my', 'like', 'collect', 'buy']);
   const layoutRef = useRef(null);
+
+  const disableEffect = useRef(false)
 
   useImperativeHandle(
     ref,
@@ -45,6 +47,14 @@ const BaseLayoutControl = forwardRef((props, ref) => {
       listRef
     }),
   );
+
+  const baseLayoutWhiteList = useMemo(() => {
+    const defaultWhiteList = ['home', 'search', 'my', 'like', 'collect', 'buy'];
+    if(Array.isArray(jumpRuleList)) {
+      return [...defaultWhiteList, ...jumpRuleList];
+    }
+    return defaultWhiteList;
+  }, [jumpRuleList]);
 
   useEffect(() => {
     ready();
@@ -54,30 +64,54 @@ const BaseLayoutControl = forwardRef((props, ref) => {
     if (hasListChild) setListRef(layoutRef?.current.listRef);
   }, [layoutRef]);
 
+  const isPageInWhiteList = () => {
+    for(const listItem of baseLayoutWhiteList) {
+      if(typeof listItem === 'string') {
+        if(listItem === pageName) {
+          return true;
+        }
+      } else if(typeof listItem.test === 'function') {
+        if(listItem.test(pageName)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   useEffect(() => {
-    if (hasListChild && listRef?.current && pageName && baseLayoutWhiteList.indexOf(pageName) !== -1) {
+    if (!disableEffect.current) {
+      handleListPosition()
+    }
+    disableEffect.current = false
+  }, [listRef?.current]);
+
+  useEffect(() => {
+    handleListPosition()
+  }, [jumpTo, hasListChild, pageName]);
+
+  const handleListPosition = () => {
+    if (hasListChild && listRef?.current && pageName && isPageInWhiteList()) {
+
       if (jumpTo > 0) {
         baselayout[pageName] = jumpTo;
         listRef.current.jumpToScrollTop(jumpTo);
       } else {
         if(baselayout[pageName] > 0) {
-          if (pageName !== 'search' || // 首页在PC和H5都适用阅读区域跳转
-              (pageName === 'search' && site.platform === 'h5')) { // 搜索页只适用H5页面阅读区域跳转
-            // 需要异步触发，可能存在列表没有渲染出来
-            setTimeout(() => {
-              listRef.current.jumpToScrollTop(baselayout[pageName]);
-            });
-          }
+          // 需要异步触发，可能存在列表没有渲染出来
+          setTimeout(() => {
+            listRef.current.jumpToScrollTop(baselayout[pageName]);
+          });
         } else if(baselayout.isJumpingToTop) {
           baselayout.removeJumpingToTop();
           listRef.current.onBackTop();
         }
       }
     }
-  }, [jumpTo, hasListChild, listRef?.current, pageName]);
-
+  }
 
   const quickScrolling = (e) => {
+    disableEffect.current = true
 
     if (!e || !e.scrollTop || !hasListChild || !listRef?.current?.currentScrollTop) {
       onScroll();

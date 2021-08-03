@@ -47,6 +47,7 @@ export default class ReplyList extends React.Component {
   }
 
   transformer = (parsedDom) => {
+    const isSelf = this.props.threadId === this.props?.data?.userId; 
     const element = this.props.data.commentUserId ? (
       <div className={styles.commentUser}>
         <div
@@ -74,6 +75,11 @@ export default class ReplyList extends React.Component {
         >
           {this.props.data.commentUser.nickname || this.props.data.commentUser.userName || '用户异常'}
         </span>
+        {isSelf && (
+          <div className={styles.masterBox}>
+            <span className={styles.masterText}>楼主</span>
+          </div>
+        )}
       </div>
     ) : (
       ''
@@ -92,7 +98,7 @@ export default class ReplyList extends React.Component {
   render() {
     const { canLike, canDelete, canHide } = this.generatePermissions(this.props.data);
     const { groups } = this.props.data?.user || {};
-
+    const isSelf = this.props.threadId === this.props?.data?.userId; 
     // 评论内容是否通过审核
     const isApproved = this.props?.data?.isApproved === 1;
     return (
@@ -113,12 +119,17 @@ export default class ReplyList extends React.Component {
           ></Avatar>
         </div>
         <div className={styles.replyListContent}>
-          <div className={styles.replyListContentText}>
+          <div className={`${styles.replyListContentText} ${this.props.active && styles.active}`}>
             <div className={styles.replyListName}>
               <div className={styles.userInfo}>
                 <div className={styles.replyListName} onClick={() => {this.avatarClick(2)}}>
                     {this.props.data?.user?.nickname || this.props.data?.user?.userName || '用户异常'}
                 </div>
+                {isSelf && (
+                    <div className={styles.masterBox}>
+                      <span className={styles.masterText}>楼主</span>
+                    </div>
+                  )}
                 {!!groups?.isDisplay && (
                   <div className={styles.groups}>{groups?.name || groups?.groupName}</div>
                 )}

@@ -193,22 +193,21 @@ class H5OthersPage extends React.Component {
       >
         <View className={styles.mobileLayout}>
           {this.renderTitleContent()}
-          {this.state.fetchUserInfoLoading && <BottomView className={styles.loadingBox} isBox loadingText="加载中..." />}
-          <View
-            style={{
-              visibility: !this.state.fetchUserInfoLoading ? 'visible' : 'hidden',
-              height: !this.state.fetchUserInfoLoading ? 'auto' : '0px',
-            }}
-          >
-            <View onClick={this.handlePreviewBgImage}>
-              <UserCenterHeaderImage isOtherPerson />
-            </View>
-            <UserCenterHead
-              updatePreviewImageStatus={this.updatePreviewImageStatus}
-              platform={platform}
-              isOtherPerson
-            />
-          </View>
+          {this.state.fetchUserInfoLoading && (
+            <BottomView className={styles.loadMoreStyle} isBox loadingText="加载中..." />
+          )}
+          {!this.state.fetchUserInfoLoading && (
+            <>
+              <View onClick={this.handlePreviewBgImage}>
+                <UserCenterHeaderImage isOtherPerson={true} />
+              </View>
+              <UserCenterHead
+                updatePreviewImageStatus={this.updatePreviewImageStatus}
+                platform={platform}
+                isOtherPerson={true}
+              />
+            </>
+          )}
 
           <View className={styles.unit}>
             {/* <View className={styles.threadUnit}>
