@@ -89,8 +89,20 @@ class Index extends React.Component {
   handleRouterCategory = () => {
     // 识别通过分享过来的url
     // 若包含categoryId参数，则定位到具体的categoryId数据
-    const { router, index } = this.props;
+    const { router, index, site } = this.props;
     let { categoryId = '', sequence = '0' } = router.query || {}
+
+    if (site.platform === 'pc') {
+      // 设置PC端左边栏
+      if (categoryId === '') {
+        categoryId = 'all'
+      }
+
+      // 设置PC端顶部
+      if (sequence !== '0') {
+        index.topMenuIndex = `${sequence}`
+      }
+    }
 
     if (categoryId || sequence !== '0') {
       let ids = categoryId.split('_').map(item => {
