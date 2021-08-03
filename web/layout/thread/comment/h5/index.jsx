@@ -389,7 +389,6 @@ class CommentH5Page extends React.Component {
 
   render() {
     const { commentDetail: commentData, isReady } = this.props.comment;
-    const isSelf = this.props.user?.userInfo?.id && this.props.user?.userInfo?.id === commentData?.userId;
     // 更多弹窗权限
     const morePermissions = {
       // canEdit: commentData?.canEdit,
@@ -450,6 +449,7 @@ class CommentH5Page extends React.Component {
               isSelf={isSelf}
               postId={this.props.comment.postId}
               positionRef={this.positionRef}
+              threadId={this.props.thread?.threadData?.userId}
             ></CommentList>
           )}
         </div>

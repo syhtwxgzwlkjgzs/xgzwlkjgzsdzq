@@ -448,6 +448,7 @@ class RenderCommentList extends React.Component {
                 }
                 isSelf={isSelf}
                 active={val.id === postId}
+                threadId={this.props.thread?.threadData?.userId}
               ></CommentList>
             </div>
           ))}

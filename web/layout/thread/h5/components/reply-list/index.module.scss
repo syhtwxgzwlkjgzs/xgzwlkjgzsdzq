@@ -110,10 +110,28 @@
             text-align: left;
             color: $primary-color;
           }
+          .masterBox {
+            padding-right: rem($padding-2n);
+            line-height: rem(18);
+            display: flex;
+            align-items: center;
+            .masterText {
+              border-radius: rem(4) 0;
+              background: #ff9700;
+              display: inline-block;
+              font-size: rem(12);
+              -webkit-text-size-adjust:none;
+              -webkit-transform : scale(0.83,0.83);
+              line-height: rem(14);
+              padding: rem(1) rem(4);
+              text-align: left;
+              color: #fff;
+            }
+          }
           .replyedAvatar {
             display: inline-block;
             margin-right: rem($margin-1n);
-
+            
             .avatar {
               width: rem(18);
               height: rem(18);
