@@ -158,9 +158,10 @@ const Index = ({
     if (!isPay) {
       if(!file || !threadId) return;
 
-      await fetchDownloadUrl(threadId, file.id, noop);
-      audioPlayer.play();
-      file.readyToPlay = true;
+      await fetchDownloadUrl(threadId, file.id, () => {
+        audioPlayer?.play();
+        file.readyToPlay = true;
+      });
     } else {
       onPay();
     }
