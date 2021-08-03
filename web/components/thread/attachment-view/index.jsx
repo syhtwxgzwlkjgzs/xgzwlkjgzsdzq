@@ -40,14 +40,14 @@ const Index = ({
     return `${fileSize} B`;
   };
 
-  const fetchDownloadUrl = (threadId, attachmentId, callback) => {
+  const fetchDownloadUrl = async (threadId, attachmentId, callback) => {
     if(!threadId || !attachmentId) return;
 
     let toastInstance = Toast.loading({
       duration: 0,
     });
 
-    thread.fetchThreadAttachmentUrl(threadId, attachmentId).then((res) => {
+    await thread.fetchThreadAttachmentUrl(threadId, attachmentId).then((res) => {
       if(res?.code === 0 && res?.data) {
         const { url } = res.data;
         if(!url) {
@@ -144,14 +144,11 @@ const Index = ({
     return AUDIO_FORMAT.includes(file?.extension?.toUpperCase())
   };
 
-  const onAttachPlay = async (file, audioRef) => {
+  const beforeAttachPlay = async (file) => {
     // 该文件已经通过校验，能直接播放
     if (file.readyToPlay) {
-      return;  
+      return true;  
     }
-
-    const audioPlayer = audioRef?.current?.getState()?.audioCtx;
-    audioPlayer?.pause();
 
     // 播放前校验权限
     updateViewCount();
@@ -159,27 +156,26 @@ const Index = ({
       if(!file || !threadId) return;
 
       await fetchDownloadUrl(threadId, file.id, () => {
-        audioPlayer?.play();
         file.readyToPlay = true;
       });
     } else {
       onPay();
     }
+
+    return !!file.readyToPlay;
   };
 
   const Normal = ({ item, index, type }) => {
     if (isAttachPlayable(item)) {
       const { url, fileName, fileSize } = item;
-      const audioRef = useRef();
 
       return (
         <div className={styles.audioContainer} key={index} onClick={onClick} >
           <AudioPlayer
-            ref={audioRef}
             src={url}
             fileName={fileName}
             fileSize={handleFileSize(parseFloat(item.fileSize || 0))}
-            onPlay={throttle(() => onAttachPlay(item, audioRef), 1000)}
+            beforePlay={async () => await beforeAttachPlay(item)}
             onDownload={throttle(() => onDownLoad(item, index), 1000)}
             onLink={throttle(() => onLinkShare(item), 1000)}
           />
