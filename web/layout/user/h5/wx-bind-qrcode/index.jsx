@@ -11,6 +11,7 @@ import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util'
 import PcBodyWrap from '../components/pc-body-wrap';
 import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 import { isExtFieldsOpen } from '@common/store/login/util';
+import LoginHelper from '@common/utils/login-helper';
 
 @inject('site')
 @inject('user')
@@ -128,7 +129,7 @@ class WeixinBindQrCodePage extends React.Component {
           />
           {/* 二维码 end */}
           <span className={layout.skip} onClick={() => {
-            window.location.href = '/';
+            LoginHelper.gotoIndex();
           }}>跳过</span>
         </div>
       </div>
