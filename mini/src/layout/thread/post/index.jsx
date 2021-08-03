@@ -735,6 +735,7 @@ class Index extends Component {
     const { postData, setPostData, setCursorPosition, navInfo, cursorPosition } = this.props.threadPost;
     const { rewardQa, redpacket, video, product, position, contentText = '' } = postData;
     const {
+      postType,
       isShowTitle,
       maxLength,
       showClassifyPopup,
@@ -779,6 +780,8 @@ class Index extends Component {
               <Content
                 ref={this.contentRef}
                 value={postData.contentText}
+                postType={postType}
+                navInfo={navInfo}
                 showEmoji={showEmoji}
                 bottomHeight={bottomHeight}
                 maxLength={maxLength}

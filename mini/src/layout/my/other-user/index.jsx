@@ -59,19 +59,29 @@ class H5OthersPage extends React.Component {
       Router.replace({ url: '/subPages/my/index' });
       return;
     }
+
     if (this.targetUserId) {
       // 如果是预览图片操作 就不需要重新更新状态
       if (this.isPreivewImage) {
         this.isPreivewImage = false;
         return;
       }
+
       this.setState({
         fetchUserInfoLoading: true,
       });
+
+      // FIXME: 缓存所有加载的用户，利用缓存特性进行加载，避免此类问题
+      // TODO: 需要重新进行存储的设计
+      // 清空操作在 onshow 时再进行，避免数据更新导致的视图错误
+      this.props.user.removeTargetUserInfo();
+
       await this.props.user.getTargetUserInfo(this.targetUserId);
+
       this.setState({
         fetchUserInfoLoading: false,
       });
+
       await this.props.user.getTargetUserThreads(this.targetUserId);
     }
   };
@@ -86,7 +96,6 @@ class H5OthersPage extends React.Component {
   };
 
   componentWillUnmount() {
-    this.props.user.removeTargetUserInfo();
     const onShowEventId = this.$instance.router.onShow;
     // 卸载
     eventCenter.off(onShowEventId, this.onShow);
@@ -177,13 +186,14 @@ class H5OthersPage extends React.Component {
       <BaseLayout
         showHeader={false}
         showTabBar={false}
-        immediateCheck={true}
+        immediateCheck
         onRefresh={this.fetchTargetUserThreads}
         noMore={targetUserThreadsTotalPage < targetUserThreadsPage}
         showLoadingInCenter={!this.formatUserThreadsData(targetUserThreads).length}
       >
         <View className={styles.mobileLayout}>
           {this.renderTitleContent()}
+<<<<<<< HEAD
           {this.state.fetchUserInfoLoading && (
             <BottomView className={styles.loadMoreStyle} isBox loadingText="加载中..." />
           )}
@@ -199,6 +209,24 @@ class H5OthersPage extends React.Component {
               />
             </>
           )}
+=======
+          {this.state.fetchUserInfoLoading && <BottomView className={styles.loadingBox} isBox loadingText="加载中..." />}
+          <View
+            style={{
+              visibility: !this.state.fetchUserInfoLoading ? 'visible' : 'hidden',
+              height: !this.state.fetchUserInfoLoading ? 'auto' : '0px',
+            }}
+          >
+            <View onClick={this.handlePreviewBgImage}>
+              <UserCenterHeaderImage isOtherPerson />
+            </View>
+            <UserCenterHead
+              updatePreviewImageStatus={this.updatePreviewImageStatus}
+              platform={platform}
+              isOtherPerson
+            />
+          </View>
+>>>>>>> origin/releases
 
           <View className={styles.unit}>
             {/* <View className={styles.threadUnit}>
