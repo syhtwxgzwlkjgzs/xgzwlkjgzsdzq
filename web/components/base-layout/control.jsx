@@ -89,12 +89,12 @@ const BaseLayoutControl = forwardRef((props, ref) => {
   const quickScrolling = (e) => {
     disableEffect.current = true
 
-    if (!e || !e.scrollTop || !hasListChild || !listRef?.current?.currentScrollTop) {
+    if (!e || isNaN(e.scrollTop) || !hasListChild || !listRef?.current?.currentScrollTop) {
       onScroll();
       return;
     }
     const { scrollTop } = e;
-    if (scrollTop && pageName) baselayout[pageName] = scrollTop;
+    if (!isNaN(scrollTop) && pageName) baselayout[pageName] = scrollTop;
 
     const { playingVideoDom } = baselayout;
 
