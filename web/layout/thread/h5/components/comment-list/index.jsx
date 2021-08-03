@@ -242,12 +242,12 @@ class CommentList extends React.Component {
                           <ReplyList
                             data={val}
                             key={val.id || index}
-                            avatarClick={(floor) => this.replyAvatarClick(val, floor)}
+                            avatarClick={floor => this.replyAvatarClick(val, floor)}
                             likeClick={() => this.replyLikeClick(val)}
                             replyClick={() => this.replyReplyClick(val)}
                             deleteClick={() => this.replyDeleteClick(val)}
                             toCommentDetail={() => this.toCommentDetail()}
-                            isSelf={this.props.isSelf}
+                            threadId={this.props.threadId}
                             active={this.props.postId === val.id}
                           ></ReplyList>
                         </div>
