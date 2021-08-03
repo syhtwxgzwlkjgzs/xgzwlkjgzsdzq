@@ -1,8 +1,12 @@
 @import '@common/styles/index.scss';
+
 .wrapper {
   :last-child {
     margin-bottom: 0;
   }
+}
+.audioPlayer {
+  margin-bottom: rem(8);
 }
 .container {
   position: relative;
@@ -98,6 +102,10 @@
     margin-right: rem(8);
     max-width: 70%;
   }
+}
+
+.audioContainer {
+  margin-bottom: $margin-2n;
 }
 
 .spinner {
