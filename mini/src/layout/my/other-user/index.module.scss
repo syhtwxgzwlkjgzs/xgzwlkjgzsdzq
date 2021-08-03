@@ -4,11 +4,8 @@
 
 .mobileLayout {
   background: $white;
-  .loadMoreStyle {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 380px;
+  .loadingBox {
+    height: 400px;
   }
 }
 
