@@ -141,7 +141,7 @@ import config from '../../../app.config';
     }
     setAppPageLinks(pageLinks);
   }
-  
+
   const getImagesFromText = (text) => {
     const _text = replaceStringInRegex(text, "emoj", '');
     const images = _text.match(/<img\s+[^<>]*src=[\"\'\\]+([^\"\']*)/gm) || [];
@@ -163,10 +163,6 @@ import config from '../../../app.config';
 
     const length = fuzzyCalcContentLength(filterContent, lengthInLine); // 大致计算文本长度
     const maxContentLength = lengthInLine * 6; // 如果默认长度是704，一共可容纳264个字符
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/releases
     if (length < maxContentLength && length <= 1200) {
       // 显示6行内容
       setShowMore(false);
@@ -188,7 +184,7 @@ import config from '../../../app.config';
     }
 
   }, [filterContent]);
-  
+
   return (
     <View className={styles.container} {...props}>
       <View
