@@ -48,7 +48,6 @@ export default class ReplyList extends React.Component {
 
   transformer = (parsedDom) => {
     const isSelf = this.props.threadId === this.props?.data?.userId || (this.props.threadId === this.props.data?.commentUserId)
-    console.log(this.props.threadId, this.props?.data?.userId, this.props.data.commentUser.nickname);
 
     const element = this.props.data.commentUserId ? (
       <div className={styles.commentUser}>
