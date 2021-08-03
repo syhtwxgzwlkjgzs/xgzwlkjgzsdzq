@@ -297,7 +297,7 @@ class Detail extends React.Component {
   }
 
   render() {
-    const { site } = this.props;
+    const { site, canPublish } = this.props;
     const { platform } = site;
     let showSiteName = true;
     if (this.props?.thread?.threadData?.title || this.props?.thread?.threadData?.content?.text) {
@@ -314,7 +314,7 @@ class Detail extends React.Component {
     return (
       <ViewAdapter
         h5={<ThreadH5Page />}
-        pc={<ThreadPCPage />}
+        pc={<ThreadPCPage canPublish={canPublish}/>}
         title={this.props?.thread?.title || ''}
         showSiteName={showSiteName}
       />
