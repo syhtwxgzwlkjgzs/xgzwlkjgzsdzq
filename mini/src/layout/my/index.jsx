@@ -113,7 +113,7 @@ export default class index extends Component {
         left: '50%',
         transform: 'translate(-50%)',
         color: 'black',
-        zIndex: 1,
+        zIndex: 1000,
         width: '100%',
         backgroundColor: 'white',
         display: 'flex',
@@ -128,7 +128,7 @@ export default class index extends Component {
       top: `${this.getStatusBarHeight()}px`,
       left: '50%',
       transform: 'translate(-50%, 8px)',
-      zIndex: 1
+      zIndex: 1000
     };
   }
 
