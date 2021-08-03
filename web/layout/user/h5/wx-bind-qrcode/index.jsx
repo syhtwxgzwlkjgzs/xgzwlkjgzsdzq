@@ -127,6 +127,9 @@ class WeixinBindQrCodePage extends React.Component {
             orCodeTips={platform === 'h5' ? '长按保存二维码，并在微信中识别此二维码，即可完成登录' : '请使用微信，扫码登录'}
           />
           {/* 二维码 end */}
+          <span className={layout.skip} onClick={() => {
+            window.location.href = '/';
+          }}>跳过</span>
         </div>
       </div>
       </PcBodyWrap>
