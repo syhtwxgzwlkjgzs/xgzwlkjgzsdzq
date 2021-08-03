@@ -85,6 +85,10 @@ class Header extends React.Component {
   }
 
   handleRouter = (url) => {
+    if (url === '/search') {
+      this.props.search.resetIndexData();
+      this.props.baselayout.search = -1
+    }
     this.props.router.push(url);
   };
   // 登录
