@@ -6,6 +6,7 @@ import { noop } from '@components/thread/utils';
 import { withRouter } from 'next/router';
 import UnreadRedDot from '@components/unread-red-dot';
 import { unreadUpdateInterval } from '@common/constants/message';
+import browser from '@common/utils/browser';
 import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
 /**
@@ -21,11 +22,11 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
   }, [curr]);
 
   const [tabs, setTabs] = useState([
-    { icon: 'HomeOutlined', text: '首页', active: checkCurrActiveTab(curr, 'home'), router: '/?refresh' },
-    { icon: 'FindOutlined', text: '发现', active: checkCurrActiveTab(curr, 'search'), router: '/search?refresh' },
-    { icon: 'PlusOutlined', router: '/thread/post' },
-    { icon: 'MailOutlined', text: '消息', active: checkCurrActiveTab(curr, 'message'), router: '/message?refresh' },
-    { icon: 'ProfessionOutlined', text: '我的', active: checkCurrActiveTab(curr, 'my'), router: '/my?refresh' },
+    { key: 'home', icon: 'HomeOutlined', text: '首页', active: checkCurrActiveTab(curr, 'home'), router: '/' },
+    { key: 'search', icon: 'FindOutlined', text: '发现', active: checkCurrActiveTab(curr, 'search'), router: '/search' },
+    { key: 'post', icon: 'PlusOutlined', router: '/thread/post' },
+    { key: 'message', icon: 'MailOutlined', text: '消息', active: checkCurrActiveTab(curr, 'message'), router: '/message' },
+    { key: 'my', icon: 'ProfessionOutlined', text: '我的', active: checkCurrActiveTab(curr, 'my'), router: '/my' },
   ]);
 
   // 轮询更新未读消息
@@ -60,7 +61,9 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
       temp[idx].active = true;
       setTabs(temp);
     }
-    router.push(i.router);
+
+    const routePath = `${i.router}${browser.env('uc') ? `?uc-refresh=${i.key}` : ''}`;
+    router.push(routePath);
   };
 
   return (
