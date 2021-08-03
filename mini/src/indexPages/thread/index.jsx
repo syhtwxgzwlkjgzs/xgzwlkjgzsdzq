@@ -31,13 +31,7 @@ class Detail extends React.Component {
   componentDidHide() {
     const { baselayout } = this.props;
 
-    const playingVideoDom = baselayout?.playingVideoDom;
     const playingAudioDom = baselayout?.playingAudioDom;
-
-    if (playingVideoDom) {
-      Taro.createVideoContext(playingVideoDom)?.pause();
-      baselayout.playingVideoDom = "";
-    }
 
     if(playingAudioDom) {
       baselayout.playingAudioDom.pause();
