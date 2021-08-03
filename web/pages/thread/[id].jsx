@@ -245,6 +245,15 @@ class Detail extends React.Component {
       }
     }
 
+    if (this.hasMaybeCache()) {
+      // 判断是否审核通过
+      const isApproved = (this.props.thread?.threadData?.isApproved || 0) === 1;
+      if (!isApproved) {
+        // 先尝试从列表store中获取帖子数据
+        this.getThreadDataFromList(id);
+      }
+    }
+
     // 设置详情分享
     isWeiXin() && this.handleWeiXinShare();
 
@@ -288,6 +297,32 @@ class Detail extends React.Component {
           id,
         };
         this.props.commentPosition.loadCommentList(params);
+      }
+    }
+  }
+
+  // 尝试从列表中获取帖子数据
+  async getThreadDataFromList(id) {
+    if (id) {
+      let threadData;
+      // 首页iebook
+      const indexRes = this.props.index.findAssignThread(Number(id));
+      threadData = indexRes?.data;
+
+      // 发现列表
+      if (!threadData) {
+        const searchRes = this.props.search.findAssignThread(Number(id));
+        threadData = searchRes[0]?.data;
+      }
+
+      // 话题列表
+      if (!threadData) {
+        const topicRes = this.props.topic.findAssignThread(Number(id));
+        threadData = topicRes?.data;
+      }
+
+      if (threadData?.threadId) {
+        this.props.thread.setThreadData(threadData);
       }
     }
   }
