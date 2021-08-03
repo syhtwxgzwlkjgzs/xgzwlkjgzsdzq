@@ -37,7 +37,7 @@ export default function fuzzyCalcContentLength(content, lengthInLine = 50) {
     IMG_SIZE * (countImgs - countEmojs > 0 ? countImgs - countEmojs : 0); // 加上图片大小
 
     if(!newContent || newContent === '') return parseInt(totalCount);
-    totalCount = newContent.length;
+    totalCount += newContent.length;
     const countReturns = (newContent.match(/\n/g) || []).length; // 匹配回车符
 
     for(let i = 0; i < countReturns; i++) {
