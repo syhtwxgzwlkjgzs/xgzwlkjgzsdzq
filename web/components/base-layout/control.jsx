@@ -44,13 +44,13 @@ const BaseLayoutControl = forwardRef((props, ref) => {
   useImperativeHandle(
     ref,
     () => ({
-      listRef
+      listRef,
     }),
   );
 
   const baseLayoutWhiteList = useMemo(() => {
-    const defaultWhiteList = ['home', 'search', 'my', 'like', 'collect', 'buy'];
-    if(Array.isArray(jumpRuleList)) {
+    const defaultWhiteList = ['home', 'search', 'my', 'like', 'collect', 'buy', 'block'];
+    if (Array.isArray(jumpRuleList)) {
       return [...defaultWhiteList, ...jumpRuleList];
     }
     return defaultWhiteList;
@@ -65,19 +65,19 @@ const BaseLayoutControl = forwardRef((props, ref) => {
   }, [layoutRef]);
 
   const isPageInWhiteList = () => {
-    for(const listItem of baseLayoutWhiteList) {
-      if(typeof listItem === 'string') {
-        if(listItem === pageName) {
+    for (const listItem of baseLayoutWhiteList) {
+      if (typeof listItem === 'string') {
+        if (listItem === pageName) {
           return true;
         }
-      } else if(typeof listItem.test === 'function') {
-        if(listItem.test(pageName)) {
+      } else if (typeof listItem.test === 'function') {
+        if (listItem.test(pageName)) {
           return true;
         }
       }
     }
     return false;
-  }
+  };
 
   useEffect(() => {
     if (!disableEffect.current) {
@@ -142,7 +142,6 @@ const BaseLayoutControl = forwardRef((props, ref) => {
       if (playingAudioTop > 0
         && (playingAudioBottom < scrollTop // 音频在视窗下面
           || playingAudioTop > window.innerHeight + scrollTop)) { // 音频在视窗上面
-
         baselayout.pauseWebPlayingAudio();
       }
     }

@@ -48,6 +48,7 @@ class LikePCPage extends React.Component {
         onRefresh={this.fetchMoreData}
         rightClass={styles.rightSide}
         isShowLayoutRefresh={!!pageData?.length}
+        pageName={'like'}
         className="mylike"
       >
         <SidebarPanel
