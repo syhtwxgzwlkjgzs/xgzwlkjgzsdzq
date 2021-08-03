@@ -48,6 +48,7 @@ class LikePCPage extends React.Component {
         onRefresh={this.fetchMoreData}
         rightClass={styles.rightSide}
         isShowLayoutRefresh={!!pageData?.length}
+        pageName={'like'}
         className="mylike"
       >
         <SidebarPanel
@@ -60,6 +61,8 @@ class LikePCPage extends React.Component {
           rightText={`共有${totalCount}条点赞`}
           className={styles.container}
           mold='plane'
+          isError={this.props.index.threadError.isError}
+          errorText={this.props.index.threadError.errorText}
         >
           {
             pageData?.map((item, index) => <ThreadContent className={styles.threadContent} data={item} key={index} />)

@@ -3,6 +3,7 @@ import { getByteLen } from '../utils';
 import replaceStringInRegex from '@common/utils/replace-string-in-regex';
 import priceShare from '../card-img/admin-logo-pc.jpg';
 import lookMore from '../card-img/look-more.jpg';
+import s9e from '@common/utils/s9e'
 
 import {
   posterFrameWidth,
@@ -187,7 +188,7 @@ const handleLookMore = (baseHeight = 0, contentTextHeight = {}, imagesHeight = {
 
 const handleCategories = (thread, baseHeight, { renderedTextHeight = 0 }, { renderedImgHeight = 0 }, overHeight) => {
   // 分组内容
-  const categoryType = thread.categoryName;
+  const categoryType = thread.parentCategoryName;
   let categoryLength = getByteLen(categoryType) * 12;
   if (categoryLength > 650) {
     categoryLength = 650;
@@ -240,7 +241,8 @@ const handleContent = (thread) => {
     },
   });
 
-  let contentText = thread.content.text;
+  let contentText = s9e.parse(thread?.content?.text || '');
+
   // 处理匿名时的文本
   if (thread.displayTag.isPrice) {
     contentText = '';

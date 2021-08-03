@@ -64,3 +64,25 @@
 .friendWrap.display-none {
   display: none;
 }
+
+:global {
+  .user-center-follow-list {
+      &::-webkit-scrollbar {
+          display: block;
+          width: 8px;
+          border-radius: $border-radius-small;
+      }
+
+
+      // 滚动条轨道
+      &::-webkit-scrollbar-track {
+          background: transparent;
+      }
+
+      // 滚动条上的滚动滑块
+      &::-webkit-scrollbar-thumb {
+          background: $border-shadow-color;
+          border-radius: 4px;
+      }
+  }
+}

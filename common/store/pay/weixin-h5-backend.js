@@ -1,7 +1,6 @@
 import { PAY_BOX_ERROR_CODE_MAP, PAY_MENT_MAP, WX_PAY_STATUS } from '../../constants/payBoxStoreConstants';
 import { get } from '../../utils/get';
-import isWeixin from '../../utils/is-weixin';
-import browser from '../../utils/browser';
+import Router from '@discuzq/sdk/dist/router';
 
 export const onBridgeReady = data => new Promise((resolve, reject) => {
   const { appId, timeStamp, nonceStr, package: wxPackage, paySign } = data;
@@ -27,7 +26,17 @@ export const onBridgeReady = data => new Promise((resolve, reject) => {
       reject(PAY_BOX_ERROR_CODE_MAP.WX_PAY_FAIL);
     }
   });
-}).catch((e) => {console.log(e)});
+}).catch((e) => {
+  console.log(e);
+});
+
+export const onBridgeReadyH5 = data => new Promise((resolve, reject) => {
+  const link = `/pay/middle?link=${encodeURIComponent(data)}`;
+
+  Router.push({ url: link });
+
+  resolve();
+});
 
 export const listenWXJsBridgeAndExecCallback = (callback) => {
   if (typeof WeixinJSBridge === 'undefined') {
@@ -40,6 +49,10 @@ export const listenWXJsBridgeAndExecCallback = (callback) => {
   } else {
     callback();
   }
+};
+
+export const listenWXJsBridgeAndExecCallbackH5 = (callback) => {
+  callback();
 };
 
 export const wxValidator = () => {

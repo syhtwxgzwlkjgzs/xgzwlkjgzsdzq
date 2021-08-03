@@ -12,19 +12,50 @@
       // padding-right: rem($padding-4n);
       border-radius: rem($border-radius-small);
       background-color: $comment-bg-color;
+
+      &.active {
+        background: $primary-color10;
+      }
+
       .replyHeader {
         display: flex;
         justify-content: space-between;
-
-        .replyListName {
-          padding-top: rem($padding-2n);
-          padding-left: rem($padding-3n);
-          padding-right: rem($padding-3n);
-          font-weight: $font-weight-regular;
-          font-size: rem($font-size-primary);
-          line-height: rem(20);
-          text-align: left;
-          color: $text-color-primary;
+        .userInfo {
+          display: flex;
+          .replyListName {
+            padding-top: rem($padding-2n);
+            padding-left: rem($padding-3n);
+            padding-right: rem($padding-2n);
+            font-weight: $font-weight-regular;
+            font-size: rem($font-size-primary);
+            line-height: rem(20);
+            text-align: left;
+            color: $text-color-primary;
+          }
+          .masterBox {
+            padding:rem($padding-2n + 2) rem($padding-2n) 0 0;
+            .masterText {
+              border-radius: rem(4) 0;
+              background: #ff9700;
+              display: inline-block;
+              font-size: rem(12);
+              -webkit-text-size-adjust:none;
+              -webkit-transform : scale(0.83,0.83);
+              line-height: rem(14);
+              padding: rem(1) rem(4);
+              text-align: left;
+              color: #fff;
+            }
+          }
+          .groups {
+            color: var(--color-text-secondary);
+            font-size: $font-size-label;
+            max-width: rem(100);
+            white-space: nowrap;
+            overflow: hidden;
+            padding-top: rem($padding-2n);
+            line-height: rem(20);
+          }
         }
         .isApproved {
           font-size: $font-size-primary;
@@ -65,6 +96,7 @@
 
             .dzq-p {
               margin-bottom: 0;
+              font-size: $font-size-middle !important;
             }
           }
         }
@@ -98,6 +130,24 @@
             line-height: rem(20);
             text-align: left;
             color: $primary-color;
+          }
+          .masterBox {
+            padding:0 rem($padding-2n) 0 0;
+            line-height: rem(20);
+            display: flex;
+            align-items: center;
+            .masterText {
+              border-radius: rem(4) 0;
+              background: #ff9700;
+              display: inline-block;
+              font-size: rem(12);
+              -webkit-text-size-adjust:none;
+              -webkit-transform : scale(0.83,0.83);
+              line-height: rem(14);
+              padding: rem(1) rem(4);
+              text-align: left;
+              color: #fff;
+            }
           }
         }
       }

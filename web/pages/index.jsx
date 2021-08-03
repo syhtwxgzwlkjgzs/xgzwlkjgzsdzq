@@ -52,6 +52,8 @@ class Index extends React.Component {
   }
 
   componentDidMount() {
+    this.handleRouterCategory()
+
     const { index } = this.props;
     const { essence = 0, sequence = 0, attention = 0, sort = 1 } = index.filter;
 
@@ -83,6 +85,32 @@ class Index extends React.Component {
     }
   }
 
+  // 通过地址栏获取到当前分类信息
+  handleRouterCategory = () => {
+    // 识别通过分享过来的url
+    // 若包含categoryId参数，则定位到具体的categoryId数据
+    const { router, index } = this.props;
+    const { categoryId = '' } = router.query
+    if (categoryId) {
+      const ids = categoryId.split('_').map(item => {
+        // 判断categoryId是否是数字。可能是all/default
+        const id = /^\d+$/.test(item) ? Number(item) : item
+
+        return id
+      })
+
+      const newFilter = { ...index.filter, categoryids: ids };
+
+      index.setFilter(newFilter);
+    }
+  }
+
+  // 根据选中的筛选项，设置地址栏 
+  setUrl = (categoryIds = []) => {
+    const url = categoryIds?.length ? `/?categoryId=${categoryIds.join('_')}` : '/'
+    this.props.router.replace(url)
+  }
+
   dispatch = async (type, data = {}) => {
     const { index } = this.props;
     const newData = {...index.filter, ...data}
@@ -101,6 +129,8 @@ class Index extends React.Component {
     }
 
     if (type === 'click-filter') { // 点击tab
+      this.setUrl(categoryIds)
+
       this.page = 1;
       this.props.baselayout.setJumpingToTop();
       this.props.vlist.setPosition(0);

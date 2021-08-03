@@ -225,7 +225,7 @@ const Index = (props) => {
     }
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('type', 1);
+    formData.append('type', 4);
     formData.append('dialogMessageId', file.dialogMessageId);
     const ret = await createAttachment(formData);
     if (ret.code !== 0) file.isImageFail = true;
@@ -236,6 +236,10 @@ const Index = (props) => {
     if (!typingValue.trim()) return;
     submit({ messageText: typingValue, isImage: false });
   };
+
+  const filterTag = (html) => {
+    return html?.replace(/<(\/)?([beprt]|br|div|h\d)[^>]*>|[\r\n]/gi, '');
+  }
 
   const messagesList = useMemo(() => {
     const listData = dialogMsgList.list.map((item) => {
@@ -264,7 +268,7 @@ const Index = (props) => {
         userAvatar: item.user.avatar,
         displayTimePanel: true,
         textType: 'string',
-        text: item.messageTextHtml,
+        text: filterTag(item.messageText),
         ownedBy: user.id === item.userId ? 'myself' : 'itself',
         nickname: item.user.username,
       };
