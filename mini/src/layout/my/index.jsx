@@ -90,12 +90,12 @@ export default class index extends Component {
     return Object.values(userThreads).reduce((fullData, pageData) => [...fullData, ...pageData]);
   };
 
-  onRefresh = () => {
+  onRefresh = async () => {
     const { isLoading } = this.state;
 
     // 避免第一次进入页面时，触发了上拉加载
     if (!isLoading) {
-      return this.fetchUserThreads;
+      return await this.fetchUserThreads();
     }
     return Promise.resolve();
   };
