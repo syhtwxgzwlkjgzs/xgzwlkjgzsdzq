@@ -330,7 +330,14 @@ class ThreadPCPage extends React.Component {
     this.setState({ showDeletePopup: false });
     const id = this.props.thread?.threadData?.id;
 
-    const { success, msg } = await this.props.thread.delete(id, this.props.index, this.props.search, this.props.topic, this.props.site);
+    const { success, msg } = await this.props.thread.delete(
+      id,
+      this.props.index,
+      this.props.search,
+      this.props.topic,
+      this.props.site,
+      this.props.user,
+    );
 
     if (success) {
       Toast.success({
@@ -688,9 +695,7 @@ class ThreadPCPage extends React.Component {
     const isApproved = (threadStore?.threadData?.isApproved || 0) === 1;
     return (
       <div className={layout.bodyLeft}>
-        {isReady && !isApproved && (
-          <div className={layout.examinePosition}></div>
-        )}
+        {isReady && !isApproved && <div className={layout.examinePosition}></div>}
         {/* 帖子内容 */}
         {isReady ? (
           <RenderThreadContent
@@ -742,9 +747,7 @@ class ThreadPCPage extends React.Component {
     const isAnonymous = threadStore?.threadData?.isAnonymous;
     return (
       <div className={`${layout.bodyRigth}`}>
-        {isReady && !isApproved && (
-          <div className={layout.examinePosition}></div>
-        )}
+        {isReady && !isApproved && <div className={layout.examinePosition}></div>}
         {!isAnonymous && (
           <div className={`${layout.authorInfo} detail-authorinfo`}>
             {threadStore?.authorInfo ? (
@@ -845,7 +848,7 @@ class ThreadPCPage extends React.Component {
           visible={this.state.showDeletePopup}
           onClose={() => this.setState({ showDeletePopup: false })}
           onBtnClick={() => this.delete()}
-          type='thread'
+          type="thread"
         ></DeletePopup>
 
         {/* 举报弹层 */}

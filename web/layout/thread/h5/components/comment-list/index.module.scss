@@ -62,12 +62,24 @@
         .commentHeader {
           display: flex;
           justify-content: space-between;
-          .commentListName {
-            font-weight: bold;
-            font-size: rem($font-size-primary);
-            line-height: rem(20);
-            text-align: left;
-            color: $text-color-primary;
+          .userInfo {
+            display: flex;
+            .commentListName {
+              font-weight: bold;
+              font-size: rem($font-size-primary);
+              line-height: rem(20);
+              text-align: left;
+              color: $text-color-primary;
+            }
+            .groups {
+              color: var(--color-text-secondary);
+              font-size: $font-size-label;
+              max-width: rem(100);
+              white-space: nowrap;
+              overflow: hidden;
+              padding-left: $padding-2n;
+              line-height: rem(20);
+            }
           }
           .isApproved {
             font-size: $font-size-primary;

@@ -425,7 +425,14 @@ class ThreadH5Page extends React.Component {
     this.setState({ showDeletePopup: false });
     const id = this.props.thread?.threadData?.id;
 
-    const { success, msg } = await this.props.thread.delete(id, this.props.index);
+    const { success, msg } = await this.props.thread.delete(
+      id,
+      this.props.index,
+      this.props.search,
+      this.props.topic,
+      this.props.site,
+      this.props.user,
+    );
 
     if (success) {
       Toast.success({
@@ -1053,9 +1060,10 @@ class ThreadH5Page extends React.Component {
             ></RewardPopup>
 
             {/* 采纳弹层 */}
-            {parseContent?.REWARD?.money && (
+            {parseContent?.REWARD?.money && parseContent?.REWARD?.remainMoney && (
               <AboptPopup
-                rewardAmount={parseContent?.REWARD?.money} // 需要传入剩余悬赏金额
+                money={Number(parseContent.REWARD.money)} // 悬赏总金额
+                remainMoney={Number(parseContent.REWARD.remainMoney)} // 需要传入剩余悬赏金额
                 visible={this.state.showAboptPopup}
                 onCancel={() => this.onAboptCancel()}
                 onOkClick={(data) => this.onAboptOk(data)}

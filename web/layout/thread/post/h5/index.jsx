@@ -60,15 +60,29 @@ function isIOSMiui() {
 class ThreadCreate extends React.Component {
   componentDidMount() {
     window.addEventListener('scroll', this.handler);
+    window.addEventListener('resize', this.androidHandler);
   }
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handler);
+    window.removeEventListener('resize', this.androidHandler);
   }
 
   handler = () => {
     if (!isIOSMiui()) return;
     throttle(this.setBottomBarStyle(window.scrollY), 50);
+  }
+
+  androidHandler = () => {
+    // 如果是操作栏则不进行resize时间的判断
+    if (this.props.currentDefaultOperation || this.props.currentAttachOperation) return;
+    const winHeight = getVisualViewpost();
+    if (!judgeDeviceType().isAndroid) return;
+    if (window.innerHeight === winHeight) {
+      this.clearBottomFixed();
+    } else {
+      this.props.handleSetState({ currentDefaultOperation: '' });
+    }
   }
 
   // 定位的显示与影藏

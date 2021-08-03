@@ -14,6 +14,9 @@ import goToLoginPage from '@common/utils/go-to-login-page';
 import Router from '@discuzq/sdk/dist/router';
 
 // 评论列表
+@inject('index')
+@inject('topic')
+@inject('search')
 @inject('thread')
 @inject('comment')
 @inject('user')
@@ -84,7 +87,13 @@ class RenderCommentList extends React.Component {
       id: data.id,
       isLiked: !data.isLiked,
     };
-    const { success, msg } = await this.props.comment.updateLiked(params, this.props.thread);
+
+    const threadStore = this.props.thread;
+    const indexStore = this.props.index;
+    const searchStore = this.props.search;
+    const topicStore = this.props.topic;
+
+    const { success, msg } = await this.props.comment.updateLiked(params, threadStore, indexStore, searchStore, topicStore);
 
     if (success) {
       this.props.thread.setCommentListDetailField(data.id, 'isLiked', params.isLiked);

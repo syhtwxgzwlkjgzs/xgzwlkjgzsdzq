@@ -7,7 +7,9 @@ import { PAY_MENT_MAP, PAYWAY_MAP, STEP_MAP } from '../../../../../common/consta
 import isWeixin from '@common/utils/is-weixin';
 import {
   listenWXJsBridgeAndExecCallback,
+  listenWXJsBridgeAndExecCallbackH5,
   onBridgeReady,
+  onBridgeReadyH5,
   wxValidator,
   mode,
 } from '../../../../../common/store/pay/weixin-h5-backend';
@@ -30,15 +32,15 @@ export default class PayBox extends React.Component {
     ];
 
     // 判断是否微信支付开启
-    if (this.props.site.isWechatPayOpen && this.props.site.wechatEnv !== 'none') {
-      if (isWeixin()) {
+    if (this.props.site.isWechatPayOpen) {
+      // if (isWeixin()) {
         payConfig.unshift({
           name: '微信支付',
           icon: 'WechatPaymentOutlined',
           color: '#09bb07',
           paymentType: 'weixin',
         });
-      }
+      // }
     }
 
     this.state = {
@@ -128,11 +130,12 @@ export default class PayBox extends React.Component {
         });
         if (!isWeixin()) {
           await this.props.payBox.wechatPayOrder({
-            listenWXJsBridgeAndExecCallback,
-            onBridgeReady,
+            listenWXJsBridgeAndExecCallback: listenWXJsBridgeAndExecCallbackH5,
+            onBridgeReady: onBridgeReadyH5,
             wxValidator,
             mode: PAY_MENT_MAP.WX_H5,
           });
+          this.props.payBox.visible = false;
           this.setState({
             isSubmit: false,
           });
