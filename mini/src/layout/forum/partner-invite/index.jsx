@@ -51,13 +51,6 @@ class PartnerInviteH5Page extends React.Component {
     this.setNavigationBarStyle();
     
     try {
-      // 若用户已登录，实时刷新站点付费及用户是否付费信息
-      const {site, user} = this.props;
-      if (user.isLogin()) {
-        user.updateUserInfo(user.id);
-        site.getSiteInfo();
-      }
-
       await Promise.all([
         this.initInviteCode(),
         this.initUserList(),
