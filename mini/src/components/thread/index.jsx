@@ -10,12 +10,12 @@ import styles from './index.module.scss';
 import goToLoginPage from '@common/utils/go-to-login-page';
 import threadPay from '@common/pay-bussiness/thread-pay';
 import ThreadCenterView from './ThreadCenterView';
-import { debounce, noop } from './utils'
+import { debounce, noop , getElementRect, randomStr } from './utils'
 import { View, Text } from '@tarojs/components'
 import { getImmutableTypeHeight } from './getHeight'
-import { getElementRect, randomStr } from './utils'
+
 import Skeleton from './skeleton';
-import { updateViewCountInStores } from '@common/utils/viewcount-in-storage';
+import { updateViewCountInStorage } from '@common/utils/viewcount-in-storage';
 
 @inject('site')
 @inject('index')
@@ -51,7 +51,7 @@ class Index extends React.Component {
       // 保存视频高度
       const { videoH } = this.state
       if (params?.type === 'video' && videoH === 0) {
-        this.setState({ videoH: params['height'] })
+        this.setState({ videoH: params.height })
       }
 
       // 更新帖子组件高度
@@ -86,7 +86,6 @@ class Index extends React.Component {
       this.updateViewCount();
       this.handlePraise();
     }
-
     handlePraise = debounce(() => {
 
       if(this.state.isSendingLike) return;
@@ -208,9 +207,15 @@ class Index extends React.Component {
     }
 
     updateViewCount = async () => {
-      const { threadId = '' } = this.props.data || {};
+      const { data, site } = this.props;
+      const { threadId = '' } = data || {};
+      const { openViewCount } = site?.webConfig?.setSite || {};
+
+      const viewCountMode = Number(openViewCount);
+      if(viewCountMode === 1) return;
+
       const threadIdNumber = Number(threadId);
-      const viewCount = await updateViewCountInStores(threadIdNumber);
+      const viewCount = await updateViewCountInStorage(threadIdNumber);
       if(viewCount) {
         this.props.index.updateAssignThreadInfo(threadIdNumber, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })
         this.props.search.updateAssignThreadInfo(threadIdNumber, { updateType: 'viewCount', updatedInfo: { viewCount: viewCount } })

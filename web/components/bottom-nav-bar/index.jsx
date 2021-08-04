@@ -6,6 +6,8 @@ import { noop } from '@components/thread/utils';
 import { withRouter } from 'next/router';
 import UnreadRedDot from '@components/unread-red-dot';
 import { unreadUpdateInterval } from '@common/constants/message';
+import browser from '@common/utils/browser';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
 /**
  * BottomNavBar组件
@@ -13,7 +15,7 @@ import { unreadUpdateInterval } from '@common/constants/message';
  * @prop {boolean} curr 常亮icon
  */
 
-const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 'home', onClick = noop, message }) => {
+const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 'home', onClick = noop, message, canPublish }) => {
   const { totalUnread, readUnreadCount } = message;
   const checkCurrActiveTab = useCallback((curr, target) => {
     return curr === target;
@@ -49,6 +51,7 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
         Toast.info({ content: '您暂无发帖权限' });
         return;
       }
+      if (!canPublish()) return;
     }
 
     onClick(i, idx)
@@ -95,4 +98,4 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
   );
 };
 
-export default withRouter(inject('user', 'message')(observer(BottomNavBar)));
+export default HOCFetchSiteData(withRouter(inject('user', 'message')(observer(BottomNavBar))));
