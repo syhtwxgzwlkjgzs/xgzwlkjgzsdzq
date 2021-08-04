@@ -51,4 +51,3 @@ export default function fuzzyCalcContentLength(content, lengthInLine = 50) {
 
     return parseInt(totalCount);
 }
-  

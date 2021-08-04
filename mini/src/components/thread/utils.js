@@ -89,17 +89,19 @@ export const extensionList = [
   'EPS',
   'EXE',
   'IPA',
+  'M4A',
   'MP3',
   'MP4',
   'PDF',
   'PPT',
+  'PPTX',
   'PSD',
   'RAR',
   'TXT',
   'XLS',
   'XLSX',
   'ZIP',
-  'JPG',
+  'JPEG',
   'WAV',
 ];
 
@@ -152,7 +154,7 @@ export const getElementRect = async (eleId = '', delay = 200) =>
   });
 
 export const handleLink = (node) => {
-  const href = node?.attribs?.href;
+  const href = node?.attribs?.href || node?.attribs?.src;
   if (href) {
     // 处理外部链接
     const isExternaLink = urlReg.test(href);

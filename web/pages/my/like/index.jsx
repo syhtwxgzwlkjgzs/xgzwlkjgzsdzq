@@ -111,7 +111,6 @@ class Index extends React.Component {
   };
 
   componentWillUnmount() {
-    this.clearStoreThreads();
     if (!isServer()) {
       window.removeEventListener('popstate', this.clearStoreThreads);
     }
@@ -151,7 +150,7 @@ class Index extends React.Component {
           />
         }
         pc={<IndexPCPage firstLoading={firstLoading} dispatch={this.dispatch} />}
-        title={`我的点赞`}
+        title={'我的点赞'}
       />
     );
   }

@@ -59,6 +59,10 @@
         border-radius: rem($border-radius-small);
         background: $body-bg-color;
 
+        &.active {
+          background: $primary-color10;
+        }
+
         .commentHeader {
           display: flex;
           justify-content: space-between;
@@ -70,6 +74,22 @@
               line-height: rem(20);
               text-align: left;
               color: $text-color-primary;
+            }
+            .masterBox {
+              padding-top:rem(2);
+              padding-left: rem($padding-2n);
+              .masterText {
+                border-radius: rem(4) 0;
+                background: #ff9700;
+                display: inline-block;
+                font-size: rem(12);
+                -webkit-text-size-adjust:none;
+                -webkit-transform : scale(0.83,0.83);
+                line-height: rem(14);
+                padding: rem(1) rem(4);
+                text-align: left;
+                color: #fff;
+              }
             }
             .groups {
               color: var(--color-text-secondary);
@@ -100,7 +120,7 @@
               height: rem(22);
             }
 
-            .dzq-p  {
+            .dzq-p {
               margin-bottom: 0;
             }
           }

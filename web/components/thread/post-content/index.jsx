@@ -28,7 +28,7 @@ const PostContent = ({
   usePointer = true,
   onOpen = noop,
   updateViewCount = noop,
-  transformer = parsedDom => parsedDom,
+  transformer = (parsedDom) => parsedDom,
   ...props
 }) => {
   // 内容是否超出屏幕高度
@@ -37,7 +37,7 @@ const PostContent = ({
   const [showMore, setShowMore] = useState(false); // 根据文本长度显示"查看更多"
   const [imageVisible, setImageVisible] = useState(false);
   const [imageUrlList, setImageUrlList] = useState([]);
-  const [curImageUrl, setCurImageUrl] = useState("");
+  const [curImageUrl, setCurImageUrl] = useState('');
   const ImagePreviewerRef = useRef(null); // 富文本中的图片也要支持预览
   const contentWrapperRef = useRef(null);
 
@@ -99,7 +99,8 @@ const PostContent = ({
   // 点击富文本中的链接
   const handleLinkClick = () => {
     updateViewCount();
-    setTimeout(() => { // 等待store更新完成后跳转
+    setTimeout(() => {
+      // 等待store更新完成后跳转
     }, 500);
   };
 
@@ -115,20 +116,21 @@ const PostContent = ({
   };
 
   const getImagesFromText = (text) => {
-    const _text = replaceStringInRegex(text, "emoj", '');
+    const _text = replaceStringInRegex(text, 'emoj', '');
     const images = _text.match(/<img\s+[^<>]*src=[\"\'\\]+([^\"\']*)/gm) || [];
 
-    for(let i = 0; i < images.length; i++) {
-      images[i] = images[i].replace(/<img\s+[^<>]*src=[\"\'\\]+/gm, "") || "";
+    for (let i = 0; i < images.length; i++) {
+      images[i] = images[i].replace(/<img\s+[^<>]*src=[\"\'\\]+/gm, '') || '';
       images[i] = decodeURIComponent(images[i]);
-      images[i] = images[i].replace(/&lt;/g, "<")
-                            .replace(/&gt;/g, ">")
-                            .replace(/&amp;/g, "&")
-                            .replace(/&quot;/g, '"')
-                            .replace(/&apos;/g, "'");
+      images[i] = images[i]
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&amp;/g, '&')
+        .replace(/&quot;/g, '"')
+        .replace(/&apos;/g, "'");
     }
     return images;
-  }
+  };
 
   useEffect(() => {
     const lengthInLine = parseInt((contentWrapperRef.current.offsetWidth || 704) / 16);
@@ -142,7 +144,8 @@ const PostContent = ({
       // 超过6行
       setShowMore(true);
     }
-    if (length > 1200) { // 超过一页的超长文本
+    if (length > 1200) {
+      // 超过一页的超长文本
       if (useShowMore) getCutContentForDisplay(1200);
       setContentTooLong(true);
     } else {
@@ -150,17 +153,18 @@ const PostContent = ({
     }
 
     const imageUrlList = getImagesFromText(filterContent);
-    if(imageUrlList.length) {
+    if (imageUrlList.length) {
       setImageUrlList(imageUrlList);
     }
-
   }, [filterContent]);
 
   return (
     <div className={classnames(styles.container, usePointer ? styles.usePointer : '')} {...props}>
       <div
         ref={contentWrapperRef}
-        className={`${styles.contentWrapper} ${(useShowMore && showMore) ? styles.hideCover : ''} ${customHoverBg ? styles.bg : ''}`}
+        className={`${styles.contentWrapper} ${useShowMore && showMore ? styles.hideCover : ''} ${
+          customHoverBg ? styles.bg : ''
+        }`}
         onClick={showMore ? onShowMore : handleClick}
       >
         <div className={styles.content}>
@@ -170,6 +174,7 @@ const PostContent = ({
             onImgClick={handleImgClick}
             onLinkClick={handleLinkClick}
             transformer={transformer}
+            iframeWhiteList={['bilibili', 'youku', 'iqiyi', 'music.163.com', 'qq.com']}
           />
           {imageVisible && (
             <ImagePreviewer

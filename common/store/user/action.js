@@ -19,9 +19,9 @@ import {
   readUsersDeny,
   wechatRebindQrCodeGen,
   getWechatRebindStatus,
-  getSignInFields,
   h5Rebind,
   miniRebind,
+  getSignInFields,
 } from '@server';
 import { get } from '../../utils/get';
 import set from '../../utils/set';
@@ -399,7 +399,7 @@ class UserAction extends SiteStore {
     Object.keys(this.userThreads).forEach((pageNum) => {
       const pageDataSet = this.userThreads[pageNum];
 
-      const itemIdx = pageDataSet.findIndex((item) => item.threadId === id);
+      const itemIdx = pageDataSet.findIndex(item => item.threadId === id);
 
       if (itemIdx === -1) return;
 
@@ -417,12 +417,15 @@ class UserAction extends SiteStore {
   setUserThreads = async (userThreadList) => {
     const pageData = get(userThreadList, 'data.pageData', []);
     const totalPage = get(userThreadList, 'data.totalPage', 1);
+    const currPage = get(userThreadList, 'data.currentPage', 1);
 
     this.userThreadsTotalPage = totalPage;
+
     this.userThreads = {
       ...this.userThreads,
-      [this.userThreadsPage]: pageData,
+      [currPage]: pageData,
     };
+
     this.userThreadsTotalCount = get(userThreadList, 'data.totalCount', 0);
 
     if (this.userThreadsPage <= this.userThreadsTotalPage) {
@@ -946,10 +949,10 @@ class UserAction extends SiteStore {
 
       // 更新点赞
       if (
-        updateType === 'like' &&
-        !typeofFn.isUndefined(updatedInfo.isLiked) &&
-        !typeofFn.isNull(updatedInfo.isLiked) &&
-        user
+        updateType === 'like'
+        && !typeofFn.isUndefined(updatedInfo.isLiked)
+        && !typeofFn.isNull(updatedInfo.isLiked)
+        && user
       ) {
         const { isLiked, likePayCount = 0 } = updatedInfo;
         const theUserId = user.userId || user.id;
