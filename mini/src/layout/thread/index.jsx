@@ -966,7 +966,7 @@ class ThreadH5Page extends React.Component {
           scrollY
           scrollTop={this.position}
           lowerThreshold={50}
-          onScrollToLower={() => this.scrollToLower()}
+          onScrollToLower={this.props.index.hasOnScrollToLower ? () => this.scrollToLower() : null}
           scrollIntoView={this.state.toView}
           onScroll={(e) => throttle(this.handleOnScroll(e), 200)}
         >
