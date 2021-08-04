@@ -29,14 +29,14 @@ function withShare() {
         if (this.getShareData && typeof this.getShareData === 'function') {
           shareData = this.getShareData({ ...data, from: res.from });
         }
-        const { title = defalutTitle, path = defalutPath, imageUrl = '' } = shareData;
+        const { title = defalutTitle, path = defalutPath, imageUrl = '', promise } = shareData;
         const encodePath = `/pages/index/index?path=${encodeURIComponent(path)}`;
         const value = {
           title,
           path: encodePath,
           imageUrl,
         };
-        return new Promise((resolve) => {
+        return promise || new Promise((resolve) => {
           setTimeout(() => {
             resolve(value);
           }, 1000);

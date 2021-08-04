@@ -9,6 +9,7 @@ import withShare from '@common/utils/withShare/withShare';
 import ErrorMiniPage from '../../layout/error/index';
 import { priceShare } from '@common/utils/priceShare';
 import { updateViewCountInStorage } from '@common/utils/viewcount-in-storage';
+import Toast from '@discuzq/design/dist/components/toast';
 
 // const MemoToastProvider = React.memo(ToastProvider);
 @inject('site')
@@ -46,6 +47,16 @@ class Detail extends React.Component {
       };
     }
     if (data.from === 'menu')  {
+      const isApproved = this.props?.thread?.threadData?.isApproved === 1;
+      if(!isApproved) {
+        Toast.info({content: '内容正在审核中'})
+        const promise = new Promise((resolve, reject) => {
+          setTimeout(() => {
+            reject()
+          }, 1000)
+        })
+      return {promise}
+      }
       return priceShare({isAnonymous, isPrice, path}) || {
         title: defalutTitle,
         path,
