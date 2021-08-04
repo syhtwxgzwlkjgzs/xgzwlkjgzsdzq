@@ -103,7 +103,7 @@ const Index = ({ visible, data: tmpData = [], current, onSubmit = noop, onCancel
     }
 
     let categoryids = [first];
-    if (firstChildren) {
+    if (firstChildren && !current?.categoryids?.length) {
       categoryids = [firstChildren];
     } else {
       const tmp = data[0]?.data?.filter(item => item.pid === first)
