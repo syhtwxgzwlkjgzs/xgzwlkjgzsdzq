@@ -58,7 +58,7 @@ class CommentList extends React.Component {
   // 点击评论回复
   replyClick() {
     const userName = this.props.data?.user?.nickname || this.props.data?.user?.userName;
-
+   
     this.setState({
       isShowInput: !this.state.isShowInput,
       replyId: null,
@@ -108,8 +108,8 @@ class CommentList extends React.Component {
   }
 
   // 点击评论列表用户头像
-  replyAvatarClick(data,floor) {
-    typeof this.props.replyAvatarClick === 'function' && this.props.replyAvatarClick(data,floor);
+  replyAvatarClick(data, floor) {
+    typeof this.props.replyAvatarClick === 'function' && this.props.replyAvatarClick(data, floor);
   }
 
   async onSubmit(value, imageList) {
@@ -290,26 +290,28 @@ class CommentList extends React.Component {
                         data={this.needReply[0]}
                         key={this.needReply[0].id}
                         isShowOne={true}
-                        avatarClick={(floor) => this.replyAvatarClick(this.needReply[0],floor)}
+                        avatarClick={floor => this.replyAvatarClick(this.needReply[0], floor)}
                         likeClick={() => this.replyLikeClick(this.needReply[0])}
                         replyClick={() => this.replyReplyClick(this.needReply[0])}
                         deleteClick={() => this.replyDeleteClick(this.needReply[0])}
                         toCommentDetail={() => this.toCommentDetail()}
                         onSubmit={(value, imageList) => this.onSubmit(value, imageList)}
                         isShowInput={this.state.replyId && this.state.replyId === this.needReply[0].id}
+                        canPublish={this.props.canPublish}
                       ></ReplyList>
                     ) : (
                       (this.needReply || []).map((val, index) => (
                         <ReplyList
                           data={val}
                           key={val.id || index}
-                          avatarClick={(floor) => this.replyAvatarClick(val,floor)}
+                          avatarClick={floor => this.replyAvatarClick(val, floor)}
                           likeClick={() => this.replyLikeClick(val)}
                           replyClick={() => this.replyReplyClick(val)}
                           deleteClick={() => this.replyDeleteClick(val)}
                           toCommentDetail={() => this.toCommentDetail()}
                           onSubmit={(value, imageList) => this.onSubmit(value, imageList)}
                           isShowInput={this.state.replyId && this.state.replyId === val.id}
+                          canPublish={this.props.canPublish}
                         ></ReplyList>
                       ))
                     )}
