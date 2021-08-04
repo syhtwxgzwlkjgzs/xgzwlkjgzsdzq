@@ -31,6 +31,10 @@ class UsernameH5Login extends React.Component {
     this.props.userLogin.password = e.target.value;
   };
 
+  componentDidMount() {
+    this.props.commonLogin.setLoginType('username');
+  }
+
   componentWillUnmount() {
     this.props.userLogin.reset();
   }

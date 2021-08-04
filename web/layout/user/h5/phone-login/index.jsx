@@ -35,6 +35,10 @@ class LoginPhoneH5Page extends React.Component {
     mobileLogin.code = code;
   };
 
+  componentDidMount() {
+    this.props.commonLogin.setLoginType('phone');
+  }
+
   componentWillUnmount() {
     this.props.mobileLogin.reset();
   }
