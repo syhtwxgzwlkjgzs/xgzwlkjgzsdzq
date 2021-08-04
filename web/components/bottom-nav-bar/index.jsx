@@ -22,11 +22,11 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
   }, [curr]);
 
   const [tabs, setTabs] = useState([
-    { key: 'home', icon: 'HomeOutlined', text: '首页', active: checkCurrActiveTab(curr, 'home'), router: '/' },
-    { key: 'search', icon: 'FindOutlined', text: '发现', active: checkCurrActiveTab(curr, 'search'), router: '/search' },
-    { key: 'post', icon: 'PlusOutlined', router: '/thread/post' },
-    { key: 'message', icon: 'MailOutlined', text: '消息', active: checkCurrActiveTab(curr, 'message'), router: '/message' },
-    { key: 'my', icon: 'ProfessionOutlined', text: '我的', active: checkCurrActiveTab(curr, 'my'), router: '/my' },
+    { icon: 'HomeOutlined', text: '首页', active: checkCurrActiveTab(curr, 'home'), router: '/' },
+    { icon: 'FindOutlined', text: '发现', active: checkCurrActiveTab(curr, 'search'), router: '/search' },
+    { icon: 'PlusOutlined', router: '/thread/post' },
+    { icon: 'MailOutlined', text: '消息', active: checkCurrActiveTab(curr, 'message'), router: '/message' },
+    { icon: 'ProfessionOutlined', text: '我的', active: checkCurrActiveTab(curr, 'my'), router: '/my' },
   ]);
 
   // 轮询更新未读消息
@@ -62,8 +62,7 @@ const BottomNavBar = ({ router, user, fixed = true, placeholder = false, curr = 
       setTabs(temp);
     }
 
-    const routePath = `${i.router}${browser.env('uc') ? `?uc-refresh=${i.key}` : ''}`;
-    router.push(routePath);
+    router.push(i.router);
   };
 
   return (
