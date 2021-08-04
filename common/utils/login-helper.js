@@ -156,10 +156,10 @@ class LoginHelper {
     this.gotoLogin();
   };
 
-  // 恢复登录前的跳转。优先级：记录页 > defaultPage > 主页
-  restore = (defaultPage) => {
-    const url = this.getUrl() || defaultPage || (isWeb() ? HOME_PAGE_PC : HOME_PAGE_MINI);
-    this.clear();
+  // 恢复登录前的跳转。优先级：记录页 > 主页
+  restore = (clearUrl = true) => {
+    const url = this.getUrl() || (isWeb() ? HOME_PAGE_PC : HOME_PAGE_MINI);
+    clearUrl && this.clear();
 
     Router.redirect({
       url,

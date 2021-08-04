@@ -188,7 +188,8 @@ http.interceptors.response.use((res) => {
         LoginHelper.saveCurrentUrl();
         window.location.replace(url); // 此处LoginHelper的saveAndRedirect跳转失败
       } else {
-        url = '/subPages/forum/partner-invite/index'
+        const targetPath = '/subPages/forum/partner-invite/index';
+        url = `/pages/index/index?reload=true?path=${encodeURIComponent(targetPath)}`; // 跳转中转页重新加载站点和用户信息
         LoginHelper.saveAndRedirect(url);
       }
       break;
