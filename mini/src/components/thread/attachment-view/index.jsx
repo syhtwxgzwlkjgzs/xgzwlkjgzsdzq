@@ -166,8 +166,6 @@ const Index = ({
       return true;  
     }
 
-    // 播放前校验权限
-    updateViewCount();
     if (!isPay) {
       if(!file || !threadId) return;
 
