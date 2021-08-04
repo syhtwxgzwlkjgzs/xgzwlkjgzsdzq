@@ -769,9 +769,7 @@ class ThreadPCPage extends React.Component {
         <div className={layout.qrcode}>
           <QcCode></QcCode>
         </div>
-        <div className={layout.copyright}>
-          <Copyright></Copyright>
-        </div>
+        <Copyright className={layout.copyright}></Copyright>
       </div>
     );
   }

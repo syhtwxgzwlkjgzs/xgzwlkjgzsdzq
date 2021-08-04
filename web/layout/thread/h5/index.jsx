@@ -33,6 +33,8 @@ import RenderCommentList from './comment-list';
 import classNames from 'classnames';
 
 import BottomView from '@components/list/BottomView';
+import Copyright from '@components/copyright';
+
 import MorePopop from '@components/more-popop';
 @inject('site')
 @inject('user')
@@ -777,6 +779,7 @@ class ThreadH5Page extends React.Component {
               )}
             </div>
           )}
+          <Copyright marginTop={0} />
         </div>
 
         {/* 底部操作栏 */}
