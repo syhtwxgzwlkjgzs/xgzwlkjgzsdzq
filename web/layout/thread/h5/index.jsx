@@ -31,6 +31,7 @@ import isWeiXin from '@common/utils/is-weixin';
 import RenderThreadContent from './content';
 import RenderCommentList from './comment-list';
 import classNames from 'classnames';
+import HOCFetchSiteData from '@middleware/HOCFetchSiteData';
 
 import BottomView from '@components/list/BottomView';
 import Copyright from '@components/copyright';
@@ -225,7 +226,7 @@ class ThreadH5Page extends React.Component {
       goToLoginPage({ url: '/user/login' });
       return;
     }
-
+    if (!this.props.canPublish()) return;
     this.setState({
       showCommentInput: true,
     });
@@ -847,6 +848,7 @@ class ThreadH5Page extends React.Component {
 
                   {/* 第二段列表 */}
                   <RenderCommentList
+                    canPublish={this.props.canPublish}
                     positionRef={this.positionRef}
                     showHeader={!isShowCommentList}
                     router={this.props.router}
@@ -972,4 +974,4 @@ class ThreadH5Page extends React.Component {
   }
 }
 
-export default withRouter(ThreadH5Page);
+export default HOCFetchSiteData(withRouter(ThreadH5Page));
