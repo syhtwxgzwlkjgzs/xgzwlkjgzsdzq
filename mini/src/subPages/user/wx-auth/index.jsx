@@ -97,6 +97,19 @@ class MiniAuth extends React.Component {
     } catch (error) {
       this.props.commonLogin.setLoginLoading(true);
       await getParamCode(this.props.commonLogin);
+      // 补充昵称
+      if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_BIND_USERNAME.Code || error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_ALL_INFO.Code) {
+        const uid = get(error, 'uid', '');
+        uid && this.props.user.updateUserInfo(uid);
+
+        if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_ALL_INFO.Code) {
+          this.props.commonLogin.needToCompleteExtraInfo = true;
+        }
+
+        Router.redirect({ url: '/subPages/user/bind-nickname/index' });
+        return;
+      }
+
       // 注册信息补充
       if (error.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
         const uid = get(error, 'uid', '');
@@ -109,6 +122,7 @@ class MiniAuth extends React.Component {
         LoginHelper.restore();
         return;
       }
+
       // 跳转状态页
       if (error.Code === BANNED_USER || error.Code === REVIEWING || error.Code === REVIEW_REJECT) {
         const uid = get(error, 'uid', '');
