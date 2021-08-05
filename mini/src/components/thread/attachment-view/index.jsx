@@ -27,6 +27,7 @@ const Index = ({
   user = null,
   threadId = null,
   thread = null,
+  baselayout,
   updateViewCount = noop,
 }) => {
   // 处理文件大小的显示
@@ -41,7 +42,7 @@ const Index = ({
     return `${fileSize} B`;
   };
 
-  const fetchDownloadUrl = (threadId, attachmentId, callback) => {
+  const fetchDownloadUrl = async (threadId, attachmentId, callback) => {
     if (!threadId || !attachmentId) return;
 
     // TODO: toastInstance 返回的是boolean
@@ -49,7 +50,7 @@ const Index = ({
     //   duration: 0,
     // });
 
-    thread
+    await thread
       .fetchThreadAttachmentUrl(threadId, attachmentId)
       .then((res) => {
         if (res?.code === 0 && res?.data) {
@@ -157,14 +158,11 @@ const Index = ({
     return AUDIO_FORMAT.includes(file?.extension?.toUpperCase())
   };
 
-  const onAttachPlay = async (file, audioRef) => {
+  const beforeAttachPlay = async (file) => {
     // 该文件已经通过校验，能直接播放
     if (file.readyToPlay) {
-      return;  
+      return true;  
     }
-
-    const audioPlayer = audioRef?.current?.getState()?.audioCtx;
-    audioPlayer?.pause();
 
     // 播放前校验权限
     updateViewCount();
@@ -172,11 +170,35 @@ const Index = ({
       if(!file || !threadId) return;
 
       await fetchDownloadUrl(threadId, file.id, () => {
-        audioPlayer?.play();
         file.readyToPlay = true;
       });
     } else {
       onPay();
+    }
+
+    return !!file.readyToPlay;
+  };
+
+  const onPlay = (audioRef, audioWrapperRef) => {
+    const audioContext = audioRef?.current?.getState()?.audioCtx;
+    updateViewCount();
+    if( audioContext && baselayout && audioWrapperRef) {
+      
+      // 暂停之前正在播放的视频
+      if(baselayout.playingVideoDom) {
+        Taro.createVideoContext(baselayout.playingVideoDom)?.pause();
+      }
+
+       // 暂停之前正在播放的音频
+      if (baselayout.playingAudioDom) {
+        if(baselayout.playingAudioWrapperId !== audioWrapperRef.current.uid) {
+          baselayout.playingAudioDom?.pause();
+          baselayout.playingAudioWrapperId = audioWrapperRef.current.uid;
+        }
+      }
+
+      baselayout.playingAudioDom = audioContext;
+      baselayout.playingAudioWrapperId = audioWrapperRef.current.uid;
     }
   };
 
@@ -184,15 +206,17 @@ const Index = ({
     if (isAttachPlayable(item)) {
       const { url, fileName, fileSize } = item;
       const audioRef = useRef();
+      const audioWrapperRef = useRef();
 
       return (
-        <View className={styles.audioContainer} key={index} onClick={onClick} >
+        <View className={styles.audioContainer} key={index} onClick={onClick} ref={audioWrapperRef}>
           <AudioPlayer
             ref={audioRef}
             src={url}
             fileName={fileName}
+            onPlay={() => onPlay(audioRef, audioWrapperRef)}
             fileSize={handleFileSize(parseFloat(item.fileSize || 0))}
-            onPlay={throttle(() => onAttachPlay(item, audioRef), 1000)}
+            beforePlay={async () => await beforeAttachPlay(item)}
             onDownload={throttle(() => onDownLoad(item, index), 1000)}
             onLink={throttle(() => onLinkShare(item), 1000)}
           />
@@ -251,4 +275,4 @@ const Index = ({
   );
 };
 
-export default inject('user', 'thread')(observer(Index));
+export default inject('user', 'baselayout', 'thread')(observer(Index));

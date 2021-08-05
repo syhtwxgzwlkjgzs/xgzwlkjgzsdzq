@@ -7,6 +7,7 @@ import { handleString2Arr } from '@common/utils/handleCategory';
 import HOCFetchSiteData from '../middleware/HOCFetchSiteData';
 import ViewAdapter from '@components/view-adapter';
 import isServer from '@common/utils/is-server';
+import browser from '@common/utils/browser';
 
 @inject('site')
 @inject('index')
@@ -89,25 +90,49 @@ class Index extends React.Component {
   handleRouterCategory = () => {
     // 识别通过分享过来的url
     // 若包含categoryId参数，则定位到具体的categoryId数据
-    const { router, index } = this.props;
-    const { categoryId = '' } = router.query
-    if (categoryId) {
-      const ids = categoryId.split('_').map(item => {
+    const { router, index, site } = this.props;
+    let { categoryId = '', sequence = '0' } = router.query || {}
+
+    if (site.platform === 'pc') {
+      // 设置PC端左边栏
+      if (categoryId === '') {
+        categoryId = 'all'
+      }
+
+      // 设置PC端顶部
+      if (sequence !== '0') {
+        index.topMenuIndex = `${sequence}`
+      }
+    }
+
+    if (categoryId || sequence !== '0') {
+      let ids = categoryId.split('_').map(item => {
         // 判断categoryId是否是数字。可能是all/default
         const id = /^\d+$/.test(item) ? Number(item) : item
 
         return id
-      })
+      }).filter(item => item)
 
-      const newFilter = { ...index.filter, categoryids: ids };
+      if (sequence === '1' && !ids?.length) {
+        ids = ['default']
+      }
+
+      if (ids.indexOf('default') !== -1 && sequence === '0') {
+        sequence = '1'
+      }
+
+      const newFilter = { ...index.filter, categoryids: ids, sequence };
 
       index.setFilter(newFilter);
+    } else {
+      const { categoryids, sequence: seq } = index.filter || {}
+      this.setUrl(categoryids, seq)
     }
   }
 
   // 根据选中的筛选项，设置地址栏 
-  setUrl = (categoryIds = []) => {
-    const url = categoryIds?.length ? `/?categoryId=${categoryIds.join('_')}` : '/'
+  setUrl = (categoryIds = [], sequence = 0) => {
+    const url = (categoryIds?.length || sequence !== 0)  ? `/?categoryId=${categoryIds.join('_')}&sequence=${sequence}` : '/'
     this.props.router.replace(url)
   }
 
@@ -129,7 +154,7 @@ class Index extends React.Component {
     }
 
     if (type === 'click-filter') { // 点击tab
-      this.setUrl(categoryIds)
+      this.setUrl(categoryIds, sequence)
 
       this.page = 1;
       this.props.baselayout.setJumpingToTop();
@@ -173,7 +198,7 @@ class Index extends React.Component {
 // eslint-disable-next-line new-cap
 export default HOCFetchSiteData(Index, (pass) => {
   // 因部署方式的问题，所有路径第一次访问都会访问index.html，导致会出现首页渲染出来之后跳转到制定的url地址，为了防止这种情况，对首页的渲染做一次判断，如果url不是首页连接，将不渲染首页。
-  if (!isServer()) {
+  if (!isServer() && !browser.env('uc')) { // uc浏览器存在异常，首页不做判断
     const pathname = window.location.pathname;
     if (pathname === '/' || pathname === '/index') {
       return true;
