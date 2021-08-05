@@ -11,6 +11,8 @@ import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util'
 import PcBodyWrap from '../components/pc-body-wrap';
 import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 import { isExtFieldsOpen } from '@common/store/login/util';
+import locals from '@common/utils/local-bridge';
+import setAccessToken from '@common/utils/set-access-token';
 import LoginHelper from '@common/utils/login-helper';
 
 @inject('site')
@@ -79,30 +81,47 @@ class WeixinBindQrCodePage extends React.Component {
         window.location.href = '/';
         clearInterval(this.timer);
       } catch (e) {
-        const { site, h5QrCode, commonLogin, router } = this.props;
+        const { h5QrCode } = this.props;
         if (h5QrCode.countDown > 0) {
           h5QrCode.countDown = h5QrCode.countDown - 3;
         } else {
           clearInterval(this.timer);
         }
-        if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
-          if (isExtFieldsOpen(site)) {
-            commonLogin.needToCompleteExtraInfo = true;
-            router.push('/user/supplementary');
-            return;
-          }
-          return window.location.href = '/';
-        }
-        // 跳转状态页
-        if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
-          const uid = get(e, 'uid', '');
-          uid && this.props.user.updateUserInfo(uid);
-          commonLogin.setStatusMessage(e.Code, e.Message);
-          router.push(`/user/status?statusCode=${e.Code}&statusMsg=${e.Message}`);
-        }
+        this.errorHandler(e);
       }
     }, 3000);
   }
+
+  errorHandler(e) {
+    const { site, commonLogin, router } = this.props;
+    if (e.Code === MOBILE_LOGIN_STORE_ERRORS.NEED_COMPLETE_REQUIRED_INFO.Code) {
+      if (isExtFieldsOpen(site)) {
+        commonLogin.needToCompleteExtraInfo = true;
+        router.push('/user/supplementary');
+        return;
+      }
+      return window.location.href = '/';
+    }
+    // 跳转状态页
+    if (e.Code === BANNED_USER || e.Code === REVIEWING || e.Code === REVIEW_REJECT) {
+      const uid = get(e, 'uid', '');
+      uid && this.props.user.updateUserInfo(uid);
+      commonLogin.setStatusMessage(e.Code, e.Message);
+      router.push(`/user/status?statusCode=${e.Code}&statusMsg=${e.Message}`);
+    }
+  }
+
+  handleSkipWechatButtonClick = async () => {
+    const loginToken = this.props.commonLogin.getLoginToken();
+    if (loginToken) {
+      const dzqUserId = locals.get('dzq_user_id');
+      dzqUserId && this.props.user.updateUserInfo(dzqUserId);
+      setAccessToken({
+        accessToken: loginToken,
+      });
+      LoginHelper.gotoIndex();
+    }
+  };
 
   render() {
     const { site: { platform }, router, h5QrCode } = this.props;
@@ -128,9 +147,7 @@ class WeixinBindQrCodePage extends React.Component {
             orCodeTips={platform === 'h5' ? '长按保存二维码，并在微信中识别此二维码，即可完成登录' : '请使用微信，扫码登录'}
           />
           {/* 二维码 end */}
-          <span className={layout.skip} onClick={() => {
-            LoginHelper.gotoIndex();
-          }}>跳过</span>
+          <span className={layout.skip} onClick={this.handleSkipWechatButtonClick}>跳过</span>
         </div>
       </div>
       </PcBodyWrap>

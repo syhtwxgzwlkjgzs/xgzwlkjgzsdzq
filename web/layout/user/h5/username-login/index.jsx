@@ -31,10 +31,6 @@ class UsernameH5Login extends React.Component {
     this.props.userLogin.password = e.target.value;
   };
 
-  componentDidMount() {
-    this.props.commonLogin.setLoginType('username');
-  }
-
   componentWillUnmount() {
     this.props.userLogin.reset();
   }
@@ -71,6 +67,7 @@ class UsernameH5Login extends React.Component {
       if (e.uid) {
         this.props.commonLogin.setUserId(e.uid);
       }
+      e.accessToken && this.props.commonLogin.setLoginToken(e.accessToken);
       if (wechatEnv === 'miniProgram' && platform === 'h5') {
         this.props.commonLogin.needToBindMini = true;
         const resp = await genMiniScheme();

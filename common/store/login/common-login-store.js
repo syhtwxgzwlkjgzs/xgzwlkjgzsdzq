@@ -31,19 +31,19 @@ export default class commonLoginStore {
     @observable protocolVisible = false;
     @observable protocolStatus = 'register';
     @observable loginLoading = true;
-    @observable loginType = 'username';
+    @observable loginToken = '';
 
-    @action getLoginType() {
-      let loginType;
+    @action getLoginToken() {
+      let loginToken;
       if (typeof window === 'object') {
-        loginType = window?.sessionStorage?.getItem('loginType') || this.loginType ||  '';
+        loginToken = window?.sessionStorage?.getItem('loginToken') || this.loginToken ||  '';
       }
-      return loginType;
+      return loginToken;
     }
 
-    @action setLoginType(type) {
-      this.loginType = type;
-      typeof window === 'object' && window.sessionStorage?.setItem('loginType', type);
+    @action setLoginToken(loginToken) {
+      this.loginToken = loginToken;
+      typeof window === 'object' && window.sessionStorage?.setItem('loginToken', loginToken);
     }
 
     @action

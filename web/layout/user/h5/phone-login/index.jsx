@@ -35,10 +35,6 @@ class LoginPhoneH5Page extends React.Component {
     mobileLogin.code = code;
   };
 
-  componentDidMount() {
-    this.props.commonLogin.setLoginType('phone');
-  }
-
   componentWillUnmount() {
     this.props.mobileLogin.reset();
   }
@@ -103,6 +99,7 @@ class LoginPhoneH5Page extends React.Component {
         if (e.uid) {
           this.props.commonLogin.setUserId(e.uid);
         }
+        e.accessToken && this.props.commonLogin.setLoginToken(e.accessToken);
         if (wechatEnv === 'miniProgram' && platform === 'h5') {
           this.props.commonLogin.needToBindMini = true;
           this.props.commonLogin.sessionToken = e.sessionToken;
