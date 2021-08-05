@@ -15,7 +15,7 @@ import { Toast } from '@discuzq/design';
 import browser, { constants } from '@common/utils/browser';
 
 export default function DVditor(props) {
-  const { pc, emoji = {}, atList = [], topic, value = '',
+  const { pc, emoji = {}, atList = [], topic, value = '', isResetContentText,
     onChange = () => { }, onFocus = () => { }, onBlur = () => { },
     onInit = () => { },
     onInput = () => { },
@@ -108,6 +108,12 @@ export default function DVditor(props) {
     const timer = setTimeout(() => {
       clearTimeout(timer);
       try {
+        // 重置编辑器的值
+        if (isResetContentText && value) {
+          errorNum = 0;
+          html2mdSetValue(value);
+          return;
+        }
         if (!value || (vditor && vditor.getValue && vditor.getValue() !== '\n')) {
           errorNum = 0;
           return;
@@ -326,7 +332,10 @@ export default function DVditor(props) {
 
   return (
     <>
-      <div id={vditorId} className={className} onClick={e => e.stopPropagation()}>
+      <div id={vditorId} className={className} onClick={e => {
+        e.stopPropagation()
+        setState({ currentDefaultOperation: '' })
+      }}>
         <LoadingBox>编辑器加载中...</LoadingBox>
       </div>
       {/* {!pc && isFocus && <div className="dvditor__placeholder"></div>} */}

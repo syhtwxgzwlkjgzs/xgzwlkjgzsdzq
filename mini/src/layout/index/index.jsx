@@ -44,9 +44,6 @@ class IndexH5Page extends React.Component {
     })
   }
   componentDidMount() {
-
-    this.setNavigationBarStyle();
-
     // 是否有推荐
     const isDefault = this.props.site.checkSiteIsOpenDefautlThreadListData();
     this.props.index.setNeedDefault(isDefault);

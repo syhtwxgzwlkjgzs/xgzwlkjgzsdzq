@@ -38,6 +38,7 @@ import { parseContentData } from './utils';
 @inject('site')
 @inject('user')
 @inject('thread')
+@inject('commentPosition')
 @inject('comment')
 @inject('index')
 @inject('topic')
@@ -64,7 +65,6 @@ class ThreadH5Page extends React.Component {
     };
 
     this.perPage = 20;
-    this.page = 1; // 页码
     this.commentDataSort = true;
 
     // 滚动定位相关属性
@@ -86,6 +86,9 @@ class ThreadH5Page extends React.Component {
     this.reportContent = ['广告垃圾', '违规内容', '恶意灌水', '重复发帖'];
     this.inputText = '其他理由...';
     this.$instance = getCurrentInstance()
+
+    this.positionRef = React.createRef();
+    this.isPositioned = false;
   }
 
   componentWillMount () {
@@ -121,6 +124,16 @@ class ThreadH5Page extends React.Component {
         };
       }
     }
+
+    // 滚动到指定的评论定位位置
+    if (this.props.commentPosition?.postId && !this.isPositioned && this.positionRef?.current) {
+      this.isPositioned = true;
+      setTimeout(() => {
+        this.setState({
+          toView: `position${this.props.commentPosition?.postId}`,
+        });
+      }, 1000);
+    }
   }
 
   componentWillUnmount() {
@@ -153,7 +166,7 @@ class ThreadH5Page extends React.Component {
       const id = this.props.thread?.threadData?.id;
       const params = {
         id,
-        page: this.page + 1,
+        page: this.props.thread.page + 1,
         perPage: this.perPage,
         sort: this.commentDataSort ? 'createdAt' : '-createdAt',
       };
@@ -166,7 +179,7 @@ class ThreadH5Page extends React.Component {
   scrollToLower = () => {
     const { isCommentReady, isNoMore } = this.props.thread;
     if (!this.state.isCommentLoading && isCommentReady && !isNoMore) {
-      this.page = this.page + 1;
+      this.props.thread.setCommentListPage(this.props.thread.page + 1);
       this.loadCommentList();
     }
   };
@@ -213,7 +226,7 @@ class ThreadH5Page extends React.Component {
     });
   }
 
-  // 加载评论列表
+  // 加载第二段评论列表
   async loadCommentList() {
     const { isCommentReady } = this.props.thread;
     if (this.state.isCommentLoading || !isCommentReady) {
@@ -226,7 +239,7 @@ class ThreadH5Page extends React.Component {
     const id = this.props.thread?.threadData?.id;
     const params = {
       id,
-      page: this.page,
+      page: this.props.thread.page,
       perPage: this.perPage,
       sort: this.commentDataSort ? 'createdAt' : '-createdAt',
     };
@@ -243,10 +256,47 @@ class ThreadH5Page extends React.Component {
     });
   }
 
+  // 点击加载更多
+  onLoadMoreClick() {
+    this.props.commentPosition.page = this.props.commentPosition.page + 1;
+    this.loadCommentPositionList();
+  }
+
+  // 加载第一段评论列表
+  async loadCommentPositionList() {
+    const { isCommentReady } = this.props.commentPosition;
+    if (this.state.isCommentLoading || !isCommentReady) {
+      return;
+    }
+
+    this.setState({
+      isCommentLoading: true,
+    });
+    const id = this.props.thread?.threadData?.id;
+    const params = {
+      id,
+      page: this.props?.commentPosition?.page || 1,
+      perPage: this.perPage,
+      sort: this.commentDataSort ? 'createdAt' : '-createdAt',
+    };
+
+    const { success, msg } = await this.props.commentPosition.loadCommentList(params);
+    this.setState({
+      isCommentLoading: false,
+    });
+    if (success) {
+      return true;
+    }
+    Toast.error({
+      content: msg,
+    });
+  }
+
   // 列表排序
   onSortChange(isCreateAt) {
     this.commentDataSort = isCreateAt;
-    this.page = 1;
+    this.props.thread.setCommentListPage(1);
+    this.props.commentPosition.reset();
     return this.loadCommentList();
   }
 
@@ -866,7 +916,8 @@ class ThreadH5Page extends React.Component {
         this.setState({ showAboptPopup: false });
 
         // 重新获取帖子详细
-        this.props.thread.fetchThreadDetail(params.threadId);
+        await this.props.thread.fetchThreadDetail(params.threadId);
+        this.props.thread.updateListStore(this.props.index, this.props.search, this.props.topic);
 
         Toast.success({
           content: `悬赏${data}元`,
@@ -931,6 +982,9 @@ class ThreadH5Page extends React.Component {
     // 是否审核通过
     const isApproved = (threadStore?.threadData?.isApproved || 0) === 1;
 
+    // 定位评论相关
+    const { isShowCommentList, isNoMore: isCommentPositionNoMore } = this.props.commentPosition;
+
     return (
       <View className={layout.container}>
         <View className={layout.header}>
@@ -979,7 +1033,35 @@ class ThreadH5Page extends React.Component {
               <View className={`${layout.bottom}`} ref={this.commentDataRef} id="commentId">
                 {isCommentReady ? (
                   <Fragment>
+                    {/* 第一段列表 */}
+                    {isCommentReady && isShowCommentList && (
+                      <Fragment>
+                        <RenderCommentList
+                          isPositionComment={true}
+                          router={this.props.router}
+                          sort={(flag) => this.onSortChange(flag)}
+                          replyAvatarClick={(comment, reply, floor) => this.replyAvatarClick(comment, reply, floor)}
+                        ></RenderCommentList>
+                        {!isCommentPositionNoMore && (
+                          // <BottomView
+                          //   onClick={() => this.onLoadMoreClick()}
+                          //   noMoreType="line"
+                          //   loadingText="点击加载更多"
+                          //   isError={isCommentListError}
+                          //   noMore={isCommentPositionNoMore}
+                          // ></BottomView>
+
+                          <View className={layout.showMore} onClick={() => this.onLoadMoreClick()}>
+                            <View className={layout.hidePercent}>展开更多评论</View>
+                            <Icon className={layout.icon} name="RightOutlined" size={12} />
+                          </View>
+                        )}
+                      </Fragment>
+                    )}
+
                     <RenderCommentList
+                      positionRef={this.positionRef}
+                      showHeader={!isShowCommentList}
                       router={this.props.router}
                       sort={(flag) => this.onSortChange(flag)}
                       onEditClick={(comment) => this.onEditClick(comment)}
@@ -1075,7 +1157,7 @@ class ThreadH5Page extends React.Component {
               visible={this.state.showDeletePopup}
               onClose={() => this.setState({ showDeletePopup: false })}
               onBtnClick={(type) => this.onBtnClick(type)}
-              type='thread'
+              type="thread"
             ></DeletePopup>
             {/* 举报弹层 */}
 
