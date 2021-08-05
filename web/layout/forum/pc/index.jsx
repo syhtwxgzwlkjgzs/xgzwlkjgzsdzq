@@ -106,9 +106,9 @@ class ForumPCPage extends React.Component {
                   size='small'
                   className={layout.user_value_avatar}
                   image={siteAuthor.avatar}
-                  name={siteAuthor.username}
+                  name={siteAuthor.nickname}
                 />
-                <div className={layout.user_value_name} title={siteAuthor.username}>{siteAuthor.username}</div>
+                <div className={layout.user_value_name} title={siteAuthor.nickname}>{siteAuthor.nickname}</div>
               </div>
               <div className={layout.user_value_item} title={numberFormat(userTotal)}>{numberFormat(userTotal)}</div>
               <div
