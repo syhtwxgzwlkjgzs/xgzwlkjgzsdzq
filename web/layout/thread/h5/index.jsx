@@ -804,6 +804,13 @@ class ThreadH5Page extends React.Component {
                   <Icon size="20" name="MessageOutlined"></Icon>
                 </div>
                 <Icon
+                  color={this.props.thread?.threadData?.isLike ? styleVar['--color-primary'] : ''}
+                  className={footer.icon}
+                  onClick={debounce(() => this.onLikeClick(), 500)}
+                  size="20"
+                  name="LikeOutlined"
+                ></Icon>
+                <Icon
                   color={this.props.thread?.isFavorite ? styleVar['--color-primary'] : ''}
                   className={footer.icon}
                   onClick={debounce(() => this.onCollectionClick(), 500)}
@@ -854,7 +861,7 @@ class ThreadH5Page extends React.Component {
             <DeletePopup
               visible={this.state.showDeletePopup}
               onClose={() => this.setState({ showDeletePopup: false })}
-              onBtnClick={(type) => this.onBtnClick(type)}
+              onBtnClick={type => this.onBtnClick(type)}
               type='thread'
             ></DeletePopup>
             {/* 举报弹层 */}
