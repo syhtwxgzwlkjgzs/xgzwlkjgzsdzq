@@ -11,6 +11,8 @@ import { BANNED_USER, REVIEWING, REVIEW_REJECT } from '@common/store/login/util'
 import PcBodyWrap from '../components/pc-body-wrap';
 import { MOBILE_LOGIN_STORE_ERRORS } from '@common/store/login/mobile-login-store';
 import { isExtFieldsOpen } from '@common/store/login/util';
+import { genMiniScheme } from '@server';
+import SkipMiniPopup from '@components/login/skip-mini-popup';
 import locals from '@common/utils/local-bridge';
 import setAccessToken from '@common/utils/set-access-token';
 import LoginHelper from '@common/utils/login-helper';
@@ -21,11 +23,21 @@ import LoginHelper from '@common/utils/login-helper';
 @inject('commonLogin')
 @observer
 class WeixinBindQrCodePage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: true
+    }
+  }
 
   timer = null;
   isDestroy = false;
 
   async componentDidMount() {
+    const { wechatEnv, platform } = this.props.site;
+    if (wechatEnv === 'miniProgram' && platform === 'h5') { // h5上不展示小程序码，用Scheme跳转
+      return;
+    }
     await this.generateQrCode();
   }
 
@@ -123,9 +135,33 @@ class WeixinBindQrCodePage extends React.Component {
     }
   };
 
+  onOkClick = async () => {
+    this.props.commonLogin.needToBindMini = true;
+    const { sessionToken } = this.props.router.query;
+    const resp = await genMiniScheme();
+    if (resp.code === 0) {
+      this.setState({
+        visible: false
+      });
+      window.location.href = `${get(resp, 'data.openLink', '')}&sessionToken=${sessionToken}`;
+      return;
+    }
+    Toast.error({
+      content: '网络错误',
+      hasMask: false,
+      duration: 1000,
+    });
+  }
+
+  onCancel = () => {
+    this.setState({
+      visible: false
+    });
+  }
+
   render() {
-    const { site: { platform }, router, h5QrCode } = this.props;
-    const { nickname } = router.query;
+    const { site: { wechatEnv, platform }, router, h5QrCode } = this.props;
+    const { nickname, isSkip = false } = router.query;
     return (
       <PcBodyWrap>
       <div className={platform === 'h5' ? layout.container : layout.pc_container}>
@@ -147,9 +183,10 @@ class WeixinBindQrCodePage extends React.Component {
             orCodeTips={platform === 'h5' ? '长按保存二维码，并在微信中识别此二维码，即可完成登录' : '请使用微信，扫码登录'}
           />
           {/* 二维码 end */}
-          <span className={layout.skip} onClick={this.handleSkipWechatButtonClick}>跳过</span>
+          { isSkip && <span className={layout.skip} onClick={this.handleSkipWechatButtonClick}>跳过</span> }
         </div>
       </div>
+      { wechatEnv === 'miniProgram' && platform === 'h5' && <SkipMiniPopup visible={this.state.visible} onOkClick={this.onOkClick} onCancel={this.onCancel}/> }
       </PcBodyWrap>
     );
   }
