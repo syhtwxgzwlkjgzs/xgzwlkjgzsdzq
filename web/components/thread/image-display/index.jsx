@@ -12,7 +12,7 @@ const Index = ({ imgData = [], flat = false, platform = 'h5', isPay = false, onP
   const [defaultImg, setDefaultImg] = useState('');
   const ImagePreviewerRef = React.useRef(null);
   // const [firstImgData, setFirstImgData] = useState(null);
-  const [firstImgData, setFirstImgData] = useState({ width: (Array.isArray(imgData) && imgData[0] && imgData[0].fileWidth) || 0, height: (Array.isArray(imgData) && imgData[0] && imgData[0].fileHeight) || 0 });
+  const [firstImgData, setFirstImgData] = useState({ width: !Array.isArray(imgData) ? imgData[0]?.fileWidth || 0 : 0, height: !Array.isArray(imgData) ? imgData[0]?.fileHeight || 0 : 0});
 
   const imagePreviewers = useMemo(() => imgData.map(item => item.url), [imgData]);
   useEffect(() => {
@@ -222,6 +222,7 @@ const Two = ({ type, bigImages, onClick, style, showLongPicture, postLoad }) => 
 );
 
 const Three = ({ type, bigImages, smallImages, onClick, style, showLongPicture, postLoad }) => {
+  console.log(`type`, type)
   if (type === 'long' || type === 'longitudinal') {
     return (
       <div className={`${styles[style]} ${styles[type]}`}>
