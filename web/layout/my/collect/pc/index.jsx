@@ -10,7 +10,6 @@ import PopTopic from '@components/pop-topic';
 import UserCenterFansPc from '@components/user-center/fans-pc';
 import SidebarPanel from '@components/sidebar-panel';
 
-
 @inject('site')
 @inject('index')
 @observer
@@ -36,9 +35,41 @@ class CollectPCPage extends React.Component {
     </div>
   );
 
+  getCollectThreadsList = () => {
+    const collectThreadsListData = this.props.index.getList({ namespace: 'collect' }).data;
+
+    if (collectThreadsListData && Object.keys(collectThreadsListData) > 0) {
+      return Object.values(collectThreadsListData).reduce((prev, next) => {
+        if (!next) return [...prev];
+
+        return [...prev, ...next];
+      }, []);
+    }
+
+    return [];
+  };
+
   render() {
     const { index } = this.props;
-    const { pageData, currentPage, totalPage  } = index.threads || {};
+    const { pageData } = index.threads || {};
+
+    const collectThreadsList = index.getList({ namespace: 'collect' });
+
+    const totalCount = index.getAttribute({
+      namespace: 'collect',
+      key: 'totalCount',
+    });
+
+    const totalPage = index.getAttribute({
+      namespace: 'collect',
+      key: 'totalPage',
+    });
+
+    const currentPage = index.getAttribute({
+      namespace: 'collect',
+      key: 'currentPage',
+    });
+
     return (
       <div className={styles.container}>
         <BaseLayout
@@ -52,17 +83,17 @@ class CollectPCPage extends React.Component {
         >
           <SidebarPanel
             title="我的收藏"
-            type='normal'
+            type="normal"
             isShowMore={false}
-            noData={!pageData?.length}
-            isLoading={!pageData}
+            noData={!collectThreadsList?.length}
+            isLoading={!totalCount}
             icon={{ type: 3, name: 'CollectOutlined' }}
-            rightText={`共有${this.props.totalCount}条收藏`}
-            mold='plane'
+            rightText={`共有${totalCount}条收藏`}
+            mold="plane"
             isError={this.props.index.threadError.isError}
             errorText={this.props.index.threadError.errorText}
           >
-            {pageData?.map((item, index) => (
+            {collectThreadsList?.map((item, index) => (
               <ThreadContent className={index === 0 && styles.threadStyle} data={item} key={index} />
             ))}
           </SidebarPanel>

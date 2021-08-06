@@ -1,5 +1,6 @@
 import { observable, computed, action } from 'mobx';
 import { readThreadList } from '@server';
+import { get } from '@common/utils/get';
 
 // 定义统一的 list 数据结构
 export default class ListStore {
@@ -31,7 +32,18 @@ export default class ListStore {
       if (!this.lists[namespace]) {
         this.registerList({ namespace });
       }
-      return this.lists[namespace];
+      return this.listAdapter(this.lists[namespace]);
+    }
+
+    // 列表适配器，可以拍平含有分页的列表数据
+    @action
+    listAdapter = (listInstance) => {
+      const { data } = listInstance;
+      let listArray = [];
+      Object.values(data).forEach((pageData) => {
+        listArray = [...listArray, ...pageData];
+      });
+      return listArray;
     }
 
     /**
@@ -69,6 +81,20 @@ export default class ListStore {
       this.lists[namespace].requestError.errorText = errorText;
     }
 
+    /**
+     * 获取指定列表的错误信息
+     * @param {*} param0
+     * @returns
+     */
+    @action
+    getListRequestError = ({ namespace }) => {
+      if (!this.lists[namespace]) {
+        this.registerList({ namespace });
+      }
+
+      return this.lists[namespace].requestError;
+    }
+
 
     /**
      * 更新列表
@@ -89,12 +115,34 @@ export default class ListStore {
      * @param {*} param0
      */
     @action
-    initList = ({ namespace, data }) => {
+    setList = ({ namespace, data, page }) => {
       if (!this.lists[namespace]) {
         this.registerList({ namespace });
       }
 
-      this.lists[namespace].data = data;
+      this.lists[namespace].data[page] = get(data, 'data.pageData');
+
+      if (!this.getAttribute({ namespace, key: 'currentPage' }) || Number(this.getAttribute({ namespace, key: 'currentPage' })) <= Number(get(data, 'data.currentPage'))) {
+        this.setAttribute({ namespace, key: 'currentPage', value: get(data, 'data.currentPage') });
+      }
+      this.setAttribute({ namespace, key: 'totalPage', value: get(data, 'data.totalPage') });
+      this.setAttribute({ namespace, key: 'totalCount', value: get(data, 'data.totalCount') });
+    }
+
+    /**
+     * 清空指定 namespace 的列表
+     * @param {*} param0
+     */
+    @action
+    clearList = ({ namespace }) => {
+      if (!this.lists[namespace]) return;
+
+      this.lists[namespace].data = {};
+      this.lists[namespace].attribs = {};
+      this.lists[namespace].requestError = {
+        isError: false,
+        errorText: '',
+      };
     }
 
     /**
