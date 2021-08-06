@@ -35,23 +35,8 @@ class CollectPCPage extends React.Component {
     </div>
   );
 
-  getCollectThreadsList = () => {
-    const collectThreadsListData = this.props.index.getList({ namespace: 'collect' }).data;
-
-    if (collectThreadsListData && Object.keys(collectThreadsListData) > 0) {
-      return Object.values(collectThreadsListData).reduce((prev, next) => {
-        if (!next) return [...prev];
-
-        return [...prev, ...next];
-      }, []);
-    }
-
-    return [];
-  };
-
   render() {
     const { index } = this.props;
-    const { pageData } = index.threads || {};
 
     const collectThreadsList = index.getList({ namespace: 'collect' });
 
@@ -70,6 +55,8 @@ class CollectPCPage extends React.Component {
       key: 'currentPage',
     });
 
+    const requestError = index.getListRequestError({ namespace: 'collect' });
+
     return (
       <div className={styles.container}>
         <BaseLayout
@@ -78,7 +65,7 @@ class CollectPCPage extends React.Component {
           onRefresh={this.fetchMoreData}
           right={this.renderRight}
           rightClass={styles.rightSide}
-          isShowLayoutRefresh={!!pageData?.length}
+          isShowLayoutRefresh={!!collectThreadsList?.length}
           className="mycollect"
         >
           <SidebarPanel
@@ -90,8 +77,8 @@ class CollectPCPage extends React.Component {
             icon={{ type: 3, name: 'CollectOutlined' }}
             rightText={`共有${totalCount}条收藏`}
             mold="plane"
-            isError={this.props.index.threadError.isError}
-            errorText={this.props.index.threadError.errorText}
+            isError={requestError.isError}
+            errorText={requestError.errorText}
           >
             {collectThreadsList?.map((item, index) => (
               <ThreadContent className={index === 0 && styles.threadStyle} data={item} key={index} />

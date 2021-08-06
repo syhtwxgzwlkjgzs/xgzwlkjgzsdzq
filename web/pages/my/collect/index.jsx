@@ -37,6 +37,7 @@ class Index extends React.Component {
   constructor(props) {
     super(props);
     const { serverIndex, index } = this.props;
+    index.registerList({ namespace: 'collect' });
     this.state = {
       firstLoading: true, // 首次加载状态判断
       totalCount: 0,

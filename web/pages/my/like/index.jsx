@@ -44,12 +44,14 @@ class Index extends React.Component {
 
   constructor(props) {
     super(props);
+    const { serverIndex, index, serverSearch, search } = this.props;
     this.state = {
       firstLoading: true, // 首次加载状态判断
       totalCount: 0,
       page: 1,
     };
-    const { serverIndex, index, serverSearch, search } = this.props;
+    index.registerList({ namespace: 'like' });
+
     if (serverIndex && serverIndex.threads) {
       index.setThreads(serverIndex.threads);
       this.state.page = 2;
@@ -73,17 +75,26 @@ class Index extends React.Component {
     const hasTopics = !!search.topics;
     this.page = 1;
     if (!hasThreadsData) {
-      const threadsResp = await this.props.index.getReadThreadList({
+      const threadsResp = await index.fetchList({
+        perPage: 10,
+        page: this.state.page,
         filter: {
           complex: 2,
         },
-        perPage: 10,
       });
+
+      index.setList({
+        namespace: 'like',
+        data: threadsResp,
+        page: this.state.page,
+      });
+
       this.setState({
-        totalCount: threadsResp?.totalCount,
-        totalPage: threadsResp?.totalPage,
+        totalCount: threadsResp.data.totalCount,
+        totalPage: threadsResp.data.totalPage,
       });
-      if (this.state.page <= threadsResp?.totalPage) {
+
+      if (this.state.page <= threadsResp?.data.totalPage) {
         this.setState({
           page: this.state.page + 1,
         });
@@ -120,14 +131,21 @@ class Index extends React.Component {
   dispatch = async () => {
     const { index } = this.props;
     this.page += 1;
-    const threadsResp = await index.getReadThreadList({
-      perPage: this.prePage,
-      page: this.page,
+    const threadsResp = await index.fetchList({
+      perPage: 10,
+      page: this.state.page,
       filter: {
         complex: 2,
       },
     });
-    if (this.state.page <= threadsResp.totalPage) {
+
+    index.setList({
+      namespace: 'like',
+      data: threadsResp,
+      page: this.state.page,
+    });
+
+    if (this.state.page <= threadsResp.data.totalPage) {
       this.setState({
         page: this.state.page + 1,
       });
@@ -151,7 +169,7 @@ class Index extends React.Component {
           />
         }
         pc={<IndexPCPage firstLoading={firstLoading} dispatch={this.dispatch} />}
-        title={`我的点赞`}
+        title={'我的点赞'}
       />
     );
   }
