@@ -222,7 +222,6 @@ const Two = ({ type, bigImages, onClick, style, showLongPicture, postLoad }) => 
 );
 
 const Three = ({ type, bigImages, smallImages, onClick, style, showLongPicture, postLoad }) => {
-  console.log(`type`, type)
   if (type === 'long' || type === 'longitudinal') {
     return (
       <div className={`${styles[style]} ${styles[type]}`}>
